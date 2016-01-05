@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Buddy</string>
+    <string name="action_settings">Settings</string>
+    <string name="a5dp">5dp</string>
+    <string name="a10dp">10dp</string>
+    <string name="closeDrawer">Navigation View</string>
+    <string name="openDrawer">Navigation View Closed</string>
+    <string name="a20dp">20dp</string>
+    <string name="msgapl">You have not yet applied for EMI Financing.Apply now to get access to a selction of fast,new laptops and upgrade your student life!</string>
+</resources>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/rl1"
+        android:layout_height="wrap_content">
+<EditText
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:layout_centerInParent="true"
+    android:layout_alignParentLeft="true"
+    android:padding="10dp"
+    android:maxLength="1"
+    android:inputType="number"
+    android:textColorHint="#664A4A4A"
+
+
+
+    android:id="@+id/otp1"
+    android:hint="1"/>
+
+<EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:layout_centerInParent="true"
+        android:padding="10dp"
+    android:inputType="number"
+    android:maxLength="1"
+        android:layout_toRightOf="@id/otp1"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/otp2"
+    android:textColorHint="#664A4A4A"
+        android:hint="1"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:layout_centerInParent="true"
+        android:padding="10dp"
+        android:inputType="number"
+        android:textColorHint="#664A4A4A"
+        android:maxLength="1"
+        android:layout_toRightOf="@id/otp2"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/otp3"
+        android:hint="1"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:layout_centerInParent="true"
+        android:textColorHint="#664A4A4A"
+        android:padding="10dp"
+        android:inputType="number"
+        android:maxLength="1"
+        android:layout_toRightOf="@id/otp3"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/otp4"
+        android:hint="1"/>
+
+</RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter OTP"
+        android:visibility="invisible"
+        android:textColor="#4A4A4A"
+        android:id="@+id/enterotp"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:layout_above="@id/rl1"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ENTER OTP"
+        android:layout_centerInParent="true"
+        android:textColor="#4A4A4A"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:layout_above="@id/enterotp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl1"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+android:paddingTop="20dp"
+
+        android:text="Look for an SMS from Buddy to find your 4-digit OTP."/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Verify"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#4A4A4A"
+        android:layout_alignParentBottom="true"
+android:layout_centerInParent="true"
+android:id="@+id/ver"
+        android:layout_margin="100dp"
+        />
+</RelativeLayout>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Formsaved">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/rl11"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        style="@style/DrawerArrowStyle"/>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/rl1"
+    android:layout_below="@id/toolbar"
+    android:padding="10dp">
+
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+
+        android:id="@+id/profile_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/images"
+    />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/name"
+
+        android:textColor="#4A4A4A"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/profile_image"
+        android:text="Aniket Verma"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/email"
+        android:layout_toRightOf="@id/profile_image"
+        android:layout_marginLeft="20dp"
+
+        android:textColor="#664A4A4A"
+        android:layout_below="@id/name"
+        android:text="aniket1259.11@bitmesra.ac.in"/>
+</RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/applymsg"
+
+        android:textColor="#4A4A4A"
+        android:layout_below="@id/rl1"
+android:layout_marginTop="20dp"
+
+android:layout_centerInParent="true"
+        android:padding="5dp"
+
+        android:text="Your application form to apply for EMI with buddy"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/applymsg2"
+        android:textColor="#4A4A4A"
+
+        android:layout_below="@id/applymsg"
+        android:layout_centerInParent="true"
+
+        android:padding="5dp"
+        android:text="is incomplete.Please complete your form to"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/applymsg3"
+        android:layout_below="@id/applymsg2"
+        android:layout_centerInParent="true"
+        android:textColor="#4A4A4A"
+
+        android:padding="5dp"
+        android:text="access to a selection of fast,new laptops and"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/applymsg4"
+        android:layout_below="@id/applymsg3"
+        android:layout_centerInParent="true"
+        android:textColor="#4A4A4A"
+
+        android:padding="5dp"
+        android:text="upgrade your student life! "/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Complete form!"
+        android:textColor="#ffffff"
+        android:id="@+id/apply"
+        android:layout_below="@id/applymsg4"
+        android:background="#21A5E0"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerInParent="true"
+
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/or"
+        android:layout_below="@id/apply"
+        android:padding="5dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:textColor="#4A4A4A"
+
+        android:text="OR"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/check"
+        android:layout_below="@id/or"
+        android:layout_centerInParent="true"
+        android:padding="5dp"
+        android:layout_marginTop="20dp"
+        android:textColor="#4A4A4A"
+
+        android:text="Check out some of our products"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/wbsite"
+        android:layout_below="@id/check"
+        android:layout_centerInParent="true"
+        android:padding="5dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#21A5E0"
+
+        android:text="on the website"/>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chat"
+        android:layout_margin="5dp"
+        android:layout_alignParentRight="true"
+        app:backgroundTint="#21A5E0"
+        android:layout_alignParentBottom="true"/>
+  </RelativeLayout>
+ <android.support.design.widget.NavigationView
+ android:id="@+id/navigation_view"
+ android:layout_width="wrap_content"
+ android:layout_height="match_parent"
+ android:layout_gravity="start"
+     app:itemTextColor="#ffffff"
+ app:headerLayout="@layout/header"
+     android:background="#323232"
+app:menu="@menu/drawer" />
+
+    </android.support.v4.widget.DrawerLayout>

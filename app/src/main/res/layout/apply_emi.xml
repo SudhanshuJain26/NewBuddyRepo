@@ -11,6 +11,14 @@
     android:layout_width="match_parent"
     android:id="@+id/rl11"
     android:layout_height="match_parent">
+    <ProgressBar
+        android:id="@+id/progressBar1"
+       android:layout_above="@id/apply"
+        android:background="@xml/progress"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
@@ -27,15 +35,16 @@
     <de.hdodenhof.circleimageview.CircleImageView
 
         android:id="@+id/profile_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginLeft="8dp"
         android:src="@drawable/images"
     />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/name"
-
+android:textAppearance="?android:textAppearanceMedium"
         android:textColor="#4A4A4A"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
@@ -51,6 +60,25 @@
         android:textColor="#664A4A4A"
         android:layout_below="@id/name"
         android:text="aniket1259.11@bitmesra.ac.in"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Application Form"
+        android:textColor="#ffffff"
+        android:textAlignment="center"
+        android:id="@+id/view"
+        android:layout_below="@id/email"
+        android:layout_marginLeft="20dp"
+        android:background="#21A5E0"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_toRightOf="@id/profile_image"
+        android:layout_marginTop="10dp"
+        android:layout_centerInParent="true"
+
+        />
 </RelativeLayout>
     <TextView
         android:layout_width="wrap_content"
@@ -150,13 +178,14 @@ android:layout_centerInParent="true"
         android:layout_height="wrap_content"
         android:id="@+id/chat"
         android:layout_margin="5dp"
+        android:src="@drawable/chaticon"
         android:layout_alignParentRight="true"
         app:backgroundTint="#21A5E0"
         android:layout_alignParentBottom="true"/>
   </RelativeLayout>
  <android.support.design.widget.NavigationView
  android:id="@+id/navigation_view"
- android:layout_width="wrap_content"
+ android:layout_width="240dp"
  android:layout_height="match_parent"
  android:layout_gravity="start"
      app:itemTextColor="#ffffff"

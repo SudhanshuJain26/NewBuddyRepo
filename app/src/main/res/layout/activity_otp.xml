@@ -3,10 +3,119 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.buddy.myapplication.Otp">
+
+    tools:context="indwin.c3.shareapp.Otp">
+<ImageView
+    android:layout_width="120dp"
+    android:layout_height="120dp"
+    android:layout_centerHorizontal="true"
+    android:id="@+id/buddyLogo"
+    android:layout_marginTop="40dp"
+    android:src="@drawable/buddylogo_blue"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textRCode"
+        android:text="YOUR REFERRAL CODE"
+
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_below="@id/buddyLogo"
+        android:layout_centerHorizontal="true"/>
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/rlCode"
+    android:layout_margin="8dp"
+    android:paddingLeft="48dp"
+android:paddingRight="48dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:layout_centerInParent="true"
+    android:background="@drawable/border1"
+    android:layout_below="@id/textRCode"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ANIK03528"
+android:textStyle="bold"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:id="@+id/code"
+        android:textAppearance="?android:textAppearanceMedium"
+        />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/rlshare"
+        android:layout_below="@id/code"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+
+       android:src="@drawable/shareicon"
+        android:id="@+id/share"
+
+        android:paddingTop="16dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+    android:textColor="#21A5E0"
+        android:id="@+id/shareNow"
+        android:text="Share"
+        android:layout_toRightOf="@id/share"
+
+android:layout_marginTop="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
+
+    </RelativeLayout>
+</RelativeLayout>
+    <TextView
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlCode"
+        android:id="@+id/line_1"
+        android:layout_centerInParent="true"
+        android:text="Share your unique referral link with friends for"/>
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/line_2"
+        android:layout_below="@id/line_1"
+        android:layout_centerInParent="true"
+        android:text="signing up for Buddy.For every friend that ends"/>
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/line_3"
+        android:layout_below="@id/line_2"
+        android:layout_centerInParent="true"
+        android:text="up buying a gadget,we will give you 10% of the "/>
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/line_4"
+        android:layout_below="@id/line_3"
+        android:layout_centerInParent="true"
+        android:text="order value (upto. Rs 600) in cash!"/>
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/done"
+        android:layout_below="@id/line_4"
+        android:padding="16dp"
+        android:textStyle="bold"
+        android:textColor="#21A5E0"
+        android:layout_centerInParent="true"
+        android:text="DONE"/>
+
 
 </RelativeLayout>

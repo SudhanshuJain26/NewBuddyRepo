@@ -36,6 +36,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:padding="20dp"
+        android:layout_marginBottom="48dp"
         android:layout_height="wrap_content">
 
         <TextView
@@ -50,16 +51,16 @@
             />
 
     <View
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
         android:visibility="gone"
         android:layout_margin="10dp"
 android:id="@+id/c1"
         android:background="@drawable/circle"
 />
         <View
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:layout_toRightOf="@id/c1"
             android:layout_margin="10dp"
             android:id="@+id/c2"
@@ -67,8 +68,8 @@ android:id="@+id/c1"
             android:background="@drawable/circle"
             />
         <View
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:layout_toRightOf="@id/c2"
 android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
@@ -78,3 +79,4 @@ android:layout_marginTop="10dp"
             />
     </RelativeLayout>
 </RelativeLayout>
+

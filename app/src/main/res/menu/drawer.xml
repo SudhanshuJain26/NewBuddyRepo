@@ -5,19 +5,23 @@
     >
 
     <group android:checkableBehavior="single"
+        android:enabled="true"
         android:id="@+id/gr1">
 
 
         <item
             android:id="@+id/MyAccount"
-            android:checked="false"
-            android:title="My Account" />
+
+            android:checked="true"
+
+            android:color="#21A5E0"
+            android:title="Home" />
 
         <item
-            android:id="@+id/Wishlist"
+            android:id="@+id/app_form"
             android:checked="false"
-
-            android:title="Application Form" />
+            android:color="#21A5E0"
+            android:title="Profile" />
 
 
 
@@ -34,6 +38,7 @@
         <item
             android:id="@+id/faq"
             android:checked="false"
+            android:color="#21A5E0"
 
             android:title="FAQ" />
 
@@ -41,12 +46,12 @@
         <item
             android:id="@+id/Share"
             android:checked="false"
-
-            android:title="Share" />
+            android:color="#21A5E0"
+            android:title="Share Referral Code" />
         <item
             android:id="@+id/log"
             android:checked="false"
-
+            android:color="#21A5E0"
             android:title="Log Out"
             />
 

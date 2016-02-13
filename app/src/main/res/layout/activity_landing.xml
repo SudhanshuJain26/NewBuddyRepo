@@ -4,9 +4,90 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="com.example.buddy.myapplication.Landing">
+    tools:context="indwin.c3.shareapp.Landing">
+
     <android.support.v4.view.ViewPager
         android:id="@+id/landing"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:weightSum="2"
+android:id="@+id/logsign"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:id="@+id/login_pager"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:padding="20dp"
+            android:background="#000000"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:text="Login"
+
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:background="#21A5E0"
+android:id="@+id/signup_pager"
+            android:text="Signup"
+            android:textAppearance="?android:textAppearanceMedium"
+            />
+    </LinearLayout>
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/buddyLogo"
+        android:tint="#ffffff"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/buddylogo_blue"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_above="@id/logsign"
+        android:layout_centerInParent="true"
+        android:padding="20dp"
+       android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content">
+
+
+
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+
+            android:layout_margin="10dp"
+            android:id="@+id/c1"
+            android:background="@drawable/circle"
+            />
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_toRightOf="@id/c1"
+            android:layout_margin="10dp"
+            android:id="@+id/c2"
+
+            android:background="@drawable/circle"
+            />
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_toRightOf="@id/c2"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/c3"
+
+            android:background="@drawable/circle"
+            />
+    </RelativeLayout>
+
 </RelativeLayout>

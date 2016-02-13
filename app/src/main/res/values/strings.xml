@@ -7,4 +7,8 @@
     <string name="openDrawer">Navigation View Closed</string>
     <string name="a20dp">20dp</string>
     <string name="msgapl">You have not yet applied for EMI Financing.Apply now to get access to a selction of fast,new laptops and upgrade your student life!</string>
+    <string name="title_activity_login_with_otp">Login_with_otp</string>
+    <string name="title_activity_splash">Splash</string>
+    <!--<string name="server">http://ninja.hellobuddy.in/</string>-->
+    <string name="server">http://54.255.147.43:80/</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.buddy.myapplication;
+package indwin.c3.shareapp;
 
 import org.junit.Test;
 

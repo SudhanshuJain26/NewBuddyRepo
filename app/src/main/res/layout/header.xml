@@ -3,23 +3,23 @@
     android:layout_width="match_parent"
     android:id="@+id/head"
     android:layout_height="wrap_content"
-    android:paddingBottom="56dp"
+
   >
     <ImageView
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="8dp"
+
         android:layout_width="24dp"
         android:layout_height="24dp"
-
+android:visibility="gone"
         android:id="@+id/arrow"
 
         android:src="@drawable/back"/>
 
 <ImageView
     android:layout_toRightOf="@id/arrow"
+    android:visibility="gone"
               android:layout_width="60dp"
               android:layout_height="64dp"
-android:layout_marginLeft="24dp"
+
               android:tint="#ffffff"
 
               android:src="@drawable/buddylogo_blue"/>

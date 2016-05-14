@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="indwin.c3.shareapp.ProductsPage">
+
+    <RelativeLayout
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="#F28E52">
+
+        <ImageView
+            android:id="@+id/backo"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="18dp"
+            android:src="@drawable/back11"
+            android:tint="#ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/backo"
+            android:text="Product Finder"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolBar"
+        android:background="#ffffff">
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/del"
+        android:layout_height="wrap_content"
+        android:text="Delivery Address"
+        android:textColor="#000000"
+        android:textStyle="bold"
+
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        />
+        <RelativeLayout
+android:layout_below="@id/del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+           <ListView
+                android:layout_width="wrap_content"
+                android:id="@+id/list1"
+               android:background="#ffffff"
+
+                android:layout_height="wrap_content">
+
+
+           </ListView>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:id="@+id/cardeditAdd1"
+                android:visibility="gone"
+
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:id="@+id/min"
+                    android:src="@drawable/back"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:tint="#000000"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/min"
+                    android:id="@+id/newAdd"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:text="New Address"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/edtAdd11"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/min"
+                    android:layout_below="@id/newAdd"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/edtAdd22"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/min"
+                    android:layout_below="@id/edtAdd11"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/edtAdd33"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/min"
+                    android:layout_below="@id/edtAdd22"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/edtAdd44"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/min"
+                    android:layout_below="@id/edtAdd33"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:id="@+id/save"
+                    android:layout_below="@id/edtAdd44"
+                    android:textColor="#F28E52"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delete"
+                    android:id="@+id/delete"
+                    android:layout_below="@id/edtAdd44"
+                    android:layout_toLeftOf="@id/save"
+                    android:textColor="#F28E52"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    />
+            </RelativeLayout>
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:id="@+id/cardAddress"
+                android:visibility="gone"
+                android:paddingTop="@dimen/activity_horizontal_margin"
+                android:layout_below="@id/list1"
+                android:layout_height="wrap_content">
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:id="@+id/clickAdd"
+        android:visibility="gone"
+    android:layout_centerHorizontal="true"
+    android:text="Add an address"/>
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+
+</RelativeLayout>
+        </ScrollView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#44C2A6"
+        android:gravity="center"
+        android:id="@+id/paydo"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:text="Pay Downpayment"
+        android:textColor="#ffffff"
+        android:textStyle="bold" />
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:rotationY="180"
+        android:src="@drawable/back11"
+        android:tint="#ffffff" />
+</RelativeLayout>

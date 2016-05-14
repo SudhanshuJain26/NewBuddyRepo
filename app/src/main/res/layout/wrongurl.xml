@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="indwin.c3.shareapp.ProductsPage">
+
+    <RelativeLayout
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="#3380B6">
+
+        <ImageView
+            android:id="@+id/backo"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="18dp"
+            android:src="@drawable/back11"
+            android:tint="#ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/backo"
+            android:text="Product Finder"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolBar"
+        android:background="#ffffff">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <ImageView
+                android:id="@+id/searchIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/left"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/left"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/left"
+                android:src="@drawable/search" />
+
+            <EditText
+                android:id="@+id/query"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:textColor="#664A4A4A"
+                android:paddingLeft="20dp"
+                android:layout_toRightOf="@id/searchIcon"
+                android:drawableLeft="@drawable/search"
+                android:background="#ffffff"
+                android:cursorVisible="true"
+                android:singleLine="true"
+                android:textCursorDrawable="@null"
+                android:text=""
+
+                />
+
+            <View
+                android:id="@+id/borderView"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/query"
+                android:background="#664A4A4A" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:id="@+id/monkey"
+                android:layout_centerInParent="true"
+                android:layout_below="@id/borderView"
+                android:src="@drawable/monkey"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@id/monkey"
+        android:gravity="center"
+        android:id="@+id/oops"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:lines="2"
+
+        android:padding="@dimen/activity_horizontal_margin"
+        android:text="Oops... the pasted URL
+doesn't seem correct!"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textattach"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="48dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_below="@id/oops"
+                android:text="Make sure you have copied he entire link!
+ If is still doesn't work,take a screenshot of the
+ product page and attach it here."
+                />
+    </RelativeLayout>
+        </ScrollView>
+    </RelativeLayout>

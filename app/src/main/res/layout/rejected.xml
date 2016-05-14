@@ -78,7 +78,7 @@
             android:layout_height="64dp"
             android:layout_below="@id/rl1"
             android:src="@drawable/rejected"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:id="@+id/rej"
             android:layout_centerHorizontal="true"/>
         <TextView
@@ -107,18 +107,18 @@
             android:textStyle="bold"
 
 
-            android:text="Borrowing Limit for you because:"/>
+            android:text="Borrowing Limit for you:"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/applymsg3"
 
             android:layout_below="@id/applymsg2"
-
+android:gravity="center"
             android:textColor="#4A4A4A"
             android:padding="5dp"
             android:layout_centerInParent="true"
-            android:text="Rs.50,000"/>
+            android:text="You dont have correct credentials"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -188,6 +188,7 @@ android:visibility="gone"
             android:src="@drawable/chaticon"
             app:backgroundTint="#21A5E0"
             android:layout_margin="8dp"
+            android:visibility="gone"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"/>
 
@@ -197,7 +198,8 @@ android:visibility="gone"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#323232"
+        android:background="#33A4D0"
+        app:itemIconTint="#ffffff"
         app:itemTextColor="#ffffff"
         app:headerLayout="@layout/header"
         app:menu="@menu/drawer" />

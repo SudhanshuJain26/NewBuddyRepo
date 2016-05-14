@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
+    android:background="@drawable/background"
     tools:context="indwin.c3.shareapp.Inviteform">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:id="@+id/relative"
+    android:layout_height="match_parent"
+
+
+>
 
 
     <ImageView
@@ -13,66 +21,139 @@
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/buddyLogo"
-        android:layout_marginTop="40dp"
+        android:tint="#ffffff"
+        android:layout_marginTop="56dp"
         android:src="@drawable/buddylogo_blue"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_below="@id/buddyLogo"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/error"
+        android:paddingBottom="12dp"
+        android:visibility="invisible"
+
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/warn"
+            android:padding="2dp"
+            android:src="@drawable/warning"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/msg"
+            android:textColor="#CCffffff"
+
+            android:layout_toRightOf="@id/warn"
+            android:text="OTP incorrect!"/>
+    </RelativeLayout>
 
     <EditText
         android:id="@+id/name"
-android:layout_below="@id/buddyLogo"
-
+        android:layout_below="@id/error"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:textColorHint="#664A4A4A"
-        android:maxLines="1"
-        android:layout_marginRight="16dp"
+
+
+        android:layout_marginLeft="48dp"
+        android:textColorHint="#99ffffff"
+        android:textColor="#CCffffff"
+        android:singleLine="true"
+        android:imeOptions="actionNext"
+
+        android:paddingTop="16dp"
+        android:background="@drawable/texted"
+        android:textCursorDrawable="@null"
+        android:layout_marginRight="48dp"
         android:layout_marginBottom="5dp"
-        android:hint="NAME"/>
+        android:hint="Name"/>
 
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="48dp"
+
+        android:layout_marginRight="48dp"
         android:layout_marginBottom="5dp"
-        android:maxLines="1"
-        android:textColorHint="#664A4A4A"
+
+        android:singleLine="true"
+        android:imeOptions="actionNext"
+        android:textColorHint="#99ffffff"
+        android:textColor="#CCffffff"
+
+        android:paddingTop="16dp"
+        android:background="@drawable/texted"
+        android:textCursorDrawable="@null"
         android:layout_marginTop="5dp"
         android:layout_below="@id/name"
-        android:hint="EMAIL"/>
+
+        android:hint="Email"/>
 
     <EditText
         android:id="@+id/phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:imeOptions="actionDone"
+
         android:layout_marginBottom="5dp"
-        android:maxLines="1"
+
+        android:singleLine="true"
         android:inputType="number"
-        android:textColorHint="#664A4A4A"
+        android:textColorHint="#99ffffff"
+        android:textColor="#CCffffff"
+
+        android:paddingTop="16dp"
+        android:background="@drawable/texted"
+        android:textCursorDrawable="@null"
         android:layout_marginTop="5dp"
         android:layout_below="@id/email"
-        android:hint="PHONE"/>
+        android:hint="Phone Number"/>
     <EditText
         android:id="@+id/ref"
-        android:textColorHint="#664A4A4A"
+        android:textColorHint="#99ffffff"
+        android:textColor="#CCffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="5dp"
+
+        android:singleLine="true"
+        android:layout_marginTop="5dp"
+android:visibility="invisible"
+
+        android:paddingTop="16dp"
+        android:background="@drawable/texted"
+        android:textCursorDrawable="@null"
+        android:layout_below="@id/phone"
+        android:hint="Referral Code"/>
+    <TextView
+        android:id="@+id/have"
+        android:textColorHint="#664A4A4A"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#CCffffff"
+android:layout_centerInParent="true"
+
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="5dp"
+android:text="Have a referral code?"
 
-        android:maxLines="1"
+        android:singleLine="true"
         android:layout_marginTop="5dp"
 
-        android:layout_below="@id/phone"
-        android:hint="REFERRAL CODE"/>
+        android:layout_below="@id/phone" />
     <ProgressBar
         android:id="@+id/progressBar1"
         android:layout_above="@id/phone"
@@ -89,6 +170,7 @@ android:layout_below="@id/buddyLogo"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
+        android:visibility="gone"
         android:layout_height="wrap_content"
 
         android:text="We will send a One Time Password on your phone."
@@ -100,7 +182,7 @@ android:layout_below="@id/buddyLogo"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="5dp"
-
+android:visibility="gone"
         android:layout_height="wrap_content"
 
         android:text="Please enter it in the next step."
@@ -109,7 +191,7 @@ android:layout_below="@id/buddyLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SIGN UP"
-        android:layout_marginTop="32dp"
+
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:textColor="#4A4A4A"
@@ -136,7 +218,7 @@ android:layout_below="@id/buddyLogo"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
-        android:textColor="#21A5E0"
+        android:textColor="#66ffffff"
        android:padding="10dp"
         android:id="@+id/invite"
         android:layout_below="@id/invitex"/>
@@ -152,27 +234,28 @@ android:layout_below="@id/buddyLogo"
         android:layout_height="wrap_content"
         android:id="@+id/Notuser"
         android:text="Already a user?"
-        android:textColor="#4A4A4A"
+        android:textColor="#CCffffff"
 
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+
         android:layout_centerInParent="true"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lgin"
         android:text="Log in"
-        android:textColor="#21A5E0"
+        android:textColor="#CCffffff"
 
         android:layout_toRightOf="@id/Notuser"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:paddingLeft="5dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+
         android:layout_centerInParent="true"/>
     </LinearLayout>
 
 </RelativeLayout>
 
+    </ScrollView>

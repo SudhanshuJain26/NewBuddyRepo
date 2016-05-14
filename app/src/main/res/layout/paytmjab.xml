@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="indwin.c3.shareapp.ProductsPage">
+
+    <RelativeLayout
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="#3380B6">
+
+        <ImageView
+            android:id="@+id/backo"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="18dp"
+            android:src="@drawable/back11"
+            android:tint="#ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/backo"
+            android:text="Product Finder"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolBar"
+        android:background="#ffffff">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <ImageView
+                android:id="@+id/searchIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/left"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/left"
+                android:layout_marginTop="@dimen/left"
+                android:src="@drawable/search"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/query"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_toRightOf="@id/searchIcon"
+                android:background="#ffffff"
+                android:cursorVisible="true"
+                android:textCursorDrawable="@null"
+                android:drawableLeft="@drawable/search"
+                android:paddingLeft="20dp"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="#664A4A4A"
+
+
+                />
+
+            <View
+                android:id="@+id/borderView"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/query"
+                android:background="#664A4A4A" />
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/borderView"
+
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:src="@drawable/snapdeal" />
+
+            <ImageView
+                android:id="@+id/productDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/logo"
+                android:layout_centerHorizontal="true"
+
+                android:src="@drawable/product"
+                android:visibility="gone"
+
+                />
+
+            <EditText
+                android:id="@+id/editQ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/logo"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:hint=" Enter Product Price                  " />
+
+            <TextView
+                android:id="@+id/enter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/logo"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="32dp"
+                android:layout_toRightOf="@id/editQ"
+                android:background="#3380B6"
+                android:paddingBottom="2dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+
+                android:paddingTop="2dp"
+                android:text="Enter"
+
+                android:textColor="#ffffff" />
+
+            <View
+                android:id="@+id/viewFirst"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/enter"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="#664A4A4A" />
+
+            <TextView
+                android:id="@+id/avlbal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/viewFirst"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:text="Available Balance" />
+
+            <TextView
+                android:id="@+id/avlbalRs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/avlbal"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="Rs 320"
+                android:textColor="#33A4D0" />
+
+            <View
+                android:id="@+id/viewSec"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/avlbalRs"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="#664A4A4A" />
+
+            <RelativeLayout
+                android:id="@+id/msgRel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/viewSec"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="@drawable/roundedproducts">
+
+                <TextView
+                    android:id="@+id/flx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/left"
+                    android:text="Flexible Payment Plan" />
+
+                <TextView
+                    android:id="@+id/flxmsg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/flx"
+                    android:layout_margin="@dimen/left"
+                    android:text="To avail a payment plan for this product,please enter the product price above" />
+
+                <TextView
+                    android:id="@+id/flxmsg2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/flxmsg"
+                    android:layout_margin="@dimen/left"
+                    android:text="The order will be placed only when we confirm the correct product price from the seller website." />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/profileProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/msgRel"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:text="Read more details about the product,seller and shipping on Product Page." />
+        </RelativeLayout>
+
+    </ScrollView>
+</RelativeLayout>

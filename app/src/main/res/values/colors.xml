@@ -3,5 +3,8 @@
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorwhite">#21A5E0</color>
     <color name="colorBlack">#000000</color>
+    <color name="ripplecolorbackground">#1A000000</color>
+    <color name="rippplecolorlist">#26000000</color>
 </resources>

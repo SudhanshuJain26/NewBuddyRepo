@@ -1,23 +1,35 @@
 package indwin.c3.shareapp;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -37,69 +49,220 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.Manifest;
 
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
 import io.intercom.com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final int PERMISSION_REQUEST_CODEC = 2;
+    private static final int PERMISSION_REQUEST_CODE = 1;
+    TextView notreg, login_otp;
+    private PendingIntent pendingIntent;
     String url = "";
     static String token;
+    private int cashBack=0;
     static Activity act;
-    public static final String MyPREFERENCES = "buddy" ;
-    SharedPreferences sharedpreferences,sharedpreferences2;
+    public static final String MyPREFERENCES = "buddy";
+    SharedPreferences sharedpreferences, sharedpreferences2;
     static String userId = "", pass = "";
-    int d=0;
+    int d = 0;
     private ProgressBar spinner;
-    String Name = "", email = "", formstatus = "",uniqueCode="",creditLimit="",panoradhar="",bankaccount="",collegeid="",verificationdate="",rejectionReason="";
-    EditText username, password;
+    private String Name = "", email = "", fbid = "",courseCompletiondate="", formstatus = "", uniqueCode = "", creditLimit = "", panoradhar = "", bankaccount = "", collegeid = "", verificationdate = "", rejectionReason = "";
+    private EditText username, password;
     HashMap<String, String> data11;
-
+    private TextView login;
+    private RelativeLayout rerr;
+    private TextView error;
+    private int pL, pT, pR, pB;
+    private int checkpass = 0, checkuserid = 0;
     List<SMS> lstSms = new ArrayList<SMS>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        act=this;
+        act = this;
 
 
-       url= getApplicationContext().getString(R.string.server)+"authenticate";
+        url = getApplicationContext().getString(R.string.server) + "authenticate";
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         sharedpreferences2 = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
-        if(sharedpreferences.getInt("checklog",0)==1)
-        {userId=sharedpreferences2.getString("name",null);
-        pass=sharedpreferences2.getString("password",null);
+        if (sharedpreferences.getInt("checklog", 0) == 1) {
+            userId = sharedpreferences2.getString("name", null);
+            pass = sharedpreferences2.getString("password", null);
             new ItemsByKeyword().execute(url);
         } else {
-            d=1;
+            d = 1;
 
 
-            overridePendingTransition(0,0);
+            overridePendingTransition(0, 0);
             setContentView(R.layout.activity_main);
-
-            spinner=(ProgressBar)findViewById(R.id.progressBar1);
+//            Intercom.client().reset();
+            rerr = (RelativeLayout) findViewById(R.id.error);
+            error = (TextView) findViewById(R.id.msg);
+            spinner = (ProgressBar) findViewById(R.id.progressBar1);
             username = (EditText) findViewById(R.id.phone_number);
             password = (EditText) findViewById(R.id.password);
+            username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        username.setHint(R.string.h2);
+                        //  Toast.makeText(getApplicationContext(), "got the focus", Toast.LENGTH_LONG).show();
+                    } else {
+                        username.setHint("Phone Number");
+                        // Toast.makeText(getApplicationContext(), "lost the focus", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        password.setHint(R.string.h3);
+                        //  Toast.makeText(getApplicationContext(), "got the focus", Toast.LENGTH_LONG).show();
+                    } else {
+                        password.setHint("Password");
+                        // Toast.makeText(getApplicationContext(), "lost the focus", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            pL = username.getPaddingLeft();
+            pT = username.getPaddingTop();
+            pR = username.getPaddingRight();
+            pB = username.getPaddingBottom();
+            login = (TextView) findViewById(R.id.Login);
+            login.setEnabled(false);
+            final TextWatcher mTextEditorWatcher = new TextWatcher() {
 
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            TextView notreg = (TextView) findViewById(R.id.signUp);
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    //This sets a textview to the current length
+                    username.setBackgroundResource(R.drawable.texted);
+                    username.setPadding(pL, pT, pR, pB);
+                    password.setBackgroundResource(R.drawable.texted);
+                    password.setPadding(pL, pT, pR, pB);
+//
+//  textview.setText(String.valueOf(s.length());
+//                    int padding_in_dp = 16;  // 6 dps
+//                    final float scale = getResources().getDisplayMetrics().density;
+//                    int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+//                  //  final float scale = getResources().getDisplayMetrics().density;
+//                    int padding_in_px1 = (int) (48 * scale + 0.5f);
+//                    //final float scale = getResources().getDisplayMetrics().density;
+//                    int padding_in_px2 = (int) (5 * scale + 0.5f);
+//                    username.setPadding(0,padding_in_px,0,0);
+//                    password.setPadding(0,padding_in_px,0,0);
+//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
+//                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+//                    username.setLayoutParams(params);
+//                    RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
+//                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+//                    password.setLayoutParams(params1);
+//
+//  Toast.makeText(getApplicationContext(),
+//                                "Please Enter your password",
+//                                Toast.LENGTH_LONG).show();
+//                    username.setBackgroundResource(R.drawable.texted);
+//                    password.setBackgroundResource(R.drawable.texted);
+                    rerr.setVisibility(View.INVISIBLE);
+//                    error.setText("Please login with correct userid.")
+                    if (s.length() == 10)
+                        checkuserid = 1;
+                    else
+                        checkuserid = 0;
+                    if ((checkuserid == 1) && (checkpass == 1)) {
+                        login.setEnabled(true);
+                        login.setTextColor(Color.parseColor("#ffffff"));
+                    } else {
+                        login.setEnabled(false);
+                        login.setTextColor(Color.parseColor("#66ffffff"));
+                    }
+
+                }
+
+                public void afterTextChanged(Editable s) {
+                }
+            };
+            username.addTextChangedListener(mTextEditorWatcher);
+
+            final TextWatcher mTextEditorWatcher1 = new TextWatcher() {
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    //This sets a textview to the current length
+
+                    username.setBackgroundResource(R.drawable.texted);
+                    username.setPadding(pL, pT, pR, pB);
+                    password.setBackgroundResource(R.drawable.texted);
+                    password.setPadding(pL, pT, pR, pB);
+//                    int padding_in_dp = 16;  // 6 dps
+//                    final float scale = getResources().getDisplayMetrics().density;
+//                    int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+//                    //  final float scale = getResources().getDisplayMetrics().density;
+//                    int padding_in_px1 = (int) (48 * scale + 0.5f);
+//                    //final float scale = getResources().getDisplayMetrics().density;
+//                    int padding_in_px2 = (int) (5 * scale + 0.5f);
+//                    username.setPadding(0,padding_in_px,0,0);
+//                    password.setPadding(0,padding_in_px,0,0);
+//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
+//                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+//                    username.setLayoutParams(params);
+//                    RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
+//                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+//                    password.setLayoutParams(params1);
+////
+////  Toast.makeText(getApplicationContext(),
+////                                "Please Enter your password",
+////                                Toast.LENGTH_LONG).show();
+//                    username.setBackgroundResource(R.drawable.texted);
+//                    password.setBackgroundResource(R.drawable.texted);
+                    rerr.setVisibility(View.INVISIBLE);
+
+                    //  textview.setText(String.valueOf(s.length());
+                    if (s.length() > 0)
+                        checkpass = 1;
+                    else
+                        checkpass = 0;
+                    if ((checkuserid == 1) && (checkpass == 1)) {
+                        login.setEnabled(true);
+                        login.setTextColor(Color.parseColor("#ffffff"));
+                    } else {
+                        login.setEnabled(false);
+                        login.setTextColor(Color.parseColor("#66ffffff"));
+                    }
+
+                }
+
+                public void afterTextChanged(Editable s) {
+                }
+            };
+            password.addTextChangedListener(mTextEditorWatcher1);
+
+            notreg = (TextView) findViewById(R.id.signUp);
             notreg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent in2 = new Intent(MainActivity.this, Inviteform.class);
-                    in2.putExtra("login",1);
+                    in2.putExtra("login", 1);
                     finish();
                     startActivity(in2);
                     overridePendingTransition(0, 0);
                 }
             });
-TextView login_otp=(TextView)findViewById(R.id.Login_otp);
+            login_otp = (TextView) findViewById(R.id.Login_otp);
             login_otp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent opt=new Intent(MainActivity.this,Login_with_otp.class);
+                    Intent opt = new Intent(MainActivity.this, Login_with_otp.class);
                     finish();
                     startActivity(opt);
                     overridePendingTransition(0, 0);
@@ -107,63 +270,160 @@ TextView login_otp=(TextView)findViewById(R.id.Login_otp);
 
                 }
             });
-            TextView login = (TextView) findViewById(R.id.Login);
+
+            login.setTextColor(Color.parseColor("#66ffffff"));
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
+                    login.setTextColor(Color.parseColor("#ffffff"));
+                    login.setEnabled(false);
 
-                    SharedPreferences.Editor editor2= sharedpreferences2.edit();
-                    editor2.putString("name",username.getText().toString());
+                    SharedPreferences.Editor editor2 = sharedpreferences2.edit();
+                    editor2.putString("name", username.getText().toString());
 
-                    editor2.putString("password",password.getText().toString());
+                    editor2.putString("password", password.getText().toString());
                     editor2.commit();
                     userId = username.getText().toString();
                     pass = password.getText().toString();
-                    Map userMap = new HashMap<>();
+                    SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor edc = cred.edit();
+                    edc.putString("phone_number", userId);
+                    edc.commit();
+//                    String tok_sp=toks.getString("token_value","");
 
-                    userMap.put("user_id", username.getText().toString());
-
-
-                    Intercom.client().updateUser(userMap);
-
-
-                    if ((userId.length() != 0) && (pass.length() != 0))
+                    if ((userId.length() != 0) && (pass.length() != 0)) {
                         new ItemsByKeyword().execute(url);
-                    else if (userId.length() != 0)
+                        login_otp.setEnabled(false);
+                        notreg.setEnabled(false);
+                    } else if (userId.length() != 0) {
+                        login.setTextColor(Color.parseColor("#66ffffff"));
+//                        int padding_in_dp = 16;  // 6 dps
+//                        final float scale = getResources().getDisplayMetrics().density;
+//                        int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+//                        //  final float scale = getResources().getDisplayMetrics().density;
+//                        int padding_in_px1 = (int) (48 * scale + 0.5f);
+//                        //final float scale = getResources().getDisplayMetrics().density;
+//                        int padding_in_px2 = (int) (5 * scale + 0.5f);
+//                        username.setPadding(0,padding_in_px,0,0);
+//                        password.setPadding(0,padding_in_px,0,0);
+//                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
+//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+//                        username.setLayoutParams(params);
+//                        RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
+//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+//                        password.setLayoutParams(params1);
+////
+////  Toast.makeText(getApplicationContext(),
+////                                "Please Enter your password",
+////                                Toast.LENGTH_LONG).show();
+////                      username.setBackgroundResource(R.drawable.texted);
+//                        password.setBackgroundResource(R.drawable.texted2);
 
-                        Toast.makeText(getApplicationContext(),
-                                "Please Enter your password",
-                                Toast.LENGTH_LONG).show();
-                    else if (pass.length() != 0)
+                        password.setBackgroundResource(R.drawable.texted2);
+                        password.setPadding(pL, pT, pR, pB);
+                        rerr.setVisibility(View.VISIBLE);
+                        error.setText("Please Enter your password");
+                        login.setEnabled(true);
 
-                        Toast.makeText(getApplicationContext(),
-                                "Please Enter your userid.",
-                                Toast.LENGTH_LONG).show();
-                    else
-                        Toast.makeText(getApplicationContext(),
-                                "Fields are empty",
-                                Toast.LENGTH_LONG).show();
+                    } else if (pass.length() != 0) {
+                        login.setTextColor(Color.parseColor("#66ffffff"));
+                        login.setEnabled(true);
+//                        Toast.makeText(getApplicationContext(),
+//                                "Please Enter your userid.",
+//                                Toast.LENGTH_LONG).show();
+                        rerr.setVisibility(View.VISIBLE);
+//                        username.setBackgroundResource(R.drawable.texted2);
+//                        int padding_in_dp = 16;  // 6 dps
+//                        final float scale = getResources().getDisplayMetrics().density;
+//                        int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+//                        //  final float scale = getResources().getDisplayMetrics().density;
+//                        int padding_in_px1 = (int) (48 * scale + 0.5f);
+//                        //final float scale = getResources().getDisplayMetrics().density;
+//                        int padding_in_px2 = (int) (5 * scale + 0.5f);
+//                        username.setPadding(0,padding_in_px,0,0);
+//                        password.setPadding(0,padding_in_px,0,0);
+//                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
+//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+//                        username.setLayoutParams(params);
+//                        RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
+//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+//                        password.setLayoutParams(params1);
+////  Toast.makeText(getApplicationContext(),
+////                                "Please Enter your password",
+////                                Toast.LENGTH_LONG).show();
+//                        username.setBackgroundResource(R.drawable.texted2);
+//                        password.setBackgroundResource(R.drawable.texted2);
+                        //    password.setBackgroundResource(R.drawable.texted);
 
+                        username.setBackgroundResource(R.drawable.texted2);
+                        username.setPadding(pL, pT, pR, pB);
+                        error.setText("Please Enter your userid.");
+                    } else {
+                        login.setEnabled(true);
+                        login.setTextColor(Color.parseColor("#66ffffff"));
+//                        Toast.makeText(getApplicationContext(),
+
+//                                "Fields are empty",
+////                                Toast.LENGTH_LONG).show();
+//                        int padding_in_dp = 16;  // 6 dps
+//                        final float scale = getResources().getDisplayMetrics().density;
+//                        int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+//                        //  final float scale = getResources().getDisplayMetrics().density;
+//                        int padding_in_px1 = (int) (48 * scale + 0.5f);
+//                        //final float scale = getResources().getDisplayMetrics().density;
+//                        int padding_in_px2 = (int) (5 * scale + 0.5f);
+//                        username.setPadding(0,padding_in_px,0,0);
+//                        password.setPadding(0,padding_in_px,0,0);
+//                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
+//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+//                        username.setLayoutParams(params);
+//                        RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
+//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+//                        password.setLayoutParams(params1);
+////
+////  Toast.makeText(getApplicationContext(),
+////                                "Please Enter your password",
+////                                Toast.LENGTH_LONG).show();
+////                        username.setBackgroundResource(R.drawable.texted);
+////                        password.setBackgroundResource(R.drawable.texted2);
+//                        username.setBackgroundResource(R.drawable.texted2);
+//                        password.setBackgroundResource(R.drawable.texted2);
+                        rerr.setVisibility(View.VISIBLE);
+
+                        username.setBackgroundResource(R.drawable.texted2);
+                        username.setPadding(pL, pT, pR, pB);
+
+                        password.setBackgroundResource(R.drawable.texted2);
+                        password.setPadding(pL, pT, pR, pB);
+                        error.setText("Fields are empty");
+                    }
                 }
             });
         }
+        Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
+        Intercom.client().registerIdentifiedUser(
+                new Registration().withUserId(userId));
+        Intercom.client().openGCMMessage(getIntent());
     }
+
     @Override
     public void onBackPressed() {
-Intent in=new Intent(MainActivity.this,Landing.class);
+        Intent in = new Intent(MainActivity.this, Landing.class);
         finish();
         startActivity(in);
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
+        
     }
 
     private class ItemsByKeyword extends
             AsyncTask<String, Void, String> {
         @Override
-        protected void onPreExecute() {  if(d==1)
-            spinner.setVisibility(View.VISIBLE);
+        protected void onPreExecute() {
+            if (d == 1)
+                spinner.setVisibility(View.VISIBLE);
 
         }
+
         @Override
         protected String doInBackground(String... params) {
 
@@ -224,8 +484,7 @@ Intent in=new Intent(MainActivity.this,Landing.class);
         }
 
         protected void onPostExecute(String result) {
-            if(d==1)
-            spinner.setVisibility(View.GONE);
+
             if (result.contains("fail")) {
 
                 // populateUserDetails();
@@ -263,12 +522,13 @@ Intent in=new Intent(MainActivity.this,Landing.class);
 
                 HttpConnectionParams
                         .setConnectionTimeout(httpParameters, 30000);
-
+                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                String tok_sp = toks.getString("token_value", "");
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String url2 = getApplicationContext().getString(R.string.server)+"api/user/login";
+                String url2 = getApplicationContext().getString(R.string.server) + "api/user/login";
                 HttpPost httppost = new HttpPost(url2);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
-                httppost.setHeader("x-access-token", token);
+                httppost.setHeader("x-access-token", tok_sp);
                 httppost.setHeader("Content-Type", "application/json");
 
 
@@ -307,57 +567,135 @@ Intent in=new Intent(MainActivity.this,Landing.class);
         }
 
         protected void onPostExecute(String result) {
-
+if(d==1)
+                spinner.setVisibility(View.GONE);
             if (!result.contains("win")) {
-
+                login.setTextColor(Color.parseColor("#66ffffff"));
                 // populateUserDetails();
-                if (result.contains("Invalid userid"))
-                    Toast.makeText(getApplicationContext(),
-                            "Please login with correct credentials ",
-                            Toast.LENGTH_LONG).show();
+                if (result.contains("Invalid userid")) {
+                    login.setEnabled(true);
+//                    Toast.makeText(getApplicationContext(),
+//                            "Please login with correct credentials ",
+//                            Toast.LENGTH_LONG).show();
+//                    int padding_in_dp = 16;  // 6 dps
+//                    final float scale = getResources().getDisplayMetrics().density;
+//                    int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+//                    username.setPadding(0,padding_in_px,0,0);
+//                    password.setPadding(0,padding_in_px,0,0);
+//
+//  Toast.makeText(getApplicationContext(),
+//                                "Please Enter your password",
+//                                Toast.LENGTH_LONG).show();
+                    notreg.setEnabled(true);
+                    login_otp.setEnabled(true);
+                    username.setBackgroundResource(R.drawable.texted2);
 
-
-                else if (result.contains("Invalid password")) {
+                    //  password.setBackgroundResource(R.drawable.texted);
+                    username.setPadding(pL, pT, pR, pB);
+//                    password.setBackgroundResource(R.drawable.texted);
+                    rerr.setVisibility(View.VISIBLE);
+                    error.setText("Please login with correct userid.");
+                } else if (result.contains("Invalid password")) {
                     password.setText("");
-                    Toast.makeText(getApplicationContext(),
-                            "Please login with correct credentials ",
-                            Toast.LENGTH_LONG).show();
+                    login.setEnabled(true);
+                    rerr.setVisibility(View.VISIBLE);
+                    notreg.setEnabled(true);
+                    login_otp.setEnabled(true);
+//                    username.setBackgroundResource(R.drawable.texted);
+//                    int padding_in_dp = 16;  // 6 dps
+//                    final float scale = getResources().getDisplayMetrics().density;
+//                    int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+//                    username.setPadding(0,padding_in_px,0,0);
+//                    password.setPadding(0,padding_in_px,0,0);
+////
+//  Toast.makeText(getApplicationContext(),
+//                                "Please Enter your password",
+//                                Toast.LENGTH_LONG).show();
+//                    username.setBackgroundResource(R.drawable.texted);
+//                    password.setBackgroundResource(R.drawable.texted2);
+                    password.setBackgroundResource(R.drawable.texted2);
+
+                    //password.setBackgroundResource(R.drawable.texted);
+                    password.setPadding(pL, pT, pR, pB);
+                    error.setText("Please login with correct password.");
                 }
 
             } else {
-                int a=1;
+                int a = 1;
                 sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putInt("checklog", a);
                 editor.commit();
-                //   getAllSms();
-                Map userMap = new HashMap<>();
+                setUpPush();
 
-                userMap.put("user_id", userId);
 
-                userMap.put("phoneVerified", true);
-                Intercom.client().updateUser(userMap);
-                SharedPreferences userP = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
-                int back=userP.getInt("back", 0);
-                if(back==0)
-                Toast.makeText(getApplicationContext(),
-                        "Successfully Logged In",
-                        Toast.LENGTH_LONG).show();
-            //  getAllSms();
-                new Thread(new Runnable() {
-                    public void run(){
-                       getALlContacts();
-                        getAllSms();
+                //   gestAllSms();
+                try {
+                    Map userMap = new HashMap<>();
+
+                    userMap.put("user_id", userId);
+                    userMap.put("logged_in", true);
+                    userMap.put("phoneVerified", true);
+                    Intercom.client().updateUser(userMap);
+                } catch (Exception e) {
+                    System.out.println("Intercom three" + e.toString());
+                }
+
+                //  getAllSms();
+                Intent alarmIntent = new Intent(MainActivity.this, AndroidReceiver.class);
+                pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
+                setAlarm();
+                int results = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.READ_SMS);
+                int w = 0;
+                int resultscon = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.READ_CONTACTS);
+//while(w==0){
+                if (resultscon == PackageManager.PERMISSION_GRANTED) {
+                    w = 1;
+
+                    new Thread(new Runnable() {
+                        public void run() {
+
+//                            getALlContacts();
+//                            getAllSms();
+
 //                    getALlContacts();
-                    }
-                }).start();
+                        }
+
+                    }).start();
+
+                } else {
+
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_CODEC);
+
+                }
+
+
+                if (results == PackageManager.PERMISSION_GRANTED) {
+
+
+                    new Thread(new Runnable() {
+                        public void run() {
+
+                            //  getALlContacts();
+                       //     getAllSms();
+
+//                    getALlContacts();
+                        }
+
+                    }).start();
+
+                } else {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.READ_SMS}, PERMISSION_REQUEST_CODE);
+
+                }
+
 //                new Thread(new Runnable() {
 //                    public void run(){
 ////                       getALlContacts();
 //                       // getAllSms();
 //                    }
 //                }).start();
-            //   getALlContacts();
+                //   getALlContacts();
 
 
                 new checkuser().execute(url);
@@ -367,6 +705,52 @@ Intent in=new Intent(MainActivity.this,Landing.class);
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    new Thread(new Runnable() {
+                        public void run() {
+
+                            //  getALlContacts();
+                            //  getALlContacts();
+//                            getAllSms();
+
+//                    getALlContacts();
+                        }
+
+                    }).start();
+//                    Snackbar.make(view,"Permission Granted, Now you can access location data.",Snackbar.LENGTH_LONG).show();
+
+                } else {
+
+//                    Snackbar.make(view,"Permission Denied, You cannot access location data.",Snackbar.LENGTH_LONG).show();
+
+                }
+                break;
+            case PERMISSION_REQUEST_CODEC:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    new Thread(new Runnable() {
+                        public void run() {
+
+//                            getALlContacts();
+//                            getAllSms(
+
+//                    getALlContacts();
+                        }
+
+                    }).start();
+//                    Snackbar.make(view,"Permission Granted, Now you can access location data.",Snackbar.LENGTH_LONG).show();
+
+                } else {
+
+//                    Snackbar.make(view,"Permission Denied, You cannot access location data.",Snackbar.LENGTH_LONG).show();
+
+                }
+                break;
+        }
+    }
 
     private class checkuser extends
             AsyncTask<String, Void, String> {
@@ -384,15 +768,16 @@ Intent in=new Intent(MainActivity.this,Landing.class);
                 // payload.put("action", details.get("action"));
 
                 HttpParams httpParameters = new BasicHttpParams();
-                String uurl = getApplicationContext().getString(R.string.server)+"api/user/form?phone="+userId;
+                String uurl = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + userId;
                 HttpConnectionParams
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-
+                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                String tok_sp = toks.getString("token_value", "");
                 HttpGet httppost = new HttpGet(uurl);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
-                httppost.setHeader("x-access-token", token);
+                httppost.setHeader("x-access-token", tok_sp);
                 HttpResponse response = client.execute(httppost);
                 HttpEntity ent = response.getEntity();
                 String responseString = EntityUtils.toString(ent, "UTF-8");
@@ -410,51 +795,122 @@ Intent in=new Intent(MainActivity.this,Landing.class);
                     Name = data.getString("name");
                     try {
                         uniqueCode = data.getString("uniqueCode");
+                        SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.putString("rcode", uniqueCode);
+                        editor.commit();
+
+                    } catch (Exception e) {
                     }
-                    catch(Exception e){}
                     try {
                         creditLimit = data.getString("creditLimit");
+                    } catch (Exception e) {
                     }
-                    catch(Exception e){}
                     try {
                         rejectionReason = data.getString("rejectionReason");
+                    } catch (Exception e) {
                     }
-                    catch(Exception e){}
+
+                    try {
+                        courseCompletiondate=data.getString("courseCompletionDate");
+                        SharedPreferences.Editor editor2 = toks.edit();
+                        editor2.putString("course", courseCompletiondate);
+
+                        //  editor2.putString("password", password.getText().toString());
+                        editor2.commit();
+                       // SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+
+                        formstatus = data.getString("formStatus");
+                    } catch (Exception e) {
+                        formstatus = "empty";
+                    }
+
                     try{
-                    formstatus = data.getString("formStatus");}
-                    catch(Exception e){
-                        formstatus="empty";
+                        cashBack=data.getInt("totalCashback");
                     }
-                    if(formstatus.equals(""))
-                        formstatus="empty";
+                    catch(Exception e)
+                    {
+                        cashBack=0;
+                    }
+                    String approvedBand="";
                     try{
-                        panoradhar = data.getString("addressProof");}
-                    catch(Exception e){
-                        panoradhar="NA";
+                        approvedBand=data.getString("approvedBand");
                     }
-                    if(panoradhar.equals(""))
-                        panoradhar="NA";
+                    catch(Exception e)
+                    {
+                        approvedBand="";
+                    }
+                    int creditLimit=0;
                     try{
-                        collegeid = data.getString("collegeId");}
-                    catch(Exception e){
-                        collegeid="NA";
+                       creditLimit=data.getInt("creditLimit");
                     }
-                    if(collegeid.equals(""))
-                        collegeid="NA";
+                    catch(Exception e)
+                    {
+                        creditLimit=0;
+                    }
+                    int totalBorrowed=0;
                     try{
-                       bankaccount = data.getString("bankStatement");}
-                    catch(Exception e){
-                        bankaccount="NA";
+                        totalBorrowed=data.getInt("totalBorrowed");
                     }
-                    if(bankaccount.equals(""))
-                        bankaccount="NA";
-                    try{
-                        verificationdate = data.getString("collegeIdVerificationDate");}
-                    catch(Exception e){
-                        verificationdate="NA";
+                    catch(Exception e)
+                    {
+                        totalBorrowed=0;
                     }
-                    if(verificationdate.equals(""))
-                        verificationdate="NA";
+                    SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editorP = userP.edit();
+                    editorP.putString("approvedBand",approvedBand);
+                    editorP.putInt("creditLimit", creditLimit);
+                    editorP.putInt("totalBorrowed", totalBorrowed);
+                    editorP.putInt("cashBack", cashBack);
+                    editorP.commit();
+
+                    if (formstatus.equals(""))
+                        formstatus = "empty";
+                    try {
+                        String dpid = data.getString("fbUserId");
+                        SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor2 = sf.edit();
+                        editor2.putString("dpid", dpid);
+
+                        //  editor2.putString("password", password.getText().toString());
+                        editor2.commit();
+                    } catch (Exception e) {
+                    }
+                    try {
+                        fbid = data.getString("fbConnected");
+                    } catch (Exception e) {
+                        fbid = "empty";
+                    }
+                    if ((fbid.equals("") || (fbid.equals("false"))))
+                        fbid = "empty";
+                    try {
+                        panoradhar = data.getString("addressProofs");
+                    } catch (Exception e) {
+                        panoradhar = "NA";
+                    }
+                    if (panoradhar.equals(""))
+                        panoradhar = "NA";
+                    try {
+                        collegeid = data.getString("collegeIDs");
+                    } catch (Exception e) {
+                        collegeid = "NA";
+                    }
+                    if (collegeid.equals(""))
+                        collegeid = "NA";
+                    try {
+                        bankaccount = data.getString("bankStatement");
+                    } catch (Exception e) {
+                        bankaccount = "NA";
+                    }
+                    if (bankaccount.equals(""))
+                        bankaccount = "NA";
+                    try {
+                        verificationdate = data.getString("collegeIdVerificationDate");
+                    } catch (Exception e) {
+                        verificationdate = "NA";
+                    }
+                    if (verificationdate.equals(""))
+                        verificationdate = "NA";
                     // TODO: 2/7/2016  add college id field and check
 
                     if (resp.getString("status").contains("fail")) {
@@ -478,7 +934,10 @@ Intent in=new Intent(MainActivity.this,Landing.class);
         }
 
         protected void onPostExecute(String result) {
-
+            if (d == 1){
+                spinner.setVisibility(View.GONE);
+            notreg.setEnabled(true);
+            login_otp.setEnabled(true);}
             if (result.contains("fail")) {
 
                 // populateUserDetails();
@@ -487,92 +946,114 @@ Intent in=new Intent(MainActivity.this,Landing.class);
                         "Something's Wrong! Please try again!",
                         Toast.LENGTH_LONG).show();
 
-            } else { try {
-           //     Intercom.client().reset();
-            }
-            catch (Exception e)
-            {System.out.println(e.toString()+"int main");}
-                Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
-                Intercom.client().registerIdentifiedUser(
-                        new Registration().withUserId(userId));
+            } else {
+                try {
+
+
+                    if (d == 1)
+
+                        Toast.makeText(getApplicationContext(),
+                                "Successfully Logged In",
+                                Toast.LENGTH_LONG).show();
+                    //     Intercom.client().reset();
+                } catch (Exception e) {
+                    System.out.println(e.toString() + "int main");
+                }
+                try {
+
+
+              //      setUpPush();
+                    try {
+                        Map userMap = new HashMap<>();
+                        System.out.println("Intercom data 1" + userId);
+
+                        userMap.put("user_id", userId);
+
+
+                        Intercom.client().updateUser(userMap);
+                    } catch (Exception e) {
+                        System.out.println("Intercom five" + e.toString());
+                    }
+                } catch (Exception e) {
+                    System.out.println("Intercom four" + e.toString());
+                }
                 if (formstatus.equals("saved")) {
 
-                    Intent in = new Intent(MainActivity.this, Formempty.class);
-                    finish();
-                   // Intent in = new Intent(MainActivity.this, Inviteform.class);
-                    in.putExtra("Name", Name);
-                    in.putExtra("Email", email);
-                    in.putExtra("Form", formstatus);
-                    in.putExtra("UniC",uniqueCode);
-                    startActivity(in);
-                    overridePendingTransition(0, 0);
-                }
-else
-                if (formstatus.equals("declined")) {
-
-                    Intent in = new Intent(MainActivity.this, Formempty.class);
+                    Intent in = new Intent(MainActivity.this, HomePage.class);
                     finish();
                     // Intent in = new Intent(MainActivity.this, Inviteform.class);
                     in.putExtra("Name", Name);
-                    in.putExtra("Rej",rejectionReason);
+                    in.putExtra("fbid", fbid);
                     in.putExtra("Email", email);
                     in.putExtra("Form", formstatus);
-                    in.putExtra("UniC",uniqueCode);
+                    in.putExtra("UniC", uniqueCode);
                     startActivity(in);
                     overridePendingTransition(0, 0);
-                }
-                else
-                if (formstatus.equals("submitted")) {
-   //                 Intent in = new Intent(MainActivity.this, Landing.class);
-                    Intent in = new Intent(MainActivity.this, Formstatus.class);
+                } else if (formstatus.equals("declined")) {
 
-if((panoradhar.equals("NA"))||(bankaccount.equals("NA"))||(collegeid.equals("NA")))
-{
-in.putExtra("screen_no",1);
-}
-                    else if((!panoradhar.equals("NA"))&&(!collegeid.equals("NA"))&&(!bankaccount.equals("NA"))&&(verificationdate.equals("NA")))
-                    {
-                        in.putExtra("screen_no",2);
-                    }
-                   else if((!panoradhar.equals("NA"))&&(!collegeid.equals("NA"))&&(!bankaccount.equals("NA"))&&(!verificationdate.equals("NA")))
-                    {
-                        in.putExtra("screen_no",3);
-in.putExtra("VeriDate",verificationdate);
+                    Intent in = new Intent(MainActivity.this, HomePage.class);
+                    finish();
+                    // Intent in = new Intent(MainActivity.this, Inviteform.class);
+                    in.putExtra("Name", Name);
+                    in.putExtra("fbid", fbid);
+                    in.putExtra("Rej", rejectionReason);
+                    in.putExtra("Email", email);
+                    in.putExtra("Form", formstatus);
+                    in.putExtra("UniC", uniqueCode);
+                    startActivity(in);
+                    overridePendingTransition(0, 0);
+                } else if (formstatus.equals("submitted")) {
+                    //                 Intent in = new Intent(MainActivity.this, Landing.class);
+                    Intent in = new Intent(MainActivity.this, HomePage.class);
+                    bankaccount = "something";
+                    if ((panoradhar.equals("NA")) || (bankaccount.equals("NA")) || (collegeid.equals("NA"))) {
+                        in.putExtra("screen_no", 1);
+                    } else if ((!panoradhar.equals("NA")) && (!collegeid.equals("NA")) && (!bankaccount.equals("NA")) && (verificationdate.equals("NA"))) {
+                        in.putExtra("screen_no", 2);
+                    } else if ((!panoradhar.equals("NA")) && (!collegeid.equals("NA")) && (!bankaccount.equals("NA")) && (!verificationdate.equals("NA"))) {
+                        in.putExtra("screen_no", 3);
+                        in.putExtra("VeriDate", verificationdate);
                     }
 
 
                     finish();
                     in.putExtra("Name", Name);
                     in.putExtra("Email", email);
+                    in.putExtra("fbid", fbid);
                     in.putExtra("Form", formstatus);
-                    in.putExtra("UniC",uniqueCode);
+                    in.putExtra("UniC", uniqueCode);
                     startActivity(in);
                     overridePendingTransition(0, 0);
                 }
-                if (formstatus.equals("approved")) {
+                if (formstatus.equals("approved")||(formstatus.equals("flashApproved"))) {
 
-                    Intent in = new Intent(MainActivity.this, Approved.class);
+                    Intent in = new Intent(MainActivity.this, HomePage.class);
                     // Intent in = new Intent(MainActivity.this, Inviteform.class);
                     finish();
                     in.putExtra("Name", Name);
+                    if(formstatus.equals("approved"))
+                        in.putExtra("checkflash",0);
+                    else
+                        in.putExtra("checkflash",1);
+
+                    in.putExtra("fbid", fbid);
                     in.putExtra("Email", email);//
-                     in.putExtra("Credits",creditLimit);
+                    in.putExtra("Credits", creditLimit);
                     in.putExtra("Form", formstatus);
-                    in.putExtra("UniC",uniqueCode);
+                    in.putExtra("UniC", uniqueCode);
                     startActivity(in);
-                    overridePendingTransition(0,0);
-                }
-                else
-                if (formstatus.equals("empty")) {
+                    overridePendingTransition(0, 0);
+                } else if (formstatus.equals("empty")) {
 //                    Intent in = new Intent(MainActivity.this, Inviteform    .class);
-                    Intent in = new Intent(MainActivity.this, Formempty.class);
+                    Intent in = new Intent(MainActivity.this, HomePage.class);
                     finish();
                     in.putExtra("Name", Name);
+                    in.putExtra("fbid", fbid);
                     in.putExtra("Email", email);
                     in.putExtra("Form", formstatus);
-                    in.putExtra("UniC",uniqueCode);
+                    in.putExtra("UniC", uniqueCode);
                     startActivity(in);
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                 }
 
 
@@ -580,16 +1061,18 @@ in.putExtra("VeriDate",verificationdate);
 
         }
     }
-    public   class SendSmsToServer extends AsyncTask<List<SMS>, String, String> {
+
+    public class SendSmsToServer extends AsyncTask<List<SMS>, String, String> {
 
         @Override
-        protected String doInBackground(List<SMS>... sms){
+        protected String doInBackground(List<SMS>... sms) {
             try {
                 System.out.println("sm123");
                 JSONObject payload = new JSONObject();
                 List<SMS> res = sms[0];
                 System.out.println("buddyqwe" + new Gson().toJson(sms[0]));
                 String check = new Gson().toJson(sms[0]);
+
 
                 int length = check.length();
 
@@ -602,37 +1085,37 @@ in.putExtra("VeriDate",verificationdate);
 
                 try {
                     HttpParams httpParameters = new BasicHttpParams();
-
+                    SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                    String tok_sp = toks.getString("token_value", "");
                     HttpClient client = new DefaultHttpClient(httpParameters);
-                    String urlsm = getApplicationContext().getString(R.string.server)+"api/content/sms";
+                    String urlsm = getApplicationContext().getString(R.string.server) + "api/content/sms";
                     SharedPreferences pref = act.getSharedPreferences("MyPref", 0);
                     HttpPost httppost = new HttpPost(urlsm);
 
                     HttpConnectionParams
                             .setConnectionTimeout(httpParameters, 30000);
-                    httppost.setHeader("x-access-token", token);
+                    httppost.setHeader("x-access-token", tok_sp);
                     httppost.setHeader("Content-Type", "application/json");
                     //     JSONArray mJSONArray = new JSONArray(Arrays.asList(sms));
                     payload.put("userId", userId);
                     payload.put("data", check);
 
 
-
-String t=payload.toString();
-                    String t1=payload.toString().replace("{\\", "{");
-                    String tx=t1.toString().replace(":\\", ":");
-                    String ty=tx.toString().replace("\\\":", "\":");
-                    String tz=ty.toString().replace(",\\", ",");
-                    String tw=tz.toString().replace("\\\"", "\"");
-                    String te=tw.toString().replace("\\\\r\\", "");
-                    String tr=te.toString().replace("\\\\\"","");
-                    String tu=tr.toString().replace("/\\/","");
-                    String tq=tu.toString().replace("\\/","");
-                    String tl=tq.toString().replace("\\\\","");
-               String t2=tl.replace("\"[{", "[{");
-                String t3=t2.replace("}]\"", "} ]");
-                    String t4=t3.replace("\\n", "");
-                    String t5=t4.replace("\"\"","");
+                    String t = payload.toString();
+                    String t1 = payload.toString().replace("{\\", "{");
+                    String tx = t1.toString().replace(":\\", ":");
+                    String ty = tx.toString().replace("\\\":", "\":");
+                    String tz = ty.toString().replace(",\\", ",");
+                    String tw = tz.toString().replace("\\\"", "\"");
+                    String te = tw.toString().replace("\\\\r\\", "");
+                    String tr = te.toString().replace("\\\\\"", "");
+                    String tu = tr.toString().replace("/\\/", "");
+                    String tq = tu.toString().replace("\\/", "");
+                    String tl = tq.toString().replace("\\\\", "");
+                    String t2 = tl.replace("\"[{", "[{");
+                    String t3 = t2.replace("}]\"", "} ]");
+                    String t4 = t3.replace("\\n", "");
+                    String t5 = t4.replace("\"\"", "");
                     StringEntity entity = new StringEntity(t5);
                     httppost.setEntity(entity);
                     HttpResponse response = client.execute(httppost);
@@ -663,37 +1146,39 @@ String t=payload.toString();
                     e.printStackTrace();
                     return "fail";
                 }
+            } catch (Exception e) {
+                return "fail";
             }
-            catch (Exception e){return "fail";}
         }
 
         @Override
         protected void onPostExecute(String result) {
 //            Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
             // TODO Auto-generated method stub
-            if(result.equals("win")){
+            if (result.equals("win")) {
 
-                System.out.println(result+"smswin");
+                System.out.println(result + "smswin");
             }
-            System.out.println(result+"smsloss");
+            System.out.println(result + "smsloss");
         }
     }
-    public  class SendContactToServer extends AsyncTask<List<Contacts>, String, String> {
+
+    public class SendContactToServer extends AsyncTask<List<Contacts>, String, String> {
 
         @Override
-        protected String doInBackground(List<Contacts>... cont){
+        protected String doInBackground(List<Contacts>... cont) {
             try {
                 System.out.println("sm123");
                 JSONObject payload = new JSONObject();
                 List<Contacts> res = cont[0];
 
-               String check="";
-                try{ System.out.println("buddyqwe" + new Gson().toJson(cont[0]));
-                    check = new Gson().toJson(cont[0]);}
-                catch (Exception e)
-                {
-                    String s=e.toString();
-                    System.out.print("regre"+s+"ssio");
+                String check = "";
+                try {
+                    System.out.println("buddyqwe" + new Gson().toJson(cont[0]));
+                    check = new Gson().toJson(cont[0]);
+                } catch (Exception e) {
+                    String s = e.toString();
+                    System.out.print("regre" + s + "ssio");
                 }
 
 //                int length = check.length();
@@ -707,41 +1192,40 @@ String t=payload.toString();
 
                 try {
                     HttpParams httpParameters = new BasicHttpParams();
-
+                    SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                    String tok_sp = toks.getString("token_value", "");
                     HttpClient client = new DefaultHttpClient(httpParameters);
-                    String urlsm = getApplicationContext().getString(R.string.server)+"api/content/contact";
+                    String urlsm = getApplicationContext().getString(R.string.server) + "api/content/contact";
                     SharedPreferences pref = act.getSharedPreferences("MyPref", 0);
                     HttpPost httppost = new HttpPost(urlsm);
 
                     HttpConnectionParams
                             .setConnectionTimeout(httpParameters, 30000);
-                    httppost.setHeader("x-access-token", token);
+                    httppost.setHeader("x-access-token", tok_sp);
                     httppost.setHeader("Content-Type", "application/json");
                     //     JSONArray mJSONArray = new JSONArray(Arrays.asList(sms));
-                    try{
-                    payload.put("userId", userId);
-                    payload.put("data",check);}
-                    catch(Exception e)
-                    {
-                        System.out.println("NNeve"+e.toString());
+                    try {
+                        payload.put("userId", userId);
+                        payload.put("data", check);
+                    } catch (Exception e) {
+                        System.out.println("NNeve" + e.toString());
                     }
 
 
-
-                    String t1=payload.toString().replace("{\\", "{");
-                    String tx=t1.toString().replace(":\\", ":");
-                    String ty=tx.toString().replace("\\\":", "\":");
-                    String tz=ty.toString().replace(",\\", ",");
-                    String tw=tz.toString().replace("\\\"", "\"");
-                    String te=tw.toString().replace("\\\\r\\", "");
-                    String tr=te.toString().replace("\\\\\"","");
-                    String tu=tr.toString().replace("/\\/","");
-                    String tq=tu.toString().replace("\\/","");
-                    String tl=tq.toString().replace("\\\\","");
-                    String t2=tl.replace("\"[", "[");
-                    String t3=t2.replace("]\"", "]");
-                    String t4=t3.replace("\\n", "");
-                    String t5=t4.replace("\"\"","");
+                    String t1 = payload.toString().replace("{\\", "{");
+                    String tx = t1.toString().replace(":\\", ":");
+                    String ty = tx.toString().replace("\\\":", "\":");
+                    String tz = ty.toString().replace(",\\", ",");
+                    String tw = tz.toString().replace("\\\"", "\"");
+                    String te = tw.toString().replace("\\\\r\\", "");
+                    String tr = te.toString().replace("\\\\\"", "");
+                    String tu = tr.toString().replace("/\\/", "");
+                    String tq = tu.toString().replace("\\/", "");
+                    String tl = tq.toString().replace("\\\\", "");
+                    String t2 = tl.replace("\"[", "[");
+                    String t3 = t2.replace("]\"", "]");
+                    String t4 = t3.replace("\\n", "");
+                    String t5 = t4.replace("\"\"", "");
                     StringEntity entity = new StringEntity(t5);
                     httppost.setEntity(entity);
                     HttpResponse response = client.execute(httppost);
@@ -772,35 +1256,35 @@ String t=payload.toString();
                     e.printStackTrace();
                     return "fail";
                 }
+            } catch (Exception e) {
+                return "fail";
             }
-            catch (Exception e){return "fail";}
         }
 
         @Override
         protected void onPostExecute(String result) {
 //            Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
             // TODO Auto-generated method stub
-            if(result.equals("win")){
+            if (result.equals("win")) {
                 System.out.println(result);
             }
         }
     }
-    public void getALlContacts()
-    {
-        String id="NA",name="NA",ph_no="NA",typ="NA",email="NA",emailType="NA",noteWhere="NA",note="NA",orgWhere="NA",orgName="NA",title="NA",addrWhere="NA",poBox="NA",city="NA",state="NA",postalCode="NA",street="NA",country="NA",type="NA";
-        String[] noteWhereParams,orgWhereParams,addrWhereParams,nickwhereparam;
-        String nickwhere="NA",nickname="NA";
-        ContentResolver cr1=getContentResolver();
-        Cursor cu=cr1.query(ContactsContract.Contacts.CONTENT_URI,null,null,null,null);
-        if(cu.getCount()>0)
-        {
-            System.out.print("con"+cu.getCount());
-            List<Contacts> con=new ArrayList<Contacts>();
-            List<Contacts> con2=new ArrayList<Contacts>();
-            int batchcount1=0;
-            while(cu.moveToNext())
-            {try {
-                Contacts cObj=new Contacts();
+
+    public void getALlContacts() {
+        String id = "NA", name = "NA", ph_no = "NA", typ = "NA", email = "NA", emailType = "NA", noteWhere = "NA", note = "NA", orgWhere = "NA", orgName = "NA", title = "NA", addrWhere = "NA", poBox = "NA", city = "NA", state = "NA", postalCode = "NA", street = "NA", country = "NA", type = "NA";
+        String[] noteWhereParams, orgWhereParams, addrWhereParams, nickwhereparam;
+        String nickwhere = "NA", nickname = "NA";
+        ContentResolver cr1 = getContentResolver();
+        Cursor cu = cr1.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        if (cu.getCount() > 0) {
+            System.out.print("con" + cu.getCount());
+            List<Contacts> con = new ArrayList<Contacts>();
+            List<Contacts> con2 = new ArrayList<Contacts>();
+            int batchcount1 = 0;
+            while (cu.moveToNext()) {
+                try {
+                    Contacts cObj = new Contacts();
 
 //                String address=cu.getString(cu.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
 //
@@ -813,231 +1297,242 @@ String t=payload.toString();
 //               String nick = cu.getString(cu.getColumnIndex(ContactsContract.CommonDataKinds.Nickname.NAME));
 //                String im=cu.getString(cu.getColumnIndex(ContactsContract.CommonDataKinds.In
 //                String im=cu.getString(cu.getColumnIndex(ContactsContract.Contacts.1
-try {
-    id = cu.getString(
-            cu.getColumnIndex(ContactsContract.Contacts._ID));
-}
-catch(Exception e){System.out.println("Error with contact");
-id="NA";}
-                try{
-                 name = cu.getString(
-                        cu.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
-                }
-                catch(Exception e){System.out.println("Error with contact");
-                name="NA";}
-                cObj.setName(name);
-                if (Integer.parseInt(cu.getString(
-                        cu.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                    Cursor pCur = cr1.query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
-                            new String[]{id}, null);
-
-                   List<Phone> ph_ns=new ArrayList<Phone>();
-                    while (pCur.moveToNext()) {
-                        Phone p=
-
-                                new Phone();
-                try{
-                  ph_no=pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));}
-                catch(Exception e){System.out.println("Error with contact");
-                ph_no="NA";}
-                        try{
-                         typ=pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));}
-                        catch(Exception e){System.out.println("Error with contact");
-                        typ="NA";}
-
-                        //System.out.println("eefee"+typ);
-                        p.setPhone(ph_no);
-                        p.setPhone_type(typ);
-                        ph_ns.add(p);
-
-                        // Do something with phones
-                    }
-                    pCur.close();
-                    cObj.setPh(ph_ns);
-
-                }
-
-                Cursor emailCur = cr1.query(
-                        ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
-                        new String[]{id}, null);
-                List<Email> eMail= new ArrayList<Email>();
-                while (emailCur.moveToNext()) {
-                    Email eObj= new Email();
-                    // This would allow you get several email addresses
-                    // if the email addresses were stored in an array
-                    try{
-                     email = emailCur.getString(
-                            emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                    }
-                    catch(Exception e){
-                        email="NA";
-                        System.out.println("Error with contact");}
-                    try{
-                    emailType = emailCur.getString(
-                            emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
-                    }
-                    catch(Exception e){
-                        emailType="NA";
-                        System.out.println("Error with contact");}
-                    eObj.setemail(email);
-                    eObj.setemail_type(emailType);
-                    eMail.add(eObj);
-//                    System.out.println(emailType+"eeee");
-                }
-                cObj.setEm(eMail);
-                emailCur.close();
-                try{
-                 noteWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";}
-                catch(Exception e){
-                    noteWhere="NA";
-                    System.out.println("Error with contact");}
-
-                noteWhereParams = new String[]{id,
-                        ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE};
-
-                Cursor noteCur = cr1.query(ContactsContract.Data.CONTENT_URI, null, noteWhere, noteWhereParams, null);
-                if (noteCur.moveToFirst()) {
-                    try{
-                     note = noteCur.getString(noteCur.getColumnIndex(ContactsContract.CommonDataKinds.Note.NOTE));}
-                    catch(Exception e){note="NA";}
-                    System.out.println("eeee");
-                }
-                noteCur.close();
-                try{
-                orgWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
-                }
-                catch(Exception e){
-                    orgWhere="NA";
-                    System.out.println("Error with contact");}
-                 orgWhereParams = new String[]{id,
-                        ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE};
-                Cursor orgCur = cr1.query(ContactsContract.Data.CONTENT_URI,
-                        null, orgWhere, orgWhereParams, null);
-                if (orgCur.moveToFirst()) {
-                    try{
-                     orgName = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DATA));
-                    }
-                    catch(Exception e){
-                        orgName="NA";
-                        System.out.println("Error with contact");}
-                    try{
-                     title = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE));
-                    }
-                    catch(Exception e){
-                        title="NA";
-                        System.out.println("Error with contact");}
-                    cObj.setOrg(orgName);
-                }
-                orgCur.close();
-                try{
-                addrWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
-                }
-                catch(Exception e){
-                    addrWhere="NA";
-                    System.out.println("Error with contact");}
-                 addrWhereParams = new String[]{id,
-                        ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE};
-                Cursor addrCur = cr1.query(ContactsContract.Data.CONTENT_URI,
-                        null, addrWhere, addrWhereParams, null);
-                while(addrCur.moveToNext()) {
-                    try{
-                     poBox = addrCur.getString(
-                            addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.POBOX));
-                    }
-                    catch(Exception e){
-                        poBox="NA";
-                        System.out.println("Error with contact");}
-                    try{
-                    street = addrCur.getString(
-                            addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.STREET));
-                    }
-                    catch(Exception e){
-                        street="NA";
-                        System.out.println("Error with contact");}
-                    try{
-                    city = addrCur.getString(
-                            addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CITY));
-                    }
-                    catch(Exception e){
-                        city="NA";
-                        System.out.println("Error with contact");}
-                    try{
-                    state = addrCur.getString(
-                            addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.REGION));
-                    }
-                    catch(Exception e){
-                        state="NA";
-                        System.out.println("Error with contact");}
                     try {
-                        postalCode = addrCur.getString(
-                                addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE));
+                        id = cu.getString(
+                                cu.getColumnIndex(ContactsContract.Contacts._ID));
+                    } catch (Exception e) {
+                        System.out.println("Error with contact");
+                        id = "NA";
                     }
-                    catch(Exception e){
-                        postalCode="NA";
-                        System.out.println("Error with contact");}
-                     try{
-                    country = addrCur.getString(
-                            addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY));
-                     }
-                     catch(Exception e){
-                         country="NA";
-                         System.out.println("Error with contact");}
-                    try{
-                     type = addrCur.getString(
-                            addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.TYPE));
-                    }
-                    catch(Exception e){
-                        type="NA";
-                        System.out.println("Error with contact");}
-             cObj.setAddress(city + " " + state + " " + postalCode + " " + country + " " + type + " " + poBox + " " + street);
-                }
-                addrCur.close();
-try{
-                 nickwhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
-}
-catch(Exception e){
-    nickwhere="NA";
-    System.out.println("Error with contact");}
-                 nickwhereparam = new String[]{id,
-                        ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE};
-                Cursor nick = cr1.query(ContactsContract.Data.CONTENT_URI,
-                        null, nickwhere, nickwhereparam, null);
-                if (nick.moveToFirst()) {
-                    try{
-                     nickname = nick.getString(nick.getColumnIndex(ContactsContract.CommonDataKinds.Nickname.DATA));
-                    }
-                    catch(Exception e){
-                        nickname="NA";
-                        System.out.println("Error with contact");}
-                    try{
-                    System.out.println("swag" + id);
-                    }
-                    catch(Exception e){System.out.println("Error with contact");}
-                    cObj.setNick(nickname);
-//                    String title = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE));
-                }
-                nick.close();
-con.add(cObj);
+                    try {
+                        name = cu.getString(
+                                cu.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
-            }
-            catch (Exception e){System.out.println("buddyErro"+e.toString());}
+                    } catch (Exception e) {
+                        System.out.println("Error with contact");
+                        name = "NA";
+                    }
+                    cObj.setName(name);
+                    if (Integer.parseInt(cu.getString(
+                            cu.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                        Cursor pCur = cr1.query(
+                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                null,
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                new String[]{id}, null);
+
+                        List<Phone> ph_ns = new ArrayList<Phone>();
+                        while (pCur.moveToNext()) {
+                            Phone p =
+
+                                    new Phone();
+                            try {
+                                ph_no = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            } catch (Exception e) {
+                                System.out.println("Error with contact");
+                                ph_no = "NA";
+                            }
+                            try {
+                                typ = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                            } catch (Exception e) {
+                                System.out.println("Error with contact");
+                                typ = "NA";
+                            }
+
+                            //System.out.println("eefee"+typ);
+                            p.setPhone(ph_no);
+                            p.setPhone_type(typ);
+                            ph_ns.add(p);
+
+                            // Do something with phones
+                        }
+                        pCur.close();
+                        cObj.setPh(ph_ns);
+
+                    }
+
+                    Cursor emailCur = cr1.query(
+                            ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
+                            new String[]{id}, null);
+                    List<Email> eMail = new ArrayList<Email>();
+                    while (emailCur.moveToNext()) {
+                        Email eObj = new Email();
+                        // This would allow you get several email addresses
+                        // if the email addresses were stored in an array
+                        try {
+                            email = emailCur.getString(
+                                    emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                        } catch (Exception e) {
+                            email = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        try {
+                            emailType = emailCur.getString(
+                                    emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
+                        } catch (Exception e) {
+                            emailType = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        eObj.setemail(email);
+                        eObj.setemail_type(emailType);
+                        eMail.add(eObj);
+//                    System.out.println(emailType+"eeee");
+                    }
+                    cObj.setEm(eMail);
+                    emailCur.close();
+                    try {
+                        noteWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
+                    } catch (Exception e) {
+                        noteWhere = "NA";
+                        System.out.println("Error with contact");
+                    }
+
+                    noteWhereParams = new String[]{id,
+                            ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE};
+
+                    Cursor noteCur = cr1.query(ContactsContract.Data.CONTENT_URI, null, noteWhere, noteWhereParams, null);
+                    if (noteCur.moveToFirst()) {
+                        try {
+                            note = noteCur.getString(noteCur.getColumnIndex(ContactsContract.CommonDataKinds.Note.NOTE));
+                        } catch (Exception e) {
+                            note = "NA";
+                        }
+                        System.out.println("eeee");
+                    }
+                    noteCur.close();
+                    try {
+                        orgWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
+                    } catch (Exception e) {
+                        orgWhere = "NA";
+                        System.out.println("Error with contact");
+                    }
+                    orgWhereParams = new String[]{id,
+                            ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE};
+                    Cursor orgCur = cr1.query(ContactsContract.Data.CONTENT_URI,
+                            null, orgWhere, orgWhereParams, null);
+                    if (orgCur.moveToFirst()) {
+                        try {
+                            orgName = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DATA));
+                        } catch (Exception e) {
+                            orgName = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        try {
+                            title = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE));
+                        } catch (Exception e) {
+                            title = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        cObj.setOrg(orgName);
+                    }
+                    orgCur.close();
+                    try {
+                        addrWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
+                    } catch (Exception e) {
+                        addrWhere = "NA";
+                        System.out.println("Error with contact");
+                    }
+                    addrWhereParams = new String[]{id,
+                            ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE};
+                    Cursor addrCur = cr1.query(ContactsContract.Data.CONTENT_URI,
+                            null, addrWhere, addrWhereParams, null);
+                    while (addrCur.moveToNext()) {
+                        try {
+                            poBox = addrCur.getString(
+                                    addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.POBOX));
+                        } catch (Exception e) {
+                            poBox = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        try {
+                            street = addrCur.getString(
+                                    addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.STREET));
+                        } catch (Exception e) {
+                            street = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        try {
+                            city = addrCur.getString(
+                                    addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CITY));
+                        } catch (Exception e) {
+                            city = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        try {
+                            state = addrCur.getString(
+                                    addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.REGION));
+                        } catch (Exception e) {
+                            state = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        try {
+                            postalCode = addrCur.getString(
+                                    addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE));
+                        } catch (Exception e) {
+                            postalCode = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        try {
+                            country = addrCur.getString(
+                                    addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY));
+                        } catch (Exception e) {
+                            country = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        try {
+                            type = addrCur.getString(
+                                    addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.TYPE));
+                        } catch (Exception e) {
+                            type = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        cObj.setAddress(city + " " + state + " " + postalCode + " " + country + " " + type + " " + poBox + " " + street);
+                    }
+                    addrCur.close();
+                    try {
+                        nickwhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
+                    } catch (Exception e) {
+                        nickwhere = "NA";
+                        System.out.println("Error with contact");
+                    }
+                    nickwhereparam = new String[]{id,
+                            ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE};
+                    Cursor nick = cr1.query(ContactsContract.Data.CONTENT_URI,
+                            null, nickwhere, nickwhereparam, null);
+                    if (nick.moveToFirst()) {
+                        try {
+                            nickname = nick.getString(nick.getColumnIndex(ContactsContract.CommonDataKinds.Nickname.DATA));
+                        } catch (Exception e) {
+                            nickname = "NA";
+                            System.out.println("Error with contact");
+                        }
+                        try {
+                            System.out.println("swag" + id);
+                        } catch (Exception e) {
+                            System.out.println("Error with contact");
+                        }
+                        cObj.setNick(nickname);
+//                    String title = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE));
+                    }
+                    nick.close();
+                    con.add(cObj);
+
+                } catch (Exception e) {
+                    System.out.println("buddyErro" + e.toString());
+                }
 
                 batchcount1++;
 
-if(batchcount1%500==0)
-{ new SendContactToServer().execute(con);
-    lstSms.clear();
-    batchcount1 = 0;
-    break;
-}
+                if (batchcount1 % 500 == 0) {
+                    new SendContactToServer().execute(con);
+                    lstSms.clear();
+                    batchcount1 = 0;
+                    break;
+                }
 
-           }
+            }
 //            int w=0;
 //            for(Contacts item:con)
 //            {
@@ -1059,26 +1554,45 @@ if(batchcount1%500==0)
 //
 //    }
 //}
-            if(!con2.isEmpty()){
+            if (!con2.isEmpty()) {
                 new SendContactToServer().execute(con2);
-                con2.clear();}
+                con2.clear();
+            }
 
-            System.out.print(con+"dekkh");
+            System.out.print(con + "dekkh");
 
         }
 
 
-
-
     }
 
+    public void setAlarm()
+    {
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        int interval = 5000;
+long timeToset=1459871688+21600;
+        long curr=System.currentTimeMillis()/1000;
+        int w=1;
+        while(w==1)
+        {
+            if(timeToset<curr)
+            {
+                timeToset+=24*60*60;
+            }
+            else
+                w=0;
+        }
+        ;//+21600000;
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeToset*1000, 24*60*60*1000, pendingIntent);
+        //Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+    }
     public void getAllSms() {
-JSONArray smsJ=new JSONArray();
+        JSONArray smsJ = new JSONArray();
 
         SMS objSms = new SMS();
 
 
-        JSONObject rSms=new JSONObject();
+        JSONObject rSms = new JSONObject();
         Uri message = Uri.parse("content://sms/inbox");
         ContentResolver cr = getContentResolver();
 
@@ -1093,7 +1607,7 @@ JSONArray smsJ=new JSONArray();
                 objSms.setAddress(c.getString(c
                         .getColumnIndexOrThrow("address")));
                 objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
-               // objSms.setReadState(c.getString(c.getColumnIndex("read")));
+                // objSms.setReadState(c.getString(c.getColumnIndex("read")));
                 objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
                 if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
                     objSms.setFolderName("inbox");
@@ -1101,15 +1615,15 @@ JSONArray smsJ=new JSONArray();
                     objSms.setFolderName("sent");
                 }
 
-               // String json=gson.toJson(objSms);
+                // String json=gson.toJson(objSms);
                 lstSms.add(objSms);
 
                 batchCount++;
-                if(batchCount==350){
+                if (batchCount == 350) {
                     System.out.println("sm12a" + lstSms.get(0).getMsg());
 //                    new SendSmsToServer().execute(lstSms);
                     // lstSms.clear();
-                  new SendSmsToServer().execute(lstSms);
+  //                  new SendSmsToServer().execute(lstSms);
                     lstSms.clear();
                     batchCount = 0;
 
@@ -1118,8 +1632,8 @@ JSONArray smsJ=new JSONArray();
             }
         }
 
-        if(batchCount>0){
-            new SendSmsToServer().execute(lstSms);
+        if (batchCount > 0) {
+//            new SendSmsToServer().execute(lstSms);
         }
         SharedPreferences pref = getSharedPreferences("MyPref", 0);
         pref.edit().putBoolean("sms_sent", true).commit();
@@ -1133,5 +1647,18 @@ JSONArray smsJ=new JSONArray();
     }
 
 
+    private void setUpPush() {
+        //make sure we have google play services available,
+        //without it we can't receive push notifications
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+    }
 
+    public boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        return resultCode == ConnectionResult.SUCCESS;
+    }
 }

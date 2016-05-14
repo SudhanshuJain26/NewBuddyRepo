@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_horizontal_margin"
+android:id="@+id/rlo"
+    tools:context="indwin.c3.shareapp.Ordersuccessfailure">
+<ImageView
+    android:layout_width="160dp"
+    android:layout_height="160dp"
+    android:src="@drawable/success"
+    android:id="@+id/orderStatus"
+    android:layout_marginTop="80dp"
+    android:layout_centerHorizontal="true"
+
+
+
+   />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/orderStatus"
+        android:textColor="#ffffff"
+        android:id="@+id/orderId"
+        android:text="ORDER ID:9304853612"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_centerHorizontal="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment Received!"
+        android:textStyle="bold"
+        android:id="@+id/payRec"
+        android:textColor="#ffffff"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/orderId"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You can track your order on the"
+        android:textColor="#ffffff"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:id="@+id/track"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/payRec"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/orderPage"
+        android:background="#ffffff"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/four"
+        android:paddingBottom="@dimen/four"
+        android:text="Orders Page"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/track"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:id="@+id/home"
+   android:layout_alignParentBottom="true"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:layout_centerHorizontal="true"
+        android:text="Home"/>
+</RelativeLayout>

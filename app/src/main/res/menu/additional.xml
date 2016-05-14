@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+>
+<item
+android:id="@+id/MyAccount"
+
+
+android:color="#21A5E0"
+android:title="Sometimes the actual price of the
+product might vary because of the lag in placing order
+or additional delivery charges. For price changes within Rs.100,
+we will go ahead and place the order with the seller of your choice.
+The extra amount will be adjusted in your Flexible Payment Plan.
+If the price exceeds Rs.100, we will contact you to confirm which
+ seller you want to buy product from :)" />
+
+
+    </menu>

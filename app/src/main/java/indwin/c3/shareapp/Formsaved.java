@@ -79,6 +79,13 @@ public class Formsaved extends AppCompatActivity {
         } catch (Exception e) {
             System.out.println(e.toString() + "digo");
         }
+        ImageView inter=(ImageView)findViewById(R.id.interCom);
+        inter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intercom.client().displayMessageComposer();
+            }
+        });
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
 //        GridView gridviewshow=(GridView)findViewById(R.id.grid1a);
 //       gridviewshow.setAdapter(new ImageAdapter(this));
@@ -100,6 +107,7 @@ public class Formsaved extends AppCompatActivity {
                 //Closing drawer on item click
                 drawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
+
 
                     case R.id.MyAccount:
 
@@ -145,6 +153,7 @@ public class Formsaved extends AppCompatActivity {
                         startActivity(intform);
                         return true;
                     case R.id.log:
+                        Splash.notify = 0;
                         int a = 0;
                         SharedPreferences sharedpreferences = getSharedPreferences("buddy", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedpreferences.edit();

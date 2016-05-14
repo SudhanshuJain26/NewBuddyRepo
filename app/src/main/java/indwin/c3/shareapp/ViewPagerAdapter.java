@@ -58,7 +58,7 @@ public class ViewPagerAdapter extends PagerAdapter {
                 TextView t=(TextView)layout.findViewById(R.id.textland);
                 t.setText("Products starting at");
                 TextView t1=(TextView)layout.findViewById(R.id.textland2);
-                t1.setText("Rs 899/month");
+                t1.setText("Rs 99/month");
                 ImageView img= (ImageView) layout.findViewById(R.id.imageView1);
                 img.setImageResource(R.drawable.onboard1);}
             if(position==1){
@@ -67,9 +67,9 @@ public class ViewPagerAdapter extends PagerAdapter {
                 dot2.setBackgroundResource(R.drawable.circle2);
                 dot3.setVisibility(View.GONE);
                 TextView t=(TextView)layout.findViewById(R.id.textland);
-                t.setText("Convert Big MRPs into");
+                t.setText("Convert big MRPs into");
                 TextView t1=(TextView)layout.findViewById(R.id.textland2);
-                t1.setText("Small Monthly Payments");
+                t1.setText("small monthly payments");
                 ImageView img= (ImageView) layout.findViewById(R.id.imageView1);
                 img.setImageResource(R.drawable.onboard2);}
             if(position==2){
@@ -79,9 +79,9 @@ public class ViewPagerAdapter extends PagerAdapter {
                 dot3.setVisibility(View.GONE);
                 dot3.setBackgroundResource(R.drawable.circle2);
                 TextView t=(TextView)layout.findViewById(R.id.textland);
-                t.setText("Upgrade your machine");
+                t.setText("Upgrade your");
                 TextView t1=(TextView)layout.findViewById(R.id.textland2);
-                t1.setText("and your Student Life");
+                t1.setText("student Life");
 
                 ImageView img= (ImageView) layout.findViewById(R.id.imageView1);
                 img.setImageResource(R.drawable.onboard3);}

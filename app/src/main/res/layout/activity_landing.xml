@@ -48,7 +48,7 @@ android:id="@+id/signup_pager"
         android:layout_centerHorizontal="true"
         android:id="@+id/buddyLogo"
         android:tint="#ffffff"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="56dp"
         android:src="@drawable/buddylogo_blue"/>
     <RelativeLayout
         android:layout_width="wrap_content"

@@ -3,29 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-android:background="#ffffff"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    android:background="#286793"
+
     >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="#ffffff"
+
         android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_marginTop="12dp"
-android:background="#ffffff"
 
-        android:layout_height="32dp"
-        android:id="@+id/ccc"
-        android:src="@drawable/buddylogo_blue"
 
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/texthead"
+            android:layout_marginTop="14dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:text="Profile Details"
+            android:textAppearance="?android:textAppearanceMedium"
+           />
         <View
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:background="#ffffff"
-            android:layout_below="@id/ccc"/>
+           android:background="#286793"
+            android:layout_below="@id/texthead"/>
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="18dp"
+            android:id="@+id/interCom"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:src="@drawable/chechintercom"/>
+
+
+
     </RelativeLayout>
 
 

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/rradd"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:id="@+id/cardAddress"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/cardAdd"
+
+
+            android:layout_height="wrap_content">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioAdd"
+            android:buttonTint="#F28E52"
+
+
+
+            android:layout_margin="@dimen/activity_horizontal_margin"
+
+            />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/img"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:src="@drawable/plus"
+                android:visibility="invisible"
+                android:tint="#66000000"
+
+
+                />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addRess1"
+            android:text="703,Syndicate Colony"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/radioAdd"
+            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addRess2"
+                android:text="703,Syndicate Colony"
+                android:layout_marginTop="@dimen/four"
+                android:layout_below="@id/addRess1"
+                android:layout_toRightOf="@id/radioAdd"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addRess3"
+                android:text="703,Syndicate Colony"
+                android:layout_marginTop="@dimen/four"
+                android:layout_below="@id/addRess2"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_toRightOf="@id/radioAdd"
+                />
+<ImageView
+    android:layout_width="16dp"
+    android:layout_height="16dp"
+    android:layout_alignParentRight="true"
+    android:id="@+id/edit"
+    android:visibility="invisible"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:src="@drawable/back"
+    android:tint="#000000"/>
+</RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>

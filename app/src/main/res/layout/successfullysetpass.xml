@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    >
+    <ProgressBar
+        android:id="@+id/progressBar1"
+
+        android:background="@xml/progress"
+        android:layout_above="@id/phone_number"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/buddyLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+       android:layout_centerHorizontal="true"
+android:layout_marginTop="80dp"
+        android:padding="@dimen/fab_margin"
+
+
+
+
+
+
+
+
+
+
+
+        android:text="Your password has been changed!"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/lSign"
+        android:gravity="center"
+        android:paddingBottom="40dp"
+        android:layout_below="@id/buddyLogo"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/NotRegistered"
+            android:text="Not yet registered?"
+            android:textColor="#4A4A4A"
+            android:visibility="invisible"
+            android:layout_below="@id/buddyLogo"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+
+            android:layout_centerInParent="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/signUp"
+            android:text="Sign Up"
+            android:visibility="invisible"
+            android:textColor="#21A5E0"
+            android:layout_below="@id/buddyLogo"
+            android:layout_toRightOf="@id/NotRegistered"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="5dp"
+
+            android:layout_centerInParent="true"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/newpass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+android:visibility="invisible"
+
+        android:layout_below="@id/lSign"
+        android:layout_marginBottom="5dp"
+
+
+        android:layout_marginLeft="5dp"
+        android:paddingTop="16dp"
+       android:layout_centerInParent="true"
+
+        android:layout_marginRight="5dp"
+        android:text="Your password has been reset :)"/>
+    <EditText
+        android:id="@+id/reenter"
+        android:layout_width="match_parent"
+
+
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColorHint="#664A4A4A"
+        android:layout_centerInParent="true"
+        android:inputType="textPassword"
+android:visibility="invisible"
+        android:paddingTop="16dp"
+        android:background="@drawable/texted"
+        android:textCursorDrawable="@null"
+        android:layout_margin="5dp"
+        android:layout_below="@id/newpass"
+        android:hint="RE-ENTER NEW PASSWORD"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Login1"
+        android:text="LOGIN"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#4A4A4A"
+        android:clickable="true"
+        android:padding="5dp"
+        android:visibility="invisible"
+        android:layout_below="@id/reenter"
+        android:layout_centerInParent="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/backtologin"
+        android:text="LOGIN"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ffffff"
+        android:clickable="true"
+        android:padding="10dp"
+        android:layout_below="@id/Login1"
+        android:layout_centerInParent="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Login_otp"
+        android:text="Login with OTP"
+        android:visibility="invisible"
+        android:textColor="#4A4A4A"
+        android:clickable="true"
+        android:padding="10dp"
+        android:layout_below="@id/Login"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>
+

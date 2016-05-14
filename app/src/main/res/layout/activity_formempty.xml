@@ -8,6 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Formempty">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
 android:id="@+id/rl11"
@@ -19,6 +20,8 @@ android:id="@+id/rl11"
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
         style="@style/DrawerArrowStyle"/>
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -80,7 +83,7 @@ android:id="@+id/rl11"
         android:layout_height="60dp"
         android:layout_marginBottom="2dp"
         android:layout_below="@id/rl1"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:src="@drawable/empty"
         android:id="@+id/rej"
         android:layout_centerHorizontal="true"/>
@@ -171,20 +174,25 @@ android:visibility="gone"
         android:layout_height="wrap_content"
         android:id="@+id/chat"
         app:backgroundTint="#21A5E0"
+        android:visibility="gone"
        android:layout_margin="8dp"
         android:src="@drawable/chaticon"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
+
+
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:background="#323232"
+
 
         android:layout_gravity="start"
         app:headerLayout="@layout/header"
+        android:background="#33A4D0"
+        app:itemIconTint="#ffffff"
         app:itemTextColor="#ffffff"
         app:menu="@menu/drawer" />
 

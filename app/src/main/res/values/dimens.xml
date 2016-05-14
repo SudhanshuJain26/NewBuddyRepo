@@ -3,4 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fabtop">10dp</dimen>
+    <dimen name="left">8dp</dimen>
+    <dimen name="four">4dp</dimen>
+    <dimen name="twe">12dp</dimen>
+    <dimen name="fabrig">40dp</dimen>
 </resources>

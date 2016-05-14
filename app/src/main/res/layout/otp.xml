@@ -1,40 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@drawable/background"
     android:layout_height="match_parent">
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_centerHorizontal="true"
+    <TextView
         android:id="@+id/buddyLogo"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/buddylogo_blue"/>
-
-
-    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:paddingBottom="8dp"
+        android:text="We've sent an SMS containing an OTP to your Phone Number +91 7070362045"
+        android:layout_marginTop="80dp"
+        android:padding="@dimen/four"></TextView>
+    <TextView
+        android:id="@+id/buddynum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:padding="@dimen/four"
+        android:layout_marginLeft="12dp"
+        android:visibility="invisible"
+        android:layout_below="@id/buddyLogo"
+
+        android:text="Phone Number +91 7070362045"
+
+        ></TextView>
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_below="@id/buddynum"
+    android:layout_centerHorizontal="true"
+    android:id="@+id/error"
+    android:visibility="gone"
+
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/warn"
+        android:padding="2dp"
+ android:src="@drawable/warning"
+        />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/msg"
+    android:textColor="#CCffffff"
+
+    android:layout_toRightOf="@id/warn"
+    android:text="OTP incorrect!"/>
+</RelativeLayout>
+       <RelativeLayout
+        android:layout_width="wrap_content"
+       android:layout_below="@id/buddynum"
         android:id="@+id/rl1"
+           android:layout_marginTop="40dp"
+           android:layout_centerHorizontal="true"
         android:layout_height="wrap_content">
 
 <EditText
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/border"
-    android:layout_centerInParent="true"
-    android:layout_alignParentLeft="true"
+
+    android:background="@drawable/texted"
+    android:textColorHint="#99ffffff"
+    android:textColor="#CCffffff"
+android:gravity="center"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:maxLength="1"
+    android:maxLength="4"
     android:inputType="number"
-    android:textColorHint="#664A4A4A"
+    android:textCursorDrawable="@null"
 
 
 
     android:id="@+id/otp1"
-    android:hint="1"/>
+
+    android:hint="@string/hint1"/>
         <ProgressBar
             android:id="@+id/progressBar1"
             android:layout_above="@id/otp1"
@@ -46,32 +91,37 @@
 <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
+        android:background="@drawable/texted"
         android:layout_centerInParent="true"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:inputType="number"
+    android:textCursorDrawable="@null"
+    android:visibility="gone"
     android:maxLength="1"
         android:layout_toRightOf="@id/otp1"
         android:layout_marginLeft="10dp"
         android:id="@+id/otp2"
-    android:textColorHint="#664A4A4A"
+    android:textColorHint="#66ffffff"
         android:hint="1"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
+        android:background="@drawable/texted"
         android:layout_centerInParent="true"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:paddingLeft="16dp"
+
         android:paddingRight="16dp"
         android:inputType="number"
-        android:textColorHint="#664A4A4A"
+        android:textColorHint="#66ffffff"
+        android:textCursorDrawable="@null"
         android:maxLength="1"
+        android:visibility="gone"
         android:layout_toRightOf="@id/otp2"
         android:layout_marginLeft="10dp"
         android:id="@+id/otp3"
@@ -80,14 +130,16 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
+        android:background="@drawable/texted"
         android:layout_centerInParent="true"
-        android:textColorHint="#664A4A4A"
+        android:textColorHint="#66ffffff"
         android:paddingTop="10dp"
+        android:textCursorDrawable="@null"
         android:paddingBottom="10dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:inputType="number"
+        android:visibility="gone"
         android:maxLength="1"
         android:layout_toRightOf="@id/otp3"
         android:layout_marginLeft="10dp"
@@ -120,10 +172,12 @@
         android:layout_below="@id/rl1"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:onClick="true"
         android:layout_centerInParent="true"
-        android:paddingTop="20dp"
+        android:textColor="#CCffffff"
+        android:padding="20dp"
         android:id="@+id/textLook"
-android:text="Look for an SMS from Buddy"/>
+android:text="Resend OTP"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -132,6 +186,7 @@ android:text="Look for an SMS from Buddy"/>
         android:paddingRight="10dp"
        android:layout_centerHorizontal="true"
         android:paddingTop="5dp"
+        android:visibility="invisible"
         android:id="@+id/textLookBuddy"
         android:text="to find your 4 digit OTP."/>
 
@@ -139,12 +194,22 @@ android:text="Look for an SMS from Buddy"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VERIFY OTP"
+        android:text="VERIFY"
+        android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#21A5E0"
+        android:textColor="#66ffffff"
         android:layout_alignParentBottom="true"
 android:layout_centerInParent="true"
 android:id="@+id/ver"
         android:layout_margin="100dp"
         />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/buddyLogo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="272dp"
+        android:layout_marginStart="272dp"></FrameLayout>
 </RelativeLayout>

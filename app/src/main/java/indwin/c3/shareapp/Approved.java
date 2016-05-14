@@ -23,6 +23,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.intercom.android.sdk.Intercom;
 
 /**
@@ -33,7 +36,7 @@ public class Approved extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private ProgressBar spinner;
-
+private String fbid="",formstatus="";
     Intent intform;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +44,53 @@ public class Approved extends AppCompatActivity {
         String value = getIntent().getExtras().getString("Name");
         String value1 = getIntent().getExtras().getString("Email");
         String value2 = getIntent().getExtras().getString("Credits");
+        try {
+            fbid = getIntent().getExtras().getString("fbid");
+            if(!fbid.equals("empty"))
+        Splash.checkfbid=1;
+        }
+        catch (Exception e){}
+        try {
+            formstatus = getIntent().getExtras().getString("Form");
+
+        }
+        catch (Exception e){
+            formstatus="";
+        }
         setContentView(R.layout.credits_given_profile);
+           TextView titlehead=(TextView)findViewById(R.id.titlehead);
+           titlehead.setText("Profile");
+        ImageView logointool=(ImageView)findViewById(R.id.logointool);
+        logointool.setVisibility(View.INVISIBLE);
+
+
+        try{
+            CircleImageView profile=(CircleImageView)findViewById(R.id.profile_image);
+            SharedPreferences p=getSharedPreferences("proid",Context.MODE_PRIVATE);
+            String dp=p.getString("dpid", null);
+            String url="http://graph.facebook.com/" + p.getString("dpid",null) + "/picture?type=square";
+            Picasso.with(this)
+                    .load("https://graph.facebook.com/" + p.getString("dpid",null) + "/picture?type=large")
+                    .placeholder(R.drawable.images)
+                    .into(profile);}
+        catch (Exception e){
+            String t=e.toString();
+        }
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        if(formstatus.equals("approved")){
         TextView credit=(TextView)findViewById(R.id.applymsg3);
-        credit.setText("Rs." + value2);
+        credit.setText("Rs." + value2);}
         TextView wbsite=(TextView)findViewById(R.id.wbsite);
         wbsite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!fbid.equals("empty"))
                 intform=new Intent(Approved.this, ViewForm.class);
+                else
+                    intform=new Intent(Approved.this, FacebookAuth.class);
                 intform.putExtra("which_page",1);
                 intform.putExtra("url", "http://hellobuddy.in/#/flipkart/products");
-
+finish();
                 startActivity(intform);
                 overridePendingTransition(0, 0);
             }
@@ -61,7 +99,10 @@ public class Approved extends AppCompatActivity {
         viewDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intform=new Intent(Approved.this, ViewForm.class);
+                if(!fbid.equals("empty"))
+                    intform=new Intent(Approved.this, ViewForm.class);
+                else
+                    intform=new Intent(Approved.this, FacebookAuth.class);
                 finish();
                 intform.putExtra("which_page", 7);
 
@@ -73,7 +114,10 @@ public class Approved extends AppCompatActivity {
         wbsite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intform=new Intent(Approved.this, ViewForm.class);
+                if(!fbid.equals("empty"))
+                    intform=new Intent(Approved.this, ViewForm.class);
+                else
+                    intform=new Intent(Approved.this, FacebookAuth.class);
                 finish();
                 intform.putExtra("which_page", 1);
                 intform.putExtra("url","http://hellobuddy.in/#/flipkart/products");
@@ -91,8 +135,16 @@ public class Approved extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         }
-        catch(Exception e){System.out.println(e.toString()+"digo");}
 
+
+        catch(Exception e){System.out.println(e.toString()+"digo");}
+        ImageView inter=(ImageView)findViewById(R.id.interCom);
+        inter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intercom.client().displayMessageComposer();
+            }
+        });
         TextView name=(TextView)findViewById(R.id.name);
         FloatingActionButton chat=(FloatingActionButton)findViewById(R.id.chat);
         chat.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +155,7 @@ public class Approved extends AppCompatActivity {
         });
         name.setText(value);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        navigationView.getMenu().getItem(0).setChecked(true);
+        navigationView.getMenu().getItem(1).setChecked(true);
 //        GridView gridviewshow=(GridView)findViewById(R.id.grid1a);
 //       gridviewshow.setAdapter(new ImageAdapter(this));
 
@@ -128,20 +180,59 @@ public class Approved extends AppCompatActivity {
                 switch (menuItem.getItemId()){
                     case R.id.MyAccount:
 
-
+finish();
                         return true;
                     case R.id.About:
 
-                        intform=new Intent(Approved.this, ViewForm.class);
+
+                            intform=new Intent(Approved.this, ViewForm.class);
+
                         finish();
                         intform.putExtra("which_page", 3);
                         intform.putExtra("url","http://hellobuddy.in/#/how-it-works");
                         startActivity(intform);
                         overridePendingTransition(0, 0);
                         return true;
-                    case R.id.app_form:
+                    case R.id.Orders:
+
 
                         intform=new Intent(Approved.this, ViewForm.class);
+
+                        finish();
+                        intform.putExtra("which_page", 16);
+                        intform.putExtra("url","http://hellobuddy.in/#/how-it-works");
+                        startActivity(intform);
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.Repayments:
+
+
+                        intform=new Intent(Approved.this, ViewForm.class);
+
+                        finish();
+                        intform.putExtra("which_page", 17);
+                        intform.putExtra("url","http://hellobuddy.in/#/how-it-works");
+                        startActivity(intform);
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.work:
+
+
+                        intform=new Intent(Approved.this, ViewForm.class);
+
+                        finish();
+                        intform.putExtra("which_page", 11);
+                        intform.putExtra("url","http://hellobuddy.in/#/how-it-works");
+                        startActivity(intform);
+                        overridePendingTransition(0, 0);
+                        return true;
+
+                    case R.id.app_form:
+
+                        if(!fbid.equals("empty"))
+                            intform=new Intent(Approved.this, ViewForm.class);
+                        else
+                            intform=new Intent(Approved.this, FacebookAuth.class);
                         finish();
                         intform.putExtra("which_page", 4);
                         intform.putExtra("url","http://hellobuddy.in/");
@@ -150,9 +241,21 @@ public class Approved extends AppCompatActivity {
                         return true;
                     case R.id.faq:
 
-                        intform=new Intent(Approved.this, ViewForm.class);
+//                        if(!fbid.equals("empty"))
+                            intform=new Intent(Approved.this, ViewForm.class);
                         finish();
                         intform.putExtra("which_page", 5);
+                        intform.putExtra("url","http://hellobuddy.in/#/faqs");
+                        startActivity(intform);
+                        overridePendingTransition(0, 0);
+                        return true;
+
+                    case R.id.security:
+
+//                        if(!fbid.equals("empty"))
+                        intform=new Intent(Approved.this, ViewForm.class);
+                        finish();
+                        intform.putExtra("which_page", 15);
                         intform.putExtra("url","http://hellobuddy.in/#/faqs");
                         startActivity(intform);
                         overridePendingTransition(0, 0);
@@ -163,15 +266,40 @@ public class Approved extends AppCompatActivity {
                         SharedPreferences.Editor editornew = sh_otp.edit();
 //                        editor.putInt("checklog",a);
                         editornew.putInt("chshare",1);
-                        editornew.putString("rcode", getIntent().getExtras().getString("UniC"));
+//                        editornew.putString("rcode", getIntent().getExtras().getString("UniC"));
                         editornew.commit();
                         Intent in=new Intent(Approved.this,Share.class);
 
                         startActivity(in);
                         overridePendingTransition(0, 0);
                         return true;
+
                     case R.id.log:
+                        Splash.notify = 0;
+                        Intent stop = new Intent("CLOSE_ALL");
+                        Approved.this.sendBroadcast(stop);
+                        Splash.checklog=1;
                         int a=0;
+                        SharedPreferences preferences = getSharedPreferences("buddyotp", 0);
+                        SharedPreferences.Editor editora = preferences.edit();
+                        editora.clear();
+                        editora.commit();
+                        SharedPreferences preferencesb = getSharedPreferences("buddy", 0);
+                        SharedPreferences.Editor editorab = preferencesb.edit();
+                        editorab.clear();
+                        editorab.commit();
+                        SharedPreferences preferencesbc = getSharedPreferences("buddyin", 0);
+                        SharedPreferences.Editor editorabc = preferencesbc.edit();
+                        editorabc.clear();
+                        editorabc.commit();
+                        SharedPreferences preferencesbc1 = getSharedPreferences("proid", 0);
+                        SharedPreferences.Editor editorabc1 = preferencesbc1.edit();
+                        editorabc1.clear();
+                        editorabc1.commit();
+                        SharedPreferences preferencesbc2 = getSharedPreferences("cred", 0);
+                        SharedPreferences.Editor editorabc2 = preferencesbc2.edit();
+                        editorabc2.clear();
+                        editorabc2.commit();
                         SharedPreferences sharedpreferences = getSharedPreferences("buddy", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedpreferences.edit();
                         editor.putInt("checklog",a);
@@ -241,11 +369,29 @@ public class Approved extends AppCompatActivity {
         TextView email=(TextView)findViewById(R.id.email);
         email.setText(value1);
         TextView view=(TextView)findViewById(R.id.apply);
+        if(formstatus.equals("flashApproved"))
+        { TextView con=(TextView)findViewById(R.id.applymsg);
+            con.setText("CONGRATS!");
+            TextView firms=(TextView)findViewById(R.id.applymsg2);
+
+            TextView secms=(TextView)findViewById(R.id.applymsg3);
+          firms.setText("You have been approved for a flash Credit Limit of Rs.1000, which will be credited to your Buddy account in a short while.");
+                secms.setText("In the meanwhile, complete your profile to increase your credit limit further!");
+            view.setText("Complete your Profile!");
+        ImageView fla=(ImageView)findViewById(R.id.rej);
+        fla.setImageResource(R.drawable.flash);
+        }
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { Intent in=new Intent(Approved.this, ViewForm.class);
+            public void onClick(View v) {
+                Intent in;
+//                if(!fbid.equals("empty"))
+                    in=new Intent(Approved.this, ViewForm.class);
+//                else
+//                    in=new Intent(Approved.this, FacebookAuth.class);
                 finish();
-                in.putExtra("which_page", 6);
+                in.putExtra("which_page", 1);
                 in.putExtra("url", "http://hellobuddy.in/#/");
 
                 startActivity(in);
@@ -260,16 +406,8 @@ public class Approved extends AppCompatActivity {
         if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             this.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-
-            new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Exit")
-                .setMessage("Are you sure you want to exit?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-
-                    }
-                }).setNegativeButton("No", null).show();}
+finish();
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <ImageView
+            android:id="@+id/backo"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="18dp"
+            android:src="@drawable/backne"
+            android:tint="#ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/backo"
+            android:text="Forgot Password"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/buddyLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="80dp"
+        android:padding="@dimen/four"
+        android:paddingBottom="8dp"
+        android:text="Enter the phone number you used to sign up with Buddy"
+        android:textColor="#ffffff" />
+
+    <RelativeLayout
+        android:id="@+id/error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buddyLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:paddingBottom="12dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/warn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:src="@drawable/warning" />
+
+        <TextView
+            android:id="@+id/msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/warn"
+            android:text="OTP incorrect!"
+            android:textColor="#CCffffff" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/lSign"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/error"
+        android:gravity="center"
+        android:paddingBottom="40dp"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/NotRegistered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buddyLogo"
+            android:layout_centerInParent="true"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:text="Not yet registered?"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#4A4A4A" />
+
+        <TextView
+            android:id="@+id/signUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buddyLogo"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/NotRegistered"
+            android:paddingBottom="10dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="10dp"
+            android:text="Sign Up"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#21A5E0" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lSign"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:background="@drawable/texted"
+        android:hint="Phone"
+        android:inputType="number"
+        android:paddingTop="16dp"
+        android:textColor="#CCffffff"
+        android:textColorHint="#99ffffff"
+        android:textCursorDrawable="@null" />
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/phone_number"
+        android:layout_centerInParent="true"
+        android:background="@xml/progress"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/phone_number"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginLeft="24dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColorHint="#66ffffff"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/textOtp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/phone_number"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:text="We will send a One Time Password on your phone. "
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#4A4A4A"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textOtp2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textOtp"
+        android:paddingLeft="10dp"
+        android:text="Please enter it in the next step. "
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#4A4A4A"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/Login1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textOtp2"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:padding="5dp"
+        android:text="LOGIN WITH OTP"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#4A4A4A"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/Login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/Login1"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="80dp"
+        android:text="SEND OTP"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#66ffffff"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Login_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Login"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:padding="10dp"
+        android:text="Login with Password"
+        android:textColor="#4A4A4A"
+        android:visibility="invisible" />
+</RelativeLayout>

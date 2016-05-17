@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="indwin.c3.shareapp.ProductsPage">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="#21Ae50"
+        android:id="@+id/toolBar"
+        android:layout_height="@dimen/abc_action_bar_default_height_material">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="18dp"
+            android:id="@+id/backo"
+            android:tint="#ffffff"
+            android:src="@drawable/backne"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product Finder"
+            android:textColor="#ffffff"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/backo"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/search"
+        android:layout_below="@id/toolBar"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchIcon"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/left"
+            android:layout_marginBottom="@dimen/left"
+            android:layout_marginRight="@dimen/left"
+            android:src="@drawable/search"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:id="@+id/query"
+            android:text="https://flipkart.com/buddyrocks"
+            android:singleLine="true"
+            android:layout_toRightOf="@id/searchIcon"
+            android:layout_margin="@dimen/left"
+            android:background="#ffffff"
+
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/searchIcon"
+            android:id="@+id/borderView"
+            android:background="#000000"/>
+</RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+
+        android:layout_below="@id/search"
+        android:text="Oops... the pasted URL doesn't seem correct!"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content" />
+    </RelativeLayout>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="indwin.c3.shareapp.activities.AccountSettingsActivity"
+    tools:showIn="@layout/activity_account_settings">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/double_activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/double_activity_horizontal_margin"
+        android:layout_marginRight="@dimen/double_activity_horizontal_margin"
+        android:layout_marginStart="@dimen/double_activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:text="Your full name"
+        android:textColor="#7c6a94"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/double_activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/double_activity_horizontal_margin"
+        android:layout_marginRight="@dimen/double_activity_horizontal_margin"
+        android:layout_marginStart="@dimen/double_activity_horizontal_margin"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:lines="1"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:text=""
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/user_name_edittext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-2dp"
+            android:layout_marginLeft="-4dp"
+            android:layout_marginStart="-4dp"
+            android:layout_marginTop="-8dp"
+            android:width="200dp"
+            android:inputType="text"
+            android:singleLine="true"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/edit_name"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:scaleType="fitCenter"
+            android:src="@drawable/edit"
+            android:tint="#7c6a94" />
+
+        <TextView
+            android:id="@+id/save_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:elevation="2dp"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="#7c6a94"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/name_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:alpha="0.2"
+        android:background="#333333" />
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="@dimen/double_activity_horizontal_margin"-->
+        <!--android:layout_marginLeft="@dimen/double_activity_horizontal_margin"-->
+        <!--android:layout_marginRight="@dimen/double_activity_horizontal_margin"-->
+        <!--android:layout_marginStart="@dimen/double_activity_horizontal_margin"-->
+        <!--android:layout_marginTop="@dimen/activity_horizontal_margin"-->
+        <!--android:text="Registered Email"-->
+        <!--android:textColor="#7c6a94"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textStyle="bold" />-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="@dimen/double_activity_horizontal_margin"-->
+        <!--android:layout_marginLeft="@dimen/double_activity_horizontal_margin"-->
+        <!--android:layout_marginRight="@dimen/double_activity_horizontal_margin"-->
+        <!--android:layout_marginStart="@dimen/double_activity_horizontal_margin"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:gravity="center_vertical">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/user_email"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:ellipsize="marquee"-->
+            <!--android:fadingEdge="horizontal"-->
+            <!--android:lines="1"-->
+            <!--android:marqueeRepeatLimit="marquee_forever"-->
+            <!--android:maxWidth="240dp"-->
+            <!--android:scrollHorizontally="true"-->
+            <!--android:text=""-->
+            <!--android:textSize="16sp" />-->
+
+        <!--<EditText-->
+            <!--android:id="@+id/user_email_edittext"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="-2dp"-->
+            <!--android:layout_marginLeft="-4dp"-->
+            <!--android:layout_marginStart="-4dp"-->
+            <!--android:layout_marginTop="-8dp"-->
+            <!--android:width="200dp"-->
+            <!--android:inputType="text"-->
+            <!--android:singleLine="true"-->
+            <!--android:textSize="16sp"-->
+            <!--android:visibility="gone" />-->
+
+        <!--<ImageButton-->
+            <!--android:id="@+id/edit_email"-->
+            <!--android:layout_width="15dp"-->
+            <!--android:layout_height="15dp"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:background="?android:attr/selectableItemBackground"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:src="@drawable/edit"-->
+            <!--android:tint="#7c6a94" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/save_email"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginEnd="16dp"-->
+            <!--android:layout_marginRight="16dp"-->
+            <!--android:background="?android:attr/selectableItemBackground"-->
+            <!--android:text="Save"-->
+            <!--android:textAllCaps="false"-->
+            <!--android:textColor="#7c6a94"-->
+            <!--android:textSize="16sp"-->
+            <!--android:visibility="gone" />-->
+
+    <!--</LinearLayout>-->
+
+    <!--<View-->
+        <!--android:id="@+id/email_underline"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_marginEnd="2dp"-->
+        <!--android:layout_marginLeft="2dp"-->
+        <!--android:layout_marginRight="2dp"-->
+        <!--android:layout_marginStart="2dp"-->
+        <!--android:layout_marginTop="@dimen/activity_horizontal_margin"-->
+        <!--android:alpha="0.2"-->
+        <!--android:background="#333333" />-->
+
+    <LinearLayout
+        android:id="@+id/change_password_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/change_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/double_activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/double_activity_horizontal_margin"
+            android:layout_marginRight="@dimen/double_activity_horizontal_margin"
+            android:layout_marginStart="@dimen/double_activity_horizontal_margin"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="Change Password"
+            android:textAllCaps="false"
+            android:textColor="#7c6a94"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/changed_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="Changed!"
+            android:textAllCaps="false"
+            android:textSize="12sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        android:alpha="0.2"
+        android:background="#333333" />
+
+    <LinearLayout
+        android:id="@+id/delete_account_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/delete_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/double_activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/double_activity_horizontal_margin"
+            android:layout_marginRight="@dimen/double_activity_horizontal_margin"
+            android:layout_marginStart="@dimen/double_activity_horizontal_margin"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="Delete Account"
+            android:textAllCaps="false"
+            android:textColor="#7c6a94"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        android:alpha="0.2"
+        android:background="#333333" />
+</LinearLayout>

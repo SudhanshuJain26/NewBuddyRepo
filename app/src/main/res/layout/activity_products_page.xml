@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="indwin.c3.shareapp.ProductsPage">
+
+    <RelativeLayout
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="#21Ae50">
+
+        <ImageView
+            android:id="@+id/backo"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="18dp"
+            android:src="@drawable/back11"
+            android:tint="#ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/backo"
+            android:text="Product Finder"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolBar"
+        android:background="#ffffff">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <ImageView
+                android:id="@+id/searchIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/left"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/left"
+                android:layout_marginTop="@dimen/left"
+                android:src="@drawable/search" />
+
+            <EditText
+                android:id="@+id/query"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/left"
+                android:layout_toRightOf="@id/searchIcon"
+                android:background="#ffffff"
+                android:cursorVisible="false"
+                android:singleLine="true"
+                android:text="https://flipkart.com/buddyrocks"
+
+                />
+
+            <View
+                android:id="@+id/borderView"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/searchIcon"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/borderView"
+
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:src="@drawable/snapdeal" />
+
+            <ImageView
+                android:id="@+id/productDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+android:visibility="gone"
+                android:layout_below="@id/logo"
+
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/product"
+
+                 />
+
+            <TextView
+                android:id="@+id/titleProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/productDisplay"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/left"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+
+                android:text="Apple iPhone 6s"
+                android:textAppearance="?android:textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/manProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleProduct"
+
+
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:text="Manufacture: Apple" />
+
+            <RelativeLayout
+                android:id="@+id/rlmanProd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/manProduct">
+
+                <TextView
+                    android:id="@+id/sellerMrp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/left"
+                    android:text="Seller MRP"
+                    android:textAppearance="?android:textAppearanceSmall" />
+
+                <TextView
+                    android:id="@+id/sellerMrpValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/sellerMrp"
+                    android:layout_marginBottom="@dimen/left"
+
+
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:text="Rs 49,999" />
+
+                <TextView
+                    android:id="@+id/priceChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_below="@id/sellerMrp"
+                    android:layout_marginBottom="@dimen/left"
+                    android:layout_marginLeft="32dp"
+                    android:layout_toRightOf="@id/sellerMrpValue"
+                    android:background="#000000"
+                    android:paddingLeft="@dimen/left"
+                    android:paddingRight="@dimen/left"
+
+                    android:text="Additional costs?"
+                    android:textColor="#fff" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rlmanProd"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:id="@+id/rlProfile">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"
+                    android:id="@+id/vw1"
+                    ></View>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/overView"
+
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="Credit Balance"
+                        android:id="@+id/bal"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="Credit Balance"
+                        android:id="@+id/availbal"
+                        android:layout_below="@id/bal"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="Credit Balance"
+                        android:id="@+id/availbalmsg"
+                        android:layout_below="@id/availbal"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:layout_height="wrap_content" />
+                    </RelativeLayout>
+               <RelativeLayout
+                   android:layout_width="wrap_content"
+                   android:id="@+id/details"
+                   android:visibility="gone"
+                   android:layout_height="wrap_content">
+                <de.hdodenhof.circleimageview.CircleImageView
+
+                    android:id="@+id/profile_image"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+
+                    android:src="@drawable/images"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_toRightOf="@id/profile_image"
+                    android:layout_marginTop="24dp"
+                    android:id="@+id/pname"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_height="wrap_content"
+                    android:text="Aniket Verma"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:id="@+id/status"
+                    android:layout_toRightOf="@id/profile_image"
+                    android:layout_below="@id/pname"
+
+                    android:layout_height="wrap_content"
+                    android:text="Aniket Verma1"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3"
+                    android:id="@+id/ll"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+
+                    android:layout_below="@id/profile_image"
+                    android:orientation="horizontal"
+
+                    >
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/cb"
+    android:text="Credit Balance"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cbValue"
+                            android:paddingTop="@dimen/left"
+                            android:layout_below="@id/cb"
+                            android:text="Credit Balance"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cl"
+                            android:text="Credit Balance"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/clValue"
+                            android:paddingTop="@dimen/left"
+                            android:layout_below="@id/cl"
+                            android:text="Credit Balance"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cbck"
+                            android:text="Credit Balance"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cbckValue"
+                            android:paddingTop="@dimen/left"
+                            android:layout_below="@id/cbck"
+                            android:text="Credit Balance"/>
+                    </RelativeLayout>
+                </LinearLayout>
+               </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_below="@id/overView"
+                    android:id="@+id/vwo"
+
+
+                    ></View>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"
+                    android:id="@+id/vwd"
+                   android:layout_below="@id/details"
+
+
+                    ></View>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/downPayment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rlProfile"
+                android:layout_marginBottom="@dimen/left"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="Down Payment" />
+
+            <RelativeLayout
+                android:id="@+id/downRupees"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/downPayment"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+
+
+
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/roundedproducts">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Rs.20,000"
+                    android:visibility="gone" />
+
+                <Spinner
+                    android:id="@+id/spinnerItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_centerHorizontal="true"
+                    android:background="@android:color/transparent"></Spinner>
+
+                <ImageView
+                    android:id="@+id/spinnArr"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/expandmore"
+                    android:tint="#000000" />
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/downRupees"
+                android:layout_marginBottom="@dimen/left"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+
+                android:text="Down Payment" />
+
+            <RelativeLayout
+                android:id="@+id/durationLayout"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/duration"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/roundedproducts">
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_alignParentRight="true"
+    android:id="@+id/plusR"
+
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:id="@+id/plusImg"
+android:layout_centerInParent="true"
+                    android:src="@drawable/plus"
+                    android:tint="#000000" />
+</LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/minusR"
+
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/minus"
+                    android:tint="#000000" />
+</LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dValue"
+                    android:layout_centerHorizontal="true"
+                    android:text="Rs.20,000" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/couponLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/durationLayout"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="16dp"
+
+                android:background="@drawable/roundedproducts">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="invisible"
+                    android:text="Have a code?" />
+
+
+            </RelativeLayout>
+            <EditText
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:layout_below="@id/durationLayout"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="16dp"
+                android:gravity="center"
+                android:background="@drawable/roundedproducts"
+                android:hint="Have a code?"/>
+            <RelativeLayout
+                android:layout_width="52dp"
+
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="16dp"
+                android:layout_height="56dp"
+                android:background="#000000"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/durationLayout">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/plus"
+                    android:id="@+id/plus"
+                    android:layout_centerInParent="true"
+
+                    />
+            </RelativeLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:id="@+id/cashback"
+
+    android:layout_below="@id/couponLayout"
+    android:background="@drawable/roundedproducts"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:layout_height="wrap_content">
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:id="@+id/radioCou"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="4dp"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_toRightOf="@id/radioCou"
+        android:text="ENTER COUPON CODE"/>
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:id="@+id/radioCash"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/radioCou"
+
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/radioCou"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_toRightOf="@id/radioCou"
+        android:text="USE CASHBACK"/>
+
+
+</RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/emiDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/cashback"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="@drawable/roundedproducts">
+
+                <TextView
+                    android:id="@+id/calMonPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Calculated Monthly Payment" />
+
+                <TextView
+                    android:id="@+id/calMonPayRs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/calMonPay"
+                    android:text="Rs 1924 per month" />
+
+                <TextView
+                    android:id="@+id/calTotalPayRs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/calMonPayRs"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:text="Total Payable Amount with interest" />
+
+                <TextView
+                    android:id="@+id/calTotalPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/calTotalPayRs"
+                    android:text="Rs 1924 per month" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/downar"
+                     />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/dropSpec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/emiDetails">
+
+                <RelativeLayout
+                    android:id="@+id/infoLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/left"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/left"
+                        android:text="Information" />
+
+                    <ImageView
+                        android:id="@+id/dropdes"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="@dimen/left"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/left"
+                        android:src="@drawable/downar"
+                        android:tint="#000000" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/desLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/infoLayout">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/left"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/left"
+                        android:text="Description" />
+
+                    <ImageView
+                        android:id="@+id/dropinfo"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="@dimen/left"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/left"
+                        android:src="@drawable/downar"
+                        android:tint="#000000" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/specLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_below="@id/desLayout">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/left"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/left"
+                        android:text="Specifications" />
+
+                    <ImageView
+                        android:id="@+id/dropspec"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="@dimen/left"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/left"
+                        android:src="@drawable/downar"
+                        android:tint="#000000" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/retLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/specLayout">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/left"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/left"
+                        android:text="Returns" />
+
+                    <ImageView
+                        android:id="@+id/dropret"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="@dimen/left"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/left"
+                        android:src="@drawable/downar"
+                        android:tint="#000000" />
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dropSpec"
+                android:layout_marginBottom="56dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:text="Read more details about the product,seller and shipping on Product Page"
+
+                />
+
+            <RelativeLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/durationLayout"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:layout_toRightOf="@id/couponLayout"
+                android:background="#000000">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+
+
+                    android:src="@drawable/downar"
+
+
+                    android:tint="#ffffff" />
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#21ae50"
+        android:gravity="center"
+        android:padding="@dimen/activity_horizontal_margin"
+
+        android:text="Checkout"
+        android:textColor="#ffffff"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/linkBar"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolBar"></RelativeLayout>
+
+    <TextView
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="100"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/butcheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/check"
+
+        android:layout_centerHorizontal="true"
+        android:text="Increm"
+        android:visibility="gone" />
+
+</RelativeLayout>

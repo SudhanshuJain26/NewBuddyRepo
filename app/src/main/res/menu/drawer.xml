@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+    >
+
+    <group android:checkableBehavior="single"
+        android:enabled="true"
+        android:id="@+id/gr1">
+
+
+        <item
+            android:id="@+id/MyAccount"
+
+            android:checked="true"
+android:icon="@drawable/unnamed"
+            android:color="#21A5E0"
+            android:title="Home" />
+
+        <item
+
+            android:id="@+id/app_form"
+            android:checked="false"
+            android:color="#21A5E0"
+            android:icon="@drawable/profile"
+            android:title="Profile" />
+
+        <item
+            android:id="@+id/Orders"
+            android:checked="false"
+            android:color="#21A5E0"
+            android:icon="@drawable/orders"
+            android:title="Orders" />
+        <item
+            android:id="@+id/Repayments"
+            android:checked="false"
+            android:color="#21A5E0"
+            android:icon="@drawable/repayments"
+            android:title="Repayments" />
+
+
+
+        <item
+            android:id="@+id/About"
+            android:checked="false"
+            android:icon="@drawable/aboutus"
+
+            android:title="About Us" />
+        <item
+            android:id="@+id/work"
+            android:checked="false"
+android:icon="@drawable/howitworks"
+            android:title="How it works?" />
+
+
+        <item
+            android:id="@+id/faq"
+            android:checked="false"
+            android:color="#21A5E0"
+            android:icon="@drawable/gaqs"
+            android:title="FAQs" />
+
+        <item
+            android:id="@+id/security"
+            android:checked="false"
+            android:color="#21A5E0"
+            android:icon="@drawable/safety"
+
+            android:title="Safety and Security" />
+
+        <item
+            android:id="@+id/Share"
+            android:checked="false"
+            android:color="#21A5E0"
+            android:icon="@drawable/referandearnfinal"
+            android:title="Share Referral Code" />
+
+        <item
+            android:id="@+id/log"
+            android:icon="@drawable/logoutfinal"
+            android:checked="false"
+            android:color="#21A5E0"
+            android:title="Log Out"
+            />
+
+
+
+
+    </group>
+
+</menu>

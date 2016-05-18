@@ -22,19 +22,14 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.models.TrendingMapWrapper;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
@@ -79,12 +75,15 @@ public class Splash extends AppCompatActivity {
     //    String name="",email="",formstatus="",creditLimit="",referral_code="",token="";
     static String userId = "", pass = "", token1 = "";
     private String url;
+    private Tracker mTracker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notify = 0;
-
+        BuddyApplication application = (BuddyApplication) getApplication();
+        mTracker = application.getDefaultTracker();
         gson = new Gson();
         init();
 
@@ -216,6 +215,10 @@ public class Splash extends AppCompatActivity {
     public void onResume() {
 
         super.onResume();
+
+
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         //        Toast.makeText(Splash.this, "onresume", Toast.LENGTH_LONG).show();
         if (checresume == 0) {
             //            Toast.makeText(Splash.this, "onresume1", Toast.LENGTH_LONG).show();
@@ -287,43 +290,39 @@ public class Splash extends AppCompatActivity {
                 // payload.put("productid", details.get("productid"));
                 // payload.put("action", details.get("action"));
 
-                HttpParams httpParameters = new BasicHttpParams();
 
-                HttpConnectionParams
-                        .setConnectionTimeout(httpParameters, 30000);
-
-                HttpClient client = new DefaultHttpClient(httpParameters);
-
-                HttpPost httppost = new HttpPost(url);
-                httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
-
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
-                if (response.getStatusLine().getStatusCode() != 200) {
-
-                    Log.e("MeshCommunication", "Server returned code "
-                            + response.getStatusLine().getStatusCode());
-                    return "fail";
-                } else {
-                    JSONObject resp = new JSONObject(responseString);
-
-                    if (resp.getString("status").contains("fail")) {
+                HttpResponse response = AppUtils.connectToServerPost(url, null, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
 
                         Log.e("MeshCommunication", "Server returned code "
                                 + response.getStatusLine().getStatusCode());
                         return "fail";
                     } else {
-                        SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editorP = userP.edit();
-                        token1 = resp.getString("token");
-                        editorP.putString("token_value", token1);
-                        editorP.putLong("expires", resp.getLong("expiresAt"));
-                        editorP.commit();
-                        return "win";
+                        JSONObject resp = new JSONObject(responseString);
+
+                        if (resp.getString("status").contains("fail")) {
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return "fail";
+                        } else {
+                            SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editorP = userP.edit();
+                            token1 = resp.getString("token");
+                            editorP.putString("token_value", token1);
+                            editorP.putLong("expires", resp.getLong("expiresAt"));
+                            editorP.commit();
+                            return "win";
+
+                        }
 
                     }
-
+                }
+                {
+                    return "fail";
                 }
 
             } catch (Exception e) {
@@ -369,16 +368,7 @@ public class Splash extends AppCompatActivity {
                 String url = getApplicationContext().getString(R.string.server) + "api/product/trending?category=" + urldisplay;
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
-                // httppost.setHeader("x-access-token", tok_sp);
-                // String token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NTY3MjY1NzMsImV4cCI6MTQ1Njc2MjU3M30.98mQFcYm5Uf3Fd7ZNPD-OwMIfObu7vfoq9zNtCCLfyI";
-                // payload.put("action", details.get("action"));
 
-                HttpParams httpParameters = new BasicHttpParams();
-
-                HttpConnectionParams
-                        .setConnectionTimeout(httpParameters, 30000);
-
-                HttpClient client = new DefaultHttpClient(httpParameters);
 
                 // url2=getApplicationContext().getString(R.string.server)+"api/login/verifyotp";
                 if (urldisplay.equals("Computers&subCategory=Laptops"))
@@ -388,54 +378,55 @@ public class Splash extends AppCompatActivity {
                     urldisplay = "apparels";
                 else if (urldisplay.equals("Health%20and%20Beauty"))
                     urldisplay = "homeandbeauty";
-                HttpGet httppost = new HttpGet(url);
-                httppost.setHeader("x-access-token", tok_sp);
-                httppost.setHeader("Content-Type", "application/json");
 
 
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
-                if (response.getStatusLine().getStatusCode() != 200) {
+                HttpResponse response = AppUtils.connectToServerGet(urldisplay, tok_sp, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
 
-                    Log.e("MeshCommunication", "Server returned code "
-                            + response.getStatusLine().getStatusCode());
-                    return "fail";
-                } else {
-                    JSONObject resp = new JSONObject(responseString);
-                    if (resp.getString("status").equals("success")) {
-                        JSONArray data1 = new JSONArray(resp.getString("data"));
-                        int lenght = data1.length();
-                        for (int j = 0; j < lenght; j++) {
-                            JSONObject js = data1.getJSONObject(j);
-                            String categ = js.getString("category");
-                            String subc = js.getString("subCategory");
-                            String brand1 = js.getString("brand");
-                            String id = js.getString("title");
-                            String mrp = js.getString("mrp");
-                            String seller = js.getString("seller");
-                            String fkid = js.getString("fkProductId");
-                            String selling_price = js.getString("sellingPrice");
-                            JSONObject img = new JSONObject(js.getString("imgUrls"));
-                            String imgurl = img.getString("200x200");
-                            category.get(urldisplay).put(String.valueOf(j), categ);
-                            subCategory.get(urldisplay).put(String.valueOf(j), subc);
-                            brand.get(urldisplay).put(String.valueOf(j), brand1);
-                            image.get(urldisplay).put(String.valueOf(j), imgurl);
-                            mrp1.get(urldisplay).put(String.valueOf(j), mrp);
-                            title.get(urldisplay).put(String.valueOf(j), id);
-                            fkid1.get(urldisplay).put(String.valueOf(j), fkid);
-                            selling.get(urldisplay).put(String.valueOf(j), selling_price);
-                            sellers.get(urldisplay).put(String.valueOf(j), seller);
-                            String p = id;
-                        }
-                        return "win";
-                        //versioncode=data1.getString("version_code");
-                        //return versioncode;
-                    } else
+                        Log.e("MeshCommunication", "Server returned code "
+                                + response.getStatusLine().getStatusCode());
                         return "fail";
+                    } else {
+                        JSONObject resp = new JSONObject(responseString);
+                        if (resp.getString("status").equals("success")) {
+                            JSONArray data1 = new JSONArray(resp.getString("data"));
+                            int lenght = data1.length();
+                            for (int j = 0; j < lenght; j++) {
+                                JSONObject js = data1.getJSONObject(j);
+                                String categ = js.getString("category");
+                                String subc = js.getString("subCategory");
+                                String brand1 = js.getString("brand");
+                                String id = js.getString("title");
+                                String mrp = js.getString("mrp");
+                                String seller = js.getString("seller");
+                                String fkid = js.getString("fkProductId");
+                                String selling_price = js.getString("sellingPrice");
+                                JSONObject img = new JSONObject(js.getString("imgUrls"));
+                                String imgurl = img.getString("200x200");
+                                category.get(urldisplay).put(String.valueOf(j), categ);
+                                subCategory.get(urldisplay).put(String.valueOf(j), subc);
+                                brand.get(urldisplay).put(String.valueOf(j), brand1);
+                                image.get(urldisplay).put(String.valueOf(j), imgurl);
+                                mrp1.get(urldisplay).put(String.valueOf(j), mrp);
+                                title.get(urldisplay).put(String.valueOf(j), id);
+                                fkid1.get(urldisplay).put(String.valueOf(j), fkid);
+                                selling.get(urldisplay).put(String.valueOf(j), selling_price);
+                                sellers.get(urldisplay).put(String.valueOf(j), seller);
+                                String p = id;
+                            }
+                            return "win";
+                            //versioncode=data1.getString("version_code");
+                            //return versioncode;
+                        } else
+                            return "fail";
 
 
+                    }
+                } else {
+                    return "fail";
                 }
             } catch (Exception e) {
                 String t = e.toString();
@@ -469,53 +460,34 @@ public class Splash extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                // userid=12&productid=23&action=add
-                // TYPE: POST
-
-                // payload.put("action", details.get("action"));
-
-                HttpParams httpParameters = new BasicHttpParams();
-
-                HttpConnectionParams
-                        .setConnectionTimeout(httpParameters, 30000);
-
-                HttpClient client = new DefaultHttpClient(httpParameters);
-                //                String url2="http://54.255.147.43:80/api/user/form?phone="+sh_otp.getString("number","");
                 String url3 = getApplicationContext().getString(R.string.server) + "api/app/version?platform=android";
-
-                HttpGet httppost = new HttpGet(url3);
-                try {
-
-                } catch (Exception e) {
-                    System.out.println("dio " + e.toString());
-                }
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
-                httppost.setHeader("x-access-token", tok_sp);
 
 
-                httppost.setHeader("Content-Type", "application/json");
+                HttpResponse response = AppUtils.connectToServerGet(url3, tok_sp, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    String versioncode = "";
+                    if (response.getStatusLine().getStatusCode() != 200) {
 
-
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
-                String versioncode = "";
-                if (response.getStatusLine().getStatusCode() != 200) {
-
-                    Log.e("MeshCommunication", "Server returned code "
-                            + response.getStatusLine().getStatusCode());
-                    return "fail";
-                } else {
-                    JSONObject resp = new JSONObject(responseString);
-                    if (resp.getString("status").equals("success")) {
-                        JSONObject data1 = new JSONObject(resp.getString("data"));
-                        versioncode = data1.getString("version_code");
-                        return versioncode;
-                    } else
+                        Log.e("MeshCommunication", "Server returned code "
+                                + response.getStatusLine().getStatusCode());
                         return "fail";
+                    } else {
+                        JSONObject resp = new JSONObject(responseString);
+                        if (resp.getString("status").equals("success")) {
+                            JSONObject data1 = new JSONObject(resp.getString("data"));
+                            versioncode = data1.getString("version_code");
+                            return versioncode;
+                        } else
+                            return "fail";
 
 
+                    }
+                } else {
+                    return "fail";
                 }
             } catch (Exception e) {
                 return "fail";
@@ -603,7 +575,7 @@ public class Splash extends AppCompatActivity {
                         // token=MainActivity.token;
                         // token=MainActivity.token;
                         url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + userId;
-                        new verifyOtp().execute("");
+                        new ValidateForm().execute("");
                     } else if (!sh_otp.getString("number", "").equals("")) {
                         token = tok1;
                         try {
@@ -615,7 +587,7 @@ public class Splash extends AppCompatActivity {
                             System.out.println("Intercom nine" + e.toString());
                         }
                         url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + sh_otp.getString("number", "");
-                        new verifyOtp().execute("");
+                        new ValidateForm().execute("");
                     } else {
                         Intent in = new Intent(Splash.this, Landing.class);
                         finish();
@@ -634,8 +606,8 @@ public class Splash extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private class verifyOtp extends
-                            AsyncTask<String, Void, String> {
+    private class ValidateForm extends
+                               AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... data) {
 
@@ -647,157 +619,141 @@ public class Splash extends AppCompatActivity {
                 // TYPE: POST
 
                 // payload.put("action", details.get("action"));
-
-                HttpParams httpParameters = new BasicHttpParams();
-
-                HttpConnectionParams
-                        .setConnectionTimeout(httpParameters, 30000);
-
-                HttpClient client = new DefaultHttpClient(httpParameters);
-                //                String url2="http://54.255.147.43:80/api/user/form?phone="+sh_otp.getString("number","");
-
-
-                HttpGet httppost = new HttpGet(url2);
-                try {
-
-                } catch (Exception e) {
-                    System.out.println("dio " + e.toString());
-                }
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
-                httppost.setHeader("x-access-token", tok_sp);
 
 
-                httppost.setHeader("Content-Type", "application/json");
+                HttpResponse response = AppUtils.connectToServerGet(url2, tok_sp, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
 
-
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
-
-                if (response.getStatusLine().getStatusCode() != 200) {
-
-                    Log.e("MeshCommunication", "Server returned code "
-                            + response.getStatusLine().getStatusCode());
-                    return "fail";
-                } else {
-                    JSONObject resp = new JSONObject(responseString);
-                    JSONObject data1 = new JSONObject(resp.getString("data"));
-                    try {
-
-                        referral_code = data1.getString("uniqueCode");
-                        SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putString("rcode", referral_code);
-                        editor.commit();
-                        Gson gson = new Gson();
-                        String json = sh.getString("UserObject", "");
-                        UserModel user = gson.fromJson(json, UserModel.class);
-                        if (user == null)
-                            user = new UserModel();
-                        name = data1.getString("name");
-                        email = data1.getString("email");
-                        user.setName(name);
-                        user.setEmail(email);
-                        if (!data1.getBoolean("offlineForm"))
-                            checkDataForNormalUser(user, gson, data1);
-                        else
-                            checkDataForOfflineUser(user, gson, data1);
-                        json = gson.toJson(user);
-                        sh.edit().putString("UserObject", json).apply();
-                        name = data1.getString("name");
-                        email = data1.getString("email");
-                    } catch (Exception e) {
-                    }
-                    try {
-                        try {
-                            creditLimit = data1.getString("creditLimit");
-                        } catch (Exception e) {
-                        }
-                        try {
-                            fbid = data1.getString("fbConnected");
-                        } catch (Exception e) {
-                            fbid = "empty";
-                        }
-                        if (fbid.equals("") || (fbid.equals("false")))
-                            fbid = "empty";
-                        try {
-                            formstatus = data1.getString("formStatus");
-                        } catch (Exception e) {
-                            formstatus = "empty";
-                        }
-
-                        try {
-                            cashBack = data1.getString("totalCashback");
-                        } catch (Exception e) {
-                            cashBack = "";
-                        }
-
-                        SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editorP = userP.edit();
-
-                        editorP.putString("cashBack", cashBack);
-                        editorP.commit();
-                        try {
-                            rejectionReason = data1.getString("rejectionReason");
-                        } catch (Exception e) {
-                        }
-                        if (formstatus.equals(""))
-                            formstatus = "empty";
-                        try {
-                            panoradhar = data1.getString("addressProofs");
-                        } catch (Exception e) {
-                            panoradhar = "NA";
-                        }
-                        if (panoradhar.equals(""))
-                            panoradhar = "NA";
-                        try {
-                            collegeid = data1.getString("collegeIDs");
-                        } catch (Exception e) {
-                            collegeid = "NA";
-                        }
-                        if (collegeid.equals(""))
-                            collegeid = "NA";
-                        try {
-                            bankaccount = data1.getString("bankStatement");
-                        } catch (Exception e) {
-                            bankaccount = "NA";
-                        }
-                        if (bankaccount.equals(""))
-                            bankaccount = "NA";
-                        try {
-                            verificationdate = data1.getString("collegeIdVerificationDate");
-                        } catch (Exception e) {
-                            verificationdate = "NA";
-                        }
-                        if (verificationdate.equals(""))
-                            verificationdate = "NA";
-
-                        try {
-                            String dpid = data1.getString("fbUserId");
-                            SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor2 = sf.edit();
-                            editor2.putString("dpid", dpid);
-
-                            //  editor2.putString("password", password.getText().toString());
-                            editor2.commit();
-                        } catch (Exception e) {
-                        }
-
-                    } catch (Exception e) {
-                    }
-
-                    if (resp.getString("msg").contains("error")) {
+                    if (response.getStatusLine().getStatusCode() != 200) {
 
                         Log.e("MeshCommunication", "Server returned code "
                                 + response.getStatusLine().getStatusCode());
-                        return resp.getString("msg");
+                        return "fail";
                     } else {
+                        JSONObject resp = new JSONObject(responseString);
+                        JSONObject data1 = new JSONObject(resp.getString("data"));
+                        try {
 
-                        return "win";
+                            referral_code = data1.getString("uniqueCode");
+                            SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString("rcode", referral_code);
+                            editor.commit();
+                            Gson gson = new Gson();
+                            String json = sh.getString("UserObject", "");
+                            UserModel user = gson.fromJson(json, UserModel.class);
+                            if (user == null)
+                                user = new UserModel();
+                            name = data1.getString("name");
+                            email = data1.getString("email");
+                            user.setName(name);
+                            user.setEmail(email);
+                            if (!data1.getBoolean("offlineForm"))
+                                checkDataForNormalUser(user, gson, data1);
+                            else
+                                checkDataForOfflineUser(user, gson, data1);
+                            json = gson.toJson(user);
+                            sh.edit().putString("UserObject", json).apply();
+                            name = data1.getString("name");
+                            email = data1.getString("email");
+                        } catch (Exception e) {
+                        }
+                        try {
+                            try {
+                                creditLimit = data1.getString("creditLimit");
+                            } catch (Exception e) {
+                            }
+                            try {
+                                fbid = data1.getString("fbConnected");
+                            } catch (Exception e) {
+                                fbid = "empty";
+                            }
+                            if (fbid.equals("") || (fbid.equals("false")))
+                                fbid = "empty";
+                            try {
+                                formstatus = data1.getString("formStatus");
+                            } catch (Exception e) {
+                                formstatus = "empty";
+                            }
+
+                            try {
+                                cashBack = data1.getString("totalCashback");
+                            } catch (Exception e) {
+                                cashBack = "";
+                            }
+
+                            SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editorP = userP.edit();
+
+                            editorP.putString("cashBack", cashBack);
+                            editorP.commit();
+                            try {
+                                rejectionReason = data1.getString("rejectionReason");
+                            } catch (Exception e) {
+                            }
+                            if (formstatus.equals(""))
+                                formstatus = "empty";
+                            try {
+                                panoradhar = data1.getString("addressProofs");
+                            } catch (Exception e) {
+                                panoradhar = "NA";
+                            }
+                            if (panoradhar.equals(""))
+                                panoradhar = "NA";
+                            try {
+                                collegeid = data1.getString("collegeIDs");
+                            } catch (Exception e) {
+                                collegeid = "NA";
+                            }
+                            if (collegeid.equals(""))
+                                collegeid = "NA";
+                            try {
+                                bankaccount = data1.getString("bankStatement");
+                            } catch (Exception e) {
+                                bankaccount = "NA";
+                            }
+                            if (bankaccount.equals(""))
+                                bankaccount = "NA";
+                            try {
+                                verificationdate = data1.getString("collegeIdVerificationDate");
+                            } catch (Exception e) {
+                                verificationdate = "NA";
+                            }
+                            if (verificationdate.equals(""))
+                                verificationdate = "NA";
+
+                            try {
+                                String dpid = data1.getString("fbUserId");
+                                SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor2 = sf.edit();
+                                editor2.putString("dpid", dpid);
+
+                                //  editor2.putString("password", password.getText().toString());
+                                editor2.commit();
+                            } catch (Exception e) {
+                            }
+
+                        } catch (Exception e) {
+                        }
+
+                        if (resp.getString("msg").contains("error")) {
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return resp.getString("msg");
+                        } else {
+
+                            return "win";
+
+                        }
 
                     }
-
+                } else {
+                    return "fail";
                 }
 
             } catch (Exception e) {

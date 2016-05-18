@@ -18,13 +18,6 @@ import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
 import io.intercom.com.google.gson.Gson;
@@ -227,46 +221,44 @@ public class Landing extends AppCompatActivity {
                 // payload.put("productid", details.get("productid"));
                 // payload.put("action", details.get("action"));
 
-
-                HttpParams httpParameters = new BasicHttpParams();
-
-                HttpConnectionParams
-                        .setConnectionTimeout(httpParameters, 30000);
-
-                HttpClient client = new DefaultHttpClient(httpParameters);
                 String urll = getApplicationContext().getString(R.string.server) + "authenticate";
-                HttpPost httppost = new HttpPost(urll);
-                httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
-                if (response.getStatusLine().getStatusCode() != 200) {
 
-                    Log.e("MeshCommunication", "Server returned code "
-                            + response.getStatusLine().getStatusCode());
-                    return "fail";
-                } else {
-                    JSONObject resp = new JSONObject(responseString);
+                HttpResponse response = AppUtils.connectToServerPost(urll, null, null);
+                if (response != null) {
 
-                    if (resp.getString("status").contains("fail")) {
+
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
 
                         Log.e("MeshCommunication", "Server returned code "
                                 + response.getStatusLine().getStatusCode());
                         return "fail";
                     } else {
-                        String token1 = "";
+                        JSONObject resp = new JSONObject(responseString);
 
-                        userP = getSharedPreferences("token", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editorP = userP.edit();
-                        token1 = resp.getString("token");
-                        editorP.putString("token_value", token1);
-                        editorP.putLong("expires", resp.getLong("expiresAt"));
-                        editorP.commit();
-                        return "win";
+                        if (resp.getString("status").contains("fail")) {
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return "fail";
+                        } else {
+                            String token1 = "";
+
+                            userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editorP = userP.edit();
+                            token1 = resp.getString("token");
+                            editorP.putString("token_value", token1);
+                            editorP.putLong("expires", resp.getLong("expiresAt"));
+                            editorP.commit();
+                            return "win";
+
+                        }
 
                     }
-
+                } else {
+                    return "fail";
                 }
 
             } catch (Exception e) {
@@ -310,16 +302,10 @@ public class Landing extends AppCompatActivity {
 
                 // payload.put("action", details.get("action"));
 
-                HttpParams httpParameters = new BasicHttpParams();
 
-                HttpConnectionParams
-                        .setConnectionTimeout(httpParameters, 30000);
-
-                HttpClient client = new DefaultHttpClient(httpParameters);
                 String url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + ss.getString("phone_number", "");
 
 
-                HttpGet httppost = new HttpGet(url2);
                 try {
 
                 } catch (Exception e) {
@@ -327,135 +313,134 @@ public class Landing extends AppCompatActivity {
                 }
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
-                httppost.setHeader("x-access-token", tok_sp);
 
 
-                httppost.setHeader("Content-Type", "application/json");
+                HttpResponse response = AppUtils.connectToServerGet(url2, tok_sp, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
 
+                    if (response.getStatusLine().getStatusCode() != 200) {
 
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
-
-                if (response.getStatusLine().getStatusCode() != 200) {
-
-                    Log.e("MeshCommunication", "Server returned code "
-                            + response.getStatusLine().getStatusCode());
-                    return "fail";
-                } else {
-                    JSONObject resp = new JSONObject(responseString);
-                    JSONObject data1 = new JSONObject(resp.getString("data"));
-                    try {
-
-                        referral_code = data1.getString("uniqueCode");
-                        SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putString("rcode", referral_code);
-                        editor.commit();
-
-                        Gson gson = new Gson();
-                        String json = sh.getString("UserObject", "");
-                        UserModel user = gson.fromJson(json, UserModel.class);
-                        if (user == null)
-                            user = new UserModel();
-                        name = data1.getString("name");
-                        email = data1.getString("email");
-                        user.setName(name);
-                        user.setEmail(email);
-                        if (!data1.getBoolean("offlineForm"))
-                            checkDataForNormalUser(user, gson, data1);
-                        else
-                            checkDataForOfflineUser(user, gson, data1);
-                        json = gson.toJson(user);
-                        sh.edit().putString("UserObject", json).apply();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        try {
-                            creditLimit = data1.getString("creditLimit");
-                        } catch (Exception e) {
-                        }
-                        try {
-                            fbid = data1.getString("fbConnected");
-                        } catch (Exception e) {
-                            fbid = "empty";
-                        }
-                        if (fbid.equals("") || (fbid.equals("false")))
-                            fbid = "empty";
-                        try {
-                            formstatus = data1.getString("formStatus");
-                        } catch (Exception e) {
-                            formstatus = "empty";
-                        }
-
-                        try {
-                            cashBack = data1.getString("totalCashback");
-                        } catch (Exception e) {
-                            cashBack = "";
-                        }
-
-                        SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editorP = userP.edit();
-
-                        editorP.putString("cashBack", cashBack);
-                        editorP.commit();
-                        try {
-                            rejectionReason = data1.getString("rejectionReason");
-                        } catch (Exception e) {
-                        }
-                        if (formstatus.equals(""))
-                            formstatus = "empty";
-                        try {
-                            panoradhar = data1.getString("addressProofs");
-                        } catch (Exception e) {
-                            panoradhar = "NA";
-                        }
-                        if (panoradhar.equals(""))
-                            panoradhar = "NA";
-                        try {
-                            collegeid = data1.getString("collegeIDs");
-                        } catch (Exception e) {
-                            collegeid = "NA";
-                        }
-                        if (collegeid.equals(""))
-                            collegeid = "NA";
-                        try {
-                            bankaccount = data1.getString("bankStatement");
-                        } catch (Exception e) {
-                            bankaccount = "NA";
-                        }
-                        if (bankaccount.equals(""))
-                            bankaccount = "NA";
-                        try {
-                            verificationdate = data1.getString("collegeIdVerificationDate");
-                        } catch (Exception e) {
-                            verificationdate = "NA";
-                        }
-                        if (verificationdate.equals(""))
-                            verificationdate = "NA";
-                        try {
-                            String dpid = data1.getString("fbUserId");
-                            SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor2 = sf.edit();
-                            editor2.putString("dpid", dpid);
-
-                            //  editor2.putString("password", password.getText().toString());
-                            editor2.commit();
-                        } catch (Exception e) {
-                        }
-
-                    } catch (Exception e) {
-                    }
-                    if (resp.getString("msg").contains("error")) {
                         Log.e("MeshCommunication", "Server returned code "
                                 + response.getStatusLine().getStatusCode());
-                        return resp.getString("msg");
+                        return "fail";
                     } else {
-                        return "win";
-                    }
+                        JSONObject resp = new JSONObject(responseString);
+                        JSONObject data1 = new JSONObject(resp.getString("data"));
+                        try {
 
+                            referral_code = data1.getString("uniqueCode");
+                            SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString("rcode", referral_code);
+                            editor.commit();
+
+                            Gson gson = new Gson();
+                            String json = sh.getString("UserObject", "");
+                            UserModel user = gson.fromJson(json, UserModel.class);
+                            if (user == null)
+                                user = new UserModel();
+                            name = data1.getString("name");
+                            email = data1.getString("email");
+                            user.setName(name);
+                            user.setEmail(email);
+                            if (!data1.getBoolean("offlineForm"))
+                                checkDataForNormalUser(user, gson, data1);
+                            else
+                                checkDataForOfflineUser(user, gson, data1);
+                            json = gson.toJson(user);
+                            sh.edit().putString("UserObject", json).apply();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            try {
+                                creditLimit = data1.getString("creditLimit");
+                            } catch (Exception e) {
+                            }
+                            try {
+                                fbid = data1.getString("fbConnected");
+                            } catch (Exception e) {
+                                fbid = "empty";
+                            }
+                            if (fbid.equals("") || (fbid.equals("false")))
+                                fbid = "empty";
+                            try {
+                                formstatus = data1.getString("formStatus");
+                            } catch (Exception e) {
+                                formstatus = "empty";
+                            }
+
+                            try {
+                                cashBack = data1.getString("totalCashback");
+                            } catch (Exception e) {
+                                cashBack = "";
+                            }
+
+                            SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editorP = userP.edit();
+
+                            editorP.putString("cashBack", cashBack);
+                            editorP.commit();
+                            try {
+                                rejectionReason = data1.getString("rejectionReason");
+                            } catch (Exception e) {
+                            }
+                            if (formstatus.equals(""))
+                                formstatus = "empty";
+                            try {
+                                panoradhar = data1.getString("addressProofs");
+                            } catch (Exception e) {
+                                panoradhar = "NA";
+                            }
+                            if (panoradhar.equals(""))
+                                panoradhar = "NA";
+                            try {
+                                collegeid = data1.getString("collegeIDs");
+                            } catch (Exception e) {
+                                collegeid = "NA";
+                            }
+                            if (collegeid.equals(""))
+                                collegeid = "NA";
+                            try {
+                                bankaccount = data1.getString("bankStatement");
+                            } catch (Exception e) {
+                                bankaccount = "NA";
+                            }
+                            if (bankaccount.equals(""))
+                                bankaccount = "NA";
+                            try {
+                                verificationdate = data1.getString("collegeIdVerificationDate");
+                            } catch (Exception e) {
+                                verificationdate = "NA";
+                            }
+                            if (verificationdate.equals(""))
+                                verificationdate = "NA";
+                            try {
+                                String dpid = data1.getString("fbUserId");
+                                SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor2 = sf.edit();
+                                editor2.putString("dpid", dpid);
+
+                                //  editor2.putString("password", password.getText().toString());
+                                editor2.commit();
+                            } catch (Exception e) {
+                            }
+
+                        } catch (Exception e) {
+                        }
+                        if (resp.getString("msg").contains("error")) {
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return resp.getString("msg");
+                        } else {
+                            return "win";
+                        }
+
+                    }
                 }
+                return "fail";
 
             } catch (Exception e) {
                 Log.e("mesherror", e.getMessage());

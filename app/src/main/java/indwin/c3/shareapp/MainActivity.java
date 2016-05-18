@@ -52,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 
 import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
@@ -454,45 +455,36 @@ public class MainActivity extends AppCompatActivity {
                 // payload.put("productid", details.get("productid"));
                 // payload.put("action", details.get("action"));
 
-                HttpParams httpParameters = new BasicHttpParams();
-
-                HttpConnectionParams
-                        .setConnectionTimeout(httpParameters, 30000);
-
-                HttpClient client = new DefaultHttpClient(httpParameters);
-
-                HttpPost httppost = new HttpPost(url);
-                httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
-
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
-                if (response.getStatusLine().getStatusCode() != 200) {
-
-                    Log.e("MeshCommunication", "Server returned code "
-                            + response.getStatusLine().getStatusCode());
-                    return "fail";
-                } else {
-                    JSONObject resp = new JSONObject(responseString);
-
-                    if (resp.getString("status").contains("fail")) {
+                HttpResponse response = AppUtils.connectToServerPost(url, null, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
 
                         Log.e("MeshCommunication", "Server returned code "
                                 + response.getStatusLine().getStatusCode());
                         return "fail";
                     } else {
-                        token = resp.getString("token");
-                        SharedPreferences userP = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = userP.edit();
-                        editor.putString("tok", token);
+                        JSONObject resp = new JSONObject(responseString);
 
-                        editor.commit();
-                        return "win";
+                        if (resp.getString("status").contains("fail")) {
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return "fail";
+                        } else {
+                            token = resp.getString("token");
+                            SharedPreferences userP = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = userP.edit();
+                            editor.putString("tok", token);
+
+                            editor.commit();
+                            return "win";
+
+                        }
 
                     }
-
-                }
-
+                } else return "fail";
             } catch (Exception e) {
                 Log.e("mesherror111", e.getMessage());
                 return "fail";
@@ -511,14 +503,14 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
 
-                new login().execute(url);
+                new Login().execute(url);
 
             }
 
         }
     }
 
-    private class login extends
+    private class Login extends
                         AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... data) {
@@ -533,47 +525,34 @@ public class MainActivity extends AppCompatActivity {
                 payload.put("userid", userId);
                 payload.put("password", pass);
                 // payload.put("action", details.get("action"));
-
-                HttpParams httpParameters = new BasicHttpParams();
-
-                HttpConnectionParams
-                        .setConnectionTimeout(httpParameters, 30000);
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
-                HttpClient client = new DefaultHttpClient(httpParameters);
                 String url2 = getApplicationContext().getString(R.string.server) + "api/user/login";
-                HttpPost httppost = new HttpPost(url2);
-                httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
-                httppost.setHeader("x-access-token", tok_sp);
-                httppost.setHeader("Content-Type", "application/json");
-
-
-                StringEntity entity = new StringEntity(payload.toString());
-
-                httppost.setEntity(entity);
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
-                if (response.getStatusLine().getStatusCode() != 200) {
-
-                    Log.e("MeshCommunication", "Server returned code "
-                            + response.getStatusLine().getStatusCode());
-                    return "fail";
-                } else {
-                    JSONObject resp = new JSONObject(responseString);
-
-                    if (resp.getString("status").contains("error")) {
+                HttpResponse response = AppUtils.connectToServerPost(url2, payload.toString(), tok_sp);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
 
                         Log.e("MeshCommunication", "Server returned code "
                                 + response.getStatusLine().getStatusCode());
-                        return resp.getString("msg");
+                        return "fail";
                     } else {
+                        JSONObject resp = new JSONObject(responseString);
 
-                        return "win";
+                        if (resp.getString("status").contains("error")) {
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return resp.getString("msg");
+                        } else {
+
+                            return "win";
+
+                        }
 
                     }
-
-                }
+                } else return "fail";
 
             } catch (Exception e) {
                 Log.e("mesherror", e.getMessage());
@@ -714,7 +693,7 @@ public class MainActivity extends AppCompatActivity {
                 //   getALlContacts();
 
 
-                new checkuser().execute(url);
+                new CheckUser().execute(url);
 
             }
 
@@ -766,7 +745,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class checkuser extends
+    private class CheckUser extends
                             AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -1243,11 +1222,13 @@ public class MainActivity extends AppCompatActivity {
 
 
                 try {
-                    HttpParams httpParameters = new BasicHttpParams();
                     SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
-                    String tok_sp = toks.getString("token_value", "");
-                    HttpClient client = new DefaultHttpClient(httpParameters);
+
                     String urlsm = getApplicationContext().getString(R.string.server) + "api/content/sms";
+                    String tok_sp = toks.getString("token_value", "");
+
+                    HttpParams httpParameters = new BasicHttpParams();
+                    HttpClient client = new DefaultHttpClient(httpParameters);
                     SharedPreferences pref = act.getSharedPreferences("MyPref", 0);
                     HttpPost httppost = new HttpPost(urlsm);
 
@@ -1278,6 +1259,8 @@ public class MainActivity extends AppCompatActivity {
                     StringEntity entity = new StringEntity(t5);
                     httppost.setEntity(entity);
                     HttpResponse response = client.execute(httppost);
+
+
                     HttpEntity ent = response.getEntity();
 
                     String responseString = EntityUtils.toString(ent, "UTF-8");

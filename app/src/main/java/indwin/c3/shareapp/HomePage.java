@@ -50,6 +50,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpEntity;
@@ -72,6 +74,7 @@ import java.util.Date;
 import java.util.List;
 
 import indwin.c3.shareapp.activities.ProfileActivity;
+import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
@@ -114,10 +117,13 @@ public class HomePage extends AppCompatActivity {
     private SharedPreferences mPrefs;
     private Gson gson;
     private UserModel user;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BuddyApplication application = (BuddyApplication) getApplication();
+        mTracker = application.getDefaultTracker();
         userP = getSharedPreferences("token", Context.MODE_PRIVATE);
         cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
         //userid=ss.getString("phone_number", "");
@@ -1695,6 +1701,12 @@ public class HomePage extends AppCompatActivity {
         }
         Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

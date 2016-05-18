@@ -5,6 +5,18 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
+import java.io.IOException;
+
 import indwin.c3.shareapp.models.UserModel;
 import io.intercom.com.google.gson.Gson;
 
@@ -19,6 +31,7 @@ public class AppUtils {
     public static final String SOURCE = "source";
     public static final String HEADING = "heading";
     public static final String TnC_URL = "https://hellobuddy.in/termsApp";
+    public static int TIMEOUT_MILLISECS = 30000;
 
     public static boolean isNotEmpty(String checkString) {
         if (checkString != null && !checkString.trim().isEmpty()) {
@@ -27,6 +40,66 @@ public class AppUtils {
         return false;
 
 
+    }
+
+
+    public static HttpResponse connectToServerGet(String url, String x_access_token, String basicAuth) {
+
+        HttpParams httpParameters = new BasicHttpParams();
+
+        HttpConnectionParams
+                .setConnectionTimeout(httpParameters, 30000);
+
+        HttpClient client = new DefaultHttpClient(httpParameters);
+        //                String url2="http://54.255.147.43:80/api/user/form?phone="+sh_otp.getString("number","");
+
+        HttpGet httppost = new HttpGet(url);
+
+
+        httppost.setHeader("x-access-token", x_access_token);
+
+
+        httppost.setHeader("Content-Type", "application/json");
+
+
+        try {
+            HttpResponse response = client.execute(httppost);
+            return response;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+
+    public static HttpResponse connectToServerPost(String url, String json, String x_access_token) {
+        HttpParams httpParameters = new BasicHttpParams();
+
+        HttpConnectionParams
+                .setConnectionTimeout(httpParameters, 30000);
+
+        HttpClient client = new DefaultHttpClient(httpParameters);
+
+        HttpPost httppost = new HttpPost(url);
+        httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
+        if (isNotEmpty(x_access_token)) {
+
+            httppost.setHeader("x-access-token", x_access_token);
+        }
+
+        try {
+            if (isNotEmpty(json)) {
+                StringEntity entity = new StringEntity(json);
+                httppost.setEntity(entity);
+            }
+
+            HttpResponse response = client.execute(httppost);
+            return response;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static UserModel getUserObject(Context context) {

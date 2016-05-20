@@ -146,11 +146,23 @@
                     android:alpha="0.6"
                     android:background="#000000"/>
 
-                <Spinner
-                    android:id="@+id/profession_family_member_1"
-                    android:layout_width="232dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"/>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="is a "
+                        android:textStyle="bold"/>
+
+                    <Spinner
+                        android:id="@+id/profession_family_member_1"
+                        android:layout_width="232dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"/>
+                </LinearLayout>
 
                 <View
                     android:layout_width="232dp"
@@ -207,12 +219,25 @@
                     android:background="#000000"
                     android:visibility="gone"/>
 
-                <Spinner
-                    android:id="@+id/profession_family_member_2"
-                    android:layout_width="232dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:visibility="gone"/>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="is a "
+                        android:textStyle="bold"/>
+
+                    <Spinner
+                        android:id="@+id/profession_family_member_2"
+                        android:layout_width="232dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
 
                 <View
                     android:id="@+id/profession_view_family_member_2"
@@ -281,6 +306,21 @@
                         android:textSize="16sp"
                         android:textStyle="bold"/>
                 </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:drawableLeft="@drawable/infotip"
+                    android:drawablePadding="8dip"
+                    android:drawableStart="@drawable/infotip"
+                    android:text="Speaking to your parents is necessary for approval.Submitting incorrect details will lead to instant rejection"
+                    android:textColor="@color/intercomsdk_attachment_color"
+                    android:textSize="14sp"/>
+
 
             </LinearLayout>
         </ScrollView>

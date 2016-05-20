@@ -105,35 +105,12 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         View rootView = inflater.inflate(
                 R.layout.profile_form_step2_fragment1, container, false);
         String[] gpaArray = getResources().getStringArray(R.array.gpa_values);
-        gpaTypeArray = getResources().getStringArray(R.array.gpa_type);
-        mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        gpaTypeSp = (Spinner) rootView.findViewById(R.id.gpa_spinner);
-        spinnerErrorTv = (TextView) rootView.findViewById(R.id.spinner_error_msg_tv);
-        gpaValueEt = (EditText) rootView.findViewById(R.id.gpa_value);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        dobEditText = (EditText) rootView.findViewById(R.id.user_dob_edittext);
-        incompleteAddressDetails = (ImageView) rootView.findViewById(R.id.incomplete_address);
-        completeAddressDetails = (ImageView) rootView.findViewById(R.id.complete_address);
-        completeDOB = (ImageView) rootView.findViewById(R.id.complete_dob);
-        incompleteDOB = (ImageView) rootView.findViewById(R.id.incomplete_dob);
         final String placesToStay[] = getResources().getStringArray(R.array.places_of_stay);
         final String placesToStayValues[] = getResources().getStringArray(R.array.places_of_stay_values);
-        googleCurrentAddress = (AutoCompleteTextView) rootView.findViewById(R.id.google_current_address_autocomplete);
-        googleCurrentAddress.setOnItemClickListener(mAutocompleteClickListener);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
 
-        editCurrentAddress = (TextView) rootView.findViewById(R.id.edit_current_address);
-        editPermanentAddress = (TextView) rootView.findViewById(R.id.edit_permanent_address);
-        currentAddressLayout = (RelativeLayout) rootView.findViewById(R.id.current_address_layout);
-        addressHelptip = (ImageButton) rootView.findViewById(R.id.address_helptip);
-        currentAddressHeading = (TextView) rootView.findViewById(R.id.current_address_heading);
-        submitAddress = (Button) rootView.findViewById(R.id.submit_address);
+        gpaTypeArray = getResources().getStringArray(R.array.gpa_type);
+        mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
+        getAllViews(rootView);
 
 
         BANGALORE_CENTER.setLatitude(12.97232);
@@ -199,6 +176,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
                     .load(R.mipmap.step2fragment1girl)
                     .into(topImage);
         }
+        googleCurrentAddress.setOnItemClickListener(mAutocompleteClickListener);
 
         addressHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,25 +215,9 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
             }
         });
 
-        gpaTypeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (position == 0) {
-                    gpaValueEt.setEnabled(false);
-                    spinnerErrorTv.setText("");
-                } else {
-                    if (!user.isAppliedFor7k())
-                        gpaValueEt.setEnabled(true);
-                    spinnerErrorTv.setText(validateGpa(gpaValueEt.getText().toString()));
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
-
-        });
+        spinner.setAdapter(adapter);
+        spinner.setSelection(adapter.getCount());
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -271,8 +233,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
                 user.setUpdateAccommodation(false);
             }
         });
-        spinner.setAdapter(adapter);
-        spinner.setSelection(adapter.getCount());
+        setOnClickListerner();
 
         if (user.getDob() != null && !"".equals(user.getDob())) {
             dobEditText.setText(user.getDob());
@@ -309,6 +270,81 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         int statusBarHeight = rectangle.top;
         currentAddressLayout.getLayoutParams().height = displaymetrics.heightPixels - statusBarHeight;
 
+
+        datePicker = new
+
+                DatePicker(getActivity(),
+
+                "DOB");
+        datePicker.build(new DialogInterface.OnClickListener()
+
+                         {
+                             @Override
+                             public void onClick(DialogInterface dialog, int which) {
+                             }
+                         }
+
+                , null);
+
+
+        if (user.isIncompleteDOB() || user.isIncompleteAddressDetails() || !(gpaValueEntered && gpaTypeEntered))
+
+        {
+            incompleteStep1.setVisibility(View.VISIBLE);
+            if (user.isIncompleteDOB()) {
+                incompleteDOB.setVisibility(View.VISIBLE);
+            }
+            if (user.isIncompleteAddressDetails()) {
+                incompleteAddressDetails.setVisibility(View.VISIBLE);
+            }
+        }
+
+        if (user.isIncompleteFamilyDetails())
+
+        {
+            incompleteStep2.setVisibility(View.VISIBLE);
+        }
+
+        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails()
+                || user.isIncompleteVerificationDate())
+
+        {
+            incompleteStep3.setVisibility(View.VISIBLE);
+        }
+
+        return rootView;
+    }
+
+    private void setOnClickListerner() {
+        closeCurrentAddressLayout.setOnClickListener(new View.OnClickListener()
+
+                                                     {
+                                                         @Override
+                                                         public void onClick(View v) {
+                                                             hideCurrentAddressLayout();
+                                                         }
+                                                     }
+
+        );
+        gpaTypeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (position == 0) {
+                    gpaValueEt.setEnabled(false);
+                    spinnerErrorTv.setText("");
+                } else {
+                    if (!user.isAppliedFor7k())
+                        gpaValueEt.setEnabled(true);
+                    spinnerErrorTv.setText(validateGpa(gpaValueEt.getText().toString()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
         submitAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -432,58 +468,35 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
                                        }
 
         );
-        datePicker = new
 
-                DatePicker(getActivity(),
+    }
 
-                "DOB");
-        datePicker.build(new DialogInterface.OnClickListener()
+    private void getAllViews(View rootView) {
+        gpaTypeSp = (Spinner) rootView.findViewById(R.id.gpa_spinner);
+        spinnerErrorTv = (TextView) rootView.findViewById(R.id.spinner_error_msg_tv);
+        gpaValueEt = (EditText) rootView.findViewById(R.id.gpa_value);
+        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
+        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
+        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
+        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
+        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
+        dobEditText = (EditText) rootView.findViewById(R.id.user_dob_edittext);
+        incompleteAddressDetails = (ImageView) rootView.findViewById(R.id.incomplete_address);
+        completeAddressDetails = (ImageView) rootView.findViewById(R.id.complete_address);
+        completeDOB = (ImageView) rootView.findViewById(R.id.complete_dob);
+        incompleteDOB = (ImageView) rootView.findViewById(R.id.incomplete_dob);
+        googleCurrentAddress = (AutoCompleteTextView) rootView.findViewById(R.id.google_current_address_autocomplete);
+        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
 
-                         {
-                             @Override
-                             public void onClick(DialogInterface dialog, int which) {
-                             }
-                         }
-
-                , null);
-
+        editCurrentAddress = (TextView) rootView.findViewById(R.id.edit_current_address);
+        editPermanentAddress = (TextView) rootView.findViewById(R.id.edit_permanent_address);
+        currentAddressLayout = (RelativeLayout) rootView.findViewById(R.id.current_address_layout);
+        addressHelptip = (ImageButton) rootView.findViewById(R.id.address_helptip);
+        currentAddressHeading = (TextView) rootView.findViewById(R.id.current_address_heading);
+        submitAddress = (Button) rootView.findViewById(R.id.submit_address);
         closeCurrentAddressLayout = (ImageButton) rootView.findViewById(R.id.close_current_address_layout);
-        closeCurrentAddressLayout.setOnClickListener(new View.OnClickListener()
-
-                                                     {
-                                                         @Override
-                                                         public void onClick(View v) {
-                                                             hideCurrentAddressLayout();
-                                                         }
-                                                     }
-
-        );
-        if (user.isIncompleteDOB() || user.isIncompleteAddressDetails() || !(gpaValueEntered && gpaTypeEntered))
-
-        {
-            incompleteStep1.setVisibility(View.VISIBLE);
-            if (user.isIncompleteDOB()) {
-                incompleteDOB.setVisibility(View.VISIBLE);
-            }
-            if (user.isIncompleteAddressDetails()) {
-                incompleteAddressDetails.setVisibility(View.VISIBLE);
-            }
-        }
-
-        if (user.isIncompleteFamilyDetails())
-
-        {
-            incompleteStep2.setVisibility(View.VISIBLE);
-        }
-
-        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails()
-                || user.isIncompleteVerificationDate())
-
-        {
-            incompleteStep3.setVisibility(View.VISIBLE);
-        }
-
-        return rootView;
     }
 
     private void setAllHelpTipsEnabled() {

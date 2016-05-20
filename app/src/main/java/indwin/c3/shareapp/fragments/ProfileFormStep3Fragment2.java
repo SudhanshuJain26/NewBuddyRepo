@@ -57,22 +57,7 @@ public class ProfileFormStep3Fragment2 extends Fragment {
         String json = mPrefs.getString("UserObject", "");
         user = gson.fromJson(json, UserModel.class);
 
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
-        previous = (Button) rootView.findViewById(R.id.previous);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        completeMonthlyExpenditure = (ImageView) rootView.findViewById(R.id.complete_monthly_expenditure);
-        incompleteMonthlyExpenditure = (ImageView) rootView.findViewById(R.id.incomplete_monthly_expenditure);
-        completeVehicleDetails = (ImageView) rootView.findViewById(R.id.complete_vehicle_details);
-        incompleteVehicleDetails = (ImageView) rootView.findViewById(R.id.incomplete_vehicle_details);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
-        expenditureHelptip = (ImageButton) rootView.findViewById(R.id.expenditure_helptip);
-        viewVehicleType = (View) rootView.findViewById(R.id.view_vehicle_type);
-
+        getAllViews(rootView);
         if (!mPrefs.getBoolean("step3Editable", true)) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment1, gotoFragment3);
         }
@@ -128,7 +113,7 @@ public class ProfileFormStep3Fragment2 extends Fragment {
         final String vehicleType[] = getResources().getStringArray(R.array.vehicles_type);
         SpinnerHintAdapter vehicleTypeAdapter = new SpinnerHintAdapter(getActivity(), vehicleType, R.layout.spinner_item_underline);
         vehicleTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        vehicleSpinnerType = (Spinner) rootView.findViewById(R.id.vehicle_type);
+
         vehicleSpinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -205,25 +190,7 @@ public class ProfileFormStep3Fragment2 extends Fragment {
                 }
             }
         }
-
-        saveAndProceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkIncomplete();
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
-                Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);
-                getContext().sendBroadcast(intent);
-                replaceFragment3(false);
-            }
-        });
-
-        previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment1(true);
-            }
-        });
+        setOnClickListener();
 
         if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship() || user.isIncompleteStudentLoan()) {
             incompleteStep1.setVisibility(View.VISIBLE);
@@ -244,6 +211,50 @@ public class ProfileFormStep3Fragment2 extends Fragment {
             saveAndProceed.setVisibility(View.INVISIBLE);
             rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
         }
+
+        return rootView;
+    }
+
+    private void getAllViews(View rootView) {
+        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
+        previous = (Button) rootView.findViewById(R.id.previous);
+        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
+        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
+        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
+        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
+        completeMonthlyExpenditure = (ImageView) rootView.findViewById(R.id.complete_monthly_expenditure);
+        incompleteMonthlyExpenditure = (ImageView) rootView.findViewById(R.id.incomplete_monthly_expenditure);
+        completeVehicleDetails = (ImageView) rootView.findViewById(R.id.complete_vehicle_details);
+        incompleteVehicleDetails = (ImageView) rootView.findViewById(R.id.incomplete_vehicle_details);
+        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
+        expenditureHelptip = (ImageButton) rootView.findViewById(R.id.expenditure_helptip);
+        viewVehicleType = (View) rootView.findViewById(R.id.view_vehicle_type);
+        vehicleSpinnerType = (Spinner) rootView.findViewById(R.id.vehicle_type);
+
+    }
+
+    private void setOnClickListener() {
+
+        saveAndProceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkIncomplete();
+                String json = gson.toJson(user);
+                mPrefs.edit().putString("UserObject", json).apply();
+                Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);
+                getContext().sendBroadcast(intent);
+                replaceFragment3(false);
+            }
+        });
+
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment1(true);
+            }
+        });
         gotoFragment1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,7 +267,6 @@ public class ProfileFormStep3Fragment2 extends Fragment {
                 replaceFragment3(true);
             }
         });
-        return rootView;
     }
 
 

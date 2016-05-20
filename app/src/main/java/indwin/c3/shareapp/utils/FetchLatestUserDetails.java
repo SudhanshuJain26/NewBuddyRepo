@@ -18,21 +18,22 @@ import org.json.JSONObject;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment1;
 import indwin.c3.shareapp.models.UserModel;
-import io.intercom.com.google.gson.Gson;
 
 /**
  * Created by shubhang on 26/04/16.
  */
 public class FetchLatestUserDetails extends
-        AsyncTask<String, Void, String> {
+                                    AsyncTask<String, Void, String> {
 
     Context context;
     int retryCount = 0;
     String phone;
+    private UserModel userModel;
 
-    public FetchLatestUserDetails(Context context, String phone) {
+    public FetchLatestUserDetails(Context context, String phone,UserModel userModel) {
         this.context = context;
         this.phone = phone;
+        this.userModel = userModel;
     }
 
     @Override
@@ -90,14 +91,16 @@ public class FetchLatestUserDetails extends
                     ProfileFormStep1Fragment1.verifyEmail.setEnabled(false);
                     ProfileFormStep1Fragment1.completeEmail.setVisibility(View.VISIBLE);
                     ProfileFormStep1Fragment1.incompleteEmail.setVisibility(View.GONE);
+                    AppUtils.saveUserObject(context, userModel);
+
                 } else if (result.equals("notVerified")) {
                     ProfileFormStep1Fragment1.verifyEmail.setText("Check");
                     Toast.makeText(context, "Please try again", Toast.LENGTH_SHORT).show();
                 } else if (result.equals("authFailed")) {
                     new FetchNewToken(context).execute();
-                    new FetchLatestUserDetails(context, phone).execute();
+                    new FetchLatestUserDetails(context, phone,userModel).execute();
                 } else if (result.equals("fail"))
-                    new FetchLatestUserDetails(context, phone).execute();
+                    new FetchLatestUserDetails(context, phone,userModel).execute();
             } else
                 retryCount = 0;
         } catch (Exception e) {

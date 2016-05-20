@@ -137,11 +137,9 @@ public class DatePicker {
             public void onClick(View v) {
                 if ("VerificationDate".equals(dateType)) {
                     if (getSelectedYear() == getCurrentYear()) {
-                        if (getSelectedMonth() == getCurrentMonth()) {
-                            if (getSelectedDate() <= currentDate + 2) {
-                                Toast.makeText(activity, "Sorry, can't do it then!", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+                        if ((getSelectedMonth() == getCurrentMonth() && getSelectedDate() <= (currentDate + 2)) || ((getSelectedMonth() == (getCurrentMonth() + 1) && getSelectedDate() > currentDate)) || (getSelectedMonth() >= (getCurrentMonth() + 2))) {
+                            Toast.makeText(activity, "Sorry, can't do it then!", Toast.LENGTH_SHORT).show();
+                            return;
                         } else if (getSelectedMonth() < getCurrentMonth()) {
                             Toast.makeText(activity, "Sorry, can't do it then!", Toast.LENGTH_SHORT).show();
                             return;

@@ -182,7 +182,7 @@ public class Landing extends AppCompatActivity {
                     return;
                 }
                 if (time + 5 < userP.getLong("expires", 0))
-                    new verifyOtp().execute("");
+                    new ValidateForm().execute("");
                 else
                     new AuthTokc().execute();
             }
@@ -276,14 +276,14 @@ public class Landing extends AppCompatActivity {
                 // new fblogin().execute();
                 //            next.fblogin().execute();
                 //                new forgotpass().execute();
-                new verifyOtp().execute("");
+                new ValidateForm().execute("");
 
             }
         }
     }
 
 
-    private class verifyOtp extends
+    private class ValidateForm extends
                             AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {

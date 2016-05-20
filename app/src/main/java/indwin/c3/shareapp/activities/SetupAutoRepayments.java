@@ -42,6 +42,7 @@ import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
+import indwin.c3.shareapp.utils.ValidationUtils;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.com.google.gson.Gson;
 
@@ -165,7 +166,7 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
         submitRepayments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ifscCode.getText().length() != 11) {
+                if (ValidationUtils.isNotValidIFSCCode(ifscCode.getText())) {
                     wrongIfsc.setVisibility(View.VISIBLE);
                     return;
                 }
@@ -233,6 +234,7 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
             }
         });
     }
+
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {

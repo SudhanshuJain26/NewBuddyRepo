@@ -433,6 +433,7 @@ public class HomePage extends AppCompatActivity {
                 }
                 but.setVisibility(View.GONE);
                 if (Constants.STATUS.DECLINED.toString().equals(user.getProfileStatus()) || Constants.STATUS.WAITLISTED.equals(user.getProfileStatus())) {
+
                     line1.setText("Your profile has currently been waitlisted for approval. Touch here to find out more.");
 
                 } else if (Constants.STATUS.APPROVED.toString().equals(user.getProfileStatus())) {
@@ -451,12 +452,20 @@ public class HomePage extends AppCompatActivity {
                     } else if (Constants.STATUS.APPLIED.toString().equals(status7K)) {
                         line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
                     } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
-                        line1.setText("You have applied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
+                        line1.setText("You have ap'plied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
                     }
                 } else {
-                    line1.setText("Ready to get started? Complete your profile now to get a Borrowing Limit and start shopping now!");
-                    but.setText("Complete it now!");
-                    but.setVisibility(View.VISIBLE);
+                    if (Constants.STATUS.APPLIED.toString().equals(status60K)) {
+                        line1.setText("You have applied for upto Rs.60,000 credit. We will inform you as soon as it gets approved.");
+                    } else if (Constants.STATUS.APPLIED.toString().equals(status7K)) {
+                        line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
+                    } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
+                        line1.setText("You have applied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
+                    } else {
+                        line1.setText("Ready to get started? Complete your profile now to get a Borrowing Limit and start shopping now!");
+                        but.setText("Complete it now!");
+                        but.setVisibility(View.VISIBLE);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

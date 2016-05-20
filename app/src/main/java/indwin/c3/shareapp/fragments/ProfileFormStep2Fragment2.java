@@ -47,6 +47,8 @@ public class ProfileFormStep2Fragment2 extends Fragment {
     ImageView topImage;
     View view1, view2;
     private ImageButton familyHelptip;
+    private Spinner familyMember2spinner, professionFamilyMember2spinner;
+    private SpinnerHintAdapter adapter, adapter2;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -57,29 +59,9 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep2Fragment2", true).apply();
         gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
+        user = AppUtils.getUserObject(getActivity());
 
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
-        previous = (Button) rootView.findViewById(R.id.previous);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        addFamilyMember = (TextView) rootView.findViewById(R.id.add_family_member);
-        designationFamilyMember1 = (EditText) rootView.findViewById(R.id.designation_family_member_1);
-        designationFamilyMember2 = (EditText) rootView.findViewById(R.id.designation_family_member_2);
-        phoneFamilyMember1 = (EditText) rootView.findViewById(R.id.phone_number_family_member_1);
-        phoneFamilyMember2 = (EditText) rootView.findViewById(R.id.phone_number_family_member_2);
-        incompleteFamilyDetails = (ImageView) rootView.findViewById(R.id.incomplete_family_details);
-        completeFamilyDetails = (ImageView) rootView.findViewById(R.id.complete_family_details);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
-        familyHelptip = (ImageButton) rootView.findViewById(R.id.family_helptip);
-        view1 = (View) rootView.findViewById(R.id.view_family_member_2);
-        view2 = (View) rootView.findViewById(R.id.profession_view_family_member_2);
-
+        getAllViews(rootView);
         if (!mPrefs.getBoolean("step2Editable", true)) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment1, gotoFragment3);
         }
@@ -92,6 +74,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             gotoFragment3.setAlpha(1);
             gotoFragment3.setClickable(true);
         }
+
 
         if (user.getGender() != null && "girl".equals(user.getGender())) {
             Picasso.with(getActivity())
@@ -115,7 +98,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         }
 
         final String familyMemberOptions[] = getResources().getStringArray(R.array.family_member);
-        SpinnerHintAdapter adapter = new SpinnerHintAdapter(getActivity(), familyMemberOptions, R.layout.spinner_item_underline);
+        adapter = new SpinnerHintAdapter(getActivity(), familyMemberOptions, R.layout.spinner_item_underline);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         Spinner familyMember1spinner = (Spinner) rootView.findViewById(R.id.family_member_1);
@@ -137,7 +120,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         familyMember1spinner.setAdapter(adapter);
         familyMember1spinner.setSelection(adapter.getCount());
 
-        final Spinner familyMember2spinner = (Spinner) rootView.findViewById(R.id.family_member_2);
+
         familyMember2spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -157,7 +140,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         familyMember2spinner.setSelection(adapter.getCount());
 
         final String professionFamilyMemberOptions[] = getResources().getStringArray(R.array.profession_family_member);
-        SpinnerHintAdapter adapter2 = new SpinnerHintAdapter(getActivity(), professionFamilyMemberOptions, R.layout.spinner_item_underline);
+        adapter2 = new SpinnerHintAdapter(getActivity(), professionFamilyMemberOptions, R.layout.spinner_item_underline);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner professionFamilyMember1spinner = (Spinner) rootView.findViewById(R.id.profession_family_member_1);
         professionFamilyMember1spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -178,7 +161,6 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         professionFamilyMember1spinner.setAdapter(adapter2);
         professionFamilyMember1spinner.setSelection(adapter2.getCount());
 
-        final Spinner professionFamilyMember2spinner = (Spinner) rootView.findViewById(R.id.profession_family_member_2);
         professionFamilyMember2spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -196,8 +178,9 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         });
         professionFamilyMember2spinner.setAdapter(adapter2);
         professionFamilyMember2spinner.setSelection(adapter2.getCount());
+        checkAndPopulateFamilyLayout2();
 
-        if (!"".equals(user.getFamilyMemberType1())) {
+        if (AppUtils.isNotEmpty(user.getFamilyMemberType1())) {
             for (int i = 0; i < familyMemberOptions.length - 1; i++) {
                 if (familyMemberOptions[i].equalsIgnoreCase(user.getFamilyMemberType1())) {
                     familyMember1spinner.setSelection(i);
@@ -205,7 +188,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                 }
             }
         }
-        if (!"".equals(user.getProfessionFamilyMemberType1())) {
+        if (AppUtils.isNotEmpty(user.getProfessionFamilyMemberType1())) {
             for (int i = 0; i < professionFamilyMemberOptions.length - 1; i++) {
                 if (professionFamilyMemberOptions[i].equalsIgnoreCase(user.getProfessionFamilyMemberType1())) {
                     professionFamilyMember1spinner.setSelection(i);
@@ -213,10 +196,12 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                 }
             }
         }
-        if (!"".equals(user.getDesignationFamilyMemberType1())) {
+
+
+        if (AppUtils.isNotEmpty(user.getDesignationFamilyMemberType1())) {
             designationFamilyMember1.setText(user.getDesignationFamilyMemberType1());
         }
-        if (!"".equals(user.getPhoneFamilyMemberType1())) {
+        if (AppUtils.isNotEmpty(user.getPhoneFamilyMemberType1())) {
             phoneFamilyMember1.setText(user.getPhoneFamilyMemberType1());
         }
         if (AppUtils.isNotEmpty(user.getFamilyMemberType1())
@@ -234,7 +219,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                     break;
                 }
             }
-            if (!"".equals(user.getProfessionFamilyMemberType2())) {
+            if (AppUtils.isNotEmpty(user.getProfessionFamilyMemberType2())) {
                 for (int i = 0; i < professionFamilyMemberOptions.length - 1; i++) {
                     if (professionFamilyMemberOptions[i].equalsIgnoreCase(user.getProfessionFamilyMemberType2())) {
                         professionFamilyMember2spinner.setSelection(i);
@@ -242,34 +227,101 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                     }
                 }
             }
-            if (!"".equals(user.getDesignationFamilyMemberType2())) {
+            if (AppUtils.isNotEmpty(user.getDesignationFamilyMemberType2())) {
                 designationFamilyMember2.setText(user.getDesignationFamilyMemberType2());
             }
-            if (!"".equals(user.getPhoneFamilyMemberType2())) {
+            if (AppUtils.isNotEmpty(user.getPhoneFamilyMemberType2())) {
                 phoneFamilyMember2.setText(user.getPhoneFamilyMemberType2());
             }
         }
+        setOnClickListener();
+        if (user.isIncompleteDOB() || user.isIncompleteAddressDetails()) {
+            incompleteStep1.setVisibility(View.VISIBLE);
+        }
+
+        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails() || user.isIncompleteVerificationDate()) {
+            incompleteStep3.setVisibility(View.VISIBLE);
+        }
+        return rootView;
+    }
+
+    private void checkAndPopulateFamilyLayout2() {
+
+        if (AppUtils.isNotEmpty(user.getDesignationFamilyMemberType2()) || AppUtils.isNotEmpty(user.getProfessionFamilyMemberType2()) || AppUtils.isNotEmpty(user.getFamilyMemberType2()) || AppUtils.isNotEmpty(user.getPhoneFamilyMemberType2())) {
+            showFamilyLayout2();
+            if (AppUtils.isNotEmpty(user.getFamilyMemberType2())) {
+                int spinnerPosition = adapter.getPosition(user.getFamilyMemberType2());
+                familyMember2spinner.setSelection(spinnerPosition);
+            }
+            if (AppUtils.isNotEmpty(user.getProfessionFamilyMemberType2())) {
+                int spinnerPosition = adapter2.getPosition(user.getProfessionFamilyMemberType2());
+                professionFamilyMember2spinner.setSelection(spinnerPosition);
+            }
+            designationFamilyMember2.setText(user.getDesignationFamilyMemberType2());
+            phoneFamilyMember2.setText(user.getPhoneFamilyMemberType2());
+            isFamilyMemberAdded = true;
+            addFamilyMember.setText("Remove this family member");
+
+
+        }
+    }
+
+    private void showFamilyLayout2() {
+        familyMember2spinner.setVisibility(View.VISIBLE);
+        professionFamilyMember2spinner.setVisibility(View.VISIBLE);
+        designationFamilyMember2.setVisibility(View.VISIBLE);
+        phoneFamilyMember2.setVisibility(View.VISIBLE);
+        view1.setVisibility(View.VISIBLE);
+        view2.setVisibility(View.VISIBLE);
+    }
+
+    private void getAllViews(View rootView) {
+        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
+        previous = (Button) rootView.findViewById(R.id.previous);
+        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
+        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
+        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
+        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
+        addFamilyMember = (TextView) rootView.findViewById(R.id.add_family_member);
+        designationFamilyMember1 = (EditText) rootView.findViewById(R.id.designation_family_member_1);
+        designationFamilyMember2 = (EditText) rootView.findViewById(R.id.designation_family_member_2);
+        phoneFamilyMember1 = (EditText) rootView.findViewById(R.id.phone_number_family_member_1);
+        phoneFamilyMember2 = (EditText) rootView.findViewById(R.id.phone_number_family_member_2);
+        incompleteFamilyDetails = (ImageView) rootView.findViewById(R.id.incomplete_family_details);
+        completeFamilyDetails = (ImageView) rootView.findViewById(R.id.complete_family_details);
+        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
+        familyHelptip = (ImageButton) rootView.findViewById(R.id.family_helptip);
+        view1 = (View) rootView.findViewById(R.id.view_family_member_2);
+        view2 = (View) rootView.findViewById(R.id.profession_view_family_member_2);
+        familyMember2spinner = (Spinner) rootView.findViewById(R.id.family_member_2);
+        professionFamilyMember2spinner = (Spinner) rootView.findViewById(R.id.profession_family_member_2);
+    }
+
+    private void setOnClickListener() {
         addFamilyMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isFamilyMemberAdded) {
                     isFamilyMemberAdded = true;
-                    view1.setVisibility(View.VISIBLE);
-                    view2.setVisibility(View.VISIBLE);
-                    familyMember2spinner.setVisibility(View.VISIBLE);
-                    professionFamilyMember2spinner.setVisibility(View.VISIBLE);
-                    designationFamilyMember2.setVisibility(View.VISIBLE);
-                    phoneFamilyMember2.setVisibility(View.VISIBLE);
+
+                    showFamilyLayout2();
+                    resetFamilyDetails();
                     addFamilyMember.setText("Remove this family member");
                 } else {
                     isFamilyMemberAdded = false;
-                    view1.setVisibility(View.GONE);
-                    view2.setVisibility(View.GONE);
-                    familyMember2spinner.setVisibility(View.GONE);
-                    professionFamilyMember2spinner.setVisibility(View.GONE);
-                    designationFamilyMember2.setVisibility(View.GONE);
-                    phoneFamilyMember2.setVisibility(View.GONE);
+                    resetFamilyDetails();
+                    hideFamilyDetails();
+                    user.setUpdateDesignationFamilyMemberType2(true);
+                    user.setDesignationFamilyMemberType2("");
+
+
+                    user.setPhoneFamilyMemberType2("");
+                    user.setUpdatePhoneFamilyMemberType2(true);
                     addFamilyMember.setText("Add a family member");
+                    user.setProfessionFamilyMemberType2("");
+                    user.setFamilyMemberType2("");
                 }
             }
         });
@@ -286,20 +338,20 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             @Override
             public void onClick(View v) {
                 checkIncomplete();
-                if (!"".equals(designationFamilyMember1.getText().toString())) {
+                if (AppUtils.isNotEmpty(designationFamilyMember1.getText().toString())) {
                     user.setDesignationFamilyMemberType1(designationFamilyMember1.getText().toString());
                     user.setUpdateDesignationFamilyMemberType1(true);
                 }
-                if (!"".equals(phoneFamilyMember1.getText().toString()) && ValidationUtils.isValidPhoneNumber(phoneFamilyMember1.getText().toString())) {
+                if (AppUtils.isNotEmpty(phoneFamilyMember1.getText().toString()) && ValidationUtils.isValidPhoneNumber(phoneFamilyMember1.getText().toString())) {
                     user.setPhoneFamilyMemberType1(phoneFamilyMember1.getText().toString());
                     user.setUpdatePhoneFamilyMemberType1(true);
                 }
                 if (isFamilyMemberAdded) {
-                    if (!"".equals(designationFamilyMember2.getText().toString())) {
+                    if (AppUtils.isNotEmpty(designationFamilyMember2.getText().toString())) {
                         user.setDesignationFamilyMemberType2(designationFamilyMember2.getText().toString());
                         user.setUpdateDesignationFamilyMemberType2(true);
                     }
-                    if (!"".equals(phoneFamilyMember2.getText().toString()) && ValidationUtils.isValidPhoneNumber(phoneFamilyMember2.getText().toString())) {
+                    if (AppUtils.isNotEmpty(phoneFamilyMember2.getText().toString()) && ValidationUtils.isValidPhoneNumber(phoneFamilyMember2.getText().toString())) {
                         user.setPhoneFamilyMemberType2(phoneFamilyMember2.getText().toString());
                         user.setUpdatePhoneFamilyMemberType2(true);
                     }
@@ -328,13 +380,17 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             incompleteStep2.setVisibility(View.VISIBLE);
             incompleteFamilyDetails.setVisibility(View.VISIBLE);
         }
-        if (user.isIncompleteDOB() || user.isIncompleteAddressDetails()) {
-            incompleteStep1.setVisibility(View.VISIBLE);
-        }
-        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails() || user.isIncompleteVerificationDate()) {
-            incompleteStep3.setVisibility(View.VISIBLE);
-        }
-        return rootView;
+    }
+
+    private void hideFamilyDetails() {
+        view1.setVisibility(View.GONE);
+        view2.setVisibility(View.GONE);
+
+
+        phoneFamilyMember2.setVisibility(View.GONE);
+        familyMember2spinner.setVisibility(View.GONE);
+        professionFamilyMember2spinner.setVisibility(View.GONE);
+        designationFamilyMember2.setVisibility(View.GONE);
     }
 
 
@@ -348,6 +404,13 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         } else {
             user.setIncompleteFamilyDetails(false);
         }
+    }
+
+    private void resetFamilyDetails() {
+        professionFamilyMember2spinner.setSelection(10);
+        familyMember2spinner.setSelection(2);
+        user.setDesignationFamilyMemberType2("");
+        phoneFamilyMember2.setText("");
     }
 
     private void replaceFragment1(boolean check) {

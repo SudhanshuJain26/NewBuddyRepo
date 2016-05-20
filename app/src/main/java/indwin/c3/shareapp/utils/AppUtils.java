@@ -16,6 +16,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import indwin.c3.shareapp.models.UserModel;
 import io.intercom.com.google.gson.Gson;
@@ -24,6 +25,16 @@ import io.intercom.com.google.gson.Gson;
  * Created by rock on 5/10/16.
  */
 public class AppUtils {
+
+    static HashMap<String, HashMap<String, String>> image=new HashMap<>();
+    static HashMap<String, HashMap<String, String>> mrp1;
+    static HashMap<String, HashMap<String, String>> fkid1;
+    static HashMap<String, HashMap<String, String>> title;
+    static HashMap<String, HashMap<String, String>> sellers;
+    static HashMap<String, HashMap<String, String>> selling;
+    static HashMap<String, HashMap<String, String>> category;
+    static HashMap<String, HashMap<String, String>> subCategory;
+    static HashMap<String, HashMap<String, String>> brand;
     public static final String APP_NAME = "buddy";
     public static final String USER_OBJECT = "UserObject";
     public static final String IMAGE = "image";
@@ -83,6 +94,7 @@ public class AppUtils {
 
         HttpPost httppost = new HttpPost(url);
         httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
+        httppost.setHeader("Content-Type", "application/json");
         if (isNotEmpty(x_access_token)) {
 
             httppost.setHeader("x-access-token", x_access_token);

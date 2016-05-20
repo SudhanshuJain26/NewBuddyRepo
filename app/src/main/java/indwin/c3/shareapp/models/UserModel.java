@@ -11,6 +11,10 @@ public class UserModel {
     String userId;
     String name;
     String email;
+    private String rollNumber;
+    private boolean updateRollNumber;
+    private boolean incompleteRollNumber;
+    boolean isInCompleteAgreement;
     boolean emailVerified = false;
     boolean updateEmail;
     boolean isFbConnected;
@@ -151,6 +155,38 @@ public class UserModel {
 
     public void setUpdateScholarshipAmount(boolean updateScholarshipAmount) {
         this.updateScholarshipAmount = updateScholarshipAmount;
+    }
+
+    public boolean getIsUpdateRollNumber() {
+        return updateRollNumber;
+    }
+
+    public void setIsUpdateRollNumber(boolean isUpdateRollNumber) {
+        this.updateRollNumber = isUpdateRollNumber;
+    }
+
+    public boolean isUpdateRollNumber() {
+        return updateRollNumber;
+    }
+
+    public void setUpdateRollNumber(boolean updateRollNumber) {
+        this.updateRollNumber = updateRollNumber;
+    }
+
+    public boolean isIncompleteRollNumber() {
+        return incompleteRollNumber;
+    }
+
+    public void setIncompleteRollNumber(boolean incompleteRollNumber) {
+        this.incompleteRollNumber = incompleteRollNumber;
+    }
+
+    public String getRollNumber() {
+        return rollNumber;
+    }
+
+    public void setRollNumber(String rollNumber) {
+        this.rollNumber = rollNumber;
     }
 
     public String getScholarshipAmount() {
@@ -1177,5 +1213,14 @@ public class UserModel {
 
     public void setGpaValueUpdate(boolean gpaValueUpdate) {
         this.gpaValueUpdate = gpaValueUpdate;
+    }
+
+
+    public boolean isInCompleteAgreement() {
+        return isInCompleteAgreement;
+    }
+
+    public void setInCompleteAgreement(boolean inCompleteAgreement) {
+        isInCompleteAgreement = inCompleteAgreement;
     }
 }

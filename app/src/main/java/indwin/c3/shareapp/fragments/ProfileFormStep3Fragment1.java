@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
 import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import io.intercom.com.google.gson.Gson;
@@ -48,6 +49,7 @@ public class ProfileFormStep3Fragment1 extends Fragment {
     String[] scholarshipType;
     Spinner scholarshipTypeSpinner;
     View viewScholarship;
+    private ImageButton feesHelptip, scholarshipHelptip;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -56,28 +58,11 @@ public class ProfileFormStep3Fragment1 extends Fragment {
         //Inflate the layout for this fragment
         View rootView = inflater.inflate(
                 R.layout.profile_form_step3_fragment1, container, false);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        incompleteAnnualFees = (ImageView) rootView.findViewById(R.id.incomplete_annual_fees);
-        completeAnnualFees = (ImageView) rootView.findViewById(R.id.complete_annual_fees);
-        incompleteScholarshipDetails = (ImageView) rootView.findViewById(R.id.incomplete_scholarship_details);
-        completeScholarshipDetails = (ImageView) rootView.findViewById(R.id.complete_scholarship_details);
-        incompleteStudentLoan = (ImageView) rootView.findViewById(R.id.incomplete_student_loan);
-        completeStudentLoan = (ImageView) rootView.findViewById(R.id.complete_student_loan);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
-        ImageButton feesHelptip = (ImageButton) rootView.findViewById(R.id.fees_helptip);
-        ImageButton scholarshipHelptip = (ImageButton) rootView.findViewById(R.id.scholarship_helptip);
-        scholarshipAmount = (EditText) rootView.findViewById(R.id.edit_scholarship_amount);
-        viewScholarship = (View) rootView.findViewById(R.id.view_scholarship_type);
+        getAllViews(rootView);
 
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
+        user = AppUtils.getUserObject(getActivity());
         if (!mPrefs.getBoolean("step3Editable", true)) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment2, gotoFragment3);
         }
@@ -95,46 +80,13 @@ public class ProfileFormStep3Fragment1 extends Fragment {
                     .load(R.mipmap.step3fragment1girl)
                     .into(topImage);
         }
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
+
 
         if (user.isAppliedFor60k()) {
-
             saveAndProceed.setVisibility(View.INVISIBLE);
             rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
         }
-        feesHelptip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text1 = "Upload your identity card(with photo) that has been provided to you by your college or institution.";
-                String text2 = "Please remember to upload both front and back sides of the card.";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
-                dialog.show();
-            }
-        });
-        scholarshipHelptip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text1 = "Upload your identity card(with photo) that has been provided to you by your college or institution.";
-                String text2 = "Please remember to upload both front and back sides of the card.";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
-                dialog.show();
-            }
-        });
-        gotoFragment2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment2(true);
-            }
-        });
-
-        gotoFragment3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment3(true);
-            }
-        });
-
-
+        setOnclickListener();
         final String annualFeesOptions[] = getResources().getStringArray(R.array.annual_fees);
         final String annualFeesValues[] = getResources().getStringArray(R.array.annual_fees_values);
         Spinner spinner = (Spinner) rootView.findViewById(R.id.annual_fees);
@@ -159,7 +111,7 @@ public class ProfileFormStep3Fragment1 extends Fragment {
         spinner.setSelection(adapter.getCount());
 
         scholarshipType = getResources().getStringArray(R.array.scholarship_type);
-        scholarshipTypeSpinner = (Spinner) rootView.findViewById(R.id.scholarship_type);
+
         SpinnerHintAdapter scholarshipTypeAdapter = new SpinnerHintAdapter(getActivity(), scholarshipType, R.layout.spinner_item_underline);
         scholarshipTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         scholarshipTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -192,6 +144,7 @@ public class ProfileFormStep3Fragment1 extends Fragment {
                 }
             }
         });
+
 
         final String scholarship[] = getResources().getStringArray(R.array.scholarship);
         final String scholarshipValues[] = getResources().getStringArray(R.array.scholarship_values);
@@ -279,17 +232,7 @@ public class ProfileFormStep3Fragment1 extends Fragment {
                 }
             }
         }
-        saveAndProceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkIncomplete();
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
-                Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);
-                getContext().sendBroadcast(intent);
-                replaceFragment2(false);
-            }
-        });
+
         if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship() || user.isIncompleteStudentLoan()) {
             incompleteStep1.setVisibility(View.VISIBLE);
             if (user.isIncompleteAnnualFees())
@@ -306,6 +249,75 @@ public class ProfileFormStep3Fragment1 extends Fragment {
             incompleteStep3.setVisibility(View.VISIBLE);
         }
         return rootView;
+    }
+
+    private void getAllViews(View rootView) {
+        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
+        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
+        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
+        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
+        incompleteAnnualFees = (ImageView) rootView.findViewById(R.id.incomplete_annual_fees);
+        completeAnnualFees = (ImageView) rootView.findViewById(R.id.complete_annual_fees);
+        incompleteScholarshipDetails = (ImageView) rootView.findViewById(R.id.incomplete_scholarship_details);
+        completeScholarshipDetails = (ImageView) rootView.findViewById(R.id.complete_scholarship_details);
+        incompleteStudentLoan = (ImageView) rootView.findViewById(R.id.incomplete_student_loan);
+        completeStudentLoan = (ImageView) rootView.findViewById(R.id.complete_student_loan);
+        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
+        feesHelptip = (ImageButton) rootView.findViewById(R.id.fees_helptip);
+        scholarshipHelptip = (ImageButton) rootView.findViewById(R.id.scholarship_helptip);
+        scholarshipAmount = (EditText) rootView.findViewById(R.id.edit_scholarship_amount);
+        viewScholarship = (View) rootView.findViewById(R.id.view_scholarship_type);
+        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
+        scholarshipTypeSpinner = (Spinner) rootView.findViewById(R.id.scholarship_type);
+    }
+
+    private void setOnclickListener() {
+
+        feesHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "Upload your identity card(with photo) that has been provided to you by your college or institution.";
+                String text2 = "Please remember to upload both front and back sides of the card.";
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
+                dialog.show();
+            }
+        });
+        scholarshipHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "Upload your identity card(with photo) that has been provided to you by your college or institution.";
+                String text2 = "Please remember to upload both front and back sides of the card.";
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
+                dialog.show();
+            }
+        });
+        gotoFragment2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment2(true);
+            }
+        });
+
+        gotoFragment3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment3(true);
+            }
+        });
+
+        saveAndProceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkIncomplete();
+                String json = gson.toJson(user);
+                mPrefs.edit().putString("UserObject", json).apply();
+                Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);
+                getContext().sendBroadcast(intent);
+                replaceFragment2(false);
+            }
+        });
     }
 
     private void checkIncomplete() {

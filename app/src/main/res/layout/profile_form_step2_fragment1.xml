@@ -66,8 +66,8 @@
             <ScrollView
                 android:id="@+id/parent_scrollview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="false">
+                android:layout_height="match_parent">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -263,10 +263,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/gpa_value"
+                            android:layout_marginBottom="50dp"
                             android:layout_toRightOf="@id/gpa_spinner"
                             android:textColor="@color/intercomsdk_red"/>
 
                     </RelativeLayout>
+
+
                 </LinearLayout>
             </ScrollView>
         </android.support.v7.widget.CardView>

@@ -82,10 +82,10 @@ public class ProfileFormStep3Fragment3 extends Fragment {
         mPrefs.edit().putBoolean("visitedFormStep3Fragment3", true).apply();
         gson = new Gson();
         String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
+        user = AppUtils.getUserObject(getActivity());
+
         newBankStmts = new HashMap<>();
-        completeBankStmt = (ImageView) rootView.findViewById(R.id.complete_bank_stmt);
-        incompleteBankStmt = (ImageView) rootView.findViewById(R.id.incomplete_bank_stmt);
+        getAllViews(rootView);
         try {
             bankStmts = user.getBankStmts();
             if (bankStmts == null) {
@@ -126,16 +126,6 @@ public class ProfileFormStep3Fragment3 extends Fragment {
         adapter = new ImageUploaderRecyclerAdapter(getActivity(), bankStmts, "Bank Statements", user.isAppliedFor60k());
         rvImages.setAdapter(adapter);
 
-        saveAndProceed = (Button) rootView.findViewById(R.id.unlock);
-        previous = (Button) rootView.findViewById(R.id.previous);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
-        bankHelptip = (ImageButton) rootView.findViewById(R.id.bank_helptip);
 
         if (!mPrefs.getBoolean("step3Editable", true)) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment1, gotoFragment2);
@@ -164,12 +154,23 @@ public class ProfileFormStep3Fragment3 extends Fragment {
         if (user.isIncompleteBankStmt()) {
             incompleteStep3.setVisibility(View.VISIBLE);
         }
+        setOnClickListener();
+        if (user.isAppliedFor60k()) {
+            previous.setVisibility(View.INVISIBLE);
+            saveAndProceed.setVisibility(View.INVISIBLE);
+            rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
+        }
+
+        return rootView;
+    }
+
+    private void setOnClickListener() {
         bankHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String text1 = "We require your last 3 months financial history to be able to provide you with a higher borrowing limit. " +
-                        "You can either take photos of your passbook pages or download/take screenshots from your " +
-                        "netbanking account for the last 3 months.";
+                        "You can either take photos/scans of your passbook pages or download/take screenshots from your " +
+                        "netbanking account";
                 String text2 = "Please remember to upload both front and back sides of the card.";
                 Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#f2954e");
                 dialog.show();
@@ -237,11 +238,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
                 }
             }
         });
-        if (user.isAppliedFor60k()) {
-            previous.setVisibility(View.INVISIBLE);
-            saveAndProceed.setVisibility(View.INVISIBLE);
-            rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
-        }
+
         gotoFragment1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,7 +251,21 @@ public class ProfileFormStep3Fragment3 extends Fragment {
                 replaceFragment2();
             }
         });
-        return rootView;
+    }
+
+    private void getAllViews(View rootView) {
+        completeBankStmt = (ImageView) rootView.findViewById(R.id.complete_bank_stmt);
+        incompleteBankStmt = (ImageView) rootView.findViewById(R.id.incomplete_bank_stmt);
+        saveAndProceed = (Button) rootView.findViewById(R.id.unlock);
+        previous = (Button) rootView.findViewById(R.id.previous);
+        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
+        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
+        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
+        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
+        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
+        bankHelptip = (ImageButton) rootView.findViewById(R.id.bank_helptip);
     }
 
     private void setAllHelpTipsEnabled() {

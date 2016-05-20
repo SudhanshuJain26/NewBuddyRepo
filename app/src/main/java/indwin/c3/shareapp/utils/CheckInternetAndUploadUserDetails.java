@@ -100,9 +100,9 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
         boolean updateUser = false;
 
         @Override
-        protected String doInBackground(String... params) {
+        protected synchronized String doInBackground(String... params) {
             UserModel userImages = AppUtils.getUserObject(mContext);
-            if (userImages.getNewCollegeIds() != null) {
+            if (userImages.getNewCollegeIds() != null && user.getNewCollegeIds().size() > 0) {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewCollegeIds().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
@@ -446,6 +446,14 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     userMap.put("currentAddress", user.getCurrentAddress());
                     userMap.put("currentAddressCity", user.getCurrentAddressCity());
                 }
+
+                if (user.isUpdateRollNumber()) {
+                    doApiCall = true;
+                    jsonobj.put("rollNumber", user.getRollNumber());
+                    userMap.put("rollNumber", user.getRollNumber());
+
+                }
+
                 if (user.isUpdatePermanentAddress()) {
                     doApiCall = true;
                     JSONObject json = new JSONObject();
@@ -558,6 +566,12 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 JSONObject json = new JSONObject(responseText);
                 if (json.get("msg").toString().contains("details updated")) {
                     // Need to get fields which are updated from DB so as to set what is updated.
+                    if (jsonobj.opt("gpa") != null && !"".equals(jsonobj.get("gpa")))
+                        user.setGpaValueUpdate(false);
+                    if (jsonobj.opt("rollNumber") != null && !"".equals(jsonobj.get("rollNumber")))
+                        user.setUpdateRollNumber(false);
+                    if (jsonobj.opt("gpaType") != null && !"".equals(jsonobj.get("gpaType")))
+                        user.setGpaTypeUpdate(false);
                     if (jsonobj.opt("name") != null && !"".equals(jsonobj.get("name")))
                         user.setUpdateName(false);
                     if (jsonobj.opt("gender") != null && !"".equals(jsonobj.get("gender")))

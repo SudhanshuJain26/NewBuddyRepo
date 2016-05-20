@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#44c2a6">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#44c2a6">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,23 +20,25 @@
             android:text="Previous"
             android:textAllCaps="false"
             android:textColor="@color/colorwhite"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
+
         <TextView
-                 android:id="@+id/details_submitted_tv"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_alignParentBottom="true"
-                 android:layout_centerHorizontal="true"
-                 android:layout_marginEnd="16dp"
-                 android:layout_marginRight="16dp"
-                 android:visibility="gone"
-                 android:layout_marginTop="8dp"
-                 android:background="?android:attr/selectableItemBackground"
-                 android:text="Details submitted! Contact us for changes "
-                 android:layout_marginBottom="20dp"
-                 android:textAllCaps="false"
-                 android:textColor="@color/colorwhite"
-                 android:textSize="16sp"/>
+            android:id="@+id/details_submitted_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="Details submitted! Contact us for changes "
+            android:textAllCaps="false"
+            android:textColor="@color/colorwhite"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+
         <Button
             android:id="@+id/save_and_proceed"
             android:layout_width="wrap_content"
@@ -51,23 +53,23 @@
             android:text="Save and proceed"
             android:textAllCaps="false"
             android:textColor="@color/colorwhite"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/fragment1_card_view"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_above="@id/previous"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="-8dp"
-            card_view:cardBackgroundColor="@android:color/white"
-            card_view:cardCornerRadius="4dp"
-            card_view:cardElevation="2dp"
-            card_view:cardUseCompatPadding="true">
+        <android.support.v7.widget.CardView android:id="@+id/fragment1_card_view"
+                                            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="300dp"
+                                            android:layout_above="@id/previous"
+                                            android:layout_marginEnd="8dp"
+                                            android:layout_marginLeft="8dp"
+                                            android:layout_marginRight="8dp"
+                                            android:layout_marginStart="8dp"
+                                            android:layout_marginTop="-8dp"
+                                            card_view:cardBackgroundColor="@android:color/white"
+                                            card_view:cardCornerRadius="4dp"
+                                            card_view:cardElevation="2dp"
+                                            card_view:cardUseCompatPadding="true">
 
             <ScrollView
                 android:id="@+id/parent_scrollview"
@@ -92,7 +94,7 @@
                             android:text="Upload your College ID"
                             android:textColor="#44c2a6"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"/>
 
                         <ImageView
                             android:id="@+id/incomplete_college_id"
@@ -104,7 +106,7 @@
                             android:layout_toEndOf="@id/college_id_header"
                             android:layout_toRightOf="@id/college_id_header"
                             android:src="@drawable/incomplete"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/complete_college_id"
@@ -116,7 +118,7 @@
                             android:layout_toEndOf="@id/college_id_header"
                             android:layout_toRightOf="@id/college_id_header"
                             android:src="@drawable/complete"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <ImageButton
                             android:id="@+id/social_helptip"
@@ -127,14 +129,61 @@
                             android:layout_marginTop="2dp"
                             android:background="?android:attr/selectableItemBackground"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/helptip" />
+                            android:src="@drawable/helptip"/>
                     </RelativeLayout>
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rvImages"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="8dp"/>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:text="Enter your Roll Number"
+                            android:textColor="#44c2a6"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+
+
+                        <ImageView
+                            android:id="@+id/incomplete_roll_number"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/incomplete"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/complete_roll_number"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/complete"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/roll_number_et"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginStart="-4dp"
+                        android:layout_marginTop="8dp"
+                        android:hint="(Must match the number on your ID)"
+                        android:textSize="16sp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -149,7 +198,7 @@
                             android:text="Enter your College Details"
                             android:textColor="#44c2a6"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"/>
 
                         <ImageView
                             android:id="@+id/incomplete_college_details"
@@ -158,7 +207,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
                             android:src="@drawable/incomplete"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/complete_college_details"
@@ -167,7 +216,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
                             android:src="@drawable/complete"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
                     </LinearLayout>
 
                     <TextView
@@ -181,13 +230,13 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"/>
 
                     <View
                         android:layout_width="200dp"
                         android:layout_height="1dp"
                         android:layout_marginTop="2dp"
-                        android:background="#000000" />
+                        android:background="#000000"/>
 
                     <TextView
                         android:id="@+id/edit_course_name"
@@ -200,13 +249,13 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"/>
 
                     <View
                         android:layout_width="200dp"
                         android:layout_height="1dp"
                         android:layout_marginTop="2dp"
-                        android:background="#000000" />
+                        android:background="#000000"/>
 
                     <TextView
                         android:id="@+id/edit_college_end_date"
@@ -221,14 +270,14 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"/>
 
                     <View
                         android:layout_width="200dp"
                         android:layout_height="1dp"
                         android:layout_marginBottom="32dp"
                         android:layout_marginTop="2dp"
-                        android:background="#000000" />
+                        android:background="#000000"/>
 
                 </LinearLayout>
             </ScrollView>
@@ -255,7 +304,7 @@
                 android:padding="4dp"
                 android:text="1"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"/>
 
             <ImageView
                 android:id="@+id/incomplete_step_1"
@@ -264,7 +313,7 @@
                 android:layout_marginLeft="-16dp"
                 android:layout_marginStart="-16dp"
                 android:src="@drawable/incomplete"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -285,12 +334,12 @@
                     android:padding="4dp"
                     android:text="2"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="#ffffff" />
+                    android:textColor="#ffffff"/>
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/up_arrow" />
+                    android:src="@drawable/up_arrow"/>
             </LinearLayout>
 
             <ImageView
@@ -300,7 +349,7 @@
                 android:layout_marginLeft="-16dp"
                 android:layout_marginStart="-16dp"
                 android:src="@drawable/incomplete"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/goto_fragment3"
@@ -317,7 +366,7 @@
                 android:padding="4dp"
                 android:text="3"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"/>
 
             <ImageView
                 android:id="@+id/incomplete_step_3"
@@ -326,7 +375,7 @@
                 android:layout_marginLeft="-16dp"
                 android:layout_marginStart="-16dp"
                 android:src="@drawable/incomplete"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </LinearLayout>
 
         <ImageView
@@ -339,7 +388,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:minHeight="100dp"
-            android:src="@mipmap/step1fragment2" />
+            android:src="@mipmap/step1fragment2"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -366,7 +415,7 @@
                 android:layout_height="15dp"
                 android:background="@color/transparent"
                 android:scaleType="fitCenter"
-                android:src="@drawable/close_black" />
+                android:src="@drawable/close_black"/>
 
             <TextView
                 android:id="@+id/college_name_heading"
@@ -375,7 +424,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:text="Enter your College Name"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <AutoCompleteTextView
@@ -386,7 +435,7 @@
             android:dropDownVerticalOffset="64dp"
             android:inputType="textAutoComplete"
             android:popupBackground="@color/transparent"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <Button
             android:id="@+id/cant_find_college_button"
@@ -397,7 +446,7 @@
             android:text="Can't find your College?"
             android:textAllCaps="false"
             android:textColor="@color/colorwhite"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -424,7 +473,7 @@
                 android:layout_height="15dp"
                 android:background="@color/transparent"
                 android:scaleType="fitCenter"
-                android:src="@drawable/close_black" />
+                android:src="@drawable/close_black"/>
 
             <TextView
                 android:id="@+id/add_college_name_heading"
@@ -433,7 +482,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:text="Add your College"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <TextView
@@ -443,7 +492,7 @@
             android:layout_below="@id/add_name_linear_layout"
             android:layout_marginTop="32dp"
             android:text="Looks like we can't find your college in our database, but don't worry...\nAdd your College to our database now!"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <AutoCompleteTextView
             android:id="@+id/google_college_autocomplete"
@@ -458,7 +507,7 @@
             android:hint="Add your College"
             android:inputType="textAutoComplete"
             android:popupBackground="@color/transparent"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <Button
             android:id="@+id/add_college"
@@ -475,85 +524,86 @@
             android:text="Add this college"
             android:textAllCaps="false"
             android:textColor="@color/colorwhite"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
     </RelativeLayout>
+
     <RelativeLayout
-           android:id="@+id/add_course_layout"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:alpha="0.95"
-           android:background="#ecf7f4"
-           android:clickable="true"
-           android:padding="16dp"
-           android:visibility="gone">
+        android:id="@+id/add_course_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.95"
+        android:background="#ecf7f4"
+        android:clickable="true"
+        android:padding="16dp"
+        android:visibility="gone">
 
-           <LinearLayout
-               android:id="@+id/add_course_name_linear_layout"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_marginTop="16dp"
-               android:gravity="center_vertical"
-               android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/add_course_name_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-               <ImageButton
-                   android:id="@+id/close_add_course_name_layout"
-                   android:layout_width="15dp"
-                   android:layout_height="15dp"
-                   android:background="@color/transparent"
-                   android:scaleType="fitCenter"
-                   android:src="@drawable/close_black" />
+            <ImageButton
+                android:id="@+id/close_add_course_name_layout"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/close_black"/>
 
-               <TextView
-                   android:id="@+id/add_course_name_heading"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_marginLeft="16dp"
-                   android:layout_marginStart="16dp"
-                   android:text="Add your Course"
-                   android:textSize="16sp" />
-           </LinearLayout>
+            <TextView
+                android:id="@+id/add_course_name_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:text="Add your Course"
+                android:textSize="16sp"/>
+        </LinearLayout>
 
-           <TextView
-               android:id="@+id/course_not_found_text"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_below="@id/add_course_name_linear_layout"
-               android:layout_marginTop="32dp"
-               android:text="Looks like we can't find your course in our database, but don't worry...\nAdd your Course to our database now!"
-               android:textSize="16sp" />
+        <TextView
+            android:id="@+id/course_not_found_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/add_course_name_linear_layout"
+            android:layout_marginTop="32dp"
+            android:text="Looks like we can't find your course in our database, but don't worry...\nAdd your Course to our database now!"
+            android:textSize="16sp"/>
 
-           <EditText
-               android:id="@+id/course_name_et"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_below="@id/course_not_found_text"
-               android:layout_marginLeft="-4dp"
-               android:layout_marginStart="-4dp"
-               android:layout_marginTop="24dp"
-               android:cursorVisible="true"
-               android:dropDownHeight="100dp"
-               android:hint="Add your Course"
-               android:inputType="textAutoComplete"
-               android:popupBackground="@color/transparent"
-               android:textSize="16sp" />
+        <EditText
+            android:id="@+id/course_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/course_not_found_text"
+            android:layout_marginLeft="-4dp"
+            android:layout_marginStart="-4dp"
+            android:layout_marginTop="24dp"
+            android:cursorVisible="true"
+            android:dropDownHeight="100dp"
+            android:hint="Add your Course"
+            android:inputType="textAutoComplete"
+            android:popupBackground="@color/transparent"
+            android:textSize="16sp"/>
 
-           <Button
-               android:id="@+id/add_course"
-               android:layout_width="wrap_content"
-               android:layout_height="30dp"
-               android:layout_alignParentBottom="true"
-               android:layout_centerHorizontal="true"
-               android:layout_marginBottom="16dp"
-               android:background="@drawable/border_button_green"
-               android:paddingEnd="16dp"
-               android:paddingLeft="16dp"
-               android:paddingRight="16dp"
-               android:paddingStart="16dp"
-               android:text="Add this course"
-               android:textAllCaps="false"
-               android:textColor="@color/colorwhite"
-               android:textSize="16sp" />
-       </RelativeLayout>
+        <Button
+            android:id="@+id/add_course"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/border_button_green"
+            android:paddingEnd="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingStart="16dp"
+            android:text="Add this course"
+            android:textAllCaps="false"
+            android:textColor="@color/colorwhite"
+            android:textSize="16sp"/>
+    </RelativeLayout>
 </RelativeLayout>
 
 

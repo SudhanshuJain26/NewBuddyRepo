@@ -101,31 +101,8 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         View rootView = inflater.inflate(
                 R.layout.profile_form_step1_fragment1, container, false);
         FacebookSdk.sdkInitialize(getActivity());
-        userEmail = (TextView) rootView.findViewById(R.id.user_email);
-        userEmailEditText = (EditText) rootView.findViewById(R.id.user_email_edittext);
-        editEmail = (ImageButton) rootView.findViewById(R.id.edit_user_email);
-        verifyEmail = (Button) rootView.findViewById(R.id.verify_user_email);
-        saveEmail = (Button) rootView.findViewById(R.id.save_user_email);
-        connectSocialAccountFb = (Button) rootView.findViewById(R.id.connect_social_account_fb);
-        connectSocialAccountInsta = (Button) rootView.findViewById(R.id.connect_social_account_insta);
-        //        dontHaveFb = (Button) rootView.findViewById(R.id.dont_have_fb);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
-        completeEmail = (ImageView) rootView.findViewById(R.id.complete_email);
-        completeFb = (ImageView) rootView.findViewById(R.id.complete_fb);
-        incompleteEmail = (ImageView) rootView.findViewById(R.id.incomplete_email);
-        incompleteFb = (ImageView) rootView.findViewById(R.id.incomplete_fb);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        completeGender = (ImageView) rootView.findViewById(R.id.complete_gender);
-        incompleteGender = (ImageView) rootView.findViewById(R.id.incomplete_gender);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
-        socialHelptip = (ImageButton) rootView.findViewById(R.id.social_helptip);
-        incorrectEmail = (TextView) rootView.findViewById(R.id.incorrect_email);
-
+        getAllViews(rootView);
+        setAllClickListener();
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep1Fragment1", true).apply();
         if (!mPrefs.getBoolean("step1Editable", true)) {
@@ -146,22 +123,12 @@ public class ProfileFormStep1Fragment1 extends Fragment {
 
 
         gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
+        user = AppUtils.getUserObject(getActivity());
         if (user.isAppliedFor1k()) {
 
             saveAndProceed.setVisibility(View.INVISIBLE);
             rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
         }
-        socialHelptip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text1 = "We require access to your facebook account to help build your social score. This step is very important to getting approved for a credit limit.";
-                String text2 = "";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
-                dialog.show();
-            }
-        });
 
 
         callbackManager = CallbackManager.Factory.create();
@@ -250,16 +217,8 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             }
         });
         isFbLoggedIn();
-        connectSocialAccountFb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                loginManager.logOut();
-                loginManager.logInWithReadPermissions(ProfileFormStep1Fragment1.this, Arrays.asList("public_profile", "user_friends", "email", "user_birthday"));
-
-            }
-        });
-        if (!"".equals(user.getEmail())) {
+        if (AppUtils.isNotEmpty(user.getEmail())) {
             userEmail.setText(user.getEmail());
         }
         if (user.isEmailVerified()) {
@@ -277,6 +236,160 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             verifyEmail.setVisibility(View.VISIBLE);
             completeEmail.setVisibility(View.GONE);
         }
+
+
+        final String genderOptions[] = getResources().getStringArray(R.array.gender);
+        final SpinnerHintAdapter adapter2 = new SpinnerHintAdapter(getActivity(), genderOptions, R.layout.spinner_item_underline);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner genderSpinner = (Spinner) rootView.findViewById(R.id.gender_spinner);
+        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position < genderOptions.length - 1) {
+                    user.setUpdateGender(true);
+                    isGenderSelected = true;
+                    user.setGender(genderOptions[position]);
+                }
+                if (position == 1) {
+                    Picasso.with(getActivity())
+                            .load(R.mipmap.step1fragment1girl)
+                            .into(topImage);
+                } else {
+                    Picasso.with(getActivity())
+                            .load(R.mipmap.step1fragment1)
+                            .into(topImage);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                user.setUpdateGender(false);
+            }
+        });
+        genderSpinner.setAdapter(adapter2);
+        genderSpinner.setSelection(adapter2.getCount());
+
+        if (AppUtils.isNotEmpty(user.getGender())) {
+            for (int i = 0; i < genderOptions.length - 1; i++) {
+                if (genderOptions[i].equals(user.getGender())) {
+                    if (i == 1) {
+                        Picasso.with(getActivity())
+                                .load(R.mipmap.step1fragment1girl)
+                                .into(topImage);
+                    }
+                    genderSpinner.setSelection(i);
+                    completeGender.setVisibility(View.VISIBLE);
+                    user.setIncompleteGender(false);
+                    break;
+                }
+            }
+        }
+
+        gotoFragment2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment2(true);
+            }
+        });
+
+        gotoFragment3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment3(true);
+            }
+        });
+        saveAndProceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ("Verified!".equals(verifyEmail.getText().toString())) {
+                    user.setEmailVerified(true);
+                }
+                checkIncomplete();
+                String json = gson.toJson(user);
+                mPrefs.edit().putString("UserObject", json).apply();
+                Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);
+                getContext().sendBroadcast(intent);
+                replaceFragment2(false);
+            }
+        });
+
+        if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()) {
+            incompleteStep1.setVisibility(View.VISIBLE);
+            if (user.isIncompleteFb()) {
+                incompleteFb.setVisibility(View.VISIBLE);
+            }
+            if (user.isIncompleteEmail()) {
+                incompleteEmail.setVisibility(View.VISIBLE);
+            }
+            if (user.isIncompleteGender()) {
+                incompleteGender.setVisibility(View.VISIBLE);
+            }
+        }
+        if (user.getCollegeIds() != null && user.getCollegeIds().size() > 0) {
+            user.setIncompleteCollegeId(false);
+        }
+        if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails() || user.isIncompleteRollNumber()) {
+            incompleteStep2.setVisibility(View.VISIBLE);
+        }
+
+        if (user.isIncompleteAadhar() || !(user.getAddressProofs() != null && user.getAddressProofs().size() > 0)||(AppUtils.isEmpty(user.getSelfie())||AppUtils.isEmpty(user.getSignature()))) {
+            incompleteStep3.setVisibility(View.VISIBLE);
+        }
+
+        return rootView;
+    }
+
+
+    private void getAllViews(View rootView) {
+
+        userEmail = (TextView) rootView.findViewById(R.id.user_email);
+        userEmailEditText = (EditText) rootView.findViewById(R.id.user_email_edittext);
+        editEmail = (ImageButton) rootView.findViewById(R.id.edit_user_email);
+        verifyEmail = (Button) rootView.findViewById(R.id.verify_user_email);
+        saveEmail = (Button) rootView.findViewById(R.id.save_user_email);
+        connectSocialAccountFb = (Button) rootView.findViewById(R.id.connect_social_account_fb);
+        connectSocialAccountInsta = (Button) rootView.findViewById(R.id.connect_social_account_insta);
+        //        dontHaveFb = (Button) rootView.findViewById(R.id.dont_have_fb);
+        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
+        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
+        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
+        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
+        completeEmail = (ImageView) rootView.findViewById(R.id.complete_email);
+        completeFb = (ImageView) rootView.findViewById(R.id.complete_fb);
+        incompleteEmail = (ImageView) rootView.findViewById(R.id.incomplete_email);
+        incompleteFb = (ImageView) rootView.findViewById(R.id.incomplete_fb);
+        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
+        completeGender = (ImageView) rootView.findViewById(R.id.complete_gender);
+        incompleteGender = (ImageView) rootView.findViewById(R.id.incomplete_gender);
+        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
+        socialHelptip = (ImageButton) rootView.findViewById(R.id.social_helptip);
+        incorrectEmail = (TextView) rootView.findViewById(R.id.incorrect_email);
+
+
+    }
+
+
+    private void setAllClickListener() {
+        socialHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "We require access to your facebook account to help build your social score. This step is very important to getting approved for a credit limit.";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
+                dialog.show();
+            }
+        });
+        connectSocialAccountFb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                loginManager.logOut();
+                loginManager.logInWithReadPermissions(ProfileFormStep1Fragment1.this, Arrays.asList("public_profile", "user_friends", "email", "user_birthday"));
+
+            }
+        });
         editEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -298,9 +411,10 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         saveEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userEmailEditText.getText().length() > 0 && !"".equals(userEmailEditText.getText().toString().trim()))
-                    saveEmail();
-                else if (isValidEmail(userEmailEditText.getText())) {
+                //if (userEmailEditText.getText().length() > 0 && !"".equals(userEmailEditText.getText().toString().trim()))
+                //    saveEmail();
+                //else
+                if (isValidEmail(userEmailEditText.getText())) {
                     incorrectEmail.setVisibility(View.GONE);
                     userEmail.setText(user.getEmail());
                     editEmail.setVisibility(View.VISIBLE);
@@ -386,7 +500,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             public void onClick(View v) {
                 if (!"".equals(userEmail.getText().toString()))
                     if ("Check".equals(verifyEmail.getText().toString()))
-                        new FetchLatestUserDetails(getActivity(), user.getUserId()).execute();
+                        new FetchLatestUserDetails(getActivity(), user.getUserId(), user).execute();
                     else {
                         new VerifyEmail(getActivity(), user.getUserId(), userEmail.getText().toString()).execute();
                         user.setEmailSent(true);
@@ -394,107 +508,8 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             }
         });
 
-        final String genderOptions[] = getResources().getStringArray(R.array.gender);
-        final SpinnerHintAdapter adapter2 = new SpinnerHintAdapter(getActivity(), genderOptions, R.layout.spinner_item_underline);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner genderSpinner = (Spinner) rootView.findViewById(R.id.gender_spinner);
-        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position < genderOptions.length - 1) {
-                    user.setUpdateGender(true);
-                    isGenderSelected = true;
-                    user.setGender(genderOptions[position]);
-                }
-                if (position == 1) {
-                    Picasso.with(getActivity())
-                            .load(R.mipmap.step1fragment1girl)
-                            .into(topImage);
-                } else {
-                    Picasso.with(getActivity())
-                            .load(R.mipmap.step1fragment1)
-                            .into(topImage);
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                user.setUpdateGender(false);
-            }
-        });
-        genderSpinner.setAdapter(adapter2);
-        genderSpinner.setSelection(adapter2.getCount());
-
-        if (!"".equals(user.getGender())) {
-            for (int i = 0; i < genderOptions.length - 1; i++) {
-                if (genderOptions[i].equals(user.getGender())) {
-                    if (i == 1) {
-                        Picasso.with(getActivity())
-                                .load(R.mipmap.step1fragment1girl)
-                                .into(topImage);
-                    }
-                    genderSpinner.setSelection(i);
-                    completeGender.setVisibility(View.VISIBLE);
-                    user.setIncompleteGender(false);
-                    break;
-                }
-            }
-        }
-
-        gotoFragment2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment2(true);
-            }
-        });
-
-        gotoFragment3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment3(true);
-            }
-        });
-        saveAndProceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ("Verified!".equals(verifyEmail.getText().toString())) {
-                    user.setEmailVerified(true);
-                }
-                checkIncomplete();
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
-                Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);
-                getContext().sendBroadcast(intent);
-                replaceFragment2(false);
-            }
-        });
-
-        if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()) {
-            incompleteStep1.setVisibility(View.VISIBLE);
-            if (user.isIncompleteFb()) {
-                incompleteFb.setVisibility(View.VISIBLE);
-            }
-            if (user.isIncompleteEmail()) {
-                incompleteEmail.setVisibility(View.VISIBLE);
-            }
-            if (user.isIncompleteGender()) {
-                incompleteGender.setVisibility(View.VISIBLE);
-            }
-        }
-        if (user.getCollegeIds() != null && user.getCollegeIds().size() > 0) {
-            user.setIncompleteCollegeId(false);
-        }
-        if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails()) {
-            incompleteStep2.setVisibility(View.VISIBLE);
-        }
-
-        if (user.isIncompleteAadhar() || !(user.getAddressProofs() != null && user.getAddressProofs().size() > 0)) {
-            incompleteStep3.setVisibility(View.VISIBLE);
-        }
-
-        return rootView;
     }
-
 
     private void setAllHelpTipsEnabled() { socialHelptip.setEnabled(true);}
 

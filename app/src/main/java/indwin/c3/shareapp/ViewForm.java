@@ -149,8 +149,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
         form.setListener(this, this);
         this.form.getSettings().setUserAgentString(this.form.getSettings().getUserAgentString()
 
-                + " " + R.string.buddyagent);
-        int t = R.string.buddyagent;
+                + " " + getResources().getString(R.string.buddyagent));
         // TODO: 3/21/2016 check this and then remove comment
         Long time = Calendar.getInstance().getTimeInMillis() / 1000;
         Long oldtime = userP.getLong("expires", 0);
@@ -374,7 +373,8 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
                     finish();
                     return;
                 }
-                Intent in = new Intent(ViewForm.this, MainActivity.class);
+                Intent in = new Intent(ViewForm.this, HomePage.class);
+                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(in);
                 finish();
             }

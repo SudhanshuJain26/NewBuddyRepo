@@ -22,6 +22,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -121,19 +123,24 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     private ImageButton socialHelptip;
     private Button addCourse, addCollege;
     private EditText addCourseEt;
+    private EditText addRollNumberEt;
+    private ImageView incompleteRollNumber, completeRollNumber;
+    private boolean isRollNUmberUpdate;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(
                 R.layout.profile_form_step1_fragment2, container, false);
+        getAllViews(rootView);
+        setOnCLickListener();
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep1Fragment2", true).apply();
         gson = new Gson();
         String json = mPrefs.getString("UserObject", "");
         user = gson.fromJson(json, UserModel.class);
-        completeCollegeId = (ImageView) rootView.findViewById(R.id.complete_college_id);
+
         try {
             collegeIds = user.getCollegeIds();
             if (collegeIds == null) {
@@ -178,47 +185,10 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                     }
                 })
         );
-
+        newCollegeIds = new HashMap<>();
         adapter = new ImageUploaderRecyclerAdapter(getActivity(), collegeIds, "College Ids", user.isAppliedFor1k());
         rvImages.setAdapter(adapter);
-        addCourse = (Button) rootView.findViewById(R.id.add_course);
-        addCollege = (Button) rootView.findViewById(R.id.add_college);
-        editCollegeName = (TextView) rootView.findViewById(R.id.edit_college_name);
-        editCourseName = (TextView) rootView.findViewById(R.id.edit_course_name);
-        editCollegeEndDate = (TextView) rootView.findViewById(R.id.edit_college_end_date);
-        editCollegeEndDate = (TextView) rootView.findViewById(R.id.edit_college_end_date);
-        collegeNameLayout = (LinearLayout) rootView.findViewById(R.id.college_name_layout);
-        collegeName = (AutoCompleteTextView) rootView.findViewById(R.id.college_name);
-        addCourseEt = (EditText) rootView.findViewById(R.id.course_name_et);
-        closeCollegeNameLayout = (ImageButton) rootView.findViewById(R.id.close_college_name_layout);
-        collegeArrayList = new ArrayList<>(Arrays.asList(getActivity().getResources().getStringArray(R.array.colleges)));
-        courseArrayList = new ArrayList<>(Arrays.asList(getActivity().getResources().getStringArray(R.array.courses)));
-        collegeNameHeading = (TextView) rootView.findViewById(R.id.college_name_heading);
-        //        collegeNameMapLayout = (RelativeLayout) rootView.findViewById(R.id.college_name_map_layout);
-        //        collegeNameMap = (TextView) rootView.findViewById(R.id.college_name_map);
-        //        closeCollegeNameMapLayout = (ImageButton) rootView.findViewById(R.id.close_college_name_map_layout);
-        //        acceptCollege = (Button) rootView.findViewById(R.id.accept_college);
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
-        newCollegeIds = new HashMap<>();
-        previous = (Button) rootView.findViewById(R.id.previous);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        addCollegeLayout = (RelativeLayout) rootView.findViewById(R.id.add_college_layout);
-        addCourseLayout = (RelativeLayout) rootView.findViewById(R.id.add_course_layout);
 
-        cantFindCollege = (Button) rootView.findViewById(R.id.cant_find_college_button);
-        closeAddCollegeLayout = (ImageButton) rootView.findViewById(R.id.close_add_college_name_layout);
-        incompleteCollegeId = (ImageView) rootView.findViewById(R.id.incomplete_college_id);
-        completeCollegeDetails = (ImageView) rootView.findViewById(R.id.complete_college_details);
-        incompleteCollegeDetails = (ImageView) rootView.findViewById(R.id.incomplete_college_details);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
-        socialHelptip = (ImageButton) rootView.findViewById(R.id.social_helptip);
-
-        googleCollegeName = (AutoCompleteTextView) rootView.findViewById(R.id.google_college_autocomplete);
         googleCollegeName.setOnItemClickListener(mAutocompleteClickListener);
         mGooglePlaceAdapter = new PlaceAutocompleteAdapter(getActivity(), mGoogleApiClient, BOUNDS_GREATER_BANGALORE, null);
         googleCollegeName.setAdapter(mGooglePlaceAdapter);
@@ -227,6 +197,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment1, gotoFragment3);
         }
         setAllHelpTipsEnabled();
+
         if (mPrefs.getBoolean("visitedFormStep1Fragment2", false)) {
             gotoFragment2.setAlpha(1);
             gotoFragment2.setClickable(true);
@@ -242,33 +213,23 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                     .load(R.mipmap.step1fragment2girl)
                     .into(topImage);
         }
-        if (!"".equals(user.getCollegeName())) {
+        if (AppUtils.isNotEmpty(user.getCollegeName())) {
             editCollegeName.setText(user.getCollegeName());
         }
 
-        if (!"".equals(user.getCourseName())) {
+        if (AppUtils.isNotEmpty(user.getCourseName())) {
             editCourseName.setText(user.getCourseName());
         }
 
-        if (!"".equals(user.getCourseEndDate())) {
+        if (AppUtils.isNotEmpty(user.getCourseEndDate())) {
             editCollegeEndDate.setText(user.getCourseEndDate());
         }
 
-        if (user.getCollegeName() != null && !"".equals(user.getCollegeName()) && user.getCourseName() != null && !"".equals(user.getCourseName())
-                && user.getCourseEndDate() != null && !"".equals(user.getCourseEndDate())) {
+        if (AppUtils.isNotEmpty(user.getCourseName()) && AppUtils.isNotEmpty(user.getCourseEndDate())) {
             completeCollegeDetails.setVisibility(View.VISIBLE);
             user.setIncompleteCollegeDetails(false);
         }
 
-        socialHelptip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text1 = "Upload your identity card(with photo) that has been provided to you by your college or institution.";
-                String text2 = "Please remember to upload both front and back sides of the card.";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
-                dialog.show();
-            }
-        });
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -286,6 +247,122 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         //        collegeNameMapLayout.getLayoutParams().height = height;
 
 
+        if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails() || user.isIncompleteRollNumber())
+
+        {
+            incompleteStep2.setVisibility(View.VISIBLE);
+            if (user.isIncompleteCollegeId())
+                incompleteCollegeId.setVisibility(View.VISIBLE);
+            if (user.isIncompleteCollegeDetails())
+                incompleteCollegeDetails.setVisibility(View.VISIBLE);
+            if (user.isIncompleteRollNumber()) {
+                incompleteRollNumber.setVisibility(View.VISIBLE);
+            } else {
+                completeRollNumber.setVisibility(View.VISIBLE);
+                addRollNumberEt.setText(user.getRollNumber());
+            }
+        } else
+
+        {
+            incompleteStep2.setVisibility(View.GONE);
+        }
+
+        if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender())
+
+        {
+            incompleteStep1.setVisibility(View.VISIBLE);
+        } else
+            incompleteStep1.setVisibility(View.GONE);
+
+
+        if (user.getCollegeIds() != null && user.getCollegeIds().size() > 0) {
+            user.setIncompleteCollegeId(false);
+        }
+        if (user.isIncompleteAadhar() || !(user.getAddressProofs() != null && user.getAddressProofs().size() > 0) || (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())))
+
+        {
+            incompleteStep3.setVisibility(View.VISIBLE);
+        } else
+            incompleteStep3.setVisibility(View.GONE);
+
+
+        if (user.isAppliedFor1k()) {
+            previous.setVisibility(View.INVISIBLE);
+            saveAndProceed.setVisibility(View.INVISIBLE);
+            rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
+        }
+
+
+        return rootView;
+    }
+
+
+    private void setOnCLickListener() {
+        addRollNumberEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isRollNUmberUpdate = true;
+            }
+        });
+        gotoFragment1.setOnClickListener(new View.OnClickListener()
+
+                                         {
+                                             @Override
+                                             public void onClick(View v) {
+                                                 replaceFragment1(true);
+                                             }
+                                         }
+
+        );
+        gotoFragment3.setOnClickListener(new View.OnClickListener()
+
+                                         {
+                                             @Override
+                                             public void onClick(View v) {
+                                                 replaceFragment3(true);
+                                             }
+                                         }
+
+        );
+        addCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addCourseLayout.setVisibility(View.GONE);
+                editCourseName.setText(addCourseEt.getText().toString());
+                user.setCourseName(editCourseName.getText().toString());
+                user.setUpdateCourseName(true);
+            }
+        });
+        addCollege.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addCollegeLayout.setVisibility(View.GONE);
+                editCollegeName.setText(googleCollegeName.getText().toString());
+                user.setCollegeName(editCollegeName.getText().toString());
+                user.setUpdateCollegeName(true);
+            }
+        });
+
+
+        socialHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "Upload photos or scans of your photo identity card that has been provided by your college or institution.";
+                String text2 = "Please remember to upload both (front and back) sides of the card.";
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
+                dialog.show();
+            }
+        });
         editCollegeName.setOnClickListener
                 (new View.OnClickListener() {
                      @Override
@@ -432,9 +509,6 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         //        map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map))
         //                .getMap();
         //        map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
-        final Calendar instance = Calendar.getInstance();
-        final int currentMonth = instance.get(Calendar.MONTH);
-        final int currentYear = instance.get(Calendar.YEAR);
 
         monthYearPicker = new MonthYearPicker(getActivity());
         monthYearPicker.build(new DialogInterface.OnClickListener() {
@@ -471,6 +545,10 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                     readyToUpdate = false;
                 }
                 checkIncomplete();
+                if (isRollNUmberUpdate && AppUtils.isNotEmpty(addRollNumberEt.getText().toString())) {
+                    user.setIncompleteRollNumber(false);
+                    user.setRollNumber(addRollNumberEt.getText().toString());
+                }
                 if (updateCourseEndDate) {
                     try {
                         SimpleDateFormat spf = new SimpleDateFormat("MMM yyyy");
@@ -502,84 +580,53 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                 replaceFragment3(false);
             }
         });
+    }
 
-        if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails())
+    private void getAllViews(View rootView) {
+        completeCollegeId = (ImageView) rootView.findViewById(R.id.complete_college_id);
+        addCourse = (Button) rootView.findViewById(R.id.add_course);
+        addRollNumberEt = (EditText) rootView.findViewById(R.id.roll_number_et);
 
-        {
-            incompleteStep2.setVisibility(View.VISIBLE);
-            if (user.isIncompleteCollegeId())
-                incompleteCollegeId.setVisibility(View.VISIBLE);
-            if (user.isIncompleteCollegeDetails())
-                incompleteCollegeDetails.setVisibility(View.VISIBLE);
-        } else
+        completeRollNumber = (ImageView) rootView.findViewById(R.id.complete_roll_number);
+        incompleteRollNumber = (ImageView) rootView.findViewById(R.id.incomplete_roll_number);
+        addCollege = (Button) rootView.findViewById(R.id.add_college);
+        editCollegeName = (TextView) rootView.findViewById(R.id.edit_college_name);
+        editCourseName = (TextView) rootView.findViewById(R.id.edit_course_name);
+        editCollegeEndDate = (TextView) rootView.findViewById(R.id.edit_college_end_date);
+        editCollegeEndDate = (TextView) rootView.findViewById(R.id.edit_college_end_date);
+        collegeNameLayout = (LinearLayout) rootView.findViewById(R.id.college_name_layout);
+        collegeName = (AutoCompleteTextView) rootView.findViewById(R.id.college_name);
+        addCourseEt = (EditText) rootView.findViewById(R.id.course_name_et);
+        closeCollegeNameLayout = (ImageButton) rootView.findViewById(R.id.close_college_name_layout);
+        collegeArrayList = new ArrayList<>(Arrays.asList(getActivity().getResources().getStringArray(R.array.colleges)));
+        courseArrayList = new ArrayList<>(Arrays.asList(getActivity().getResources().getStringArray(R.array.courses)));
+        collegeNameHeading = (TextView) rootView.findViewById(R.id.college_name_heading);
+        //        collegeNameMapLayout = (RelativeLayout) rootView.findViewById(R.id.college_name_map_layout);
+        //        collegeNameMap = (TextView) rootView.findViewById(R.id.college_name_map);
+        //        closeCollegeNameMapLayout = (ImageButton) rootView.findViewById(R.id.close_college_name_map_layout);
+        //        acceptCollege = (Button) rootView.findViewById(R.id.accept_college);
+        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
 
-        {
-            incompleteStep2.setVisibility(View.GONE);
-        }
+        previous = (Button) rootView.findViewById(R.id.previous);
+        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
+        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
+        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
+        addCollegeLayout = (RelativeLayout) rootView.findViewById(R.id.add_college_layout);
+        addCourseLayout = (RelativeLayout) rootView.findViewById(R.id.add_course_layout);
 
-        if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender())
+        cantFindCollege = (Button) rootView.findViewById(R.id.cant_find_college_button);
+        closeAddCollegeLayout = (ImageButton) rootView.findViewById(R.id.close_add_college_name_layout);
+        incompleteCollegeId = (ImageView) rootView.findViewById(R.id.incomplete_college_id);
+        completeCollegeDetails = (ImageView) rootView.findViewById(R.id.complete_college_details);
+        incompleteCollegeDetails = (ImageView) rootView.findViewById(R.id.incomplete_college_details);
+        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
+        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
+        socialHelptip = (ImageButton) rootView.findViewById(R.id.social_helptip);
 
-        {
-            incompleteStep1.setVisibility(View.VISIBLE);
-        } else
-            incompleteStep1.setVisibility(View.GONE);
+        googleCollegeName = (AutoCompleteTextView) rootView.findViewById(R.id.google_college_autocomplete);
 
-
-        if (user.getCollegeIds() != null && user.getCollegeIds().size() > 0) {
-            user.setIncompleteCollegeId(false);
-        }
-        if (user.isIncompleteAadhar() || !(user.getAddressProofs() != null && user.getAddressProofs().size() > 0))
-
-        {
-            incompleteStep3.setVisibility(View.VISIBLE);
-        } else
-            incompleteStep3.setVisibility(View.GONE);
-
-        gotoFragment1.setOnClickListener(new View.OnClickListener()
-
-                                         {
-                                             @Override
-                                             public void onClick(View v) {
-                                                 replaceFragment1(true);
-                                             }
-                                         }
-
-        );
-        gotoFragment3.setOnClickListener(new View.OnClickListener()
-
-                                         {
-                                             @Override
-                                             public void onClick(View v) {
-                                                 replaceFragment3(true);
-                                             }
-                                         }
-
-        );
-        if (user.isAppliedFor1k()) {
-            previous.setVisibility(View.INVISIBLE);
-            saveAndProceed.setVisibility(View.INVISIBLE);
-            rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
-        }
-
-        addCourse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addCourseLayout.setVisibility(View.GONE);
-                editCourseName.setText(addCourseEt.getText().toString());
-                user.setCourseName(editCourseName.getText().toString());
-                user.setUpdateCourseName(true);
-            }
-        });
-        addCollege.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addCollegeLayout.setVisibility(View.GONE);
-                editCollegeName.setText(googleCollegeName.getText().toString());
-                user.setCollegeName(editCollegeName.getText().toString());
-                user.setUpdateCollegeName(true);
-            }
-        });
-        return rootView;
     }
 
 
@@ -609,8 +656,14 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
             user.setCollegeIds(collegeIds);
             user.setIncompleteCollegeId(false);
         }
+        if (AppUtils.isEmpty(addRollNumberEt.getText().toString())) {
+
+            user.setIncompleteRollNumber(true);
+        } else {
+            user.setIncompleteRollNumber(false);
+        }
         if ("".equals(editCollegeName.getText().toString()) || "".equals(editCourseName.getText().toString())
-                || "".equals(editCollegeEndDate.getText().toString())) {
+                || "".equals(editCollegeEndDate.getText().toString()) || AppUtils.isEmpty(addRollNumberEt.getText().toString())) {
             incompleteCollegeDetails.setVisibility(View.VISIBLE);
             user.setIncompleteCollegeDetails(true);
         } else

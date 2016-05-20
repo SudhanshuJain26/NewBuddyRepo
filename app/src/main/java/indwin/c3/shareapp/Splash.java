@@ -932,6 +932,14 @@ public class Splash extends AppCompatActivity {
                 user.setCollegeIds(gson.fromJson(data1.getString("collegeIDs"), ArrayList.class));
             if (data1.opt("addressProofs") != null)
                 user.setAddressProofs(gson.fromJson(data1.getString("addressProofs"), ArrayList.class));
+
+            if (data1.opt("dob") != null)
+                user.setDob(data1.getString("dob"));
+            if (data1.opt("accomodation") != null)
+                user.setAccommodation(data1.getString("accomodation"));
+
+
+
             if (data1.opt("panOrAadhar") != null) {
                 user.setPanOrAadhar(data1.getString("panOrAadhar"));
                 if ("PAN".equals(user.getPanOrAadhar()))
@@ -939,15 +947,14 @@ public class Splash extends AppCompatActivity {
                 else
                     user.setAadharNumber(data1.getString("aadhar"));
             }
-            if (data1.opt("dob") != null)
-                user.setDob(data1.getString("dob"));
-            if (data1.opt("accomodation") != null)
-                user.setAccommodation(data1.getString("accomodation"));
             if (data1.opt("currentAddress") != null)
                 user.setCurrentAddress(data1.getJSONObject("currentAddress").getString("line1"));
             if (data1.opt("permanentAddress") != null)
                 user.setPermanentAddress(data1.getJSONObject("permanentAddress").getString("line1"));
-
+            if (data1.opt("bankAccountNumber") != null)
+                user.setBankAccNum(data1.getString("bankAccountNumber"));
+            if (data1.opt("bankIFSC") != null)
+                user.setBankIfsc(data1.getString("bankIFSC"));
             if (data1.optJSONArray("familyMember") != null) {
                 JSONArray familyMembers = data1.getJSONArray("familyMember");
                 for (int i = 0; i < familyMembers.length(); i++) {
@@ -970,10 +977,7 @@ public class Splash extends AppCompatActivity {
                 }
             }
 
-            if (data1.opt("bankAccountNumber") != null)
-                user.setBankAccNum(data1.getString("bankAccountNumber"));
-            if (data1.opt("bankIFSC") != null)
-                user.setBankIfsc(data1.getString("bankIFSC"));
+
             if (data1.opt("friendName") != null)
                 user.setClassmateName(data1.getString("friendName"));
             if (data1.opt("friendNumber") != null)

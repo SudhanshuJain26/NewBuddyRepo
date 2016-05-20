@@ -73,34 +73,9 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep2Fragment3", true).apply();
         gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
+        user = AppUtils.getUserObject(getActivity());
 
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
-        previous = (Button) rootView.findViewById(R.id.previous);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        verificationDateEditText = (EditText) rootView.findViewById(R.id.verification_date);
-        setupAutoRepayments = (Button) rootView.findViewById(R.id.setup_repayments);
-        bankAccNum = (TextView) rootView.findViewById(R.id.bank_acc_number);
-        classmateName = (EditText) rootView.findViewById(R.id.classmate_name);
-        classmatePhone = (EditText) rootView.findViewById(R.id.classmate_phone);
-        completeSetupRepayments = (ImageView) rootView.findViewById(R.id.complete_repayments);
-        incompleteSetupRepayments = (ImageView) rootView.findViewById(R.id.incomplete_repayments);
-        completeClassmate = (ImageView) rootView.findViewById(R.id.complete_classmate);
-        incompleteClassmate = (ImageView) rootView.findViewById(R.id.incomplete_classmate);
-        completeVerifcationDate = (ImageView) rootView.findViewById(R.id.complete_verification_date);
-        incompleteVerificationDate = (ImageView) rootView.findViewById(R.id.incomplete_verification_date);
-        changeAccNum = (ImageButton) rootView.findViewById(R.id.edit_bank_acc);
-        incorrectPhone = (TextView) rootView.findViewById(R.id.incorrect_phone);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
-        autoRepayHelptip = (ImageButton) rootView.findViewById(R.id.auto_repayment_helptip);
-        classmateHelptip = (ImageButton) rootView.findViewById(R.id.classmate_helptip);
-        verificationHelptip = (ImageButton) rootView.findViewById(R.id.verification_helptip);
+        getAllViews(rootView);
 
         if (!mPrefs.getBoolean("step2Editable", true)) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment1, gotoFragment2);
@@ -130,33 +105,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
             saveAndProceed.setVisibility(View.INVISIBLE);
             rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
         }
-        autoRepayHelptip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text1 = "Upload your identity card(with photo) that has been provided to you by your college or institution.";
-                String text2 = "Please remember to upload both front and back sides of the card.";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#eeb85f");
-                dialog.show();
-            }
-        });
-        classmateHelptip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text1 = "We need to speak to a classmate who can vouch for your authenticity. Let them know in advance!";
-                String text2 = "";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#eeb85f");
-                dialog.show();
-            }
-        });
-        verificationHelptip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text1 = "We will come to your college, verify your college ID and get your signature. Tell us a convenient time when we can come and visit!";
-                String text2 = "";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#eeb85f");
-                dialog.show();
-            }
-        });
+
         if (user.getBankAccNum() != null && !"".equals(user.getBankAccNum())) {
             try {
                 //                String password = "bf5cbe23fd8e60697c8ddc2ef25af796";
@@ -217,6 +166,61 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
             }
         });
 
+
+        //        changeAccNum.setOnClickListener(listener);
+        setOnClickListener();
+
+        if (user.isIncompleteFamilyDetails()) {
+            incompleteStep2.setVisibility(View.VISIBLE);
+        }
+        if (user.isIncompleteDOB() || user.isIncompleteAddressDetails()) {
+            incompleteStep1.setVisibility(View.VISIBLE);
+        }
+        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails()
+                || user.isIncompleteVerificationDate()) {
+            incompleteStep3.setVisibility(View.VISIBLE);
+            if (user.isIncompleteRepaymentSetup()) {
+                incompleteSetupRepayments.setVisibility(View.VISIBLE);
+            }
+            if (user.isIncompleteClassmateDetails()) {
+                incompleteClassmate.setVisibility(View.VISIBLE);
+            }
+            if (user.isIncompleteVerificationDate()) {
+                incompleteVerificationDate.setVisibility(View.VISIBLE);
+            }
+        }
+        return rootView;
+    }
+
+    private void setOnClickListener() {
+        autoRepayHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "Upload your identity card(with photo) that has been provided to you by your college or institution.";
+                String text2 = "Please remember to upload both front and back sides of the card.";
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#eeb85f");
+                dialog.show();
+            }
+        });
+        classmateHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "We need to speak to a classmate who can vouch for your authenticity. Let them know in advance!";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#eeb85f");
+                dialog.show();
+            }
+        });
+        verificationHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "We will come to your college, verify your college ID and get your signature. Tell us a convenient time when we can come and visit!";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#eeb85f");
+                dialog.show();
+            }
+        });
+
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,7 +233,6 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                 startActivity(intent);
             }
         };
-        //        changeAccNum.setOnClickListener(listener);
         setupAutoRepayments.setOnClickListener(listener);
         changeAccNum.setOnClickListener(listener);
         previous.setOnClickListener(new View.OnClickListener() {
@@ -304,9 +307,8 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                 if (AppUtils.isNotEmpty(user.getGpaType())) {
                     user.setGpaTypeUpdate(true);
                 }
-                String json = gson.toJson(user);
+                AppUtils.saveUserObject(getActivity(), user);
                 mPrefs.edit().putBoolean("updatingDB", false).apply();
-                mPrefs.edit().putString("UserObject", json).apply();
                 Context context = getActivity();
                 Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
                 getContext().sendBroadcast(intent);
@@ -346,27 +348,34 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                 replaceFragment2(true);
             }
         });
+    }
 
-        if (user.isIncompleteFamilyDetails()) {
-            incompleteStep2.setVisibility(View.VISIBLE);
-        }
-        if (user.isIncompleteDOB() || user.isIncompleteAddressDetails()) {
-            incompleteStep1.setVisibility(View.VISIBLE);
-        }
-        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails()
-                || user.isIncompleteVerificationDate()) {
-            incompleteStep3.setVisibility(View.VISIBLE);
-            if (user.isIncompleteRepaymentSetup()) {
-                incompleteSetupRepayments.setVisibility(View.VISIBLE);
-            }
-            if (user.isIncompleteClassmateDetails()) {
-                incompleteClassmate.setVisibility(View.VISIBLE);
-            }
-            if (user.isIncompleteVerificationDate()) {
-                incompleteVerificationDate.setVisibility(View.VISIBLE);
-            }
-        }
-        return rootView;
+    private void getAllViews(View rootView) {
+        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
+        previous = (Button) rootView.findViewById(R.id.previous);
+        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
+        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
+        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
+        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
+        verificationDateEditText = (EditText) rootView.findViewById(R.id.verification_date);
+        setupAutoRepayments = (Button) rootView.findViewById(R.id.setup_repayments);
+        bankAccNum = (TextView) rootView.findViewById(R.id.bank_acc_number);
+        classmateName = (EditText) rootView.findViewById(R.id.classmate_name);
+        classmatePhone = (EditText) rootView.findViewById(R.id.classmate_phone);
+        completeSetupRepayments = (ImageView) rootView.findViewById(R.id.complete_repayments);
+        incompleteSetupRepayments = (ImageView) rootView.findViewById(R.id.incomplete_repayments);
+        completeClassmate = (ImageView) rootView.findViewById(R.id.complete_classmate);
+        incompleteClassmate = (ImageView) rootView.findViewById(R.id.incomplete_classmate);
+        completeVerifcationDate = (ImageView) rootView.findViewById(R.id.complete_verification_date);
+        incompleteVerificationDate = (ImageView) rootView.findViewById(R.id.incomplete_verification_date);
+        changeAccNum = (ImageButton) rootView.findViewById(R.id.edit_bank_acc);
+        incorrectPhone = (TextView) rootView.findViewById(R.id.incorrect_phone);
+        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
+        autoRepayHelptip = (ImageButton) rootView.findViewById(R.id.auto_repayment_helptip);
+        classmateHelptip = (ImageButton) rootView.findViewById(R.id.classmate_helptip);
+        verificationHelptip = (ImageButton) rootView.findViewById(R.id.verification_helptip);
     }
 
     private void setAllHelpTipsEnabled() {
@@ -381,15 +390,15 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         } else {
             user.setIncompleteRepaymentSetup(false);
         }
-        if ("".equals(classmateName.getText().toString()) || "".equals(classmatePhone.getText().toString())) {
+        if (AppUtils.isEmpty(classmateName.getText().toString()) || AppUtils.isEmpty(classmatePhone.getText().toString())) {
             user.setIncompleteClassmateDetails(true);
         } else {
             user.setIncompleteClassmateDetails(false);
-            if (!"".equals(classmateName.getText().toString())) {
+            if (AppUtils.isNotEmpty(classmateName.getText().toString())) {
                 user.setClassmateName(classmateName.getText().toString());
                 user.setUpdateClassmateName(true);
             }
-            if (!"".equals(classmatePhone.getText().toString())) {
+            if (AppUtils.isNotEmpty(classmatePhone.getText().toString())) {
                 user.setClassmatePhone(classmatePhone.getText().toString());
                 user.setUpdateClassmatePhone(true);
             }
@@ -406,7 +415,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                 user.setIncompleteVerificationDate(true);
                 e.printStackTrace();
             }
-        } else if ("".equals(verificationDateEditText.getText().toString())) {
+        } else if (AppUtils.isEmpty(verificationDateEditText.getText().toString())) {
             user.setIncompleteVerificationDate(true);
         }
     }

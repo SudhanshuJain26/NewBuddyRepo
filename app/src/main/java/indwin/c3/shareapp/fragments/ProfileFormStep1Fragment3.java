@@ -101,8 +101,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
         final View rootView = inflater.inflate(
                 R.layout.profile_form_step1_fragment3, container, false);
-        completeAgreement = (ImageView) rootView.findViewById(R.id.complete_agreement);
-        incompleteAgreement = (ImageView) rootView.findViewById(R.id.incomplete_agreement);
+        getAllViews(rootView);
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
@@ -110,7 +109,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         String json = mPrefs.getString("UserObject", "");
         user = gson.fromJson(json, UserModel.class);
         newaddressProofs = new HashMap<>();
-        completeAddress = (ImageView) rootView.findViewById(R.id.complete_address_proof);
+
         try {
             addressProofs = user.getAddressProofs();
             if (addressProofs == null) {
@@ -152,30 +151,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         adapter = new ImageUploaderRecyclerAdapter(getActivity(), addressProofs, "Address Proofs", user.isAppliedFor1k());
         rvImages.setAdapter(adapter);
 
-        aadharPanHeader = (TextView) rootView.findViewById(R.id.aadhar_pan_header);
-        editTextHeader = (TextView) rootView.findViewById(R.id.editext_header);
-        editTextCardView = (CardView) rootView.findViewById(R.id.edittext_carview);
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
-        editAadharNumber = (EditText) rootView.findViewById(R.id.edit_aadhar_number);
-        incompleteAadhar = (ImageView) rootView.findViewById(R.id.incomplete_aadhar);
-        completeAadhar = (ImageView) rootView.findViewById(R.id.complete_aadhar);
-        incompleteAddress = (ImageView) rootView.findViewById(R.id.incomplete_address_proof);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        agreementBtn = (Button) rootView.findViewById(R.id.agreement_btn);
-        currentSelected = 0;
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        previous = (Button) rootView.findViewById(R.id.previous);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
-        aadharHelptip = (ImageButton) rootView.findViewById(R.id.aadhar_helptip);
-        addressHelptip = (ImageButton) rootView.findViewById(R.id.address_helptip);
-        incorrectFormat = (LinearLayout) rootView.findViewById(R.id.incorrect_format_layout);
-        saveAadhar = (Button) rootView.findViewById(R.id.save_user_aadhar);
-        editAadhar = (ImageButton) rootView.findViewById(R.id.edit_user_aadhar);
-
         if (!mPrefs.getBoolean("step1Editable", true)) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment1, gotoFragment2);
         }
@@ -208,7 +183,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 replaceFragment2(true);
             }
         });
-        aadharNuber = (TextView) rootView.findViewById(R.id.aadhar_number);
+
         arrayAaadharOrPan = getResources().getStringArray(R.array.aadhar_or_pan);
         if (user.getPanOrAadhar() != null && !"".equals(user.getPanOrAadhar())) {
             if ("Aadhar".equals(user.getPanOrAadhar()) && user.getAadharNumber() != null && !"".equals(user.getAadharNumber())) {
@@ -240,100 +215,47 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             }
         }
 
-        aadharHelptip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text1 = "We require a Govt. approved identity proof, either PAN card or Aadhar card to approve a Credit Limit for you.<br><br>" +
-                        "If you don’t have your PAN card, "
-                        + "<a href=\"https://tin.tin.nsdl.com/pan/\">get one here</a>" + "<br><br>If you don’t have your Aadhar card, " +
-                        "<a href=\"https://aadharcarduid.com/aadhaar-card-apply-online\">get one here</a>";
-                String text2 = "Please remember to upload both front and back sides of the card.";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
-                dialog.show();
-            }
-        });
 
-        addressHelptip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text1 = "Upload either your DL, Aadhar Card or Passports’ softcopy. Or, you could upload one of your parents' Permanent Address Proof.";
-                String text2 = "Please remember to upload both front and back sides of the card.";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
-                dialog.show();
-            }
-        });
-
-
-        aadharOrPan = (Spinner) rootView.findViewById(R.id.aadhar_or_pan_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.aadhar_or_pan, R.layout.spinner_item);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        aadharOrPan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    ((TextView) parent.getChildAt(0)).setText(arrayAaadharOrPan[position]);
-                    editAadharNumber.setHint(arrayAaadharOrPan[position]);
-                    user.setPanOrAadhar(arrayAaadharOrPan[position].split(" ")[0]);
-                    currentSelected = position;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                currentSelected = 99;
-                ((TextView) parent.getChildAt(0)).setText(arrayAaadharOrPan[0]);
-            }
-        });
-        saveAadhar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveAadharorPan();
-            }
-        });
-        editAadhar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentSelected == 0) {
-                    editAadharNumber.setHint("Aadhar Number");
-                } else {
-                    editAadharNumber.setHint("PAN Number");
-                }
-                aadharNuber.setVisibility(View.GONE);
-                editAadhar.setVisibility(View.GONE);
-                saveAadhar.setVisibility(View.VISIBLE);
-                editAadharNumber.setVisibility(View.VISIBLE);
-            }
-        });
-        editAadharNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                incorrectFormat.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
+        setOnClickListener();
         if (user.isAppliedFor1k()) {
             previous.setVisibility(View.INVISIBLE);
             saveAndProceed.setVisibility(View.INVISIBLE);
             rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
         }
         aadharOrPan.setAdapter(adapter);
-        previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment2(true);
-            }
-        });
+
+        if (AppUtils.isEmpty(user.getSignature()) || AppUtils.isEmpty(user.getSelfie())) {
+
+            incompleteAgreement.setVisibility(View.VISIBLE);
+        } else if (AppUtils.isNotEmpty(user.getSignature()) && AppUtils.isNotEmpty(user.getSelfie())) {
+
+            completeAgreement.setVisibility(View.VISIBLE);
+        }
+        if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()) {
+            incompleteStep1.setVisibility(View.VISIBLE);
+        }
+        if (user.getCollegeIds() != null && user.getCollegeIds().size() > 0) {
+            user.setIncompleteCollegeId(false);
+        }
+        if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails() || user.isIncompleteRollNumber()) {
+            incompleteStep2.setVisibility(View.VISIBLE);
+        }
+        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress() || (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature()))) {
+            incompleteStep3.setVisibility(View.VISIBLE);
+            if (user.isIncompleteAadhar())
+                incompleteAadhar.setVisibility(View.VISIBLE);
+            if (user.isIncompletePermanentAddress())
+                incompleteAddress.setVisibility(View.VISIBLE);
+        }
+        return rootView;
+    }
+
+    private void setOnClickListener() {
+
         saveAndProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -394,23 +316,121 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 getActivity().finish();
             }
         });
-        if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()) {
-            incompleteStep1.setVisibility(View.VISIBLE);
-        }
-        if(user.getCollegeIds()!=null&&user.getCollegeIds().size()>0){
-            user.setIncompleteCollegeId(false);
-        }
-        if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails()) {
-            incompleteStep2.setVisibility(View.VISIBLE);
-        }
-        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress()) {
-            incompleteStep3.setVisibility(View.VISIBLE);
-            if (user.isIncompleteAadhar())
-                incompleteAadhar.setVisibility(View.VISIBLE);
-            if (user.isIncompletePermanentAddress())
-                incompleteAddress.setVisibility(View.VISIBLE);
-        }
-        return rootView;
+        aadharHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "We require a photo or scan of a Govt. approved identity proof, either PAN card or Aadhar card to approve a Credit Limit for you.<br><br>" +
+                        "Remember to upload both (front and back) sides of the document.<br>"
+                        + "If you don’t have your PAN card, "
+                        + "<a href=\"https://tin.tin.nsdl.com/pan/\">get one here</a>" + "<br><br>If you don’t have your Aadhar card, " +
+                        "<a href=\"https://aadharcarduid.com/aadhaar-card-apply-online\">get one here</a>";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
+                dialog.show();
+            }
+        });
+
+        addressHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "Upload either your DL, Aadhar Card or Passports’ softcopy. Or, you could upload one of your parents' Permanent Address Proof.<br>You can upload either photos or scanned copies of these documents.";
+                String text2 = "Please remember to upload both front and back sides of the card.";
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
+                dialog.show();
+            }
+        });
+
+        aadharOrPan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    ((TextView) parent.getChildAt(0)).setText(arrayAaadharOrPan[position]);
+                    editAadharNumber.setHint(arrayAaadharOrPan[position]);
+                    user.setPanOrAadhar(arrayAaadharOrPan[position].split(" ")[0]);
+                    currentSelected = position;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                currentSelected = 99;
+                ((TextView) parent.getChildAt(0)).setText(arrayAaadharOrPan[0]);
+            }
+        });
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment2(true);
+            }
+        });
+        saveAadhar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveAadharorPan();
+            }
+        });
+        editAadhar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentSelected == 0) {
+                    editAadharNumber.setHint("Aadhar Number");
+                } else {
+                    editAadharNumber.setHint("PAN Number");
+                }
+                aadharNuber.setVisibility(View.GONE);
+                editAadhar.setVisibility(View.GONE);
+                saveAadhar.setVisibility(View.VISIBLE);
+                editAadharNumber.setVisibility(View.VISIBLE);
+            }
+        });
+        editAadharNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                incorrectFormat.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+    }
+
+    private void getAllViews(View rootView) {
+        completeAgreement = (ImageView) rootView.findViewById(R.id.complete_agreement);
+        incompleteAgreement = (ImageView) rootView.findViewById(R.id.incomplete_agreement);
+        completeAddress = (ImageView) rootView.findViewById(R.id.complete_address_proof);
+        aadharPanHeader = (TextView) rootView.findViewById(R.id.aadhar_pan_header);
+        editTextHeader = (TextView) rootView.findViewById(R.id.editext_header);
+        editTextCardView = (CardView) rootView.findViewById(R.id.edittext_carview);
+        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
+        editAadharNumber = (EditText) rootView.findViewById(R.id.edit_aadhar_number);
+        incompleteAadhar = (ImageView) rootView.findViewById(R.id.incomplete_aadhar);
+        completeAadhar = (ImageView) rootView.findViewById(R.id.complete_aadhar);
+        incompleteAddress = (ImageView) rootView.findViewById(R.id.incomplete_address_proof);
+        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
+        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
+        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
+        agreementBtn = (Button) rootView.findViewById(R.id.agreement_btn);
+        currentSelected = 0;
+        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
+        previous = (Button) rootView.findViewById(R.id.previous);
+        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
+        aadharHelptip = (ImageButton) rootView.findViewById(R.id.aadhar_helptip);
+        addressHelptip = (ImageButton) rootView.findViewById(R.id.address_helptip);
+        incorrectFormat = (LinearLayout) rootView.findViewById(R.id.incorrect_format_layout);
+        saveAadhar = (Button) rootView.findViewById(R.id.save_user_aadhar);
+        editAadhar = (ImageButton) rootView.findViewById(R.id.edit_user_aadhar);
+        aadharNuber = (TextView) rootView.findViewById(R.id.aadhar_number);
+        aadharOrPan = (Spinner) rootView.findViewById(R.id.aadhar_or_pan_spinner);
     }
 
     private void setAllHelpTipsEnabled() {

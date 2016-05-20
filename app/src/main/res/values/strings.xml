@@ -96,7 +96,11 @@
         <item>100000&#45;150000</item>
         <item>150000</item>
     </string-array>
-
+    <string-array name="language_array">
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Kannada</item>
+    </string-array>
     <string-array name="gender">
         <item>guy</item>
         <item>girl</item>
@@ -140,7 +144,7 @@
         <item>Contractor</item>
         <item>Private Employee</item>
         <item>Other</item>
-        <item>Select a Profession</item>
+        <item>select profession</item>
     </string-array>
 
     <string-array name="colleges">

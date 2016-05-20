@@ -45,10 +45,12 @@ public class UserModel {
     String permanentAddress;
     String familyMemberType1;
     String professionFamilyMemberType1;
+    String prefferedLanguageFamilyMemberType1;
     String designationFamilyMemberType1;
     String phoneFamilyMemberType1;
     String familyMemberType2;
     String professionFamilyMemberType2;
+    String prefferedLanguageFamilyMemberType2;
     String designationFamilyMemberType2;
     String phoneFamilyMemberType2;
     String bankAccNum;
@@ -82,6 +84,9 @@ public class UserModel {
     String scholarshipAmount;
     String gpaType;
     String gpa;
+
+    private boolean updatePreferredLanguageFamilyMemberType1;
+    private boolean updatePreferredLanguageFamilyMemberType2;
     boolean emailSent;
     boolean updateCurrentAddressCity;
     boolean updateGender;
@@ -1222,5 +1227,37 @@ public class UserModel {
 
     public void setInCompleteAgreement(boolean inCompleteAgreement) {
         isInCompleteAgreement = inCompleteAgreement;
+    }
+
+    public String getPrefferedLanguageFamilyMemberType1() {
+        return prefferedLanguageFamilyMemberType1;
+    }
+
+    public void setPrefferedLanguageFamilyMemberType1(String prefferedLanguageFamilyMemberType1) {
+        this.prefferedLanguageFamilyMemberType1 = prefferedLanguageFamilyMemberType1;
+    }
+
+    public String getPrefferedLanguageFamilyMemberType2() {
+        return prefferedLanguageFamilyMemberType2;
+    }
+
+    public void setPrefferedLanguageFamilyMemberType2(String prefferedLanguageFamilyMemberType2) {
+        this.prefferedLanguageFamilyMemberType2 = prefferedLanguageFamilyMemberType2;
+    }
+
+    public boolean isUpdatePreferredLanguageFamilyMemberType1() {
+        return updatePreferredLanguageFamilyMemberType1;
+    }
+
+    public void setUpdatePreferredLanguageFamilyMemberType1(boolean updatePreferredLanguageFamilyMemberType1) {
+        this.updatePreferredLanguageFamilyMemberType1 = updatePreferredLanguageFamilyMemberType1;
+    }
+
+    public boolean isUpdatePreferredLanguageFamilyMemberType2() {
+        return updatePreferredLanguageFamilyMemberType2;
+    }
+
+    public void setUpdatePreferredLanguageFamilyMemberType2(boolean updatePreferredLanguageFamilyMemberType2) {
+        this.updatePreferredLanguageFamilyMemberType2 = updatePreferredLanguageFamilyMemberType2;
     }
 }

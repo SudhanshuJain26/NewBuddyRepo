@@ -332,7 +332,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             incompleteStep2.setVisibility(View.VISIBLE);
         }
 
-        if (user.isIncompleteAadhar() || !(user.getAddressProofs() != null && user.getAddressProofs().size() > 0)||(AppUtils.isEmpty(user.getSelfie())||AppUtils.isEmpty(user.getSignature()))) {
+        if (user.isIncompleteAadhar() || !(user.getAddressProofs() != null && user.getAddressProofs().size() > 0) || (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature()))) {
             incompleteStep3.setVisibility(View.VISIBLE);
         }
 
@@ -414,9 +414,13 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                 //if (userEmailEditText.getText().length() > 0 && !"".equals(userEmailEditText.getText().toString().trim()))
                 //    saveEmail();
                 //else
+                if (AppUtils.isEmpty(userEmailEditText.getText().toString())) {
+                    return;
+                }
                 if (isValidEmail(userEmailEditText.getText())) {
                     incorrectEmail.setVisibility(View.GONE);
-                    userEmail.setText(user.getEmail());
+                    user.setEmail(userEmailEditText.getText().toString());
+                    //userEmail.setText(user.getEmail());
                     editEmail.setVisibility(View.VISIBLE);
                     verifyEmail.setText("Verify");
                     verifyEmail.setVisibility(View.VISIBLE);

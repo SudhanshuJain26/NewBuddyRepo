@@ -16,15 +16,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -33,6 +36,7 @@ import indwin.c3.shareapp.Views.DatePicker;
 import indwin.c3.shareapp.activities.Pending7kApprovalActivity;
 import indwin.c3.shareapp.activities.ProfileActivity;
 import indwin.c3.shareapp.activities.SetupAutoRepayments;
+import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
@@ -62,6 +66,8 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
     private TextView incorrectPhone;
     public static ImageView incompleteSetupRepayments, completeSetupRepayments;
     ImageView topImage;
+    private ImageView incompleteStudentLoan, completeStudentLoan;
+    boolean selectedStudentLoan = false;
     private ImageButton autoRepayHelptip, classmateHelptip, verificationHelptip;
 
     @Override
@@ -100,12 +106,51 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                     .into(topImage);
         }
 
+
+        if (!selectedStudentLoan)
+            user.setIncompleteStudentLoan(true);
+        else
+            user.setIncompleteStudentLoan(false);
+        final String scholarship[] = getResources().getStringArray(R.array.scholarship);
+        final String scholarshipValues[] = getResources().getStringArray(R.array.scholarship_values);
+
+        Spinner studentLoanSpinner = (Spinner) rootView.findViewById(R.id.student_loan);
+        SpinnerHintAdapter studentLoanAdapter = new SpinnerHintAdapter(getActivity(), scholarship, R.layout.spinner_item_underline);
+        studentLoanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        studentLoanSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position < scholarship.length - 1) {
+                    selectedStudentLoan = true;
+                    user.setStudentLoan(scholarshipValues[position]);
+                    user.setUpdateStudentLoan(true);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                user.setUpdateStudentLoan(false);
+            }
+        });
+        studentLoanSpinner.setAdapter(studentLoanAdapter);
+        studentLoanSpinner.setSelection(studentLoanAdapter.getCount());
         if (user.isAppliedFor7k()) {
             previous.setVisibility(View.INVISIBLE);
             saveAndProceed.setVisibility(View.INVISIBLE);
             rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
         }
 
+
+        if (user.getStudentLoan() != null || "".equals(user.getStudentLoan())) {
+            for (int i = 0; i < scholarship.length - 1; i++) {
+                if (user.getStudentLoan().equals(scholarshipValues[i])) {
+                    studentLoanSpinner.setSelection(i);
+                    completeStudentLoan.setVisibility(View.VISIBLE);
+                    user.setIncompleteStudentLoan(false);
+                    break;
+                }
+            }
+        }
         if (user.getBankAccNum() != null && !"".equals(user.getBankAccNum())) {
             try {
                 //                String password = "bf5cbe23fd8e60697c8ddc2ef25af796";
@@ -143,10 +188,24 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                 classmatePhone.setText(user.getClassmatePhone());
             }
         }
-        if (user.getVerificationDate() != null && !"".equals(user.getVerificationDate())) {
-            verificationDateEditText.setText(user.getVerificationDate());
-            completeVerifcationDate.setVisibility(View.VISIBLE);
-            user.setIncompleteVerificationDate(false);
+        if (AppUtils.isNotEmpty(user.getVerificationDate())) {
+
+
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
+            Date newDate = null;
+            try {
+                newDate = spf.parse(user.getVerificationDate());
+                spf = new SimpleDateFormat("dd MMM yyyy");
+
+                verificationDateEditText.setText(spf.format(newDate));
+                completeVerifcationDate.setVisibility(View.VISIBLE);
+                user.setIncompleteVerificationDate(false);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                user.setVerificationDate("");
+                user.setIncompleteVerificationDate(true);
+            }
+
         }
         datePicker = new DatePicker(getActivity(), "VerificationDate");
         datePicker.build(new DialogInterface.OnClickListener() {
@@ -297,10 +356,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                     user.setUpdateClassmatePhone(true);
                     user.setClassmatePhone(classmatePhone.getText().toString());
                 }
-                if (AppUtils.isNotEmpty(verificationDateEditText.getText().toString())) {
-                    user.setUpdateVerificationDate(true);
-                    user.setVerificationDate(verificationDateEditText.getText().toString());
-                }
+
                 if (AppUtils.isNotEmpty(user.getGpa())) {
                     user.setGpaValueUpdate(true);
                 }
@@ -351,6 +407,9 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
     }
 
     private void getAllViews(View rootView) {
+        incompleteStudentLoan = (ImageView) rootView.findViewById(R.id.incomplete_student_loan);
+        completeStudentLoan = (ImageView) rootView.findViewById(R.id.complete_student_loan);
+
         saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
         previous = (Button) rootView.findViewById(R.id.previous);
         gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);

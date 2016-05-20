@@ -54,6 +54,8 @@ public class AppUtils {
     }
 
 
+
+
     public static HttpResponse connectToServerGet(String url, String x_access_token, String basicAuth) {
 
         HttpParams httpParameters = new BasicHttpParams();
@@ -160,7 +162,11 @@ public class AppUtils {
         }
         return false;
     }
+    public static String getFromSelectedSharedPrefs(Context context, String key,String sharedPrefKey) {
+            SharedPreferences editor = context.getSharedPreferences(sharedPrefKey, Context.MODE_PRIVATE);
+            return editor.getString(key, "");
 
+        }
 
     public static String getFromSharedPrefs(Context context, String key) {
         SharedPreferences editor = context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE);

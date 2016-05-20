@@ -464,13 +464,13 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 JSONArray relation = new JSONArray();
                 if (user.isUpdateFamilyMemberType1() &&
                         user.isUpdateProfessionFamilyMemberType1() &&
-                        user.isUpdateDesignationFamilyMemberType1() &&
+                        user.isUpdatePreferredLanguageFamilyMemberType1() &&
                         user.isUpdatePhoneFamilyMemberType1()) {
                     doApiCall = true;
                     JSONObject json = new JSONObject();
                     json.put("relation", user.getFamilyMemberType1());
                     json.put("occupation", user.getProfessionFamilyMemberType1());
-                    json.put("designation", user.getDesignationFamilyMemberType1());
+                    json.put("preferredLanguage", user.getPrefferedLanguageFamilyMemberType1());
                     json.put("phone", user.getPhoneFamilyMemberType1());
                     relation.put(json);
                     jsonobj.put("familyMember", relation);
@@ -478,13 +478,13 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 }
                 if (user.isUpdateFamilyMemberType2() &&
                         user.isUpdateProfessionFamilyMemberType2() &&
-                        user.isUpdateDesignationFamilyMemberType2() &&
+                        user.isUpdatePreferredLanguageFamilyMemberType2() &&
                         user.isUpdatePhoneFamilyMemberType2()) {
                     doApiCall = true;
                     JSONObject json = new JSONObject();
                     json.put("relation", user.getFamilyMemberType2());
                     json.put("occupation", user.getProfessionFamilyMemberType2());
-                    json.put("designation", user.getDesignationFamilyMemberType2());
+                    json.put("preferredLanguage", user.getPrefferedLanguageFamilyMemberType2());
                     json.put("phone", user.getPhoneFamilyMemberType2());
                     relation.put(json);
                     jsonobj.put("familyMember", relation);
@@ -597,11 +597,11 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     if (jsonobj.opt("familyMember") != null && !"".equals(jsonobj.get("familyMember"))) {
                         user.setUpdateFamilyMemberType1(false);
                         user.setUpdateProfessionFamilyMemberType1(false);
-                        user.setUpdateDesignationFamilyMemberType1(false);
+                        user.setUpdatePreferredLanguageFamilyMemberType1(false);
                         user.setUpdatePhoneFamilyMemberType1(false);
                         user.setUpdateFamilyMemberType2(false);
                         user.setUpdateProfessionFamilyMemberType2(false);
-                        user.setUpdateDesignationFamilyMemberType2(false);
+                        user.setUpdatePreferredLanguageFamilyMemberType2(false);
                         user.setUpdatePhoneFamilyMemberType2(false);
                     }
                     if (jsonobj.opt("bankAccountNumber") != null && !"".equals(jsonobj.get("bankAccountNumber")))

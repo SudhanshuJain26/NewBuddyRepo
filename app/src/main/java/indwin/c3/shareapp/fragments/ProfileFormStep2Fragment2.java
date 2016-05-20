@@ -16,10 +16,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
@@ -42,13 +47,16 @@ public class ProfileFormStep2Fragment2 extends Fragment {
     private final int top = 16, left = 16, right = 16, bottom = 16;
     ImageView incompleteStep1, incompleteStep2, incompleteStep3, incompleteFamilyDetails, completeFamilyDetails;
     boolean isFamilyMemberAdded = false;
-    private EditText designationFamilyMember1, designationFamilyMember2, phoneFamilyMember1, phoneFamilyMember2;
+    private EditText prefLangFamilyMember1, prefLangFamilyMember2, phoneFamilyMember1, phoneFamilyMember2;
     boolean isFamilyMember1Selected = false, isProfessionFamilyMember1Selected = false, isFamilyMember2Selected = false, isProfessionFamilyMember2Selected = false;
     ImageView topImage;
     View view1, view2;
     private ImageButton familyHelptip;
-    private Spinner familyMember2spinner, professionFamilyMember2spinner;
+    private Spinner familyMember2spinner, professionFamilyMember2spinner, familyMember1spinner;
     private SpinnerHintAdapter adapter, adapter2;
+    private LinearLayout parentLL1, parentLL2;
+    private TextView incorrectPhoneFamily1, incorrectPhoneFamily2;
+    private String mobile;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -60,7 +68,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         mPrefs.edit().putBoolean("visitedFormStep2Fragment2", true).apply();
         gson = new Gson();
         user = AppUtils.getUserObject(getActivity());
-
+        mobile = AppUtils.getFromSelectedSharedPrefs(getActivity(), "phone_number", "cred");
         getAllViews(rootView);
         if (!mPrefs.getBoolean("step2Editable", true)) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment1, gotoFragment3);
@@ -101,7 +109,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         adapter = new SpinnerHintAdapter(getActivity(), familyMemberOptions, R.layout.spinner_item_underline);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        Spinner familyMember1spinner = (Spinner) rootView.findViewById(R.id.family_member_1);
+        familyMember1spinner = (Spinner) rootView.findViewById(R.id.family_member_1);
         familyMember1spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -109,6 +117,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                     user.setFamilyMemberType1(familyMemberOptions[position].toLowerCase());
                     user.setUpdateFamilyMemberType1(true);
                     isFamilyMember1Selected = true;
+                    populateSpinner2FamilyMember();
                 }
             }
 
@@ -198,16 +207,16 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         }
 
 
-        if (AppUtils.isNotEmpty(user.getDesignationFamilyMemberType1())) {
-            designationFamilyMember1.setText(user.getDesignationFamilyMemberType1());
+        if (AppUtils.isNotEmpty(user.getPrefferedLanguageFamilyMemberType1())) {
+            prefLangFamilyMember1.setText(user.getPrefferedLanguageFamilyMemberType1());
         }
         if (AppUtils.isNotEmpty(user.getPhoneFamilyMemberType1())) {
             phoneFamilyMember1.setText(user.getPhoneFamilyMemberType1());
         }
         if (AppUtils.isNotEmpty(user.getFamilyMemberType1())
                 && user.getProfessionFamilyMemberType1() != null && !"".equals(user.getProfessionFamilyMemberType1())
-                && user.getDesignationFamilyMemberType1() != null &&
-                !"".equals(user.getDesignationFamilyMemberType1()) &&
+                && user.getPrefferedLanguageFamilyMemberType1() != null &&
+                !"".equals(user.getPrefferedLanguageFamilyMemberType1()) &&
                 user.getPhoneFamilyMemberType1() != null && !"".equals(user.getPhoneFamilyMemberType1())) {
             completeFamilyDetails.setVisibility(View.VISIBLE);
             user.setIncompleteFamilyDetails(false);
@@ -227,8 +236,8 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                     }
                 }
             }
-            if (AppUtils.isNotEmpty(user.getDesignationFamilyMemberType2())) {
-                designationFamilyMember2.setText(user.getDesignationFamilyMemberType2());
+            if (AppUtils.isNotEmpty(user.getPrefferedLanguageFamilyMemberType2())) {
+                prefLangFamilyMember2.setText(user.getPrefferedLanguageFamilyMemberType2());
             }
             if (AppUtils.isNotEmpty(user.getPhoneFamilyMemberType2())) {
                 phoneFamilyMember2.setText(user.getPhoneFamilyMemberType2());
@@ -239,7 +248,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             incompleteStep1.setVisibility(View.VISIBLE);
         }
 
-        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails() || user.isIncompleteVerificationDate()) {
+        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails() || user.isIncompleteVerificationDate() || user.isIncompleteStudentLoan()) {
             incompleteStep3.setVisibility(View.VISIBLE);
         }
         return rootView;
@@ -247,7 +256,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
 
     private void checkAndPopulateFamilyLayout2() {
 
-        if (AppUtils.isNotEmpty(user.getDesignationFamilyMemberType2()) || AppUtils.isNotEmpty(user.getProfessionFamilyMemberType2()) || AppUtils.isNotEmpty(user.getFamilyMemberType2()) || AppUtils.isNotEmpty(user.getPhoneFamilyMemberType2())) {
+        if (AppUtils.isNotEmpty(user.getPrefferedLanguageFamilyMemberType2()) || AppUtils.isNotEmpty(user.getProfessionFamilyMemberType2()) || AppUtils.isNotEmpty(user.getFamilyMemberType2()) || AppUtils.isNotEmpty(user.getPhoneFamilyMemberType2())) {
             showFamilyLayout2();
             if (AppUtils.isNotEmpty(user.getFamilyMemberType2())) {
                 int spinnerPosition = adapter.getPosition(user.getFamilyMemberType2());
@@ -257,7 +266,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                 int spinnerPosition = adapter2.getPosition(user.getProfessionFamilyMemberType2());
                 professionFamilyMember2spinner.setSelection(spinnerPosition);
             }
-            designationFamilyMember2.setText(user.getDesignationFamilyMemberType2());
+            prefLangFamilyMember2.setText(user.getPrefferedLanguageFamilyMemberType2());
             phoneFamilyMember2.setText(user.getPhoneFamilyMemberType2());
             isFamilyMemberAdded = true;
             addFamilyMember.setText("Remove this family member");
@@ -267,15 +276,15 @@ public class ProfileFormStep2Fragment2 extends Fragment {
     }
 
     private void showFamilyLayout2() {
-        familyMember2spinner.setVisibility(View.VISIBLE);
-        professionFamilyMember2spinner.setVisibility(View.VISIBLE);
-        designationFamilyMember2.setVisibility(View.VISIBLE);
-        phoneFamilyMember2.setVisibility(View.VISIBLE);
-        view1.setVisibility(View.VISIBLE);
-        view2.setVisibility(View.VISIBLE);
+        populateSpinner2FamilyMember();
+        parentLL2.setVisibility(View.VISIBLE);
     }
 
     private void getAllViews(View rootView) {
+        incorrectPhoneFamily1 = (TextView) rootView.findViewById(R.id.incorrect_phone_family_1);
+        incorrectPhoneFamily2 = (TextView) rootView.findViewById(R.id.incorrect_phone_family_2);
+        parentLL1 = (LinearLayout) rootView.findViewById(R.id.parent_ll_1);
+        parentLL2 = (LinearLayout) rootView.findViewById(R.id.parent_ll_2);
         saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
         previous = (Button) rootView.findViewById(R.id.previous);
         gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
@@ -285,8 +294,8 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
         incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
         addFamilyMember = (TextView) rootView.findViewById(R.id.add_family_member);
-        designationFamilyMember1 = (EditText) rootView.findViewById(R.id.designation_family_member_1);
-        designationFamilyMember2 = (EditText) rootView.findViewById(R.id.designation_family_member_2);
+        prefLangFamilyMember1 = (EditText) rootView.findViewById(R.id.pref_lang_family_member1);
+        prefLangFamilyMember2 = (EditText) rootView.findViewById(R.id.pref_lang_family_member2);
         phoneFamilyMember1 = (EditText) rootView.findViewById(R.id.phone_number_family_member_1);
         phoneFamilyMember2 = (EditText) rootView.findViewById(R.id.phone_number_family_member_2);
         incompleteFamilyDetails = (ImageView) rootView.findViewById(R.id.incomplete_family_details);
@@ -300,6 +309,51 @@ public class ProfileFormStep2Fragment2 extends Fragment {
     }
 
     private void setOnClickListener() {
+
+
+        phoneFamilyMember1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (!hasFocus) {
+                    String mobile = AppUtils.getFromSelectedSharedPrefs(getActivity(), "phone_number", "cred");
+                    if (phoneFamilyMember1.getText().toString().equals(mobile)) {
+                        incorrectPhoneFamily1.setText("This cant be your own number");
+                        incorrectPhoneFamily1.setVisibility(View.VISIBLE);
+
+                    } else if (!ValidationUtils.isValidPhoneNumber(phoneFamilyMember1.getText().toString())) {
+                        incorrectPhoneFamily1.setText("Incorrect phone number");
+                        incorrectPhoneFamily1.setVisibility(View.VISIBLE);
+
+                    } else {
+                        incorrectPhoneFamily1.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+
+        phoneFamilyMember2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (!hasFocus) {
+                    String mobile = AppUtils.getFromSelectedSharedPrefs(getActivity(), "phone_number", "cred");
+                    if (phoneFamilyMember2.getText().toString().equals(mobile)) {
+                        incorrectPhoneFamily2.setText("This cant be your own number");
+                        incorrectPhoneFamily2.setVisibility(View.VISIBLE);
+                    } else if (!ValidationUtils.isValidPhoneNumber(phoneFamilyMember2.getText().toString())) {
+                        incorrectPhoneFamily2.setText("Incorrect phone number");
+                        incorrectPhoneFamily2.setVisibility(View.VISIBLE);
+
+                    } else {
+                        incorrectPhoneFamily2.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+
         addFamilyMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -313,9 +367,8 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                     isFamilyMemberAdded = false;
                     resetFamilyDetails();
                     hideFamilyDetails();
-                    user.setUpdateDesignationFamilyMemberType2(true);
-                    user.setDesignationFamilyMemberType2("");
-
+                    user.setUpdatePreferredLanguageFamilyMemberType2(true);
+                    user.setPrefferedLanguageFamilyMemberType2("");
 
                     user.setPhoneFamilyMemberType2("");
                     user.setUpdatePhoneFamilyMemberType2(true);
@@ -338,20 +391,20 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             @Override
             public void onClick(View v) {
                 checkIncomplete();
-                if (AppUtils.isNotEmpty(designationFamilyMember1.getText().toString())) {
-                    user.setDesignationFamilyMemberType1(designationFamilyMember1.getText().toString());
-                    user.setUpdateDesignationFamilyMemberType1(true);
+                if (AppUtils.isNotEmpty(prefLangFamilyMember1.getText().toString())) {
+                    user.setPrefferedLanguageFamilyMemberType1(prefLangFamilyMember1.getText().toString());
+                    user.setUpdatePreferredLanguageFamilyMemberType1(true);
                 }
-                if (AppUtils.isNotEmpty(phoneFamilyMember1.getText().toString()) && ValidationUtils.isValidPhoneNumber(phoneFamilyMember1.getText().toString())) {
+                if (AppUtils.isNotEmpty(phoneFamilyMember1.getText().toString()) && ValidationUtils.isValidPhoneNumber(phoneFamilyMember1.getText().toString()) && !phoneFamilyMember1.getText().toString().equals(mobile)) {
                     user.setPhoneFamilyMemberType1(phoneFamilyMember1.getText().toString());
                     user.setUpdatePhoneFamilyMemberType1(true);
                 }
                 if (isFamilyMemberAdded) {
-                    if (AppUtils.isNotEmpty(designationFamilyMember2.getText().toString())) {
-                        user.setDesignationFamilyMemberType2(designationFamilyMember2.getText().toString());
-                        user.setUpdateDesignationFamilyMemberType2(true);
+                    if (AppUtils.isNotEmpty(prefLangFamilyMember2.getText().toString())) {
+                        user.setPrefferedLanguageFamilyMemberType2(prefLangFamilyMember2.getText().toString());
+                        user.setUpdatePreferredLanguageFamilyMemberType2(true);
                     }
-                    if (AppUtils.isNotEmpty(phoneFamilyMember2.getText().toString()) && ValidationUtils.isValidPhoneNumber(phoneFamilyMember2.getText().toString())) {
+                    if (AppUtils.isNotEmpty(phoneFamilyMember2.getText().toString()) && ValidationUtils.isValidPhoneNumber(phoneFamilyMember2.getText().toString()) && !phoneFamilyMember2.getText().toString().equals(mobile)) {
                         user.setPhoneFamilyMemberType2(phoneFamilyMember2.getText().toString());
                         user.setUpdatePhoneFamilyMemberType2(true);
                     }
@@ -382,15 +435,24 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         }
     }
 
+    private void populateSpinner2FamilyMember() {
+
+        user.setUpdateFamilyMemberType1(true);
+        user.setUpdateFamilyMemberType2(true);
+        familyMember2spinner.setEnabled(false);
+        int position = familyMember1spinner.getSelectedItemPosition();
+        String[] familyMember2Options = getActivity().getResources().getStringArray(R.array.family_member);
+        List<String> list = new ArrayList<String>(Arrays.asList(familyMember2Options));
+        list.remove(position);
+        familyMember2Options = list.toArray(new String[0]);
+
+        familyMember2spinner.setAdapter(new SpinnerHintAdapter(getActivity(), familyMember2Options, R.layout.spinner_item_underline));
+
+    }
+
+
     private void hideFamilyDetails() {
-        view1.setVisibility(View.GONE);
-        view2.setVisibility(View.GONE);
-
-
-        phoneFamilyMember2.setVisibility(View.GONE);
-        familyMember2spinner.setVisibility(View.GONE);
-        professionFamilyMember2spinner.setVisibility(View.GONE);
-        designationFamilyMember2.setVisibility(View.GONE);
+        parentLL2.setVisibility(View.GONE);
     }
 
 
@@ -409,7 +471,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
     private void resetFamilyDetails() {
         professionFamilyMember2spinner.setSelection(10);
         familyMember2spinner.setSelection(2);
-        user.setDesignationFamilyMemberType2("");
+        user.setPrefferedLanguageFamilyMemberType2("");
         phoneFamilyMember2.setText("");
     }
 

@@ -94,6 +94,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private Button saveAadhar;
     private Button agreementBtn;
     public static ImageView incompleteAgreement, completeAgreement;
+    private TextView uploadImageMsgTv;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -333,7 +334,15 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         addressHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text1 = "Upload either your DL, Aadhar Card or Passports’ softcopy. Or, you could upload one of your parents' Permanent Address Proof.<br>You can upload either photos or scanned copies of these documents.";
+                String text1;
+
+                if (aadharOrPan.getSelectedItemPosition() == 0) {
+                    text1 = "Upload photos or scans of your Aadhar Card registered in your name and with the Aadhar number you have provided.";
+
+                } else {
+                    text1 = "Upload either your DL, Aadhar Card or Passports’ softcopy. Or, you could upload one of your parents' Permanent Address Proof.<br>You can upload either photos or scanned copies of these documents.";
+
+                }
                 String text2 = "Please remember to upload both front and back sides of the card.";
                 Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
                 dialog.show();
@@ -343,6 +352,11 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         aadharOrPan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    uploadImageMsgTv.setText("Upload your Aadhar Proof");
+                } else {
+                    uploadImageMsgTv.setText("Upload your Permanent Address Proof");
+                }
                 try {
                     ((TextView) parent.getChildAt(0)).setText(arrayAaadharOrPan[position]);
                     editAadharNumber.setHint(arrayAaadharOrPan[position]);
@@ -403,6 +417,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     }
 
     private void getAllViews(View rootView) {
+        uploadImageMsgTv = (TextView) rootView.findViewById(R.id.address_proof_header);
         completeAgreement = (ImageView) rootView.findViewById(R.id.complete_agreement);
         incompleteAgreement = (ImageView) rootView.findViewById(R.id.incomplete_agreement);
         completeAddress = (ImageView) rootView.findViewById(R.id.complete_address_proof);

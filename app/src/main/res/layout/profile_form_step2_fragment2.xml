@@ -134,155 +134,248 @@
                         android:src="@drawable/helptip"/>
                 </RelativeLayout>
 
-                <Spinner
-                    android:id="@+id/family_member_1"
-                    android:layout_width="232dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"/>
-
-                <View
-                    android:layout_width="232dp"
-                    android:layout_height="1dp"
-                    android:alpha="0.6"
-                    android:background="#000000"/>
 
                 <LinearLayout
+                    android:id="@+id/parent_ll_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="is a "
-                        android:textStyle="bold"/>
+                    android:orientation="vertical">
 
                     <Spinner
-                        android:id="@+id/profession_family_member_1"
+                        android:id="@+id/family_member_1"
                         android:layout_width="232dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"/>
-                </LinearLayout>
 
-                <View
-                    android:layout_width="232dp"
-                    android:layout_height="1dp"
-                    android:alpha="0.6"
-                    android:background="#000000"/>
+                    <View
+                        android:layout_width="232dp"
+                        android:layout_height="1dp"
+                        android:alpha="0.6"
+                        android:background="#000000"/>
 
-                <EditText
-                    android:id="@+id/designation_family_member_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginStart="-4dp"
-                    android:layout_marginTop="8dp"
-                    android:width="240dp"
-                    android:hint="Enter Designation"
-                    android:inputType="text"
-                    android:singleLine="true"
-                    android:textSize="16sp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/phone_number_family_member_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginStart="-4dp"
-                    android:width="240dp"
-                    android:hint="Enter Phone Number"
-                    android:inputType="phone"
-                    android:singleLine="true"
-                    android:textSize="16sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="is a "
+                            android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/incorrect_phone_family_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Incorrect phone"
-                    android:textColor="@color/intercomsdk_red"
-                    android:textSize="14sp"
-                    android:visibility="gone"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-                <Spinner
-                    android:id="@+id/family_member_2"
-                    android:layout_width="232dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:visibility="gone"/>
+                            <Spinner
+                                android:id="@+id/profession_family_member_1"
+                                android:layout_width="232dp"
+                                android:layout_height="wrap_content"
+                                />
 
-                <View
-                    android:id="@+id/view_family_member_2"
-                    android:layout_width="232dp"
-                    android:layout_height="1dp"
-                    android:alpha="0.6"
-                    android:background="#000000"
-                    android:visibility="gone"/>
+                            <View
+                                android:layout_width="232dp"
+                                android:layout_height="1dp"
+                                android:alpha="0.6"
+                                android:background="#000000"/>
+                        </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="They can be reached on "
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/phone_number_family_member_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="-4dp"
+                            android:layout_marginStart="-4dp"
+                            android:width="240dp"
+                            android:digits="0123456789"
+                            android:hint="enter Phone Number"
+                            android:inputType="phone"
+                            android:singleLine="true"
+                            android:textSize="16sp"/>
+
+                    </LinearLayout>
 
                     <TextView
+                        android:id="@+id/incorrect_phone_family_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="is a "
-                        android:textStyle="bold"/>
+                        android:text="Incorrect phone"
+                        android:textColor="@color/intercomsdk_red"
+                        android:textSize="14sp"
+                        android:visibility="gone"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="and prefer to speak in "
+                            android:textStyle="bold"/>
+
+
+                        <EditText
+                            android:id="@+id/pref_lang_family_member1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="-4dp"
+                            android:layout_marginStart="-4dp"
+                            android:width="240dp"
+                            android:hint="language"
+                            android:inputType="text"
+                            android:singleLine="true"
+                            android:textSize="16sp"
+                            />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_ll_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <Spinner
-                        android:id="@+id/profession_family_member_2"
+                        android:id="@+id/family_member_2"
                         android:layout_width="232dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:visibility="gone"/>
+                        />
+
+                    <View
+                        android:id="@+id/view_family_member_2"
+                        android:layout_width="232dp"
+                        android:layout_height="1dp"
+                        android:alpha="0.6"
+                        android:background="#000000"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="is a "
+                            android:textStyle="bold"/>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <Spinner
+                                android:id="@+id/profession_family_member_2"
+                                android:layout_width="232dp"
+                                android:layout_height="wrap_content"
+
+                                />
+
+                            <View
+                                android:id="@+id/profession_view_family_member_2"
+                                android:layout_width="232dp"
+                                android:layout_height="1dp"
+                                android:alpha="0.6"
+                                android:background="#000000"
+                                />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="They can be reached on "
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/phone_number_family_member_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="-4dp"
+                            android:layout_marginStart="-4dp"
+                            android:width="240dp"
+                            android:digits="0123456789"
+                            android:hint="enter Phone Number"
+                            android:inputType="phone"
+                            android:singleLine="true"
+                            android:textSize="16sp"
+                            />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/incorrect_phone_family_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Incorrect phone"
+                        android:textColor="@color/intercomsdk_red"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="and prefer to speak in "
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/pref_lang_family_member2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="-4dp"
+                            android:layout_marginStart="-4dp"
+                            android:width="240dp"
+                            android:hint="language"
+                            android:inputType="text"
+                            android:singleLine="true"
+                            android:textSize="16sp"
+                            />
+
+                    </LinearLayout>
+
+
                 </LinearLayout>
-
-
-                <View
-                    android:id="@+id/profession_view_family_member_2"
-                    android:layout_width="232dp"
-                    android:layout_height="1dp"
-                    android:alpha="0.6"
-                    android:background="#000000"
-                    android:visibility="gone"/>
-
-                <EditText
-                    android:id="@+id/designation_family_member_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginStart="-4dp"
-                    android:layout_marginTop="8dp"
-                    android:width="240dp"
-                    android:hint="Enter Designation"
-                    android:inputType="text"
-                    android:singleLine="true"
-                    android:textSize="16sp"
-                    android:visibility="gone"/>
-
-                <EditText
-                    android:id="@+id/phone_number_family_member_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginStart="-4dp"
-                    android:width="240dp"
-                    android:hint="Enter Phone Number"
-                    android:inputType="phone"
-                    android:singleLine="true"
-                    android:textSize="16sp"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/incorrect_phone_family_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Incorrect phone"
-                    android:textColor="@color/intercomsdk_red"
-                    android:textSize="14sp"
-                    android:visibility="gone"/>
-
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -305,8 +398,8 @@
                         android:text="Add a family member"
                         android:textSize="16sp"
                         android:textStyle="bold"/>
-                </LinearLayout>
 
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -314,12 +407,23 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
-                    android:drawableLeft="@drawable/infotip"
-                    android:drawablePadding="8dip"
-                    android:drawableStart="@drawable/infotip"
-                    android:text="Speaking to your parents is necessary for approval.Submitting incorrect details will lead to instant rejection"
+                    android:drawableLeft="@drawable/black_warn"
+                    android:drawablePadding="8dp"
+
+                    android:drawableStart="@drawable/black_warn"
+                    android:text="Speaking to your parents is necessary"
                     android:textColor="@color/intercomsdk_attachment_color"
                     android:textSize="14sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp"
+                    android:text="for approval.Submitting incorrect details will lead to instant rejection"
+                    android:textColor="@color/intercomsdk_attachment_color"
+                    android:textSize="14sp"
+                    />
 
 
             </LinearLayout>

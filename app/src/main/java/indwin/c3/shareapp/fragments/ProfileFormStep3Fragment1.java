@@ -42,8 +42,7 @@ public class ProfileFormStep3Fragment1 extends Fragment {
     ImageView incompleteStep1, incompleteStep2, incompleteStep3;
     private final int top = 16, left = 16, right = 16, bottom = 16;
     Button saveAndProceed;
-    ImageView incompleteAnnualFees, completeAnnualFees, incompleteScholarshipDetails, completeScholarshipDetails,
-            incompleteStudentLoan, completeStudentLoan;
+    ImageView incompleteAnnualFees, completeAnnualFees, incompleteScholarshipDetails, completeScholarshipDetails;
     ImageView topImage;
     EditText scholarshipAmount;
     String[] scholarshipType;
@@ -178,26 +177,6 @@ public class ProfileFormStep3Fragment1 extends Fragment {
         scholarshipSpinner.setAdapter(scholarshipAdapter);
         scholarshipSpinner.setSelection(scholarshipAdapter.getCount());
 
-        Spinner studentLoanSpinner = (Spinner) rootView.findViewById(R.id.student_loan);
-        SpinnerHintAdapter studentLoanAdapter = new SpinnerHintAdapter(getActivity(), scholarship, R.layout.spinner_item_underline);
-        studentLoanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        studentLoanSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position < scholarship.length - 1) {
-                    selectedStudentLoan = true;
-                    user.setStudentLoan(scholarshipValues[position]);
-                    user.setUpdateStudentLoan(true);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                user.setUpdateStudentLoan(false);
-            }
-        });
-        studentLoanSpinner.setAdapter(studentLoanAdapter);
-        studentLoanSpinner.setSelection(studentLoanAdapter.getCount());
 
         if (user.getAnnualFees() != null && !"".equals(user.getAnnualFees())) {
             for (int i = 0; i < annualFeesOptions.length - 1; i++) {
@@ -222,25 +201,15 @@ public class ProfileFormStep3Fragment1 extends Fragment {
                 }
             }
         }
-        if (user.getStudentLoan() != null || "".equals(user.getStudentLoan())) {
-            for (int i = 0; i < scholarship.length - 1; i++) {
-                if (user.getStudentLoan().equals(scholarshipValues[i])) {
-                    studentLoanSpinner.setSelection(i);
-                    completeStudentLoan.setVisibility(View.VISIBLE);
-                    user.setIncompleteStudentLoan(false);
-                    break;
-                }
-            }
-        }
 
-        if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship() || user.isIncompleteStudentLoan()) {
+
+        if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship()) {
             incompleteStep1.setVisibility(View.VISIBLE);
             if (user.isIncompleteAnnualFees())
                 incompleteAnnualFees.setVisibility(View.VISIBLE);
             if (user.isIncompleteScholarship())
                 incompleteScholarshipDetails.setVisibility(View.VISIBLE);
-            if (user.isIncompleteStudentLoan())
-                incompleteStudentLoan.setVisibility(View.VISIBLE);
+
         }
         if (user.isIncompleteMonthlyExpenditure() || user.isIncompleteVehicleDetails()) {
             incompleteStep2.setVisibility(View.VISIBLE);
@@ -262,8 +231,6 @@ public class ProfileFormStep3Fragment1 extends Fragment {
         completeAnnualFees = (ImageView) rootView.findViewById(R.id.complete_annual_fees);
         incompleteScholarshipDetails = (ImageView) rootView.findViewById(R.id.incomplete_scholarship_details);
         completeScholarshipDetails = (ImageView) rootView.findViewById(R.id.complete_scholarship_details);
-        incompleteStudentLoan = (ImageView) rootView.findViewById(R.id.incomplete_student_loan);
-        completeStudentLoan = (ImageView) rootView.findViewById(R.id.complete_student_loan);
         topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
         feesHelptip = (ImageButton) rootView.findViewById(R.id.fees_helptip);
         scholarshipHelptip = (ImageButton) rootView.findViewById(R.id.scholarship_helptip);
@@ -337,10 +304,7 @@ public class ProfileFormStep3Fragment1 extends Fragment {
             user.setIncompleteScholarship(true);
         else
             user.setIncompleteScholarship(false);
-        if (!selectedStudentLoan)
-            user.setIncompleteStudentLoan(true);
-        else
-            user.setIncompleteStudentLoan(false);
+
     }
 
     public void replaceFragment2(boolean check) {

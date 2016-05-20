@@ -143,7 +143,7 @@ public class HomePage extends AppCompatActivity {
             finish();
         else {
             setContentView(R.layout.activity_home_page);
-
+            paste = (TextView) findViewById(R.id.pasteAg);
             ImageView img1 = (ImageView) findViewById(R.id.img1);
             img1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -386,7 +386,7 @@ public class HomePage extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     noti.setVisibility(View.GONE);
-                    paste = (TextView) findViewById(R.id.pasteAg);
+
                     clickpaste();
 
                 }
@@ -569,7 +569,7 @@ public class HomePage extends AppCompatActivity {
                             intform = new Intent(HomePage.this, ViewForm.class);
 
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             intform.putExtra("which_page", 11);
                             intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
@@ -578,7 +578,7 @@ public class HomePage extends AppCompatActivity {
                             return true;
                         case R.id.About:
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             intform = new Intent(HomePage.this, ViewForm.class);
                             //                        else
@@ -603,7 +603,7 @@ public class HomePage extends AppCompatActivity {
                             return true;
                         case R.id.app_form:
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             intform = new Intent(HomePage.this, ProfileActivity.class);
                             startActivity(intform);
@@ -612,7 +612,7 @@ public class HomePage extends AppCompatActivity {
                             navigationView.getMenu().getItem(0).setChecked(true);
                             // Intent in//
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             intform = new Intent(HomePage.this, ViewForm.class);
                             //                        else
@@ -627,7 +627,7 @@ public class HomePage extends AppCompatActivity {
 
                         case R.id.security:
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
 
                             //                        if(!fbid.equals("empty"))
@@ -642,7 +642,7 @@ public class HomePage extends AppCompatActivity {
                             intform = new Intent(HomePage.this, ViewForm.class);
                             intform.putExtra("which_page", 16);
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
                             startActivity(intform);
@@ -653,7 +653,7 @@ public class HomePage extends AppCompatActivity {
 
                             intform = new Intent(HomePage.this, ViewForm.class);
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
 
                             intform.putExtra("which_page", 17);
@@ -668,7 +668,7 @@ public class HomePage extends AppCompatActivity {
                             editornew.putInt("chshare", 1);
                             // finish();
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             //   editornew.putString("rcode", getIntent().getExtras().getString("UniC"));
                             editornew.commit();
@@ -718,7 +718,7 @@ public class HomePage extends AppCompatActivity {
                             }
                             intform = new Intent(HomePage.this, MainActivity.class);
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             finish();
                             startActivity(intform);
@@ -773,7 +773,6 @@ public class HomePage extends AppCompatActivity {
             actionBarDrawerToggle.syncState();
 
 
-            paste = (TextView) findViewById(R.id.paste);
 
 
             paste.setVisibility(View.GONE);
@@ -833,7 +832,7 @@ public class HomePage extends AppCompatActivity {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         Intent in = new Intent(HomePage.this, ViewForm.class);
                         Splash.checkNot = 1;
-                        paste = (TextView) findViewById(R.id.pasteAg);
+
                         query.requestFocus();
                         clickpaste();
                         //                        parse(query.getText().toString().trim());
@@ -948,7 +947,7 @@ public class HomePage extends AppCompatActivity {
                                 send1.putExtra("ecom", Splash.sellers.get(spin).get("0"));
                                 send1.putExtra("which_page", 10);
                                 Splash.checkNot = 1;
-                                paste = (TextView) findViewById(R.id.pasteAg);
+
                                 clickpaste();
                                 startActivity(send1);
                             }
@@ -962,7 +961,7 @@ public class HomePage extends AppCompatActivity {
                                 send1.putExtra("ecom", Splash.sellers.get(spin).get("1"));
                                 send1.putExtra("which_page", 10);
                                 Splash.checkNot = 1;
-                                paste = (TextView) findViewById(R.id.pasteAg);
+
                                 clickpaste();
                                 startActivity(send1);
 
@@ -978,7 +977,7 @@ public class HomePage extends AppCompatActivity {
                                 send1.putExtra("ecom", Splash.sellers.get(spin).get("2"));
                                 send1.putExtra("which_page", 10);
                                 Splash.checkNot = 1;
-                                paste = (TextView) findViewById(R.id.pasteAg);
+
                                 clickpaste();
                                 startActivity(send1);
                             }
@@ -992,7 +991,7 @@ public class HomePage extends AppCompatActivity {
                                 send1.putExtra("ecom", Splash.sellers.get(spin).get("3"));
                                 send1.putExtra("which_page", 10);
                                 Splash.checkNot = 1;
-                                paste = (TextView) findViewById(R.id.pasteAg);
+
                                 clickpaste();
                                 startActivity(send1);
                             }
@@ -1259,7 +1258,7 @@ public class HomePage extends AppCompatActivity {
                 in.putExtra("Form", formstatus);
                 in.putExtra("UniC", uniqueCode);
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 startActivity(in);
                 overridePendingTransition(0, 0);
@@ -1278,13 +1277,13 @@ public class HomePage extends AppCompatActivity {
                 in.putExtra("Form", formstatus);
                 in.putExtra("UniC", uniqueCode);
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 startActivity(in);
                 overridePendingTransition(0, 0);
             } else if (formstatus.equals("submitted")) {
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 Intent in = new Intent(HomePage.this, Formstatus.class);
                 in.putExtra("screen_no", screen_no);
@@ -1306,7 +1305,7 @@ public class HomePage extends AppCompatActivity {
             }
             if (formstatus.equals("flashApproved")) {
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 Intent in = new Intent(HomePage.this, Approved.class);
                 //   finish();
@@ -1322,7 +1321,7 @@ public class HomePage extends AppCompatActivity {
             }
             if (formstatus.equals("approved")) {
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 Intent in = new Intent(HomePage.this, Approved.class);
                 //   finish();
@@ -1337,7 +1336,7 @@ public class HomePage extends AppCompatActivity {
                 overridePendingTransition(0, 0);
             } else if (formstatus.equals("empty")) {
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 //                    Intent in = new Intent(MainActivity.this, Inviteform    .class);
                 Intent in = new Intent(HomePage.this, Formempty.class);
@@ -1364,7 +1363,7 @@ public class HomePage extends AppCompatActivity {
                 //     Toast.makeText(HomePage.this,"checknow",Toast.LENGTH_LONG).show();
                 Intent send1 = new Intent(HomePage.this, ViewForm.class);
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 send1.putExtra("prodid", Splash.fkid1.get(spin).get("0"));
                 send1.putExtra("ecom", Splash.sellers.get(spin).get("0"));
@@ -1379,7 +1378,7 @@ public class HomePage extends AppCompatActivity {
                 Intent send1 = new Intent(HomePage.this, ViewForm.class);
                 send1.putExtra("prodid", Splash.fkid1.get(spin).get("1"));
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 send1.putExtra("ecom", Splash.sellers.get(spin).get("1"));
                 send1.putExtra("which_page", 10);
@@ -1393,7 +1392,7 @@ public class HomePage extends AppCompatActivity {
                 query.clearFocus();
                 Intent send1 = new Intent(HomePage.this, ViewForm.class);
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 send1.putExtra("prodid", Splash.fkid1.get(spin).get("2"));
                 send1.putExtra("ecom", Splash.sellers.get(spin).get("2"));
@@ -1407,7 +1406,7 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View v) {
                 query.clearFocus();
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 Intent send1 = new Intent(HomePage.this, ViewForm.class);
                 send1.putExtra("prodid", Splash.fkid1.get(spin).get("3"));
@@ -1605,7 +1604,7 @@ public class HomePage extends AppCompatActivity {
 
     //    @Override
     //    public void onResume() {
-    //        paste = (TextView) findViewById(R.id.pasteAg);
+    //      
     //        clickpaste();
     //       // Toast.makeText(HomePage.this, "check", Toast.LENGTH_SHORT).show();
     //        super.onResume();}

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.fragments.ProfileFormStep2Fragment1;
@@ -136,15 +137,31 @@ public class DatePicker {
             @Override
             public void onClick(View v) {
                 if ("VerificationDate".equals(dateType)) {
-                    if (getSelectedYear() == getCurrentYear()) {
-                        if ((getSelectedMonth() == getCurrentMonth() && getSelectedDate() <= (currentDate + 2)) || ((getSelectedMonth() == (getCurrentMonth() + 1) && getSelectedDate() > currentDate)) || (getSelectedMonth() >= (getCurrentMonth() + 2))) {
-                            Toast.makeText(activity, "Sorry, can't do it then!", Toast.LENGTH_SHORT).show();
-                            return;
-                        } else if (getSelectedMonth() < getCurrentMonth()) {
+                    long dayMillisec = 86400 * 1000;
+
+                    try {
+                        Calendar c = Calendar.getInstance();
+                        c.set(getSelectedYear(), getSelectedMonth(), getSelectedDate(), 0, 0);
+                        Date currentDate = new Date();
+                        long currentTime = currentDate.getTime();
+                        long selectedTime = c.getTime().getTime();
+                        if ((selectedTime < (3 * dayMillisec + currentTime)) || (selectedTime > (30 * dayMillisec) + currentTime)) {
                             Toast.makeText(activity, "Sorry, can't do it then!", Toast.LENGTH_SHORT).show();
                             return;
                         }
+                    } catch (Exception e) {
+
+
                     }
+                    //if (getSelectedYear() == getCurrentYear()) {
+                    //    if ((getSelectedMonth() == getCurrentMonth() && getSelectedDate() <= (currentDate + 2)) || ((getSelectedMonth() == (getCurrentMonth() + 1) && getSelectedDate() > currentDate)) || (getSelectedMonth() >= (getCurrentMonth() + 2))) {
+                    //        Toast.makeText(activity, "Sorry, can't do it then!", Toast.LENGTH_SHORT).show();
+                    //        return;
+                    //    } else if (getSelectedMonth() < getCurrentMonth()) {
+                    //        Toast.makeText(activity, "Sorry, can't do it then!", Toast.LENGTH_SHORT).show();
+                    //        return;
+                    //    }
+                    //}
                     pickerDialog.dismiss();
                     ProfileFormStep2Fragment3.confirmVerificationDate();
                 } else {

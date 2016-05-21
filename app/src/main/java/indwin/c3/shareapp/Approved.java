@@ -48,6 +48,7 @@ public class Approved extends AppCompatActivity {
             fbid = getIntent().getExtras().getString("fbid");
             if (!fbid.equals("empty"))
                 Splash.checkfbid = 1;
+                //comment tet
         } catch (Exception e) {
         }
         try {

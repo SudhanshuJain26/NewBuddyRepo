@@ -161,6 +161,19 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         agreementBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UserModel userSP = AppUtils.getUserObject(getActivity());
+
+                if (AppUtils.isNotEmpty(userSP.getSignature())) {
+                    user.setSignature(userSP.getSignature());
+                    user.setUpdateSignature(userSP.isUpdateSignature());
+
+                }
+
+                if (AppUtils.isNotEmpty(userSP.getSelfie())) {
+                    user.setSelfie(userSP.getSelfie());
+                    user.setUpdateSelfie(userSP.isUpdateSelfie());
+
+                }
                 AppUtils.saveUserObject(getActivity(), user);
                 Intent intent = new Intent(getActivity(), AgreementActivity.class);
                 startActivity(intent);

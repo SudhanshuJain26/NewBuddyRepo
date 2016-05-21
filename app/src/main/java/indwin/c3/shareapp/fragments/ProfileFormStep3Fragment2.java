@@ -192,7 +192,7 @@ public class ProfileFormStep3Fragment2 extends Fragment {
         }
         setOnClickListener();
 
-        if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship() || user.isIncompleteStudentLoan()) {
+        if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship()) {
             incompleteStep1.setVisibility(View.VISIBLE);
         }
         if (user.isIncompleteMonthlyExpenditure() || user.isIncompleteVehicleDetails()) {

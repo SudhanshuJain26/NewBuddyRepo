@@ -219,6 +219,8 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                 user.getPhoneFamilyMemberType1() != null && !"".equals(user.getPhoneFamilyMemberType1())) {
             completeFamilyDetails.setVisibility(View.VISIBLE);
             user.setIncompleteFamilyDetails(false);
+        } else {
+            user.setIncompleteFamilyDetails(true);
         }
         if (AppUtils.isNotEmpty(user.getFamilyMemberType2())) {
             for (int i = 0; i < familyMemberOptions.length - 1; i++) {
@@ -247,7 +249,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             incompleteStep1.setVisibility(View.VISIBLE);
         }
 
-        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails() || user.isIncompleteVerificationDate() || user.isIncompleteStudentLoan()) {
+        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails() || user.isIncompleteVerificationDate() || AppUtils.isEmpty(user.getStudentLoan())) {
             incompleteStep3.setVisibility(View.VISIBLE);
         }
         return rootView;
@@ -460,7 +462,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
     }
 
     private void checkIncomplete() {
-        if (!isFamilyMember1Selected || !isProfessionFamilyMember1Selected) {
+        if (!isFamilyMember1Selected || !isProfessionFamilyMember1Selected || AppUtils.isEmpty(user.getPrefferedLanguageFamilyMemberType1()) || AppUtils.isEmpty(user.getPhoneFamilyMemberType1())) {
             user.setIncompleteFamilyDetails(true);
         } else {
             user.setIncompleteFamilyDetails(false);

@@ -107,10 +107,13 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         }
 
 
-        if (!selectedStudentLoan)
-            user.setIncompleteStudentLoan(true);
-        else
-            user.setIncompleteStudentLoan(false);
+        if (AppUtils.isEmpty(user.getStudentLoan())) {
+            incompleteStudentLoan.setVisibility(View.VISIBLE);
+            completeStudentLoan.setVisibility(View.GONE);
+        } else {
+            completeStudentLoan.setVisibility(View.VISIBLE);
+            incompleteStudentLoan.setVisibility(View.GONE);
+        }
         final String scholarship[] = getResources().getStringArray(R.array.scholarship);
         final String scholarshipValues[] = getResources().getStringArray(R.array.scholarship_values);
 
@@ -236,7 +239,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
             incompleteStep1.setVisibility(View.VISIBLE);
         }
         if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails()
-                || user.isIncompleteVerificationDate()) {
+                || user.isIncompleteVerificationDate() || AppUtils.isEmpty(user.getStudentLoan())) {
             incompleteStep3.setVisibility(View.VISIBLE);
             if (user.isIncompleteRepaymentSetup()) {
                 incompleteSetupRepayments.setVisibility(View.VISIBLE);
@@ -283,6 +286,8 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveData();
+                AppUtils.saveUserObject(getActivity(), user);
                 if (classmatePhone.getText().length() > 0)
                     if (!ValidationUtils.isValidPhoneNumber(classmatePhone.getText().toString())) {
                         incorrectPhone.setVisibility(View.VISIBLE);
@@ -304,11 +309,12 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         saveAndProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveData();
                 if (!ValidationUtils.isValidPhoneNumber(classmatePhone.getText().toString())) {
                     incorrectPhone.setVisibility(View.VISIBLE);
                 }
                 checkIncomplete();
-                if ((user.isIncompleteDOB() || user.isIncompleteAddressDetails() || user.isIncompleteFamilyDetails()
+                if ((user.isIncompleteDOB() || user.isIncompleteAddressDetails() || user.isIncompleteFamilyDetails() || AppUtils.isEmpty(user.getStudentLoan())
                         || user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails() || user.isIncompleteVerificationDate())
                         && !mPrefs.getBoolean("skipIncompleteMessage", false)) {
                     final Dialog dialog1 = new Dialog(getActivity());
@@ -404,6 +410,20 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                 replaceFragment2(true);
             }
         });
+    }
+
+    private void saveData() {
+
+        UserModel userSaved = AppUtils.getUserObject(getActivity());
+
+        if (AppUtils.isNotEmpty(userSaved.getBankIfsc())) {
+            user.setUpdateBankIfsc(userSaved.isUpdateBankIfsc());
+            user.setBankIfsc(userSaved.getBankIfsc());
+        }
+        if (AppUtils.isNotEmpty(userSaved.getBankAccNum())) {
+            user.setUpdateBankAccNum(userSaved.isUpdateBankAccNum());
+            user.setBankAccNum(userSaved.getBankAccNum());
+        }
     }
 
     private void getAllViews(View rootView) {

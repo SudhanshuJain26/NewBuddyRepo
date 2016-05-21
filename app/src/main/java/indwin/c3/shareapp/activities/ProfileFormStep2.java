@@ -13,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.fragments.ProfileFormStep2Fragment1;
+import indwin.c3.shareapp.utils.AppUtils;
 import io.intercom.android.sdk.Intercom;
 
 public class ProfileFormStep2 extends AppCompatActivity {
@@ -46,13 +48,13 @@ public class ProfileFormStep2 extends AppCompatActivity {
                     }
                 }
             });
-//            ArrayList<Fragment> fragments = new ArrayList<>();
-//            fragments.add(new ProfileFormStep2Fragment1());
-//            fragments.add(new ProfileFormStep2Fragment2());
-//            fragments.add(new ProfileFormStep2Fragment3());
-//            mPager = (ViewPager) findViewById(R.id.pager);
-//            mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), fragments);
-//            mPager.setAdapter(mPagerAdapter);
+            //            ArrayList<Fragment> fragments = new ArrayList<>();
+            //            fragments.add(new ProfileFormStep2Fragment1());
+            //            fragments.add(new ProfileFormStep2Fragment2());
+            //            fragments.add(new ProfileFormStep2Fragment3());
+            //            mPager = (ViewPager) findViewById(R.id.pager);
+            //            mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), fragments);
+            //            mPager.setAdapter(mPagerAdapter);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,13 +70,19 @@ public class ProfileFormStep2 extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        AppUtils.sendGoogleAnalytics((BuddyApplication) getApplication());
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
     }
 
-//    @Override
-//    public void selectPage(int page) {
-//        mPager.setCurrentItem(page);
-//    }
+    //    @Override
+    //    public void selectPage(int page) {
+    //        mPager.setCurrentItem(page);
+    //    }
 }

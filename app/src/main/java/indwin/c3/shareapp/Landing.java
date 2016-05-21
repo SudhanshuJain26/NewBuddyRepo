@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
@@ -283,6 +284,11 @@ public class Landing extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppUtils.sendGoogleAnalytics((BuddyApplication) getApplication());
+    }
 
     private class ValidateForm extends
                                AsyncTask<String, Void, String> {

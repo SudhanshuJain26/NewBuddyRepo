@@ -1,7 +1,6 @@
 package indwin.c3.shareapp;
 
 import android.Manifest;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,47 +35,46 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
-import io.intercom.android.sdk.Intercom;
-import io.intercom.android.sdk.identity.Registration;
+import indwin.c3.shareapp.application.BuddyApplication;
+import indwin.c3.shareapp.utils.AppUtils;
 
 public class Login_with_otp extends AppCompatActivity {
     String url = "";
-    String url_otp="";
-private ProgressBar spinner;
-   private TextView loginotp;
-    String userid="";
-    static String token="";
+    String url_otp = "";
+    private ProgressBar spinner;
+    private TextView loginotp;
+    String userid = "";
+    static String token = "";
     private RelativeLayout error;
     private TextView msg;
     EditText phone;
-    private int pT,pR,pL,pB;
-    private int checknu=0;
+    private int pT, pR, pL, pB;
+    private int checknu = 0;
     SharedPreferences userP;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login_with_otp);
-         userP = getSharedPreferences("token", Context.MODE_PRIVATE);
-        ImageView bac=(ImageView)findViewById(R.id.backo);
+        userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+        ImageView bac = (ImageView) findViewById(R.id.backo);
         bac.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in=new Intent(Login_with_otp.this,MainActivity.class);
+                Intent in = new Intent(Login_with_otp.this, MainActivity.class);
                 finish();
                 startActivity(in);
                 overridePendingTransition(0, 0);
             }
         });
-        error=(RelativeLayout)findViewById(R.id.error);
-        msg=(TextView)findViewById(R.id.msg);
-        spinner=(ProgressBar)findViewById(R.id.progressBar1);
-url=getApplicationContext().getString(R.string.server)+"authenticate";
-        url_otp=getApplicationContext().getString(R.string.server)+"api/login/sendotp";
-        phone=(EditText)findViewById(R.id.phone_number);
+        error = (RelativeLayout) findViewById(R.id.error);
+        msg = (TextView) findViewById(R.id.msg);
+        spinner = (ProgressBar) findViewById(R.id.progressBar1);
+        url = getApplicationContext().getString(R.string.server) + "authenticate";
+        url_otp = getApplicationContext().getString(R.string.server) + "api/login/sendotp";
+        phone = (EditText) findViewById(R.id.phone_number);
         pL = phone.getPaddingLeft();
         phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -90,26 +88,26 @@ url=getApplicationContext().getString(R.string.server)+"authenticate";
                 }
             }
         });
-         pT = phone.getPaddingTop();
-         pR = phone.getPaddingRight();
-         pB = phone.getPaddingBottom();
+        pT = phone.getPaddingTop();
+        pR = phone.getPaddingRight();
+        pB = phone.getPaddingBottom();
         try {
             //Intercom.client().reset();
+        } catch (Exception e) {
+            System.out.println(e.toString() + "int logotp");
         }
-        catch (Exception e)
-        {System.out.println(e.toString()+"int logotp");}
 
-        TextView login_pass=(TextView)findViewById(R.id.Login_pass);
+        TextView login_pass = (TextView) findViewById(R.id.Login_pass);
         login_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent in =new Intent(Login_with_otp.this,MainActivity.class);
+                Intent in = new Intent(Login_with_otp.this, MainActivity.class);
                 finish();
                 startActivity(in);
                 overridePendingTransition(0, 0);
             }
         });
-         loginotp=(TextView)findViewById(R.id.Login);
+        loginotp = (TextView) findViewById(R.id.Login);
         loginotp.setEnabled(false);
         loginotp.setTextColor(Color.parseColor("#66ffffff"));
 
@@ -127,75 +125,76 @@ url=getApplicationContext().getString(R.string.server)+"authenticate";
                 error.setVisibility(View.INVISIBLE);
 
                 //  textview.setText(String.valueOf(s.length());
-                if(s.length()==10)
-                    checknu=1;
+                if (s.length() == 10)
+                    checknu = 1;
                 else
-                    checknu=0;
-                if((checknu==1))
-                {
+                    checknu = 0;
+                if ((checknu == 1)) {
                     loginotp.setTextColor(Color.parseColor("#ffffff"));
-                    loginotp.setEnabled(true);}
-                else{
+                    loginotp.setEnabled(true);
+                } else {
                     loginotp.setTextColor(Color.parseColor("#66ffffff"));
-                    loginotp.setEnabled(false);}
+                    loginotp.setEnabled(false);
+                }
             }
 
             public void afterTextChanged(Editable s) {
             }
         };
         phone.addTextChangedListener(mTextEditorWatcher1);
-int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permission.RECEIVE_SMS);
-        if(res== PackageManager.PERMISSION_GRANTED){loginotp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginotp.setEnabled(false);
-                loginotp.setTextColor(Color.parseColor("#ffffff"));
-                SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
-                SharedPreferences.Editor edc=cred.edit();
-                edc.putString("phone_number",phone.getText().toString());
-                edc.commit();
-                userid=phone.getText().toString();
-                SharedPreferences userP = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = userP.edit();
-                editor.putString("name", userid);
+        int res = ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permission.RECEIVE_SMS);
+        if (res == PackageManager.PERMISSION_GRANTED) {
+            loginotp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loginotp.setEnabled(false);
+                    loginotp.setTextColor(Color.parseColor("#ffffff"));
+                    SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor edc = cred.edit();
+                    edc.putString("phone_number", phone.getText().toString());
+                    edc.commit();
+                    userid = phone.getText().toString();
+                    SharedPreferences userP = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = userP.edit();
+                    editor.putString("name", userid);
 
-                editor.commit();
+                    editor.commit();
 
-                SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor1 = sharedpreferences.edit();
-                editor1.putInt("shareflow", 0);
-                editor1.commit();
-                if(userid.length()==10){
-//                new login_otp().execute(url);
-                    Long time= Calendar.getInstance().getTimeInMillis()/1000;
-                    Long oldtime=userP.getLong("expires",0);
-//        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
-                    if(time+5<userP.getLong("expires",0))
-                        new login_otp().execute(url);
-                    else
-                new AuthTokc().execute();}
-                else
+                    SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor1 = sharedpreferences.edit();
+                    editor1.putInt("shareflow", 0);
+                    editor1.commit();
+                    if (userid.length() == 10) {
+                        //                new login_otp().execute(url);
+                        Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                        Long oldtime = userP.getLong("expires", 0);
+                        //        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
+                        if (time + 5 < userP.getLong("expires", 0))
+                            new login_otp().execute(url);
+                        else
+                            new AuthTokc().execute();
+                    } else
 
-                {
-                    loginotp.setEnabled(true);
-                    phone.setBackgroundResource(R.drawable.texted2);
-                    phone.setPadding(pL, pT, pR, pB);
-                    error.setVisibility(View.VISIBLE);
-                    msg.setText( "Please enter the correct phone number!");
-                    loginotp.setTextColor(Color.parseColor("#66ffffff"));
-//                    Toast.makeText(getApplicationContext(),
-//                            "Please enter the correct phone number!",
-//                            Toast.LENGTH_LONG).show();
+                    {
+                        loginotp.setEnabled(true);
+                        phone.setBackgroundResource(R.drawable.texted2);
+                        phone.setPadding(pL, pT, pR, pB);
+                        error.setVisibility(View.VISIBLE);
+                        msg.setText("Please enter the correct phone number!");
+                        loginotp.setTextColor(Color.parseColor("#66ffffff"));
+                        //                    Toast.makeText(getApplicationContext(),
+                        //                            "Please enter the correct phone number!",
+                        //                            Toast.LENGTH_LONG).show();
+                    }
+
                 }
-
-            }
-        });}
-        else
-        {
+            });
+        } else {
             ActivityCompat.requestPermissions(Login_with_otp.this, new String[]{Manifest.permission.RECEIVE_SMS}, 1);
         }
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -207,10 +206,10 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
                             loginotp.setEnabled(false);
                             loginotp.setTextColor(Color.parseColor("#ffffff"));
                             SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor edc=cred.edit();
-                            edc.putString("phone_number",phone.getText().toString());
+                            SharedPreferences.Editor edc = cred.edit();
+                            edc.putString("phone_number", phone.getText().toString());
                             edc.commit();
-                            userid=phone.getText().toString();
+                            userid = phone.getText().toString();
                             SharedPreferences userP = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = userP.edit();
                             editor.putString("name", userid);
@@ -221,35 +220,34 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
                             SharedPreferences.Editor editor1 = sharedpreferences.edit();
                             editor1.putInt("shareflow", 0);
                             editor1.commit();
-                            if(userid.length()==10)
-                              //  new login_otp().execute(url);
+                            if (userid.length() == 10)
+                                //  new login_otp().execute(url);
                                 new AuthTokc().execute();
-                            else
-                            {loginotp.setEnabled(true);
+                            else {
+                                loginotp.setEnabled(true);
                                 phone.setBackgroundResource(R.drawable.texted2);
                                 phone.setPadding(pL, pT, pR, pB);
                                 error.setVisibility(View.VISIBLE);
-                                msg.setText( "Please enter the correct phone number!");
+                                msg.setText("Please enter the correct phone number!");
                                 loginotp.setTextColor(Color.parseColor("#66ffffff"));
-//                                Toast.makeText(getApplicationContext(),
-//                                        "Please enter the correct phone number!",
-//                                        Toast.LENGTH_LONG).show();
+                                //                                Toast.makeText(getApplicationContext(),
+                                //                                        "Please enter the correct phone number!",
+                                //                                        Toast.LENGTH_LONG).show();
                             }
 
                         }
                     });
-                }
-                else{
+                } else {
                     loginotp.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             loginotp.setEnabled(false);
                             loginotp.setTextColor(Color.parseColor("#ffffff"));
                             SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor edc=cred.edit();
-                            edc.putString("phone_number",phone.getText().toString());
+                            SharedPreferences.Editor edc = cred.edit();
+                            edc.putString("phone_number", phone.getText().toString());
                             edc.commit();
-                            userid=phone.getText().toString();
+                            userid = phone.getText().toString();
                             SharedPreferences userP = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = userP.edit();
                             editor.putString("name", userid);
@@ -260,46 +258,48 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
                             SharedPreferences.Editor editor1 = sharedpreferences.edit();
                             editor1.putInt("shareflow", 0);
                             editor1.commit();
-                            if(userid.length()==10)
-                            {
+                            if (userid.length() == 10) {
 
-                                Long time= Calendar.getInstance().getTimeInMillis()/1000;
-                                Long oldtime=userP.getLong("expires",0);
-//        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
-                                if(time+5<userP.getLong("expires",0))
+                                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                                Long oldtime = userP.getLong("expires", 0);
+                                //        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
+                                if (time + 5 < userP.getLong("expires", 0))
                                     new login_otp().execute(url);
                                 else
                                     new AuthTokc().execute();
-                              //
-                            }
-                            else
-                            {loginotp.setEnabled(true);
+                                //
+                            } else {
+                                loginotp.setEnabled(true);
                                 loginotp.setTextColor(Color.parseColor("#66ffffff"));
-//                                Toast.makeText(getApplicationContext(),
-//                                        "Please enter the correct phone number!",
-//                                        Toast.LENGTH_LONG).show();
+                                //                                Toast.makeText(getApplicationContext(),
+                                //                                        "Please enter the correct phone number!",
+                                //                                        Toast.LENGTH_LONG).show();
                                 error.setVisibility(View.VISIBLE);
                                 phone.setBackgroundResource(R.drawable.texted2);
                                 phone.setPadding(pL, pT, pR, pB);
-                                msg.setText( "Please enter the correct phone number!");
+                                msg.setText("Please enter the correct phone number!");
                             }
 
                         }
                     });
                 }
-                break;}}
+                break;
+        }
+    }
+
     public void onBackPressed() {
-        Intent in=new Intent(Login_with_otp.this,MainActivity.class);
+        Intent in = new Intent(Login_with_otp.this, MainActivity.class);
         finish();
         startActivity(in);
         overridePendingTransition(0, 0);
 
-//        Intent in =new Intent(Login_with_otp.this,MainActivity.class);
-//        finish();
-//        startActivity(in);
+        //        Intent in =new Intent(Login_with_otp.this,MainActivity.class);
+        //        finish();
+        //        startActivity(in);
     }
+
     private class ItemsByKeyword extends
-            AsyncTask<String, Void, String> {
+                                 AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             spinner.setVisibility(View.VISIBLE);
@@ -385,8 +385,15 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
         }
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppUtils.sendGoogleAnalytics((BuddyApplication) getApplication());
+    }
+
     private class login_otp extends
-            AsyncTask<String, Void, String> {
+                            AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             spinner.setVisibility(View.VISIBLE);
@@ -403,7 +410,7 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
                 // TYPE: POST
 
                 payload.put("userid", userid);
-//                payload.put("password", pass);
+                //                payload.put("password", pass);
                 // payload.put("action", details.get("action"));
 
                 HttpParams httpParameters = new BasicHttpParams();
@@ -412,10 +419,10 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                    url_otp=getApplicationContext().getString(R.string.server)+"api/auth/sendotp?phone="+userid;
+                url_otp = getApplicationContext().getString(R.string.server) + "api/auth/sendotp?phone=" + userid;
                 HttpPost httppost = new HttpPost(url_otp);
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
-                String tok_sp=toks.getString("token_value","");
+                String tok_sp = toks.getString("token_value", "");
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
                 httppost.setHeader("x-access-token", tok_sp);
                 httppost.setHeader("Content-Type", "application/json");
@@ -444,7 +451,7 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
 
                         return "win";
 
-                           }
+                    }
 
                 }
 
@@ -467,21 +474,20 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
                 msg.setText(result);
                 phone.setBackgroundResource(R.drawable.texted2);
                 phone.setPadding(pL, pT, pR, pB);
-                    Toast.makeText(getApplicationContext(),
-                            result,
-                            Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),
+                        result,
+                        Toast.LENGTH_LONG).show();
 
 
-System.out.println("Error" + result);
+                System.out.println("Error" + result);
 
             } else {
 
 
-
-                Intent otp=new Intent(Login_with_otp.this,Otp.class);
-                otp.putExtra("send",1);
+                Intent otp = new Intent(Login_with_otp.this, Otp.class);
+                otp.putExtra("send", 1);
                 otp.putExtra("Phone_otp", userid);
-finish();
+                finish();
                 startActivity(otp);
                 overridePendingTransition(0, 0);
 
@@ -493,20 +499,21 @@ finish();
         }
     }
 
-    public  class AuthTokc extends
-            AsyncTask<String, Void, String> {
+    public class AuthTokc extends
+                          AsyncTask<String, Void, String> {
 
-        private String apiN="";
+        private String apiN = "";
+
         //        Context context;
-//        AuthTok(Context context) {
-//            this.context = context;
-//        }
+        //        AuthTok(Context context) {
+        //            this.context = context;
+        //        }
         //    Splash obj=new Splash();
         @Override
         protected String doInBackground(String... params) {
             JSONObject payload = new JSONObject();
-//            String urldisplay = params[0];
-//            apiN=urldisplay;
+            //            String urldisplay = params[0];
+            //            apiN=urldisplay;
             try {
 
                 // userid=12&productid=23&action=add
@@ -522,7 +529,7 @@ finish();
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String urll=getApplicationContext().getString(R.string.server) + "authenticate";
+                String urll = getApplicationContext().getString(R.string.server) + "authenticate";
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
@@ -543,12 +550,12 @@ finish();
                                 + response.getStatusLine().getStatusCode());
                         return "fail";
                     } else {
-                        String token1="";
+                        String token1 = "";
 
                         SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editorP = userP.edit();
                         token1 = resp.getString("token");
-                        editorP.putString("token_value",token1);
+                        editorP.putString("token_value", token1);
                         editorP.putLong("expires", resp.getLong("expiresAt"));
                         editorP.commit();
                         return "win";
@@ -563,15 +570,18 @@ finish();
 
             }
         }
-        protected void onPostExecute(String result) {
-            if(result.equals("win")){
 
-              //  Toast.makeText(Login_with_otp.this, "yey", Toast.LENGTH_SHORT).show();
-//            next.new FacebookAuth.fblogin().execute();
+        protected void onPostExecute(String result) {
+            if (result.equals("win")) {
+
+                //  Toast.makeText(Login_with_otp.this, "yey", Toast.LENGTH_SHORT).show();
+                //            next.new FacebookAuth.fblogin().execute();
                 // new fblogin().execute();
-//            next.fblogin().execute();
-//                new forgotpass().execute();
+                //            next.fblogin().execute();
+                //                new forgotpass().execute();
                 new login_otp().execute(url);
 
-            }}}
+            }
+        }
+    }
 }

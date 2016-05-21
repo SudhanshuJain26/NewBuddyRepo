@@ -22,7 +22,6 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -218,7 +217,7 @@ public class Splash extends AppCompatActivity {
         super.onResume();
 
 
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        AppUtils.sendGoogleAnalytics((BuddyApplication) getApplication());
 
         //        Toast.makeText(Splash.this, "onresume", Toast.LENGTH_LONG).show();
         if (checresume == 0) {
@@ -906,29 +905,29 @@ public class Splash extends AppCompatActivity {
                 userMap.put("profileStatus", user.getProfileStatus());
             }
             if (data1.opt("status1K") != null) {
-                    String status1K = data1.getString("status1K");
-                    user.setStatus1K(status1K);
-                    userMap.put("status1K", status1K);
-                    if (Constants.STATUS.DECLINED.toString().equals(status1K) || Constants.STATUS.APPLIED.toString().equals(status1K) || Constants.STATUS.APPROVED.toString().equals(status1K))
-                        user.setAppliedFor1k(true);
-                    else user.setAppliedFor1k(false);
-                }
-                if (data1.opt("status7K") != null) {
-                    String status7K = data1.getString("status7K");
-                    user.setStatus7K(status7K);
-                    userMap.put("status7K", status7K);
-                    if (Constants.STATUS.DECLINED.toString().equals(status7K) || Constants.STATUS.APPLIED.toString().equals(status7K) || Constants.STATUS.APPROVED.toString().equals(status7K))
-                        user.setAppliedFor7k(true);
-                    else user.setAppliedFor7k(false);
-                }
-                if (data1.opt("status60K") != null) {
-                    String status60K = data1.getString("status60K");
-                    user.setStatus60K(status60K);
-                    userMap.put("status60K", status60K);
-                    if (Constants.STATUS.DECLINED.toString().equals(status60K) || Constants.STATUS.APPLIED.toString().equals(status60K) || Constants.STATUS.APPROVED.toString().equals(status60K))
-                        user.setAppliedFor60k(true);
-                    else user.setAppliedFor60k(false);
-                }
+                String status1K = data1.getString("status1K");
+                user.setStatus1K(status1K);
+                userMap.put("status1K", status1K);
+                if (Constants.STATUS.DECLINED.toString().equals(status1K) || Constants.STATUS.APPLIED.toString().equals(status1K) || Constants.STATUS.APPROVED.toString().equals(status1K))
+                    user.setAppliedFor1k(true);
+                else user.setAppliedFor1k(false);
+            }
+            if (data1.opt("status7K") != null) {
+                String status7K = data1.getString("status7K");
+                user.setStatus7K(status7K);
+                userMap.put("status7K", status7K);
+                if (Constants.STATUS.DECLINED.toString().equals(status7K) || Constants.STATUS.APPLIED.toString().equals(status7K) || Constants.STATUS.APPROVED.toString().equals(status7K))
+                    user.setAppliedFor7k(true);
+                else user.setAppliedFor7k(false);
+            }
+            if (data1.opt("status60K") != null) {
+                String status60K = data1.getString("status60K");
+                user.setStatus60K(status60K);
+                userMap.put("status60K", status60K);
+                if (Constants.STATUS.DECLINED.toString().equals(status60K) || Constants.STATUS.APPLIED.toString().equals(status60K) || Constants.STATUS.APPROVED.toString().equals(status60K))
+                    user.setAppliedFor60k(true);
+                else user.setAppliedFor60k(false);
+            }
             Intercom.client().updateUser(userMap);
             if (data1.opt("fbConnected") != null)
                 user.setIsFbConnected(Boolean.parseBoolean(data1.getString("fbConnected")));

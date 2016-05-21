@@ -18,8 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment1;
 import indwin.c3.shareapp.models.OnBackPressedListener;
+import indwin.c3.shareapp.utils.AppUtils;
 import io.intercom.android.sdk.Intercom;
 
 public class ProfileFormStep1 extends AppCompatActivity {
@@ -89,6 +91,7 @@ public class ProfileFormStep1 extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        AppUtils.sendGoogleAnalytics((BuddyApplication) getApplication());
     }
 
     @Override

@@ -146,17 +146,15 @@ public class ProfileFormStep3Fragment3 extends Fragment {
                     .load(R.mipmap.step3fragment3girl)
                     .into(topImage);
         }
-        if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship() || user.isIncompleteStudentLoan()) {
+        if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship()) {
             incompleteStep1.setVisibility(View.VISIBLE);
         }
         if (user.isIncompleteMonthlyExpenditure() || user.isIncompleteVehicleDetails()) {
             incompleteStep2.setVisibility(View.VISIBLE);
         }
-        if (user.isIncompleteBankStmt() || user.isIncompleteStudentLoan()) {
+        if (user.isIncompleteBankStmt()) {
             incompleteStep3.setVisibility(View.VISIBLE);
         }
-        if (user.isIncompleteStudentLoan())
-            incompleteStudentLoan.setVisibility(View.VISIBLE);
         setOnClickListener();
         if (user.isAppliedFor60k()) {
             previous.setVisibility(View.INVISIBLE);
@@ -190,7 +188,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
             public void onClick(View v) {
                 checkIncomplete();
                 if ((user.isIncompleteAnnualFees() || user.isIncompleteScholarship()
-                        || user.isIncompleteStudentLoan() || user.isIncompleteMonthlyExpenditure() ||
+                        || user.isIncompleteMonthlyExpenditure() ||
                         user.isIncompleteVehicleDetails() || user.isIncompleteBankStmt())
                         && !mPrefs.getBoolean("skipIncompleteMessage", false)) {
                     final Dialog dialog1 = new Dialog(getActivity());

@@ -332,7 +332,9 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     if (jsonobj.opt("signature") != null && !"".equals(jsonobj.get("signature"))) {
                         user.setUpdateSignature(false);
                     }
+                    setImagesFromSP();
                     String jsonUser = gson.toJson(user);
+
                     mPrefs.edit().putString("UserObject", jsonUser).apply();
                     return "success";
                 } else if (json.get("msg").toString().contains("Invalid Token")) {
@@ -362,6 +364,16 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 mPrefs.edit().putBoolean("updatingDB", false).apply();
             }
         }
+    }
+
+    private void setImagesFromSP() {
+        UserModel existingUserModel = AppUtils.getUserObject(mContext);
+        user.setNewCollegeIds(existingUserModel.getNewCollegeIds());
+        user.setNewAddressProofs(existingUserModel.getNewAddressProofs());
+        user.setNewBankProofs(existingUserModel.getNewBankProofs());
+        user.setNewBankProofs(existingUserModel.getNewBankProofs());
+
+
     }
 
     private class UploadDetailsToServer extends AsyncTask<String, String, String> {
@@ -631,8 +643,9 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         user.setUpdateVehicle(false);
                     if (jsonobj.opt("vehicleType") != null && !"".equals(jsonobj.get("vehicleType")))
                         user.setUpdateVehicleType(false);
-
+                    setImagesFromSP();
                     String jsonUser = gson.toJson(user);
+
                     mPrefs.edit().putString("UserObject", jsonUser).apply();
                     return "success";
                 } else if (json.get("msg").toString().contains("Invalid Token")) {

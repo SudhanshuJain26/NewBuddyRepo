@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -18,6 +21,7 @@ import org.apache.http.params.HttpParams;
 import java.io.IOException;
 import java.util.HashMap;
 
+import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.models.UserModel;
 import io.intercom.com.google.gson.Gson;
 
@@ -26,7 +30,7 @@ import io.intercom.com.google.gson.Gson;
  */
 public class AppUtils {
 
-    static HashMap<String, HashMap<String, String>> image=new HashMap<>();
+    static HashMap<String, HashMap<String, String>> image = new HashMap<>();
     static HashMap<String, HashMap<String, String>> mrp1;
     static HashMap<String, HashMap<String, String>> fkid1;
     static HashMap<String, HashMap<String, String>> title;
@@ -52,8 +56,6 @@ public class AppUtils {
 
 
     }
-
-
 
 
     public static HttpResponse connectToServerGet(String url, String x_access_token, String basicAuth) {
@@ -162,11 +164,12 @@ public class AppUtils {
         }
         return false;
     }
-    public static String getFromSelectedSharedPrefs(Context context, String key,String sharedPrefKey) {
-            SharedPreferences editor = context.getSharedPreferences(sharedPrefKey, Context.MODE_PRIVATE);
-            return editor.getString(key, "");
 
-        }
+    public static String getFromSelectedSharedPrefs(Context context, String key, String sharedPrefKey) {
+        SharedPreferences editor = context.getSharedPreferences(sharedPrefKey, Context.MODE_PRIVATE);
+        return editor.getString(key, "");
+
+    }
 
     public static String getFromSharedPrefs(Context context, String key) {
         SharedPreferences editor = context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE);
@@ -179,6 +182,11 @@ public class AppUtils {
         editor.putString(key, value);
         editor.commit();
 
+    }
+
+    public static void sendGoogleAnalytics(BuddyApplication application) {
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
 

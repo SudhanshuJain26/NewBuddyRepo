@@ -939,7 +939,6 @@ public class Splash extends AppCompatActivity {
                 user.setAccommodation(data1.getString("accomodation"));
 
 
-
             if (data1.opt("panOrAadhar") != null) {
                 user.setPanOrAadhar(data1.getString("panOrAadhar"));
                 if ("PAN".equals(user.getPanOrAadhar()))
@@ -955,6 +954,8 @@ public class Splash extends AppCompatActivity {
                 user.setBankAccNum(data1.getString("bankAccountNumber"));
             if (data1.opt("bankIFSC") != null)
                 user.setBankIfsc(data1.getString("bankIFSC"));
+            if (data1.opt("rollNumber") != null)
+                user.setRollNumber(data1.getString("rollNumber"));
             if (data1.optJSONArray("familyMember") != null) {
                 JSONArray familyMembers = data1.getJSONArray("familyMember");
                 for (int i = 0; i < familyMembers.length(); i++) {

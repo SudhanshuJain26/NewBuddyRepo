@@ -3,6 +3,7 @@ package indwin.c3.shareapp.activities;
 import android.app.Application;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -38,6 +39,7 @@ public class ProfileFormStep1 extends AppCompatActivity {
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
             headerTitle.setText("Verify your Identity");
             setSupportActionBar(toolbar);
+            getSupportFragmentManager().addOnBackStackChangedListener(getListener());
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -56,14 +58,37 @@ public class ProfileFormStep1 extends AppCompatActivity {
                 }
             });
 
-//            mPager = (ViewPager) findViewById(R.id.pager);
-//            fragments = new ArrayList<>();
-//            fragments.add(new ProfileFormStep1Fragment1());
-//            fragments.add(new ProfileFormStep1Fragment2());
-//            fragments.add(new ProfileFormStep1Fragment3());
+            //            mPager = (ViewPager) findViewById(R.id.pager);
+            //            fragments = new ArrayList<>();
+            //            fragments.add(new ProfileFormStep1Fragment1());
+            //            fragments.add(new ProfileFormStep1Fragment2());
+            //            fragments.add(new ProfileFormStep1Fragment3());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private FragmentManager.OnBackStackChangedListener getListener() {
+        FragmentManager.OnBackStackChangedListener result = new FragmentManager.OnBackStackChangedListener() {
+            public void onBackStackChanged() {
+                FragmentManager manager = getSupportFragmentManager();
+                if (manager != null) {
+                    int backStackEntryCount = manager.getBackStackEntryCount();
+                    if (backStackEntryCount == 0) {
+                        finish();
+                    }
+                    Fragment fragment = manager.getFragments()
+                            .get(backStackEntryCount - 1);
+                    fragment.onResume();
+                }
+            }
+        };
+        return result;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -77,14 +102,14 @@ public class ProfileFormStep1 extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        if (mPager.getCurrentItem() == 0) {
-//            // If the user is currently looking at the first step, allow the system to handle the
-//            // Back button. This calls finish() on this activity and pops the back stack.
-//            super.onBackPressed();
-//        } else {
-//            // Otherwise, select the previous step.
-//            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-//        }
+        //        if (mPager.getCurrentItem() == 0) {
+        //            // If the user is currently looking at the first step, allow the system to handle the
+        //            // Back button. This calls finish() on this activity and pops the back stack.
+        //            super.onBackPressed();
+        //        } else {
+        //            // Otherwise, select the previous step.
+        //            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        //        }
         List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
         if (fragmentList != null) {
             //TODO: Perform your logic to pass back press here
@@ -98,10 +123,10 @@ public class ProfileFormStep1 extends AppCompatActivity {
             finish();
     }
 
-//    @Override
-//    public void selectPage(int page) {
-//        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), fragments);
-//        mPager.setAdapter(mPagerAdapter);
-//        mPager.setCurrentItem(page);
-//    }
+    //    @Override
+    //    public void selectPage(int page) {
+    //        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), fragments);
+    //        mPager.setAdapter(mPagerAdapter);
+    //        mPager.setCurrentItem(page);
+    //    }
 }

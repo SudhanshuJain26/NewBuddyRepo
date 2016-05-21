@@ -161,6 +161,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         agreementBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AppUtils.saveUserObject(getActivity(), user);
                 Intent intent = new Intent(getActivity(), AgreementActivity.class);
                 startActivity(intent);
             }
@@ -261,6 +262,19 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             @Override
             public void onClick(View v) {
                 user = AppUtils.getUserObject(getActivity());
+
+                UserModel userSP = AppUtils.getUserObject(getActivity());
+                if (AppUtils.isNotEmpty(userSP.getSignature())) {
+                    user.setSignature(userSP.getSignature());
+                    user.setUpdateSignature(userSP.isUpdateSignature());
+
+                }
+
+                if (AppUtils.isNotEmpty(userSP.getSelfie())) {
+                    user.setSelfie(userSP.getSelfie());
+                    user.setUpdateSelfie(userSP.isUpdateSelfie());
+
+                }
                 checkIncomplete();
                 if ((user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender() || user.isIncompleteRollNumber()
                         || user.isIncompleteAadhar() || user.isIncompleteCollegeDetails()

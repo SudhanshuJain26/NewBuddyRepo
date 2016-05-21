@@ -246,7 +246,10 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         addCollegeLayout.getLayoutParams().height = height;
         //        collegeNameMapLayout.getLayoutParams().height = height;
 
-
+        if (AppUtils.isNotEmpty(user.getRollNumber())) {
+            addRollNumberEt.setText(user.getRollNumber());
+            completeRollNumber.setVisibility(View.VISIBLE);
+        }
         if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails() || user.isIncompleteRollNumber())
 
         {
@@ -259,7 +262,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                 incompleteRollNumber.setVisibility(View.VISIBLE);
             } else {
                 completeRollNumber.setVisibility(View.VISIBLE);
-                addRollNumberEt.setText(user.getRollNumber());
+
             }
         } else
 

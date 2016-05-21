@@ -146,7 +146,6 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             }
         });
         familyMember2spinner.setAdapter(adapter);
-        familyMember2spinner.setSelection(adapter.getCount());
 
         final String professionFamilyMemberOptions[] = getResources().getStringArray(R.array.profession_family_member);
         adapter2 = new SpinnerHintAdapter(getActivity(), professionFamilyMemberOptions, R.layout.spinner_item_underline);
@@ -470,7 +469,6 @@ public class ProfileFormStep2Fragment2 extends Fragment {
 
     private void resetFamilyDetails() {
         professionFamilyMember2spinner.setSelection(10);
-        familyMember2spinner.setSelection(2);
         user.setPrefferedLanguageFamilyMemberType2("");
         phoneFamilyMember2.setText("");
     }

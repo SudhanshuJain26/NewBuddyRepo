@@ -1010,7 +1010,8 @@ public class MainActivity extends AppCompatActivity {
                     user.setCurrentAddress(data1.getJSONObject("currentAddress").getString("line1"));
                 if (data1.opt("permanentAddress") != null)
                     user.setPermanentAddress(data1.getJSONObject("permanentAddress").getString("line1"));
-
+                if (data1.opt("rollNumber") != null)
+                                   user.setRollNumber(data1.getString("rollNumber"));
                 if (data1.optJSONArray("familyMember") != null) {
                     JSONArray familyMembers = data1.getJSONArray("familyMember");
                     for (int i = 0; i < familyMembers.length(); i++) {

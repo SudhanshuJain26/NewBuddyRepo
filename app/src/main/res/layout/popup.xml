@@ -1,12 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:id="@+id/pop"
-    android:layout_height="match_parent">
+    android:background="#FFFFFF"
+    android:layout_height="wrap_content">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textPop"
-        android:text="Are you ready for it? :P"/>
+        android:textColor="#000000"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="Seller Price"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPopamt"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/textPop"
 
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="Rs.49,999"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPopseller"
+
+        android:layout_marginTop="@dimen/four"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/textPop"
+        android:text="Charged by flipkart.com"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPopservice"
+        android:textColor="#000000"
+        android:layout_below="@id/textPopseller"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="Service Charge    "/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPopseramt"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/textPopservice"
+android:layout_below="@id/textPopseller"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="Rs49,999"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPopsellers"
+        android:lines="2"
+
+        android:layout_marginTop="@dimen/four"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/textPopservice"
+        android:text="A small fee to Buddy for\nproviding you this service"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPopint"
+        android:textColor="#000000"
+        android:layout_below="@id/textPopsellers"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="Interest"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPopserintamt"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/textPopint"
+        android:layout_below="@id/textPopsellers"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="Rs49,999"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textbank"
+        android:lines="2"
+
+        android:layout_marginTop="@dimen/four"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/textPopint"
+        android:text="Charged by bank providing\nthe loan against your order."/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPopdis"
+        android:textColor="#000000"
+        android:layout_below="@id/textbank"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="Discounts"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPopserdisamt"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/textPopdis"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/textbank"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text=" Rs 49"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textcas"
+        android:lines="2"
+
+        android:layout_marginTop="@dimen/four"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/textPopdis"
+        android:text="Either using coupons or\ncashback."/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cbfaq"
+        android:layout_below="@id/textcas"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:textColor="@color/colorwhite"
+        android:text="Check out FAQ's for more details"/>
 </RelativeLayout>

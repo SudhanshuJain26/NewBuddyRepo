@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="indwin.c3.shareapp.ProductsPage">
+<RelativeLayout
+    android:id="@+id/toolBar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/abc_action_bar_default_height_material"
+    android:background="#F28E52">
+
+    <ImageView
+        android:id="@+id/backo"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/back11"
+        android:tint="#ffffff" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_toRightOf="@id/backo"
+        android:text="Verify OTP"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ffffff" />
+</RelativeLayout>
+    <TextView
+        android:id="@+id/buddyLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#664A4A4A"
+        android:layout_below="@id/toolBar"
+
+       android:layout_margin="@dimen/activity_horizontal_margin"
+        android:text="To change your password, please verify with OTP first.Your OTP will be sent to +91-7070362045"
+        android:layout_marginTop="80dp"
+        android:padding="@dimen/four">
+
+    </TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send OTP"
+        android:id="@+id/send"
+        android:padding="@dimen/left"
+        android:textColor="#ffffff"
+        android:background="@drawable/rounborder"
+
+        android:layout_centerInParent="true"/>
+    </RelativeLayout>

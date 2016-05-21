@@ -83,6 +83,10 @@ public class Splash extends AppCompatActivity {
         notify = 0;
 
         init();
+        SharedPreferences t1=getSharedPreferences("cred", Context.MODE_PRIVATE);
+        SharedPreferences.Editor e1=t1.edit();
+        e1.putInt("add",0);
+        e1.commit();
         sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
         sh_otp = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
         setContentView(R.layout.activity_splash);
@@ -616,6 +620,11 @@ public class Splash extends AppCompatActivity {
                         editor.commit();
                         name = data1.getString("name");
                         email = data1.getString("email");
+                        SharedPreferences sharedpreferences11 = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor11 = sharedpreferences11.edit();
+                        editor11.putString("n1", name);
+                        editor11.putString("e1", email);
+                        editor11.commit();
                     } catch (Exception e) {
                     }
                     try {
@@ -666,13 +675,17 @@ int cashBack=0;
                         {
                             totalBorrowed=0;
                         }
+                        String nameadd="";
+                        nameadd=data1.getString("college");
                         SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editorP = userP.edit();
 
                         editorP.putInt("creditLimit", creditLimit);
                         editorP.putInt("totalBorrowed", totalBorrowed);
                         editorP.putInt("cashBack", cashBack);
+                        editorP.putString("nameadd", nameadd);
                         editorP.putString("approvedBand",approvedBand);
+                        editorP.putString("productdpname",name);
                         editorP.commit();
                         try {
                             rejectionReason = data1.getString("rejectionReason");

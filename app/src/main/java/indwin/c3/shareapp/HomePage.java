@@ -78,6 +78,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.intercom.android.sdk.Intercom;
 
@@ -87,11 +88,11 @@ public class HomePage extends AppCompatActivity {
     private Intent intform;
     private NavigationView navigationView;
     private ImageView card1, card2, card3, card4;
-    private String formstatus, name, fbid, rejectionReason, email, uniqueCode, verificationdate, creditLimit, searchTitle, searchBrand, searchCategory, searchSubcategory;
+    private String formstatus, name, fbid, rejectionReason, email, uniqueCode, verificationdate, creditLimit, searchTitle, searchBrand, searchCategory, searchSubcategory, description, specification, review, infor;
     SharedPreferences cred;
     int screen_no;
     private int searchPrice = 0;
-    private String urlImg = "",page="";
+    private String urlImg = "", page = "";
 
     private RelativeLayout drops, newtren;
     private DrawerLayout drawerLayout;
@@ -110,7 +111,7 @@ public class HomePage extends AppCompatActivity {
     private android.content.ClipboardManager myClipboard;
     private String spin = "";
     private String productId = "";
-    private int checkValidUrl = 0,monthsallowed=0;
+    private int checkValidUrl = 0, monthsallowed = 0;
     private Double emi = 0.0;
     private int checkValidFromApis = 0;
     private String sellerNme = "";
@@ -144,8 +145,8 @@ public class HomePage extends AppCompatActivity {
             img1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(HomePage
-                            .this, "clicked", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(HomePage
+//                            .this, "clicked", Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -470,11 +471,11 @@ public class HomePage extends AppCompatActivity {
                     switch (menuItem.getItemId()) {
 
                         case R.id.MyAccount:
-                            intform = new Intent(HomePage.this, ProductsPage.class);
+                         //   intform = new Intent(HomePage.this, ProductsPage.class);
 //                            Splash.checkNot=1;
 //                            paste = (TextView) findViewById(R.id.pasteAg);
 //                            clickpaste();
-                            startActivity(intform);
+//                           .. startActivity(intform);
                             return true;
                         case R.id.work:
 
@@ -754,35 +755,46 @@ public class HomePage extends AppCompatActivity {
 
                         if ((checkValidUrl == 0) && (checkValidFromApis == 0)) {
                             Long time = Calendar.getInstance().getTimeInMillis() / 1000;
-                            if (time + 5 < userP.getLong("expires", 0))
-//                                new checkAuth().execute(url);//
-                            {
-                                new linkSearch().execute();
-                            } else
-                                //   new checkAuth().execute(url);
-                                new AuthTokc().execute("cc");
-
-                        }
-                        else if (checkValidUrl == 1) {
-                            //monkey page
-                            Intent in=new Intent(HomePage.this,ProductsPage.class);
+                            Intent in = new Intent(HomePage.this, ProductsPage.class);
+                            in.putExtra("seller", sellerNme);
+                            in.putExtra("product", productId);
+                            in.putExtra("query", query.getText().toString());
                             query.setText("");
-
-                            in.putExtra("page","monkey");
+                            in.putExtra("page", "api");
+                            checkValidFromApis=0;
+                            checkValidUrl=0;
                             startActivity(in);
-                            finish();
-                            page="monkey";
-                        }
-                        else
-                        if ((checkValidFromApis == 1)) {
+//                            if (time + 5 < userP.getLong("expires", 0))
+////                                new checkAuth().execute(url);//
+//                            {
+//                                new linkSearch().execute();
+//                            } else
+//                                //   new checkAuth().execute(url);
+//                                new AuthTokc().execute("cc");
+
+                        } else if (checkValidUrl == 1) {
+                            //monkey page
+                            Intent in = new Intent(HomePage.this, ProductsPage.class);
+                            query.setText("");
+                            in.putExtra("query", query.getText().toString());
+                            in.putExtra("page", "monkey");
+                            startActivity(in);
+                            checkValidFromApis=0;
+                            checkValidUrl=0;
+//                            finish();
+                            page = "monkey";
+                        } else if ((checkValidFromApis == 1)) {
                             //not monley page
                             query.setText("");
-                            Intent in=new Intent(HomePage.this,ProductsPage.class);
-                            in.putExtra("seller",sellerNme);
-                            in.putExtra("page","pay");
+                            Intent in = new Intent(HomePage.this, ProductsPage.class);
+                            in.putExtra("query",query.getText().toString());
+                            in.putExtra("seller", sellerNme);
+                            in.putExtra("page", "pay");
                             startActivity(in);
-                            finish();
-                            page="pay";
+                            checkValidFromApis=0;
+                            checkValidUrl=0;
+//                            finish();
+                            page = "pay";
                         }
 //                        in.putExtra("url", query.getText().toString());
 //                        in.putExtra("which_page", 9);
@@ -870,7 +882,7 @@ public class HomePage extends AppCompatActivity {
                         try {
                             populate();
                         } catch (Exception e) {
-                            new trending().execute("dd");
+                            //    new trending().execute("dd");
                         }
                         cardclick();
                         //final Intent send1=new Intent(HomePage.this,ViewForm.class);
@@ -1257,26 +1269,33 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View v) {
                 query.clearFocus();
                 //     Toast.makeText(HomePage.this,"checknow",Toast.LENGTH_LONG).show();
-              ///  Intent send1 = new Intent(HomePage.this, ViewForm.class);
+                ///  Intent send1 = new Intent(HomePage.this, ViewForm.class);
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
-                productId=Splash.fkid1.get(spin).get("0");
-                sellerNme=Splash.sellers.get(spin).get("0");
+                productId = Splash.fkid1.get(spin).get("0");
+                sellerNme = Splash.sellers.get(spin).get("0");
+//                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                Intent in = new Intent(HomePage.this, ProductsPage.class);
+                in.putExtra("seller", sellerNme);
+                in.putExtra("product", productId);
+//                in.putExtra("query",query.getText().toString());
+                in.putExtra("page", "api");
+                startActivity(in);
                 if (time + 5 < userP.getLong("expires", 0))
 //                                new checkAuth().execute(url);//
                 {
-                    new linkSearch().execute();
-                } else
+                 //   new linkSearch().execute();
+                } else{}
                     //   new checkAuth().execute(url);
-                    new AuthTokc().execute("cc");
+//                    new AuthTokc().execute("cc");
 
                 Splash.checkNot = 1;
                 paste = (TextView) findViewById(R.id.pasteAg);
-                clickpaste();
+//                clickpaste();
 //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("0"));
 //                send1.putExtra("ecom", Splash.sellers.get(spin).get("0"));
 //                send1.putExtra("which_page", 10);
-               //
-               // sestartActivity(send1);
+                //
+                // sestartActivity(send1);
             }
         });
         card2.setOnClickListener(new View.OnClickListener() {
@@ -1289,16 +1308,22 @@ public class HomePage extends AppCompatActivity {
                 paste = (TextView) findViewById(R.id.pasteAg);
                 clickpaste();
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
-                productId=Splash.fkid1.get(spin).get("1");
-                sellerNme=Splash.sellers.get(spin).get("1");
+                productId = Splash.fkid1.get(spin).get("1");
+                sellerNme = Splash.sellers.get(spin).get("1");
+//                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                Intent in = new Intent(HomePage.this, ProductsPage.class);
+                in.putExtra("seller", sellerNme);
+                in.putExtra("product", productId);
+                in.putExtra("page", "api");
+                startActivity(in);
                 if (time + 5 < userP.getLong("expires", 0))
 //                                new checkAuth().execute(url);//
                 {
-                    new linkSearch().execute();
+                   // new linkSearch().execute();
                 } else
                     //   new checkAuth().execute(url);
-                    new AuthTokc().execute("cc");
-
+                   // new AuthTokc().execute("cc");
+                {}
 //                send1.putExtra("ecom", Splash.sellers.get(spin).get("1"));
 //                send1.putExtra("which_page", 10);
 //                startActivity(send1);
@@ -1312,18 +1337,24 @@ public class HomePage extends AppCompatActivity {
 //                Intent send1 = new Intent(HomePage.this, ViewForm.class);
                 Splash.checkNot = 1;
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
-                productId=Splash.fkid1.get(spin).get("2");
-                sellerNme=Splash.sellers.get(spin).get("2");
-                if (time + 5 < userP.getLong("expires", 0))
-//                                new checkAuth().execute(url);//
-                {
-                    new linkSearch().execute();
-                } else
-                    //   new checkAuth().execute(url);
-                    new AuthTokc().execute("cc");
+                productId = Splash.fkid1.get(spin).get("2");
+                sellerNme = Splash.sellers.get(spin).get("2");
+//                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                Intent in = new Intent(HomePage.this, ProductsPage.class);
+                in.putExtra("seller", sellerNme);
+                in.putExtra("product", productId);
+                in.putExtra("page", "api");
+                startActivity(in);
+//                if (time + 5 < userP.getLong("expires", 0))
+////                                new checkAuth().execute(url);//
+//                {
+//                    new linkSearch().execute();
+//                } else
+//                    //   new checkAuth().execute(url);
+//                    new AuthTokc().execute("cc");
 
                 paste = (TextView) findViewById(R.id.pasteAg);
-                clickpaste();
+           //     clickpaste();
 //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("2"));
 //                send1.putExtra("ecom", Splash.sellers.get(spin).get("2"));
 //                send1.putExtra("which_page", 10);
@@ -1341,13 +1372,19 @@ public class HomePage extends AppCompatActivity {
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 productId = Splash.fkid1.get(spin).get("3");
                 sellerNme = Splash.sellers.get(spin).get("3");
-                if (time + 5 < userP.getLong("expires", 0))
-//                                new checkAuth().execute(url);//
-                {
-                    new linkSearch().execute();
-                } else
-                    //   new checkAuth().execute(url);
-                    new AuthTokc().execute("cc");
+//                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                Intent in = new Intent(HomePage.this, ProductsPage.class);
+                in.putExtra("seller", sellerNme);
+                in.putExtra("product", productId);
+                in.putExtra("page", "api");
+                startActivity(in);
+//                if (time + 5 < userP.getLong("expires", 0))
+////                                new checkAuth().execute(url);//
+//                {
+//                    new linkSearch().execute();
+//                } else
+//                    //   new checkAuth().execute(url);
+//                    new AuthTokc().execute("cc");
 
 //                Intent send1 = new Intent(HomePage.this, ViewForm.class);
 //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("3"));
@@ -1570,7 +1607,7 @@ public class HomePage extends AppCompatActivity {
             } else {
                 checkValidUrl = 1;
             }
-            Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
+            // Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
         }
 //snapdeal
 
@@ -1578,19 +1615,18 @@ public class HomePage extends AppCompatActivity {
             sellerNme = "snapdeal";
             pos = parseString.lastIndexOf("/");
             if (pos != -1) {
-                for (int j = pos + 1;j<parseString.length(); j++) {
-               //     if(((parseString.charAt(j))>='0')&&(parseString.charAt(j)<='9'))
-                        productId += parseString.charAt(j);
+                for (int j = pos + 1; j < parseString.length(); j++) {
+                       if(((parseString.charAt(j))>='0')&&(parseString.charAt(j)<='9'))
 
-
-
+                    productId += parseString.charAt(j);
+                    else break;
 
 
                 }
             } else {
                 checkValidUrl = 1;
             }
-            Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
         } else if (parseString.contains("myntra")) {
             sellerNme = "myntra";
             checkValidFromApis = 1;
@@ -1600,8 +1636,7 @@ public class HomePage extends AppCompatActivity {
         } else if (parseString.contains("jabong")) {
             sellerNme = "jabong";
             checkValidFromApis = 1;
-        }
-        else if (parseString.contains("paytm")) {
+        } else if (parseString.contains("paytm")) {
             sellerNme = "paytm";
             checkValidFromApis = 1;
         }
@@ -1610,8 +1645,9 @@ public class HomePage extends AppCompatActivity {
             sellerNme = "amazon";
             int w = 0;
             pos = parseString.indexOf("/dp/");
-            if(pos!=-1)
-            {pos=parseString.indexOf("dp");}
+            if (pos != -1) {
+                pos = parseString.indexOf("dp");
+            }
             if (pos == -1) {
                 pos = parseString.indexOf("/product/");
                 if (pos != -1)
@@ -1649,19 +1685,8 @@ public class HomePage extends AppCompatActivity {
             checkValidFromApis = 1;
         else
             checkValidUrl = 1;
-        if ((checkValidFromApis == 0) && (checkValidUrl == 0)) {
-            page="api";
-            //make api call
-        }
-        if ((checkValidFromApis == 1)) {
-            //not monley page
-            page="pay";
-        }
-        if (checkValidUrl == 1) {
-            //monkey page
-            page="monkey";
-        }
-        Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
+
+//        Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -1694,7 +1719,7 @@ public class HomePage extends AppCompatActivity {
                     ClipData.Item item = abc.getItemAt(0);
                     String text = item.getText().toString();
 
-                    query.setText( "   "+text);
+                    query.setText("   " + text);
                     paste.setVisibility(View.GONE);
 
                 } catch (Exception e) {
@@ -1835,6 +1860,23 @@ public class HomePage extends AppCompatActivity {
                         searchPrice = data1.getInt("sellingPrice");
                         JSONObject img = new JSONObject(data1.getString("imgUrls"));
                         urlImg = img.getString("400x400");
+//                        infor=data1.getString("")
+                        try {
+                            specification = data1.getString("specificaiton");
+                        } catch (Exception e) {
+                            specification = "";
+                        }
+                        try {
+                            description = data1.getString("description");
+                        } catch (Exception e) {
+                            description = "";
+                        }
+                        try {
+                            review = data1.getString("fkProductUrl");
+                        } catch (Exception e) {
+                            review = "";
+                        }
+                        infor = "The minimum downpayment is 20% of the product price and also depends on the payment band (Oxygen/Silicon/Palladium/Krypton) you lie in, which you will get to know after your college ID verification.";
 
                         return "win";
 
@@ -1851,7 +1893,7 @@ public class HomePage extends AppCompatActivity {
             if (!result.equals("win")) {
                 System.out.println("Error while computing data");
             } else {
-              monthsallowed = months(searchSubcategory, searchCategory, searchBrand, searchPrice);
+                monthsallowed = months(searchSubcategory, searchCategory, searchBrand, searchPrice);
                 int monthscheck = 0;
                 //digo
                 String course = userP.getString("course", "");
@@ -1906,7 +1948,7 @@ public class HomePage extends AppCompatActivity {
                         }
 
 
-                        Toast.makeText(HomePage.this, curr, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(HomePage.this, curr, Toast.LENGTH_SHORT).show();
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -1925,24 +1967,40 @@ public class HomePage extends AppCompatActivity {
                     else
                         d = 65 - currDay;
 
-                    emi = Math.floor((searchPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));}
-                    String q=query.getText().toString();
-                    Intent in = new Intent(HomePage.this, ProductsPage.class);
-                    in.putExtra("title", searchTitle);
-                    in.putExtra("price", searchPrice);
-                    in.putExtra("brand", searchBrand);
-                    in.putExtra("name",name);
-                    in.putExtra("image", urlImg);
-                    in.putExtra("emi", emi);
-                    in.putExtra("monthsallowed", monthsallowed);
-                    in.putExtra("seller", sellerNme);
-                    in.putExtra("query", q);
-                    in.putExtra("page",page);
+                    emi = Math.floor((searchPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
+                }
+                String q = query.getText().toString();
+                Intent in = new Intent(HomePage.this, ProductsPage.class);
+                in.putExtra("title", searchTitle);
+                try {
+                    Map userMap = new HashMap<>();
+                    userMap.put("PRODUCT_TITLE", searchTitle);
+//                    userMap.put("email", mEmail);
+//                    userMap.put("user_id", mPhone);
+//                    userMap.put("phone", mPhone);
+//                    System.out.println("Intercom data 4" + mPhone);
+                    Intercom.client().updateUser(userMap);
+                } catch (Exception e) {
+                    System.out.println("Intercom two" + e.toString());
+                }
+                in.putExtra("price", searchPrice);
+                in.putExtra("brand", searchBrand);
+                in.putExtra("name", name);
+                in.putExtra("image", urlImg);
+                in.putExtra("emi", emi);
+                in.putExtra("desc", "");
 
-                    startActivity(in);
-                    query.setText("");
 
-                    Toast.makeText(HomePage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
+
+                in.putExtra("monthsallowed", monthsallowed);
+                in.putExtra("seller", sellerNme);
+                in.putExtra("query", q);
+                in.putExtra("page", page);
+
+                startActivity(in);
+                query.setText("");
+
+//                    Toast.makeText(HomePage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
 
 
             }

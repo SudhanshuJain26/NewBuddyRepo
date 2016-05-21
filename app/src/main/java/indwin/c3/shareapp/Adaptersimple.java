@@ -1,6 +1,8 @@
 package indwin.c3.shareapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
@@ -14,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -55,6 +58,8 @@ public class Adaptersimple extends BaseAdapter {
     ArrayList<Deladd> myList = new ArrayList<Deladd>();
     ArrayList<Deladd> myListnew = new ArrayList<Deladd>();
     LayoutInflater inflater;
+    View check;
+    private ImageView edit;
 
     public Adaptersimple(Context context, ArrayList<Deladd> myList, int Check) {
 //        super(context,values);
@@ -83,11 +88,11 @@ public class Adaptersimple extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
 
         int t = position;
         rowView = inflater.inflate(R.layout.listelementsaddress, parent, false);
-        View rowView2 = LayoutInflater.from(context).inflate(R.layout.activity_editaddress, parent, false);
+        final View rowView2 = LayoutInflater.from(context).inflate(R.layout.activity_editaddress, parent, false);
         textAdd1 = (TextView) rowView.findViewById(R.id.addRess1);
         textAdd2 = (TextView) rowView.findViewById(R.id.addRess2);
         textAdd3 = (TextView) rowView.findViewById(R.id.addRess3);
@@ -96,14 +101,88 @@ public class Adaptersimple extends BaseAdapter {
         final TextView textView3 = (TextView) rowView.findViewById(R.id.addRess3);
         final TextView textView2 = (TextView) rowView.findViewById(R.id.addRess2);
         final ImageView imicon = (ImageView) rowView.findViewById(R.id.img);
-        final ImageView edit = (ImageView) rowView.findViewById(R.id.edit);
+         edit = (ImageView) rowView.findViewById(R.id.edit);
         final RadioButton rd = (RadioButton) rowView.findViewById(R.id.radioAdd);
+        SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
+        if(position==0){
+            SharedPreferences.Editor e1=cred.edit();
+            String cc=myList.get(position).getLine1().toString();
+            e1.putString("address",cc);
+            e1.commit();
+            rd.setChecked(true);
+            checkR = (RadioButton) rowView.findViewById(R.id.radioAdd);
+
+        }
+        check=rowView;
+        rd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if(getli.contains("address"))
+//                edit.setVisibility(View.GONE);
+
+                {
+                    if (checkR == null) {
+                        View r=rowView.findViewById(R.id.edit);
+                        im = (ImageView) check.findViewById(R.id.edit);
+//r.setVisibility(View.GONE);
+
+                        checkR = (RadioButton) v.findViewById(R.id.radioAdd);
+                       // im.setVisibility(View.VISIBLE);
+                        checkR.setChecked(true);
+                    }
+
+                    if (checkR == v.findViewById(R.id.radioAdd))
+                        return;
+
+// Otherwise, uncheck the currently checked RadioButton, check the newly checked
+// RadioButton, and store it for future reference.
+                    checkR.setChecked(false);
+//                    im.setVisibility(View.INVISIBLE);
+//                    ((ImageView) rowView.findViewById(R.id.edit)).setVisibility(View.INVISIBLE);
+//                    ((ImageView) v.findViewById(R.id.edit)).setVisibility(View.VISIBLE);
+//                    ((ImageView) check.findViewById(R.id.edit)).setVisibility(View.VISIBLE);
+                    ((RadioButton) v.findViewById(R.id.radioAdd)).setChecked(true);
+                    View p=parent.getRootView();
+//                    String cc=myList.get(position).getLine1().toString()+myList.get(position).getLine2().toString()+myList.get(position).getcity().toString()+myList.get(position).getstate().toString();
+               //     Toast.makeText(context, cc, Toast.LENGTH_SHORT).show();
+                    SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor e1=cred.edit();
+                    String cc="";
+                    if(position!=0)
+                    cc=myList.get(position).getLine1().toString()+myList.get(position).getLine2().toString()+myList.get(position).getcity().toString()+myList.get(position).getstate().toString();
+                    else
+                    cc=myList.get(position).getLine1().toString();
+                    e1.putString("address",cc);
+                    e1.commit();
+
+
+
+                    checkR = (RadioButton) v.findViewById(R.id.radioAdd);
+                    checkR = (RadioButton) v.findViewById(R.id.radioAdd);
+                    im = ((ImageView) check.findViewById(R.id.edit));
+
+                }
+            }
+        });
 
         View par=parent.getRootView();
         delete = (TextView) par.findViewById(R.id.delete);
+//        String cc=((TextView) par.findViewById(R.id.addRess2)).getText().toString();
+  //      Toast.makeText(context, cc, Toast.LENGTH_SHORT).show();
         rradd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences tt=context.getSharedPreferences("cred", Context.MODE_PRIVATE);
+                int w=tt.getInt("add",0);
+                if(w==0)
+                {
+                    Intent inSend=new Intent(context,SendOtpaddress.class);
+                    ((Activity)context).finish();
+                    context.startActivity(inSend);
+
+                }
+                else{
+
 Deladd d=new Deladd();
                 try{
 
@@ -127,7 +206,9 @@ Deladd d=new Deladd();
                 edt4=(EditText)vi.findViewById(R.id.edtAdd44);
 
                 if(getli.contains("address"))
-                    delete.setVisibility(View.GONE);
+                {
+
+                    delete.setVisibility(View.GONE);}
                 else
                     delete.setVisibility(View.VISIBLE);
                     textAdd1.setVisibility(View.GONE);
@@ -136,28 +217,8 @@ Deladd d=new Deladd();
 //                    Toast.makeText(context, "True that yo" + position, Toast.LENGTH_SHORT).show();
 //                    ((ImageView)rowView.findViewById(R.id.edit)).setVisibility(View.INVISIBLE);
 
-                if (checkR == null) {
-                    im = (ImageView) rowView.findViewById(R.id.edit);
-                    checkR = (RadioButton) v.findViewById(R.id.radioAdd);
-                    im.setVisibility(View.VISIBLE);
-                    checkR.setChecked(true);
-                }
-
-                if (checkR == v.findViewById(R.id.radioAdd))
-                    return;
-
-// Otherwise, uncheck the currently checked RadioButton, check the newly checked
-// RadioButton, and store it for future reference.
-                checkR.setChecked(false);
-                im.setVisibility(View.INVISIBLE);
-                ((ImageView) v.findViewById(R.id.edit)).setVisibility(View.VISIBLE);
-                ((RadioButton) v.findViewById(R.id.radioAdd)).setChecked(true);
-                checkR = (RadioButton) v.findViewById(R.id.radioAdd);
-                im = ((ImageView) v.findViewById(R.id.edit));
                 //edit.setVisibility(View.VISIBLE);
-
-
-            }
+                 }}
         });
         if (position == myList.size() - 1) {
             ((ImageView) rowView.findViewById(R.id.edit)).setVisibility(View.INVISIBLE);
@@ -167,14 +228,33 @@ Deladd d=new Deladd();
             rd.setVisibility(View.INVISIBLE);
             imicon.setVisibility(View.VISIBLE);
         }
+        if (position == 0) {
+//            ((ImageView) rowView.findViewById(R.id.edit)).setVisibility(View.INVISIBLE);
+//            textView2.setVisibility(View.GONE);
+            textView2.setText("");
+//            textView3.setText("");
+            textView3.setVisibility(View.GONE);
+
+//            rd.setVisibility(View.INVISIBLE);
+//            imicon.setVisibility(View.VISIBLE);
+        }
 
         // / ImageView imageView = (ImageView) rowView.findViewById(R.id.iconr.setV);
         View v = parent.getRootView();
         prefs = context.getSharedPreferences("Cred", Context.MODE_PRIVATE);
-        String text = myList.get(position).getLine1().toString();
-        textAdd1.setText(text);
-        textAdd2.setText(text);
-        textAdd3.setText(text);
+        String text1 = myList.get(position).getLine1().toString();
+        textAdd1.setText(text1);
+        try{
+        String text2 = myList.get(position).getLine2().toString();
+        String text3 = myList.get(position).getcity().toString();
+        String text4 = myList.get(position).getstate().toString();
+
+        textAdd2.setText(text2);
+        textAdd3.setText(text3+""+text4);}
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
         vi = parent.getRootView();
 //if(position==myList.size()-1){
 
@@ -190,7 +270,7 @@ Deladd d=new Deladd();
             }
         });
 //        edt1.addTextChangedListener(new TextWatcher() {
-//            @Override
+//            @Overrideadd a
 //            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 //
 //            }
@@ -217,6 +297,9 @@ Deladd d=new Deladd();
                     sedt4 = edt4.getText().toString();
 //                Toast.makeText(context, ((EditText) vi.findViewById(R.id.edtAdd1)).getText().toString(), Toast.LENGTH_SHORT).show();
                     add.setLine1(((EditText) vi.findViewById(R.id.edtAdd11)).getText().toString());
+                    add.setLine2(sedt2);
+                    add.setcity(sedt3);
+                    add.setstate(sedt4);
                     new addAddress().execute();
 
 
@@ -379,7 +462,7 @@ if((!del1.equals("delete"))&&!(getli.contains("address")))
                 myList.add(c);
                 ListView l = (ListView) vi.findViewById(R.id.list1);
 //                Toast.makeText(context, myList.size()+1+"yo", Toast.LENGTH_SHORT).show();
-                RelativeLayout.LayoutParams mParam = new RelativeLayout.LayoutParams(2000, 202 * (myList.size()+1));
+                LinearLayout.LayoutParams mParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 Adaptersimple adapter = new Adaptersimple(context, null, Check);
 
                 adapter.notifyDataSetChanged();

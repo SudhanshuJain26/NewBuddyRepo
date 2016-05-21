@@ -1,8 +1,10 @@
 package indwin.c3.shareapp;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -11,13 +13,16 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -35,7 +41,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.LogRecord;
 
 import android.os.Handler;
@@ -59,21 +67,29 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.intercom.android.sdk.Intercom;
+
+import static indwin.c3.shareapp.R.drawable.roundedgrey;
+import static indwin.c3.shareapp.R.drawable.roundedproducts;
 
 public class ProductsPage extends AppCompatActivity {
-    private TextView inc, priceChange, status, creditBalance, creditLimit, cashBack, availbal, availbalmsg;
+    private TextView inc, priceChange, status, creditBalance, creditLimit, cashBack, availbal, availbalmsg, knowmore;
     private EditText hve, queryN;
-    private int checkImg = 1, searchPrice,currDay;
+    private int checkImg = 1, searchPrice, currDay;
     String sellerNme1 = "", productId1 = "";
-    private String formstatus, name, fbid, rejectionReason, urlImg, email, uniqueCode, verificationdate, searchTitle, searchBrand, searchCategory, searchSubcategory;
+    private String s="";
+    private String whichCoupon="";
+    private int checkCorrectdis = 1, dopay2=0;
+    private String formstatus, name, fbid, rejectionReason, urlImg, email, uniqueCode, verificationdate, searchTitle, searchBrand, searchCategory, searchSubcategory, description, specification, review, infor;
     private String crcode = "", creduserid = "", truth = "", page = "";
     private Button butcheck;
+    private KeyListener listen;
     private RadioButton couCode, appcBack;
     private CircleImageView profile_image;
     private android.os.Handler rep;
     private boolean mAutoIncrement = false;
     private boolean mAutoDecrement = false;
-    public int mValue = 0, mValue2 = 0, dee, cb = 0;
+    public int mValue = 0, mValue2 = 0, dee, cb = 0,mDis=0,checkD=0;
     private RelativeLayout overview, det, infoLayout, desLayout, specLayout, retLayout, spiii, plusR;
     private View vow, vde;
     private int checkValidUrl = 0;
@@ -82,23 +98,25 @@ public class ProductsPage extends AppCompatActivity {
     private int monthsnow = 0;
     private int t = 100, count = 0;
     private Spinner spinner;
+    private int checkLenghtedittext=0;
     private String value = "", maxValue = "";
     private int[] myMonths = {1, 2, 3, 6, 9, 12, 15, 18};
     private String selectedText = "", downPayment = "";
 
     private String title, brand, sellerNme, searchQuery, urlforImage;
-    private int sellingPrice, monthsallowed, spInc, spDec, dayToday;
+    private int sellingPrice, monthsallowed, spInc, spDec, dayToday, cuurr;
     private TextView brandName, sellingRs, pname;
     private EditText query, dValue, queryNew;
     private TextView emiAmount, titlePro, totalLoan, detInfo, detSpec, detRet, detDes;
     private ImageView seller, spinnArr, plus, productImg;
-    private LinearLayout minusR;
-
+    private RelativeLayout minusR;
+private int checkCashback=0;
     private SharedPreferences st;
-
+//BroadcastReceiver broadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerReceiver(broadcastReceiver, new IntentFilter("order"));
         SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
         creduserid = cred.getString("phone_number", "");
         st = getSharedPreferences("token", Context.MODE_PRIVATE);
@@ -107,7 +125,9 @@ public class ProductsPage extends AppCompatActivity {
             wrongUrl();
 
         } else if (getIntent().getExtras().getString("page").equals("pay")) {
+
             paytmUrl();
+
             queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -128,24 +148,33 @@ public class ProductsPage extends AppCompatActivity {
         } else
         //  if(getIntent().getExtras().getString("page").equals("api"))
         {
-            correctUrl();
-            queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-
-//                        Intent in = new Intent(HomePage.this, ViewForm.class);
-
-                        // paste = (TextView) findViewById(R.id.pasteAg);
-                        queryNew.requestFocus();
-                        //clickpaste();
-                        parse(queryNew.getText().toString().trim());
-
-                    }
-                    return false;
-                }
-            });
+            setContentView(R.layout.activity_products_page);
+            try {
+                productId1 = getIntent().getExtras().getString("product");
+                sellerNme1 = getIntent().getExtras().getString("seller");
+                sellerNme = sellerNme1;
+                new linkSearch().execute();
+            } catch (Exception e) {
+            }
+//            correctUrl();
+//            queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//                @Override
+//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+//
+////                        Intent in = new Intent(HomePage.this, ViewForm.class);
+//
+//                        // paste = (TextView) findViewById(R.id.pasteAg);
+//                        queryNew.requestFocus();
+//                        //clickpaste();
+//                        parse(queryNew.getText().toString().trim());
+//
+//                    }
+//                    return false;
+//                }
+//            });
         }
+
 
     }
 
@@ -169,32 +198,65 @@ public class ProductsPage extends AppCompatActivity {
         }
     }
 
-    public void increment() {
+    public void editdp() {
+       // Toast.makeText(ProductsPage.this, "checkdp", Toast.LENGTH_SHORT).show();
+//        String s = dValue.getText().toString();
+        try {
+            if(("").equals(s))
+                s=dValue.getText().toString();
+            int dp = Integer.parseInt(s);
+            Double m = sellingPrice * .2;
+            if ((dp <= sellingPrice-mDis) && (dp >= dopay2))//&& w>=mindownn
+            {
+                // TODO: 5/14/2016
+                mValue = dp;
 
-        if (mValue + 100 <= sellingPrice) {
-            mValue += 100;
+            } else {
+                Double downValue = sellingPrice * .2;
+                mValue = downValue.intValue();
+                dValue.setText(String.valueOf(mValue));
+            }
+            s="";
+        } catch (Exception e) {
+            Double downValue = sellingPrice * .2;
+            mValue = downValue.intValue();
+            dValue.setText(String.valueOf(mValue));
+            s="";
+        }
+
+        Double emi = calculateEmi(Double.valueOf(sellingPrice - mValue), Double.valueOf(sellingPrice), monthsnow);
+//            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
+        Double tot = emi * monthsnow + mValue;
+        totalLoan.setText(String.valueOf(tot));
+
+        emiAmount.setText(String.valueOf(emi));
+        //calculate emi and set emi call
+
+    }
+
+    public void increment() {
+         if (mValue + 1 <= sellingPrice-mDis) {
+            mValue += 1;
             spInc = sellingPrice - mValue;
             Double emi = calculateEmi(Double.valueOf(spInc), Double.valueOf(sellingPrice), monthsnow);
-//            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
             Double tot = emi * monthsnow + mValue;
             totalLoan.setText(String.valueOf(tot));
-
             emiAmount.setText(String.valueOf(emi));
             dValue.setText(String.valueOf(Math.floor(mValue)));
-        }
-    }
+                                         }
+                             }
 
     public void decrement() {
 
-        if (mValue - 100 >= sellingPrice * 0.2) {
-            mValue -= 100;
+
+        if (mValue - 1 >= dopay2) {
+            mValue -= 1;
             spInc = sellingPrice - mValue;
 
             Double emi = calculateEmi(Double.valueOf(spInc), Double.valueOf(sellingPrice), monthsnow);
 //            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
             Double tot = emi * monthsnow + mValue;
             totalLoan.setText(String.valueOf(tot));
-
             emiAmount.setText(String.valueOf(emi));
             dValue.setText(String.valueOf(Math.floor(mValue)));
         }
@@ -203,6 +265,7 @@ public class ProductsPage extends AppCompatActivity {
     public void initText() {
         couCode = (RadioButton) findViewById(R.id.radioCou);
         detInfo = (TextView) findViewById(R.id.detInfo);
+        knowmore = (TextView) findViewById(R.id.knowmore);
         detSpec = (TextView) findViewById(R.id.detSpec);
         availbal = (TextView) findViewById(R.id.availbal);
         spiii = (RelativeLayout) findViewById(R.id.downRupees);
@@ -218,16 +281,38 @@ public class ProductsPage extends AppCompatActivity {
         desLayout = (RelativeLayout) findViewById(R.id.desLayout);
         retLayout = (RelativeLayout) findViewById(R.id.retLayout);
         hve = (EditText) findViewById(R.id.hve);
+        listen = hve.getKeyListener();
         crcode = hve.getText().toString().trim().toUpperCase();
         spinner = (Spinner) findViewById(R.id.spinnerItem);
         emiAmount = (TextView) findViewById(R.id.calMonPayRs);
         dValue = (EditText) findViewById(R.id.dValue);
+        dValue.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        dValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dValue.requestFocusFromTouch();
+            }
+        });
+
+        dValue.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    dValue.clearFocus();
+                    editdp();
+                    // Toast.makeText(ProductsPage.this, "c", Toast.LENGTH_SHORT).show();
+
+
+                }
+                return false;
+            }
+        });
         overview = (RelativeLayout) findViewById(R.id.overView);
         det = (RelativeLayout) findViewById(R.id.details);
         vow = findViewById(R.id.vwo);
         vde = findViewById(R.id.vwd);
         plusR = (RelativeLayout) findViewById(R.id.plusR);
-        minusR = (LinearLayout) findViewById(R.id.minusR);
+        minusR = (RelativeLayout) findViewById(R.id.minusR);
         brandName = (TextView) findViewById(R.id.manProduct);
         sellingRs = (TextView) findViewById(R.id.sellerMrpValue);
         titlePro = (TextView) findViewById(R.id.titleProduct);
@@ -247,7 +332,8 @@ public class ProductsPage extends AppCompatActivity {
 
     public void setText() {
         try {
-
+            String set = "<font color=#664A4A4A>Read more details about the product,seller and shipping on </font> <font color=#33A4D0>Product Page</font>";
+            knowmore.setText(Html.fromHtml(set));
             String sta = st.getString("approvedBand", null);
             cb = st.getInt("cashBack", 0);
             int cl = st.getInt("creditLimit", 0);
@@ -263,7 +349,7 @@ public class ProductsPage extends AppCompatActivity {
             cashBack.setText(getApplicationContext().getString(R.string.Rs) + cb);
 //            CircleImageView profile=(CircleImageView)findViewById(R.id.profile_image);
             status.setText(sta);
-            pname.setText(getIntent().getExtras().getString("name"));
+            pname.setText(st.getString("productdpname", ""));
             SharedPreferences p = getSharedPreferences("proid", Context.MODE_PRIVATE);
             String dp = p.getString("dpid", null);
             String url = "http://graph.facebook.com/" + p.getString("dpid", null) + "/picture?type=square";
@@ -275,26 +361,65 @@ public class ProductsPage extends AppCompatActivity {
             String t = e.toString();
         }
         TextView checkout = (TextView) findViewById(R.id.checkout);
+        try{
         Picasso.with(this)
                 .load(urlforImage)
                 .placeholder(R.drawable.emptyimageproducts)
-                .into(productImg);
+                .into(productImg);}
+        catch (Exception e){}
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in = new Intent(ProductsPage.this, ConfirmOrder.class);
-                in.putExtra("title", title);
-                in.putExtra("brand", brand);
-                in.putExtra("monthforemi", monthsnow);
-                in.putExtra("daytoday", dayToday);
-                in.putExtra("down", dValue.getText().toString());
-                in.putExtra("sellingprice", sellingPrice);
-                in.putExtra("seller", sellerNme);
-                in.putExtra("image", urlforImage);
-                in.putExtra("discount", 0);
-                in.putExtra("emi", emiAmount.getText().toString());
-                in.putExtra("months", selectedText);
-                startActivity(in);
+                if (checkCorrectdis == 1) {
+                    try {
+                        Map userMap = new HashMap<>();
+                        userMap.put("PRODUCT_CLICKED", title);
+                        userMap.put("EMI_SELECTED", emiAmount.getText().toString());
+                        userMap.put("DOWNPAYMENT", dValue.getText().toString());
+//                        userMap.put("phone", mPhone);
+//                        System.out.println("Intercom data 4" + mPhone);
+                        Intercom.client().updateUser(userMap);
+                    } catch (Exception e) {
+                        System.out.println("Intercom two" + e.toString());
+                    }
+
+                    Intent in = new Intent(ProductsPage.this, ConfirmOrder.class);
+                    in.putExtra("title", title);
+                    in.putExtra("prid",productId1);
+                    in.putExtra("brand", brand);
+
+                    in.putExtra("cashback",checkCashback);
+                    in.putExtra("whichCoupon",whichCoupon);
+                    in.putExtra("discount",mDis);
+                    in.putExtra("monthforemi", monthsnow);
+                    in.putExtra("daytoday", dayToday);
+                    System.out.print("che" + dayToday + "buddy");
+                    in.putExtra("daytodaycheck", cuurr);
+                    in.putExtra("down", dValue.getText().toString());
+                    in.putExtra("sellingprice", searchPrice);
+                    in.putExtra("seller", sellerNme);
+                    in.putExtra("image", urlforImage);
+//                    in.putExtra("discount", 0);
+                    in.putExtra("emi", emiAmount.getText().toString());
+                    in.putExtra("months", selectedText);
+                    SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor et=cred.edit();
+                    et.putString("title",title);
+                    et.putString("prid",productId1);
+                    et.putInt("sp",searchPrice);
+                    et.putString("brand", brand);
+                    et.putInt("checkCashback", checkCashback);
+                    if((mDis!=0))
+                    et.putString("whichCoupon", whichCoupon);
+                    et.putInt("monthtenure", monthsnow);
+                    et.putInt("discount", mDis);
+                    et.putString("seller",sellerNme1);
+                    et.commit();
+
+                    startActivity(in);
+                } else {
+
+                }
                 //     finish();in.putE
             }
         });
@@ -305,6 +430,7 @@ public class ProductsPage extends AppCompatActivity {
         infoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
                 if (detInfo.getVisibility() == View.VISIBLE)
 
@@ -318,6 +444,7 @@ public class ProductsPage extends AppCompatActivity {
 //                    ImageView t = (ImageView) findViewById(R.id.dropdes);
                     t.setRotationX(180);
                     detInfo.setVisibility(View.VISIBLE);
+                    detInfo.setText(infor);
 //                    t.set
 
                 }
@@ -339,6 +466,7 @@ public class ProductsPage extends AppCompatActivity {
                     ImageView t = (ImageView) findViewById(R.id.dropinfo);
                     t.setRotationX(180);
                     detDes.setVisibility(View.VISIBLE);
+                    detDes.setText(description);
                 }
 
             }
@@ -359,6 +487,7 @@ public class ProductsPage extends AppCompatActivity {
                     ImageView t = (ImageView) findViewById(R.id.dropspec);
                     t.setRotationX(180);
                     detSpec.setVisibility(View.VISIBLE);
+                    detSpec.setText(specification);
                 }
 
             }
@@ -377,6 +506,17 @@ public class ProductsPage extends AppCompatActivity {
                     ImageView t = (ImageView) findViewById(R.id.dropret);
                     t.setRotationX(180);
                     detRet.setVisibility(View.VISIBLE);
+                    String set = "<font color=#664A4A4A>Checkout the ratings and reviews for this product. </font> <font color=#33A4D0>Click here</font>";
+                    detRet.setText(Html.fromHtml(set));
+                    detRet.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent in = new Intent(ProductsPage.this, ViewForm.class);
+                            in.putExtra("which_page", 119);
+                            in.putExtra("reviewUrl", review);
+                            startActivity(in);
+                        }
+                    });
                 }
 
             }
@@ -403,7 +543,7 @@ public class ProductsPage extends AppCompatActivity {
                 vow.setVisibility(View.VISIBLE);
             }
         });
-        hve.setFocusable(false);
+//        hve.setFocusable(false);
         hve.addTextChangedListener(new TextWatcher() {
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -412,6 +552,7 @@ public class ProductsPage extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
+
                     if (count == 1) {
                         checkImg = 1;
                         ((ImageView) findViewById(R.id.plus)).setImageResource(R.drawable.back11);
@@ -434,16 +575,29 @@ public class ProductsPage extends AppCompatActivity {
 
             }
         });
-        hve.setOnTouchListener(new View.OnTouchListener() {
+        hve.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-//int t=hve.getText().toString().length();
-//                Toast.makeText(ProductsPage.this, "" + t, Toast.LENGTH_SHORT).show();
-                hve.setFocusableInTouchMode(true);
+            public void onClick(View v) {
+
                 RelativeLayout cash = (RelativeLayout) findViewById(R.id.cashback);
                 cash.setVisibility(View.VISIBLE);
 
 
+            }
+        });
+        hve.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+//int t=hve.getText().toString().length();
+//                Boolean ttt = hve.hasSelection();
+
+
+//                Toast.makeText(ProductsPage.this, "" + ttt, Toast.LENGTH_SHORT).show();
+//                hve.setFocusableInTouchMode(true);
+                RelativeLayout cash = (RelativeLayout) findViewById(R.id.cashback);
+                cash.setVisibility(View.VISIBLE);
+//
+//
                 return false;
             }
         });
@@ -454,6 +608,9 @@ public class ProductsPage extends AppCompatActivity {
         RelativeLayout plus = (RelativeLayout) findViewById(R.id.plusRelative);
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
+
+
+
             public void onClick(View v) {
             }
 
@@ -463,8 +620,13 @@ public class ProductsPage extends AppCompatActivity {
             public void onClick(View v) {
                 int checkD = 0;
                 if (couCode.isChecked()) {
+                    //appcBack.setBackgroundResource(R.drawable.radiodraw);
 
 
+                    hve.setBackgroundResource(R.drawable.roundedblue);
+                    hve.setTextColor(Color.parseColor("#3380B6"));
+                    hve.setText("");
+                    ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#3380B6"));
                     // TODO: 4/21/2016 //make api call to use the referral code
                     checkD = 1;
                     appcBack.setChecked(false);
@@ -480,36 +642,58 @@ public class ProductsPage extends AppCompatActivity {
 
             }
         });
-        RelativeLayout enter = ((RelativeLayout) findViewById(R.id.plusRelative));
+        final RelativeLayout enter = ((RelativeLayout) findViewById(R.id.plusRelative));
 
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                if (hve.getKeyListener() == null) {
+                    hve.setBackgroundResource(R.drawable.roundedblue);
+                    checkCorrectdis = 1;
+                    hve.setTextColor(Color.parseColor("#3380B6"));
+                    enter.setBackgroundColor(Color.parseColor("#3380B6"));
+                    hve.setKeyListener(listen);
+                    hve.setText("");
+                    appcBack.setChecked(false);
+                    couCode.setChecked(true);
+                } else {
+
+
 //                Toast.makeText(ProductsPage.this, "cccc", Toast.LENGTH_SHORT).show();
-                crcode = hve.getText().toString().trim().toUpperCase();
-                if ((crcode.length() != 0) && (couCode.isChecked())) {
-                    new COUPON().execute();
-                }
-                ImageView pl = (ImageView) findViewById(R.id.plus);
-                Drawable.ConstantState d = pl.getDrawable().getConstantState();
-                Drawable.ConstantState d1 = getResources().getDrawable(R.drawable.cancel).getConstantState();
-                Drawable p = pl.getDrawable();
+                    crcode = hve.getText().toString().trim().toUpperCase();
+                    if ((crcode.length() != 0) && (couCode.isChecked())) {
+
+                        new COUPON().execute();
+                    }}
+                    ImageView pl = (ImageView) findViewById(R.id.plus);
+//                    Drawable.ConstantState d = pl.getDrawable().getConstantState();
+//                    Drawable.ConstantState d1 = getResources().getDrawable(R.drawable.cancel).getConstantState();
+//                    Drawable p = pl.getDrawable();
 //                Drawable r=DrR.drawable.cancel;
 //                Drawable i=R.drawable.cancel;
 //                if (pl.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.cancel).getConstantState())) {
-                if ((checkImg == 2) || (checkImg == 3)) {
-                    ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
-                    sellingPrice = getIntent().getExtras().getInt("price");
-                    setEmi(sellingPrice);
-                    appcBack.setChecked(false);
-                    couCode.setChecked(true);
-                    hve.setCursorVisible(true);
-                    hve.setText("");
-                }
+                    if ((checkImg == 2) || (checkImg == 3)) {
+                        ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
+                        sellingPrice = searchPrice;
+System.out.println("entering here"+checkImg);
+                        checkD=0;
+                        checkCashback=0;
+                        Double doPay=(searchPrice*.2);
+                        dopay2=doPay.intValue();
+                        mValue=dopay2;
+                        setEmi(sellingPrice);
+                        appcBack.setChecked(false);
+                        couCode.setChecked(true);
+                        hve.setCursorVisible(true);
+                        hve.setText("");
+
+                    }
+
 
 
             }
-
 
         });
 
@@ -522,16 +706,53 @@ public class ProductsPage extends AppCompatActivity {
                     checkD = 1;
 
                     sellingPrice = spDec;
+                    Double doPay=(searchPrice*.2);
+                    dopay2=doPay.intValue();
+
+checkCashback=1;
+                    if(cb<=dopay2)
+                    {mDis=cb;
+
+                        dopay2=dopay2-cb;
+                        mValue=dopay2;
+                        checkD=1;
+                        setEmi(1);}
+                    else {
+
+                        if (sellingPrice - cb<0)
+                        {
+                            checkD=0;
+
+                            mDis=sellingPrice;
+                            sellingPrice = 0;
+                            setEmi(2);
+                        }
+                        else
+                        {
+
+                            checkD=0;
+                            mDis=cb;
+                            sellingPrice = sellingPrice-mDis;
+                            setEmi(2);
+
+                        }}
+
 
                     dee = 1;
 
-                    sellingPrice = sellingPrice - cb;
+//                    sellingPrice = sellingPrice - cb;
+                    hve.setBackgroundResource(R.drawable.roundedyellow);
+                    ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#F28E52"));
                     setEmi(sellingPrice);
                     couCode.setChecked(false);
+                    checkCorrectdis = 1;
+                    if(cb!=0)
                     hve.setText(getApplicationContext().getString(R.string.Rs) + cb + " Cashback applied!");
+                    hve.setKeyListener(null);
+                    hve.setTextColor(Color.parseColor("#F28E52"));
                     ((RelativeLayout) findViewById(R.id.plusRelative)).setVisibility(View.VISIBLE);
                     ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
-                    hve.setCursorVisible(false);
+
                     ((ImageView) findViewById(R.id.plus)).setImageResource(R.drawable.cancel);
                     checkImg = 2;
 //                    ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
@@ -561,12 +782,13 @@ public class ProductsPage extends AppCompatActivity {
                         "or additional delivery charges. For price changes within Rs.100," +
                         "we will go ahead and place the order with the seller of your choice." +
                         "The extra amount will be adjusted in your Flexible Payment Plan." +
+                        "\n" + "\n" +
                         "If the price exceeds Rs.100, we will contact you to confirm which " +
                         "seller you want to buy product from :)");
                 alert.create().show();
             }
         });
-        if (brand.trim().length() > 0)
+        if (searchBrand.trim().length() > 0)
             brandName.setText("Manufacturer: " + brand);
         else
             brandName.setText("");
@@ -578,7 +800,7 @@ public class ProductsPage extends AppCompatActivity {
 
             seller.setImageResource(R.drawable.snapdeal);
         sellingRs.setText(String.valueOf(sellingPrice));
-        titlePro.setText(title);
+        titlePro.setText(searchTitle);
         query.setText(searchQuery);
     }
 
@@ -676,13 +898,64 @@ public class ProductsPage extends AppCompatActivity {
             if (result.equals("win")) {
                 int dis = Integer.parseInt(value);
                 ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
-                sellingPrice = sellingPrice - dis;
-                setEmi(sellingPrice);
+                Double doPay=(searchPrice*.2);
+                 dopay2=doPay.intValue();
+whichCoupon=crcode;
+
+if(dis<=dopay2)
+{mDis=dis;
+
+    dopay2=dopay2-dis;
+    mValue=dopay2;
+    checkD=1;
+    setEmi(1);}
+    else {
+
+    if (sellingPrice - dis<0)
+    {
+        checkD=0;
+        mDis=sellingPrice;
+        sellingPrice = 0;
+        setEmi(2);
+    }
+    else
+    {
+
+        checkD=0;
+        mDis=dis;
+        sellingPrice = sellingPrice-mDis;
+        setEmi(2);
+
+    }
+
+}
+
+//                hve.setFocusable(false);
+
+                hve.setBackgroundResource(R.drawable.roundedproducts);
+                hve.setTextColor(Color.parseColor("#44C2A6"));
+                ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#44C2A6"));
+                ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
                 hve.setText(truth);
+                checkCorrectdis = 1;
+                checkImg=2;
+                ((ImageView) findViewById(R.id.plus)).setImageResource(R.drawable.cancel);
+
+                hve.setKeyListener(null);
 //                Toast.makeText(ProductsPage.this, value, Toa/st.LENGTH_SHORT).show();
             } else {
+                checkCorrectdis = 1;
                 hve.setText(truth);
                 checkImg = 3;
+                //hve.setFocusable(false);
+
+                hve.setKeyListener(null);
+                checkCorrectdis = 0;
+//                hve.setFocusable(false);
+                hve.setBackgroundResource(R.drawable.roundedred);
+                hve.setTextColor(Color.parseColor("#D48080"));
+                ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#D48080"));
+                ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
                 ((ImageView) findViewById(R.id.plus)).setImageResource(R.drawable.retry);
 
             }
@@ -704,22 +977,23 @@ public class ProductsPage extends AppCompatActivity {
                 currentDay += curr.charAt(j);
             }
             currDay = Integer.parseInt(currentDay);
+            cuurr = currDay;
         } catch (Exception e) {
         }
         Double emi = 0.0;
         Double rate = 21.0 / 1200.0;
         int d = 0;
         if (searchPrice <= 5000) {
-            emi = searchPrice * 0.8 / months;
+            emi = principal * 1.0 / months;
         } else {
             if (currDay <= 15)
                 d = 35 - currDay;
             else
                 d = 65 - currDay;
-
+            dayToday = d;
             emi = Math.floor((principal * rate * Math.pow(1 + rate, months - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, months) - 1));
         }
-        dayToday = d;
+
         return emi;
     }
 
@@ -736,10 +1010,18 @@ public class ProductsPage extends AppCompatActivity {
         mValue = v.intValue();
         mValue2 = v.intValue();
         monthsnow = Integer.parseInt(t);
+        if(sellingP==1)
+        {dValue.setText(String.valueOf(Math.floor(dopay2)));
+            emiAmount.setText(String.valueOf(calculateEmi(sellingPrice * 0.8-mDis, Double.valueOf(sellingPrice), monthsnow)));
+            Double tot = calculateEmi(sellingPrice * 0.8-mDis, Double.valueOf(sellingPrice), monthsnow) * monthsnow + dopay2;
+            Double r=(sellingPrice * 0.2-mDis);
+            mValue=r.intValue();
+            totalLoan.setText(String.valueOf(tot));}
+        else{
         dValue.setText(String.valueOf(Math.floor(sellingPrice * .2)));
         emiAmount.setText(String.valueOf(calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow)));
         Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
-        totalLoan.setText(String.valueOf(tot));
+        totalLoan.setText(String.valueOf(tot));}
 //        Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
 
     }
@@ -753,6 +1035,13 @@ public class ProductsPage extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+
+        finish();
     }
 
     public class linkSearch extends
@@ -803,8 +1092,28 @@ public class ProductsPage extends AppCompatActivity {
                         searchCategory = data1.getString("category");
                         searchSubcategory = data1.getString("subCategory");
                         searchPrice = data1.getInt("sellingPrice");
+                        sellingPrice = searchPrice;
                         JSONObject img = new JSONObject(data1.getString("imgUrls"));
                         urlImg = img.getString("400x400");
+                        urlforImage = urlImg;
+                        brand = searchBrand;
+                        try {
+                            specification = data1.getString("specificaiton");
+                        } catch (Exception e) {
+                            specification = "";
+                        }
+                        try {
+                            description = data1.getString("description");
+                        } catch (Exception e) {
+                            description = "";
+                        }
+                        try {
+                            review = data1.getString("fkProductUrl");
+                        } catch (Exception e) {
+                            review = "";
+                        }
+                        infor = "The minimum downpayment is 20% of the product price and also depends on the payment band (Oxygen/Silicon/Palladium/Krypton) you lie in, which you will get to know after your college ID verification.";
+
 
                         return "win";
 
@@ -821,357 +1130,351 @@ public class ProductsPage extends AppCompatActivity {
             if (!result.equals("win")) {
                 System.out.println("Error while computing data");
             } else {
+                Double doPay=(searchPrice*.2);
+                dopay2=doPay.intValue();
 
-                monthsallowed = months(searchSubcategory, searchCategory, searchBrand, searchPrice);
-                int monthscheck = 0;
-                //digo
-                String course = st.getString("course", "");
-
-                if (!course.equals("")) {
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-
-                    Date courseDate;
-                    Double diff = 18.0;
-                    try {
-                        courseDate = df.parse(course);
-                        String newDateString = df.format(courseDate);
-                        System.out.println(newDateString);
-                        Long milli = courseDate.getTime();
-                        Date date = new Date();
-                        Long currentMilli = date.getTime();
-                        Double diffDouble = (milli.doubleValue() - currentMilli.doubleValue());
-                        Double mul = (1000.0 * 60.0 * 60.0 * 24.0 * 365.0);
-                        diff = diffDouble / mul;
-                        diff = diff * 12.0;
-                        diff = Math.floor(diff);
-                        String curr = df.format(date);
-                        String currentDay = "";
-                        for (int j = curr.length() - 2; j < curr.length(); j++) {
-
-                            currentDay += curr.charAt(j);
-                        }
-
-                        currDay = Integer.parseInt(currentDay);
-                        int months;
-                        if (currDay > 15)
-                            diff -= 1.0;
-
-                        if (diff > 0) {
-                            months = diff.intValue();
-                            if (diff.intValue() == 1)
-                                months = 1;
-                            else if (diff.intValue() == 2)
-                                months = 2;
-                            else if (diff.intValue() >= 3 && diff.intValue() <= 5) {
-                                months = 3;
-                            } else if (diff.intValue() >= 6 && diff.intValue() <= 8) {
-                                months = 6;
-                            } else if (diff.intValue() >= 9 && diff.intValue() <= 11) {
-                                months = 9;
-                            } else if (diff.intValue() >= 12 && diff.intValue() <= 14) {
-                                months = 12;
-                            } else if (diff.intValue() >= 15 && diff.intValue() <= 18) {
-                                months = 15;
-                            }
-                            monthscheck = months;
-                        }
-
-
-//                        Toast.makeText(HomePage.this, curr, Toast.LENGTH_SHORT).show();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (monthsallowed > monthscheck)
-                    monthsallowed = monthscheck;
-
-//                Double emi = 0.0;
-                Double rate = 21.0 / 1200.0;
-                int d = 0;
-                if (searchPrice <= 5000) {
-                    emi = searchPrice * 0.8 / monthsallowed;
-                } else {
-                    if (currDay <= 15)
-                        d = 35 - currDay;
-                    else
-                        d = 65 - currDay;
-
-                    emi = Math.floor((searchPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
-                    Intent in = new Intent(ProductsPage.this, ProductsPage.class);
-                    in.putExtra("title", searchTitle);
-                    in.putExtra("price", searchPrice);
-                    in.putExtra("brand", searchBrand);
-                    in.putExtra("name", name);
-                    in.putExtra("image", urlImg);
-                    in.putExtra("emi", emi);
-                    in.putExtra("monthsallowed", monthsallowed);
-                    in.putExtra("seller", sellerNme1);
-                    in.putExtra("query", queryNew.getText().toString());
-                    in.putExtra("page", page);
-
-                    startActivity(in);
-                }
+                show();
             }
-        }}
+        }
+    }
 
-        public void parse(String parseString) {
-            productId1 = "";
-            int pos = -1;
-            if (parseString.contains("flipkart")) {
-                sellerNme1 = "flipkart";
-                pos = parseString.indexOf("pid");
-                if (pos != -1) {
-                    for (int j = pos + 4; ; j++) {
-                        if (parseString.charAt(j) == '&')
-                            break;
-                        else {
-                            productId1 += parseString.charAt(j);
-                        }
-
+    public void parse(String parseString) {
+        productId1 = "";
+        int pos = -1;
+        if (parseString.contains("flipkart")) {
+            sellerNme1 = "flipkart";
+            pos = parseString.indexOf("pid");
+            if (pos != -1) {
+                for (int j = pos + 4; ; j++) {
+                    if (parseString.charAt(j) == '&')
+                        break;
+                    else {
+                        productId1 += parseString.charAt(j);
                     }
-                } else {
-                    checkValidUrl = 1;
+
                 }
-                //       Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
+            } else {
+                checkValidUrl = 1;
             }
+            //       Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
+        }
 //snapdeal
 
-            else if (parseString.contains("snapdeal")) {
-                sellerNme1 = "snapdeal";
-                pos = parseString.lastIndexOf("/");
-                if (pos != -1) {
-                    for (int j = pos + 1; ; j++) {
-                        if (parseString.charAt(j) == '#')
-                            break;
-                        else {
-                            productId1 += parseString.charAt(j);
-                        }
-
+        else if (parseString.contains("snapdeal")) {
+            sellerNme1 = "snapdeal";
+            pos = parseString.lastIndexOf("/");
+            if (pos != -1) {
+                for (int j = pos + 1; ; j++) {
+                    if (parseString.charAt(j) == '#')
+                        break;
+                    else {
+                        productId1 += parseString.charAt(j);
                     }
-                } else {
-                    checkValidUrl = 1;
-                }
-                //     Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
-            } else if (parseString.contains("myntra")) {
-                sellerNme1 = "myntra";
-                checkValidFromApis = 1;
-            } else if (parseString.contains("shopclues")) {
-                sellerNme1 = "shopclues";
-                checkValidFromApis = 1;
-            } else if (parseString.contains("jabong")) {
-                sellerNme1 = "jabong";
-                checkValidFromApis = 1;
-            } else if (parseString.contains("paytm")) {
-                sellerNme1 = "paytm";
-                checkValidFromApis = 1;
-            }
-//amazon
-            else if (parseString.contains("amazon")) {
-                sellerNme1 = "amazon";
-                int w = 0;
-                pos = parseString.indexOf("/dp/");
-                if (pos != -1) {
-                    pos = parseString.indexOf("dp");
-                }
-                if (pos == -1) {
-                    pos = parseString.indexOf("/product/");
-                    if (pos != -1)
-                        w = 1;
-                }
-                if (pos == -1) {
 
-                    pos = parseString.indexOf("/d/");
-                    if (pos != -1)
-                        w = 2;
                 }
-
-
-                if (pos != -1) {
-                    int r = 0;
-                    if (w == 0)
-                        r = pos + 3;
-                    if (w == 1)
-                        r = pos + 9;
-                    if (w == 2)
-                        r = pos + 3;
-                    for (int j = r; ; j++) {
-                        if ((parseString.charAt(j) == '/') || ((parseString.charAt(j) == '?')))
-                            break;
-                        else {
-                            productId1 += parseString.charAt(j);
-                        }
-
-                    }
-                } else {
-                    checkValidUrl = 1;
-                }
-
-            } else if (parseString.contains("shopclues"))
-                checkValidFromApis = 1;
-            else
+            } else {
                 checkValidUrl = 1;
-
-            if ((checkValidFromApis == 0) && (checkValidUrl == 0)) {
-                page = "api";
-                new linkSearch().execute();
-
-
-                //make api call
             }
-            if ((checkValidFromApis == 1)) {
-                //not monley page
-                Intent in=new Intent(ProductsPage.this,ProductsPage.class);
-                query.setText("");
-                in.putExtra("seller",sellerNme1);
-                in.putExtra("page","pay");
-                startActivity(in);
-                finish();
-                page = "pay";
-                paytmUrl();
+            //     Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
+        } else if (parseString.contains("myntra")) {
+            sellerNme1 = "myntra";
+            checkValidFromApis = 1;
+        } else if (parseString.contains("shopclues")) {
+            sellerNme1 = "shopclues";
+            checkValidFromApis = 1;
+        } else if (parseString.contains("jabong")) {
+            sellerNme1 = "jabong";
+            checkValidFromApis = 1;
+        } else if (parseString.contains("paytm")) {
+            sellerNme1 = "paytm";
+            checkValidFromApis = 1;
+        }
+//amazon
+        else if (parseString.contains("amazon")) {
+            sellerNme1 = "amazon";
+            int w = 0;
+            pos = parseString.indexOf("/dp/");
+            if (pos != -1) {
+                pos = parseString.indexOf("dp");
             }
-            if (checkValidUrl == 1) {
-                //monkey page
-                Intent in=new Intent(ProductsPage.this,ProductsPage.class);
-                query.setText("");
+            if (pos == -1) {
+                pos = parseString.indexOf("/product/");
+                if (pos != -1)
+                    w = 1;
+            }
+            if (pos == -1) {
 
-                in.putExtra("page","monkey");
-                startActivity(in);
-                finish();
-                page = "monkey";
-                wrongUrl();
+                pos = parseString.indexOf("/d/");
+                if (pos != -1)
+                    w = 2;
             }
+
+
+            if (pos != -1) {
+                int r = 0;
+                if (w == 0)
+                    r = pos + 3;
+                if (w == 1)
+                    r = pos + 9;
+                if (w == 2)
+                    r = pos + 3;
+                for (int j = r; ; j++) {
+                    if ((parseString.charAt(j) == '/') || ((parseString.charAt(j) == '?')))
+                        break;
+                    else {
+                        productId1 += parseString.charAt(j);
+                    }
+
+                }
+            } else {
+                checkValidUrl = 1;
+            }
+
+        } else if (parseString.contains("shopclues"))
+        {sellerNme1="shopclues";
+            checkValidFromApis = 1;}
+        else
+            checkValidUrl = 1;
+
+        if ((checkValidFromApis == 0) && (checkValidUrl == 0)) {
+            page = "api";
+            new linkSearch().execute();
+
+
+            //make api call
+        }
+        if ((checkValidFromApis == 1)) {
+            //not monley page
+            Intent in = new Intent(ProductsPage.this, ProductsPage.class);
+            //query.setText("");
+            in.putExtra("seller", sellerNme1);
+            in.putExtra("page", "pay");
+            startActivity(in);
+            finish();
+            page = "pay";
+//            paytmUrl();
+        }
+        if (checkValidUrl == 1) {
+            //monkey page
+            Intent in = new Intent(ProductsPage.this, ProductsPage.class);
+//            query.setText("");
+
+            in.putExtra("page", "monkey");
+            startActivity(in);
+            //finish();
+            page = "monkey";
+//            wrongUrl();//
+        }
 //        Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
 
+        sellerNme = sellerNme1;
+    }
 
+    public void wrongUrl() {
+
+        setContentView(R.layout.wrongurl);
+        queryNew = (EditText) findViewById(R.id.query);
+        queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        clickUrl();
+        backpress();
+    }
+
+    public void paytmUrl() {
+        setContentView(R.layout.paytmjab);
+        String seller = getIntent().getExtras().getString("seller");
+//        String seller = getIntent().getExtras().getString("seller");
+        ImageView logo = (ImageView) findViewById(R.id.logod);
+        if ("paytm".equals(seller)) {
+            logo.setImageResource(R.drawable.paytm);
+        }
+        if ("jabong".equals(seller)) {
+
+            logo.setImageResource(R.drawable.jabong);
+        }
+        if ("myntra".equals(seller)) {
+            logo.setImageResource(R.drawable.myntra);
+        }
+        if ("shopclues".equals(seller)) {
+            logo.setImageResource(R.drawable.shopclues);
         }
 
-        public void wrongUrl() {
 
-            setContentView(R.layout.wrongurl);
-            queryNew = (EditText) findViewById(R.id.query);
-            queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
-            clickUrl();
-            backpress();
-        }
 
-        public void paytmUrl() {
-            setContentView(R.layout.paytmjab);
-
-            queryNew = (EditText) findViewById(R.id.query);
-            queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
-            clickUrl();
-            EditText editQ = (EditText) findViewById(R.id.editQ);
-            TextView aval = (TextView) findViewById(R.id.avlbalRs);
-            TextView enter = (TextView) findViewById(R.id.enter);
-            ImageView img = (ImageView) findViewById(R.id.logo);
-            String sta = st.getString("approvedBand", null);
-            cb = st.getInt("cashBack", 0);
-            int cl = st.getInt("creditLimit", 0);
-            int cbv = st.getInt("totalBorrowed", 0);
-            int fcbv = cl - cbv;
-            aval.setText(getApplicationContext().getString(R.string.Rs) + fcbv);
-            backpress();
-        }
-
-        public void correctUrl() {
-            setContentView(R.layout.activity_products_page);
-            queryNew = (EditText) findViewById(R.id.query);
-            queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
-            backpress();
-            clickUrl();
-            inc = (TextView) findViewById(R.id.check);
-            butcheck = (Button) findViewById(R.id.butcheck);
-            try {
-                monthsallowed = getIntent().getExtras().getInt("monthsallowed");
-                title = getIntent().getExtras().getString("title");
-                brand = getIntent().getExtras().getString("brand");
-                emi = getIntent().getExtras().getDouble("emi");
-                searchQuery = getIntent().getExtras().getString("query");
-                sellerNme = getIntent().getExtras().getString("seller");
-                sellingPrice = getIntent().getExtras().getInt("price");
-                urlforImage = getIntent().getExtras().getString("image");
-
-                spInc = sellingPrice;
-                spDec = sellingPrice;
-            } catch (Exception e) {
-            }
-            initText();
-            //emiAmount=(TextView)findViewById(R.id.calMonPayRs);
-            setText();
-
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    selectedText = parent.getItemAtPosition(position).toString();
-                    int i = 0;
-                    String t = "";
-                    while (selectedText.charAt(i) != ' ') {
-
-                        t = t + selectedText.charAt(i);
-                        i++;
+        queryNew = (EditText) findViewById(R.id.query);
+        queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        clickUrl();
+        final EditText editQ = (EditText) findViewById(R.id.editQ);
+        TextView aval = (TextView) findViewById(R.id.avlbalRs);
+        TextView enter = (TextView) findViewById(R.id.enter);
+        enter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String minP=editQ.getText().toString();
+                if((editQ.getText().toString().length()!=0)&&(Integer.parseInt(minP)>=50)) {
+                    ScrollView removescrol = (ScrollView) findViewById(R.id.removescroll);
+                    removescrol.setVisibility(View.GONE);
+                    searchTitle = "";
+                    searchBrand = "";
+                    sellerNme = getIntent().getExtras().getString("seller");
+                    sellerNme1 = sellerNme;
+                    searchCategory = "";
+                    searchSubcategory = "";
+                    searchPrice = Integer.parseInt(editQ.getText().toString());
+                    sellingPrice = searchPrice;
+                    ImageView logo = (ImageView) findViewById(R.id.logo);
+                    if ("paytm".equals(sellerNme1)) {
+                        logo.setImageResource(R.drawable.paytm);
                     }
-                    Double v = Math.floor(sellingPrice * .2);
-                    mValue = v.intValue();
-                    mValue2 = v.intValue();
-                    monthsnow = Integer.parseInt(t);
-                    dValue.setText(String.valueOf(Math.floor(sellingPrice * .2)));
-                    emiAmount.setText(String.valueOf(calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow)));
-                    Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
-                    totalLoan.setText(String.valueOf(tot));
+                    if ("jabong".equals(sellerNme1)) {
+
+                        logo.setImageResource(R.drawable.jabong);
+                    }
+                    if ("myntra".equals(sellerNme1)) {
+                        logo.setImageResource(R.drawable.myntra);
+                    }
+                    if ("shopclues".equals(sellerNme1)) {
+                        logo.setImageResource(R.drawable.shopclues);
+                    }
+//                JSONObject img = new JSONObject(data1.getString("imgUrls"));
+//                urlImg = img.getString("400x400");
+                    urlforImage = "";
+                    brand = searchBrand;
+                    try {
+                        specification = "";
+                    } catch (Exception e) {
+                        specification = "";
+                    }
+                    try {
+                        description = "";
+                    } catch (Exception e) {
+                        description = "";
+                    }
+                    try {
+                        review = "";
+                    } catch (Exception e) {
+                        review = "";
+                    }
+                    infor = "The minimum downpayment is 20% of the product price and also depends on the payment band (Oxygen/Silicon/Palladium/Krypton) you lie in, which you will get to know after your college ID verification.";
+
+
+                    show();
+                }
+            else
+            editQ.setText("");}
+
+        });
+
+        ImageView img = (ImageView) findViewById(R.id.logo);
+        String sta = st.getString("approvedBand", null);
+        cb = st.getInt("cashBack", 0);
+        int cl = st.getInt("creditLimit", 0);
+        int cbv = st.getInt("totalBorrowed", 0);
+        int fcbv = cl - cbv;
+        aval.setText(getApplicationContext().getString(R.string.Rs) + fcbv);
+        backpress();
+    }
+
+    public void correctUrl() {
+
+        queryNew = (EditText) findViewById(R.id.query);
+        queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        backpress();
+        clickUrl();
+        inc = (TextView) findViewById(R.id.check);
+        butcheck = (Button) findViewById(R.id.butcheck);
+        try {
+//            monthsallowed = getIntent().getExtras().getInt("monthsallowed");
+//            title = getIntent().getExtras().getString("title");
+//            brand = getIntent().getExtras().getString("brand");
+//            emi = getIntent().getExtras().getDouble("emi");
+//            searchQuery = getIntent().getExtras().getString("query");
+//            sellerNme = getIntent().getExtras().getString("seller");
+//            sellingPrice = getIntent().getExtras().getInt("price");
+//            urlforImage = getIntent().getExtras().getString("image");
+
+            spInc = searchPrice;
+            spDec = searchPrice;
+        } catch (Exception e) {
+        }
+        initText();
+
+
+        //emiAmount=(TextView)findViewById(R.id.calMonPayRs);
+        setText();
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                selectedText = parent.getItemAtPosition(position).toString();
+                int i = 0;
+                String t = "";
+                while (selectedText.charAt(i) != ' ') {
+
+                    t = t + selectedText.charAt(i);
+                    i++;
+                }
+                Double v = Math.floor(sellingPrice * .2);
+                mValue = v.intValue();
+                mValue2 = v.intValue();
+                monthsnow = Integer.parseInt(t);
+                dValue.setText(String.valueOf(Math.floor(sellingPrice * .2)));
+                emiAmount.setText(String.valueOf(calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow)));
+                Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
+                totalLoan.setText(String.valueOf(tot));
 //                    Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
-            // Spinner Drop down elements
-            int arrmont[] = new int[8];
-            int p = 0;
-            List<String> categories = new ArrayList<String>();
-            for (int j = 0; j < 8; j++) {
-                if (myMonths[j] <= monthsallowed) {
-
-                    p = j;
-                    //categories.add(String.valueOf(myMonths[j]) + " months");
-                }
-            }
-            for (int w = p; w >= 0; w--) {
-                categories.add(String.valueOf(myMonths[w]) + " months");
             }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-            // Creating adapter for spinner
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+            }
+        });
 
-            // Drop down layout style - list view with radio button
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Spinner Drop down elements
+        int arrmont[] = new int[8];
+        int p = 0;
+        List<String> categories = new ArrayList<String>();
+        for (int j = 0; j < 8; j++) {
+            if (myMonths[j] <= monthsallowed) {
 
-            // attaching data adapter to spinner
-            spinner.setAdapter(dataAdapter);
-            rep = new Handler();
-            new Thread(new Runnable() {
-                public void run() {
-                    // DO NOT ATTEMPT TO DIRECTLY UPDATE THE UI HERE, IT WON'T WORK!
-                    // YOU MUST POST THE WORK TO THE UI THREAD'S HANDLER
-                    rep.postDelayed(new Runnable() {
-                        public void run() {
-                            // Open the Spinner...
-                            //s.performClick();
-                            spiii.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    spinner.performClick();
-                                }
-                            });
+                p = j;
+                //categories.add(String.valueOf(myMonths[j]) + " months");
+            }
+        }
+        for (int w = p; w >= 0; w--) {
+            categories.add(String.valueOf(myMonths[w]) + " months");
+        }
 
-                        }
-                    }, 5000);
-                }
-            }).start();
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+        rep = new Handler();
+        new Thread(new Runnable() {
+            public void run() {
+                // DO NOT ATTEMPT TO DIRECTLY UPDATE THE UI HERE, IT WON'T WORK!
+                // YOU MUST POST THE WORK TO THE UI THREAD'S HANDLER
+                rep.postDelayed(new Runnable() {
+                    public void run() {
+                        // Open the Spinner...
+                        //s.performClick();
+                        spiii.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                spinner.performClick();
+                            }
+                        });
+
+                    }
+                }, 5000);
+            }
+        }).start();
 //        rep=new Handler() {
 //            @Override
 //            public void close() {
@@ -1191,117 +1494,253 @@ public class ProductsPage extends AppCompatActivity {
 
 
 //        butcheck.set
-            minusR.setOnLongClickListener(
-                    new View.OnLongClickListener() {
-                        public boolean onLongClick(View arg0) {
-                            mAutoDecrement = true;
-                            rep.post(new RptUpdater());
-                            return false;
-                        }
+        minusR.setOnLongClickListener(
+                new View.OnLongClickListener() {
+                    public boolean onLongClick(View arg0) {
+                        mAutoDecrement = true;
+                        rep.post(new RptUpdater());
+                        return false;
                     }
-            );
-            minusR.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    decrement();
+                }
+        );
+        minusR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                decrement();
 
+            }
+        });
+        minusR.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if ((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL)
+                        && mAutoDecrement) {
+                    mAutoDecrement = false;
                 }
-            });
-            minusR.setOnTouchListener(new View.OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    if ((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL)
-                            && mAutoDecrement) {
-                        mAutoDecrement = false;
-                    }
-                    return false;
-                }
-            });
+                return false;
+            }
+        });
 //        spinner.performClick();
 
-            plusR.setOnLongClickListener(
-                    new View.OnLongClickListener() {
-                        public boolean onLongClick(View arg0) {
-                            mAutoIncrement = true;
-                            rep.post(new RptUpdater());
-                            return false;
-                        }
+        plusR.setOnLongClickListener(
+                new View.OnLongClickListener() {
+                    public boolean onLongClick(View arg0) {
+                        mAutoIncrement = true;
+                        rep.post(new RptUpdater());
+                        return false;
                     }
-            );
-            plusR.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    increment();
-
                 }
-            });
-            plusR.setOnTouchListener(new View.OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    if ((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL)
-                            && mAutoIncrement) {
-                        mAutoIncrement = false;
-                    }
-                    return false;
-                }
-            });
-        }
+        );
+        plusR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                increment();
 
-        public void clickUrl() {
-            queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+            }
+        });
+        plusR.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if ((event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL)
+                        && mAutoIncrement) {
+                    mAutoIncrement = false;
+                }
+                return false;
+            }
+        });
+    }
+
+    public void clickUrl() {
+        queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
 
 //                        Intent in = new Intent(HomePage.this, ViewForm.class);
 
-                        // paste = (TextView) findViewById(R.id.pasteAg);
-                        queryNew.requestFocus();
-                        //clickpaste();
-                        parse(queryNew.getText().toString().trim());
+                    // paste = (TextView) findViewById(R.id.pasteAg);
+                    queryNew.requestFocus();
+                    //clickpaste();
+                    parse(queryNew.getText().toString().trim());
 
-                    }
-                    return false;
                 }
-            });
+                return false;
+            }
+        });
+    }
+public void show()
+{
+    monthsallowed = months(searchSubcategory, searchCategory, searchBrand, searchPrice);
+    int monthscheck = 0;
+    //digo
+    String course = st.getString("course", "");
+
+    if (!course.equals("")) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date courseDate;
+        Double diff = 18.0;
+        try {
+            courseDate = df.parse(course);
+            String newDateString = df.format(courseDate);
+            System.out.println(newDateString);
+            Long milli = courseDate.getTime();
+            Date date = new Date();
+            Long currentMilli = date.getTime();
+            Double diffDouble = (milli.doubleValue() - currentMilli.doubleValue());
+            Double mul = (1000.0 * 60.0 * 60.0 * 24.0 * 365.0);
+            diff = diffDouble / mul;
+            diff = diff * 12.0;
+            diff = Math.floor(diff);
+            String curr = df.format(date);
+            String currentDay = "";
+            for (int j = curr.length() - 2; j < curr.length(); j++) {
+
+                currentDay += curr.charAt(j);
+            }
+
+            currDay = Integer.parseInt(currentDay);
+            int months;
+            if (currDay > 15)
+                diff -= 1.0;
+
+            if (diff > 0) {
+                months = diff.intValue();
+                if (diff.intValue() == 1)
+                    months = 1;
+                else if (diff.intValue() == 2)
+                    months = 2;
+                else if (diff.intValue() >= 3 && diff.intValue() <= 5) {
+                    months = 3;
+                } else if (diff.intValue() >= 6 && diff.intValue() <= 8) {
+                    months = 6;
+                } else if (diff.intValue() >= 9 && diff.intValue() <= 11) {
+                    months = 9;
+                } else if (diff.intValue() >= 12 && diff.intValue() <= 14) {
+                    months = 12;
+                } else if (diff.intValue() >= 15 && diff.intValue() <= 18) {
+                    months = 15;
+                }
+                monthscheck = months;
+            }
+
+
+//                        Toast.makeText(HomePage.this, curr, Toast.LENGTH_SHORT).show();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    if (monthsallowed > monthscheck)
+        monthsallowed = monthscheck;
+
+//                Double emi = 0.0;
+    Double rate = 21.0 / 1200.0;
+    int d = 0;
+    if (searchPrice <= 5000) {
+        emi = searchPrice * 0.8 / monthsallowed;
+    } else {
+        if (currDay <= 15)
+            d = 35 - currDay;
+        else
+            d = 65 - currDay;
+
+        emi = Math.floor((searchPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));}
+        Intent in = new Intent(ProductsPage.this, ProductsPage.class);
+        in.putExtra("title", searchTitle);
+        try {
+            Map userMap = new HashMap<>();
+            userMap.put("PRODUCT_TITLE", searchTitle);
+//                    userMap.put("email", mEmail);
+//                    userMap.put("user_id", mPhone);
+//                    userMap.put("phone", mPhone);
+//                    System.out.println("Intercom data 4" + mPhone);
+            Intercom.client().updateUser(userMap);
+        } catch (Exception e) {
+            System.out.println("Intercom two" + e.toString());
+        }
+        correctUrl();
+        queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+//                        Intent in = new Intent(HomePage.this, ViewForm.class);
+
+                    // paste = (TextView) findViewById(R.id.pasteAg);
+                    queryNew.requestFocus();
+                    //clickpaste();
+                    parse(queryNew.getText().toString().trim());
+
+                }
+                return false;
+            }
+        });
+//                    in.putExtra("price", searchPrice);
+//                    in.putExtra("brand", searchBrand);
+//                    in.putExtra("name", name);
+//                    in.putExtra("image", urlImg);
+//                    in.putExtra("emi", emi);
+//                    in.putExtra("tot", totalLoan.getText().toString());
+//                    in.putExtra("monthsallowed", monthsallowed);
+//                    in.putExtra("seller", sellerNme1);
+//                    in.putExtra("query", queryNew.getText().toString());
+//                    in.putExtra("page", page);
+//
+//                    startActivity(in);
+
+}
+
+    public int months(String subcat, String cat, String brand, int price)
+
+    {
+        int m = 18;
+        if ((subcat.equals("Fitness " +
+                "Equipments")) || ((subcat.equals("Jewellery"))) || ((subcat.equals("Combos and Kit"))) || ((subcat.equals("Speakers"))) || ((subcat.equals("Team Sports"))) || ((subcat.equals("Racquet Sports"))) || ((subcat.equals("Watches"))) || ((subcat.equals("Health and Personal Care"))) || ((subcat.equals("Leather & Travel Accessories"))) || ((cat.equals("Footwear")))) {
+            int mn = 6;
+            if (mn < m)
+                m = mn;
+        } else if ((subcat.equals("Cameras")) || ((subcat.equals("Entertainment"))) || ((subcat.equals("Smartwatches"))) || ((subcat.equals("Smart Headphones"))) || ((subcat.equals("Smart Bands"))) || ((subcat.equals("Digital Accessories"))) || ((subcat.equals("Tablets"))) || ((subcat.equals("Kindle")))) {
+            int mn = 12;
+            if (mn < m)
+                m = mn;
+        }
+        if ((!brand.equals("Apple")) && !(brand.equals("APPLE"))) {
+            int mn = 15;
+            if (mn < m)
+                m = mn;
+        }
+        if (price < 5000) {
+            int mn = 6;
+            if (mn < m)
+                m = mn;
+        } else if (price < 10000) {
+            int mn = 9;
+            if (mn < m)
+                m = mn;
+        } else if (price < 20000) {
+            int mn = 12;
+            if (mn < m)
+                m = mn;
+        } else if (price < 40000) {
+            int mn = 15;
+            if (mn < m)
+                m = mn;
         }
 
-        public int months(String subcat, String cat, String brand, int price)
+        return m;
+    }
 
-        {
-            int m = 18;
-            if ((subcat.equals("Fitness " +
-                    "Equipments")) || ((subcat.equals("Jewellery"))) || ((subcat.equals("Combos and Kit"))) || ((subcat.equals("Speakers"))) || ((subcat.equals("Team Sports"))) || ((subcat.equals("Racquet Sports"))) || ((subcat.equals("Watches"))) || ((subcat.equals("Health and Personal Care"))) || ((subcat.equals("Leather & Travel Accessories"))) || ((cat.equals("Footwear")))) {
-                int mn = 6;
-                if (mn < m)
-                    m = mn;
-            } else if ((subcat.equals("Cameras")) || ((subcat.equals("Entertainment"))) || ((subcat.equals("Smartwatches"))) || ((subcat.equals("Smart Headphones"))) || ((subcat.equals("Smart Bands"))) || ((subcat.equals("Digital Accessories"))) || ((subcat.equals("Tablets"))) || ((subcat.equals("Kindle")))) {
-                int mn = 12;
-                if (mn < m)
-                    m = mn;
-            }
-            if ((!brand.equals("Apple")) && !(brand.equals("APPLE"))) {
-                int mn = 15;
-                if (mn < m)
-                    m = mn;
-            }
-            if (price < 5000) {
-                int mn = 6;
-                if (mn < m)
-                    m = mn;
-            } else if (price < 10000) {
-                int mn = 9;
-                if (mn < m)
-                    m = mn;
-            } else if (price < 20000) {
-                int mn = 12;
-                if (mn < m)
-                    m = mn;
-            } else if (price < 40000) {
-                int mn = 15;
-                if (mn < m)
-                    m = mn;
-            }
 
-            return m;
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals("order"))
+                finish();
+
         }
+    };
+
+    public void finish() {
+        super.finish();
+    };
 
 }

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:components="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent"
+
 
     tools:context="indwin.c3.shareapp.ProductsPage">
 
@@ -55,26 +58,25 @@
                 android:layout_marginBottom="@dimen/left"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/left"
-                android:visibility="gone"
                 android:layout_marginTop="@dimen/left"
                 android:src="@drawable/search"
-             />
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/query"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:textColor="#664A4A4A"
-                android:paddingLeft="20dp"
-                android:textCursorDrawable="@null"
                 android:layout_toRightOf="@id/searchIcon"
-                android:drawableLeft="@drawable/search"
+
                 android:background="#ffffff"
                 android:cursorVisible="true"
-
+                android:drawableLeft="@drawable/search"
+                android:paddingLeft="20dp"
                 android:singleLine="true"
                 android:text="https://flipkart.com/buddyrocks"
-            />
+
+                android:textColor="#664A4A4A"
+                android:textCursorDrawable="@null" />
 
             <View
                 android:id="@+id/borderView"
@@ -103,7 +105,7 @@
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/product"
 
-                 />
+                />
 
             <TextView
                 android:id="@+id/titleProduct"
@@ -113,13 +115,13 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="@dimen/left"
-                android:textColor="#33A4D0"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-
                 android:text="Apple iPhone 6s"
-                android:textAppearance="?android:textAppearanceMedium" />
+
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="#33A4D0" />
 
             <TextView
                 android:id="@+id/manProduct"
@@ -135,6 +137,7 @@
             <RelativeLayout
                 android:id="@+id/rlmanProd"
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
                 android:layout_below="@id/manProduct">
 
@@ -155,197 +158,217 @@
                     android:layout_below="@id/sellerMrp"
                     android:layout_marginBottom="@dimen/left"
 
-                    android:textColor="#000000"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:text="Rs 49,999" />
+                    android:text="Rs 49,999"
+                    android:textColor="#000000" />
 
                 <TextView
                     android:id="@+id/priceChange"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
+                    android:layout_alignParentRight="true"
                     android:layout_below="@id/sellerMrp"
                     android:layout_marginBottom="@dimen/left"
-                    android:layout_marginLeft="32dp"
-                    android:layout_toRightOf="@id/sellerMrpValue"
-                    android:background="#F28E52"
-                    android:paddingLeft="@dimen/left"
-                    android:paddingRight="@dimen/left"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+
 
                     android:text="Additional costs?"
-                    android:textColor="#fff" />
+                    android:textColor="#F28E52" />
             </RelativeLayout>
+
             <RelativeLayout
+                android:id="@+id/rlProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rlmanProd"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:id="@+id/rlProfile">
+                android:layout_margin="@dimen/activity_horizontal_margin">
+
                 <View
+                    android:id="@+id/vw1"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#664A4A4A"
-                    android:id="@+id/vw1"
-                    ></View>
+                    android:background="#664A4A4A"></View>
+
                 <RelativeLayout
-                    android:layout_width="match_parent"
                     android:id="@+id/overView"
+                    android:layout_width="match_parent"
 
                     android:layout_height="wrap_content">
 
                     <ImageView
                         android:id="@+id/spinnArrpro"
                         android:layout_width="16dp"
-                        android:layout_marginTop="@dimen/activity_horizontal_margin"
                         android:layout_height="16dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
-                        android:src="@drawable/expandmore"
-                        android:tint="#000000" /> />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:text="Credit Balance"
-                        android:id="@+id/bal"
                         android:layout_marginTop="@dimen/activity_horizontal_margin"
-                        android:layout_height="wrap_content" />
+                        android:src="@drawable/expandmore"
+                        android:tint="#000000" />
+                    />
+
                     <TextView
+                        android:id="@+id/bal"
                         android:layout_width="wrap_content"
-                        android:text="Credit Balance"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:text="Credit Balance" />
+
+                    <TextView
                         android:id="@+id/availbal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_below="@id/bal"
                         android:layout_marginTop="@dimen/activity_horizontal_margin"
-                        android:layout_height="wrap_content" />
+                        android:text="Credit Balance" />
+
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:text="Credit Balance"
                         android:id="@+id/availbalmsg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_below="@id/availbal"
                         android:layout_marginTop="@dimen/activity_horizontal_margin"
-                        android:layout_height="wrap_content" />
-                    </RelativeLayout>
-               <RelativeLayout
-                   android:layout_width="wrap_content"
-                   android:id="@+id/details"
-                   android:visibility="gone"
-                   android:layout_height="wrap_content">
+                        android:text="Credit Balance" />
+                </RelativeLayout>
 
-                   <ImageView
+                <RelativeLayout
+                    android:id="@+id/details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
-                       android:layout_width="16dp"
-                       android:layout_marginTop="@dimen/activity_horizontal_margin"
-                       android:layout_height="16dp"
-                       android:layout_alignParentRight="true"
-                       android:layout_marginRight="@dimen/activity_horizontal_margin"
-                       android:src="@drawable/expandmore"
-                       android:rotationX="180"
-                       android:tint="#000000" /> />
-                <de.hdodenhof.circleimageview.CircleImageView
+                    <ImageView
 
-                    android:id="@+id/profile_image"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-
-                    android:src="@drawable/images"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:rotationX="180"
+                        android:src="@drawable/expandmore"
+                        android:tint="#000000" />
                     />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_toRightOf="@id/profile_image"
-                    android:layout_marginTop="24dp"
-                    android:id="@+id/pname"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_height="wrap_content"
-                    android:text="Aniket Verma"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:id="@+id/status"
-                    android:layout_toRightOf="@id/profile_image"
-                    android:layout_below="@id/pname"
 
-                    android:layout_height="wrap_content"
-                    android:text="Aniket Verma1"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="3"
-                    android:id="@+id/ll"
-                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    <de.hdodenhof.circleimageview.CircleImageView
 
-                    android:layout_below="@id/profile_image"
-                    android:orientation="horizontal"
+                        android:id="@+id/profile_image"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
 
-                    >
-                    <RelativeLayout
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/cb"
-    android:text="Credit Balance"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/cbValue"
-                            android:paddingTop="@dimen/left"
-                            android:layout_below="@id/cb"
-                            android:text="Credit Balance"/>
-                    </RelativeLayout>
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:src="@drawable/images" />
 
-                    <RelativeLayout
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/pname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="24dp"
+                        android:layout_toRightOf="@id/profile_image"
+                        android:text="Aniket Verma" />
+
+                    <TextView
+                        android:id="@+id/status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/pname"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+
+                        android:layout_toRightOf="@id/profile_image"
+                        android:text="Aniket Verma1" />
+
+                    <LinearLayout
+                        android:id="@+id/ll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/profile_image"
+                        android:layout_margin="@dimen/activity_horizontal_margin"
+
+                        android:orientation="horizontal"
+                        android:weightSum="3"
+
+                        >
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:id="@+id/cl"
-                            android:text="Credit Limit"/>
-                        <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/cb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Credit Balance" />
+
+                            <TextView
+                                android:id="@+id/cbValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/cb"
+                                android:paddingTop="@dimen/left"
+                                android:text="Credit Balance" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:id="@+id/clValue"
-                            android:paddingTop="@dimen/left"
-                            android:layout_below="@id/cl"
-                            android:text="Credit Balance"/>
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/cl"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Credit Limit" />
+
+                            <TextView
+                                android:id="@+id/clValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/cl"
+                                android:paddingTop="@dimen/left"
+                                android:text="Credit Balance" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:id="@+id/cbck"
-                            android:text="Cashback"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/cbckValue"
-                            android:paddingTop="@dimen/left"
-                            android:layout_below="@id/cbck"
-                            android:text="Credit Balance"/>
-                    </RelativeLayout>
-                </LinearLayout>
-               </RelativeLayout>
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/cbck"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Cashback" />
+
+                            <TextView
+                                android:id="@+id/cbckValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/cbck"
+                                android:paddingTop="@dimen/left"
+                                android:text="Credit Balance" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
                 <View
+                    android:id="@+id/vwo"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#664A4A4A"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_below="@id/overView"
-                    android:id="@+id/vwo"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:background="#664A4A4A"
 
 
                     ></View>
+
                 <View
+                    android:id="@+id/vwd"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_below="@id/details"
                     android:background="#664A4A4A"
-                    android:id="@+id/vwd"
-                   android:layout_below="@id/details"
 
 
                     ></View>
@@ -354,6 +377,7 @@
             <TextView
                 android:id="@+id/downPayment"
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rlProfile"
                 android:layout_marginBottom="@dimen/left"
@@ -366,19 +390,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/downPayment"
+
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
 
 
-
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:background="@drawable/roundedproducts">
+                android:background="@drawable/roundedgrey">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:text="Rs.20,000"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                     />
 
                 <Spinner
                     android:id="@+id/spinnerItem"
@@ -403,6 +428,7 @@
                 android:id="@+id/duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:layout_below="@id/downRupees"
                 android:layout_marginBottom="@dimen/left"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -412,54 +438,73 @@
 
             <RelativeLayout
                 android:id="@+id/durationLayout"
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_below="@id/duration"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:background="@drawable/roundedproducts">
+                android:background="@drawable/roundedbr"
+                android:paddingBottom="@dimen/four"
+                android:paddingTop="@dimen/four">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="3"
-                    android:orientation="horizontal">
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <RelativeLayout
                         android:id="@+id/minusR"
-                        android:layout_height="wrap_content">
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
                             android:src="@drawable/minus"
                             android:tint="#000000" />
-                    </LinearLayout>
-<RelativeLayout
-    android:layout_width="0dp"
-    android:layout_weight="1"
-    android:layout_height="wrap_content">
+                    </RelativeLayout>
 
-                    <EditText
-                        android:layout_width="wrap_content"
-                 android:layout_centerInParent="true"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/dValue"
-
-                        android:text="Rs.20,000" />
-</RelativeLayout>
                     <RelativeLayout
                         android:layout_width="0dp"
-
-                        android:id="@+id/plusR"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp">
 
-                        android:layout_height="wrap_content">
+                        <EditText
+                            android:id="@+id/dValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="#ffffff"
+                            android:cursorVisible="true"
+                            android:singleLine="true"
+
+                            android:text="Rs.20,000"
+                            android:textCursorDrawable="@null" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/plusR"
+
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+
+                        android:layout_weight="1">
+
                         <ImageView
+                            android:id="@+id/plusImg"
                             android:layout_width="16dp"
                             android:layout_height="16dp"
-                            android:id="@+id/plusImg"
                             android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+
+                            android:layout_marginRight="@dimen/activity_horizontal_margin"
                             android:src="@drawable/plus"
                             android:tint="#000000" />
                     </RelativeLayout>
@@ -474,95 +519,115 @@
 
                 android:layout_below="@id/durationLayout"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="16dp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
 
-                android:background="@drawable/roundedproducts">
+                android:background="@drawable/roundedgrey">
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:visibility="invisible"
-                    android:text="Have a code?" />
+                    android:text="Have a code?"
+                    android:visibility="invisible" />
 
 
             </RelativeLayout>
+
             <EditText
-                android:layout_width="match_parent"
                 android:id="@+id/hve"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_below="@id/durationLayout"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="16dp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:background="@drawable/roundedblue"
                 android:gravity="center"
-                android:background="@drawable/roundedproducts"
-                android:hint="Have a code?"/>
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="Offers and Cashback"
+                android:inputType="textNoSuggestions"
+                android:textColor="#3380B6"
+                android:textColorHint="#3380B6"
+                android:textCursorDrawable="@null" />
+
             <RelativeLayout
+                android:id="@+id/plusRelative"
                 android:layout_width="52dp"
-android:id="@+id/plusRelative"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="16dp"
                 android:layout_height="56dp"
-                android:visibility="gone"
-                android:background="#44C2A6"
+android:visibility="gone"
                 android:layout_alignParentRight="true"
-                android:layout_below="@id/durationLayout">
+                android:layout_below="@id/durationLayout"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:background="#3380B6"
+                >
+
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/back11"
                     android:id="@+id/plus"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerInParent="true"
                     android:rotationY="180"
 
+                    android:src="@drawable/back11"
                     android:tint="#ffffff"
-                    android:layout_centerInParent="true"
 
                     />
             </RelativeLayout>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:id="@+id/cashback"
-android:visibility="gone"
-    android:layout_below="@id/couponLayout"
-    android:background="@drawable/roundedproducts"
-    android:layout_margin="@dimen/activity_horizontal_margin"
-    android:layout_height="wrap_content">
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:id="@+id/radioCou"
-        android:buttonTint="#F28E52"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="4dp"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:layout_toRightOf="@id/radioCou"
-        android:text="ENTER COUPON CODE"/>
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:id="@+id/radioCash"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:layout_below="@id/radioCou"
-        android:buttonTint="#F28E52"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/radioCou"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:layout_toRightOf="@id/radioCou"
-        android:text="USE CASHBACK"/>
+            <RelativeLayout
+                android:id="@+id/cashback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/roundedgrey"
+                android:layout_below="@id/couponLayout"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:visibility="gone"
+
+                >
 
 
-</RelativeLayout>
+                <RadioButton
+                    android:id="@+id/radioCou"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#3380B6" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="4dp"
+
+                    android:layout_toRightOf="@id/radioCou"
+                    android:text="ENTER COUPON CODE"
+                    android:textAppearance="?android:textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioCash"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/radioCou"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:buttonTint="#F28E52" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/radioCou"
+                    android:layout_marginLeft="6dp"
+                    android:textColor="#F28E52"
+                    android:layout_marginTop="20dp"
+                    android:layout_toRightOf="@id/radioCou"
+                    android:text="USE CASHBACK"
+                    android:textAppearance="?android:textAppearanceMedium" />
+
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/emiDetails"
@@ -571,14 +636,14 @@ android:visibility="gone"
 
                 android:layout_below="@id/cashback"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                android:background="@drawable/roundedproducts">
+                android:background="@drawable/roundedgrey">
 
                 <TextView
                     android:id="@+id/calMonPay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:text="Calculated Monthly Payment" />
+                    android:text="Financing" />
 
                 <TextView
                     android:id="@+id/calMonPayRs"
@@ -586,8 +651,8 @@ android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/calMonPay"
-                    android:textColor="#44C2A6"
-                    android:text="Rs 1924 per month" />
+                    android:text="Rs 1924 per month"
+                    android:textColor="#000000" />
 
                 <TextView
                     android:id="@+id/calTotalPayRs"
@@ -596,23 +661,24 @@ android:visibility="gone"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/calMonPayRs"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
-                    android:text="Total Payable Amount with interest" />
+                    android:text="Total Payable Amount with interest"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/calTotalPay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:textColor="#44C2A6"
                     android:layout_below="@id/calTotalPayRs"
-                    android:text="Rs 1924 per month" />
+                    android:text="Rs 1924 per month"
+                    android:textColor="#44C2A6"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/downar"
-                     />
+                    android:src="@drawable/downar" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -633,7 +699,8 @@ android:visibility="gone"
                         android:layout_marginLeft="@dimen/activity_horizontal_margin"
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="@dimen/left"
-                        android:text="Information" />
+                        android:text="Information"
+                        android:textColor="#000000" />
 
                     <ImageView
                         android:id="@+id/dropdes"
@@ -647,15 +714,16 @@ android:visibility="gone"
                         android:src="@drawable/downar"
                         android:tint="#000000" />
                 </RelativeLayout>
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/detInfo"
-    android:layout_margin="@dimen/activity_horizontal_margin"
-    android:text="This is awesome"
-    android:visibility="gone"
-    android:layout_below="@id/infoLayout"
-    />
+
+                <TextView
+                    android:id="@+id/detInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/infoLayout"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:text=""
+                    android:visibility="gone" />
+
                 <RelativeLayout
                     android:id="@+id/desLayout"
                     android:layout_width="wrap_content"
@@ -669,7 +737,8 @@ android:visibility="gone"
                         android:layout_marginLeft="@dimen/activity_horizontal_margin"
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="@dimen/left"
-                        android:text="Description" />
+                        android:text="Description"
+                        android:textColor="#000000" />
 
                     <ImageView
                         android:id="@+id/dropinfo"
@@ -683,15 +752,16 @@ android:visibility="gone"
                         android:src="@drawable/downar"
                         android:tint="#000000" />
                 </RelativeLayout>
+
                 <TextView
+                    android:id="@+id/detDes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/detDes"
-                    android:layout_margin="@dimen/activity_horizontal_margin"
-                    android:text="This is awesome"
-                    android:visibility="gone"
                     android:layout_below="@id/desLayout"
-                    />
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:text=""
+                    android:visibility="gone" />
+
                 <RelativeLayout
                     android:id="@+id/specLayout"
                     android:layout_width="wrap_content"
@@ -706,7 +776,8 @@ android:visibility="gone"
                         android:layout_marginLeft="@dimen/activity_horizontal_margin"
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="@dimen/left"
-                        android:text="Specifications" />
+                        android:text="Specifications"
+                        android:textColor="#000000" />
 
                     <ImageView
                         android:id="@+id/dropspec"
@@ -720,15 +791,16 @@ android:visibility="gone"
                         android:src="@drawable/downar"
                         android:tint="#000000" />
                 </RelativeLayout>
+
                 <TextView
+                    android:id="@+id/detSpec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/detSpec"
-                    android:layout_margin="@dimen/activity_horizontal_margin"
-                    android:text="This is awesome"
-                    android:visibility="gone"
                     android:layout_below="@id/specLayout"
-                    />
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:text=""
+                    android:visibility="gone" />
+
                 <RelativeLayout
                     android:id="@+id/retLayout"
                     android:layout_width="wrap_content"
@@ -742,7 +814,8 @@ android:visibility="gone"
                         android:layout_marginLeft="@dimen/activity_horizontal_margin"
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="@dimen/left"
-                        android:text="Returns" />
+                        android:text="Returns"
+                        android:textColor="#000000" />
 
                     <ImageView
                         android:id="@+id/dropret"
@@ -758,23 +831,24 @@ android:visibility="gone"
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/detRet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/detRet"
-                    android:layout_margin="@dimen/activity_horizontal_margin"
-                    android:text="This is awesome"
-                    android:visibility="gone"
                     android:layout_below="@id/retLayout"
-                    />
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:text=""
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/knowmore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/dropSpec"
                 android:layout_marginBottom="56dp"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:text="Read more details about the product,seller and shipping on Product Page"
 
                 />
@@ -784,9 +858,9 @@ android:visibility="gone"
                 android:layout_height="48dp"
                 android:layout_below="@id/durationLayout"
                 android:layout_marginTop="16dp"
-                android:visibility="gone"
                 android:layout_toRightOf="@id/couponLayout"
-                android:background="#000000">
+                android:background="#000000"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -804,15 +878,24 @@ android:visibility="gone"
         </RelativeLayout>
     </ScrollView>
 
+    <indwin.c3.shareapp.GIFView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:backgroundTint="#21ae50"
+        android:foregroundTint="#21ae50" />
+
     <TextView
+        android:id="@+id/checkout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="#44C2A6"
         android:gravity="center"
         android:padding="@dimen/activity_horizontal_margin"
-android:id="@+id/checkout"
         android:text="Checkout"
+
         android:textColor="#ffffff"
         android:textStyle="bold" />
 

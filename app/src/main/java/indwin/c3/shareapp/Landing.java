@@ -36,7 +36,7 @@ import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
 
 public class Landing extends AppCompatActivity {
-int count=0;
+    int count=0;
     ViewPager dealspager;
     SharedPreferences sh,sh_otp,ss;
     SharedPreferences userP ;

@@ -226,19 +226,35 @@
 
         <activity
             android:name=".ProductsPage"
+            android:configChanges="orientation"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ConfirmOrder"
+            android:configChanges="orientation"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Editaddress"
+            android:configChanges="orientation"
+
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+
+             />
+        <activity
+            android:name=".PaymentLive"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ConfirmOrder"
+            android:name=".Ordersuccessfailure"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Editaddress"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".PaymentLive"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Ordersuccessfailure"
+        <activity android:name=".SendOtpaddress"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

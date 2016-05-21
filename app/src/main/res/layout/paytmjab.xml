@@ -5,9 +5,11 @@
     android:layout_height="match_parent"
 
     tools:context="indwin.c3.shareapp.ProductsPage">
-
+<include layout="@layout/activity_products_page"
+    />
     <RelativeLayout
         android:id="@+id/toolBar"
+
         android:layout_width="match_parent"
         android:layout_height="@dimen/abc_action_bar_default_height_material"
         android:background="#3380B6">
@@ -39,6 +41,7 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+android:id="@+id/removescroll"
         android:layout_below="@id/toolBar"
         android:background="#ffffff">
 
@@ -69,6 +72,7 @@
                 android:textCursorDrawable="@null"
                 android:drawableLeft="@drawable/search"
                 android:paddingLeft="20dp"
+                android:imeOptions="actionDone"
                 android:singleLine="true"
                 android:text=""
                 android:textColor="#664A4A4A"
@@ -84,7 +88,7 @@
                 android:background="#664A4A4A" />
 
             <ImageView
-                android:id="@+id/logo"
+                android:id="@+id/logod"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/borderView"
@@ -97,7 +101,7 @@
                 android:id="@+id/productDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/logo"
+                android:layout_below="@id/logod"
                 android:layout_centerHorizontal="true"
 
                 android:src="@drawable/product"
@@ -107,17 +111,19 @@
 
             <EditText
                 android:id="@+id/editQ"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/logo"
-                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:layout_below="@id/logod"
+                android:inputType="number"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:hint=" Enter Product Price                  " />
 
             <TextView
                 android:id="@+id/enter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/logo"
+                android:layout_below="@id/logod"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="32dp"
@@ -171,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/viewSec"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                android:background="@drawable/roundedproducts">
+                android:background="@drawable/roundedgrey">
 
                 <TextView
                     android:id="@+id/flx"

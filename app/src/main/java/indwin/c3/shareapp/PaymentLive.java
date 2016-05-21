@@ -48,9 +48,9 @@ import java.util.Random;
 
 public class PaymentLive  extends Activity {
     private static final String LOG_TAG = "PaymentTestActivity";
-
+    private String payname,payemail,payamt,paytitle,payphone;
     public static final String EXTRA_PARAMS = "params";
-
+    private String randomStr="";
     private static final String MERCHANT_KEY = "lhqOEOUh";// old account "zMXH8C";
     private static final String SALT = "QsBtDKH3k8";// "YBLKG80u";
     private static final String BASE_URL = "https://test.payu.in";
@@ -136,18 +136,25 @@ public class PaymentLive  extends Activity {
             else
                 e=String.valueOf(d);
             System.out.println(e);
-
-            String randomStr = System.currentTimeMillis()+e;
+long t=System.currentTimeMillis();
+            t=t/1000;
+            randomStr = String.valueOf(t);
 
              transactionId = hashCal("SHA-256", randomStr).substring(0,
                     20);
-            mInputParams.put(PARAM_TRANSACTION_ID, transactionId);
+            mInputParams.put(PARAM_TRANSACTION_ID,randomStr);
         }
 
         if (TextUtils.isEmpty(mInputParams.get(PARAM_KEY))) {
             mInputParams.put(PARAM_KEY, MERCHANT_KEY);
         }
-
+        SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
+        payamt=String.valueOf(get.getInt("downpayment", 0));
+        paytitle=get.getString("title", "");
+        payname=get.getString("n1", "");
+//        payname="jon sno";
+        payemail=get.getString("e1", "");
+        payphone=get.getString("phone_number", "");
         String hashSequence = "key|txnid|amount|productinfo|firstname|email";
         String hashString = ""  ;
         String[] hashKeys = hashSequence.split("\\|");
@@ -157,7 +164,8 @@ public class PaymentLive  extends Activity {
 
             hashString = hashString.concat("|");
         }
-        String t="lhqOEOUh"+"|"+transactionId+"|"+"1"+"|"+"Mobile"+"|"+"aniket"+"|"+"aniket@hellobuddy.in"+"|||||||||||";
+//        SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
+        String t="lhqOEOUh"+"|"+randomStr+"|"+payamt+"|"+"Mobiles"+"|"+payname+"|"+payemail+"|||||||||||";
         hashString = hashString.concat(SALT);
 t=t.concat(SALT);
         mHashValue = hashCal("SHA-512", t);
@@ -254,22 +262,22 @@ t=t.concat(SALT);
         // }
         //
         // });
+        SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
 
         HashMap<String, String> formParams = new HashMap<String, String>();
         formParams.put(PARAM_KEY, MERCHANT_KEY);
         formParams.put(PARAM_HASH, mHashValue);
         formParams.put(PARAM_TRANSACTION_ID,
-                getNonNullValueFromHashMap(mInputParams, PARAM_TRANSACTION_ID));
-        formParams.put(PARAM_AMOUNT,
-                "1");
+               getNonNullValueFromHashMap(mInputParams,PARAM_TRANSACTION_ID));
+        formParams.put(PARAM_AMOUNT, payamt);
         formParams.put(PARAM_FIRST_NAME,
-                "aniket");
+                payname);
         formParams.put(PARAM_EMAIL,
-                "aniket@hellobuddy.in");
+                payemail);
         formParams.put(PARAM_PHONE,
-                "1000000001");
+                payphone);
         formParams.put(PARAM_PRODUCT_INFO,
-                "Mobile");
+                "Mobiles");
         formParams.put(PARAM_SUCCESS_URL,
                 "https://ssl.hellobuddy.in/payment/payu/success");
         formParams.put(PARAM_FAILURE_URL,
@@ -661,26 +669,33 @@ else
             //   HashMap<String, String> details = data[0];
             JSONObject payload = new JSONObject();
             try {
+                SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
+
                 // payload.put("action", details.get("action"));
-                payload.put("userId","1000000001");
-                payload.put("fkProductId","7070362045");
-                payload.put("seller","7070362045");
-                payload.put("sellingPrice",1);
-                payload.put("downPayment",1);
-                payload.put("loanAmount",1);
-                payload.put("emiTenure",1);
-                payload.put("emi",1);
-                payload.put("interestPayable",1);
-                payload.put("discount",0);
+                payload.put("userId",cred.getString("phone_number",""));
+                payload.put("orderStatus","pendingPayment");
+                payload.put("fkProductId",cred.getString("prid", ""));
+                payload.put("seller",cred.getString("seller", ""));
+                payload.put("sellingPrice",cred.getInt("sp", 0));
+                payload.put("downPayment",cred.getInt("downpayment",0));
+                int loanamt=cred.getInt("sp", 0)-cred.getInt("downpayment",0)-cred.getInt("discount",0)+cred.getInt("service", 0);
+                payload.put("loanAmount",loanamt);
+                payload.put("emiTenure",cred.getInt("monthtenure",0));
+                payload.put("emi",cred.getInt("emi",0));
+                payload.put("interestPayable",cred.getInt("emi",0)*cred.getInt("monthtenure",0)-loanamt);
+                payload.put("discount",cred.getInt("discount",0));
                 payload.put("creditsUsed",0);
                 payload.put("deliveryFee",0);
-                payload.put("txnId",transactionId);
-
-                payload.put("deliveryAddress","7070362045");
-                payload.put("userComments","7070362045");
-                payload.put("serviceCharges",1);
-                payload.put("totalPayable" ,1);
-//                payload.put("userid","7070362045");
+                payload.put("txnId",getNonNullValueFromHashMap(mInputParams,PARAM_TRANSACTION_ID));
+                payload.put("couponCode",cred.getString("whichCoupon", ""));
+                payload.put("deliveryAddress",cred.getString("address",""));
+                payload.put("userComments",cred.getString("usercom", ""));
+                payload.put("serviceCharges",cred.getInt("service",0));
+                payload.put("totalPayable" ,cred.getInt("emi",0)*cred.getInt("monthtenure",0)+cred.getInt("downpayment",0));
+//
+                if(cred.getInt("cashback",0)==1)
+                payload.put("isCashbackApplied" ,true);
+//  payload.put("userid","7070362045");
 
 
 

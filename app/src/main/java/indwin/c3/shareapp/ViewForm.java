@@ -68,6 +68,7 @@ private String res;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
+    private String reviewUrl="";
     private String seller,prodid;
     int which_page=0;
     @Override
@@ -76,6 +77,11 @@ private String res;
         userP = getSharedPreferences("token", Context.MODE_PRIVATE);
         try{
             which_page=getIntent().getExtras().getInt("which_page");}
+        catch (Exception e)
+        {}
+        try{
+            reviewUrl=getIntent().getExtras().getString("reviewUrl");
+        }
         catch (Exception e)
         {}
         setContentView(R.layout.activity_view_form);
@@ -113,6 +119,9 @@ else
             test.setText("Profile Details");
         else
         if(which_page==9)
+            test.setText("Products");
+        else
+        if(which_page==119)
             test.setText("Products");
         else
         if(which_page==10)
@@ -572,6 +581,12 @@ in.putExtra("checksharefromweb",1);
                     case 17:
                         url=getApplicationContext().getString(R.string.web)+"/repayments" +
                                 "?m=no&userid="+userid+"&key="+result;
+                        break;
+                    case 119:
+                        try {
+                            url = reviewUrl;
+                        }
+                        catch (Exception e){}
                         break;
 
                 }

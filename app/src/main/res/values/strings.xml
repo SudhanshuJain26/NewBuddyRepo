@@ -13,8 +13,8 @@
     <string name="Rs">\u20B9</string>
     <string name="hint1"><i>Enter OTP</i></string>
     <string name="fblogin">Connect your account</string>
-    <string name="server">http://ninja.hellobuddy.in/</string>
-    <string name="web">https://mobile.hellobuddy.in</string>
+    <!--<string name="server">http://ninja.hellobuddy.in/</string>-->
+    <string name="web">http://54.169.128.156:7777</string>
     <string name="title_activity_facebook_auth">FacebookAuth</string>
     <string name="h2"><i>Phone Number</i></string>
     <string name="buddyagent"><i>buddyuseragent</i></string>
@@ -26,5 +26,5 @@
     <string name="h8"><i>New Password</i></string>
     <string name="h9"><i>Re-enter new Password</i></string>
 
-    <!--<string name="server">https://ssl.hellobuddy.in/</string>-->
+    <string name="server">https://ssl.hellobuddy.in/</string>
 </resources>

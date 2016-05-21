@@ -1,7 +1,9 @@
 package indwin.c3.shareapp;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -37,13 +40,22 @@ public class Editaddress extends AppCompatActivity {
 //    myList.add("Android1");
 int CheckSize=0;
     ListView listView;
+//    BroadcastReceiver broadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerReceiver(broadcastReceiver, new IntentFilter("order"));
         setContentView(R.layout.activity_editaddress);
         backpress();
         String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry","WebOS","Ubuntu","Windows7","Max OS X"};
       myList = new ArrayList<Deladd>();
+        Deladd d1 = new Deladd();
+        d1.setAdd("add" + String.valueOf(0));
+        SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+        String coll=userP.getString("nameadd","");
+        d1.setLine1(coll);
+
+        myList.add(d1);
 
         new getAddress().execute();
 
@@ -156,7 +168,11 @@ catch (Exception e)
 
                             CheckSize=del.length();
 
-                            for(int i=0;i<del.length();i++)
+//                        d.setLine2(off.getString("line2"));
+//                        d.setcity(off.getString("city"));
+//                        d.setstate(off.getString("state"));
+
+                            for(int i=1;i<=del.length();i++)
                             {
 
                             String add="";
@@ -174,6 +190,8 @@ catch (Exception e)
                                 d.setAdd("add" + String.valueOf(i));
                             d.setLine1(off.getString("line1"));
                             d.setLine2(off.getString("line2"));
+                                d.setcity(off.getString("city"));
+                                d.setstate(off.getString("state"));
 if(isActive)
                             myList.add(d);
                         }
@@ -191,15 +209,15 @@ if(isActive)
         }
 
         protected void onPostExecute(String result) {
-            if (result.equals("win")) {
-Deladd c=new Deladd();
+           {
+                Deladd c=new Deladd();
                 c.setLine1("Add an address");
                 myList.add(c);
 //                myList.add("Add an address");
-                Adaptersimple adapter = new Adaptersimple(Editaddress.this, myList,CheckSize);
+                Adaptersimple adapter = new Adaptersimple(Editaddress.this, myList,CheckSize+1);
                 listView = (ListView) findViewById(R.id.list1);
                 listView.setDivider(null);
-                RelativeLayout.LayoutParams mParam = new RelativeLayout.LayoutParams(2000,202*myList.size() );
+                LinearLayout.LayoutParams mParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT );
                 listView.setLayoutParams(mParam);
                 listView.setAdapter(adapter);
 
@@ -224,4 +242,18 @@ Deladd c=new Deladd();
             }
         });
     }
-            }
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals("order"))
+                finish();
+
+        }
+    };
+
+    public void finish() {
+        super.finish();
+    };
+
+}

@@ -793,6 +793,11 @@ if(d==1)
                     //profile url to be included later
                     email = data.getString("email");
                     Name = data.getString("name");
+                    SharedPreferences sharedpreferences11 = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor11 = sharedpreferences11.edit();
+                    editor11.putString("n1", Name);
+                    editor11.putString("e1", email);
+                    editor11.commit();
                     try {
                         uniqueCode = data.getString("uniqueCode");
                         SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);

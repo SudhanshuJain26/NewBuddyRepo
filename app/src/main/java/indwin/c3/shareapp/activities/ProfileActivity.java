@@ -31,6 +31,7 @@ import indwin.c3.shareapp.Splash;
 import indwin.c3.shareapp.ViewForm;
 import indwin.c3.shareapp.Views.MLRoundedImageView;
 import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.com.google.gson.Gson;
@@ -372,9 +373,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         hiName = (TextView) findViewById(R.id.hi_name);
         layout = (LinearLayout) findViewById(R.id.rl1);
         middleLayout = (LinearLayout) findViewById(R.id.middle_layout);
-        verifyIdentityCardView.setVisibility(View.GONE);
-        autoRepayCardView.setVisibility(View.GONE);
-        moreCreditCardView.setVisibility(View.GONE);
+        verifyIdentityCardView.setVisibility(View.VISIBLE);
+        autoRepayCardView.setVisibility(View.VISIBLE);
+        moreCreditCardView.setVisibility(View.VISIBLE);
         declinedCardView.setVisibility(View.VISIBLE);
         layout.setBackgroundColor(Color.parseColor("#c67876"));
         middleLayout.setBackgroundColor(Color.parseColor("#d99897"));
@@ -383,7 +384,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         String name = "Hi " + user.getName() + ",";
         hiName.setText(name);
         String text;
-        if (user.getRejectionReason() != null && !"".equals(user.getRejectionReason())) {
+        if (AppUtils.isNotEmpty(user.getRejectionReason())) {
             text = "You have currently been waitlisted " + user.getRejectionReason() + "\nThank you for applying!";
         } else {
             text = "You have currently been waitlisted. Please contact us to know more.\nThank you for applying!";
@@ -397,7 +398,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-
 
 
     private void incomplete1k() {

@@ -42,6 +42,7 @@ import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.models.TrendingMapWrapper;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
 
@@ -905,20 +906,29 @@ public class Splash extends AppCompatActivity {
                 userMap.put("profileStatus", user.getProfileStatus());
             }
             if (data1.opt("status1K") != null) {
-                user.setStatus1K(data1.getString("status1K"));
-                userMap.put("status1K", user.getStatus1K());
-                user.setAppliedFor1k(false);
-            }
-            if (data1.opt("status7K") != null) {
-                user.setStatus7K(data1.getString("status7K"));
-                userMap.put("status7K", user.getStatus7K());
-                user.setAppliedFor7k(false);
-            }
-            if (data1.opt("status60K") != null) {
-                user.setStatus60K(data1.getString("status60K"));
-                userMap.put("status60K", user.getStatus60K());
-                user.setAppliedFor60k(false);
-            }
+                    String status1K = data1.getString("status1K");
+                    user.setStatus1K(status1K);
+                    userMap.put("status1K", status1K);
+                    if (Constants.STATUS.DECLINED.toString().equals(status1K) || Constants.STATUS.APPLIED.toString().equals(status1K) || Constants.STATUS.APPROVED.toString().equals(status1K))
+                        user.setAppliedFor1k(true);
+                    else user.setAppliedFor1k(false);
+                }
+                if (data1.opt("status7K") != null) {
+                    String status7K = data1.getString("status7K");
+                    user.setStatus7K(status7K);
+                    userMap.put("status7K", status7K);
+                    if (Constants.STATUS.DECLINED.toString().equals(status7K) || Constants.STATUS.APPLIED.toString().equals(status7K) || Constants.STATUS.APPROVED.toString().equals(status7K))
+                        user.setAppliedFor7k(true);
+                    else user.setAppliedFor7k(false);
+                }
+                if (data1.opt("status60K") != null) {
+                    String status60K = data1.getString("status60K");
+                    user.setStatus60K(status60K);
+                    userMap.put("status60K", status60K);
+                    if (Constants.STATUS.DECLINED.toString().equals(status60K) || Constants.STATUS.APPLIED.toString().equals(status60K) || Constants.STATUS.APPROVED.toString().equals(status60K))
+                        user.setAppliedFor60k(true);
+                    else user.setAppliedFor60k(false);
+                }
             Intercom.client().updateUser(userMap);
             if (data1.opt("fbConnected") != null)
                 user.setIsFbConnected(Boolean.parseBoolean(data1.getString("fbConnected")));
@@ -956,6 +966,8 @@ public class Splash extends AppCompatActivity {
                 user.setBankIfsc(data1.getString("bankIFSC"));
             if (data1.opt("rollNumber") != null)
                 user.setRollNumber(data1.getString("rollNumber"));
+            if (data1.opt("rejectionReason") != null)
+                user.setRejectionReason(data1.getString("rejectionReason"));
             if (data1.optJSONArray("familyMember") != null) {
                 JSONArray familyMembers = data1.getJSONArray("familyMember");
                 for (int i = 0; i < familyMembers.length(); i++) {

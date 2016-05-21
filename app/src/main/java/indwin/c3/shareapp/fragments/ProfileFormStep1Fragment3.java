@@ -262,7 +262,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             public void onClick(View v) {
                 user = AppUtils.getUserObject(getActivity());
                 checkIncomplete();
-                if ((user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()
+                if ((user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender() || user.isIncompleteRollNumber()
                         || user.isIncompleteAadhar() || user.isIncompleteCollegeDetails()
                         || user.isIncompleteCollegeId() || user.isIncompletePermanentAddress())
                         && !mPrefs.getBoolean("skipIncompleteMessage", false) || !AppUtils.isNotEmpty(user.getSelfie()) || !AppUtils.isNotEmpty(user.getSignature())) {

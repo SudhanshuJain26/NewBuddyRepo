@@ -95,16 +95,16 @@ public class AgreementActivity extends AppCompatActivity {
             settings.setJavaScriptEnabled(true);
             settings.setUserAgentString(settings.getUserAgentString() + getApplicationContext().getString(R.string.buddyagent));
             termsAndConditionWebView.setWebChromeClient(new WebChromeClient() {
-                                   public boolean onConsoleMessage(ConsoleMessage cm) {
+                public boolean onConsoleMessage(ConsoleMessage cm) {
 
-                                       Log.d("MyApplication agreement", cm.message() + " -- From line "
-                                               + cm.lineNumber() + " of "
-                                               + cm.sourceId());
-                                       return true;
-                                   }
-                               });
+                    Log.d("MyApplication agreement", cm.message() + " -- From line "
+                            + cm.lineNumber() + " of "
+                            + cm.sourceId());
+                    return true;
+                }
+            });
             //termsAndConditionWebView.loadUrl(AppUtils.TnC_URL);
-            termsAndConditionWebView.loadUrl(getApplicationContext().getString(R.string.web)+"termsApp");
+            termsAndConditionWebView.loadUrl(getApplicationContext().getString(R.string.web) + "termsApp");
             takeASelfie = (Button) findViewById(R.id.take_a_selfie_button);
 
             acceptTerms = (Button) findViewById(R.id.accept_terms);
@@ -341,6 +341,8 @@ public class AgreementActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Drawable d = Drawable.createFromPath(mCurrentPhotoPath);
             if (d == null) {
+                user.setSelfie("");
+                isSelfieAdded = false;
                 Toast.makeText(getBaseContext(),
                         "Error while capturing image", Toast.LENGTH_LONG)
 
@@ -358,8 +360,7 @@ public class AgreementActivity extends AppCompatActivity {
             takeASelfie.setPadding(0, 0, 0, 0);
             user.setSelfie(mCurrentPhotoPath);
             user.setUpdateSelfie(true);
-            String json = gson.toJson(user);
-            mPrefs.edit().putString("UserObject", json).apply();
+            AppUtils.saveUserObject(this, user);
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resultCode == Activity.RESULT_OK) {
             hasPermissions(this, PERMISSIONS);
         }
@@ -378,7 +379,7 @@ public class AgreementActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        if (!AppUtils.isNotEmpty(user.getSelfie()) || !AppUtils.isNotEmpty(user.getSignature())) {
+        if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
 
             ProfileFormStep1Fragment3.incompleteAgreement.setVisibility(View.VISIBLE);
             ProfileFormStep1Fragment3.completeAgreement.setVisibility(View.GONE);
@@ -389,8 +390,7 @@ public class AgreementActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
+        user = AppUtils.getUserObject(this);
     }
 
     public String[] hasPermissions(Context context, final String... permissions) {

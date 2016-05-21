@@ -312,6 +312,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
             @Override
             public void afterTextChanged(Editable s) {
                 isRollNUmberUpdate = true;
+                user.setUpdateRollNumber(true);
             }
         });
         gotoFragment1.setOnClickListener(new View.OnClickListener()

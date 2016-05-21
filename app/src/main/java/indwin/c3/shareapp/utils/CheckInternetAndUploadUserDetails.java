@@ -47,7 +47,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
     String selfieUrl = "", signatureUrl = "";
 
     @Override
-    public void onReceive(Context context, Intent arg1) {
+    public synchronized void onReceive(Context context, Intent arg1) {
         mContext = context;
         mPrefs = mContext.getSharedPreferences("buddy", Context.MODE_PRIVATE);
         if (!mPrefs.getBoolean("updatingDB", false)) {
@@ -102,7 +102,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
         @Override
         protected synchronized String doInBackground(String... params) {
             UserModel userImages = AppUtils.getUserObject(mContext);
-            if (userImages.getNewCollegeIds() != null && user.getNewCollegeIds().size() > 0) {
+            if (userImages.getNewCollegeIds() != null && userImages.getNewCollegeIds().size() > 0) {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewCollegeIds().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {

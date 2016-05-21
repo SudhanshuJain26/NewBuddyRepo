@@ -71,7 +71,8 @@ public class ProfileFormStep3Fragment3 extends Fragment {
     private static final int REQUEST_PERMISSION_SETTING = 99;
     ImageView topImage;
     private ImageButton bankHelptip;
-private ImageView incompleteStudentLoan,completeStudentLoan;
+    private ImageView incompleteStudentLoan, completeStudentLoan;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -155,7 +156,7 @@ private ImageView incompleteStudentLoan,completeStudentLoan;
             incompleteStep3.setVisibility(View.VISIBLE);
         }
         if (user.isIncompleteStudentLoan())
-                       incompleteStudentLoan.setVisibility(View.VISIBLE);
+            incompleteStudentLoan.setVisibility(View.VISIBLE);
         setOnClickListener();
         if (user.isAppliedFor60k()) {
             previous.setVisibility(View.INVISIBLE);

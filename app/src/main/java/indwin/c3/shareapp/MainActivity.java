@@ -17,6 +17,9 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+
+import android.support.v7.app.AlertDialog;
+
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -49,7 +52,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import java.util.jar.Manifest;
+
+
+import indwin.c3.shareapp.application.BuddyApplication;
+import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
 
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
@@ -62,13 +72,16 @@ public class MainActivity extends AppCompatActivity {
     private PendingIntent pendingIntent;
     String url = "";
     static String token;
+
     private int cashBack=0;
+
     static Activity act;
     public static final String MyPREFERENCES = "buddy";
     SharedPreferences sharedpreferences, sharedpreferences2;
     static String userId = "", pass = "";
     int d = 0;
     private ProgressBar spinner;
+
     private String Name = "", email = "", fbid = "",courseCompletiondate="", formstatus = "", uniqueCode = "", creditLimit = "", panoradhar = "", bankaccount = "", collegeid = "", verificationdate = "", rejectionReason = "";
     private EditText username, password;
     HashMap<String, String> data11;
@@ -83,328 +96,346 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        boolean accountDeleted = getIntent().getBooleanExtra(Constants.ACCOUNT_DELETED, false);
+        if (accountDeleted) {
+
+            showAccountDeletedPopup();
+        }
         act = this;
-
-
         url = getApplicationContext().getString(R.string.server) + "authenticate";
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         sharedpreferences2 = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
-        if (sharedpreferences.getInt("checklog", 0) == 1) {
-            userId = sharedpreferences2.getString("name", null);
-            pass = sharedpreferences2.getString("password", null);
-            new ItemsByKeyword().execute(url);
-        } else {
-            d = 1;
 
+        d = 1;
+        overridePendingTransition(0, 0);
+        setContentView(R.layout.activity_main);
 
-            overridePendingTransition(0, 0);
-            setContentView(R.layout.activity_main);
-//            Intercom.client().reset();
-            rerr = (RelativeLayout) findViewById(R.id.error);
-            error = (TextView) findViewById(R.id.msg);
-            spinner = (ProgressBar) findViewById(R.id.progressBar1);
-            username = (EditText) findViewById(R.id.phone_number);
-            password = (EditText) findViewById(R.id.password);
-            username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (hasFocus) {
-                        username.setHint(R.string.h2);
-                        //  Toast.makeText(getApplicationContext(), "got the focus", Toast.LENGTH_LONG).show();
-                    } else {
-                        username.setHint("Phone Number");
-                        // Toast.makeText(getApplicationContext(), "lost the focus", Toast.LENGTH_LONG).show();
-                    }
+        rerr = (RelativeLayout) findViewById(R.id.error);
+        error = (TextView) findViewById(R.id.msg);
+        spinner = (ProgressBar) findViewById(R.id.progressBar1);
+        username = (EditText) findViewById(R.id.phone_number);
+        password = (EditText) findViewById(R.id.password);
+        username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    username.setHint(R.string.h2);
+                    //  Toast.makeText(getApplicationContext(), "got the focus", Toast.LENGTH_LONG).show();
+                } else {
+                    username.setHint("Phone Number");
+                    // Toast.makeText(getApplicationContext(), "lost the focus", Toast.LENGTH_LONG).show();
                 }
-            });
-            password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (hasFocus) {
-                        password.setHint(R.string.h3);
-                        //  Toast.makeText(getApplicationContext(), "got the focus", Toast.LENGTH_LONG).show();
-                    } else {
-                        password.setHint("Password");
-                        // Toast.makeText(getApplicationContext(), "lost the focus", Toast.LENGTH_LONG).show();
-                    }
+            }
+        });
+        password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    password.setHint(R.string.h3);
+                    //  Toast.makeText(getApplicationContext(), "got the focus", Toast.LENGTH_LONG).show();
+                } else {
+                    password.setHint("Password");
+                    // Toast.makeText(getApplicationContext(), "lost the focus", Toast.LENGTH_LONG).show();
                 }
-            });
-            pL = username.getPaddingLeft();
-            pT = username.getPaddingTop();
-            pR = username.getPaddingRight();
-            pB = username.getPaddingBottom();
-            login = (TextView) findViewById(R.id.Login);
-            login.setEnabled(false);
-            final TextWatcher mTextEditorWatcher = new TextWatcher() {
+            }
+        });
+        pL = username.getPaddingLeft();
+        pT = username.getPaddingTop();
+        pR = username.getPaddingRight();
+        pB = username.getPaddingBottom();
+        login = (TextView) findViewById(R.id.Login);
+        login.setEnabled(false);
+        final TextWatcher mTextEditorWatcher = new TextWatcher() {
 
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                }
+            }
 
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    //This sets a textview to the current length
-                    username.setBackgroundResource(R.drawable.texted);
-                    username.setPadding(pL, pT, pR, pB);
-                    password.setBackgroundResource(R.drawable.texted);
-                    password.setPadding(pL, pT, pR, pB);
-//
-//  textview.setText(String.valueOf(s.length());
-//                    int padding_in_dp = 16;  // 6 dps
-//                    final float scale = getResources().getDisplayMetrics().density;
-//                    int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
-//                  //  final float scale = getResources().getDisplayMetrics().density;
-//                    int padding_in_px1 = (int) (48 * scale + 0.5f);
-//                    //final float scale = getResources().getDisplayMetrics().density;
-//                    int padding_in_px2 = (int) (5 * scale + 0.5f);
-//                    username.setPadding(0,padding_in_px,0,0);
-//                    password.setPadding(0,padding_in_px,0,0);
-//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
-//                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
-//                    username.setLayoutParams(params);
-//                    RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
-//                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
-//                    password.setLayoutParams(params1);
-//
-//  Toast.makeText(getApplicationContext(),
-//                                "Please Enter your password",
-//                                Toast.LENGTH_LONG).show();
-//                    username.setBackgroundResource(R.drawable.texted);
-//                    password.setBackgroundResource(R.drawable.texted);
-                    rerr.setVisibility(View.INVISIBLE);
-//                    error.setText("Please login with correct userid.")
-                    if (s.length() == 10)
-                        checkuserid = 1;
-                    else
-                        checkuserid = 0;
-                    if ((checkuserid == 1) && (checkpass == 1)) {
-                        login.setEnabled(true);
-                        login.setTextColor(Color.parseColor("#ffffff"));
-                    } else {
-                        login.setEnabled(false);
-                        login.setTextColor(Color.parseColor("#66ffffff"));
-                    }
-
-                }
-
-                public void afterTextChanged(Editable s) {
-                }
-            };
-            username.addTextChangedListener(mTextEditorWatcher);
-
-            final TextWatcher mTextEditorWatcher1 = new TextWatcher() {
-
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    //This sets a textview to the current length
-
-                    username.setBackgroundResource(R.drawable.texted);
-                    username.setPadding(pL, pT, pR, pB);
-                    password.setBackgroundResource(R.drawable.texted);
-                    password.setPadding(pL, pT, pR, pB);
-//                    int padding_in_dp = 16;  // 6 dps
-//                    final float scale = getResources().getDisplayMetrics().density;
-//                    int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
-//                    //  final float scale = getResources().getDisplayMetrics().density;
-//                    int padding_in_px1 = (int) (48 * scale + 0.5f);
-//                    //final float scale = getResources().getDisplayMetrics().density;
-//                    int padding_in_px2 = (int) (5 * scale + 0.5f);
-//                    username.setPadding(0,padding_in_px,0,0);
-//                    password.setPadding(0,padding_in_px,0,0);
-//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
-//                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
-//                    username.setLayoutParams(params);
-//                    RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
-//                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
-//                    password.setLayoutParams(params1);
-////
-////  Toast.makeText(getApplicationContext(),
-////                                "Please Enter your password",
-////                                Toast.LENGTH_LONG).show();
-//                    username.setBackgroundResource(R.drawable.texted);
-//                    password.setBackgroundResource(R.drawable.texted);
-                    rerr.setVisibility(View.INVISIBLE);
-
-                    //  textview.setText(String.valueOf(s.length());
-                    if (s.length() > 0)
-                        checkpass = 1;
-                    else
-                        checkpass = 0;
-                    if ((checkuserid == 1) && (checkpass == 1)) {
-                        login.setEnabled(true);
-                        login.setTextColor(Color.parseColor("#ffffff"));
-                    } else {
-                        login.setEnabled(false);
-                        login.setTextColor(Color.parseColor("#66ffffff"));
-                    }
-
-                }
-
-                public void afterTextChanged(Editable s) {
-                }
-            };
-            password.addTextChangedListener(mTextEditorWatcher1);
-
-            notreg = (TextView) findViewById(R.id.signUp);
-            notreg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent in2 = new Intent(MainActivity.this, Inviteform.class);
-                    in2.putExtra("login", 1);
-                    finish();
-                    startActivity(in2);
-                    overridePendingTransition(0, 0);
-                }
-            });
-            login_otp = (TextView) findViewById(R.id.Login_otp);
-            login_otp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent opt = new Intent(MainActivity.this, Login_with_otp.class);
-                    finish();
-                    startActivity(opt);
-                    overridePendingTransition(0, 0);
-
-
-                }
-            });
-
-            login.setTextColor(Color.parseColor("#66ffffff"));
-            login.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+                username.setBackgroundResource(R.drawable.texted);
+                username.setPadding(pL, pT, pR, pB);
+                password.setBackgroundResource(R.drawable.texted);
+                password.setPadding(pL, pT, pR, pB);
+                //
+                //  textview.setText(String.valueOf(s.length());
+                //                    int padding_in_dp = 16;  // 6 dps
+                //                    final float scale = getResources().getDisplayMetrics().density;
+                //                    int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+                //                  //  final float scale = getResources().getDisplayMetrics().density;
+                //                    int padding_in_px1 = (int) (48 * scale + 0.5f);
+                //                    //final float scale = getResources().getDisplayMetrics().density;
+                //                    int padding_in_px2 = (int) (5 * scale + 0.5f);
+                //                    username.setPadding(0,padding_in_px,0,0);
+                //                    password.setPadding(0,padding_in_px,0,0);
+                //                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
+                //                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+                //                    username.setLayoutParams(params);
+                //                    RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
+                //                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+                //                    password.setLayoutParams(params1);
+                //
+                //  Toast.makeText(getApplicationContext(),
+                //                                "Please Enter your password",
+                //                                Toast.LENGTH_LONG).show();
+                //                    username.setBackgroundResource(R.drawable.texted);
+                //                    password.setBackgroundResource(R.drawable.texted);
+                rerr.setVisibility(View.INVISIBLE);
+                //                    error.setText("Please login with correct userid.")
+                if (s.length() == 10)
+                    checkuserid = 1;
+                else
+                    checkuserid = 0;
+                if ((checkuserid == 1) && (checkpass == 1)) {
+                    login.setEnabled(true);
                     login.setTextColor(Color.parseColor("#ffffff"));
+                } else {
                     login.setEnabled(false);
-
-                    SharedPreferences.Editor editor2 = sharedpreferences2.edit();
-                    editor2.putString("name", username.getText().toString());
-
-                    editor2.putString("password", password.getText().toString());
-                    editor2.commit();
-                    userId = username.getText().toString();
-                    pass = password.getText().toString();
-                    SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor edc = cred.edit();
-                    edc.putString("phone_number", userId);
-                    edc.commit();
-//                    String tok_sp=toks.getString("token_value","");
-
-                    if ((userId.length() != 0) && (pass.length() != 0)) {
-                        new ItemsByKeyword().execute(url);
-                        login_otp.setEnabled(false);
-                        notreg.setEnabled(false);
-                    } else if (userId.length() != 0) {
-                        login.setTextColor(Color.parseColor("#66ffffff"));
-//                        int padding_in_dp = 16;  // 6 dps
-//                        final float scale = getResources().getDisplayMetrics().density;
-//                        int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
-//                        //  final float scale = getResources().getDisplayMetrics().density;
-//                        int padding_in_px1 = (int) (48 * scale + 0.5f);
-//                        //final float scale = getResources().getDisplayMetrics().density;
-//                        int padding_in_px2 = (int) (5 * scale + 0.5f);
-//                        username.setPadding(0,padding_in_px,0,0);
-//                        password.setPadding(0,padding_in_px,0,0);
-//                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
-//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
-//                        username.setLayoutParams(params);
-//                        RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
-//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
-//                        password.setLayoutParams(params1);
-////
-////  Toast.makeText(getApplicationContext(),
-////                                "Please Enter your password",
-////                                Toast.LENGTH_LONG).show();
-////                      username.setBackgroundResource(R.drawable.texted);
-//                        password.setBackgroundResource(R.drawable.texted2);
-
-                        password.setBackgroundResource(R.drawable.texted2);
-                        password.setPadding(pL, pT, pR, pB);
-                        rerr.setVisibility(View.VISIBLE);
-                        error.setText("Please Enter your password");
-                        login.setEnabled(true);
-
-                    } else if (pass.length() != 0) {
-                        login.setTextColor(Color.parseColor("#66ffffff"));
-                        login.setEnabled(true);
-//                        Toast.makeText(getApplicationContext(),
-//                                "Please Enter your userid.",
-//                                Toast.LENGTH_LONG).show();
-                        rerr.setVisibility(View.VISIBLE);
-//                        username.setBackgroundResource(R.drawable.texted2);
-//                        int padding_in_dp = 16;  // 6 dps
-//                        final float scale = getResources().getDisplayMetrics().density;
-//                        int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
-//                        //  final float scale = getResources().getDisplayMetrics().density;
-//                        int padding_in_px1 = (int) (48 * scale + 0.5f);
-//                        //final float scale = getResources().getDisplayMetrics().density;
-//                        int padding_in_px2 = (int) (5 * scale + 0.5f);
-//                        username.setPadding(0,padding_in_px,0,0);
-//                        password.setPadding(0,padding_in_px,0,0);
-//                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
-//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
-//                        username.setLayoutParams(params);
-//                        RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
-//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
-//                        password.setLayoutParams(params1);
-////  Toast.makeText(getApplicationContext(),
-////                                "Please Enter your password",
-////                                Toast.LENGTH_LONG).show();
-//                        username.setBackgroundResource(R.drawable.texted2);
-//                        password.setBackgroundResource(R.drawable.texted2);
-                        //    password.setBackgroundResource(R.drawable.texted);
-
-                        username.setBackgroundResource(R.drawable.texted2);
-                        username.setPadding(pL, pT, pR, pB);
-                        error.setText("Please Enter your userid.");
-                    } else {
-                        login.setEnabled(true);
-                        login.setTextColor(Color.parseColor("#66ffffff"));
-//                        Toast.makeText(getApplicationContext(),
-
-//                                "Fields are empty",
-////                                Toast.LENGTH_LONG).show();
-//                        int padding_in_dp = 16;  // 6 dps
-//                        final float scale = getResources().getDisplayMetrics().density;
-//                        int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
-//                        //  final float scale = getResources().getDisplayMetrics().density;
-//                        int padding_in_px1 = (int) (48 * scale + 0.5f);
-//                        //final float scale = getResources().getDisplayMetrics().density;
-//                        int padding_in_px2 = (int) (5 * scale + 0.5f);
-//                        username.setPadding(0,padding_in_px,0,0);
-//                        password.setPadding(0,padding_in_px,0,0);
-//                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
-//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
-//                        username.setLayoutParams(params);
-//                        RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
-//                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
-//                        password.setLayoutParams(params1);
-////
-////  Toast.makeText(getApplicationContext(),
-////                                "Please Enter your password",
-////                                Toast.LENGTH_LONG).show();
-////                        username.setBackgroundResource(R.drawable.texted);
-////                        password.setBackgroundResource(R.drawable.texted2);
-//                        username.setBackgroundResource(R.drawable.texted2);
-//                        password.setBackgroundResource(R.drawable.texted2);
-                        rerr.setVisibility(View.VISIBLE);
-
-                        username.setBackgroundResource(R.drawable.texted2);
-                        username.setPadding(pL, pT, pR, pB);
-
-                        password.setBackgroundResource(R.drawable.texted2);
-                        password.setPadding(pL, pT, pR, pB);
-                        error.setText("Fields are empty");
-                    }
+                    login.setTextColor(Color.parseColor("#66ffffff"));
                 }
-            });
-        }
+
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        username.addTextChangedListener(mTextEditorWatcher);
+
+        final TextWatcher mTextEditorWatcher1 = new TextWatcher() {
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+
+                username.setBackgroundResource(R.drawable.texted);
+                username.setPadding(pL, pT, pR, pB);
+                password.setBackgroundResource(R.drawable.texted);
+                password.setPadding(pL, pT, pR, pB);
+                //                    int padding_in_dp = 16;  // 6 dps
+                //                    final float scale = getResources().getDisplayMetrics().density;
+                //                    int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+                //                    //  final float scale = getResources().getDisplayMetrics().density;
+                //                    int padding_in_px1 = (int) (48 * scale + 0.5f);
+                //                    //final float scale = getResources().getDisplayMetrics().density;
+                //                    int padding_in_px2 = (int) (5 * scale + 0.5f);
+                //                    username.setPadding(0,padding_in_px,0,0);
+                //                    password.setPadding(0,padding_in_px,0,0);
+                //                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
+                //                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+                //                    username.setLayoutParams(params);
+                //                    RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
+                //                    params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+                //                    password.setLayoutParams(params1);
+                ////
+                ////  Toast.makeText(getApplicationContext(),
+                ////                                "Please Enter your password",
+                ////                                Toast.LENGTH_LONG).show();
+                //                    username.setBackgroundResource(R.drawable.texted);
+                //                    password.setBackgroundResource(R.drawable.texted);
+                rerr.setVisibility(View.INVISIBLE);
+
+                //  textview.setText(String.valueOf(s.length());
+                if (s.length() > 0)
+                    checkpass = 1;
+                else
+                    checkpass = 0;
+                if ((checkuserid == 1) && (checkpass == 1)) {
+                    login.setEnabled(true);
+                    login.setTextColor(Color.parseColor("#ffffff"));
+                } else {
+                    login.setEnabled(false);
+                    login.setTextColor(Color.parseColor("#66ffffff"));
+                }
+
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        password.addTextChangedListener(mTextEditorWatcher1);
+
+        notreg = (TextView) findViewById(R.id.signUp);
+        notreg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in2 = new Intent(MainActivity.this, Inviteform.class);
+                in2.putExtra("login", 1);
+                finish();
+                startActivity(in2);
+                overridePendingTransition(0, 0);
+            }
+        });
+        login_otp = (TextView) findViewById(R.id.Login_otp);
+        login_otp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent opt = new Intent(MainActivity.this, Login_with_otp.class);
+                finish();
+                startActivity(opt);
+                overridePendingTransition(0, 0);
+
+
+            }
+        });
+
+        login.setTextColor(Color.parseColor("#66ffffff"));
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login.setTextColor(Color.parseColor("#ffffff"));
+                login.setEnabled(false);
+
+                SharedPreferences.Editor editor2 = sharedpreferences2.edit();
+                editor2.putString("name", username.getText().toString());
+                editor2.putString("password", password.getText().toString());
+                editor2.commit();
+                userId = username.getText().toString();
+                pass = password.getText().toString();
+                SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                SharedPreferences.Editor edc = cred.edit();
+                edc.putString("phone_number", userId);
+                edc.commit();
+                SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+                com.google.gson.Gson gson = new com.google.gson.Gson();
+                UserModel user = new UserModel();
+                user.setUserId(userId);
+                String json = gson.toJson(user);
+                mPrefs.edit().putString("UserObject", json).apply();
+                //                    String tok_sp=toks.getString("token_value","");
+
+                if ((userId.length() != 0) && (pass.length() != 0)) {
+                    new ItemsByKeyword().execute(url);
+                    login_otp.setEnabled(false);
+                    notreg.setEnabled(false);
+                } else if (userId.length() != 0) {
+                    login.setTextColor(Color.parseColor("#66ffffff"));
+                    //                        int padding_in_dp = 16;  // 6 dps
+                    //                        final float scale = getResources().getDisplayMetrics().density;
+                    //                        int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+                    //                        //  final float scale = getResources().getDisplayMetrics().density;
+                    //                        int padding_in_px1 = (int) (48 * scale + 0.5f);
+                    //                        //final float scale = getResources().getDisplayMetrics().density;
+                    //                        int padding_in_px2 = (int) (5 * scale + 0.5f);
+                    //                        username.setPadding(0,padding_in_px,0,0);
+                    //                        password.setPadding(0,padding_in_px,0,0);
+                    //                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
+                    //                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+                    //                        username.setLayoutParams(params);
+                    //                        RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
+                    //                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+                    //                        password.setLayoutParams(params1);
+                    ////
+                    ////  Toast.makeText(getApplicationContext(),
+                    ////                                "Please Enter your password",
+                    ////                                Toast.LENGTH_LONG).show();
+                    ////                      username.setBackgroundResource(R.drawable.texted);
+                    //                        password.setBackgroundResource(R.drawable.texted2);
+
+                    password.setBackgroundResource(R.drawable.texted2);
+                    password.setPadding(pL, pT, pR, pB);
+                    rerr.setVisibility(View.VISIBLE);
+                    error.setText("Please Enter your password");
+                    login.setEnabled(true);
+
+                } else if (pass.length() != 0) {
+                    login.setTextColor(Color.parseColor("#66ffffff"));
+                    login.setEnabled(true);
+                    //                        Toast.makeText(getApplicationContext(),
+                    //                                "Please Enter your userid.",
+                    //                                Toast.LENGTH_LONG).show();
+                    rerr.setVisibility(View.VISIBLE);
+                    //                        username.setBackgroundResource(R.drawable.texted2);
+                    //                        int padding_in_dp = 16;  // 6 dps
+                    //                        final float scale = getResources().getDisplayMetrics().density;
+                    //                        int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+                    //                        //  final float scale = getResources().getDisplayMetrics().density;
+                    //                        int padding_in_px1 = (int) (48 * scale + 0.5f);
+                    //                        //final float scale = getResources().getDisplayMetrics().density;
+                    //                        int padding_in_px2 = (int) (5 * scale + 0.5f);
+                    //                        username.setPadding(0,padding_in_px,0,0);
+                    //                        password.setPadding(0,padding_in_px,0,0);
+                    //                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
+                    //                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+                    //                        username.setLayoutParams(params);
+                    //                        RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
+                    //                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+                    //                        password.setLayoutParams(params1);
+                    ////  Toast.makeText(getApplicationContext(),
+                    ////                                "Please Enter your password",
+                    ////                                Toast.LENGTH_LONG).show();
+                    //                        username.setBackgroundResource(R.drawable.texted2);
+                    //                        password.setBackgroundResource(R.drawable.texted2);
+                    //    password.setBackgroundResource(R.drawable.texted);
+
+                    username.setBackgroundResource(R.drawable.texted2);
+                    username.setPadding(pL, pT, pR, pB);
+                    error.setText("Please Enter your userid.");
+                } else {
+                    login.setEnabled(true);
+                    login.setTextColor(Color.parseColor("#66ffffff"));
+                    //                        Toast.makeText(getApplicationContext(),
+
+                    //                                "Fields are empty",
+                    ////                                Toast.LENGTH_LONG).show();
+                    //                        int padding_in_dp = 16;  // 6 dps
+                    //                        final float scale = getResources().getDisplayMetrics().density;
+                    //                        int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+                    //                        //  final float scale = getResources().getDisplayMetrics().density;
+                    //                        int padding_in_px1 = (int) (48 * scale + 0.5f);
+                    //                        //final float scale = getResources().getDisplayMetrics().density;
+                    //                        int padding_in_px2 = (int) (5 * scale + 0.5f);
+                    //                        username.setPadding(0,padding_in_px,0,0);
+                    //                        password.setPadding(0,padding_in_px,0,0);
+                    //                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)username.getLayoutParams();
+                    //                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+                    //                        username.setLayoutParams(params);
+                    //                        RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)password.getLayoutParams();
+                    //                        params.setMargins(padding_in_px1, padding_in_px, padding_in_px1, padding_in_px2);
+                    //                        password.setLayoutParams(params1);
+                    ////
+                    ////  Toast.makeText(getApplicationContext(),
+                    ////                                "Please Enter your password",
+                    ////                                Toast.LENGTH_LONG).show();
+                    ////                        username.setBackgroundResource(R.drawable.texted);
+                    ////                        password.setBackgroundResource(R.drawable.texted2);
+                    //                        username.setBackgroundResource(R.drawable.texted2);
+                    //                        password.setBackgroundResource(R.drawable.texted2);
+                    rerr.setVisibility(View.VISIBLE);
+
+                    username.setBackgroundResource(R.drawable.texted2);
+                    username.setPadding(pL, pT, pR, pB);
+
+                    password.setBackgroundResource(R.drawable.texted2);
+                    password.setPadding(pL, pT, pR, pB);
+                    error.setText("Fields are empty");
+                }
+            }
+        });
+
         Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
         Intercom.client().registerIdentifiedUser(
                 new Registration().withUserId(userId));
-        Intercom.client().openGCMMessage(getIntent());
+        try {
+            Intercom.client().openGCMMessage(getIntent());
+        } catch (Exception e) {
+        }
     }
+
+    private void showAccountDeletedPopup() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        View view = MainActivity.this.getLayoutInflater().inflate(R.layout.alert_delete_account_message, null);
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+    }
+
+
 
     @Override
     public void onBackPressed() {
@@ -412,11 +443,13 @@ public class MainActivity extends AppCompatActivity {
         finish();
         startActivity(in);
         overridePendingTransition(0, 0);
+
         
     }
 
     private class ItemsByKeyword extends
             AsyncTask<String, Void, String> {
+
         @Override
         protected void onPreExecute() {
             if (d == 1)
@@ -495,15 +528,19 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
 
-                new login().execute(url);
+
+                new Login().execute(url);
+
 
             }
 
         }
     }
 
-    private class login extends
-            AsyncTask<String, Void, String> {
+
+    private class Login extends
+                        AsyncTask<String, Void, String> {
+
         @Override
         protected String doInBackground(String... data) {
 
@@ -518,46 +555,38 @@ public class MainActivity extends AppCompatActivity {
                 payload.put("password", pass);
                 // payload.put("action", details.get("action"));
 
-                HttpParams httpParameters = new BasicHttpParams();
 
-                HttpConnectionParams
-                        .setConnectionTimeout(httpParameters, 30000);
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
-                HttpClient client = new DefaultHttpClient(httpParameters);
                 String url2 = getApplicationContext().getString(R.string.server) + "api/user/login";
-                HttpPost httppost = new HttpPost(url2);
-                httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
-                httppost.setHeader("x-access-token", tok_sp);
-                httppost.setHeader("Content-Type", "application/json");
 
+                HttpResponse response = AppUtils.connectToServerPost(url2, payload.toString(), tok_sp);
 
-                StringEntity entity = new StringEntity(payload.toString());
-
-                httppost.setEntity(entity);
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
-                if (response.getStatusLine().getStatusCode() != 200) {
-
-                    Log.e("MeshCommunication", "Server returned code "
-                            + response.getStatusLine().getStatusCode());
-                    return "fail";
-                } else {
-                    JSONObject resp = new JSONObject(responseString);
-
-                    if (resp.getString("status").contains("error")) {
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
 
                         Log.e("MeshCommunication", "Server returned code "
                                 + response.getStatusLine().getStatusCode());
-                        return resp.getString("msg");
+                        return "fail";
                     } else {
+                        JSONObject resp = new JSONObject(responseString);
 
-                        return "win";
+                        if (resp.getString("status").contains("error")) {
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return resp.getString("msg");
+                        } else {
+
+                            return "win";
+
+                        }
 
                     }
+                } else return "fail";
 
-                }
 
             } catch (Exception e) {
                 Log.e("mesherror", e.getMessage());
@@ -567,6 +596,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+
 if(d==1)
                 spinner.setVisibility(View.GONE);
             if (!result.contains("win")) {
@@ -574,25 +604,13 @@ if(d==1)
                 // populateUserDetails();
                 if (result.contains("Invalid userid")) {
                     login.setEnabled(true);
-//                    Toast.makeText(getApplicationContext(),
-//                            "Please login with correct credentials ",
-//                            Toast.LENGTH_LONG).show();
-//                    int padding_in_dp = 16;  // 6 dps
-//                    final float scale = getResources().getDisplayMetrics().density;
-//                    int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
-//                    username.setPadding(0,padding_in_px,0,0);
-//                    password.setPadding(0,padding_in_px,0,0);
-//
-//  Toast.makeText(getApplicationContext(),
-//                                "Please Enter your password",
-//                                Toast.LENGTH_LONG).show();
+
                     notreg.setEnabled(true);
                     login_otp.setEnabled(true);
                     username.setBackgroundResource(R.drawable.texted2);
 
                     //  password.setBackgroundResource(R.drawable.texted);
                     username.setPadding(pL, pT, pR, pB);
-//                    password.setBackgroundResource(R.drawable.texted);
                     rerr.setVisibility(View.VISIBLE);
                     error.setText("Please login with correct userid.");
                 } else if (result.contains("Invalid password")) {
@@ -601,18 +619,6 @@ if(d==1)
                     rerr.setVisibility(View.VISIBLE);
                     notreg.setEnabled(true);
                     login_otp.setEnabled(true);
-//                    username.setBackgroundResource(R.drawable.texted);
-//                    int padding_in_dp = 16;  // 6 dps
-//                    final float scale = getResources().getDisplayMetrics().density;
-//                    int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
-//                    username.setPadding(0,padding_in_px,0,0);
-//                    password.setPadding(0,padding_in_px,0,0);
-////
-//  Toast.makeText(getApplicationContext(),
-//                                "Please Enter your password",
-//                                Toast.LENGTH_LONG).show();
-//                    username.setBackgroundResource(R.drawable.texted);
-//                    password.setBackgroundResource(R.drawable.texted2);
                     password.setBackgroundResource(R.drawable.texted2);
 
                     //password.setBackgroundResource(R.drawable.texted);
@@ -642,23 +648,19 @@ if(d==1)
                 }
 
                 //  getAllSms();
+
                 Intent alarmIntent = new Intent(MainActivity.this, AndroidReceiver.class);
                 pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
                 setAlarm();
                 int results = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.READ_SMS);
                 int w = 0;
                 int resultscon = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.READ_CONTACTS);
-//while(w==0){
                 if (resultscon == PackageManager.PERMISSION_GRANTED) {
                     w = 1;
 
                     new Thread(new Runnable() {
                         public void run() {
 
-//                            getALlContacts();
-//                            getAllSms();
-
-//                    getALlContacts();
                         }
 
                     }).start();
@@ -676,10 +678,7 @@ if(d==1)
                     new Thread(new Runnable() {
                         public void run() {
 
-                            //  getALlContacts();
-                       //     getAllSms();
-
-//                    getALlContacts();
+                            //  getALlContacts()
                         }
 
                     }).start();
@@ -689,12 +688,13 @@ if(d==1)
 
                 }
 
-//                new Thread(new Runnable() {
-//                    public void run(){
-////                       getALlContacts();
-//                       // getAllSms();
-//                    }
-//                }).start();
+                //                new Thread(new Runnable() {
+                //                    public void run(){
+                ////                       getALlContacts();
+                //                       // getAllSms();
+                //                    }
+                //                }).start();
+
                 //   getALlContacts();
 
 
@@ -715,6 +715,7 @@ if(d==1)
 
                             //  getALlContacts();
                             //  getALlContacts();
+
 //                            getAllSms();
 
 //                    getALlContacts();
@@ -734,6 +735,7 @@ if(d==1)
                     new Thread(new Runnable() {
                         public void run() {
 
+
 //                            getALlContacts();
 //                            getAllSms(
 
@@ -745,15 +747,20 @@ if(d==1)
 
                 } else {
 
-//                    Snackbar.make(view,"Permission Denied, You cannot access location data.",Snackbar.LENGTH_LONG).show();
-
                 }
                 break;
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppUtils.sendGoogleAnalytics((BuddyApplication) getApplication());
+    }
+
     private class checkuser extends
-            AsyncTask<String, Void, String> {
+                            AsyncTask<String, Void, String> {
+
         @Override
         protected String doInBackground(String... params) {
 
@@ -793,11 +800,29 @@ if(d==1)
                     //profile url to be included later
                     email = data.getString("email");
                     Name = data.getString("name");
+
                     SharedPreferences sharedpreferences11 = getSharedPreferences("cred", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor11 = sharedpreferences11.edit();
                     editor11.putString("n1", Name);
                     editor11.putString("e1", email);
                     editor11.commit();
+
+                    Gson gson = new Gson();
+                    String json = sharedpreferences.getString("UserObject", "");
+                    UserModel user = gson.fromJson(json, UserModel.class);
+                    if (user == null)
+                        user = new UserModel();
+                    user.setName(Name);
+                    user.setEmail(email);
+                    if (data.opt("offlineForm") != null && !data.getBoolean("offlineForm"))
+                        checkDataForNormalUser(user, gson, data);
+                    else
+                        checkDataForOfflineUser(user, gson, data);
+                    json = gson.toJson(user);
+
+                    json = gson.toJson(user);
+                    sharedpreferences.edit().putString("UserObject", json).apply();
+
                     try {
                         uniqueCode = data.getString("uniqueCode");
                         SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
@@ -817,18 +842,18 @@ if(d==1)
                     }
 
                     try {
-                        courseCompletiondate=data.getString("courseCompletionDate");
+
                         SharedPreferences.Editor editor2 = toks.edit();
                         editor2.putString("course", courseCompletiondate);
 
                         //  editor2.putString("password", password.getText().toString());
                         editor2.commit();
-                       // SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
 
                         formstatus = data.getString("formStatus");
                     } catch (Exception e) {
                         formstatus = "empty";
                     }
+
 
                     try{
                         cashBack=data.getInt("totalCashback");
@@ -867,6 +892,7 @@ if(d==1)
                     editorP.putInt("creditLimit", creditLimit);
                     editorP.putInt("totalBorrowed", totalBorrowed);
                     editorP.putInt("cashBack", cashBack);
+
                     editorP.commit();
 
                     if (formstatus.equals(""))
@@ -916,6 +942,7 @@ if(d==1)
                     }
                     if (verificationdate.equals(""))
                         verificationdate = "NA";
+
                     // TODO: 2/7/2016  add college id field and check
 
                     if (resp.getString("status").contains("fail")) {
@@ -924,9 +951,7 @@ if(d==1)
                                 + response.getStatusLine().getStatusCode());
                         return "fail";
                     } else {
-
                         return "win";
-
                     }
 
                 }
@@ -938,13 +963,193 @@ if(d==1)
             }
         }
 
-        protected void onPostExecute(String result) {
-            if (d == 1){
-                spinner.setVisibility(View.GONE);
-            notreg.setEnabled(true);
-            login_otp.setEnabled(true);}
-            if (result.contains("fail")) {
+        private void checkDataForNormalUser(UserModel user, Gson gson, JSONObject data1) {
+            try {
+                Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
+                Intercom.client().registerIdentifiedUser(
+                        new Registration().withUserId(user.getUserId()));
+                user.setEmailSent(false);
+                if (data1.opt("gender") != null)
+                    user.setGender(data1.getString("gender"));
+                if (data1.opt("approvedBand") != null)
+                    user.setApprovedBand(data1.getString("approvedBand"));
+                if (data1.opt("formStatus") != null)
+                    user.setFormStatus(data1.getString("formStatus"));
+                Map userMap = new HashMap<>();
+                if (data1.opt("profileStatus") != null) {
+                    user.setProfileStatus(data1.getString("profileStatus"));
+                    userMap.put("profileStatus", user.getProfileStatus());
+                }
+                if (data1.opt("status1K") != null) {
+                    String status1K = data1.getString("status1K");
+                    user.setStatus1K(status1K);
+                    userMap.put("status1K", status1K);
+                    if (Constants.STATUS.DECLINED.toString().equals(status1K) || Constants.STATUS.APPLIED.toString().equals(status1K) || Constants.STATUS.APPROVED.toString().equals(status1K))
+                        user.setAppliedFor1k(true);
+                    else user.setAppliedFor1k(false);
+                }
+                if (data1.opt("status7K") != null) {
+                    String status7K = data1.getString("status7K");
+                    user.setStatus7K(status7K);
+                    userMap.put("status7K", status7K);
+                    if (Constants.STATUS.DECLINED.toString().equals(status7K) || Constants.STATUS.APPLIED.toString().equals(status7K) || Constants.STATUS.APPROVED.toString().equals(status7K))
+                        user.setAppliedFor7k(true);
+                    else user.setAppliedFor7k(false);
+                }
+                if (data1.opt("status60K") != null) {
+                    String status60K = data1.getString("status60K");
+                    user.setStatus60K(status60K);
+                    userMap.put("status60K", status60K);
+                    if (Constants.STATUS.DECLINED.toString().equals(status60K) || Constants.STATUS.APPLIED.toString().equals(status60K) || Constants.STATUS.APPROVED.toString().equals(status60K))
+                        user.setAppliedFor60k(true);
+                    else user.setAppliedFor60k(false);
+                }
+                Intercom.client().updateUser(userMap);
+                if (data1.opt("creditLimit") != null)
+                    user.setCreditLimit(data1.getInt("creditLimit"));
+                if (data1.opt("totalBorrowed") != null) {
+                    if (user.getCreditLimit() == 0) {
+                        user.setAvailableCredit(0);
+                    } else {
+                        int available = user.getCreditLimit() - data1.getInt("totalBorrowed");
+                        if (available > 0) {
+                            user.setAvailableCredit(available);
+                        } else {
+                            user.setAvailableCredit(0);
+                        }
+                    }
+                } else {
+                    user.setAvailableCredit(user.getCreditLimit());
+                }
+                if (data1.opt("totalCashback") != null)
+                    user.setCashBack(data1.getInt("totalCashback"));
+                if (data1.opt("emailVerified") != null)
+                    user.setEmailVerified(data1.getBoolean("emailVerified"));
+                if (data1.opt("fbConnected") != null)
+                    user.setIsFbConnected(Boolean.parseBoolean(data1.getString("fbConnected")));
+                if (data1.opt("college") != null)
+                    user.setCollegeName(data1.getString("college"));
+                if (data1.opt("course") != null)
+                    user.setCourseName(data1.getString("course"));
+                if (data1.opt("courseCompletionDate") != null)
+                    user.setCourseEndDate(data1.getString("courseCompletionDate"));
+                if (data1.opt("gpa") != null) {
 
+                    user.setGpa(data1.getString("gpa"));
+                }
+                if (data1.opt("gpaType") != null) {
+
+                    user.setGpaType(data1.getString("gpaType"));
+                }
+                if (data1.opt("collegeIDs") != null)
+                    user.setCollegeIds(gson.fromJson(data1.getString("collegeIDs"), ArrayList.class));
+                if (data1.opt("addressProofs") != null)
+                    user.setAddressProofs(gson.fromJson(data1.getString("addressProofs"), ArrayList.class));
+                if (data1.opt("panOrAadhar") != null) {
+                    user.setPanOrAadhar(data1.getString("panOrAadhar"));
+                    if ("PAN".equals(user.getPanOrAadhar()))
+                        user.setPanNumber(data1.getString("pan"));
+                    else
+                        user.setAadharNumber(data1.getString("aadhar"));
+                }
+                if (data1.opt("dob") != null)
+                    user.setDob(data1.getString("dob"));
+                if (data1.opt("accomodation") != null)
+                    user.setAccommodation(data1.getString("accomodation"));
+                if (data1.opt("currentAddress") != null)
+                    user.setCurrentAddress(data1.getJSONObject("currentAddress").getString("line1"));
+                if (data1.opt("permanentAddress") != null)
+                    user.setPermanentAddress(data1.getJSONObject("permanentAddress").getString("line1"));
+                if (data1.opt("rollNumber") != null)
+                    user.setRollNumber(data1.getString("rollNumber"));
+                if (data1.opt("rejectionReason") != null)
+                    user.setRejectionReason(data1.getString("rejectionReason"));
+                if (data1.optJSONArray("familyMember") != null) {
+                    JSONArray familyMembers = data1.getJSONArray("familyMember");
+                    for (int i = 0; i < familyMembers.length(); i++) {
+                        JSONObject familyJson = familyMembers.getJSONObject(i);
+                        if (i == 1) {
+                            if (familyJson.getString("relation") != null) {
+                                user.setFamilyMemberType2(familyJson.getString("relation"));
+                                user.setProfessionFamilyMemberType2(familyJson.getString("occupation"));
+                                user.setPhoneFamilyMemberType2(familyJson.getString("phone"));
+                                user.setPrefferedLanguageFamilyMemberType2(familyJson.getString("preferredLanguage"));
+                            }
+                        } else {
+                            if (familyJson.getString("relation") != null) {
+                                user.setFamilyMemberType1(familyJson.getString("relation"));
+                                user.setProfessionFamilyMemberType1(familyJson.getString("occupation"));
+                                user.setPhoneFamilyMemberType1(familyJson.getString("phone"));
+                                user.setPrefferedLanguageFamilyMemberType1(familyJson.getString("preferredLanguage"));
+                            }
+                        }
+                    }
+                }
+                if (data1.opt("bankAccountNumber") != null)
+                    user.setBankAccNum(data1.getString("bankAccountNumber"));
+                if (data1.opt("bankIFSC") != null)
+                    user.setBankIfsc(data1.getString("bankIFSC"));
+                if (data1.opt("friendName") != null)
+                    user.setClassmateName(data1.getString("friendName"));
+                if (data1.opt("friendNumber") != null)
+                    user.setClassmatePhone(data1.getString("friendNumber"));
+                if (data1.opt("collegeIdVerificationDate") != null)
+                    user.setVerificationDate(data1.getString("collegeIdVerificationDate"));
+                if (data1.opt("annualFees") != null)
+                    user.setAnnualFees(data1.getString("annualFees"));
+                if (data1.opt("scholarship") != null)
+                    user.setScholarship(String.valueOf(data1.getString("scholarship")));
+                if (data1.opt("scholarshipProgram") != null)
+                    user.setScholarshipType(data1.getString("scholarshipProgram"));
+                if (data1.opt("scholarshipAmount") != null)
+                    user.setScholarshipAmount(data1.getString("scholarshipAmount"));
+                if (data1.opt("takenLoan") != null)
+                    user.setStudentLoan(data1.getString("takenLoan"));
+                if (data1.opt("monthlyExpense") != null)
+                    user.setMonthlyExpenditure(data1.getString("monthlyExpense"));
+                if (data1.opt("ownVehicle") != null)
+                    user.setVehicle(String.valueOf(data1.getString("ownVehicle")));
+                if (data1.opt("vehicleType") != null)
+                    user.setVehicleType(data1.getString("vehicleType"));
+                if (data1.opt("bankStatements") != null)
+                    user.setBankStmts(gson.fromJson(data1.getString("bankStatements"), ArrayList.class));
+                if (data1.opt("bankProofs") != null)
+                    user.setBankProofs(gson.fromJson(data1.getString("bankProofs"), ArrayList.class));
+                if (data1.opt("selfie") != null) {
+                    JSONArray array = data1.getJSONArray("selfie");
+                    user.setSelfie((String) array.get(0));
+                } else {
+                    user.setSelfie("");
+                }
+                if (data1.opt("signature") != null) {
+                    JSONArray array = data1.getJSONArray("signature");
+                    user.setSignature((String) array.get(0));
+                } else {
+                    user.setSignature("");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void checkDataForOfflineUser(UserModel user, Gson gson, JSONObject data1) {
+            try {
+                sharedpreferences.edit().putBoolean("visitedFormStep1Fragment1", true).apply();
+                sharedpreferences.edit().putBoolean("visitedFormStep1Fragment2", true).apply();
+                sharedpreferences.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
+                checkDataForNormalUser(user, gson, data1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        protected void onPostExecute(String result) {
+            if (d == 1) {
+                spinner.setVisibility(View.GONE);
+                notreg.setEnabled(true);
+                login_otp.setEnabled(true);
+            }
+            if (result.contains("fail")) {
                 // populateUserDetails();
 
                 Toast.makeText(getApplicationContext(),
@@ -967,7 +1172,6 @@ if(d==1)
                 try {
 
 
-              //      setUpPush();
                     try {
                         Map userMap = new HashMap<>();
                         System.out.println("Intercom data 1" + userId);
@@ -1020,7 +1224,6 @@ if(d==1)
                         in.putExtra("VeriDate", verificationdate);
                     }
 
-
                     finish();
                     in.putExtra("Name", Name);
                     in.putExtra("Email", email);
@@ -1030,16 +1233,19 @@ if(d==1)
                     startActivity(in);
                     overridePendingTransition(0, 0);
                 }
+
                 if (formstatus.equals("approved")||(formstatus.equals("flashApproved"))) {
 
                     Intent in = new Intent(MainActivity.this, HomePage.class);
                     // Intent in = new Intent(MainActivity.this, Inviteform.class);
                     finish();
                     in.putExtra("Name", Name);
+
                     if(formstatus.equals("approved"))
                         in.putExtra("checkflash",0);
                     else
                         in.putExtra("checkflash",1);
+
 
                     in.putExtra("fbid", fbid);
                     in.putExtra("Email", email);//
@@ -1049,7 +1255,7 @@ if(d==1)
                     startActivity(in);
                     overridePendingTransition(0, 0);
                 } else if (formstatus.equals("empty")) {
-//                    Intent in = new Intent(MainActivity.this, Inviteform    .class);
+
                     Intent in = new Intent(MainActivity.this, HomePage.class);
                     finish();
                     in.putExtra("Name", Name);
@@ -1060,6 +1266,7 @@ if(d==1)
                     startActivity(in);
                     overridePendingTransition(0, 0);
                 }
+
 
 
             }
@@ -1082,8 +1289,6 @@ if(d==1)
                 int length = check.length();
 
 
-//            }
-//            catch (Exception e){}
                 String check2 = check.substring(1, length - 1);
                 String pay;
 
@@ -1158,7 +1363,7 @@ if(d==1)
 
         @Override
         protected void onPostExecute(String result) {
-//            Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
+
             // TODO Auto-generated method stub
             if (result.equals("win")) {
 
@@ -1186,12 +1391,6 @@ if(d==1)
                     System.out.print("regre" + s + "ssio");
                 }
 
-//                int length = check.length();
-
-
-//            }
-//            catch (Exception e){}
-//                String check2 = check.substring(1, length - 1);
                 String pay;
 
 
@@ -1268,7 +1467,7 @@ if(d==1)
 
         @Override
         protected void onPostExecute(String result) {
-//            Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
+
             // TODO Auto-generated method stub
             if (result.equals("win")) {
                 System.out.println(result);
@@ -1291,17 +1490,6 @@ if(d==1)
                 try {
                     Contacts cObj = new Contacts();
 
-//                String address=cu.getString(cu.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
-//
-//                String organisation = cu.getString(cu.getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY));
-//          String Website = cu.getString(cu.getColumnIndex(ContactsContract.CommonDataKinds.Website.URL));
-//////
-//              String notes = cu.getString(cu.getColumnIndex(ContactsContract.CommonDataKinds.Note.NOTE));
-////                String address = cu.getString(cu.getColumnIndex(ContactsContract.CommonDataKinds.SipAddress.SIP_ADDRESS));
-//               String phoen = cu.getString(cu.getColumnIndex(ContactsContract.Contacts.PHONETIC_NAME));
-//               String nick = cu.getString(cu.getColumnIndex(ContactsContract.CommonDataKinds.Nickname.NAME));
-//                String im=cu.getString(cu.getColumnIndex(ContactsContract.CommonDataKinds.In
-//                String im=cu.getString(cu.getColumnIndex(ContactsContract.Contacts.1
                     try {
                         id = cu.getString(
                                 cu.getColumnIndex(ContactsContract.Contacts._ID));
@@ -1383,7 +1571,6 @@ if(d==1)
                         eObj.setemail(email);
                         eObj.setemail_type(emailType);
                         eMail.add(eObj);
-//                    System.out.println(emailType+"eeee");
                     }
                     cObj.setEm(eMail);
                     emailCur.close();
@@ -1519,7 +1706,7 @@ if(d==1)
                             System.out.println("Error with contact");
                         }
                         cObj.setNick(nickname);
-//                    String title = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE));
+
                     }
                     nick.close();
                     con.add(cObj);
@@ -1538,27 +1725,28 @@ if(d==1)
                 }
 
             }
-//            int w=0;
-//            for(Contacts item:con)
-//            {
-//                if(w++%500==0)
-//                {
-//                    con2.add(item);
-//                    new SendContactToServer().execute(con2);
-//                }
-//            }
+            //            int w=0;
+            //            for(Contacts item:con)
+            //            {
+            //                if(w++%500==0)
+            //                {
+            //                    con2.add(item);
+            //                    new SendContactToServer().execute(con2);
+            //                }
+            //            }
             new SendContactToServer().execute(con);
-//for(int i=0;i<batchcount1;i++)
-//{
-//    con2.add(con.get(i));
-//    if(i%500==0)
-//    {
-//        new SendContactToServer().execute(con2);
-//
-//        con2.clear();
-//
-//    }
-//}
+            //for(int i=0;i<batchcount1;i++)
+            //{
+            //    con2.add(con.get(i));
+            //    if(i%500==0)
+            //    {
+            //        new SendContactToServer().execute(con2);
+            //
+            //        con2.clear();
+            //
+            //    }
+            //}
+
             if (!con2.isEmpty()) {
                 new SendContactToServer().execute(con2);
                 con2.clear();
@@ -1570,6 +1758,7 @@ if(d==1)
 
 
     }
+
 
     public void setAlarm()
     {
@@ -1626,9 +1815,7 @@ long timeToset=1459871688+21600;
                 batchCount++;
                 if (batchCount == 350) {
                     System.out.println("sm12a" + lstSms.get(0).getMsg());
-//                    new SendSmsToServer().execute(lstSms);
-                    // lstSms.clear();
-  //                  new SendSmsToServer().execute(lstSms);
+
                     lstSms.clear();
                     batchCount = 0;
 
@@ -1638,7 +1825,6 @@ long timeToset=1459871688+21600;
         }
 
         if (batchCount > 0) {
-//            new SendSmsToServer().execute(lstSms);
         }
         SharedPreferences pref = getSharedPreferences("MyPref", 0);
         pref.edit().putBoolean("sms_sent", true).commit();

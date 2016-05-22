@@ -3,31 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="64dp">
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="18dp"
-        android:id="@+id/backo"
-android:tint="#ffffff"
-        android:src="@drawable/backne"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Forgot Password"
-        android:textColor="#ffffff"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_toRightOf="@id/backo"/>
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="18dp"
+            android:id="@+id/backo"
+            android:tint="#ffffff"
+            android:src="@drawable/backne"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password"
+            android:textColor="#ffffff"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/backo"/>
+    </RelativeLayout>
     <TextView
         android:id="@+id/buddyLogo"
         android:layout_width="wrap_content"
@@ -107,12 +107,12 @@ android:tint="#ffffff"
         android:inputType="number"
 
 
-     android:layout_below="@id/lSign"
+        android:layout_below="@id/lSign"
         android:layout_marginBottom="5dp"
         android:textColorHint="#99ffffff"
         android:textColor="#CCffffff"
         android:paddingTop="16dp"
-android:background="@drawable/texted"
+        android:background="@drawable/texted"
         android:textCursorDrawable="@null"
         android:layout_marginLeft="48dp"
         android:layout_marginRight="48dp"
@@ -184,7 +184,7 @@ android:background="@drawable/texted"
         android:layout_alignParentBottom="true"
 
 
-      android:paddingTop="80dp"
+        android:paddingTop="80dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
 
         android:textColor="#66ffffff"

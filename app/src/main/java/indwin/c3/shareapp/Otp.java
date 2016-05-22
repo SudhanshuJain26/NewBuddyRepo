@@ -80,12 +80,12 @@ public class Otp extends AppCompatActivity {
         if(ot_check==3)
         {
             setContentView(R.layout.verifyotp);
-        TextView t=(TextView)findViewById(R.id.buddyLogo);
+            TextView t=(TextView)findViewById(R.id.buddyLogo);
             SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
-        t.setText("To change your password, please verify with OTP first.Your OTP will be sent to +91-"+get.getString("phone_number",""));}
+            t.setText("To change your password, please verify with OTP first.Your OTP will be sent to +91-"+get.getString("phone_number",""));}
         else
 
-        setContentView(R.layout.otp);
+            setContentView(R.layout.otp);
         timer = (TextView) findViewById(R.id.textLook);
 
         new CountDownTimer(30000, 1000) {
@@ -542,10 +542,10 @@ public class Otp extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             if(ot_check!=3){
-            verify.setEnabled(true);
-            verify.setTextColor(Color.parseColor("#ffffff"));
-            d = 0;
-            spinner.setVisibility(View.GONE);}
+                verify.setEnabled(true);
+                verify.setTextColor(Color.parseColor("#ffffff"));
+                d = 0;
+                spinner.setVisibility(View.GONE);}
 //                    inotp.putExtra("Name", mName);
 //                    inotp.putExtra("Email",email.getText().toString());
 //                    inotp.putExtra("College",college.getText().toString());

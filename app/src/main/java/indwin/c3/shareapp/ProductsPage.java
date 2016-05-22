@@ -17,7 +17,9 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListPopupWindow;
 import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -76,6 +80,7 @@ public class ProductsPage extends AppCompatActivity {
     private TextView inc, priceChange, status, creditBalance, creditLimit, cashBack, availbal, availbalmsg, knowmore;
     private EditText hve, queryN;
     private int checkImg = 1, searchPrice, currDay;
+    private String userProfileStatus="";
     String sellerNme1 = "", productId1 = "";
     private String s="";
     private String whichCoupon="";
@@ -99,7 +104,10 @@ public class ProductsPage extends AppCompatActivity {
     private int t = 100, count = 0;
     private Spinner spinner;
     private int checkLenghtedittext=0;
-    private String value = "", maxValue = "";
+    private int value = 0;
+    private int maxValue = 0,minProd=0;
+    private String type="";
+
     private int[] myMonths = {1, 2, 3, 6, 9, 12, 15, 18};
     private String selectedText = "", downPayment = "";
 
@@ -107,12 +115,13 @@ public class ProductsPage extends AppCompatActivity {
     private int sellingPrice, monthsallowed, spInc, spDec, dayToday, cuurr;
     private TextView brandName, sellingRs, pname;
     private EditText query, dValue, queryNew;
+    private String userCode="";
     private TextView emiAmount, titlePro, totalLoan, detInfo, detSpec, detRet, detDes;
     private ImageView seller, spinnArr, plus, productImg;
     private RelativeLayout minusR;
-private int checkCashback=0;
+    private int checkCashback=0;
     private SharedPreferences st;
-//BroadcastReceiver broadcastReceiver;
+    //BroadcastReceiver broadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,7 +208,7 @@ private int checkCashback=0;
     }
 
     public void editdp() {
-       // Toast.makeText(ProductsPage.this, "checkdp", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(ProductsPage.this, "checkdp", Toast.LENGTH_SHORT).show();
 //        String s = dValue.getText().toString();
         try {
             if(("").equals(s))
@@ -227,24 +236,24 @@ private int checkCashback=0;
         Double emi = calculateEmi(Double.valueOf(sellingPrice - mValue), Double.valueOf(sellingPrice), monthsnow);
 //            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
         Double tot = emi * monthsnow + mValue;
-        totalLoan.setText(String.valueOf(tot));
+        totalLoan.setText(String.valueOf(Math.round(tot)));
 
-        emiAmount.setText(String.valueOf(emi));
+        emiAmount.setText(String.valueOf(Math.round(emi)));
         //calculate emi and set emi call
 
     }
 
     public void increment() {
-         if (mValue + 1 <= sellingPrice-mDis) {
+        if (mValue + 1 <= sellingPrice-mDis) {
             mValue += 1;
             spInc = sellingPrice - mValue;
             Double emi = calculateEmi(Double.valueOf(spInc), Double.valueOf(sellingPrice), monthsnow);
             Double tot = emi * monthsnow + mValue;
-            totalLoan.setText(String.valueOf(tot));
-            emiAmount.setText(String.valueOf(emi));
-            dValue.setText(String.valueOf(Math.floor(mValue)));
-                                         }
-                             }
+            totalLoan.setText(String.valueOf(Math.round(tot)));
+            emiAmount.setText(String.valueOf(Math.round(emi)));
+            dValue.setText(String.valueOf(Math.round(mValue)));
+        }
+    }
 
     public void decrement() {
 
@@ -256,9 +265,9 @@ private int checkCashback=0;
             Double emi = calculateEmi(Double.valueOf(spInc), Double.valueOf(sellingPrice), monthsnow);
 //            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
             Double tot = emi * monthsnow + mValue;
-            totalLoan.setText(String.valueOf(tot));
-            emiAmount.setText(String.valueOf(emi));
-            dValue.setText(String.valueOf(Math.floor(mValue)));
+            totalLoan.setText(String.valueOf(Math.round(tot)));
+            emiAmount.setText(String.valueOf(Math.round(emi)));
+            dValue.setText(String.valueOf(Math.round(mValue)));
         }
     }
 
@@ -362,65 +371,114 @@ private int checkCashback=0;
         }
         TextView checkout = (TextView) findViewById(R.id.checkout);
         try{
-        Picasso.with(this)
-                .load(urlforImage)
-                .placeholder(R.drawable.emptyimageproducts)
-                .into(productImg);}
+            Picasso.with(this)
+                    .load(urlforImage)
+                    .placeholder(R.drawable.emptyimageproducts)
+                    .into(productImg);}
         catch (Exception e){}
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkCorrectdis == 1) {
-                    try {
-                        Map userMap = new HashMap<>();
-                        userMap.put("PRODUCT_CLICKED", title);
-                        userMap.put("EMI_SELECTED", emiAmount.getText().toString());
-                        userMap.put("DOWNPAYMENT", dValue.getText().toString());
+                if(userProfileStatus.equals("approved")){
+                    if (checkCorrectdis == 1) {
+                        try {
+                            Map userMap = new HashMap<>();
+                            userMap.put("PRODUCT_CLICKED", title);
+                            userMap.put("EMI_SELECTED", emiAmount.getText().toString());
+                            userMap.put("DOWNPAYMENT", dValue.getText().toString());
 //                        userMap.put("phone", mPhone);
 //                        System.out.println("Intercom data 4" + mPhone);
-                        Intercom.client().updateUser(userMap);
-                    } catch (Exception e) {
-                        System.out.println("Intercom two" + e.toString());
-                    }
+                            Intercom.client().updateUser(userMap);
+                        } catch (Exception e) {
+                            System.out.println("Intercom two" + e.toString());
+                        }
 
-                    Intent in = new Intent(ProductsPage.this, ConfirmOrder.class);
-                    in.putExtra("title", title);
-                    in.putExtra("prid",productId1);
-                    in.putExtra("brand", brand);
+                        Intent in = new Intent(ProductsPage.this, ConfirmOrder.class);
+                        in.putExtra("title", title);
+                        in.putExtra("prid",productId1);
+                        in.putExtra("brand", brand);
 
-                    in.putExtra("cashback",checkCashback);
-                    in.putExtra("whichCoupon",whichCoupon);
-                    in.putExtra("discount",mDis);
-                    in.putExtra("monthforemi", monthsnow);
-                    in.putExtra("daytoday", dayToday);
-                    System.out.print("che" + dayToday + "buddy");
-                    in.putExtra("daytodaycheck", cuurr);
-                    in.putExtra("down", dValue.getText().toString());
-                    in.putExtra("sellingprice", searchPrice);
-                    in.putExtra("seller", sellerNme);
-                    in.putExtra("image", urlforImage);
+                        in.putExtra("cashback",checkCashback);
+                        in.putExtra("whichCoupon",whichCoupon);
+                        in.putExtra("discount",mDis);
+                        in.putExtra("monthforemi", monthsnow);
+                        in.putExtra("daytoday", dayToday);
+                        System.out.print("che" + dayToday + "buddy");
+                        in.putExtra("daytodaycheck", cuurr);
+                        in.putExtra("down", dValue.getText().toString());
+                        in.putExtra("sellingprice", searchPrice);
+                        in.putExtra("seller", sellerNme);
+                        in.putExtra("image", urlforImage);
 //                    in.putExtra("discount", 0);
-                    in.putExtra("emi", emiAmount.getText().toString());
-                    in.putExtra("months", selectedText);
-                    SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor et=cred.edit();
-                    et.putString("title",title);
-                    et.putString("prid",productId1);
-                    et.putInt("sp",searchPrice);
-                    et.putString("brand", brand);
-                    et.putInt("checkCashback", checkCashback);
-                    if((mDis!=0))
-                    et.putString("whichCoupon", whichCoupon);
-                    et.putInt("monthtenure", monthsnow);
-                    et.putInt("discount", mDis);
-                    et.putString("seller",sellerNme1);
-                    et.commit();
+                        in.putExtra("emi", emiAmount.getText().toString());
+                        in.putExtra("months", selectedText);
+                        SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor et=cred.edit();
+                        et.putString("title",title);
+                        et.putString("prid",productId1);
+                        et.putInt("sp",searchPrice);
+                        et.putString("brand", brand);
+                        et.putInt("checkCashback", checkCashback);
+                        if((mDis!=0))
+                            et.putString("whichCoupon", whichCoupon);
+                        et.putInt("monthtenure", monthsnow);
+                        et.putInt("discount", mDis);
+                        et.putString("seller",sellerNme1);
+                        et.commit();
 
-                    startActivity(in);
-                } else {
+                        startActivity(in);
+                    } else {
+
+                    }
+                    //     finish();in.putE
+                }
+                else if(userProfileStatus.equals("waitlisted")||userProfileStatus.equals("declined"))
+                {
+                    LayoutInflater inflater = (LayoutInflater) (ProductsPage.this).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                 View   parent = inflater.inflate(R.layout.activity_products_page, null, false);
+                    View popUpView = inflater.inflate(R.layout.popupwaitlisted, null, false);
+
+                    final PopupWindow popup = new PopupWindow(popUpView);
+//                        580, true);
+
+                    popup.setContentView(popUpView);
+                    popup.setWidth(ListPopupWindow.WRAP_CONTENT);
+                    popup.setHeight(ListPopupWindow.WRAP_CONTENT);
+                    popup.showAtLocation(popUpView, Gravity.CENTER, 0, 0);
+
+                    RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
+//                prod.setTi(Color.parseColor("#CC000000"));
+                    cover.setVisibility(View.VISIBLE);
+                    //    <TextView Talk to us to find out more
+
+                    TextView talk=(TextView)popUpView.findViewById(R.id.talk);
+                    String set = "<font color=#3380B6>Talk to us </font> <font color=#33A4D0>to find out more</font>";
+                    talk.setText(Html.fromHtml(set));
+                    talk.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intercom.client().displayMessageComposer();
+
+                        }
+                    });
+                    TextView ok=(TextView)popUpView.findViewById(R.id.ok);
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popup.dismiss();
+                            RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
+                            cover.setVisibility(View.INVISIBLE);
+                        }
+                    });
+//                    String set = "<font color=#664A4A4A>Checkout the ratings and reviews for this product. </font> <font color=#33A4D0>Click here</font>";
+//                    detRet.setText(Html.fromHtml(set));
 
                 }
-                //     finish();in.putE
+                else  if(userProfileStatus.equals("waitlisted")||userProfileStatus.equals("declined"))
+                {
+
+
+                }
             }
         });
         det.setVisibility(View.GONE);
@@ -667,29 +725,29 @@ private int checkCashback=0;
 
                         new COUPON().execute();
                     }}
-                    ImageView pl = (ImageView) findViewById(R.id.plus);
+                ImageView pl = (ImageView) findViewById(R.id.plus);
 //                    Drawable.ConstantState d = pl.getDrawable().getConstantState();
 //                    Drawable.ConstantState d1 = getResources().getDrawable(R.drawable.cancel).getConstantState();
 //                    Drawable p = pl.getDrawable();
 //                Drawable r=DrR.drawable.cancel;
 //                Drawable i=R.drawable.cancel;
 //                if (pl.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.cancel).getConstantState())) {
-                    if ((checkImg == 2) || (checkImg == 3)) {
-                        ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
-                        sellingPrice = searchPrice;
-System.out.println("entering here"+checkImg);
-                        checkD=0;
-                        checkCashback=0;
-                        Double doPay=(searchPrice*.2);
-                        dopay2=doPay.intValue();
-                        mValue=dopay2;
-                        setEmi(sellingPrice);
-                        appcBack.setChecked(false);
-                        couCode.setChecked(true);
-                        hve.setCursorVisible(true);
-                        hve.setText("");
+                if ((checkImg == 2) || (checkImg == 3)) {
+                    ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
+                    sellingPrice = searchPrice;
+                    System.out.println("entering here"+checkImg);
+                    checkD=0;
+                    checkCashback=0;
+                    Double doPay=(searchPrice*.2);
+                    dopay2=doPay.intValue();
+                    mValue=dopay2;
+                    setEmi(sellingPrice);
+                    appcBack.setChecked(false);
+                    couCode.setChecked(true);
+                    hve.setCursorVisible(true);
+                    hve.setText("");
 
-                    }
+                }
 
 
 
@@ -700,79 +758,84 @@ System.out.println("entering here"+checkImg);
         appcBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int checkD = 0;
-                if (appcBack.isChecked()) {
-                    // TODO: 4/21/2016 do something with cashback
-                    checkD = 1;
+                if(!userCode.equals("flashApproved")){
+                    int checkD = 0;
+                    if (appcBack.isChecked()) {
+                        // TODO: 4/21/2016 do something with cashback
+                        checkD = 1;
 
-                    sellingPrice = spDec;
-                    Double doPay=(searchPrice*.2);
-                    dopay2=doPay.intValue();
+                        sellingPrice = spDec;
+                        Double doPay=(searchPrice*.2);
+                        dopay2=doPay.intValue();
 
-checkCashback=1;
-                    if(cb<=dopay2)
-                    {mDis=cb;
+                        checkCashback=1;
+                        if(cb<=dopay2)
+                        {mDis=cb;
 
-                        dopay2=dopay2-cb;
-                        mValue=dopay2;
-                        checkD=1;
-                        setEmi(1);}
-                    else {
+                            dopay2=dopay2-cb;
+                            mValue=dopay2;
+                            checkD=1;
+                            setEmi(1);}
+                        else {
 
-                        if (sellingPrice - cb<0)
-                        {
-                            checkD=0;
+                            if (sellingPrice - cb<0)
+                            {
+                                checkD=0;
 
-                            mDis=sellingPrice;
-                            sellingPrice = 0;
-                            setEmi(2);
-                        }
-                        else
-                        {
+                                mDis=sellingPrice;
+                                sellingPrice = 0;
+                                setEmi(2);
+                            }
+                            else
+                            {
 
-                            checkD=0;
-                            mDis=cb;
-                            sellingPrice = sellingPrice-mDis;
-                            setEmi(2);
+                                checkD=0;
+                                mDis=cb;
+                                sellingPrice = sellingPrice-mDis;
+                                setEmi(2);
 
-                        }}
+                            }}
 
 
-                    dee = 1;
+                        dee = 1;
 
 //                    sellingPrice = sellingPrice - cb;
-                    hve.setBackgroundResource(R.drawable.roundedyellow);
-                    ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#F28E52"));
-                    setEmi(sellingPrice);
-                    couCode.setChecked(false);
-                    checkCorrectdis = 1;
-                    if(cb!=0)
-                    hve.setText(getApplicationContext().getString(R.string.Rs) + cb + " Cashback applied!");
-                    hve.setKeyListener(null);
-                    hve.setTextColor(Color.parseColor("#F28E52"));
-                    ((RelativeLayout) findViewById(R.id.plusRelative)).setVisibility(View.VISIBLE);
-                    ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
+                        hve.setBackgroundResource(R.drawable.roundedyellow);
+                        ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#F28E52"));
+                        setEmi(sellingPrice);
+                        couCode.setChecked(false);
+                        checkCorrectdis = 1;
+                        if(cb!=0)
+                            hve.setText(getApplicationContext().getString(R.string.Rs) + cb + " Cashback applied!");
+                        hve.setKeyListener(null);
+                        hve.setTextColor(Color.parseColor("#F28E52"));
+                        ((RelativeLayout) findViewById(R.id.plusRelative)).setVisibility(View.VISIBLE);
+                        ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
 
-                    ((ImageView) findViewById(R.id.plus)).setImageResource(R.drawable.cancel);
-                    checkImg = 2;
+                        ((ImageView) findViewById(R.id.plus)).setImageResource(R.drawable.cancel);
+                        checkImg = 2;
 //                    ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
 //                    if (cb == 0)
 //                        Toast.makeText(ProductsPage.this, "zero cashback", Toast.LENGTH_SHORT).show();
+                    }
+
+
                 }
-
-
-            }
+                else
+                {
+                    Toast.makeText(ProductsPage.this, "You cannot apply Cashback!", Toast.LENGTH_SHORT).show();
+                }}
         });
 
 
         Double loan = monthsallowed * emi;
         loan += sellingPrice * .2;
-        totalLoan.setText(String.valueOf(loan));
+        totalLoan.setText(String.valueOf(Math.round(loan)));
         Double downValue = sellingPrice * .2;
         mValue = downValue.intValue();
         mValue2 = downValue.intValue();
-        dValue.setText(String.valueOf(Math.floor(downValue)));
-        emiAmount.setText(String.valueOf(emi));
+        dValue.setText(String.valueOf(Math.round(downValue)));
+        emiAmount.setText(String.valueOf(Math.round(emi)));
         priceChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -799,7 +862,7 @@ checkCashback=1;
         else if (sellerNme.equals("snapdeal"))
 
             seller.setImageResource(R.drawable.snapdeal);
-        sellingRs.setText(String.valueOf(sellingPrice));
+        sellingRs.setText(String.valueOf(Math.round(sellingPrice)));
         titlePro.setText(searchTitle);
         query.setText(searchQuery);
     }
@@ -878,9 +941,15 @@ checkCashback=1;
                     } else {
                         JSONObject data1 = new JSONObject(resp.getString("data"));
                         truth = resp.getString("msg");
-                        value = data1.getString("value");
-                        maxValue = data1.getString("maxValue");
-
+                        value = data1.getInt("value");
+                        maxValue = data1.getInt("maxValue");
+                        minProd=data1.getInt("minProdValue");
+                        type=data1.getString("type");
+                        if(searchPrice<minProd)
+                            return "min";
+                        if(userCode.equals("flashApproved")){
+                            return "flash";
+                        }
                         return "win";
 
                     }
@@ -896,39 +965,51 @@ checkCashback=1;
 
         protected void onPostExecute(String result) {
             if (result.equals("win")) {
-                int dis = Integer.parseInt(value);
+                int dis=0;
+                if(type.equals("flat"))
+                    dis= value;
+                else
+                if(type.equals("percentage"))
+                {
+                    Double dd=searchPrice*.2;
+                    int newdis=dd.intValue();
+                    if(newdis<=value)
+                        dis=newdis;
+                    else
+                        dis=value;
+                }
                 ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
                 Double doPay=(searchPrice*.2);
-                 dopay2=doPay.intValue();
-whichCoupon=crcode;
+                dopay2=doPay.intValue();
+                whichCoupon=crcode;
 
-if(dis<=dopay2)
-{mDis=dis;
+                if(dis<=dopay2)
+                {mDis=dis;
 
-    dopay2=dopay2-dis;
-    mValue=dopay2;
-    checkD=1;
-    setEmi(1);}
-    else {
+                    dopay2=dopay2-dis;
+                    mValue=dopay2;
+                    checkD=1;
+                    setEmi(1);}
+                else {
 
-    if (sellingPrice - dis<0)
-    {
-        checkD=0;
-        mDis=sellingPrice;
-        sellingPrice = 0;
-        setEmi(2);
-    }
-    else
-    {
+                    if (sellingPrice - dis<0)
+                    {
+                        checkD=0;
+                        mDis=sellingPrice;
+                        sellingPrice = 0;
+                        setEmi(2);
+                    }
+                    else
+                    {
 
-        checkD=0;
-        mDis=dis;
-        sellingPrice = sellingPrice-mDis;
-        setEmi(2);
+                        checkD=0;
+                        mDis=dis;
+                        sellingPrice = sellingPrice-mDis;
+                        setEmi(2);
 
-    }
+                    }
 
-}
+                }
 
 //                hve.setFocusable(false);
 
@@ -945,6 +1026,13 @@ if(dis<=dopay2)
 //                Toast.makeText(ProductsPage.this, value, Toa/st.LENGTH_SHORT).show();
             } else {
                 checkCorrectdis = 1;
+                if(result.contains("min")) {
+                    Toast.makeText(ProductsPage.this, "Minimum product value to use this Coupon is " + minProd, Toast.LENGTH_SHORT).show();
+                    truth="Invalid Code";
+                }
+                if(result.contains("flash")) {
+                    Toast.makeText(ProductsPage.this, "You cannot apply Cashback!", Toast.LENGTH_SHORT).show();
+                    truth="Invalid Code";}
                 hve.setText(truth);
                 checkImg = 3;
                 //hve.setFocusable(false);
@@ -984,14 +1072,14 @@ if(dis<=dopay2)
         Double rate = 21.0 / 1200.0;
         int d = 0;
         if (searchPrice <= 5000) {
-            emi = principal * 1.0 / months;
+            emi = Math.ceil(principal * 1.0 / months);
         } else {
             if (currDay <= 15)
                 d = 35 - currDay;
             else
                 d = 65 - currDay;
             dayToday = d;
-            emi = Math.floor((principal * rate * Math.pow(1 + rate, months - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, months) - 1));
+            emi = Math.ceil((principal * rate * Math.pow(1 + rate, months - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, months) - 1));
         }
 
         return emi;
@@ -1011,17 +1099,17 @@ if(dis<=dopay2)
         mValue2 = v.intValue();
         monthsnow = Integer.parseInt(t);
         if(sellingP==1)
-        {dValue.setText(String.valueOf(Math.floor(dopay2)));
-            emiAmount.setText(String.valueOf(calculateEmi(sellingPrice * 0.8-mDis, Double.valueOf(sellingPrice), monthsnow)));
+        {dValue.setText(String.valueOf(Math.round(dopay2)));
+            emiAmount.setText(String.valueOf(Math.round(calculateEmi(sellingPrice * 0.8-mDis, Double.valueOf(sellingPrice), monthsnow))));
             Double tot = calculateEmi(sellingPrice * 0.8-mDis, Double.valueOf(sellingPrice), monthsnow) * monthsnow + dopay2;
             Double r=(sellingPrice * 0.2-mDis);
             mValue=r.intValue();
             totalLoan.setText(String.valueOf(tot));}
         else{
-        dValue.setText(String.valueOf(Math.floor(sellingPrice * .2)));
-        emiAmount.setText(String.valueOf(calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow)));
-        Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
-        totalLoan.setText(String.valueOf(tot));}
+            dValue.setText(String.valueOf(Math.floor(sellingPrice * .2)));
+            emiAmount.setText(String.valueOf(Math.round(calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow))));
+            Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
+            totalLoan.setText(String.valueOf(Math.round(tot)));}
 //        Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
 
     }
@@ -1359,8 +1447,8 @@ if(dis<=dopay2)
 
                     show();
                 }
-            else
-            editQ.setText("");}
+                else
+                    editQ.setText("");}
 
         });
 
@@ -1414,14 +1502,14 @@ if(dis<=dopay2)
                     t = t + selectedText.charAt(i);
                     i++;
                 }
-                Double v = Math.floor(sellingPrice * .2);
+                Double v = (sellingPrice * .2);
                 mValue = v.intValue();
                 mValue2 = v.intValue();
                 monthsnow = Integer.parseInt(t);
-                dValue.setText(String.valueOf(Math.floor(sellingPrice * .2)));
-                emiAmount.setText(String.valueOf(calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow)));
+                dValue.setText(String.valueOf(v.intValue()));
+                emiAmount.setText(String.valueOf(Math.round(calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow))));
                 Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
-                totalLoan.setText(String.valueOf(tot));
+                totalLoan.setText(String.valueOf(Math.round(tot)));
 //                    Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
             }
 
@@ -1566,83 +1654,83 @@ if(dis<=dopay2)
             }
         });
     }
-public void show()
-{
-    monthsallowed = months(searchSubcategory, searchCategory, searchBrand, searchPrice);
-    int monthscheck = 0;
-    //digo
-    String course = st.getString("course", "");
+    public void show()
+    {
+        monthsallowed = months(searchSubcategory, searchCategory, searchBrand, searchPrice);
+        int monthscheck = 0;
+        //digo
+        String course = st.getString("course", "");
 
-    if (!course.equals("")) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        if (!course.equals("")) {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-        Date courseDate;
-        Double diff = 18.0;
-        try {
-            courseDate = df.parse(course);
-            String newDateString = df.format(courseDate);
-            System.out.println(newDateString);
-            Long milli = courseDate.getTime();
-            Date date = new Date();
-            Long currentMilli = date.getTime();
-            Double diffDouble = (milli.doubleValue() - currentMilli.doubleValue());
-            Double mul = (1000.0 * 60.0 * 60.0 * 24.0 * 365.0);
-            diff = diffDouble / mul;
-            diff = diff * 12.0;
-            diff = Math.floor(diff);
-            String curr = df.format(date);
-            String currentDay = "";
-            for (int j = curr.length() - 2; j < curr.length(); j++) {
+            Date courseDate;
+            Double diff = 18.0;
+            try {
+                courseDate = df.parse(course);
+                String newDateString = df.format(courseDate);
+                System.out.println(newDateString);
+                Long milli = courseDate.getTime();
+                Date date = new Date();
+                Long currentMilli = date.getTime();
+                Double diffDouble = (milli.doubleValue() - currentMilli.doubleValue());
+                Double mul = (1000.0 * 60.0 * 60.0 * 24.0 * 365.0);
+                diff = diffDouble / mul;
+                diff = diff * 12.0;
+                diff = Math.floor(diff);
+                String curr = df.format(date);
+                String currentDay = "";
+                for (int j = curr.length() - 2; j < curr.length(); j++) {
 
-                currentDay += curr.charAt(j);
-            }
-
-            currDay = Integer.parseInt(currentDay);
-            int months;
-            if (currDay > 15)
-                diff -= 1.0;
-
-            if (diff > 0) {
-                months = diff.intValue();
-                if (diff.intValue() == 1)
-                    months = 1;
-                else if (diff.intValue() == 2)
-                    months = 2;
-                else if (diff.intValue() >= 3 && diff.intValue() <= 5) {
-                    months = 3;
-                } else if (diff.intValue() >= 6 && diff.intValue() <= 8) {
-                    months = 6;
-                } else if (diff.intValue() >= 9 && diff.intValue() <= 11) {
-                    months = 9;
-                } else if (diff.intValue() >= 12 && diff.intValue() <= 14) {
-                    months = 12;
-                } else if (diff.intValue() >= 15 && diff.intValue() <= 18) {
-                    months = 15;
+                    currentDay += curr.charAt(j);
                 }
-                monthscheck = months;
-            }
+
+                currDay = Integer.parseInt(currentDay);
+                int months;
+                if (currDay > 15)
+                    diff -= 1.0;
+
+                if (diff > 0) {
+                    months = diff.intValue();
+                    if (diff.intValue() == 1)
+                        months = 1;
+                    else if (diff.intValue() == 2)
+                        months = 2;
+                    else if (diff.intValue() >= 3 && diff.intValue() <= 5) {
+                        months = 3;
+                    } else if (diff.intValue() >= 6 && diff.intValue() <= 8) {
+                        months = 6;
+                    } else if (diff.intValue() >= 9 && diff.intValue() <= 11) {
+                        months = 9;
+                    } else if (diff.intValue() >= 12 && diff.intValue() <= 14) {
+                        months = 12;
+                    } else if (diff.intValue() >= 15 && diff.intValue() <= 18) {
+                        months = 15;
+                    }
+                    monthscheck = months;
+                }
 
 
 //                        Toast.makeText(HomePage.this, curr, Toast.LENGTH_SHORT).show();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-    }
-    if (monthsallowed > monthscheck)
-        monthsallowed = monthscheck;
+        if (monthsallowed > monthscheck)
+            monthsallowed = monthscheck;
 
 //                Double emi = 0.0;
-    Double rate = 21.0 / 1200.0;
-    int d = 0;
-    if (searchPrice <= 5000) {
-        emi = searchPrice * 0.8 / monthsallowed;
-    } else {
-        if (currDay <= 15)
-            d = 35 - currDay;
-        else
-            d = 65 - currDay;
+        Double rate = 21.0 / 1200.0;
+        int d = 0;
+        if (searchPrice <= 5000) {
+            emi = searchPrice * 0.8 / monthsallowed;
+        } else {
+            if (currDay <= 15)
+                d = 35 - currDay;
+            else
+                d = 65 - currDay;
 
-        emi = Math.floor((searchPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));}
+            emi = Math.ceil((searchPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));}
         Intent in = new Intent(ProductsPage.this, ProductsPage.class);
         in.putExtra("title", searchTitle);
         try {
@@ -1686,7 +1774,7 @@ public void show()
 //
 //                    startActivity(in);
 
-}
+    }
 
     public int months(String subcat, String cat, String brand, int price)
 

@@ -1,1045 +1,924 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer"
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".HomePage">
+<android.support.v4.widget.DrawerLayout android:id="@+id/drawer"
+                                        xmlns:android="http://schemas.android.com/apk/res/android"
+                                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                                        xmlns:tools="http://schemas.android.com/tools"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        tools:context=".HomePage">
+
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/rl1"
+        android:layout_width="match_parent"
+
         android:layout_height="match_parent">
 
         <include
             android:id="@+id/toolbarc"
-            layout="@layout/toolbar"
-            style="@style/DrawerArrowStyle"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:background="@drawable/roundeditagain"
-            android:text="Paste?"
 
-            android:visibility="gone"
-            android:id="@+id/pasteAg"
-            android:layout_centerHorizontal="true"
-           android:layout_above="@id/scrollView"
-            android:textColor="@color/colorwhite"
-            />
-
-
-
-        <ScrollView
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-            android:layout_below="@id/toolbarc"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/scrollView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
-
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:weightSum="1"
-
-    tools:context="indwin.c3.shareapp.HomePage"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:id="@+id/sc1"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true"
-        android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:id="@+id/not"
-android:visibility="gone"
-            android:background="#33A4D0"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hi Deepak,"
-                android:id="@+id/nameintr"
-                android:textColor="#ffffff"
-                android:layout_margin="8dp"
-                android:paddingBottom="8dp"
-                android:textAppearance="?android:textAppearanceMedium"
-
-
-                />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/close"
-                android:id="@+id/close"
-                android:layout_alignParentRight="true"
-                android:textColor="#ffffff"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-
-
-
-
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Your profiles is almost complete"
-                android:id="@+id/line1"
-                android:lineSpacingMultiplier="1.5"
-
-                android:gravity="left"
-                android:textColor="#ffffff"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:paddingBottom="4dp"
-                android:layout_below="@id/nameintr"
-
-
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Your profiles is almost complete"
-                android:id="@+id/line2"
-                android:visibility="gone"
-                android:textColor="#ffffff"
-                android:gravity="left"
-                android:layout_marginLeft="8dp"
-                android:paddingBottom="4dp"
-                android:layout_below="@id/line1"
-
-
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Your profiles is almost complete"
-                android:id="@+id/line3"
-                android:textColor="#ffffff"
-                android:gravity="left"
-                android:visibility="gone"
-                android:layout_marginLeft="8dp"
-                android:paddingBottom="4dp"
-                android:layout_below="@id/line2"
-
-
-                />
-            <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="12dp"
-                android:layout_alignParentRight="true"
-                android:padding="4dp"
-                android:layout_below="@id/line3"
-            android:src="@drawable/approved"
-            android:visibility="gone"
-
-            android:id="@+id/app"
-            android:layout_centerHorizontal="true"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Complete it now"
-                android:id="@+id/but"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:background="#33A4D0"
-                android:gravity="left"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="12dp"
-                android:layout_alignParentRight="true"
-                android:padding="4dp"
-               android:layout_below="@id/line3"
-
-
-                />
-
-
-            </RelativeLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="360dp"
-        android:id="@+id/ho"
-
-        android:layout_below="@id/not"
-
-        android:scaleType="fitXY"
-
-        android:src="@drawable/hero"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/left"
-            android:id="@+id/ful"
-            android:layout_below="@id/not"
-            android:visibility="gone"
-            android:layout_marginTop="24dp"
-            android:text="Fulfil your dreams by"
-            android:textSize="30sp"
-            android:textColor="#ffffff"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/left"
-            android:id="@+id/step"
-            android:layout_below="@id/ful"
-android:layout_marginTop="4dp"
-            android:visibility="gone"
-            android:text="taking small steps"
-            android:textSize="30sp"
-            android:textColor="#ffffff"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/left"
-            android:id="@+id/easy"
-            android:layout_below="@id/step"
-            android:layout_marginTop="@dimen/left"
-            android:visibility="invisible"
-            android:text="Easy monthly installments for college students"
-
-            android:textColor="#ffffff"/>
-
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-
-        android:id="@+id/link"
-        android:singleLine="true"
-        android:cursorVisible="false"
-
-
-        android:imeOptions="actionDone"
-        android:textAppearance="?android:textAppearanceSmall"
-android:drawableLeft="@drawable/search"
-        android:hint="                Paste a product page link here"
-
-
-
-        android:paddingLeft="20dp"
-android:paddingTop="@dimen/left"
-        android:paddingBottom="@dimen/left"
-        android:layout_below="@id/not"
-
-        android:background="@drawable/roundededit"
-        />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/paste"
-            android:padding="4dp"
-            android:visibility="gone"
-            android:layout_centerInParent="true"
-android:layout_above="@id/link"
-            android:background="@drawable/roundeditagain"
-
-
-            android:text="Paste?"
-            android:textColor="@color/colorwhite"
-
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/left"
-            android:id="@+id/ecom"
-            android:visibility="gone"
-            android:layout_below="@id/link"
-            android:padding="4dp"
-            android:layout_marginTop="@dimen/left"
-            android:text="We accept links from Flipkart,Amazon,Snapdeal and Paytm"
-
-            android:textColor="#ffffff"/>
-    </RelativeLayout>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-
-android:background="#578EB4"
-
-    >
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-android:visibility="gone"
-android:layout_centerHorizontal="true"
-
-        android:id="@+id/spinner"
-
-        />
-    <com.balysv.materialripple.MaterialRippleLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:mrl_rippleColor="@color/rippplecolorlist"
-        app:mrl_rippleAlpha="0.10"
-        app:mrl_rippleOverlay="false"
-        android:id="@+id/rip1"
-        app:mrl_rippleHover="true"
-        app:mrl_rippleDimension="1dp"
-        app:mrl_rippleDuration="350">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:id="@+id/newtr"
-        android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-       android:layout_centerHorizontal="true"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-
-android:textColor="#ffffff"
-        android:text="MOBILES"
-android:textStyle="bold"
-
-        android:id="@+id/trending"
-
-        />
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/downar"
-            android:paddingLeft="@dimen/four"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@id/trending"/>
-       </RelativeLayout>
-
-
-    </com.balysv.materialripple.MaterialRippleLayout>
-       <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:id="@+id/drops"
-        android:visibility="gone"
-           android:animateLayoutChanges="true"
-
-        android:layout_below="@id/rip1"
-        android:layout_height="wrap_content">
-           <com.balysv.materialripple.MaterialRippleLayout
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               app:mrl_rippleColor="@color/rippplecolorlist"
-               app:mrl_rippleAlpha="0.10"
-               app:mrl_rippleOverlay="false"
-               android:id="@+id/pro1"
-               app:mrl_rippleHover="true"
-
-               app:mrl_rippleDimension="1dp"
-               app:mrl_rippleDuration="350">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:fontFamily="sans-serif-light"
-            android:id="@+id/products"
-            android:textColor="#ffffff"
-            android:text="MOBILES"/>
-           </com.balysv.materialripple.MaterialRippleLayout>
-           <com.balysv.materialripple.MaterialRippleLayout
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               app:mrl_rippleColor="@color/rippplecolorlist"
-               app:mrl_rippleAlpha="0.10"
-               app:mrl_rippleOverlay="false"
-               android:id="@+id/pro2"
-               app:mrl_rippleHover="true"
-               android:layout_below="@id/pro1"
-               app:mrl_rippleDimension="1dp"
-               app:mrl_rippleDuration="350">
-           <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:textColor="#ffffff"
-            android:fontFamily="sans-serif-light"
-
-            android:id="@+id/lappy"
-            android:text="LAPTOPS"/>
-</com.balysv.materialripple.MaterialRippleLayout>
-           <com.balysv.materialripple.MaterialRippleLayout
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               app:mrl_rippleColor="@color/rippplecolorlist"
-               app:mrl_rippleAlpha="0.10"
-               app:mrl_rippleOverlay="false"
-               android:id="@+id/pro3"
-               app:mrl_rippleHover="true"
-               android:layout_below="@id/pro2"
-               app:mrl_rippleDimension="1dp"
-               app:mrl_rippleDuration="350">
-           <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="#ffffff"
-            android:paddingTop="20dp"
-            android:fontFamily="sans-serif-light"
-            android:paddingBottom="20dp"
-
-            android:id="@+id/fashion"
-
-            android:text="FASHION"/>
-           </com.balysv.materialripple.MaterialRippleLayout>
-           <com.balysv.materialripple.MaterialRippleLayout
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               app:mrl_rippleColor="@color/rippplecolorlist"
-               app:mrl_rippleAlpha="0.10"
-               app:mrl_rippleOverlay="false"
-               android:id="@+id/pro4"
-               app:mrl_rippleHover="true"
-               android:layout_below="@id/pro3"
-               app:mrl_rippleDimension="1dp"
-               app:mrl_rippleDuration="350">
-           <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingTop="20dp"
-            android:fontFamily="sans-serif-light"
-            android:paddingBottom="20dp"
-            android:textColor="#ffffff"
-            android:id="@+id/beau"
-
-            android:text="BEAUTY AND PERSONAL CARE"/>
-        </com.balysv.materialripple.MaterialRippleLayout>
-           <com.balysv.materialripple.MaterialRippleLayout
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               app:mrl_rippleColor="@color/rippplecolorlist"
-               app:mrl_rippleAlpha="0.10"
-               app:mrl_rippleOverlay="false"
-               android:id="@+id/pro5"
-               app:mrl_rippleHover="true"
-               android:layout_below="@id/pro4"
-               app:mrl_rippleDimension="1dp"
-               app:mrl_rippleDuration="350">
-           <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:textColor="#ffffff"
-            android:id="@+id/ent"
-
-            android:text="ENTERTAINMENT"/>
-        </com.balysv.materialripple.MaterialRippleLayout>
-           <com.balysv.materialripple.MaterialRippleLayout
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               app:mrl_rippleColor="@color/rippplecolorlist"
-               app:mrl_rippleAlpha="0.10"
-               app:mrl_rippleOverlay="false"
-               android:id="@+id/pro6"
-               app:mrl_rippleHover="true"
-               android:layout_below="@id/pro5"
-               app:mrl_rippleDimension="1dp"
-               app:mrl_rippleDuration="350">
-           <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingTop="20dp"
-            android:fontFamily="sans-serif-light"
-            android:paddingBottom="20dp"
-android:textColor="#ffffff"
-            android:id="@+id/foot"
-
-            android:text="FOOTWEAR"/>
-           </com.balysv.materialripple.MaterialRippleLayout>
-    </RelativeLayout>
-
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:cardview="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:id="@+id/card1"
-
-        android:background="#ffffff"
-
-        android:layout_below="@id/drops"
-        android:layout_height="wrap_content"
-       >
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:mrl_rippleColor="@color/rippplecolorlist"
-            app:mrl_rippleAlpha="0.10"
-            app:mrl_rippleOverlay="false"
-            app:mrl_rippleHover="true"
-            app:mrl_rippleDimension="1dp"
-            app:mrl_rippleDuration="350">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:weightSum="1"
-    android:id="@+id/lin1"
-    android:background="#ffffff"
-    android:orientation="horizontal">
-
-
-        <RelativeLayout
-            android:layout_width="0dp"
-
-            android:id="@+id/last1"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content">
-
-
-<ImageView
-    android:layout_width="280dp"
-    android:layout_height="120dp"
-    android:src="@drawable/mob"
-android:layout_marginTop="32dp"
-    android:padding="@dimen/fab_margin"
-    android:id="@+id/img1"
-
-    />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/snapdeal"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="8dp"
-                android:id="@+id/brand1"
-
-
-                />
-            <TextView
-                android:id="@+id/titlexxx"
-                android:layout_width="match_parent"
-
-                android:layout_height="wrap_content"
-                android:layout_below="@id/img1"
-                android:layout_marginTop="@dimen/fab_margin"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:text="Apple iPhone 6"
-                android:textColor="#33A4D0"
-                />
-            <TextView
-                android:id="@+id/titlexxxd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/left"
-                android:layout_marginBottom="@dimen/four"
-                android:layout_below="@id/titlexxx"
-                android:maxLines="2"
-                android:fontFamily="sans-serif-light"
-                android:textColor="#4A4A4A"
-             android:gravity="center"
-                android:text="Apple iPhone 6"
-
-
-                />
-
-
-        </RelativeLayout>
-    <View
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        android:background="#664A4A4A"
-        />
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_weight="0.5"
-
-        android:id="@+id/last2"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="280dp"
-            android:layout_height="120dp"
-            android:src="@drawable/mob"
-android:layout_marginTop="32dp"
-            android:padding="@dimen/fab_margin"
-            android:id="@+id/imgx"
-
-            />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/snapdeal"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="8dp"
-            android:id="@+id/brand2"
-
-
-            />
-
-
-        <TextView
-            android:id="@+id/title1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/fab_margin"
-
-            android:maxLines="2"
-            android:textStyle="bold"
-            android:layout_below="@id/imgx"
-            android:gravity="center"
-            android:text="Apple iPhone 6"
-android:textColor="#33A4D0"
-            />
-        <TextView
-            android:id="@+id/mrp1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/left"
-android:layout_below="@id/title1"
-            android:fontFamily="sans-serif-light"
-            android:textColor="#4A4A4A"
-            android:maxLines="2"
-            android:layout_marginBottom="4dp"
-            android:gravity="center"
-                  android:text="MRP Rs. 49,999"
-
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rs. 2374 per month"
-            android:textColor="#ffffff"
-            android:id="@+id/price1"
-            android:layout_marginTop="48dp"
-android:layout_marginRight="@dimen/four"
-           android:layout_below="@id/mrp1"
-            android:visibility="gone"
-            android:background="#21A5E0"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_marginBottom="12dp"
-
-
-
-            />
-
-
-
-    </RelativeLayout>
-</LinearLayout>
-        </com.balysv.materialripple.MaterialRippleLayout>
-    </LinearLayout>
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:cardview="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:id="@+id/card2"
-
-
-        android:layout_below="@id/card1"
-        android:layout_height="wrap_content"
-        >
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:mrl_rippleColor="@color/rippplecolorlist"
-            app:mrl_rippleAlpha="0.10"
-            app:mrl_rippleOverlay="false"
-            app:mrl_rippleHover="true"
-            app:mrl_rippleDimension="1dp"
-            app:mrl_rippleDuration="350">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:id="@+id/lin2"
-            android:background="#ffffff"
-            android:orientation="horizontal">
-
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:paddingLeft="4dp"
-                android:layout_weight="0.5"
-                android:id="@+id/slast"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/snapdeal"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="8dp"
-                    android:id="@+id/brand3"
-
-
-                    />
-                <ImageView
-                    android:layout_width="280dp"
-                    android:layout_height="120dp"
-                    android:id="@+id/img2"
-                    android:padding="@dimen/fab_margin"
-                    android:layout_marginTop="32dp"
-
-                    />
-                <TextView
-                    android:id="@+id/titlex2"
+            style="@style/DrawerArrowStyle"
+            layout="@layout/toolbar"/>
+
+
+        <ScrollView android:id="@+id/scrollView"
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/toolbarc"
+                    android:fillViewport="true">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="vertical"
+                          android:weightSum="1"
+                          tools:context="indwin.c3.shareapp.HomePage">
+
+                <RelativeLayout
+                    android:id="@+id/sc1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/img2"
-                    android:layout_marginTop="@dimen/fab_margin"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:text="Apple iPhone 6"
-                    android:textColor="#33A4D0"
-                    />
-                <TextView
-                    android:id="@+id/titlenew2"
+                    android:descendantFocusability="beforeDescendants"
+                    android:focusableInTouchMode="true">
+
+                    <RelativeLayout
+                        android:id="@+id/not"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#33A4D0"
+                        android:clickable="true"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/nameintr"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:paddingBottom="8dp"
+                            android:text="Hi Deepak,"
+                            android:textAppearance="?android:textAppearanceMedium"
+                            android:textColor="#ffffff"/>
+
+                        <ImageView
+                            android:id="@+id/close"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/activity_vertical_margin"
+                            android:src="@drawable/close"
+                            android:textColor="#ffffff"/>
+
+                        <TextView
+                            android:id="@+id/line1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/nameintr"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:gravity="left"
+                            android:lineSpacingMultiplier="1.5"
+                            android:paddingBottom="4dp"
+                            android:text="Your profiles is almost complete"
+                            android:textColor="#ffffff"/>
+
+                        <TextView
+                            android:id="@+id/line2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/line1"
+                            android:layout_marginLeft="8dp"
+                            android:gravity="left"
+                            android:paddingBottom="4dp"
+                            android:text="Your profiles is almost complete"
+                            android:textColor="#ffffff"
+                            android:visibility="gone"/>
+
+                        <TextView
+                            android:id="@+id/line3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/line2"
+                            android:layout_marginLeft="8dp"
+                            android:gravity="left"
+                            android:paddingBottom="4dp"
+                            android:text="Your profiles is almost complete"
+                            android:textColor="#ffffff"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/app"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@id/line3"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="12dp"
+                            android:layout_marginRight="8dp"
+                            android:padding="4dp"
+                            android:src="@drawable/approved"
+                            android:visibility="gone"/>
+
+                        <TextView
+                            android:id="@+id/but"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@id/line3"
+                            android:layout_marginBottom="12dp"
+                            android:layout_marginRight="8dp"
+                            android:background="#33A4D0"
+                            android:gravity="left"
+                            android:padding="4dp"
+                            android:text="Complete it now"
+                            android:textColor="#ffffff"
+                            android:textStyle="bold"/>
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/ho"
+                        android:layout_width="match_parent"
+                        android:layout_height="360dp"
+                        android:layout_below="@id/not"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/hero"/>
+
+                    <TextView
+                        android:id="@+id/ful"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/not"
+                        android:layout_marginLeft="@dimen/left"
+                        android:layout_marginTop="24dp"
+                        android:text="Fulfil your dreams by"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/step"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ful"
+                        android:layout_marginLeft="@dimen/left"
+                        android:layout_marginTop="4dp"
+                        android:text="taking small steps"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/easy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/step"
+                        android:layout_marginLeft="@dimen/left"
+                        android:layout_marginTop="@dimen/left"
+                        android:text="Easy monthly installments for college students"
+                        android:textColor="#ffffff"
+                        android:visibility="invisible"/>
+
+                    <EditText
+                        android:id="@+id/link"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_below="@id/not"
+                        android:background="@drawable/roundededit"
+                        android:cursorVisible="false"
+                        android:drawableLeft="@drawable/search"
+                        android:hint="                Paste a product page link here"
+                        android:imeOptions="actionDone"
+                        android:paddingBottom="@dimen/left"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="@dimen/left"
+                        android:singleLine="true"
+                        android:textAppearance="?android:textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/pasteAg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/link"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/roundeditagain"
+                        android:padding="4dp"
+                        android:text="Paste?"
+                        android:textColor="#21A5E0"
+                        android:visibility="gone"/>
+
+
+                    <TextView
+                        android:id="@+id/ecom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/link"
+                        android:layout_marginLeft="@dimen/left"
+                        android:layout_marginTop="@dimen/left"
+                        android:padding="4dp"
+                        android:text="We accept links from Flipkart,Amazon,Snapdeal and Paytm"
+                        android:textColor="#ffffff"
+                        android:visibility="gone"/>
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/left"
-                    android:layout_marginBottom="@dimen/four"
-                    android:layout_below="@id/titlex2"
-                    android:maxLines="2"
+                    android:background="#578EB4">
 
-                  android:gravity="center"
-                    android:text="Apple iPhone 6"
-                    android:fontFamily="sans-serif-light"
-                    android:textColor="#4A4A4A"
-                    />
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:visibility="gone"/>
 
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:id="@+id/rip1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:mrl_rippleAlpha="0.10"
+                        app:mrl_rippleColor="@color/rippplecolorlist"
+                        app:mrl_rippleDimension="1dp"
+                        app:mrl_rippleDuration="350"
+                        app:mrl_rippleHover="true"
+                        app:mrl_rippleOverlay="false">
 
-            </RelativeLayout>
-            <View
-                android:layout_width="1dp"
-                android:layout_height="wrap_content"
-                android:background="#664A4A4A"
-                />
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:paddingLeft="4dp"
-                android:id="@+id/flast"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:layout_width="280dp"
-                    android:layout_height="120dp"
-                    android:src="@drawable/mob"
-                    android:padding="@dimen/fab_margin"
-                    android:layout_marginTop="32dp"
-                    android:id="@+id/img2x"
+                        <RelativeLayout
+                            android:id="@+id/newtr"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                    />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/snapdeal"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="8dp"
-                    android:id="@+id/brand4"
+                            <TextView
+                                android:id="@+id/trending"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:paddingBottom="20dp"
+                                android:paddingTop="20dp"
+                                android:text="MOBILES"
+                                android:textColor="#ffffff"
+                                android:textStyle="bold"/>
 
-
-                    />
-
-                <TextView
-                    android:id="@+id/title2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/fab_margin"
-android:layout_below="@id/img2x"
-                    android:maxLines="2"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:text="Apple iPhone 6"
-                    android:textColor="#33A4D0"
-                    />
-                <TextView
-                    android:id="@+id/mrp2"
-                    android:layout_width="match_parent"
-                    android:gravity="center"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/left"
-                    android:layout_below="@id/title2"
-                    android:maxLines="2"
-                    android:fontFamily="sans-serif-light"
-                    android:layout_marginBottom="@dimen/four"
-                    android:textColor="#4A4A4A"
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_centerInParent="true"
+                                android:layout_toRightOf="@id/trending"
+                                android:paddingLeft="@dimen/four"
+                                android:src="@drawable/downar"/>
+                        </RelativeLayout>
 
 
-                    android:text="MRP Rs. 49,999"
+                    </com.balysv.materialripple.MaterialRippleLayout>
 
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:id="@+id/price2"
-                    android:layout_height="wrap_content"
-                    android:text="Rs. 2374 per month"
-                    android:textColor="#ffffff"
-                    android:layout_marginTop="48dp"
-                    android:layout_marginRight="@dimen/four"
-                    android:layout_below="@id/mrp2"
-                    android:background="#21A5E0"
-                    android:visibility="gone"
+                    <RelativeLayout android:id="@+id/drops"
+                                    xmlns:android="http://schemas.android.com/apk/res/android"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/rip1"
+                                    android:animateLayoutChanges="true"
+                                    android:visibility="gone">
 
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginBottom="12dp"
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:id="@+id/pro1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:mrl_rippleAlpha="0.10"
+                            app:mrl_rippleColor="@color/rippplecolorlist"
+                            app:mrl_rippleDimension="1dp"
+                            app:mrl_rippleDuration="350"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="false">
+
+                            <TextView
+                                android:id="@+id/products"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
+                                android:gravity="center"
+                                android:paddingBottom="20dp"
+                                android:paddingTop="20dp"
+                                android:text="MOBILES"
+                                android:textColor="#ffffff"/>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:id="@+id/pro2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@id/pro1"
+                            app:mrl_rippleAlpha="0.10"
+                            app:mrl_rippleColor="@color/rippplecolorlist"
+                            app:mrl_rippleDimension="1dp"
+                            app:mrl_rippleDuration="350"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="false">
+
+                            <TextView
+                                android:id="@+id/lappy"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
+                                android:gravity="center"
+                                android:paddingBottom="20dp"
+                                android:paddingTop="20dp"
+                                android:text="LAPTOPS"
+                                android:textColor="#ffffff"/>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:id="@+id/pro3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@id/pro2"
+                            app:mrl_rippleAlpha="0.10"
+                            app:mrl_rippleColor="@color/rippplecolorlist"
+                            app:mrl_rippleDimension="1dp"
+                            app:mrl_rippleDuration="350"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="false">
+
+                            <TextView
+                                android:id="@+id/fashion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
+                                android:gravity="center"
+                                android:paddingBottom="20dp"
+                                android:paddingTop="20dp"
+                                android:text="FASHION"
+                                android:textColor="#ffffff"/>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:id="@+id/pro4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@id/pro3"
+                            app:mrl_rippleAlpha="0.10"
+                            app:mrl_rippleColor="@color/rippplecolorlist"
+                            app:mrl_rippleDimension="1dp"
+                            app:mrl_rippleDuration="350"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="false">
+
+                            <TextView
+                                android:id="@+id/beau"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
+                                android:gravity="center"
+                                android:paddingBottom="20dp"
+                                android:paddingTop="20dp"
+                                android:text="BEAUTY AND PERSONAL CARE"
+                                android:textColor="#ffffff"/>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:id="@+id/pro5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@id/pro4"
+                            app:mrl_rippleAlpha="0.10"
+                            app:mrl_rippleColor="@color/rippplecolorlist"
+                            app:mrl_rippleDimension="1dp"
+                            app:mrl_rippleDuration="350"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="false">
+
+                            <TextView
+                                android:id="@+id/ent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
+                                android:gravity="center"
+                                android:paddingBottom="20dp"
+                                android:paddingTop="20dp"
+                                android:text="ENTERTAINMENT"
+                                android:textColor="#ffffff"/>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:id="@+id/pro6"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@id/pro5"
+                            app:mrl_rippleAlpha="0.10"
+                            app:mrl_rippleColor="@color/rippplecolorlist"
+                            app:mrl_rippleDimension="1dp"
+                            app:mrl_rippleDuration="350"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="false">
+
+                            <TextView
+                                android:id="@+id/foot"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
+                                android:gravity="center"
+                                android:paddingBottom="20dp"
+                                android:paddingTop="20dp"
+                                android:text="FOOTWEAR"
+                                android:textColor="#ffffff"/>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                    </RelativeLayout>
+
+                    <LinearLayout android:id="@+id/card1"
+                                  xmlns:android="http://schemas.android.com/apk/res/android"
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_below="@id/drops"
+                                  android:background="#ffffff">
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:mrl_rippleAlpha="0.10"
+                            app:mrl_rippleColor="@color/rippplecolorlist"
+                            app:mrl_rippleDimension="1dp"
+                            app:mrl_rippleDuration="350"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="false">
+
+                            <LinearLayout
+                                android:id="@+id/lin1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#ffffff"
+                                android:orientation="horizontal"
+                                android:weightSum="1">
+
+                                <RelativeLayout
+                                    android:id="@+id/last1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5">
+
+                                    <ImageView
+                                        android:id="@+id/img1"
+                                        android:layout_width="280dp"
+                                        android:layout_height="120dp"
+                                        android:layout_marginTop="32dp"
+                                        android:padding="@dimen/fab_margin"
+                                        android:src="@drawable/mob"/>
+
+                                    <ImageView
+                                        android:id="@+id/brand1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_margin="8dp"
+                                        android:src="@drawable/snapdeal"/>
+
+                                    <TextView
+                                        android:id="@+id/titlexxx"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/img1"
+                                        android:layout_marginTop="@dimen/fab_margin"
+                                        android:gravity="center"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#33A4D0"
+                                        android:textStyle="bold"/>
+
+                                    <TextView
+                                        android:id="@+id/titlexxxd"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/titlexxx"
+                                        android:layout_marginBottom="@dimen/four"
+                                        android:layout_marginTop="@dimen/left"
+                                        android:fontFamily="sans-serif-light"
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#4A4A4A"/>
+                                </RelativeLayout>
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="#664A4A4A"/>
+
+                                <RelativeLayout
+                                    android:id="@+id/last2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5">
+
+                                    <ImageView
+                                        android:id="@+id/imgx"
+                                        android:layout_width="280dp"
+                                        android:layout_height="120dp"
+                                        android:layout_marginTop="32dp"
+                                        android:padding="@dimen/fab_margin"
+                                        android:src="@drawable/mob"/>
+
+                                    <ImageView
+                                        android:id="@+id/brand2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_margin="8dp"
+                                        android:src="@drawable/snapdeal"/>
+
+                                    <TextView
+                                        android:id="@+id/title1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/imgx"
+                                        android:layout_marginTop="@dimen/fab_margin"
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#33A4D0"
+                                        android:textStyle="bold"/>
+
+                                    <TextView
+                                        android:id="@+id/mrp1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/title1"
+                                        android:layout_marginBottom="4dp"
+                                        android:layout_marginTop="@dimen/left"
+                                        android:fontFamily="sans-serif-light"
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:text="MRP Rs. 49,999"
+                                        android:textColor="#4A4A4A"/>
+
+                                    <TextView
+                                        android:id="@+id/price1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/mrp1"
+                                        android:layout_marginBottom="12dp"
+                                        android:layout_marginRight="@dimen/four"
+                                        android:layout_marginTop="48dp"
+                                        android:background="#21A5E0"
+                                        android:paddingBottom="10dp"
+                                        android:paddingLeft="10dp"
+                                        android:paddingRight="10dp"
+                                        android:paddingTop="10dp"
+                                        android:text="Rs. 2374 per month"
+                                        android:textColor="#ffffff"
+                                        android:visibility="gone"/>
+                                </RelativeLayout>
+                            </LinearLayout>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/card2"
+                                  xmlns:android="http://schemas.android.com/apk/res/android"
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_below="@id/card1">
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:mrl_rippleAlpha="0.10"
+                            app:mrl_rippleColor="@color/rippplecolorlist"
+                            app:mrl_rippleDimension="1dp"
+                            app:mrl_rippleDuration="350"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="false">
+
+                            <LinearLayout
+                                android:id="@+id/lin2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#ffffff"
+                                android:orientation="horizontal"
+                                android:weightSum="1">
 
 
+                                <RelativeLayout
+                                    android:id="@+id/slast"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:paddingLeft="4dp">
 
-                    />
+                                    <ImageView
+                                        android:id="@+id/brand3"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_margin="8dp"
+                                        android:src="@drawable/snapdeal"/>
 
-            </RelativeLayout>
-        </LinearLayout>
-        </com.balysv.materialripple.MaterialRippleLayout>
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/card1"
-        android:background="#664A4A4A"
-        />
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:cardview="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:id="@+id/card3"
+                                    <ImageView
+                                        android:id="@+id/img2"
+                                        android:layout_width="280dp"
+                                        android:layout_height="120dp"
+                                        android:layout_marginTop="32dp"
+                                        android:padding="@dimen/fab_margin"/>
 
-android:visibility="gone"
-        android:layout_below="@id/card2"
-        android:layout_height="wrap_content"
-        >
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:mrl_rippleColor="@color/rippplecolorlist"
-            app:mrl_rippleAlpha="0.10"
-            app:mrl_rippleOverlay="false"
-            app:mrl_rippleHover="true"
-            app:mrl_rippleDimension="1dp"
-            app:mrl_rippleDuration="350">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lin3"
-            android:background="#ffffff"
-            android:weightSum="1"
-            android:orientation="horizontal">
+                                    <TextView
+                                        android:id="@+id/titlex2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/img2"
+                                        android:layout_marginTop="@dimen/fab_margin"
+                                        android:gravity="center"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#33A4D0"
+                                        android:textStyle="bold"/>
 
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_height="wrap_content">
-
-
-                <ImageView
-                    android:layout_width="280dp"
-                    android:layout_height="120dp"
-                    android:layout_margin="12dp"
-                    android:id="@+id/img3"
-                    android:layout_centerInParent="true"
-                    />
-
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:paddingLeft="4dp"
-                android:id="@+id/lastcard"
-                android:layout_height="wrap_content">
+                                    <TextView
+                                        android:id="@+id/titlenew2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/titlex2"
+                                        android:layout_marginBottom="@dimen/four"
+                                        android:layout_marginTop="@dimen/left"
+                                        android:fontFamily="sans-serif-light"
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#4A4A4A"/>
 
 
+                                </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/title3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/fab_margin"
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="#664A4A4A"/>
 
-                    android:maxLines="2"
-                    android:textStyle="bold"
+                                <RelativeLayout
+                                    android:id="@+id/flast"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:paddingLeft="4dp">
 
-                    android:text="Apple iPhone 6"
-                    android:textColor="#222"
-                    />
-                <TextView
-                    android:id="@+id/mrp3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/left"
-                    android:layout_below="@id/title3"
-                    android:maxLines="2"
+                                    <ImageView
+                                        android:id="@+id/img2x"
+                                        android:layout_width="280dp"
+                                        android:layout_height="120dp"
+                                        android:layout_marginTop="32dp"
+                                        android:padding="@dimen/fab_margin"
+                                        android:src="@drawable/mob"/>
 
+                                    <ImageView
+                                        android:id="@+id/brand4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_margin="8dp"
+                                        android:src="@drawable/snapdeal"/>
 
-                    android:text="MRP Rs. 49,999"
+                                    <TextView
+                                        android:id="@+id/title2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/img2x"
+                                        android:layout_marginTop="@dimen/fab_margin"
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#33A4D0"
+                                        android:textStyle="bold"/>
 
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:id="@+id/price3"
-                    android:layout_height="wrap_content"
-                    android:text="Rs. 2374 per month"
-                    android:textColor="#ffffff"
-                    android:layout_marginTop="48dp"
-                    android:layout_marginRight="@dimen/four"
-                    android:layout_below="@id/mrp3"
-                    android:background="#21A5E0"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:visibility="gone"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginBottom="12dp"
+                                    <TextView
+                                        android:id="@+id/mrp2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/title2"
+                                        android:layout_marginBottom="@dimen/four"
+                                        android:layout_marginTop="@dimen/left"
+                                        android:fontFamily="sans-serif-light"
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:text="MRP Rs. 49,999"
+                                        android:textColor="#4A4A4A"/>
 
+                                    <TextView
+                                        android:id="@+id/price2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/mrp2"
+                                        android:layout_marginBottom="12dp"
+                                        android:layout_marginRight="@dimen/four"
+                                        android:layout_marginTop="48dp"
+                                        android:background="#21A5E0"
+                                        android:paddingBottom="10dp"
+                                        android:paddingLeft="10dp"
+                                        android:paddingRight="10dp"
+                                        android:paddingTop="10dp"
+                                        android:text="Rs. 2374 per month"
+                                        android:textColor="#ffffff"
+                                        android:visibility="gone"/>
+                                </RelativeLayout>
+                            </LinearLayout>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/card1"
+                        android:background="#664A4A4A"/>
 
-                    />
+                    <LinearLayout android:id="@+id/card3"
+                                  xmlns:android="http://schemas.android.com/apk/res/android"
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_below="@id/card2"
+                                  android:visibility="gone">
 
-            </RelativeLayout>
-        </LinearLayout>
-        </com.balysv.materialripple.MaterialRippleLayout>
-    </LinearLayout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:cardview="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:id="@+id/card4"
-        android:visibility="gone"
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:mrl_rippleAlpha="0.10"
+                            app:mrl_rippleColor="@color/rippplecolorlist"
+                            app:mrl_rippleDimension="1dp"
+                            app:mrl_rippleDuration="350"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="false">
 
-        android:layout_below="@id/card3"
-        android:layout_height="wrap_content"
-        >
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:mrl_rippleColor="@color/rippplecolorlist"
-            app:mrl_rippleAlpha="0.10"
-            app:mrl_rippleOverlay="false"
-            app:mrl_rippleHover="true"
-            app:mrl_rippleDimension="1dp"
-            app:mrl_rippleDuration="350">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:id="@+id/lin4"
-            android:background="#ffffff"
-            android:orientation="horizontal">
+                            <LinearLayout
+                                android:id="@+id/lin3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#ffffff"
+                                android:orientation="horizontal"
+                                android:weightSum="1">
 
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5">
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_height="wrap_content">
+                                    <ImageView
+                                        android:id="@+id/img3"
+                                        android:layout_width="280dp"
+                                        android:layout_height="120dp"
+                                        android:layout_centerInParent="true"
+                                        android:layout_margin="12dp"/>
 
+                                </RelativeLayout>
 
-                <ImageView
-                    android:layout_width="280dp"
-                    android:layout_height="120dp"
-                    android:layout_margin="12dp"
-                    android:id="@+id/img4"
-                    android:layout_centerInParent="true"
-                    />
+                                <RelativeLayout
+                                    android:id="@+id/lastcard"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:paddingLeft="4dp">
 
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:paddingLeft="4dp"
-                android:layout_height="wrap_content">
+                                    <TextView
+                                        android:id="@+id/title3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/fab_margin"
+                                        android:maxLines="2"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#222"
+                                        android:textStyle="bold"/>
 
+                                    <TextView
+                                        android:id="@+id/mrp3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/title3"
+                                        android:layout_marginTop="@dimen/left"
+                                        android:maxLines="2"
+                                        android:text="MRP Rs. 49,999"/>
 
+                                    <TextView
+                                        android:id="@+id/price3"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/mrp3"
+                                        android:layout_marginBottom="12dp"
+                                        android:layout_marginRight="@dimen/four"
+                                        android:layout_marginTop="48dp"
+                                        android:background="#21A5E0"
+                                        android:paddingBottom="10dp"
+                                        android:paddingLeft="10dp"
+                                        android:paddingRight="10dp"
+                                        android:paddingTop="10dp"
+                                        android:text="Rs. 2374 per month"
+                                        android:textColor="#ffffff"
+                                        android:visibility="gone"/>
+                                </RelativeLayout>
+                            </LinearLayout>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/title4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/fab_margin"
+                    <LinearLayout android:id="@+id/card4"
+                                  xmlns:android="http://schemas.android.com/apk/res/android"
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_below="@id/card3"
+                                  android:visibility="gone">
 
-                    android:maxLines="2"
-                    android:textStyle="bold"
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:mrl_rippleAlpha="0.10"
+                            app:mrl_rippleColor="@color/rippplecolorlist"
+                            app:mrl_rippleDimension="1dp"
+                            app:mrl_rippleDuration="350"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="false">
 
-                    android:text="Apple iPhone 6"
-                    android:textColor="#222"
-                    />
-                <TextView
-                    android:id="@+id/mrp4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/left"
-                    android:layout_below="@id/title4"
-                    android:maxLines="2"
+                            <LinearLayout
+                                android:id="@+id/lin4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#ffffff"
+                                android:orientation="horizontal"
+                                android:weightSum="1">
 
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5">
 
-                    android:text="MRP Rs. 49,999"
+                                    <ImageView
+                                        android:id="@+id/img4"
+                                        android:layout_width="280dp"
+                                        android:layout_height="120dp"
+                                        android:layout_centerInParent="true"
+                                        android:layout_margin="12dp"/>
+                                </RelativeLayout>
 
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:id="@+id/price4"
-                    android:layout_height="wrap_content"
-                    android:text="Rs. 2374 per month"
-                    android:textColor="#ffffff"
-                    android:layout_marginTop="48dp"
-                    android:layout_marginRight="@dimen/four"
-                    android:layout_below="@id/mrp4"
-                    android:background="#21A5E0"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginBottom="12dp"
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:paddingLeft="4dp">
 
+                                    <TextView
+                                        android:id="@+id/title4"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/fab_margin"
+                                        android:maxLines="2"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#222"
+                                        android:textStyle="bold"/>
 
+                                    <TextView
+                                        android:id="@+id/mrp4"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/title4"
+                                        android:layout_marginTop="@dimen/left"
+                                        android:maxLines="2"
+                                        android:text="MRP Rs. 49,999"/>
 
-                    />
+                                    <TextView
+                                        android:id="@+id/price4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/mrp4"
+                                        android:layout_marginBottom="12dp"
+                                        android:layout_marginRight="@dimen/four"
+                                        android:layout_marginTop="48dp"
+                                        android:background="#21A5E0"
+                                        android:paddingBottom="10dp"
+                                        android:paddingLeft="10dp"
+                                        android:paddingRight="10dp"
+                                        android:paddingTop="10dp"
+                                        android:text="Rs. 2374 per month"
+                                        android:textColor="#ffffff"/>
+                                </RelativeLayout>
+                            </LinearLayout>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
 
-            </RelativeLayout>
-        </LinearLayout>
-        </com.balysv.materialripple.MaterialRippleLayout>
-    </LinearLayout>
-</RelativeLayout>
-</LinearLayout>
-
-</ScrollView>
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/chat"
-            app:backgroundTint="#21A5E0"
-            android:layout_margin="8dp"
-            android:visibility="gone"
-            android:src="@drawable/chaticon"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"/>
-         </RelativeLayout>
-<android.support.design.widget.NavigationView
-android:id="@+id/navigation_view"
-android:layout_width="240dp"
-android:layout_height="match_parent"
-android:layout_gravity="start"
-android:background="#33A4D0"
-app:itemIconTint="#ffffff"
-app:itemTextColor="#ffffff"
+            android:layout_margin="8dp"
+            android:src="@drawable/chaticon"
+            android:visibility="gone"
+            app:backgroundTint="#21A5E0"/>
+    </RelativeLayout>
 
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#2A374C"
+        app:headerLayout="@layout/header"
+        app:itemIconTint="#ffffff"
+        app:itemTextColor="#ffffff"
+        app:menu="@menu/drawer"/>
+</android.support.v4.widget.DrawerLayout>
 
-app:headerLayout="@layout/header"
-app:menu="@menu/drawer" />
-
-    </android.support.v4.widget.DrawerLayout>

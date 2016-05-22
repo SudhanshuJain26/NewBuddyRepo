@@ -187,7 +187,7 @@ public class Formsaved extends AppCompatActivity {
         arr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  Toast.makeText(Formsaved.this, "clicked", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(Formsaved.this, "clicked", Toast.LENGTH_SHORT).show();
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
@@ -248,14 +248,14 @@ public class Formsaved extends AppCompatActivity {
         } else {
 
             new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Exit")
-                .setMessage("Are you sure you want to exit?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        System.exit(0);
-                    }
-                }).setNegativeButton("No", null).show();}
+                    .setMessage("Are you sure you want to exit?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                            System.exit(0);
+                        }
+                    }).setNegativeButton("No", null).show();}
     }
 
     @Override

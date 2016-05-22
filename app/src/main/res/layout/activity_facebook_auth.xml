@@ -5,12 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".FacebookAuth">
     <ImageView
-    android:layout_width="120dp"
-    android:layout_height="120dp"
-    android:layout_centerHorizontal="true"
-    android:id="@+id/buddyLogo"
-    android:layout_marginTop="40dp"
-    android:src="@drawable/buddylogo_blue"/>
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/buddyLogo"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/buddylogo_blue"/>
 
 
 
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         facebook:com_facebook_login_text="Connect your account"
 
-       android:layout_centerInParent="true"
+        android:layout_centerInParent="true"
         android:layout_height="wrap_content" />
     <ProgressBar
         android:id="@+id/progressBar1"
@@ -28,7 +28,7 @@
         android:background="@xml/progress"
         android:layout_above="@id/login_button"
         android:layout_centerInParent="true"
-android:visibility="gone"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
@@ -43,4 +43,4 @@ android:visibility="gone"
         android:textStyle="bold"
         android:textColor="#4A4A4A"
         android:text="Login with Facebook to continue."/>
-    </RelativeLayout>
+</RelativeLayout>

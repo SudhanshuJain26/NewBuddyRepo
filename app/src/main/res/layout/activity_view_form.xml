@@ -17,8 +17,8 @@ android:id="@+id/fbrl"
     tools:context="indwin.c3.shareapp.ViewForm">
 
 
-    />
 
+    />
 
 
     <im.delight.android.webview.AdvancedWebView
@@ -61,7 +61,9 @@ android:id="@+id/fbrl"
         android:id="@+id/navigation_view"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:background="#33A4D0"
+
+        android:background="#2A374C"
+
         app:itemIconTint="#ffffff"
         app:itemTextColor="#ffffff"
         android:layout_gravity="start"

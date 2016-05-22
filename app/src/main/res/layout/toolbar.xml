@@ -5,40 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/abc_action_bar_default_height_material"
     android:background="#286793"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-
-    >
     <RelativeLayout
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content">
-<ImageView
-    android:layout_width="40dp"
-    android:layout_height="40dp"
-    android:paddingRight="8dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:id="@+id/logointool"
-    
-    android:src="@mipmap/hellobud"/>
-    <TextView
-        android:id="@+id/titlehead"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        android:layout_toRightOf="@id/logointool"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:text="Home"/>
 
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:id="@+id/interCom"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/chechintercom"/>
+        <ImageView
+            android:id="@+id/logointool"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingBottom="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="8dp"
+            android:src="@mipmap/hellobud" />
+
+        <TextView
+            android:id="@+id/titlehead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/logointool"
+            android:text="Home"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/interCom"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/chechintercom" />
+
     </RelativeLayout>
 </android.support.v7.widget.Toolbar>

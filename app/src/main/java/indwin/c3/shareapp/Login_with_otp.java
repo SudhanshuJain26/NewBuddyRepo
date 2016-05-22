@@ -45,8 +45,8 @@ import io.intercom.android.sdk.identity.Registration;
 public class Login_with_otp extends AppCompatActivity {
     String url = "";
     String url_otp="";
-private ProgressBar spinner;
-   private TextView loginotp;
+    private ProgressBar spinner;
+    private TextView loginotp;
     String userid="";
     static String token="";
     private RelativeLayout error;
@@ -60,7 +60,7 @@ private ProgressBar spinner;
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login_with_otp);
-         userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+        userP = getSharedPreferences("token", Context.MODE_PRIVATE);
         ImageView bac=(ImageView)findViewById(R.id.backo);
         bac.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +74,7 @@ private ProgressBar spinner;
         error=(RelativeLayout)findViewById(R.id.error);
         msg=(TextView)findViewById(R.id.msg);
         spinner=(ProgressBar)findViewById(R.id.progressBar1);
-url=getApplicationContext().getString(R.string.server)+"authenticate";
+        url=getApplicationContext().getString(R.string.server)+"authenticate";
         url_otp=getApplicationContext().getString(R.string.server)+"api/login/sendotp";
         phone=(EditText)findViewById(R.id.phone_number);
         pL = phone.getPaddingLeft();
@@ -90,9 +90,9 @@ url=getApplicationContext().getString(R.string.server)+"authenticate";
                 }
             }
         });
-         pT = phone.getPaddingTop();
-         pR = phone.getPaddingRight();
-         pB = phone.getPaddingBottom();
+        pT = phone.getPaddingTop();
+        pR = phone.getPaddingRight();
+        pB = phone.getPaddingBottom();
         try {
             //Intercom.client().reset();
         }
@@ -103,13 +103,13 @@ url=getApplicationContext().getString(R.string.server)+"authenticate";
         login_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent in =new Intent(Login_with_otp.this,MainActivity.class);
+                Intent in =new Intent(Login_with_otp.this,MainActivity.class);
                 finish();
                 startActivity(in);
                 overridePendingTransition(0, 0);
             }
         });
-         loginotp=(TextView)findViewById(R.id.Login);
+        loginotp=(TextView)findViewById(R.id.Login);
         loginotp.setEnabled(false);
         loginotp.setTextColor(Color.parseColor("#66ffffff"));
 
@@ -144,7 +144,7 @@ url=getApplicationContext().getString(R.string.server)+"authenticate";
             }
         };
         phone.addTextChangedListener(mTextEditorWatcher1);
-int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permission.RECEIVE_SMS);
+        int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permission.RECEIVE_SMS);
         if(res== PackageManager.PERMISSION_GRANTED){loginotp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,7 +173,7 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
                     if(time+5<userP.getLong("expires",0))
                         new login_otp().execute(url);
                     else
-                new AuthTokc().execute();}
+                        new AuthTokc().execute();}
                 else
 
                 {
@@ -222,7 +222,7 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
                             editor1.putInt("shareflow", 0);
                             editor1.commit();
                             if(userid.length()==10)
-                              //  new login_otp().execute(url);
+                                //  new login_otp().execute(url);
                                 new AuthTokc().execute();
                             else
                             {loginotp.setEnabled(true);
@@ -270,7 +270,7 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
                                     new login_otp().execute(url);
                                 else
                                     new AuthTokc().execute();
-                              //
+                                //
                             }
                             else
                             {loginotp.setEnabled(true);
@@ -412,7 +412,7 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                    url_otp=getApplicationContext().getString(R.string.server)+"api/auth/sendotp?phone="+userid;
+                url_otp=getApplicationContext().getString(R.string.server)+"api/auth/sendotp?phone="+userid;
                 HttpPost httppost = new HttpPost(url_otp);
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp=toks.getString("token_value","");
@@ -444,7 +444,7 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
 
                         return "win";
 
-                           }
+                    }
 
                 }
 
@@ -467,12 +467,12 @@ int res=ContextCompat.checkSelfPermission(Login_with_otp.this, Manifest.permissi
                 msg.setText(result);
                 phone.setBackgroundResource(R.drawable.texted2);
                 phone.setPadding(pL, pT, pR, pB);
-                    Toast.makeText(getApplicationContext(),
-                            result,
-                            Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),
+                        result,
+                        Toast.LENGTH_LONG).show();
 
 
-System.out.println("Error" + result);
+                System.out.println("Error" + result);
 
             } else {
 
@@ -481,7 +481,7 @@ System.out.println("Error" + result);
                 Intent otp=new Intent(Login_with_otp.this,Otp.class);
                 otp.putExtra("send",1);
                 otp.putExtra("Phone_otp", userid);
-finish();
+                finish();
                 startActivity(otp);
                 overridePendingTransition(0, 0);
 
@@ -566,7 +566,7 @@ finish();
         protected void onPostExecute(String result) {
             if(result.equals("win")){
 
-              //  Toast.makeText(Login_with_otp.this, "yey", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(Login_with_otp.this, "yey", Toast.LENGTH_SHORT).show();
 //            next.new FacebookAuth.fblogin().execute();
                 // new fblogin().execute();
 //            next.fblogin().execute();

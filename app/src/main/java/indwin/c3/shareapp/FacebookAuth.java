@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+
 import android.hardware.camera2.params.Face;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +46,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -229,7 +232,6 @@ public class FacebookAuth extends AppCompatActivity {
                             }
                         }
                 ).executeAsync();
-
 
 
 //                btnSignIn.setOnClickListener();

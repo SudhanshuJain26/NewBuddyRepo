@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:id="@+id/pop"
+    android:background="#FFFFFF"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:id="@+id/status"
+        android:text="Complete your profile"
+        android:textColor="#000000"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/msg"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/status"
+    android:text="You need to get approval for a credit\nlimit to checkout with a FLexible\nPayment Plan"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/talk"
+        android:layout_below="@id/msg"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:text="To get approved quicly, complete\nyour profile if you haven't already!"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Complete it now"
+        android:id="@+id/ok1"
+        android:background="#3380B6"
+        android:layout_below="@id/talk"
+        android:padding="@dimen/left"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+
+        />
+</RelativeLayout>

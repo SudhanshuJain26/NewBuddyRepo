@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/approved_layout"
+    android:background="#44c2a6"
+    android:paddingEnd="24dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:paddingStart="24dp"
+    tools:context="indwin.c3.shareapp.activities.FlashApprovedActivity"
+    tools:showIn="@layout/activity_flash_approved">
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text=""
+        android:textColor="@color/colorwhite"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/status_image"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_below="@id/name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:elevation="2dp" />
+
+    <TextView
+        android:id="@+id/flash_credit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/status_image"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginTop="48dp"
+        android:text="You have been approved for"
+        android:textColor="@color/colorwhite"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/flash_credit_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/flash_credit_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="Rs.1000 FLASH Credit Limit!"
+        android:textColor="@color/colorwhite"
+        android:textSize="16sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/flash_credit_text2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/meanwhile_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:text="Go ahead,"
+            android:textColor="@color/colorwhite"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/unlock_more_credit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/meanwhile_text"
+            android:background="#5dae9b"
+            android:drawableLeft="@drawable/helptip"
+            android:drawablePadding="4dip"
+            android:drawableStart="@drawable/helptip"
+            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
+            android:text="Unlock Rs.7000 Credit Limit now!"
+            android:textColor="@color/colorwhite"
+            android:textSize="14sp" />
+        <Button
+            android:id="@+id/choose_product"
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/unlock_more_credit"
+            android:background="#5dae9b"
+            android:drawableLeft="@drawable/helptip"
+            android:drawablePadding="4dip"
+            android:drawableStart="@drawable/helptip"
+            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
+            android:text="Let me choose my product"
+            android:textColor="@color/colorwhite"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

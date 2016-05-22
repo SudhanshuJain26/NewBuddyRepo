@@ -96,7 +96,7 @@ String urll=context.getString(R.string.server) + "authenticate";
         if(result.equals("win")){
 
          ViewForm next=new ViewForm();
-            next.cc2();
+          //  next.cc2();
 //            next.new FacebookAuth.fblogin().execute();
 
 //            next.fblogin().execute();

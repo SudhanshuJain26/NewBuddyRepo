@@ -6,71 +6,71 @@
     android:background="@drawable/background"
 
     tools:context="indwin.c3.shareapp.Otp">
-<ImageView
-    android:layout_width="120dp"
-    android:layout_height="120dp"
-    android:layout_centerHorizontal="true"
-    android:id="@+id/buddyLogo"
-    android:visibility="gone"
-    android:layout_marginTop="40dp"
-    android:src="@drawable/buddylogo_blue"/>
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/buddyLogo"
+        android:visibility="gone"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/buddylogo_blue"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textRCode"
         android:text="Share and earn upto Rs.10,000!"
         android:textColor="#ffffff"
-android:layout_marginTop="80dp"
+        android:layout_marginTop="80dp"
         android:textAppearance="?android:textAppearanceMedium"
         android:layout_below="@id/buddyLogo"
         android:layout_centerHorizontal="true"/>
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/rlCode"
-    android:layout_margin="40dp"
-    android:paddingLeft="24dp"
-android:paddingRight="24dp"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp"
-    android:layout_centerInParent="true"
-    android:background="@drawable/border1"
-    android:layout_below="@id/textRCode"
-    >
-
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:id="@+id/rlshare"
-android:background="#33ffffff"
-        android:paddingLeft="12dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="8dp"
-        android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content">
-    <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-
-       android:src="@drawable/shareicon"
-        android:id="@+id/share"
-android:tint="#ffffff"
-        android:paddingTop="16dp"/>
-    <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/rlCode"
+        android:layout_margin="40dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/border1"
+        android:layout_below="@id/textRCode"
+        >
 
-    android:textColor="#ffffff"
-        android:id="@+id/shareNow"
-        android:textStyle="bold"
-        android:text="Aniket2908"
-        android:layout_toRightOf="@id/share"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/rlshare"
+            android:background="#33ffffff"
+            android:paddingLeft="12dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="8dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
 
-android:layout_marginTop="8dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"/>
+                android:src="@drawable/shareicon"
+                android:id="@+id/share"
+                android:tint="#ffffff"
+                android:paddingTop="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
+                android:textColor="#ffffff"
+                android:id="@+id/shareNow"
+                android:textStyle="bold"
+                android:text="Aniket2908"
+                android:layout_toRightOf="@id/share"
+
+                android:layout_marginTop="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"/>
+
+        </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
     <TextView
         android:layout_marginTop="24dp"
         android:layout_width="wrap_content"
@@ -96,7 +96,7 @@ android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/line_3"
-android:visibility="invisible"
+        android:visibility="invisible"
         android:layout_below="@id/line_2"
         android:layout_centerInParent="true"
         android:text="up buying a gadget,we will give you 10% of the "/>

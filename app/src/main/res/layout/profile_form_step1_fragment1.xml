@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/outer_layout"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#44c2a6"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+    <TextView
+             android:id="@+id/details_submitted_tv"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentBottom="true"
+             android:layout_centerHorizontal="true"
+             android:visibility="gone"
+             android:layout_marginEnd="16dp"
+             android:layout_marginRight="16dp"
+             android:layout_marginTop="8dp"
+             android:background="?android:attr/selectableItemBackground"
+             android:text="Details submitted! Contact us for changes "
+             android:layout_marginBottom="20dp"
+             android:textAllCaps="false"
+             android:textColor="@color/colorwhite"
+             android:textSize="16sp"/>
+    <Button
+        android:id="@+id/save_and_proceed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="Save and proceed"
+        android:textAllCaps="false"
+        android:textColor="@color/colorwhite"
+        android:textSize="16sp"/>
+
+    <android.support.v7.widget.CardView android:id="@+id/fragment1_card_view"
+                                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="300dp"
+                                        android:layout_above="@id/save_and_proceed"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginTop="-8dp"
+                                        card_view:cardBackgroundColor="@android:color/white"
+                                        card_view:cardCornerRadius="4dp"
+                                        card_view:cardElevation="2dp"
+                                        card_view:cardUseCompatPadding="true">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Verify your Email ID"
+                        android:textColor="#44c2a6"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <ImageView
+                        android:id="@+id/incomplete_email"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/incomplete"
+                        android:visibility="gone"/>
+
+                    <ImageView
+                        android:id="@+id/complete_email"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/complete"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/user_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxWidth="200sp"
+                        android:singleLine="true"
+                        android:textSize="16sp"/>
+
+                    <EditText
+                        android:id="@+id/user_email_edittext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginStart="-4dp"
+                        android:width="200dp"
+                        android:hint="Enter new Email ID"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true"
+                        android:textSize="16sp"
+                        android:visibility="gone"/>
+
+                    <ImageButton
+                        android:id="@+id/edit_user_email"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/edit"
+                        android:tint="#44c2a6"/>
+
+                    <Button
+                        android:id="@+id/verify_user_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:text="Verify"
+                        android:textAllCaps="false"
+                        android:textColor="#44c2a6"/>
+
+                    <Button
+                        android:id="@+id/save_user_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:text="Save"
+                        android:textAllCaps="false"
+                        android:textColor="#44c2a6"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/incorrect_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Incorrect format!"
+                    android:textColor="@color/intercomsdk_red"
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Connect your Social Profile"
+                            android:textColor="#44c2a6"
+                            android:textStyle="bold"/>
+
+                        <ImageView
+                            android:id="@+id/incomplete_fb"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/incomplete"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/complete_fb"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/complete"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/social_helptip"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="2dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/helptip"/>
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/connect_social_account_fb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/border_button"
+                    android:drawableLeft="@drawable/fb"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/fb"
+                    android:elevation="2dp"
+                    android:paddingEnd="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingStart="8dp"
+                    android:text="Connect your account"
+                    android:textAllCaps="false"/>
+
+                <Button
+                    android:id="@+id/connect_social_account_insta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/border_button"
+                    android:drawableLeft="@drawable/instagram"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/instagram"
+                    android:elevation="2dp"
+                    android:paddingEnd="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingStart="8dp"
+                    android:text="Connect your account"
+                    android:textAllCaps="false"
+                    android:visibility="gone"/>
+
+                <!--<Button-->
+                <!--android:id="@+id/dont_have_fb"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:background="?android:attr/selectableItemBackground"-->
+                <!--android:text="Don't have a Facebook Account?"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textSize="12sp" />-->
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tell us your Gender"
+                        android:textColor="#44c2a6"
+                        android:textStyle="bold"/>
+
+                    <ImageView
+                        android:id="@+id/incomplete_gender"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/incomplete"
+                        android:visibility="gone"/>
+
+                    <ImageView
+                        android:id="@+id/complete_gender"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/complete"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <Spinner
+                    android:id="@+id/gender_spinner"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"/>
+
+                <View
+                    android:layout_width="160dp"
+                    android:layout_height="1dp"
+                    android:alpha="0.6"
+                    android:background="#000000"/>
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v7.widget.CardView>
+
+    <include
+        layout="@layout/form_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <ImageView
+        android:id="@+id/verify_image_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/formPager"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:minHeight="100dp"
+        android:src="@mipmap/step1fragment1"/>
+    <!--<Button-->
+    <!--android:layout_width="30dp"-->
+    <!--android:layout_height="30dp"-->
+    <!--android:background="@drawable/arrow_up"-->
+    <!--android:layout_gravity="center_horizontal" />-->
+</RelativeLayout>

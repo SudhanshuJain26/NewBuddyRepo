@@ -20,8 +20,8 @@ import java.util.regex.Pattern;
  */
 public class SMSreceiver extends BroadcastReceiver {
 
-    protected static final String CODE = "code";
-    protected static final String INTENT_INFORM_MESSAGE_RECIEVED = "shareapp.intent.coderecieved" ;
+    public static final String CODE = "code";
+   public static final String INTENT_INFORM_MESSAGE_RECIEVED = "shareapp.intent.coderecieved" ;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -56,7 +56,7 @@ public class SMSreceiver extends BroadcastReceiver {
 
                         val = matcher.group(1);
                     }
-                   // new MainActivity.SendSmsToServer().execute(lstSms);
+                    // new MainActivity.SendSmsToServer().execute(lstSms);
 
                     Log.i("SmsReceiver", "senderNum: " + senderNum
                             + "; message: " + message);
@@ -64,13 +64,13 @@ public class SMSreceiver extends BroadcastReceiver {
 
 
 
-if((senderNum.contains("BUDDY"))&&(message.charAt(0)>='0')&&(message.charAt(0)<='9'))
+                    if((senderNum.contains("BUDDY"))&&(message.charAt(0)>='0')&&(message.charAt(0)<='9'))
                     {
                         System.out.println("The code recieved is" + val);
                         Intent informerIntent = new Intent(INTENT_INFORM_MESSAGE_RECIEVED);
                         informerIntent.putExtra(CODE, val);
                         LocalBroadcastManager.getInstance(context).sendBroadcast(informerIntent) ;
-}
+                    }
 
 
 

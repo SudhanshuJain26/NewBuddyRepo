@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Formstatus">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:id="@+id/rl11"
@@ -184,15 +186,16 @@ android:visibility="gone"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
-    <android.support.design.widget.NavigationView
+   <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#33A4D0"
+       android:background="#2A374C"
+        app:headerLayout="@layout/header"
         app:itemIconTint="#ffffff"
         app:itemTextColor="#ffffff"
-        app:headerLayout="@layout/header"
+
         app:menu="@menu/drawer" />
 
 </android.support.v4.widget.DrawerLayout>

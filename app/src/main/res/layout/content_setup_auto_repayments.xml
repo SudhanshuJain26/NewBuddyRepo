@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#eeb85f"
+                tools:context="indwin.c3.shareapp.activities.SetupAutoRepayments"
+                tools:showIn="@layout/activity_setup_auto_repayments">
+
+    <Button
+        android:id="@+id/submit_repayments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:alpha="0.5"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="false"
+        android:enabled="false"
+        android:text="Submit"
+        android:textAllCaps="false"
+        android:textColor="@color/colorwhite"
+        android:textSize="16sp"/>
+
+    <LinearLayout
+        android:id="@+id/note_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/submit_repayments"
+        android:layout_margin="8dp"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/infotip"
+            android:drawablePadding="8dip"
+            android:drawableStart="@drawable/infotip"
+            android:text="NOTE"
+            android:textColor="@color/colorwhite"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:drawableLeft="@drawable/bullet_white_alt"
+            android:drawablePadding="16dip"
+            android:drawableStart="@drawable/bullet_white_alt"
+            android:text="This is a secure page, the information you enter here will not be shared with anybody."
+            android:textColor="@color/colorwhite"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:drawableLeft="@drawable/bullet_white_alt"
+            android:drawablePadding="16dip"
+            android:drawableStart="@drawable/bullet_white_alt"
+            android:text="You will not be charged anyhting at this step."
+            android:textColor="@color/colorwhite"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.CardView android:id="@+id/fragment1_card_view"
+                                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_above="@id/note_layout"
+                                        android:layout_alignParentTop="true"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginTop="8dp"
+                                        card_view:cardBackgroundColor="@color/colorwhite"
+                                        card_view:cardCornerRadius="4dp"
+                                        card_view:cardElevation="2dp"
+                                        card_view:cardUseCompatPadding="true">
+
+        <ScrollView
+            android:id="@+id/parent_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="vertical"
+                android:paddingBottom="32dp">
+
+                <RelativeLayout
+                    android:id="@+id/relative_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Savings Bank Account details"
+                            android:textColor="#eeb85f"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+
+                        <ImageView
+                            android:id="@+id/incomplete_family_details"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/incomplete"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/complete_family_details"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/complete"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/helptip"/>
+                </RelativeLayout>
+
+                <EditText
+                    android:id="@+id/bank_acc_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/relative_layout"
+                    android:layout_marginLeft="-4dp"
+                    android:layout_marginStart="-4dp"
+                    android:layout_marginTop="8dp"
+                    android:width="240dp"
+                    android:hint="Enter personal bank account number"
+                    android:inputType="number"
+                    android:longClickable="false"
+                    android:singleLine="true"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/confirm_bank_acc_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/bank_acc_number"
+                    android:layout_marginLeft="-4dp"
+                    android:layout_marginStart="-4dp"
+                    android:width="240dp"
+                    android:hint="Re-enter personal bank account number"
+                    android:inputType="number"
+                    android:longClickable="false"
+                    android:singleLine="true"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/account_mismatch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/confirm_bank_acc_number"
+                    android:longClickable="false"
+                    android:text="Account Number Mismatch"
+                    android:textColor="@color/intercomsdk_red"
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
+
+                <EditText
+                    android:id="@+id/ifsc_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/account_mismatch"
+                    android:layout_marginLeft="-4dp"
+                    android:layout_marginStart="-4dp"
+                    android:width="240dp"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+                    android:hint="Enter your Bank's IFSC Code"
+                    android:inputType="textCapCharacters"
+                    android:singleLine="true"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/wrong_ifsc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ifsc_code"
+                    android:layout_marginBottom="8dp"
+                    android:text="Incorrect IFSC Code"
+                    android:textColor="@color/intercomsdk_red"
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
+
+
+                <RelativeLayout
+                    android:id="@+id/bank_proof_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ifsc_code"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/bank_proof_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Upload Bank Account Proof(Optional)"
+                        android:textColor="#eeb85f"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <!--<ImageView-->
+                    <!--android:id="@+id/incomplete_bank_proof"-->
+                    <!--android:layout_width="15dp"-->
+                    <!--android:layout_height="15dp"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_marginLeft="8dp"-->
+                    <!--android:layout_marginStart="8dp"-->
+                    <!--android:layout_toEndOf="@id/bank_proof_header"-->
+                    <!--android:layout_toRightOf="@id/bank_proof_header"-->
+                    <!--android:src="@drawable/incomplete"-->
+                    <!--android:visibility="gone" />-->
+
+                    <!--<ImageView-->
+                    <!--android:id="@+id/complete_bank_proof"-->
+                    <!--android:layout_width="15dp"-->
+                    <!--android:layout_height="15dp"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_marginLeft="8dp"-->
+                    <!--android:layout_marginStart="8dp"-->
+                    <!--android:layout_toEndOf="@id/bank_proof_header"-->
+                    <!--android:layout_toRightOf="@id/bank_proof_header"-->
+                    <!--android:src="@drawable/complete"-->
+                    <!--android:visibility="gone" />-->
+
+                    <ImageButton
+                        android:id="@+id/bank_proof_helptip"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="2dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/helptip"/>
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvImages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/bank_proof_layout"
+                    android:layout_marginTop="8dp"/>
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/rvImages"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/hdfc"/>
+
+            </RelativeLayout>
+        </ScrollView>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

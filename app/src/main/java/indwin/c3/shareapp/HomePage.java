@@ -1,7 +1,7 @@
 package indwin.c3.shareapp;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.Context;
@@ -12,13 +12,22 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+
 import android.os.AsyncTask;
 import android.os.Build;
+
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -31,6 +40,15 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,12 +65,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import com.squareup.picasso.Picasso;
 
@@ -61,6 +83,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
@@ -73,6 +96,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -82,12 +106,25 @@ import java.util.Map;
 
 import io.intercom.android.sdk.Intercom;
 
+import java.util.Date;
+import java.util.List;
+
+import indwin.c3.shareapp.activities.ProfileActivity;
+import indwin.c3.shareapp.application.BuddyApplication;
+import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
+import io.intercom.android.sdk.Intercom;
+import io.intercom.com.google.gson.Gson;
+
+
 public class HomePage extends AppCompatActivity {
     private String[] arraySpinner;
     WebView form;
     private Intent intform;
     private NavigationView navigationView;
     private ImageView card1, card2, card3, card4;
+
     private String formstatus, name, fbid, rejectionReason, email, uniqueCode, verificationdate, creditLimit, searchTitle, searchBrand, searchCategory, searchSubcategory, description, specification, review, infor;
     SharedPreferences cred;
     int screen_no;
@@ -107,20 +144,31 @@ public class HomePage extends AppCompatActivity {
     private BroadcastReceiver broadcastReceiver;
     private TextView paste, tren, products, lappy, fashion, beau, ent, foot, but;
     //    Map<String,Map<int,V>> map;
+
 //    HashMap<String, HashMap<String,String>> image;
     private android.content.ClipboardManager myClipboard;
     private String spin = "";
     private String productId = "";
     private int checkValidUrl = 0, monthsallowed = 0;
     private Double emi = 0.0;
+
     private int checkValidFromApis = 0;
     private String sellerNme = "";
     private String token = "";
     private SharedPreferences userP;
+    private SharedPreferences mPrefs;
+    private Gson gson;
+    private UserModel user;
+    private Tracker mTracker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        BuddyApplication application = (BuddyApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
         userP = getSharedPreferences("token", Context.MODE_PRIVATE);
         cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
         //userid=ss.getString("phone_number", "");
@@ -141,15 +189,27 @@ public class HomePage extends AppCompatActivity {
         else {
             setContentView(R.layout.activity_home_page);
 
+            paste = (TextView) findViewById(R.id.pasteAg);
+
             ImageView img1 = (ImageView) findViewById(R.id.img1);
             img1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Toast.makeText(HomePage
-//                            .this, "clicked", Toast.LENGTH_SHORT).show();
+
 
                 }
             });
+
+            if (!isNetworkAvailable()) {
+                showMessageOKCancel("Internet is not working. Some features of the app may be disabled.",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+            }
+
             newtren = (RelativeLayout) findViewById(R.id.newtr);
             tren = (TextView) findViewById(R.id.trending);
             newtren.setOnClickListener(new View.OnClickListener() {
@@ -331,14 +391,19 @@ public class HomePage extends AppCompatActivity {
             intercom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intercom.client().displayMessageComposer();
+
+                    try {
+                        Intercom.client().displayMessageComposer();
+                    } catch (Exception e) {
+
+                    }
+
                 }
             });
             try {
                 toolbar = (Toolbar) findViewById(R.id.toolbarc);
 
                 setSupportActionBar(toolbar);
-//getSupportActionBar().setBackgroundDrawable(R.id.buddylogo_blue);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 getSupportActionBar().setDisplayShowTitleEnabled(false);
             } catch (Exception e) {
@@ -348,7 +413,12 @@ public class HomePage extends AppCompatActivity {
             inter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intercom.client().displayMessageComposer();
+                    try {
+                        Intercom.client().displayMessageComposer();
+                    } catch (Exception e) {
+
+                    }
+
                 }
             });
             get();
@@ -365,91 +435,166 @@ public class HomePage extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     noti.setVisibility(View.GONE);
-                    paste = (TextView) findViewById(R.id.pasteAg);
+
                     clickpaste();
 
                 }
             });
-            TextView name1, line1, line2, but;
-            name1 = (TextView) findViewById(R.id.nameintr);
-            line1 = (TextView) findViewById(R.id.line1);
-            line2 = (TextView) findViewById(R.id.line2);
-            TextView line3 = (TextView) findViewById(R.id.line3);
-            but = (TextView) findViewById(R.id.but);
-            name1.setText("Hi " + name + ",");
-            if (formstatus.equals("empty")) {
-                line1.setText("Ready to get started? Complete your profile now to get a Borrowing Limit and start shopping now!");
-                //line2.setText("");
-                line3.setVisibility(View.VISIBLE);
-                line3.setText("");
-                but.setText("Complete it now!");
-            } else if (formstatus.equals("saved")) {
-                line1.setText("Ready to get started? Complete your profile now to get a Borrowing Limit and start shopping now!");
-                line2.setText("");
-                line3.setVisibility(View.VISIBLE);
-                line3.setText("");
-                but.setText("Complete it now!");
-            } else if (formstatus.equals("flashApproved")) {
-                line1.setText("Congrats! You have been approved for Rs.1000 flash Credit Limit! ");
-                line2.setText("");
-                line3.setVisibility(View.VISIBLE);
-                line3.setText("");
-                but.setText("Increase it further!");
-            } else if (formstatus.equals("approved")) {
 
-                line1.setText("You have been approved for a Borrowing Limit of Rs. " + creditLimit + ". Go Crazy");
-//                line2.setText("");
-                but.setVisibility(View.GONE);
-                ImageView i = (ImageView) findViewById(R.id.app);
-                i.setVisibility(View.VISIBLE);
 
-            } else if (formstatus.equals("declined")) {
-                line1.setText("Sorry, but we are unable to approve a Borrowing Limit for you! Find out why!");
-//                line2.setText("");
-                but.setText("");
-            } else if (formstatus.equals("submitted")) {
-                if (screen_no == 1) {
-//upload
-                    line1.setText("We have received your details but your documents are not yet uploaded.");
-//                    line2.setText("");
-
-                    but.setText("Upload 'em now");
-
-                } else if (screen_no == 2) {
-                    //setupverif
-                    line1.setText("Your profile is almost complete, but you still haven't scheduled your college id verification date.");
-//                    line2.setText("");
-//                    line3.setVisibility(View.VISIBLE);
-//                    line3.setText("");
-                    but.setText("Schedule it now!");
-
-                } else if (screen_no == 3) {
-                    line1.setText("Your verification has been scheduled on:");
-                    line2.setText(verificationdate);
-                    ;
-                    but.setText("Okie Dokie");
-                    //verif
-
+            noti.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    query.clearFocus();
+                    //                    send();
+                    Intent intent = new Intent(HomePage.this, ProfileActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    Splash.notify = 1;
                 }
+            });
+            mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+            mPrefs.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
+            gson = new Gson();
+            String json = mPrefs.getString("UserObject", "");
+            setNewIdsNull(json);
+            json = mPrefs.getString("UserObject", "");
+            user = gson.fromJson(json, UserModel.class);
 
+            try {
+                TextView name1, line1, line2, but;
+                name1 = (TextView) findViewById(R.id.nameintr);
+                line1 = (TextView) findViewById(R.id.line1);
+                line2 = (TextView) findViewById(R.id.line2);
+                TextView line3 = (TextView) findViewById(R.id.line3);
+                but = (TextView) findViewById(R.id.but);
+                name1.setText("Hi " + user.getName() + ",");
+                String status60K = "";
+                if (user.getStatus60K() != null) {
+                    status60K = user.getStatus60K();
+                }
+                String status7K = "";
+                if (user.getStatus7K() != null) {
+                    status7K = user.getStatus7K();
+                }
+                String status1K = "";
+                if (user.getStatus1K() != null) {
+                    status1K = user.getStatus1K();
+                }
+                but.setVisibility(View.GONE);
+                if (Constants.STATUS.DECLINED.toString().equals(user.getProfileStatus()) || Constants.STATUS.WAITLISTED.equals(user.getProfileStatus())) {
+
+                    line1.setText("Your profile has currently been waitlisted for approval. Touch here to find out more.");
+
+                } else if (Constants.STATUS.APPROVED.toString().equals(user.getProfileStatus())) {
+
+                    if (Constants.STATUS.APPROVED.toString().equals(status60K)) {
+                        name1.setText("Congrats " + name + ",");
+                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Happy shopping!");
+                    } else if (Constants.STATUS.APPROVED.toString().equals(status7K)) {
+                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Go ahead and shop or complete your profile to apply for a higher credit limit.");
+                    } else if (Constants.STATUS.APPROVED.toString().equals(status1K)) {
+                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " FLASH credit limit! Go ahead and shop or complete your profile to apply for a higher credit limit.");
+                    } else if (Constants.STATUS.DECLINED.toString().equals(status1K) || "waitlisted".equals(status1K)) {
+                        line1.setText("Your profile has currently been waitlisted for Rs.1000 FLASH credit limit! We suggest that you complete your profile to apply for a higher limit.");
+                    } else if (Constants.STATUS.APPLIED.toString().equals(status60K)) {
+                        line1.setText("You have applied for upto Rs.60,000 credit. We will inform you as soon as it gets approved.");
+                    } else if (Constants.STATUS.APPLIED.toString().equals(status7K)) {
+                        line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
+                    } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
+                        line1.setText("You have ap'plied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
+                    }
+                } else {
+                    if (Constants.STATUS.APPLIED.toString().equals(status60K)) {
+                        line1.setText("You have applied for upto Rs.60,000 credit. We will inform you as soon as it gets approved.");
+                    } else if (Constants.STATUS.APPLIED.toString().equals(status7K)) {
+                        line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
+                    } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
+                        line1.setText("You have applied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
+                    } else {
+                        line1.setText("Ready to get started? Complete your profile now to get a Borrowing Limit and start shopping now!");
+                        but.setText("Complete it now!");
+                        but.setVisibility(View.VISIBLE);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            //            if (user.get) {
+            //
+            //            } else if (formstatus.equals("saved")) {
+            //                line1.setText("Ready to get started? Complete your profile now to get a Borrowing Limit and start shopping now!");
+            //                line2.setText("");
+            //                line3.setVisibility(View.VISIBLE);
+            //                line3.setText("");
+            //                but.setText("Complete it now!");
+            //            } else if (formstatus.equals("flashApproved")) {
+            //                line1.setText("Congrats! You have been approved for Rs.1000 flash Credit Limit! ");
+            //                line2.setText("");
+            //                line3.setVisibility(View.VISIBLE);
+            //                line3.setText("");
+            //                but.setText("Increase it further!");
+            //            } else if (formstatus.equals("approved")) {
+            //
+            //                line1.setText("You have been approved for a Borrowing Limit of Rs. " + creditLimit + ". Go Crazy");
+            ////                line2.setText("");
+            //                but.setVisibility(View.GONE);
+            //                ImageView i = (ImageView) findViewById(R.id.app);
+            //                i.setVisibility(View.VISIBLE);
+            //
+            //            } else if (formstatus.equals("declined")) {
+            //                line1.setText("Sorry, but we are unable to approve a Borrowing Limit for you! Find out why!");
+            ////                line2.setText("");
+            //                but.setText("");
+            //            } else if (formstatus.equals("submitted")) {
+            //                if (screen_no == 1) {
+            ////upload
+            //                    line1.setText("We have received your details but your documents are not yet uploaded.");
+            ////                    line2.setText("");
+            //
+            //                    but.setText("Upload 'em now");
+            //
+            //                } else if (screen_no == 2) {
+            //                    //setupverif
+            //                    line1.setText("Your profile is almost complete, but you still haven't scheduled your college_id verification date.");
+            ////                    line2.setText("");
+            ////                    line3.setVisibility(View.VISIBLE);
+            ////                    line3.setText("");
+            //                    but.setText("Schedule it now!");
+            //
+            //                } else if (screen_no == 3) {
+            //                    line1.setText("Your verification has been scheduled on:");
+            //                    line2.setText(verificationdate);
+            //                    ;
+            //                    but.setText("Okie Dokie");
+            //                    //verif
+            //
+            //                }
+            //
+            //            }
+
 
             but = (TextView) findViewById(R.id.but);
             but.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     query.clearFocus();
-                    send();
 
+                    //                    send();
+                    Intent intent = new Intent(HomePage.this, ProfileActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                     Splash.notify = 1;
 
                 }
             });
 
             navigationView = (NavigationView) findViewById(R.id.navigation_view);
-//        navigationView.getMenu().getItem(0).setChecked(true);
-//        GridView gridviewshow=(GridView)findViewById(R.id.grid1a);
-//       gridviewshow.setAdapter(new ImageAdapter(this));
+
+            //        navigationView.getMenu().getItem(0).setChecked(true);
+            //        GridView gridviewshow=(GridView)findViewById(R.id.grid1a);
+            //       gridviewshow.setAdapter(new ImageAdapter(this));
+
 
             navigationView.getMenu().getItem(0).setChecked(true);
             //Setting Navigation View Item Selected Listener
@@ -461,21 +606,14 @@ public class HomePage extends AppCompatActivity {
                 public boolean onNavigationItemSelected(MenuItem menuItem) {
 
 
-                    //Checking if the item is in checked state or not, if not make it in checked state
-//                if(menuItem.isChecked()) menuItem.setChecked(false);
-//                else menuItem.setChecked(true);
-//                navigationView.getMenu().getItem(1).setChecked(true);
+                    //Checking if the item is in
                     //Closing drawer on item click
                     drawerLayout.closeDrawers();
 
                     switch (menuItem.getItemId()) {
 
                         case R.id.MyAccount:
-                         //   intform = new Intent(HomePage.this, ProductsPage.class);
-//                            Splash.checkNot=1;
-//                            paste = (TextView) findViewById(R.id.pasteAg);
-//                            clickpaste();
-//                           .. startActivity(intform);
+
                             return true;
                         case R.id.work:
 
@@ -483,7 +621,6 @@ public class HomePage extends AppCompatActivity {
                             intform = new Intent(HomePage.this, ViewForm.class);
 
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
                             clickpaste();
                             intform.putExtra("which_page", 11);
                             intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
@@ -492,45 +629,42 @@ public class HomePage extends AppCompatActivity {
                             return true;
                         case R.id.About:
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             intform = new Intent(HomePage.this, ViewForm.class);
-//                        else
-//                            intform=new Intent(Formempty.this, FacebookAuth.class);
+                            //                        else
+                            //                            intform=new Intent(Formempty.this, FacebookAuth.class);
+
                             // finish();
                             intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
                             intform.putExtra("which_page", 3);
                             //  finish();
                             startActivity(intform);
                             overridePendingTransition(0, 0);
-
-//                        //if(!fbid.equals("empty"))
-//                        intform=new Intent(Formempty.this, ViewForm.class);
-////                        else
-////                            intform=new Intent(Formempty.this, FacebookAuth.class);
-//                        finish();
-//                        intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
-//                        intform.putExtra("which_page",3);
-//                        finish();
-//                        startActivity(intform);
-//                        overridePendingTransition(0, 0);
+ //                        intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+                            //                        intform.putExtra("which_page",3);
+                            //                        finish();
+                            //                        startActivity(intform);
+                            //                        overridePendingTransition(0, 0);
                             return true;
                         case R.id.app_form:
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
-                            send();
+                            intform = new Intent(HomePage.this, ProfileActivity.class);
+                            startActivity(intform);
 
                             return true;
                         case R.id.faq:
                             navigationView.getMenu().getItem(0).setChecked(true);
                             // Intent in//
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             intform = new Intent(HomePage.this, ViewForm.class);
-//                        else
-//                            intform=new Intent(Formempty.this, FacebookAuth.class);
+                            //                        else
+                            //                            intform=new Intent(Formempty.this, FacebookAuth.class);
+
 
                             intform.putExtra("url", "http://hellobuddy.in/#/faqs");
                             intform.putExtra("which_page", 5);
@@ -541,10 +675,12 @@ public class HomePage extends AppCompatActivity {
 
                         case R.id.security:
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
+
                             clickpaste();
 
-//                        if(!fbid.equals("empty"))
+                            //                        if(!fbid.equals("empty"))
+
                             intform = new Intent(HomePage.this, ViewForm.class);
 
                             intform.putExtra("which_page", 15);
@@ -556,7 +692,7 @@ public class HomePage extends AppCompatActivity {
                             intform = new Intent(HomePage.this, ViewForm.class);
                             intform.putExtra("which_page", 16);
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
                             startActivity(intform);
@@ -567,7 +703,7 @@ public class HomePage extends AppCompatActivity {
 
                             intform = new Intent(HomePage.this, ViewForm.class);
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
 
                             intform.putExtra("which_page", 17);
@@ -582,7 +718,7 @@ public class HomePage extends AppCompatActivity {
                             editornew.putInt("chshare", 1);
                             // finish();
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             //   editornew.putString("rcode", getIntent().getExtras().getString("UniC"));
                             editornew.commit();
@@ -632,7 +768,7 @@ public class HomePage extends AppCompatActivity {
                             }
                             intform = new Intent(HomePage.this, MainActivity.class);
                             Splash.checkNot = 1;
-                            paste = (TextView) findViewById(R.id.pasteAg);
+
                             clickpaste();
                             finish();
                             startActivity(intform);
@@ -687,23 +823,22 @@ public class HomePage extends AppCompatActivity {
             actionBarDrawerToggle.syncState();
 
 
-            paste = (TextView) findViewById(R.id.paste);
+
 
 
             paste.setVisibility(View.GONE);
-//        mRecycler = (RecyclerView) findViewById(R.id.recycler_view);
+            //        mRecycler = (RecyclerView) findViewById(R.id.recycler_view);
+
             query = (EditText) findViewById(R.id.link);
 
             // query.setCompoundDrawablesWithIntrinsicBounds(50,50,50,50);
             query.setImeOptions(EditorInfo.IME_ACTION_DONE);
-//        query
+
             query.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
                         paste.setVisibility(View.GONE);
-//                        hideSoftKeyboard(HomePage.this);
-
                         // code to execute when EditText loses focus
                     }
                 }
@@ -736,15 +871,17 @@ public class HomePage extends AppCompatActivity {
                 public void afterTextChanged(Editable s) {
                     query.requestFocus();
 
-//if(w==0)
-//    paste.setVisibility(View.VISIBLE);
+                    //if(w==0)
+                    //    paste.setVisibility(View.VISIBLE);
                 }
             });
-//
+            //
+
             query.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
+
 
 //                        Intent in = new Intent(HomePage.this, ViewForm.class);
                         Splash.checkNot = 1;
@@ -840,10 +977,6 @@ public class HomePage extends AppCompatActivity {
             clickpaste();
 
 
-//        CustomLinearLayoutManager customLayoutManager = new CustomLinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
-//        mRecycler.setLayoutManager(customLayoutManager);
-//        mRecycler.setNestedScrollingEnabled(false);
-//        feedsList=new ArrayList<FeedItem>();
             this.arraySpinner = new String[]{
                     "MOBILES", "LAPTOPS", "FASHION", "BEAUTY & PERSONAL CARE", "ENTERTAINMENT", "FOOTWEAR"
             };
@@ -882,6 +1015,7 @@ public class HomePage extends AppCompatActivity {
                         try {
                             populate();
                         } catch (Exception e) {
+
                             //    new trending().execute("dd");
                         }
                         cardclick();
@@ -963,6 +1097,33 @@ public class HomePage extends AppCompatActivity {
         }
     }
 
+
+    private void setNewIdsNull(String json) {
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            if (jsonObject.optJSONArray("newAddressProofs") != null) {
+                jsonObject.put("newAddressProofs", null);
+            }
+            if (jsonObject.optJSONArray("newBankProofs") != null) {
+                jsonObject.put("newBankProofs", null);
+            }
+            if (jsonObject.optJSONArray("newBankStmts") != null) {
+                jsonObject.put("newBankStmts", null);
+            }
+            if (jsonObject.optJSONArray("newCollegeIds") != null) {
+                jsonObject.put("newCollegeIds", null);
+            }
+
+            AppUtils.saveInSharedPrefs(this, AppUtils.USER_OBJECT, jsonObject.toString());
+
+
+        } catch (Exception e) {
+
+
+        }
+    }
+
+
     @Override
     public void onDestroy() {
         // TODO Auto-generated method stub
@@ -977,11 +1138,28 @@ public class HomePage extends AppCompatActivity {
 
     }
 
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new android.support.v7.app.AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .create()
+                .show();
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
     private class trending extends
-            AsyncTask<String, Void, String> {
+                           AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
-//            spinner.setVisibility(View.VISIBLE);
+            //            spinner.setVisibility(View.VISIBLE);
+
         }
 
 
@@ -989,7 +1167,7 @@ public class HomePage extends AppCompatActivity {
         protected String doInBackground(String... data) {
 
             String urldisplay = data[0];
-//               HashMap<String, String> details = data[0];
+
             JSONObject payload = new JSONObject();
             try {
                 // userid=12&productid=23&action=add
@@ -1042,12 +1220,14 @@ public class HomePage extends AppCompatActivity {
                             String selling_price = js.getString("sellingPrice");
                             JSONObject img = new JSONObject(js.getString("imgUrls"));
                             String imgurl = img.getString("200x200");
-//                           image.get(urldisplay).put(String.valueOf(j), imgurl);
-//                            mrp1.get(urldisplay).put(String.valueOf(j), mrp);
-//                            title.get(urldisplay).put(String.valueOf(j), id);
-//                            fkid1.get(urldisplay).put(String.valueOf(j), fkid);
-//                            selling.get(urldisplay).put(String.valueOf(j),selling_price);
-//                            sellers.get(urldisplay).put(String.valueOf(j), seller);
+
+                            //                           image.get(urldisplay).put(String.valueOf(j), imgurl);
+                            //                            mrp1.get(urldisplay).put(String.valueOf(j), mrp);
+                            //                            title.get(urldisplay).put(String.valueOf(j), id);
+                            //                            fkid1.get(urldisplay).put(String.valueOf(j), fkid);
+                            //                            selling.get(urldisplay).put(String.valueOf(j),selling_price);
+                            //                            sellers.get(urldisplay).put(String.valueOf(j), seller);
+
                             String p = id;
                         }
                         return "win";
@@ -1157,7 +1337,7 @@ public class HomePage extends AppCompatActivity {
             if (formstatus.equals("declined")) {
 
                 Intent in = new Intent(HomePage.this, Formempty.class);
-//                finish();
+
                 // Intent in = new Intent(MainActivity.this, Inviteform.class);
                 in.putExtra("Name", name);
                 in.putExtra("fbid", fbid);
@@ -1166,7 +1346,6 @@ public class HomePage extends AppCompatActivity {
                 in.putExtra("Form", formstatus);
                 in.putExtra("UniC", uniqueCode);
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
                 clickpaste();
                 startActivity(in);
                 overridePendingTransition(0, 0);
@@ -1185,13 +1364,12 @@ public class HomePage extends AppCompatActivity {
                 in.putExtra("Form", formstatus);
                 in.putExtra("UniC", uniqueCode);
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 startActivity(in);
                 overridePendingTransition(0, 0);
             } else if (formstatus.equals("submitted")) {
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
                 clickpaste();
                 Intent in = new Intent(HomePage.this, Formstatus.class);
                 in.putExtra("screen_no", screen_no);
@@ -1213,7 +1391,7 @@ public class HomePage extends AppCompatActivity {
             }
             if (formstatus.equals("flashApproved")) {
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
                 clickpaste();
                 Intent in = new Intent(HomePage.this, Approved.class);
                 //   finish();
@@ -1229,7 +1407,6 @@ public class HomePage extends AppCompatActivity {
             }
             if (formstatus.equals("approved")) {
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
                 clickpaste();
                 Intent in = new Intent(HomePage.this, Approved.class);
                 //   finish();
@@ -1244,9 +1421,11 @@ public class HomePage extends AppCompatActivity {
                 overridePendingTransition(0, 0);
             } else if (formstatus.equals("empty")) {
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
+
                 clickpaste();
-//                    Intent in = new Intent(MainActivity.this, Inviteform    .class);
+                //                    Intent in = new Intent(MainActivity.this, Inviteform    .class);
+
                 Intent in = new Intent(HomePage.this, Formempty.class);
                 //    finish();
                 in.putExtra("Name", name);
@@ -1269,6 +1448,7 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View v) {
                 query.clearFocus();
                 //     Toast.makeText(HomePage.this,"checknow",Toast.LENGTH_LONG).show();
+
                 ///  Intent send1 = new Intent(HomePage.this, ViewForm.class);
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 productId = Splash.fkid1.get(spin).get("0");
@@ -1296,12 +1476,14 @@ public class HomePage extends AppCompatActivity {
 //                send1.putExtra("which_page", 10);
                 //
                 // sestartActivity(send1);
+
             }
         });
         card2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 query.clearFocus();
+
 //                Intent send1 = new Intent(HomePage.this, ViewForm.class);
 //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("1"));
                 Splash.checkNot = 1;
@@ -1334,6 +1516,7 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 query.clearFocus();
+
 //                Intent send1 = new Intent(HomePage.this, ViewForm.class);
                 Splash.checkNot = 1;
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
@@ -1360,6 +1543,7 @@ public class HomePage extends AppCompatActivity {
 //                send1.putExtra("which_page", 10);
 //                send1.putExtra("which_page", 10);
 //                startActivity(send1);
+
             }
         });
         card4.setOnClickListener(new View.OnClickListener() {
@@ -1367,7 +1551,8 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View v) {
                 query.clearFocus();
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+
+//                paste = (TextView) findViewById(R.id.pasteAg);
                 clickpaste();
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 productId = Splash.fkid1.get(spin).get("3");
@@ -1402,10 +1587,7 @@ public class HomePage extends AppCompatActivity {
 
     private void populate() {
         {
-//            TextView mrp11=(TextView)findViewById(R.id.mrp1);
-//            TextView mrp2=(TextView)findViewById(R.id.mrp2);
-//            TextView mrp3=(TextView)findViewById(R.id.mrp3);
-//            TextView mrp4=(TextView)findViewById(R.id.mrp4);
+
             TextView price1 = (TextView) findViewById(R.id.titlexxx);
             TextView price2 = (TextView) findViewById(R.id.title1);
             TextView price3 = (TextView) findViewById(R.id.titlex2);
@@ -1460,15 +1642,12 @@ public class HomePage extends AppCompatActivity {
             card2 = (ImageView) findViewById(R.id.imgx);
             card3 = (ImageView) findViewById(R.id.img2);
             card4 = (ImageView) findViewById(R.id.img2x);
-//            mrp11.setText("MRP "+getApplicationContext().getString(R.string.Rs)+" "+ Splash.selling.get(spin).get("0"));
-//            mrp2.setText("MRP "+getApplicationContext().getString(R.string.Rs)+" "+ Splash.selling.get(spin).get("1"));
-//            mrp3.setText("MRP "+getApplicationContext().getString(R.string.Rs)+" "+ Splash.selling.get(spin).get("2"));
-//            mrp4.setText("MRP "+getApplicationContext().getString(R.string.Rs)+" "+ Splash.selling.get(spin).get("3"));
+
             title1.setText(Splash.title.get(spin).get("0"));
             title2.setText(Splash.title.get(spin).get("1"));
             title3.setText(Splash.title.get(spin).get("2"));
             title4.setText(Splash.title.get(spin).get("3"));
-            title4.setText(Splash.title.get(spin).get("3"));
+
             Picasso.with(this)
                     .load(Splash.image.get(spin).get("0"))
                     .placeholder(R.drawable.emptyimageproducts)
@@ -1511,7 +1690,7 @@ public class HomePage extends AppCompatActivity {
             if ((princ2 * 10 / 8) < 5000.0)
                 emi2 = princ2 / monthscam2;
             price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi2.intValue()) + " per month");
-//emi3
+
 
             Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
             int monthscam3 = 18;
@@ -1536,8 +1715,6 @@ public class HomePage extends AppCompatActivity {
             if ((princ4 * 10 / 8) < 5000.0)
                 emi4 = princ4 / monthscam4;
             price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
-
-
         }
 
         cardclick();
@@ -1583,12 +1760,6 @@ public class HomePage extends AppCompatActivity {
         return m;
     }
 
-    //    @Override
-//    public void onResume() {
-//        paste = (TextView) findViewById(R.id.pasteAg);
-//        clickpaste();
-//       // Toast.makeText(HomePage.this, "check", Toast.LENGTH_SHORT).show();
-//        super.onResume();}
     public void parse(String parseString) {
         productId = "";
         int pos = -1;
@@ -1607,14 +1778,16 @@ public class HomePage extends AppCompatActivity {
             } else {
                 checkValidUrl = 1;
             }
-            // Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
+
         }
-//snapdeal
+        //snapdeal
+
 
         else if (parseString.contains("snapdeal")) {
             sellerNme = "snapdeal";
             pos = parseString.lastIndexOf("/");
             if (pos != -1) {
+
                 for (int j = pos + 1; j < parseString.length(); j++) {
                        if(((parseString.charAt(j))>='0')&&(parseString.charAt(j)<='9'))
 
@@ -1626,7 +1799,6 @@ public class HomePage extends AppCompatActivity {
             } else {
                 checkValidUrl = 1;
             }
-//            Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
         } else if (parseString.contains("myntra")) {
             sellerNme = "myntra";
             checkValidFromApis = 1;
@@ -1636,6 +1808,7 @@ public class HomePage extends AppCompatActivity {
         } else if (parseString.contains("jabong")) {
             sellerNme = "jabong";
             checkValidFromApis = 1;
+
         } else if (parseString.contains("paytm")) {
             sellerNme = "paytm";
             checkValidFromApis = 1;
@@ -1648,6 +1821,7 @@ public class HomePage extends AppCompatActivity {
             if (pos != -1) {
                 pos = parseString.indexOf("dp");
             }
+
             if (pos == -1) {
                 pos = parseString.indexOf("/product/");
                 if (pos != -1)
@@ -1686,7 +1860,23 @@ public class HomePage extends AppCompatActivity {
         else
             checkValidUrl = 1;
 
-//        Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
+        if ((checkValidFromApis == 0) && (checkValidUrl == 0)) {
+            //make api call
+        }
+        if ((checkValidFromApis == 1)) {
+            //not monley page
+        }
+        if (checkValidUrl == 1) {
+            //monkey page
+        }
+        Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
     }
 
@@ -1697,15 +1887,6 @@ public class HomePage extends AppCompatActivity {
         } else {
             finish();
 
-//            new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Exit")
-//                    .setMessage("Are you sure you want to exit?")
-//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            finish();
-//
-//                        }
-//                    }).setNegativeButton("No", null).show();
         }
     }
 
@@ -1719,7 +1900,9 @@ public class HomePage extends AppCompatActivity {
                     ClipData.Item item = abc.getItemAt(0);
                     String text = item.getText().toString();
 
+
                     query.setText("   " + text);
+
                     paste.setVisibility(View.GONE);
 
                 } catch (Exception e) {
@@ -1730,14 +1913,13 @@ public class HomePage extends AppCompatActivity {
     }
 
     public class AuthTokc extends
+
             AsyncTask<String, Void, String> {
+
 
         private String apiN = "";
 
         //        Context context;
-//        AuthTok(Context context) {
-//            this.context = context;
-//        }
         //    Splash obj=new Splash();
         @Override
         protected String doInBackground(String... params) {
@@ -1810,26 +1992,27 @@ public class HomePage extends AppCompatActivity {
     }
 
 
+
     public class linkSearch extends
             AsyncTask<String, Void, String> {
         @Override
         public void onPreExecute() {
 //            spinner.setVisibility(View.VISIBLE);
+
         }
 
 
         @Override
+
         public String doInBackground(String... data) {
 
             //  String urldisplay = data[0];
-//               HashMap<String, String> details = data[0];
             JSONObject payload = new JSONObject();
             try {
                 // userid=12&productid=23&action=add
                 // TYPE: get
                 String url = getApplicationContext().getString(R.string.server) + "api/product?productId=" + productId + "&seller=" + sellerNme + "&userid=" + cred.getString("phone_number", "");
 
-//                String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NTY3MjY1NzMsImV4cCI6MTQ1Njc2MjU3M30.98mQFcYm5Uf3Fd7ZNPD-OwMIfObu7vfoq9zNtCCLfyI";
                 // payload.put("action", details.get("action"));
 
 
@@ -1858,6 +2041,7 @@ public class HomePage extends AppCompatActivity {
                         searchCategory = data1.getString("category");
                         searchSubcategory = data1.getString("subCategory");
                         searchPrice = data1.getInt("sellingPrice");
+
                         JSONObject img = new JSONObject(data1.getString("imgUrls"));
                         urlImg = img.getString("400x400");
 //                        infor=data1.getString("")
@@ -1878,6 +2062,7 @@ public class HomePage extends AppCompatActivity {
                         }
                         infor = "The minimum downpayment is 20% of the product price and also depends on the payment band (Oxygen/Silicon/Palladium/Krypton) you lie in, which you will get to know after your college ID verification.";
 
+
                         return "win";
 
 
@@ -1893,6 +2078,7 @@ public class HomePage extends AppCompatActivity {
             if (!result.equals("win")) {
                 System.out.println("Error while computing data");
             } else {
+
                 monthsallowed = months(searchSubcategory, searchCategory, searchBrand, searchPrice);
                 int monthscheck = 0;
                 //digo
@@ -1912,13 +2098,13 @@ public class HomePage extends AppCompatActivity {
                         Long currentMilli = date.getTime();
                         Double diffDouble = (milli.doubleValue() - currentMilli.doubleValue());
                         Double mul = (1000.0 * 60.0 * 60.0 * 24.0 * 365.0);
+
                         diff = diffDouble / mul;
                         diff = diff * 12.0;
                         diff = Math.floor(diff);
                         String curr = df.format(date);
                         String currentDay = "";
                         for (int j = curr.length() - 2; j < curr.length(); j++) {
-
                             currentDay += curr.charAt(j);
                         }
 
@@ -1948,7 +2134,6 @@ public class HomePage extends AppCompatActivity {
                         }
 
 
-//                        Toast.makeText(HomePage.this, curr, Toast.LENGTH_SHORT).show();
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -1956,7 +2141,6 @@ public class HomePage extends AppCompatActivity {
                 if (monthsallowed > monthscheck)
                     monthsallowed = monthscheck;
 
-//                Double emi = 0.0;
                 Double rate = 21.0 / 1200.0;
                 int d = 0;
                 if (searchPrice <= 5000) {
@@ -1968,6 +2152,7 @@ public class HomePage extends AppCompatActivity {
                         d = 65 - currDay;
 
                     emi = Math.floor((searchPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
+
                 }
                 String q = query.getText().toString();
                 Intent in = new Intent(HomePage.this, ProductsPage.class);

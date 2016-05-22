@@ -1,16 +1,26 @@
 package indwin.c3.shareapp;
 
 import android.annotation.SuppressLint;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -24,8 +34,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.ConsoleMessage;
+
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
+
+
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -49,32 +62,42 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+
 import java.io.File;
+
+
 import java.net.URLEncoder;
 import java.util.Calendar;
 
 import im.delight.android.webview.AdvancedWebView;
+
+import indwin.c3.shareapp.activities.ProfileActivity;
 import io.intercom.android.sdk.Intercom;
 
 public class ViewForm extends AppCompatActivity implements AdvancedWebView.Listener {
-    private AdvancedWebView form;String userid="",token="",url="";
+    private AdvancedWebView form;
+    String userid = "", token = "", url = "";
     private Intent intform;
-private String res;
+    private String res;
     private Uri mCapturedImageURI;
-                        private int FILECHOOSER_RESULTCODE=1;
+    private int FILECHOOSER_RESULTCODE = 1;
+
     private ValueCallback<Uri> mUploadMessage;
     private ProgressBar spinner;
     SharedPreferences userP;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
+
     private String reviewUrl="";
     private String seller,prodid;
     int which_page=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+
         try{
             which_page=getIntent().getExtras().getInt("which_page");}
         catch (Exception e)
@@ -256,30 +279,21 @@ else
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.app_form:
-//                        if(.equals("empty"))
-//                          if(Splash.checkfbid==1)
-                            intform=new Intent(ViewForm.this, ViewForm.class);
-
-                        //intform = new Intent(ViewForm.this, ViewForm.class);
-                        finish();
-                        intform.putExtra("url", "http://hellobuddy.in/");
-                        intform.putExtra("which_page", 4);
-                        startActivity(intform);
+                        Intent intent = new Intent(ViewForm.this, ProfileActivity.class);
+                        startActivity(intent);
                         overridePendingTransition(0, 0);
                         return true;
-
                     case R.id.security:
-
-//                        if(!fbid.equals("empty"))
-                        intform=new Intent(ViewForm.this, ViewForm.class);
+                        //                        if(!fbid.equals("empty"))
+                        intform = new Intent(ViewForm.this, ViewForm.class);
                         finish();
                         intform.putExtra("which_page", 15);
-                        intform.putExtra("url","http://hellobuddy.in/#/faqs");
+                        intform.putExtra("url", "http://hellobuddy.in/#/faqs");
+
                         startActivity(intform);
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.faq:
-
                         intform = new Intent(ViewForm.this, ViewForm.class);
                         finish();
                         intform.putExtra("url", "http://hellobuddy.in/#/faqs");
@@ -289,27 +303,26 @@ else
                         return true;
                     case R.id.Orders:
 
-
-                        intform=new Intent(ViewForm.this, ViewForm.class);
-
+                        intform = new Intent(ViewForm.this, ViewForm.class);
                         finish();
                         intform.putExtra("which_page", 16);
-                        intform.putExtra("url","http://hellobuddy.in/#/how-it-works");
+                        intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+
                         startActivity(intform);
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.Repayments:
 
-
-                        intform=new Intent(ViewForm.this, ViewForm.class);
-
+                        intform = new Intent(ViewForm.this, ViewForm.class);
                         finish();
                         intform.putExtra("which_page", 17);
-                        intform.putExtra("url","http://hellobuddy.in/#/how-it-works");
+                        intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+
                         startActivity(intform);
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.Share:
+
 
                         SharedPreferences sh_otp=getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editornew = sh_otp.edit();
@@ -319,13 +332,20 @@ else
                         editornew.commit();
                         Intent in=new Intent(ViewForm.this,Share.class);
 in.putExtra("checksharefromweb",1);
+
                         startActivity(in);
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.log:
-                        Intercom.client().reset();
-                        Splash.checklog=1;
-                        Splash.notify=0;
+                        try {
+
+
+                            Intercom.client().reset();
+                        } catch (Exception e) {
+                        }
+                        Splash.checklog = 1;
+                        Splash.notify = 0;
+
                         Intent stop = new Intent("CLOSE_ALL");
                         ViewForm.this.sendBroadcast(stop);
                         int a = 0;
@@ -368,14 +388,18 @@ in.putExtra("checksharefromweb",1);
                 }
                 //Check to see which item was being clicked and perform appropriate action
 
-            }});
+            }
+        });
+
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         //   ImageView arrowclose=(ImageView)findViewById(R.id.arrow);
 
+
         NavigationView nview=(NavigationView) drawerLayout.findViewById(R.id.navigation_view);
         View headerView=nview.getHeaderView(0);
         ImageView arr=(ImageView)headerView.findViewById(R.id.arrow);
+
         RelativeLayout header = (RelativeLayout) headerView.findViewById(R.id.head);
         //RelativeLayout header = (RelativeLayout) headerView.findViewById(R.id.head);
         header.setOnClickListener(new View.OnClickListener() {
@@ -386,6 +410,7 @@ in.putExtra("checksharefromweb",1);
             }
         });
         //dddddd
+
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.openDrawer, R.string.closeDrawer){
 
 
@@ -411,76 +436,69 @@ in.putExtra("checksharefromweb",1);
         //calling sync state is necessay or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
 
-
     }
+
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
 
         if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             this.drawerLayout.closeDrawer(GravityCompat.START);
-        } else
-        {
-          //  Intent in=new Intent(ViewForm.this,Landing.class);
-            if(form.canGoBack())
+        } else {
+            if (form.canGoBack())
                 form.goBack();
             else {
-                Intent in = new Intent(ViewForm.this, MainActivity.class);
+                if (!isNetworkAvailable()) {
+                    Intent in = new Intent(ViewForm.this, Landing.class);
+                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(in);
+                    finish();
+                    return;
+                }
+                Intent in = new Intent(ViewForm.this, HomePage.class);
+                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(in);
                 finish();
             }
-            //startActivity(in);
-        //    overridePendingTransition(0,0);
         }
-        // code here to show dialoguper.onBackPressed();  // optional depending on your needs
     }
-    public void cc2()
-    {new checkAuth().execute();}
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public void cc2() {
+        new checkAuth().execute();
+    }
+
     private class checkAuth extends
-            AsyncTask<String, Void, String> {
+                            AsyncTask<String, Void, String> {
         @Override
-        protected  void onPreExecute()
-        {
+        protected void onPreExecute() {
             spinner.setVisibility(View.VISIBLE);
         }
+
         @Override
         protected String doInBackground(String... data) {
-
-            // String urldisplay = data[0];
-            //   HashMap<String, String> details = data[0];
             JSONObject payload = new JSONObject();
             try {
-                // userid=12&productid=23&action=add
-                // TYPE: POST
-
-                // payload.put("action", details.get("action"));
-
                 HttpParams httpParameters = new BasicHttpParams();
-
                 HttpConnectionParams
                         .setConnectionTimeout(httpParameters, 30000);
-
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String url2= getApplicationContext().getString(R.string.server)+"api/user/authtoken?userid="+userid;
-
-
+                String url2 = getApplicationContext().getString(R.string.server) + "api/user/authtoken?userid=" + userid;
                 HttpGet httppost = new HttpGet(url2);
                 try {
 
+                } catch (Exception e) {
+                    System.out.println("dio " + e.toString());
                 }
-
-                catch(Exception e){System.out.println("dio "+e.toString());}
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
-                String tok_sp=toks.getString("token_value","");
+                String tok_sp = toks.getString("token_value", "");
                 httppost.setHeader("x-access-token", tok_sp);
-
-
                 httppost.setHeader("Content-Type", "application/json");
-
-
-
-
-
                 HttpResponse response = client.execute(httppost);
                 HttpEntity ent = response.getEntity();
                 String responseString = EntityUtils.toString(ent, "UTF-8");
@@ -492,9 +510,6 @@ in.putExtra("checksharefromweb",1);
                     return "fail";
                 } else {
                     JSONObject resp = new JSONObject(responseString);
-//                    JSONObject data1 = new JSONObject(resp.getString("data"));
-
-
 
                     if (resp.getString("status").contains("error")) {
 
@@ -517,6 +532,7 @@ in.putExtra("checksharefromweb",1);
         }
 
         protected void onPostExecute(String result) {
+
 
             if(!result.equals("fail"))
             {//url="http://www.convert-jpg-to-pdf.net/";
@@ -594,10 +610,12 @@ in.putExtra("checksharefromweb",1);
                 System.out.print("aT123" + result);
                 if((((apiversion==19)||(apiversion==20))&&((which_page==8)))||((which_page==40)))
                 {
+
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     finish();
                     startActivity(i);
+
                 }
                 else
                 {
@@ -617,9 +635,6 @@ form.setWebViewClient(new myWebClient());
                     form.loadUrl(url);
 
 
-//                    setContentView(form);
-//form.setWebChromeClient(new urichrome());
-//                    form.addJavascriptInterface(new JavascriptInterface(ViewForm.this),"Android");
                     form.setWebChromeClient(new WebChromeClient() {
                         public boolean onConsoleMessage(ConsoleMessage cm) {
 
@@ -632,23 +647,21 @@ form.setWebViewClient(new myWebClient());
                 }
             }
 
-        }}
+        }
+    }
+
+    public class AuthTokc extends
+                          AsyncTask<String, Void, String> {
+
+        private String apiN = "";
 
 
-    public  class AuthTokc extends
-            AsyncTask<String, Void, String> {
-
-        private String apiN="";
-        //        Context context;
-//        AuthTok(Context context) {
-//            this.context = context;
-//        }
-        //    Splash obj=new Splash();
         @Override
         protected String doInBackground(String... params) {
             JSONObject payload = new JSONObject();
             String urldisplay = params[0];
-            apiN=urldisplay;
+
+            apiN = urldisplay;
             try {
 
                 // userid=12&productid=23&action=add
@@ -656,15 +669,13 @@ form.setWebViewClient(new myWebClient());
                 //      payload.put("userid", details.get("userid"));
                 // payload.put("productid", details.get("productid"));
                 // payload.put("action", details.get("action"));
-
-
                 HttpParams httpParameters = new BasicHttpParams();
 
                 HttpConnectionParams
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String urll=getApplicationContext().getString(R.string.server) + "authenticate";
+                String urll = getApplicationContext().getString(R.string.server) + "authenticate";
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
@@ -672,19 +683,18 @@ form.setWebViewClient(new myWebClient());
                 HttpEntity ent = response.getEntity();
                 String responseString = EntityUtils.toString(ent, "UTF-8");
                 if (response.getStatusLine().getStatusCode() != 200) {
-
                     Log.e("MeshCommunication", "Server returned code "
                             + response.getStatusLine().getStatusCode());
                     return "fail";
                 } else {
                     JSONObject resp = new JSONObject(responseString);
-
                     if (resp.getString("status").contains("fail")) {
 
                         Log.e("MeshCommunication", "Server returned code "
                                 + response.getStatusLine().getStatusCode());
                         return "fail";
                     } else {
+
                         String token1="";
 
                         SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
@@ -717,6 +727,7 @@ form.setWebViewClient(new myWebClient());
 
             }}}
 
+
     @SuppressLint("NewApi")
     @Override
     protected void onResume() {
@@ -748,8 +759,9 @@ form.setWebViewClient(new myWebClient());
     }
 
 
-    public class myWebClient extends WebViewClient
-    {
+
+    public class myWebClient extends WebViewClient {
+
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             // TODO Auto-generated method stub
@@ -759,6 +771,7 @@ form.setWebViewClient(new myWebClient());
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             // TODO Auto-generated method stub
+
             if(url.equals("buddy://profile"))
             {
                 Toast.makeText(ViewForm.this, "gopi", Toast.LENGTH_SHORT).show();
@@ -775,11 +788,13 @@ form.setWebViewClient(new myWebClient());
     @Override
     public void onPageStarted(String url, Bitmap favicon) {  spinner.setVisibility(View.INVISIBLE);}
 
+
     @Override
     public void onPageFinished(String url) {
     }
 
     @Override
+
     public void onPageError(int errorCode, String description, String failingUrl) { }
 
     @Override
@@ -790,3 +805,4 @@ form.setWebViewClient(new myWebClient());
 
 
 }
+

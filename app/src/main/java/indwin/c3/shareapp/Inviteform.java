@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.WebView;
+
 import android.webkit.WebViewClient;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -28,6 +29,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
+import com.google.gson.Gson;
+
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -47,6 +52,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import indwin.c3.shareapp.models.UserModel;
+
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
 
@@ -56,6 +63,7 @@ public class Inviteform extends AppCompatActivity {
     private Toolbar toolbar;
     private WebView form;
     private ProgressBar spinner;
+
     private TextView invite,openref;
     private Pattern pattern;
     private Matcher matcher;
@@ -69,10 +77,12 @@ public class Inviteform extends AppCompatActivity {
     AutoCompleteTextView college;
 int a=0;
     String mName,mEmail,mCollege,mPhone,mRef="",truth="";static String token="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inviteform);
+
         error=(RelativeLayout)findViewById(R.id.error);
         msg=(TextView)findViewById(R.id.msg);
 spinner=(ProgressBar)findViewById(R.id.progressBar1);
@@ -89,6 +99,7 @@ catch(Exception e){}
 //        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 //                android.R.layout.simple_dropdown_item_1line, colleges);
         phone=(EditText)findViewById(R.id.phone);
+
         name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -139,6 +150,7 @@ catch(Exception e){}
         });
 
 
+
         pL=name.getPaddingLeft();
         pR=name.getPaddingRight();
          pT = name.getPaddingTop();
@@ -148,6 +160,7 @@ catch(Exception e){}
         invite=(TextView)findViewById(R.id.invite);
         invite.setEnabled(false);
        // username.addTextChangedListener(mTextEditorWatcher);
+
 
         final TextWatcher mTextEditorWatcher1 = new TextWatcher() {
 
@@ -164,6 +177,7 @@ catch(Exception e){}
                 phone.setPadding(pL, pT, pR, pB);
                 email.setBackgroundResource(R.drawable.texted);
                 email.setPadding(pL, pT, pR, pB);
+
                ref.setBackgroundResource(R.drawable.texted);
                 ref.setPadding(pL, pT, pR, pB);
                 //  textview.setText(String.valueOf(s.length());
@@ -177,6 +191,7 @@ catch(Exception e){}
                 else{
                     invite.setTextColor(Color.parseColor("#66ffffff"));
                     invite.setEnabled(false);}
+
 
             }
 
@@ -204,6 +219,7 @@ catch(Exception e){}
                 email.setPadding(pL, pT, pR, pB);
                 ref.setBackgroundResource(R.drawable.texted);
                 ref.setPadding(pL, pT, pR, pB);
+
                 if(s.length()>0)
                     checkemail=1;
                 else
@@ -242,6 +258,7 @@ catch(Exception e){}
                 email.setPadding(pL, pT, pR, pB);
                 ref.setBackgroundResource(R.drawable.texted);
                 ref.setPadding(pL, pT, pR, pB);
+
                 if(s.length()==10)
                     checkphone=1;
                 else
@@ -269,6 +286,7 @@ catch(Exception e){}
 
             }
         });
+
         RelativeLayout rPage=(RelativeLayout)findViewById(R.id.relative);
         rPage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,9 +294,9 @@ catch(Exception e){}
                 if(ref.getText().toString().trim().length()==0)
                 {ref.setVisibility(View.INVISIBLE);
                 openref.setVisibility(View.VISIBLE);}
+
             }
         });
-
 
 
         //ref.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -288,19 +306,25 @@ catch(Exception e){}
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
+
+        } catch (Exception e) {
+            System.out.println(e.toString() + "digo");
         }
-        catch(Exception e){System.out.println(e.toString()+"digo");}
-         lgin=(TextView)findViewById(R.id.lgin);
+        lgin = (TextView) findViewById(R.id.lgin);
+
 
         lgin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in=new Intent(Inviteform.this,MainActivity.class);
+
+                Intent in = new Intent(Inviteform.this, MainActivity.class);
+
                 finish();
                 startActivity(in);
                 overridePendingTransition(0, 0);
             }
         });
+
 
         int res= ContextCompat.checkSelfPermission(Inviteform.this, Manifest.permission.RECEIVE_SMS);
         if(res== PackageManager.PERMISSION_GRANTED){
@@ -413,9 +437,9 @@ mRef=ref.getText().toString().trim();
                             msg.setText("Please enter a valid email-id!");
                             invite.setTextColor(Color.parseColor("#66ffffff"));
 //                            Toast.makeText(Inviteform.this,"Please enter a valid email-id!",Toast.LENGTH_LONG).show();
+
                         }
                     else {
-                       //     Toast.makeText(Inviteform.this, "Please Enter the correct details!", Toast.LENGTH_LONG).show();
                             invite.setEnabled(true);
                             phone.setBackgroundResource(R.drawable.texted2);
                             phone.setPadding(pL, pT, pR, pB);
@@ -425,6 +449,7 @@ mRef=ref.getText().toString().trim();
                         }
 
 //
+
                 }
                 catch(Exception e) {
                     //           Toast.makeText(Inviteform.this,e.toString(),Toast.LENGTH_LONG).show();
@@ -454,10 +479,13 @@ mRef=ref.getText().toString().trim();
                         @Override
                         public void onClick(View v) {
                             invite.setTextColor(Color.parseColor("#ffffff"));
-                            try { mName=name.getText().toString().trim();
+                            try {
+                                mName = name.getText().toString().trim();
+
                                 String EMAIL_PATTERN =
                                         "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                                                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
 
 
 
@@ -470,6 +498,7 @@ mRef=ref.getText().toString().trim();
 
                                 mPhone=phone.getText().toString().trim();
 
+
                                 SharedPreferences userP = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = userP.edit();
                                 editor.putString("name", mPhone);
@@ -478,72 +507,78 @@ mRef=ref.getText().toString().trim();
                                 try {
                                     //
                                     //              Intercom.client().reset();
+
+                                } catch (Exception e) {
+                                    System.out.println(e.toString() + "int inv");
                                 }
-                                catch (Exception e)
-                                {System.out.println(e.toString()+"int inv");}
+
                                 try {
                                     Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
                                     Intercom.client().registerIdentifiedUser(
                                             new Registration().withUserId(mPhone));
+
+                                } catch (Exception e) {
+                                    System.out.println("Intercom one" + e.toString());
                                 }
-                                catch (Exception e)
-                                {
-                                    System.out.println("Intercom one"+e.toString());
-                                }
-                                int chckphn=0;
-                                for(int j=1;j<mPhone.length();j++)
-                                {
-                                    if((mPhone.charAt(j)>='0')&&(mPhone.charAt(j)<='9'))
-                                        chckphn=1;
+                                int chckphn = 0;
+                                for (int j = 1; j < mPhone.length(); j++) {
+                                    if ((mPhone.charAt(j) >= '0') && (mPhone.charAt(j) <= '9'))
+                                        chckphn = 1;
                                     else {
-                                        chckphn=0;
+                                        chckphn = 0;
                                         break;
                                     }
                                 }
-                                if((chckphn==1)&&(mPhone.charAt(0)>='1')&&(mPhone.charAt(0)<='9'))
-                                    chckphn=1;
+                                if ((chckphn == 1) && (mPhone.charAt(0) >= '1') && (mPhone.charAt(0) <= '9'))
+                                    chckphn = 1;
                                 else
-                                    chckphn=0;
+                                    chckphn = 0;
 
 
-                                if(mName.length()!=0)
-                                    an=1;
-                                if((mEmail.length()!=0)&&(checkemail))
-                                    ae=1;
-                                if((mPhone.length()==10)&&(chckphn)==1)
-                                    ap=1;
-                                ac=1;
-                                if((an==1)&&(ae==1)&&(ap==1)&&(ac==1))
+                                if (mName.length() != 0)
+                                    an = 1;
+                                if ((mEmail.length() != 0) && (checkemail))
+                                    ae = 1;
+                                if ((mPhone.length() == 10) && (chckphn) == 1)
+                                    ap = 1;
+                                ac = 1;
+                                if ((an == 1) && (ae == 1) && (ap == 1) && (ac == 1))
 
                                 {
-                                    try{
+                                    try {
+
                                         Map userMap = new HashMap<>();
                                         userMap.put("name", mName);
                                         userMap.put("email", mEmail);
                                         userMap.put("user_id", mPhone);
                                         userMap.put("phone", mPhone);
                                         System.out.println("Intercom data 4" + mPhone);
-                                        Intercom.client().updateUser(userMap);}
-                                    catch (Exception e)
-                                    {
-                                        System.out.println("Intercom two"+e.toString());
+
+                                        Intercom.client().updateUser(userMap);
+                                    } catch (Exception e) {
+                                        System.out.println("Intercom two" + e.toString());
+
                                     }
                                     SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor1 = sharedpreferences.edit();
                                     editor1.putInt("shareflow", 0);
                                     editor1.commit();
+//<<<<<<< HEAD
                                //     new sendOtp().execute();
                                     Long time= Calendar.getInstance().getTimeInMillis()/1000;
                                     Long oldtime=userP.getLong("expires",0);
 //        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
                                     if(time+5<userP.getLong("expires",0))
+
                                         new sendOtp().execute();
                                     else
                                         new AuthTokc().execute();
                                     openref.setEnabled(false);
+
                                     lgin.setEnabled(false);}
                                 else
                                 if(!checkemail) {
+
                                     error.setVisibility(View.VISIBLE);
                                     invite.setEnabled(true);
 //                                    name.setBackgroundResource(R.drawable.texted);
@@ -553,6 +588,7 @@ mRef=ref.getText().toString().trim();
                                     email.setBackgroundResource(R.drawable.texted2);
                                     email.setPadding(pL, pT, pR, pB);
                                     msg.setText("Please enter a valid email-id!");
+
                                    // Toast.makeText(Inviteform.this, "Please enter a valid email-id!", Toast.LENGTH_LONG).show();
                                     invite.setTextColor(Color.parseColor("#66ffffff"));
                                 }
@@ -567,6 +603,7 @@ mRef=ref.getText().toString().trim();
                                     error.setVisibility(View.VISIBLE);
                                     msg.setText("Please Enter the correct details!");
 //                                    Toast.makeText(Inviteform.this,"Please Enter the correct details!",Toast.LENGTH_LONG).show();
+
                                     invite.setTextColor(Color.parseColor("#66ffffff"));}
 
 //
@@ -684,6 +721,7 @@ mRef=ref.getText().toString().trim();
 //                                name.setPadding(pL, pT, pR, pB);
 //                                phone.setBackgroundResource(R.drawable.texted);
 //                                phone.setPadding(pL, pT, pR, pB);
+
                                 email.setBackgroundResource(R.drawable.texted2);
                                 email.setPadding(pL, pT, pR, pB);
                                 msg.setText("Please enter a valid email-id!");
@@ -769,7 +807,9 @@ else{
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
 
+
                 HttpPost httppost = new HttpPost(getApplicationContext().getString(R.string.server)+"authenticate");
+
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
                 HttpResponse response = client.execute(httppost);
@@ -827,10 +867,12 @@ else{
 
         }
     }
+
     public  class AuthTokc extends
             AsyncTask<String, Void, String> {
 
         private String apiN="";
+
         //        Context context;
 //        AuthTok(Context context) {
 //            this.context = context;
@@ -856,7 +898,9 @@ else{
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
+
                 String urll=getApplicationContext().getString(R.string.server) + "authenticate";
+
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
@@ -877,12 +921,16 @@ else{
                                 + response.getStatusLine().getStatusCode());
                         return "fail";
                     } else {
-                        String token1="";
+
+                        String token1 = "";
+
 
                         SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editorP = userP.edit();
                         token1 = resp.getString("token");
-                        editorP.putString("token_value",token1);
+
+                        editorP.putString("token_value", token1);
+
                         editorP.putLong("expires", resp.getLong("expiresAt"));
                         editorP.commit();
                         return "win";
@@ -897,6 +945,7 @@ else{
 
             }
         }
+
         protected void onPostExecute(String result) {
             if(result.equals("win")){
 
@@ -908,8 +957,8 @@ else{
 
 
 
-            }}}
 
+            }}}
     private class sendOtp extends
             AsyncTask<String, Void, String> {
         @Override
@@ -927,6 +976,7 @@ else{
                 // userid=12&productid=23&action=add
                 // TYPE: POST
                 SharedPreferences red = getSharedPreferences("Referral", Context.MODE_PRIVATE);
+
                 String referralinst=red.getString("referrer","");
                 payload.put("name",mName);
                 payload.put("email", mEmail);
@@ -944,10 +994,12 @@ else{
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
                 //api/login/sendotp
+
                 String url2 = getApplicationContext().getString(R.string.server)+"api/login/signup";
                 HttpPost httppost = new HttpPost(url2);
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp=toks.getString("token_value","");
+
                 httppost.setHeader("x-access-token", tok_sp);
                 httppost.setHeader("Content-Type", "application/json");
 
@@ -972,7 +1024,9 @@ else{
                                 + response.getStatusLine().getStatusCode());
                         return resp.getString("msg");
                     } else {
+
                         truth=resp.getString("status");
+
                         return truth;
 
                     }
@@ -992,18 +1046,29 @@ else{
             lgin.setEnabled(true);
 
             spinner.setVisibility(View.GONE);
-            if(result.equals("success")){
+
+            if (result.equals("success")) {
                 SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
-                SharedPreferences.Editor edc=cred.edit();
-                edc.putString("phone_number",mPhone);
+                SharedPreferences.Editor edc = cred.edit();
+                edc.putString("phone_number", mPhone);
                 edc.commit();
-            if(truth.equals("success")){
-            Intent inotp=new Intent(Inviteform.this,Otp.class);
-                finish();
+                SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+                Gson gson = new Gson();
+                UserModel user = new UserModel();
+                user.setUserId(mPhone);
+                user.setName(mName);
+                user.setEmail(mEmail);
+                String json = gson.toJson(user);
+                mPrefs.edit().putString("UserObject", json).apply();
+                if (truth.equals("success")) {
+                    Intent inotp = new Intent(Inviteform.this, Otp.class);
+                    finish();
+
 //                    inotp.putExtra("Name", mName);
 //                    inotp.putExtra("Email",email.getText().toString());
 //                    inotp.putExtra("College",college.getText().toString());
                     inotp.putExtra("Phone", phone.getText().toString().trim());
+
                 inotp.putExtra("Ref",mRef);
 
 
@@ -1018,10 +1083,12 @@ else{
 
         }  else{
 
+
 //
 
                 error.setVisibility(View.VISIBLE);
                 msg.setText(result);
+
                 if(result.contains("Phone"))
 //                    name.setBackgroundResource(R.drawable.texted);
 //                name.setPadding(pL, pT, pR, pB);
@@ -1040,13 +1107,17 @@ else{
 
 
 
+
 //                email.setBackgroundResource(R.drawable.texted);
 //                email.setPadding(pL, pT, pR, pB);
 
 //            Toast.makeText(getApplicationContext(),
 //                    result,
 //                    Toast.LENGTH_LONG).show();
-        }
-    }
 
-}}
+            }
+        }
+
+    }
+}
+

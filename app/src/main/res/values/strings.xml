@@ -13,11 +13,12 @@
     <string name="Rs">\u20B9</string>
     <string name="hint1"><i>Enter OTP</i></string>
     <string name="fblogin">Connect your account</string>
+
     <!--<string name="server">http://ninja.hellobuddy.in/</string>-->
     <string name="web">http://54.169.128.156:7777</string>
     <string name="title_activity_facebook_auth">FacebookAuth</string>
     <string name="h2"><i>Phone Number</i></string>
-    <string name="buddyagent"><i>buddyuseragent</i></string>
+    <string name="buddyagent"><i>2131296332</i></string>
     <string name="h3"><i>Password</i></string>
     <string name="h4"><i>Name</i></string>
     <string name="h5"><i>Email</i></string>
@@ -26,5 +27,2614 @@
     <string name="h8"><i>New Password</i></string>
     <string name="h9"><i>Re-enter new Password</i></string>
 
+    <string name="title_activity_profile_form_step1">ProfileFormStep1</string>
     <string name="server">https://ssl.hellobuddy.in/</string>
+    <string name="title_choose_image">Choose an Image</string>
+    <string-array name="aadhar_or_pan">
+        <item>Aadhar Number</item>
+        <item>PAN</item>
+    </string-array>
+
+    <string-array name="places_of_stay">
+        <item>Rented/PG Accommodation</item>
+        <item>With Parents</item>
+        <item>College hostel</item>
+        <item>Select an option</item>
+    </string-array>
+
+    <string-array name="places_of_stay_values">
+        <item>pg</item>
+        <item>parents</item>
+        <item>hostel</item>
+    </string-array>
+    <string-array name="gpa_type">
+        <item>Select an option</item>
+        <item>percentage</item>
+        <item>GPA5</item>
+        <item>GPA</item>
+    </string-array>
+    <string-array name="gpa_values">
+        <item>Select an option</item>
+        <item>Percentage</item>
+        <item>GPA out of 5</item>
+        <item>GPA out of 10</item>
+    </string-array>
+    <string-array name="vehicles_type">
+        <item>2 wheeler</item>
+        <item>4 wheeler</item>
+        <item>Select an option</item>
+    </string-array>
+
+    <string-array name="monthly_expenditure">
+        <item>Below Rs 2,500</item>
+        <item>Rs.2,500&#45;5,000</item>
+        <item>Rs.5,000&#45;10,000</item>
+        <item>Rs.10,000 &amp; above</item>
+        <item>Select range</item>
+    </string-array>
+
+    <string-array name="monthly_expenditure_values">
+        <item>2500</item>
+        <item>2500&#45;5000</item>
+        <item>5000&#45;10000</item>
+        <item>10000</item>
+    </string-array>
+
+    <string-array name="annual_fees">
+        <item>Below Rs. 10,000</item>
+        <item>Rs.10,000&#45;25,000</item>
+        <item>Rs.25,000&#45;50,000</item>
+        <item>Rs.50,000&#45;100,000</item>
+        <item>Rs.100,000&#45;150,000</item>
+        <item>Rs.150,000 &amp; above</item>
+        <item>Select range</item>
+    </string-array>
+
+    <string-array name="annual_fees_values">
+        <item>10000</item>
+        <item>10000&#45;25000</item>
+        <item>25000&#45;50000</item>
+        <item>50000&#45;100000</item>
+        <item>100000&#45;150000</item>
+        <item>150000</item>
+    </string-array>
+    <string-array name="language_array">
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Kannada</item>
+    </string-array>
+    <string-array name="gender">
+        <item>guy</item>
+        <item>girl</item>
+        <item>Select gender</item>
+    </string-array>
+
+    <string-array name="scholarship">
+        <item>No</item>
+        <item>Yes</item>
+        <item>Select</item>
+    </string-array>
+
+    <string-array name="scholarship_values">
+        <item>false</item>
+        <item>true</item>
+    </string-array>
+
+    <string-array name="scholarship_type">
+        <item>Merit Scholarship</item>
+        <item>Need based Scholarship</item>
+        <item>Athletic Scholarship</item>
+        <item>Ethnic/Minority Scholarship</item>
+        <item>Multiple Scholarship</item>
+        <item>Select scholarship type</item>
+    </string-array>
+
+    <string-array name="family_member">
+        <item>Father</item>
+        <item>Mother</item>
+        <item>Select a family member</item>
+    </string-array>
+
+    <string-array name="profession_family_member">
+        <item>Government Employee</item>
+        <item>Public Servant</item>
+        <item>Businessman/Businesswoman</item>
+        <item>Self Employed Professional</item>
+        <item>Retiree</item>
+        <item>Homemaker</item>
+        <item>Freelancer</item>
+        <item>Contractor</item>
+        <item>Private Employee</item>
+        <item>Other</item>
+        <item>select profession</item>
+    </string-array>
+
+    <string-array name="colleges">
+        <item>Other</item>
+        <item>A.J.COLLEGE OF NURSING, Bangalore, T Dasarahalli</item>
+        <item>Aakash Institute of Business Management, Mallathalli,  Nagarbhavi</item>
+        <item>Aakson Group of Institutions, R.T. Nagar, Bangalore</item>
+        <item>AAT College, Malleswaram, Bangalore</item>
+        <item>Abbas khan College for Women ,Cubbonpet</item>
+        <item>Academic Center for Clinical Studies, Vasanth Nagar, Bangalore</item>
+        <item>Academy of Business Management, Tourism &amp;  Research, Electronic City, Bangalore</item>
+        <item>Acharya &amp;  B.M. Reddy College Of Pharmacy, Bangalore</item>
+        <item>Acharya Bangalore B-School (ABBS), Off Magadi Road, Bangalore</item>
+        <item>Acharya Institute of Health Sciences, R.T. Nagar, Bangalore</item>
+        <item>Acharya Institute of Management and Sciences (AIMS), Peenya</item>
+        <item>Acharya Institute of Technology, Radhakrishnan Road</item>
+        <item>Acharya Pathasala College, Narasimha Raja Colony</item>
+        <item>Acharya School of Management,  Dr. Sarvepalli Radhakrishnan Road,</item>
+        <item>Acharya\'s NR School of Nursing, Hessarghatta Road, Bangalore</item>
+        <item>Acharya’s NRV School of Architecture</item>
+        <item>Acliv Technology and Management Academy (ATMA College), Hosur Road</item>
+        <item>ACRI Clinical Research Institute, J.P. Nagar, Bangalore</item>
+        <item>ACS College of Engineering, Mysore Road, Bangalore</item>
+        <item>Adarsh Group of Institutions, Chamarajpet</item>
+        <item>Adarsha Education Society Seethadevi Ratanchand College – Chamarajpet</item>
+        <item>Adarsha Institute of Technology, Kundana, Bangalore</item>
+        <item>Aditya Academy of Architecture and design, Yelahanaka, Bangalore</item>
+        <item>Aditya Bangalore Institute of Pharmacy Education &amp;  Research (ABIPER), Yelahanaka, Bangalore</item>
+        <item>Aditya Institute of Management Studies &amp;  Research, Bangalore, Yelahanaka, Bangalore</item>
+        <item>AECS Maaruti College of Dental Sciences &amp;  Research Centre, Bangalore</item>
+        <item>Aegis School of Business and Telecommunication, Bangalore, Koramangala, Bangalore</item>
+        <item>Agragami Institute of Management and Technology, Yelahanaka, Bangalore</item>
+        <item>AIM MDS Bangalore, Bangalore</item>
+        <item>Aimfill International, Bangalore, Jayanagar, Bangalore</item>
+        <item>Al-Ameen Institute of Management Studies, Hosur Road, Bangalore</item>
+        <item>Alliance University , BTM 1st Stage </item>
+        <item>Alliance University, Anekal, Bangalore</item>
+        <item>Alliance University,BTM 2nd Stage</item>
+        <item>Alpha College of Engineering, Kannur, Bangalore</item>
+        <item>ALT Training College, Sarjapur Road, Bangalore</item>
+        <item>Ambedkar Evening College – Indiranagar, HAL 2nd stage</item>
+        <item>AMC Group of Institutions, Bannerghatta Road, Bangalore</item>
+        <item>Amity Global Business School, Bangalore, Koramangala, Bangalore</item>
+        <item>Amrita College, Sarjapur Road, Bangalore</item>
+        <item>Amruta Institute of Engineering and Management Sciences, Bidadi, Bangalore</item>
+        <item>Apollo MedSkills, Bangalore, Bannerghatta Road, Bangalore</item>
+        <item>APS College of Engineering (APSCE), Kanakapura Road, Bangalore</item>
+        <item>Army Institute of Fashion &amp;  Design, Kothanur, Bangalore</item>
+        <item>Army Institute of Hotel Management and Catering Technology</item>
+        <item>Aruna Design College, Infantry Road, Bangalore</item>
+        <item>Atria Institute of Technology, Anand Nagar, Bangalore</item>
+        <item>B. E. S. First Grade College of Arts, Commerce &amp;  Sceince</item>
+        <item>B. M. Setty Government First Grade College</item>
+        <item>B.E.L. First Grade College – Jalahalli</item>
+        <item>B.H.S. First Grade College – Jayanagar 4th Block</item>
+        <item>B.M. Education Trust First Grade College – BTM Layout</item>
+        <item>B.M.S College for Women, Basavanagudi</item>
+        <item>B.N.M Institute of Technology (BNMIT), Banashankari, Bangalore</item>
+        <item>Baldwin First Grade College – Richmond Road</item>
+        <item>Baldwin Methodist College – Hosur Road, Near Shooley Circle</item>
+        <item>Balija Education and Cultural Society’s College – Balija Hostel Building, Chamarajapet</item>
+        <item>Bangalore City College (BCC Bangalore ), Banasavadi, Bangalore</item>
+        <item>Bangalore Institute of Dental Sciences - Karnataka, Hosur Road, Bangalore</item>
+        <item>Bangalore Institute of International Management (BIIM), Mysore Road, Bangalore</item>
+        <item>Bangalore Institute of Management Studies (BIMS), Central Bengaluru, Bangalore</item>
+        <item>Bangalore Institute of Technology (BIT Bangalore), K R Puram, Bangalore</item>
+        <item>Bangalore Medical College and Research Institute, Mysore Road, Bangalore</item>
+        <item>Bangalore North Education Society’s First Grade College – Mahalaxmipuram</item>
+        <item>Bangalore School of Business, Bangalore, Hosur Road, Bangalore</item>
+        <item>Bangalore Technological Institute, Kodathi, Bangalore</item>
+        <item>Bangalore University, Jnana Bharathi Campus</item>
+        <item>Basaveshwara College of Commerce, Arts and Science</item>
+        <item>BATS Business School, J.P. Nagar, Bangalore</item>
+        <item>Bengaluru School of Management Studies, GITAM University, Doddaballapur Rd.,</item>
+        <item>Bhagawan Mahaveer Jain College – V V Puram</item>
+        <item>Bhagirathi Bai Narayan Rao Manay College for Women – Banashankari 2nd stage</item>
+        <item>Bhagwan Buddha First Grade College – Binny Layout, Vijayanagar</item>
+        <item>Bhagwan Budhha First Grade Arts, Commerce and BBM College</item>
+        <item>Bharathiya Samskriti Vidya Peeta College for Women – Vijayanagar</item>
+        <item>Bishop Cotton Women’s Christian College – St.Marks’ Road</item>
+        <item>Blue Pearl Infomedia (BPI), Bangalore</item>
+        <item>BMS College of Engineering (BMSCE), Bull Temple Road, Bangalore</item>
+        <item>BMS Institute of Technology and Management, Yelahanaka, Bangalore</item>
+        <item>Bright International Educational Trust, Ganga Nagar, Bangalore</item>
+        <item>Brindavan College , Yelahanaka, Bangalore</item>
+        <item>Brindavan College of Engineering, Hebbal, Bangalore</item>
+        <item>BSBS Business Academy, Bannerghatta Road, Bangalore</item>
+        <item>BTL Institute of Technology and Management, Hosur Road, Bangalore</item>
+        <item>C.N.K.Reddy College of Business Management, Indiranagar, Bangalore</item>
+        <item>Cambridge Institute of Technology (CITech), K R Puram, Bangalore</item>
+        <item>Canara Bank School of Management Studies, Palace Road, Bangalore</item>
+        <item>Career Craft School of Business, Jayanagar, Bangalore</item>
+        <item>Cavalier Animation and Media College (Cavalier Animation) | Kalyan Nagar, Bangalore</item>
+        <item>Center for Management Studies, Jain University, Bangalore</item>
+        <item>Central College – Near Vidhana Soudha, Bangalore</item>
+        <item>Centre for Development of Advanced Computing, Bangalore</item>
+        <item>Chamarajapet Education Society’s First Grade College – Sirsi Circle, Chamarajapet</item>
+        <item>Chinmaya Institute of Management, Cooke Town, Bangalore</item>
+        <item>Christ University (CU), Hosur Road, Bangalore</item>
+        <item>Christ University Faculty of Engineering, Mysore Road, Bangalore</item>
+        <item>City College, Jayanagar, Bangalore</item>
+        <item>City Engineering College (CEC, Banglore), Kanakapura Road, Bangalore</item>
+        <item>Clinwell Kriger Training &amp;  Research Institute, Koramangala, Bangalore</item>
+        <item>CMR Institute of Management Studies (CMRIMS), H.R.B.R. Layout, Bangalore</item>
+        <item>CMR Institute of Technology (CMRIT), I.T. Park Road, Bangalore</item>
+        <item>CMS Business School, J.P. Nagar, Bangalore</item>
+        <item>CNK College, Indiranagar Campus, Indiranagar, Bangalore</item>
+        <item>College of Advanced Technology Studies, Dickenson Road, Bangalore</item>
+        <item>Community Institute of Management Studies, Jayanagar, Bangalore</item>
+        <item>CRO Careers, Ganga Nagar, Bangalore</item>
+        <item>Dayananda Sagar Institutions (DSI), Kanakapura Road, Bangalore</item>
+        <item>Dayananda Sagar Institutions (DSI), Kumaraswamy Layout, Bangalore</item>
+        <item>Department of Management Studies,Indian Institute of Science (DOMS IISC), Devasandra Lake, Bangalor</item>
+        <item>Diva Fashion Academy, RajajiNagar, Bangalore</item>
+        <item>Don Bosco Group of Institution, Bommanahalli , Bangalore</item>
+        <item>Don Bosco Group of Institutions (DBGI), Mysore Road, Bangalore</item>
+        <item>Dr Syamala Reddy Dental College - Karnataka, Bangalore</item>
+        <item>Dr. Ambedkar College – Indiranagar, HAL 2nd stage</item>
+        <item>Dr. Ambedkar Institute of Technology (Dr. AIT), Mallathalli, Bangalore</item>
+        <item>Dr. B.R. Ambedkar Medical College, Shampura, Bangalore</item>
+        <item>Dr. Gopalraju Government First Grade College</item>
+        <item>Dr. John\'s School &amp;  College of Nursing, Bangalore</item>
+        <item>Dr. S. Gopalaraju Government First Grade College – Anekal</item>
+        <item>Dream Zone..School of Creative Studies, A Division of CADD Centre, Basaveshwaranagar, Bangalore</item>
+        <item>Dreamzone - School Of Interior Architecture and Design, Koramangala, Bangalore</item>
+        <item>Dreamzone-School of Interior Architecture and Design, Yelahanaka, Bangalore</item>
+        <item>East Point College Of Engineering &amp;  Technology , Aavalahalli,Bangalore</item>
+        <item>East Point College of Management, Bidarahalli, Bangalore</item>
+        <item>East West Group Of Institutions, Vishwaneedam, Bangalore</item>
+        <item>Focus Institute of Pharma Skills, Bangalore</item>
+        <item>Fortune Institute of Fashion Technology and Arts</item>
+        <item>Frameboxx Animation &amp;  Visual Effects | Indiranagar, Bangalore</item>
+        <item>Gaai’s Beauty Institute, Mathikere, Bangalore</item>
+        <item>Ganga Kaveri Group of Institutions - Bangalore</item>
+        <item>Garden City College of Science &amp;  Management Studies, Battarahalli</item>
+        <item>Gautham Educational Academy - Bangalore</item>
+        <item>Gems B School, Bangalore (GEMS Bangalore), Vasanth Nagar, Bangalore</item>
+        <item>GIBS Business School, Bannerghatta Road, Bangalore</item>
+        <item>GITS Academy, Malleswaram, Bangalore</item>
+        <item>GKM College of Pharmacy - Karnataka, Bangalore</item>
+        <item>Global Academy of Technology, Raja Rajeshwari Nagar, Bangalore</item>
+        <item>Global Institute For Corpoarate Education, RMV Extension, Bangalore</item>
+        <item>Gokula Education Turst Hotel Management College – M S Ramaiah Double Road</item>
+        <item>Gopalan College of Engineering and Management, Whitefield, Bangalore</item>
+        <item>Goutham College, Basaveshwaranagar, Bangalore</item>
+        <item>Government Arts, Commerce &amp;  Science College – Vijayanagar</item>
+        <item>Government R C College – Near Basaveshwara Circle, Vidhana Soudha, Bangalore</item>
+        <item>Government Sri Krishnarajendra Silver Jubilee Technological Institute, Sampangirama Nagar, Bangalore</item>
+        <item>Govt. Ramanarayana Chellaram College of Commerce &amp;  Management, Palace Road, Bangalore</item>
+        <item>GRV Business Management Academy, Ganga Nagar, Bangalore</item>
+        <item>GSS Institute of Technology, Raja Rajeshwari Nagar, Bangalore</item>
+        <item>Gupta College of Management and Technology, Banashankari, Bangalore</item>
+        <item>Hasnath First Grade College for Boys – Shivajinagar</item>
+        <item>Hasnath First Grade College for women – dickonson Road</item>
+        <item>Hillside Academy, Kanakapura Road, Bangalore</item>
+        <item>Hindi Education Society’s First Grade College – Indiranagar</item>
+        <item>Hindustan Aviation Academy, Marathahalli, Bangalore</item>
+        <item>HKBK College, Nagavara, Bangalore</item>
+        <item>IACT Global Education | Kempe Gowda Road, Bangalore</item>
+        <item>IBMR Business Schools, Bangalore, Hosur Road, Bangalore</item>
+        <item>IBS Business School, Bangalore, Mysore Road, Bangalore</item>
+        <item>ICAT Design &amp;  Media College, Bangalore, Hosur Road, Bangalore</item>
+        <item>ICBIO - Innovative centre for Biosciences, Bangalore</item>
+        <item>ICBio Clinical Research, Yelahanaka, Bangalore</item>
+        <item>IDA - Interior Design Academy | Indiranagar, Bangalore</item>
+        <item>IDeA Worldwide, Cunningham Road, City, Bangalore</item>
+        <item>IFIM Institute of Social Sciences, Electronic City, Bangalore</item>
+        <item>Image College of Arts Animation and Technology - Bangalore</item>
+        <item>Imarticus Learning | Koramangala, Bangalore</item>
+        <item>IMER - Institute of Management Excellence and Research</item>
+        <item>Impact Institute  Sahakara Nagar, Bangalor</item>
+        <item>Imperial College of Business Studies, Bangalore, BTM 2nd Stage, Bangalore</item>
+        <item>Indian Academy Degree College, Kalyan Nagar, Bangalore</item>
+        <item>Indian Academy Group Of Institutions , Kalyan Nagar </item>
+        <item>Indian Institute of Fashion Technology, Vijayanagar, Bangalore</item>
+        <item>Indian Institute of Film and Animation (IIFA Multimedia), Srinivasanagar,</item>
+        <item>Indian Institute of Management, Bangalore (IIM B)</item>
+        <item>Indian Institute of Plantation Management (IIPM), Mathikere, Bangalore</item>
+        <item>Indian Institute of Science, CV Raman Road, Bangalore</item>
+        <item>Indian Retail School, Bangalore, Hosur Road, Bangalore</item>
+        <item>Indian School of Business and Computing (ISBC), Mahadevpura, Bangalore</item>
+        <item>Indo Asian Academy Group of Institutions, Kalyan Nagar, Bangalore</item>
+        <item>Indo German Training Centre, Bangalore, Bangalore</item>
+        <item>Indus Business Academy, Bangalore (IBA, Bangalore), Kanakapura Road, Bangalore</item>
+        <item>Innovative Business School, Bangalore, Jayanagar, Bangalore</item>
+        <item>Institute for Creative Excellence, Koramangala, Bangalore</item>
+        <item>Institute of Aerospace Medicine (IAM) - Karnataka, Bangalore</item>
+        <item>Institute of Business Management &amp;  Research – International Business School, Koramangala, Bangalore</item>
+        <item>Institute of Business Management &amp;  Technology, Banashankari, Bangalore</item>
+        <item>Institute of Clinical Research (ICRI Bangalore), Indiranagar, Bangalore</item>
+        <item>Institute of Health Management Research, Electronic City Phase 1, Bangalore</item>
+        <item>Institute of Logistics &amp;  Aviation Management, Bangalore, Indiranagar, Bangalore</item>
+        <item>International Academy of Management &amp;  Entrepreneurship (IAME), Kanakapura Road</item>
+        <item>International Facility Management Institute - Bangalore</item>
+        <item>International Institute of Business Studies, Bangalore (IIBS), R.T. Nagar, Bangalore</item>
+        <item>International Institute of Fashion Design, Bangalore, M. G. Road, Bangalore</item>
+        <item>International Institute of Industrial Safety Management, Nagarbhavi, Bangalore</item>
+        <item>International Institute of Information Technology, Hosur Road, Bangalore</item>
+        <item>International Institute of Management and Technical Studies, Bangalore, Basavanagudi, Bangalore</item>
+        <item>International School of Business &amp;  Media,Banglore (ISB&amp; M, Banglore),</item>
+        <item>International School of Management Excellence (ISME, Bangalore), Sarjapur Road, Bangalore</item>
+        <item>International School of Management Sciences | Kanakapura Road, Bangalore</item>
+        <item>ISBR Business School, Bangalore(ISBR), Electronic City, Bangalore</item>
+        <item>Islamiah Institute of Technology, Bannerghatta Road, Bangalore</item>
+        <item>Islamic Mission Of India Society College of Arts &amp;  Science –</item>
+        <item>ITM Business School, Bangalore, Bannerghatta Road, Bangalore</item>
+        <item>IZee Business School, Electronic City, Bangalore</item>
+        <item>J.S.S. Mahavidyalaya First Grade College for Women – BTM Layout</item>
+        <item>Jagadguru Renukacharya College –Race Course Road, Banaglore</item>
+        <item>Jain Group of Institution, JC Road, Bangalore</item>
+        <item>Jain University, Devasandra Lake, Bangalore</item>
+        <item>Jaipur National University Online MBA | M. G. Road, Bangalore</item>
+        <item>Jawaharlal Nehru First Grade College – Viveknagar</item>
+        <item>JD Institute of Fashion Technology, Lavelle Road, Bangalore</item>
+        <item>JD Institute of Fashion Technology, Yelahanaka, Bangalore</item>
+        <item>Jnana Vikas Institute of Technology, Bidadi, Bangalore</item>
+        <item>JSS Academy of Technical Education, Banglore (JSSATEB), Uttarahalli Main Road, Bangalore</item>
+        <item>Jyothy Institute of Technology, Kanakapura Road, Bangalore</item>
+        <item>Jyoti Nivas College, Koramangala, Bangalore</item>
+        <item>K.S. School of Engineering and Management (KSSEM), Kanakapura Road, Bangalore</item>
+        <item>K.S.Institute of Technology, Kanakapura Road, Bangalore</item>
+        <item>Kairali Niketan Education Trust Evening College – Indiranagar</item>
+        <item>Kammavari Sangha College – Raghuvanahalli, Kanakapura Road</item>
+        <item>Kanakadas Shikshana Samiti</item>
+        <item>Karanataka Muslim Federation College – Kurus Salam Building Queen’s Road</item>
+        <item>Karnataka College of Management, Yelahanaka, Bangalore</item>
+        <item>Karnataka College Of Nursing, Yelahanaka, Bangalore</item>
+        <item>Karnataka State Open University, Bangalore, Koramangala, Bangalore</item>
+        <item>Karnataka Yadaya Education Society Women’s College – Madhavanagar</item>
+        <item>Kempegowda Institute of Medical Sciences, Banashankari, Bangalore</item>
+        <item>KKECS Institute of Management, Malleswaram, Bangalore</item>
+        <item>KNS Institute of Technology, Yelahanaka, Bangalore</item>
+        <item>Koshys B-School, Hennur-Bagalur Road, Bangalore</item>
+        <item>Krishnadevaraya College Of Dental Sciences &amp;  Hospital, airport(new airport), Bangalore</item>
+        <item>Kristu Jayanti College (KJC, Kothanur), Kothanur, Bangalore</item>
+        <item>Krupanidhi College, Vivek Nagar, Bangalore</item>
+        <item>Krupanidhi School of Management(KSM - BANGALORE), Sarjapur Road, Bangalore</item>
+        <item>Lalbahdur Shastri Government First Grade College – Ganganagar</item>
+        <item>LEADS School Of Health, Bangalore</item>
+        <item>Learntech World Wide Educational Trust, Bangalore</item>
+        <item>LISAA School of Design,Hosur Main Road, Adugodi, Bangalore</item>
+        <item>LORAA Business Academy, Bommanahalli, Bangalore</item>
+        <item>Lorven College of Science &amp;  Management, Anekal, Bangalore</item>
+        <item>Lotus Clinical Research Academy, Koramangala, Bangalore</item>
+        <item>M E S College Of Arts Commerce andScience Malleswaram, Bangalore</item>
+        <item>M R Ambedkar Dental College - Karnataka, Bangalore</item>
+        <item>M.E.S. College of Arts, Science &amp;  Commerce – Malleshwaram</item>
+        <item>M.S Engineering College, airport(new airport), Bangalore</item>
+        <item>M.S. Ramaiah College, MSR Nagar, Bangalore</item>
+        <item>M.V.J. College of Engineering, Whitefield, Bangalore</item>
+        <item>Maaruti College of Dental Sciences &amp;  Research Centre, Bangalore</item>
+        <item>Maharani Lakshmi Ammanni College for Women, Malleswaram, Bangalore</item>
+        <item>Maharani’s Arts &amp;  Commerce College for Women – Near Vidhana Soudha, Bangalore</item>
+        <item>Maharishi Institute of Management, Brigade Road, Bangalore</item>
+        <item>Mahatma Gandhi University, Bangalore, Bangalore</item>
+        <item>Malleshwaram Women’s Association First Grade College – Malleshwaram</item>
+        <item>Mangilal Sundar Bai Gotawat Jain First Grade College – CMH Road, Indiranagar</item>
+        <item>Manipal Institute of Regenerative Medicine (MIRM), Yelahanaka, Bangalore</item>
+        <item>Manipal University, Bangalore, Indiranagar, Bangalore</item>
+        <item>MARC School of Business (MSB Bangalore), Bannerghatta Road, Bangalore</item>
+        <item>Mariyappa Memorial Trust First Grade College – Mariyappanapalya</item>
+        <item>Master of Dental Surgery (MDS)</item>
+        <item>Methodist Church in India First Grade College –</item>
+        <item>Milind Institute of Pharmacy - Karnataka, Bangalore</item>
+        <item>Millennium School of Business, Bangalore, Hosur Road, Bangalore</item>
+        <item>Miranda College – HAL 3rd Stage</item>
+        <item>Mla First Grade College For Women, Malleshwaram</item>
+        <item>Mobility India,J.P. Nagar, Bangalore</item>
+        <item>Model Education Society College – BTM 3rd Stage</item>
+        <item>Mount Carmel Institute of Management (for Women), Palace Road, Bangalore</item>
+        <item>Mount Carmel College, Palace Road, Bangalore</item>
+        <item>MP Birla Institute of Management (MPBIM), Race Course Road, Bangalore</item>
+        <item>MVJ College of Engineering, ITPL Main Road</item>
+        <item>MVJ Medical College &amp;  Research Hospital, Hoskote, Bangalore</item>
+        <item>NMKRV First Grade College for Women – Jayanagar</item>
+        <item>Nagarjuna College of Engineering &amp;  Technology (NCET Devanahalli), Devanhalli, Bangalore</item>
+        <item>NAISH Business School, Koramangala, Bangalore</item>
+        <item>Nandini First Grade College – West of Chord Road, Mahalaksmipuram</item>
+        <item>Nargund College of Pharmacy - Karnataka, Bangalore</item>
+        <item>Narsee Monjee Institute of Management Studies, Koramangala, Bangalore</item>
+        <item>National College , basavanagudi</item>
+        <item>National Education Trust First Grade College – Hennuru Road</item>
+        <item>National Institute of Business Excellence, Electronic City, Bangalore</item>
+        <item>National Institute of Creative Communication, Hennur Main Road, Bangalore</item>
+        <item>National Institute of Fashion Technology (NIFT), Bengaluru, H.S.R Layout, Bangalore</item>
+        <item>National Institute of Management Studies, Bangalore, Vijayanagar, Bangalore</item>
+        <item>National Institute of Mental Health and Neuro Sciences, Hosur Road, Bangalore</item>
+        <item>National Institute of Retail and Management, Bangalore, H.B.R. Layout, Bangalore</item>
+        <item>National Institute of Unani Medicine (NIUM) - Karnataka, Magadi Road</item>
+        <item>National School of Business (NSB, Banglore) | J.P. Nagar, Bangalore</item>
+        <item>National School of Fashion Arts And Design, airport(new airport), Bangalore</item>
+        <item>Nehru Memorial Vidyakendra Trust – Jayanagar 7th Block</item>
+        <item>New Horizon College ,Kadubeesanahalli, , Marathahalli, Bangalore</item>
+        <item>New Horizon College ,Kasturinagar, Bangalore</item>
+        <item>NIAM Institute Of Applied Management, Bangalore, Jayanagar, Bangalore</item>
+        <item>NICC - International College of Media and Design,  Near Hennur Bande, Kalyan Nagar Post, Bangalore</item>
+        <item>Nidhi Infotech, Jayanagar, Bangalore</item>
+        <item>Nihongo Bashi Centre for Japanese Management Studies</item>
+        <item>NIIT Imperia Centre For Advanced Learning - Jayanagar 3rd Block,  Bangalore</item>
+        <item>NIS Academy,  Basavanagudi, Bangalore</item>
+        <item>Nisa School of Nursing - Karnatak, Madivala, Bangalore</item>
+        <item>Nitte Meenakshi Institute of Technology (NMIT), Yelahanaka, Bangalore</item>
+        <item>NITTE School of Management (NSOM), Govindapura, Bangalore</item>
+        <item>Nitya Jyothi Education Society’s First Grade College – Chikkasandra, Hesarghatta Road</item>
+        <item>NMKRV College For Women, Jaya Nagar East, Bangalore</item>
+        <item>Noble School of Business, J.P. Nagar, Bangalore</item>
+        <item>NSB School of Management Studies, Hosur Road, Bangalore</item>
+        <item>Osteen College (Gauri Education Trust), Chamrajpet, Bangalore</item>
+        <item>Oxbridge Business School, Magadi Road, Bangalore</item>
+        <item>PC Nursing College - Karnataka, Bangalore</item>
+        <item>Padmashree Institute , Nagarbhavi, Bangalore</item>
+        <item>Parents Association First Grade College – Rajajinagar 5th Block</item>
+        <item>Parsons School of Design, Online Executive Programs (Talentedge), Ramamurthy Nagar, Bangalore</item>
+        <item>PES College of Pharmacy, Hanumanth Nagar, Bangalore</item>
+        <item>PES Institute of Technology, South Campus (PESCE), Hosur Road, Bangalore</item>
+        <item>PES University (PESIT), Banashankari, Bangalore</item>
+        <item>PNS Institute of Technology, Tumkur Road, Bangalore</item>
+        <item>Pragati Business Management College – HMT Layout, R T Nagar</item>
+        <item>Presidency College, Hebbal, Bangalore</item>
+        <item>Presidency University, Yelahanaka, Bangalore</item>
+        <item>Prin. L. N. Welingkar Institute of Management development &amp;  Research (WeSchool), Hosur Road, Bangalore</item>
+        <item>RV College of Commerce &amp;  Management – Banashankari, 3rd Stage</item>
+        <item>RV Dental College &amp;  Hospital - Karnataka, Bangalore</item>
+        <item>R. R. Institute of Technology, Hessarghatta Road, Bangalore</item>
+        <item>R. V. Institute of Management (RVIM), Jayanagar, Bangalore</item>
+        <item>R.B.A.N.MS. Evening College – Gangadhara Shetty Road</item>
+        <item>R.K.Institute of Management and Computer Science,Koramangala, Jakasandra, Bangalore</item>
+        <item>R.R. Institute of Advanced Studies,Heseraghatta Main Road,  Bangalore</item>
+        <item>R.V.College of Engineering (RVCE), Mysore Road, Bangalore</item>
+        <item>Raffles Millennium International, Bangalore, Koramangala, Bangalore</item>
+        <item>Rai Business School, Bangalore, Bangalore</item>
+        <item>Rajajinagar Education Society’s College – Behind Modi Hospital, Mahalaxmipura</item>
+        <item>RajaRajeswari College (RRCE), Mysore Road, Bangalore</item>
+        <item>Rajendra Education Society’s First Grade College – Sunkadakatte, Magadi Road</item>
+        <item>Rajiv Gandhi Institute of Technology, R.T. Nagar, Bangalore</item>
+        <item>Rangnekar Institute of Management Studies and Research | RajajiNagar, Bangalore</item>
+        <item>RBANMS First Grade College ,  Annaswamy Mudaliar Rd , Banagalore</item>
+        <item>RD International - Consultancy, Church Street</item>
+        <item>Regional Institute of Cooperative Management, Bangalore, Padmanabhanagar, Bangalore</item>
+        <item>Reva University, Yelahanaka, Bangalore</item>
+        <item>Rhenium Academy of Clinical Research., Bangalore</item>
+        <item>Right Brain Art Animation Academy | Indiranagar, Bangalore</item>
+        <item>RJS Institute of Management Studies (RJSIMS), Koramangala, Bangalore</item>
+        <item>RNS Institute of Technology (RNSIT), Channasandra, Bangalore</item>
+        <item>RS College of Management &amp;  Science, Doddaballapur Rd., Bangalore</item>
+        <item>S B International, Khb Colony</item>
+        <item>S J E S Educational Institution, Old Madras Road, Bangalore</item>
+        <item>S. Nijalingappa College – Rajajinagar, 2nd Block</item>
+        <item>S.E.A. College of Engineering &amp;  Technology, K R Puram, Bangalore</item>
+        <item>S.J.R.C. College for Women – Rajajinagar</item>
+        <item>S.L.N. College – Fort, Chamarajapet</item>
+        <item>S.M.K.R.V. College – J. P. Nagar</item>
+        <item>S.S.R Group Of Institution, Kothanur, Bangalore</item>
+        <item>Sai Vidya Institute of Technology, Doddaballapur Rd., Bangalore</item>
+        <item>Salon Nayana Academy, Koramangala, Bangalore</item>
+        <item>Sambhram Academy , Jalahalli, Bangalore</item>
+        <item>Sanjay Gandhi College of Nursing ,Anandnagar, Hebbal,</item>
+        <item>Sanjay Gandhi Institute of Trauma and Orthopaedics (SITO) , Jaya Nagar East</item>
+        <item>Sapthagiri College of Engineering, Hessarghatta Road, Bangalore</item>
+        <item>Sardar Vallabai Patel Education Society College – Sarjapur, Anekal</item>
+        <item>Sarvodaya College of law, Mahalakshmipuram Layout, Bangalore</item>
+        <item>Sarvodaya College of Nursing - Magadi Main Road, Bangalore </item>
+        <item>SB Group of Institutions, Yelahanaka, Bangalore</item>
+        <item>Scribblers Medical Transcription Pvt.Ltd, Shampura, Bangalore</item>
+        <item>SCT Institute of Technology, Vignana Nagar, Bangalore</item>
+        <item>Seshadripuram Academy For Global Excellence, Yelahanaka, Bangalore</item>
+        <item>Seshadripuram Institute , Yelahanaka, Bangalore</item>
+        <item>Seventh Day Adventist’s Lory Memorial College – Dooravaninagar</item>
+        <item>SG Institute of Management Studies, J.P. Nagar, Bangalore</item>
+        <item>Sha-Shib College of Engineering, Chikkaballapur, Bangalore</item>
+        <item>Shri Bhaghavan Mahaveer Jain College, Jayanagar</item>
+        <item>Shri Pillappa College of Engineering, Hessarghatta Road, Bangalore</item>
+        <item>Shri Sai Siddhartha Institute of Aviation &amp;  Management, Sahakara Nagar, Bangalore</item>
+        <item>Shristi School of Art Design and Technology ,Doddaballapur Road</item>
+        <item>Sidvin School of Business (SIDVIN), Banashankari, Bangalore</item>
+        <item>SIET Institute Of Management, Mysore Road, Bangalore</item>
+        <item>Signetsoft, Marathahalli, Bangalore</item>
+        <item>Sikkim Manipal University, Marathahalli, Bangalore</item>
+        <item>Sindhi Institute of Management (SIM), Hebbal, Bangalore</item>
+        <item>Sir M Visvesvaraya Institute of Technology, Yelahanaka, Bangalore</item>
+        <item>SJB Institute of Technology (SJBIT), Kengeri, Bangalore</item>
+        <item>SJES College of Management Studies, Microsoft IT Academy, Old Madras Road, Bangalore</item>
+        <item>SKM Educational Institutions, SKM Educational Institutions, Bangalore ,Bangalore</item>
+        <item>SMT. NAGARATHNAMMA COLLEGE OF NURSING, Bangalore</item>
+        <item>Smt. Neelam K.A. Sathyanarayana Sheetty Government College</item>
+        <item>Sree Sevalal College of Dental Sciences &amp;  Hospital - Karnataka, Mahalakshmipuram, Bangalore</item>
+        <item>Sri Belimatha Maha Samasthana Institute of Technology, Indiranagar, Bangalore</item>
+        <item>Sri Kongadiyappa College, Doddaballapur</item>
+        <item>Sri Krishna Institute of Technology, Hessarghatta Road, Bangalore</item>
+        <item>Sri Krishna Rukmini College of Nursing (SKRCN) - Karnataka, Bangalore</item>
+        <item>Sri Rajiv Gandhi College of Dental Sciences and Hospital (SRGCDS) - Karnataka, R.T. Nagar, Bangalore</item>
+        <item>Sri Revana Siddeshwara Institute of Technology, airport(new airport), Bangalore</item>
+        <item>Sri Sairam College of Engineering, Anekal, Bangalore</item>
+        <item>Sri Vekateshwara Dental College &amp;  Hospital - Karnataka, Bangalore</item>
+        <item>Sri Venkateshwara College of Engineering (SVCE Bangalore), Yelahanaka, Bangalore</item>
+        <item>Sri Venkateshwara Institute of Nursing Sciences, Hosur Road, Bangalore</item>
+        <item>Sri Vidya Vinayaka Institute of Technology, Seshadri Road, Bangalore</item>
+        <item>Srishti School of Art, Design and Technology, Doddaballapur Rd., Bangalore</item>
+        <item>Srishti School of Business, Banashankari, Bangalore</item>
+        <item>St John College, Bannerghatta Road, Bangalore</item>
+        <item>St John\'s National Academy of Health Sciences, Sarjapur Road, Bangalore</item>
+        <item>St Josephs College Of Arts And Science, Langford Rd</item>
+        <item>St. Francis DE Sales College (SFS), Hebbagodi</item>
+        <item>St Josephs College of Commerce, Brigade Road</item>
+        <item>St. Anne’s First Grade College for Women – Ramamurthynagar</item>
+        <item>St. George College of Management, Science &amp;  Nursing, Banasavadi, Bangalore</item>
+        <item>St. John\'s College of Physiotherapy, Yelahanaka, Bangalore</item>
+        <item>St. John\'s Medical College, Sarjapur Road, Bangalore</item>
+        <item>St.Hopkins Group of Institution, Sampangirama Nagar, Bangalore</item>
+        <item>St.John\'s College of Nursing, Bangalore</item>
+        <item>Stansys Software Solutions, BTM 1st Stage, Bangalore</item>
+        <item>Sunstone Business School, Bangalore , Whitefield</item>
+        <item>Surana College, Tumkur Road, Bangalore</item>
+        <item>SV Institutions, International Airport Road</item>
+        <item>Symbiosis Institute , Hosur Road, Bangalore</item>
+        <item>T. John College, Bannerghatta Road, Bangalore</item>
+        <item>Teachers\' Academy Group of Institutions, Kalyan Nagar, Bangalore</item>
+        <item>The Indian Management Academy - Bangalore</item>
+        <item>The National Degree College, Jayanagar</item>
+        <item>The Oxford Institutions, H.S.R Layout, Bangalore</item>
+        <item>The Oxford Institutions, Hosur Road, Bangalore</item>
+        <item>The Spplash International, Indiranagar, Bangalore</item>
+        <item>University of Agricultural Sciences, Vivek Nagar, Bangalore</item>
+        <item>University Visvesvaraya College of Engineering, Sampangirama Nagar, Bangalore</item>
+        <item>V. V. N. Degree College, Vanivilas Road</item>
+        <item>Vanguard Business School, Hosur Road, Bangalore</item>
+        <item>Vasan Institute of Ophthalmology &amp;  Research, Raja Rajeshwari Nagar, Bangalore</item>
+        <item>Vasavi Education Trust First Grade College – J P Nagar 2nd Stage</item>
+        <item>Vasavi Institute of Management &amp;  Advanced Studies, Banashankari, Bangalore</item>
+        <item>Vasavi Jnana Peeta Evening College – Vijayanagar</item>
+        <item>Vasavi Jnana Peeta First Grade College – Jayanagar</item>
+        <item>Vasavi Vidyaniketan College for Women – Vanivilas Road, Basavanagudi</item>
+        <item>Veerendra Patil First Grade College – Rajamahalvilas, Sadashivanagar</item>
+        <item>Versatile Fashion Design Academy, J.P. Nagar, Bangalore</item>
+        <item>Vidya Fashion Academy, Jayanagar, Bangalore</item>
+        <item>Vidya Vardhaka Sangha (R.) V. V. S. First Grade College for Women</item>
+        <item>Vijaya College – Basavanagudi</item>
+        <item>Vijaya Vittala Institute of Technology (VVIT), Hennur-Bagalur Road, Bangalore</item>
+        <item>Virginia Commonwealth University, Jayanagar, Bangalore</item>
+        <item>Vision India Institute of Technology,Narayanapura Cross Rd</item>
+        <item>Visveswarapuram College – K R Road, V V Puram</item>
+        <item>Vivekanada Degree College of Arts, Science, Commerce &amp;  Post Graduate Studies, Raja Rajeshwari Nagar, Bangalore</item>
+        <item>Vivekananda First Grade College – Rajajinagar</item>
+        <item>VLCC Institute of Beauty &amp;  Nutrition, Airport (Old Airport), Bangalore</item>
+        <item>Vogue Institute of Fashion Technology, Richmond Road, Bangalore</item>
+        <item>VOKKALIGARA SANGHA DENTAL COLLEGE &amp;  HOSPITAL, K R Puram, Bangalore</item>
+        <item>Vydehi Institute of Medical Sciences and Research Centre, Whitefield, Bangalore</item>
+        <item>Wider Horizons, Madivala, Bangalore</item>
+        <item>Wisdom School of Management, Indiranagar, Bangalore</item>
+        <item>WLC College India, Bangalore, M. G. Road, Bangalore</item>
+        <item>Wockhardt Institute of Medical Sciences - Karnataka, Bangalore</item>
+        <item>Xavier Institute of Management &amp;  Entrepreneurship, Bangalore (XIME), Hosur Road, Bangalore</item>
+        <item>Yellamma Dasappa Institute of Technology, Kanakapura Road, Bangalore</item>
+    </string-array>
+
+    <string-array name="courses">
+        <item>B.A</item>
+        <item>B.A Anthropology</item>
+        <item>B.A Archeology and Museology</item>
+        <item>B.A Drawing &amp; Painting</item>
+        <item>B.A Economics, Politics, Modern Language</item>
+        <item>B.A Historical Studies</item>
+        <item>B.A History</item>
+        <item>B.A History, Economics, Geography</item>
+        <item>B.A History, Economics, Politics</item>
+        <item>B.A History, Economics, Public Administration</item>
+        <item>B.A History, Political Science, Modern Language</item>
+        <item>B.A History, Politics, Public Administration</item>
+        <item>B.A Home Science</item>
+        <item>B.A Indian Heritage and Culture</item>
+        <item>B.A International Hospitality Administration</item>
+        <item>B.A Islamic History</item>
+        <item>B.A Jainology</item>
+        <item>B.A L.L.B</item>
+        <item>B.A Library Science</item>
+        <item>B.A Mass Communication</item>
+        <item>B.A Mass Communication and Video Production</item>
+        <item>B.A Mathematics</item>
+        <item>B.A Office Management</item>
+        <item>B.A Painting</item>
+        <item>B.A Painting, Sculpture, Applied Arts</item>
+        <item>B.A Performance arts</item>
+        <item>B.A Population Studies</item>
+        <item>B.A Public Administration</item>
+        <item>B.A Sculpture</item>
+        <item>B.A Social Science</item>
+        <item>B.A Social Work</item>
+        <item>B.A Sociology</item>
+        <item>B.A. International Culinary Administration</item>
+        <item>B.E</item>
+        <item>BE ECE</item>
+        <item>BE EEE</item>
+        <item>BE Mechanical</item>
+        <item>BE Civil</item>
+        <item>BE CSE</item>
+        <item>B.F.A Applied Arts</item>
+        <item>B.F.A Commercial Arts</item>
+        <item>B.F.A Dance</item>
+        <item>B.F.A Painting</item>
+        <item>B.F.A Sculpture</item>
+        <item>B.P.M.T.</item>
+        <item>B.S.Marine Engineering</item>
+        <item>B.Sc (Hon) Nursing</item>
+        <item>B.Sc Accounting &amp; Finance</item>
+        <item>B.Sc Advanced Information Technology</item>
+        <item>B.Sc Agricultural Marketing</item>
+        <item>B.Sc Agro-forestry</item>
+        <item>B.Sc Airport Management</item>
+        <item>B.Sc Allied Health Sciences</item>
+        <item>B.Sc Animation</item>
+        <item>B.Sc Animation Film making</item>
+        <item>B.Sc Anthropology</item>
+        <item>B.Sc Anthropology (Honours)</item>
+        <item>B.Sc Apparel and Fashion Design (BScAFD)</item>
+        <item>B.Sc Applied MicroBiology</item>
+        <item>B.Sc Aviation</item>
+        <item>B.Sc Biochemistry</item>
+        <item>B.Sc BioInformatics</item>
+        <item>B.Sc Biology</item>
+        <item>B.Sc Biomedical Science</item>
+        <item>B.Sc Biotech, Bioinformatics, Computer Science</item>
+        <item>B.Sc Biotech, Computer Science, Chemistry</item>
+        <item>B.Sc Biotech, Life Science, Chemistry</item>
+        <item>B.Sc Biotechnology</item>
+        <item>B.Sc Biotechnology, Biochemistry, Chemistry</item>
+        <item>B.Sc Biotechnology, Botany, Chemistry</item>
+        <item>B.Sc Biotechnology, Genetics, Chemistry</item>
+        <item>B.Sc Biotechnology, Zoology, Chemistry</item>
+        <item>B.Sc Business Process Outsourcing</item>
+        <item>B.Sc Catering Science &amp; Hotel Management</item>
+        <item>B.Sc Catering Technology</item>
+        <item>B.Sc CBZ (Chemistry, Botany and Zoology)</item>
+        <item>B.Sc Chemical Technology</item>
+        <item>B.Sc Chemistry (Hons)</item>
+        <item>B.Sc Clinical Nutrition and Dietetics</item>
+        <item>B.Sc Computer Science (Honours)</item>
+        <item>B.Sc Computer Technology</item>
+        <item>B.Sc Costume Design &amp; Fashion</item>
+        <item>B.Sc Dairy Technology</item>
+        <item>B.Sc Economics</item>
+        <item>B.Sc Economics and Management</item>
+        <item>B.Sc Ecorestoration</item>
+        <item>B.Sc Electronic Media</item>
+        <item>B.Sc Electronic Technology &amp; Computers</item>
+        <item>B.Sc Electronics</item>
+        <item>B.Sc Electronics &amp; Communication Systems</item>
+        <item>B.Sc Embedded Systems</item>
+        <item>B.Sc Engineering in Electrical Engineering</item>
+        <item>B.Sc Engineering in Mechanical Engineering</item>
+        <item>B.Sc Environmental Science</item>
+        <item>B.Sc Fashion Design</item>
+        <item>B.Sc Fashion Technology and Costume Designing</item>
+        <item>B.Sc Food Science &amp; Management</item>
+        <item>B.Sc Forestry</item>
+        <item>B.Sc General</item>
+        <item>B.Sc Geography</item>
+        <item>B.Sc Health Education</item>
+        <item>B.Sc Health Information Administration (BScHIA)</item>
+        <item>B.Sc Home Science (B.H.Sc.)</item>
+        <item>B.Sc Home Science (Clinical Nutrition Dietetics)</item>
+        <item>B.Sc Horticulture</item>
+        <item>B.Sc Hotel Management</item>
+        <item>B.Sc Hotel Management &amp; Catering Science</item>
+        <item>B.Sc Industrial Chemistry</item>
+        <item>B.Sc Industrial Electronics</item>
+        <item>B.Sc Industrial Fish and Fisheries</item>
+        <item>B.Sc Industrial Microbiology</item>
+        <item>B.Sc Information Systems Management</item>
+        <item>B.Sc Information Technology</item>
+        <item>B.Sc Interior Design</item>
+        <item>B.Sc Life science</item>
+        <item>B.Sc Maintenance Engineering</item>
+        <item>B.Sc Mathematics, Electronics, Computer Science</item>
+        <item>B.Sc Mathematics, Physics, Electronics</item>
+        <item>B.Sc MCAJ</item>
+        <item>B.Sc MCAJ + Cinema</item>
+        <item>B.Sc MCAJ + Electronic Media (Radio &amp; TV)</item>
+        <item>B.Sc Medical Imaging Technology (BScMIT)</item>
+        <item>B.Sc Medical Radiological Technology</item>
+        <item>B.Sc Medical Technology</item>
+        <item>B.Sc Microbiology</item>
+        <item>B.Sc Microbiology, Biochemistry, Chemistry</item>
+        <item>B.Sc Microbiology, Botany, Chemistry</item>
+        <item>B.Sc Microbiology, Genetics, Chemistry</item>
+        <item>B.Sc MLT</item>
+        <item>B.Sc Mobile Application Development</item>
+        <item>B.Sc Multimedia</item>
+        <item>B.Sc Multimedia Production</item>
+        <item>B.Sc Nautical Science</item>
+        <item>B.Sc Nursing</item>
+        <item>B.Sc Nutrition</item>
+        <item>B.Sc Operations Research</item>
+        <item>B.Sc Opthalmic Techniques</item>
+        <item>B.Sc Optometry</item>
+        <item>B.Sc Optometry and Ophthalmic Techniques</item>
+        <item>B.Sc PC B.Sc (Nursing for Trained)</item>
+        <item>B.Sc PCFS (Physics, Chemistry, Forensic Sc.)</item>
+        <item>B.Sc PCM (Physics, Chemistry, Mathematics)</item>
+        <item>B.Sc Physical Education</item>
+        <item>B.Sc Physical Education, Health Education and Sports</item>
+        <item>B.Sc Physiology</item>
+        <item>B.Sc Plant Biology</item>
+        <item>B.Sc Plant Biotechnology</item>
+        <item>B.Sc PMCS (Physics, Mathematics, Computer Science)</item>
+        <item>B.Sc Polymer Chemistry</item>
+        <item>B.Sc Radiology</item>
+        <item>B.Sc Sericulture</item>
+        <item>B.Sc Silk Technology</item>
+        <item>B.Sc Software Engineering</item>
+        <item>B.Sc Sports</item>
+        <item>B.Sc Vedic Culture</item>
+        <item>B.Sc Visual Communication</item>
+        <item>B.Sc Zoology, Chemistry, Fisheries</item>
+        <item>B.Sc. (Hons) Animal Husbandry &amp; Dairying</item>
+        <item>B.Sc. (Hons.) International Hospitality</item>
+        <item>B.Sc. (Information System Management)</item>
+        <item>B.Sc. Advanced Zoology and Bio-Technology</item>
+        <item>B.Sc. Applied Physical Science</item>
+        <item>B.Sc. Aqua culture</item>
+        <item>B.Sc. Banking &amp; Finance</item>
+        <item>B.Sc. Business</item>
+        <item>B.Sc. Critical Care Technology</item>
+        <item>B.Sc. Economics and Finance</item>
+        <item>B.Sc. Hospitality &amp; Hotel Adm</item>
+        <item>B.Sc. International Hospitality Administration</item>
+        <item>B.Sc. Management</item>
+        <item>B.Sc. Vocational</item>
+        <item>B.Sc.(ASLP)</item>
+        <item>B.Sc.(Hospitality Studies)</item>
+        <item>B.Sc.(Plant Biology and Plant Bio-Technology)</item>
+        <item>B.Sc.Maritime Science</item>
+        <item>B.Tech</item>
+        <item>B.Tech Integrated</item>
+        <item>B.Th.</item>
+        <item>BA (Hons.) International Culinary Administration</item>
+        <item>Baccalaureate in Optometry</item>
+        <item>Bachelor in Business Economics</item>
+        <item>Bachelor in Computer Applications (BCA)</item>
+        <item>Bachelor in Hospitality Management (BHM)</item>
+        <item>Bachelor in Information Systems Management (BISM)</item>
+        <item>Bachelor in Photography (BFA)</item>
+        <item>Bachelor in Rehabilitation Science</item>
+        <item>Bachelor of A.L</item>
+        <item>Bachelor of A.M.S</item>
+        <item>Bachelor of Architecture</item>
+        <item>Bachelor of Arts in Media and Communication</item>
+        <item>Bachelor of B.L</item>
+        <item>Bachelor of Communication &amp; Journalism (BCJ)</item>
+        <item>Bachelor of Computer Application (B Level)</item>
+        <item>Bachelor of Computer Science (B Level)</item>
+        <item>Bachelor of Corporate Secretaryship</item>
+        <item>Bachelor of Dance</item>
+        <item>Bachelor of Dance -</item>
+        <item>Bachelor of Dance (Hons)</item>
+        <item>Bachelor of Dental Hygiene (BDH)</item>
+        <item>Bachelor of Dental Mechanic</item>
+        <item>Bachelor of Design</item>
+        <item>Bachelor of Developer Information Technology</item>
+        <item>Bachelor of Drama</item>
+        <item>Bachelor of Drawing and Painting (Hons)</item>
+        <item>Bachelor of Fashion and Apparel Design (BFAD)</item>
+        <item>Bachelor of Fashion Management (B.F.M.)</item>
+        <item>Bachelor of Fashion Technology (B.F.Tech.)</item>
+        <item>Bachelor of Film &amp; Television Tech(Cinematography)</item>
+        <item>Bachelor of Film &amp; Television Technology (Editing)</item>
+        <item>Bachelor of Film and Television Tech (Direction)</item>
+        <item>Bachelor of Film Technology</item>
+        <item>Bachelor of Financial &amp; Investment Analysis</item>
+        <item>Bachelor of Fine Arts (B.F.A.)</item>
+        <item>Bachelor of Fisheries Science (B.F.Sc.)</item>
+        <item>Bachelor of Gen. Nursing &amp; Midwifery - GNM</item>
+        <item>Bachelor Of General Law</item>
+        <item>Bachelor of General Nursing &amp; Midwifery (GNM)</item>
+        <item>Bachelor of Heritage Management - BHM</item>
+        <item>Bachelor of Homoeopathic Medicine and Surgery</item>
+        <item>Bachelor of Hotel Management and Catering Tech.</item>
+        <item>Bachelor of ICSI</item>
+        <item>Bachelor of Information Technology</item>
+        <item>Bachelor of Journalism and Mass Communication</item>
+        <item>Bachelor of L.I.Sc.</item>
+        <item>Bachelor of Law (B.L)</item>
+        <item>Bachelor of Library and Information Science</item>
+        <item>Bachelor of Management Studies</item>
+        <item>Bachelor of Management Studies (BMS)</item>
+        <item>Bachelor of Mass Media - BMM</item>
+        <item>Bachelor of Mass. Comm. Journalism &amp; Advtg.</item>
+        <item>Bachelor of Medical Record Science</item>
+        <item>Bachelor of Naturopathy &amp; Yogic science (B.N.Y.S.)</item>
+        <item>Bachelor of Naturopathy &amp; Yogic Science (BNYS)</item>
+        <item>Bachelor of Occupational Therapy</item>
+        <item>Bachelor of Performing Arts (B.P.A.)</item>
+        <item>Bachelor of Physical Arts (Dance)</item>
+        <item>Bachelor of Physical Education (B.P.Ed )</item>
+        <item>Bachelor of Physiotherapy</item>
+        <item>Bachelor of Preparatory Program (BPP)</item>
+        <item>Bachelor of Preparatory Programme</item>
+        <item>Bachelor of Preparatory Programme (B.P.P.)</item>
+        <item>Bachelor of Preparatory Programme (BPP)</item>
+        <item>Bachelor of Rabindra Sangeet (Hons)</item>
+        <item>Bachelor of Sanitary Science (BSSc)</item>
+        <item>Bachelor of Science in Media Science (BMSc)</item>
+        <item>Bachelor of Siddha Medicine and Surgery (B.S.M.S.)</item>
+        <item>Bachelor of Social Legal Science (B.S.L)</item>
+        <item>Bachelor of Social Work (BSW)</item>
+        <item>Bachelor of Sociology</item>
+        <item>Bachelor of Speech Language &amp; Hearing (BSLH)</item>
+        <item>Bachelor of Theatre Arts</item>
+        <item>Bachelor of Unani Medicine &amp; Surgery (BUMS)</item>
+        <item>Bachelor of Veterinary Science &amp; Animal-Husbandary</item>
+        <item>Bachelor of Visual Arts (B.V.A)</item>
+        <item>Bachelor of Visual Arts (B.V.A.)</item>
+        <item>Bachelor of Visual Communication (BVC)</item>
+        <item>Bachelor of Yogic Science</item>
+        <item>BEng Honours</item>
+        <item>BSc (Honors) Computing Science</item>
+        <item>BS-MS</item>
+        <item>Call Centre Assistant</item>
+        <item>Certificate Co-operation, Co-operative Law (CCLBL)</item>
+        <item>Certificate in Anti Human Trafficking (CAHT)</item>
+        <item>Certificate International Humanitarian Law (CIH)</item>
+        <item>Certificate Programme Functional English (Basic)</item>
+        <item>Certification Actuarial Science</item>
+        <item>Certification Advance Company Law and Practice</item>
+        <item>Certification Advance Pattern Making for Fashion Apparel</item>
+        <item>Certification Advertising Agency</item>
+        <item>Certification Aircraft Maintenance Engineering</item>
+        <item>Certification Anchoring &amp; News Production</item>
+        <item>Certification Auto and Farm Machinery</item>
+        <item>Certification Bakery and Confectionary</item>
+        <item>Certification Bar Bending Practices</item>
+        <item>Certification Bar Tendering</item>
+        <item>Certification Battery Repairer</item>
+        <item>Certification Cable jointer</item>
+        <item>Certification Cable Television Operator</item>
+        <item>Certification Camera Operation and Plate Making</item>
+        <item>Certification Care Waste Management (CHCWM)</item>
+        <item>Certification Carpenter</item>
+        <item>Certification Carving (Fruit &amp; Ice)</item>
+        <item>Certification CCP</item>
+        <item>Certification Certificate in Chinese/Continental Cuisine</item>
+        <item>Certification Certificate in Cocktail/Mocktail</item>
+        <item>Certification Certificate in Consumer Protection (CCP)</item>
+        <item>Certification Certificate in Guidance (CIG)</item>
+        <item>Certification Certificate ParticipatoryForest Management(CPFM)</item>
+        <item>Certification Certificate Program in Embedded Systems</item>
+        <item>Certification Certified Financial Planner</item>
+        <item>Certification Certified Radiology Administrator (C.R.A.)</item>
+        <item>Certification Chartered Certified Accountant</item>
+        <item>Certification CIC</item>
+        <item>Certification Cisco Certified Network Associate</item>
+        <item>Certification Clothing Production Technology</item>
+        <item>Certification Computer Application in Fashion Industry (CAFI)</item>
+        <item>Certification Computer Applications (CCA)</item>
+        <item>Certification Computer Engieering</item>
+        <item>Certification Computer Maintenance</item>
+        <item>Certification Computer Science</item>
+        <item>Certification Computer Science &amp; IT</item>
+        <item>Certification Computer Technology</item>
+        <item>Certification Computing</item>
+        <item>Certification Computing (CIC)</item>
+        <item>Certification Concept of GIS &amp; GPS</item>
+        <item>Certification Consumer Protection (CCP)</item>
+        <item>Certification Cookery</item>
+        <item>Certification COPA-Computer operator and Programming Asst</item>
+        <item>Certification Craft Programme in Front Office Management</item>
+        <item>Certification Craftsmanship in F &amp; B Service</item>
+        <item>Certification Craftsmanship in Food Production</item>
+        <item>Certification Crane Operator</item>
+        <item>Certification Creative Fashion Styling</item>
+        <item>Certification Cultural studies</item>
+        <item>Certification CWA/ICWA</item>
+        <item>Certification Dance</item>
+        <item>Certification Design &amp; Pattern Making for Ethnic Apparel</item>
+        <item>Certification Design Process</item>
+        <item>Certification Desk Top Publishing</item>
+        <item>Certification Digital Still Photography</item>
+        <item>Certification Disaster Management (CDM)</item>
+        <item>Certification Dr. Ambedkar Studies</item>
+        <item>Certification Draughtman</item>
+        <item>Certification Dress Maker</item>
+        <item>Certification Driver Cum Fitter</item>
+        <item>Certification Dyeing Printing &amp; Surface Techniques on Textiles</item>
+        <item>Certification Electrical Equipment Maintenance</item>
+        <item>Certification Electrical Wiring and Home Appliances Servicing</item>
+        <item>Certification Electrician</item>
+        <item>Certification Electro plater</item>
+        <item>Certification Electronic Mechanic</item>
+        <item>Certification Electroplating</item>
+        <item>Certification Elementary Teacher Education</item>
+        <item>Certification Empowering Women through Self Help Groups (CWDL)</item>
+        <item>Certification English</item>
+        <item>Certification Engraver</item>
+        <item>Certification Environmental Studies (CES)</item>
+        <item>Certification Export Management</item>
+        <item>Certification F &amp; B Management</item>
+        <item>Certification Fabric, Fashion &amp; Retail</item>
+        <item>Certification Fashion &amp; Clothing Technology (FCT)</item>
+        <item>Certification Fashion Accessories &amp; Handicraft Development</item>
+        <item>Certification Fashion Art &amp; Illustration</item>
+        <item>Certification Fashion Brand Management</item>
+        <item>Certification Fashion Communication &amp; Promotion</item>
+        <item>Certification Fashion Integration for Apparel Industry (FIAI)</item>
+        <item>Certification Fashion Jewellery &amp; Technology</item>
+        <item>Certification Fashion Journalism</item>
+        <item>Certification Fashion Knitwear &amp; Production Technology(FKPT)</item>
+        <item>Certification Fashion Leather Accessories</item>
+        <item>Certification Fashion Photography</item>
+        <item>Certification Fashion Retail Management (FRM)</item>
+        <item>Certification Fashion Retail Store Management</item>
+        <item>Certification Finance</item>
+        <item>Certification Fire Prevention</item>
+        <item>Certification Food Production</item>
+        <item>Certification Food Technology (CFT)</item>
+        <item>Certification Footwear Designing &amp; Production Technology</item>
+        <item>Certification Footwear Maker</item>
+        <item>Certification Foreign Trade Practices &amp; Procedures</item>
+        <item>Certification Forex</item>
+        <item>Certification Foundaryman</item>
+        <item>Certification Foundation Programme (E.M. and T.M.)</item>
+        <item>Certification Foundry &amp; Forging (CFF)</item>
+        <item>Certification French</item>
+        <item>Certification Fundamentals of Design Conceptualisation</item>
+        <item>Certification Furnace Operator</item>
+        <item>Certification Gandhian thought</item>
+        <item>Certification Garderner</item>
+        <item>Certification Garment Export Merchandising Management (GEMM)</item>
+        <item>Certification Garment Production Technology &amp; Apparel Design</item>
+        <item>Certification Gas Cutter</item>
+        <item>Certification Graphics &amp; Communication Design</item>
+        <item>Certification Guidance</item>
+        <item>Certification Hair Dresser</item>
+        <item>Certification Handcrafted Jewellery Design &amp; Trends</item>
+        <item>Certification Hindi tankan, Ashulekhan and mudrit sanshodhan Pa</item>
+        <item>Certification Home Fashion Retail</item>
+        <item>Certification Horticulture Assistant</item>
+        <item>Certification Hotel Management &amp; Catering Technology</item>
+        <item>Certification House Keeper</item>
+        <item>Certification Housekeeping Operation</item>
+        <item>Certification HRD &amp; Industrial Relations</item>
+        <item>Certification Human resource management</item>
+        <item>Certification Human Rights (CHR)</item>
+        <item>Certification ICT Application in Library (CICTAL)</item>
+        <item>Certification in Television Maintenance</item>
+        <item>Certification Industrial design , Communication Design</item>
+        <item>Certification Industrial Pattern Making</item>
+        <item>Certification Industrial Pattern Making &amp; Grading for Womenswear</item>
+        <item>Certification Information Technology</item>
+        <item>Certification Instrument Mechanic</item>
+        <item>Certification Instruments</item>
+        <item>Certification Insurance</item>
+        <item>Certification International Business Language (CCIBL)</item>
+        <item>Certification Intg. Pest Mgt. Tech. in Potato Culv</item>
+        <item>Certification Introduction to Design Skills</item>
+        <item>Certification Investment &amp; Stock Market</item>
+        <item>Certification Jainology</item>
+        <item>Certification Jawaharlal Nehru Studies</item>
+        <item>Certification Jewellery Design &amp; Development</item>
+        <item>Certification Laboratory Assistant</item>
+        <item>Certification Laboratory Techniques (CPLT)</item>
+        <item>Certification Labour in Development (CLD)</item>
+        <item>Certification Leather Goods Designing &amp; Production Technology</item>
+        <item>Certification Machinist</item>
+        <item>Certification Manufacture of Matches</item>
+        <item>Certification Marketing &amp; Merchandising of Fashion Products</item>
+        <item>Certification Mason</item>
+        <item>Certification Mass Communication and Journalism</item>
+        <item>Certification Mechanic Television</item>
+        <item>Certification Micro Finance</item>
+        <item>Certification Micro-processor and Micro-controlle</item>
+        <item>Certification Microsoft Certified Application Developers</item>
+        <item>Certification Microsoft Certified Architect Program</item>
+        <item>Certification Microsoft Certified Database Administrators</item>
+        <item>Certification Microsoft Certified Learning Consultant</item>
+        <item>Certification Microsoft Certified Professional Developer</item>
+        <item>Certification Microsoft Certified Solution Developers</item>
+        <item>Certification Mini-analytical Lab</item>
+        <item>Certification Montessori Teachers Training</item>
+        <item>Certification Motor Mechanic</item>
+        <item>Certification Motorcycle Service &amp; Repair (CMSR)</item>
+        <item>Certification MS-CIT</item>
+        <item>Certification MS-Office</item>
+        <item>Certification Mushroom Culture</item>
+        <item>Certification Network Oriented Office Computing</item>
+        <item>Certification NGO Management</item>
+        <item>Certification Non-Linear Editing</item>
+        <item>Certification Nursery Teacher Training</item>
+        <item>Certification Office Management</item>
+        <item>Certification Offset Machine Printing</item>
+        <item>Certification Oracle</item>
+        <item>Certification Oral Implantology</item>
+        <item>Certification Organic Farming</item>
+        <item>Certification P.G. Certificate Program in International Business</item>
+        <item>Certification P.G.Cert.ParticipatoryMgmt DisplcmtResettlmt.Rehab</item>
+        <item>Certification P.G.Certificate in Copy editing and Proof Reading</item>
+        <item>Certification P.G.Certificate in Radio Writing</item>
+        <item>Certification P.G.Certificate in Writing for Television (PGCTW)</item>
+        <item>Certification Packaging Design</item>
+        <item>Certification Painter</item>
+        <item>Certification Painting</item>
+        <item>Certification Paper &amp; Printing Technology (CPPT)</item>
+        <item>Certification Participatory Forest Management (CPFM)</item>
+        <item>Certification Participatory Project Planning (SAVINI)</item>
+        <item>Certification Pattern Maker</item>
+        <item>Certification Pattern Making for Fashion Apparel</item>
+        <item>Certification PC Software</item>
+        <item>Certification Performing and Visual Arts</item>
+        <item>Certification Photo Journalism</item>
+        <item>Certification Photographer</item>
+        <item>Certification Physical education</item>
+        <item>Certification Pipe Fitter</item>
+        <item>Certification Plastic Mould Maker</item>
+        <item>Certification Plumber</item>
+        <item>Certification Portfolio Design &amp; Presentation Techniques</item>
+        <item>Certification Power Distribution Management (ACPDM)</item>
+        <item>Certification Power Electrician</item>
+        <item>Certification Pre nursery</item>
+        <item>Certification Primary Education (CPE)</item>
+        <item>Certification Primary Teaching (CPT)</item>
+        <item>Certification Principles of Remote Sensing</item>
+        <item>Certification Print Design for Home Fashion</item>
+        <item>Certification Process Cameraman</item>
+        <item>Certification Programme in Plumbing / Water Supply</item>
+        <item>Certification Pump Operator Cum Mechanic</item>
+        <item>Certification Refrigeration &amp; Air Conditioning Mechanic</item>
+        <item>Certification Retail Management</item>
+        <item>Certification Rewinding A.C. Motors and Home Appliances Servicin</item>
+        <item>Certification Rigger</item>
+        <item>Certification Salesmanship</item>
+        <item>Certification Sampreshan aur Janasampark Madhyamo ke liye Hindi</item>
+        <item>Certification Screen Printing</item>
+        <item>Certification SELF HELP GROUP MANAGEMENT</item>
+        <item>Certification Sericulture</item>
+        <item>Certification Servicing &amp; Maint.Electronics Instrs</item>
+        <item>Certification Servicing &amp;Maintenance Medical Instr</item>
+        <item>Certification Sheet Metal Worker</item>
+        <item>Certification Short-hand</item>
+        <item>Certification Soil Ecology, Earthworms</item>
+        <item>Certification Srimanta Shankardeva Studies</item>
+        <item>Certification Steward</item>
+        <item>Certification Store Operation Management</item>
+        <item>Certification Stri bhautik Prasutitantra</item>
+        <item>Certification Surface Design &amp; Product Styling For Home Fashion</item>
+        <item>Certification Surveyor</item>
+        <item>Certification Tailor</item>
+        <item>Certification Teaching of English (CTE)</item>
+        <item>Certification Teaching of Primary School Mathematics</item>
+        <item>Certification Television Mechanism and Service</item>
+        <item>Certification TES</item>
+        <item>Certification TML</item>
+        <item>Certification Tool and Die maker</item>
+        <item>Certification Tractor Mechanic</item>
+        <item>Certification Training of Adult education</item>
+        <item>Certification Translation</item>
+        <item>Certification Trend Interpretation &amp; Forecasting</item>
+        <item>Certification Turner</item>
+        <item>Certification Tyre Repairer</item>
+        <item>Certification Upholsterer</item>
+        <item>Certification Vedic Math</item>
+        <item>Certification Videography</item>
+        <item>Certification Visual Merchandising</item>
+        <item>Certification Visual Merchandising &amp; Retail Store Design</item>
+        <item>Certification VLSI Design</item>
+        <item>Certification Vyavaharik Marathi Padvika Abhyaskram</item>
+        <item>Certification Vyyaktik Ayurvedic Swasthvrutta Pramanpatra</item>
+        <item>Certification Water Harvesting and Management</item>
+        <item>Certification Weaver</item>
+        <item>Certification Web Site Design &amp; Management</item>
+        <item>Certification Welder</item>
+        <item>Certification Wireman</item>
+        <item>Certification Womens Empowerment and Development</item>
+        <item>Certification Youth in Development Work (CCYP)</item>
+        <item>DET</item>
+        <item>Diploma 2D &amp; 3D Animation</item>
+        <item>Diploma 3D Animation</item>
+        <item>Diploma Accountancy</item>
+        <item>Diploma Accounting</item>
+        <item>Diploma Accounting &amp; Finance</item>
+        <item>Diploma Accupuncture in Ayurveda</item>
+        <item>Diploma Actuarial Principles &amp; Practices</item>
+        <item>Diploma Actuary</item>
+        <item>Diploma ADITM</item>
+        <item>Diploma AdvancedDipl.inTVDirectionScriptwriting&amp;Production</item>
+        <item>Diploma Aeronautical Engineering</item>
+        <item>Diploma Agadtantra Vyavaharayurveda</item>
+        <item>Diploma Agri Business Management</item>
+        <item>Diploma Agriculture Technology</item>
+        <item>Diploma Air Hostess and Aviation Hospitality</item>
+        <item>Diploma Aircraft Maintenance Engineering.</item>
+        <item>Diploma Airport Management</item>
+        <item>Diploma Anaesthesia (DA)</item>
+        <item>Diploma Anaesthesiology</item>
+        <item>Diploma Anesthesia Technology</item>
+        <item>Diploma Animation</item>
+        <item>Diploma Apparel Engineering</item>
+        <item>Diploma Apparel Merchanding &amp; Marketing (AMM)</item>
+        <item>Diploma Apparel Mfg Tech</item>
+        <item>Diploma Application Oriented Course</item>
+        <item>Diploma Applied Arts and Crafts</item>
+        <item>Diploma Applied Electronics</item>
+        <item>Diploma Aquaculture Management</item>
+        <item>Diploma Architectural Assistantship</item>
+        <item>Diploma Auditing</item>
+        <item>Diploma Auto-cad, Arch, 3D max</item>
+        <item>Diploma Ayurveda Nishnat</item>
+        <item>Diploma Ayurvedic Pharmacy and Compounding</item>
+        <item>Diploma Bakery &amp; Confectionery</item>
+        <item>Diploma Bank Marketing</item>
+        <item>Diploma Banking</item>
+        <item>Diploma Banking &amp; Financial Management</item>
+        <item>Diploma Banking finance</item>
+        <item>Diploma Banking Laws &amp; Loan Management</item>
+        <item>Diploma Banking Operations</item>
+        <item>Diploma Basic Web-Technology</item>
+        <item>Diploma Bio-informatics</item>
+        <item>Diploma Bio-Medical Engineering</item>
+        <item>Diploma Biopesticides Tech &amp; Biofertilizer Tech</item>
+        <item>Diploma Biopesticides Technology&amp;Biofertilizer Production</item>
+        <item>Diploma Bio-technology</item>
+        <item>Diploma Broadcast Journalism and TV Production</item>
+        <item>Diploma Business Administration</item>
+        <item>Diploma Business Communication</item>
+        <item>Diploma Business Economics</item>
+        <item>Diploma Business Ethics</item>
+        <item>Diploma Business Law</item>
+        <item>Diploma Business Management (D.B.M.)</item>
+        <item>Diploma Business Process Outsourcing, Finance &amp; Accounting</item>
+        <item>Diploma Business Research Methods</item>
+        <item>Diploma Business Strategy</item>
+        <item>Diploma Camera and Lighting techniques</item>
+        <item>Diploma Capital Marketing Management (D.C.M.M.)</item>
+        <item>Diploma Central Banking</item>
+        <item>Diploma Ceramic Technology</item>
+        <item>Diploma Chemical Process Instrumentation and Control</item>
+        <item>Diploma Chemical Technology</item>
+        <item>Diploma Child Health (DCH)</item>
+        <item>Diploma Civil Engineering</item>
+        <item>Diploma Claims Management</item>
+        <item>Diploma Clinical Neurophysiology &amp; Technology</item>
+        <item>Diploma Clinical Pathology</item>
+        <item>Diploma Commercial Banking</item>
+        <item>Diploma Commercial Floriculture</item>
+        <item>Diploma Communication Engineering</item>
+        <item>Diploma Communicative English</item>
+        <item>Diploma Community Medicine</item>
+        <item>Diploma Company Secretaryship</item>
+        <item>Diploma Computer Application &amp; Business Management</item>
+        <item>Diploma Computer Applications</item>
+        <item>Diploma Computer Hardware Maintenance</item>
+        <item>Diploma Computer Hardware Maintenance &amp; Networking</item>
+        <item>Diploma Computer in Office Mgt</item>
+        <item>Diploma Computer integrated manufacturing</item>
+        <item>Diploma Computer Management</item>
+        <item>Diploma Computer Programming</item>
+        <item>Diploma Computer Science and Technology</item>
+        <item>Diploma Computer Technology</item>
+        <item>Diploma ComputerAided Costume Design &amp; DressMaking</item>
+        <item>Diploma Computing</item>
+        <item>Diploma Concrete Technology &amp; Design of Concret</item>
+        <item>Diploma Construction Management</item>
+        <item>Diploma Construction Mgt.</item>
+        <item>Diploma Construction Supervisor</item>
+        <item>Diploma Consumer Behavior</item>
+        <item>Diploma Co-operative Laws</item>
+        <item>Diploma Co-operative Management (D.C.M.)</item>
+        <item>Diploma Costume Design and Dress Making</item>
+        <item>Diploma CRAFT PROGRAMME</item>
+        <item>Diploma Craft Programme in Front Office Management</item>
+        <item>Diploma Craft Programme in House Keeping</item>
+        <item>Diploma Creative writing in English</item>
+        <item>Diploma Creative Writing in Hindi</item>
+        <item>Diploma Credit Management</item>
+        <item>Diploma Criminology</item>
+        <item>Diploma Criminology and Forensic Science</item>
+        <item>Diploma Critical Care Nursing</item>
+        <item>Diploma Cruise Galley Operations</item>
+        <item>Diploma Culinary Skills</item>
+        <item>Diploma Cultural Studies</item>
+        <item>Diploma Cyber Journalism</item>
+        <item>Diploma D.F.A (Film Acting)</item>
+        <item>Diploma Dairy Mgt.</item>
+        <item>Diploma Dairy Technology</item>
+        <item>Diploma Damage Assessment, Repair &amp; Rehabilitation</item>
+        <item>Diploma Dance</item>
+        <item>Diploma data entry techniques &amp; PC maintanence</item>
+        <item>Diploma Debt Valuation</item>
+        <item>Diploma Dental Hygienist</item>
+        <item>Diploma Dental Mechanic</item>
+        <item>Diploma Derivative Valuation</item>
+        <item>Diploma Dermatology</item>
+        <item>Diploma Dermatology, Venereology &amp; Leprocy(DDVL)</item>
+        <item>Diploma Design of Foundation Systems</item>
+        <item>Diploma Diabetes Patient Education</item>
+        <item>Diploma Diabetology</item>
+        <item>Diploma Dialysis Technology</item>
+        <item>Diploma Digital Design</item>
+        <item>Diploma Digital Electronics</item>
+        <item>Diploma Digital Media Production</item>
+        <item>Diploma Disaster Management</item>
+        <item>Diploma Dispute Resolution System</item>
+        <item>Diploma DMRT (Diploma in Medical Radiation Therapy)</item>
+        <item>Diploma Drilling Engineering</item>
+        <item>Diploma Drives and Control</item>
+        <item>Diploma Early Childhood Care and Education</item>
+        <item>Diploma Early Childhood Spl.Edu.(MR)</item>
+        <item>Diploma Education</item>
+        <item>Diploma Education for Deaf</item>
+        <item>Diploma Education for Teachers of Mentally Retarded Child</item>
+        <item>Diploma Electrical Engineering (DEE)</item>
+        <item>Diploma Electrical Power System</item>
+        <item>Diploma Electronics &amp; Tele-communication</item>
+        <item>Diploma Electronics &amp; Video Engineering</item>
+        <item>Diploma Electronics and Avionics</item>
+        <item>Diploma Electronics and Hardware Maintenance</item>
+        <item>Diploma Electronics and Instrumentation</item>
+        <item>Diploma Electronics Engineering (DEE)</item>
+        <item>Diploma Electronics Production Technology</item>
+        <item>Diploma Elementary Education</item>
+        <item>Diploma Embedded System and VLSI</item>
+        <item>Diploma Embedded Systems and Applications</item>
+        <item>Diploma Energy Engineering</item>
+        <item>Diploma Energy Mgt. Technology</item>
+        <item>Diploma English</item>
+        <item>Diploma English Journalism</item>
+        <item>Diploma Enterprise risk management</item>
+        <item>Diploma Entrepreneurship</item>
+        <item>Diploma Environment</item>
+        <item>Diploma Environmental Management</item>
+        <item>Diploma Equity Valuation</item>
+        <item>Diploma Event Management</item>
+        <item>Diploma Executive Diploma in Export Management (EDEM)</item>
+        <item>Diploma F &amp; B (production &amp; service)</item>
+        <item>Diploma Fabrication Engineering</item>
+        <item>Diploma Fashion Design</item>
+        <item>Diploma Fashion Design &amp; Boutique Management</item>
+        <item>Diploma Fashion Technology</item>
+        <item>Diploma Fertilizer Technology</item>
+        <item>Diploma Film Making</item>
+        <item>Diploma Financial Accounting</item>
+        <item>Diploma Financial engineering</item>
+        <item>Diploma Financial Institutions</item>
+        <item>Diploma Financial Management</item>
+        <item>Diploma Financial Markets</item>
+        <item>Diploma Financial Planning</item>
+        <item>Diploma Financial Risk Management</item>
+        <item>Diploma Financial Services (D.F.S.)</item>
+        <item>Diploma Financial Statement Analysis</item>
+        <item>Diploma Fish Products Technology</item>
+        <item>Diploma Floriculture and Landscape Gardening</item>
+        <item>Diploma Folklore</item>
+        <item>Diploma Food &amp; Beverages Production</item>
+        <item>Diploma Food &amp; Nutrition</item>
+        <item>Diploma Food Preservation Technology</item>
+        <item>Diploma Food Processing and Technology</item>
+        <item>Diploma Foreign Trade</item>
+        <item>Diploma Forensic accounting</item>
+        <item>Diploma Forensic Medicine</item>
+        <item>Diploma Forex</item>
+        <item>Diploma Foundry Technology</item>
+        <item>Diploma French</item>
+        <item>Diploma Front Office Management</item>
+        <item>Diploma Fruit Production</item>
+        <item>Diploma Functional Arabic</item>
+        <item>Diploma Garment Fabrication Technology</item>
+        <item>Diploma Garment Manufacturing Technology (GMT)</item>
+        <item>Diploma General Electronics</item>
+        <item>Diploma General Insurance</item>
+        <item>Diploma General Nursing</item>
+        <item>Diploma General Nursing and Midwifery (G.N.M)</item>
+        <item>Diploma German</item>
+        <item>Diploma Global Business Environment</item>
+        <item>Diploma Global strategic management</item>
+        <item>Diploma graphic and multimedia</item>
+        <item>Diploma Guidance and Counselling</item>
+        <item>Diploma Health Administration</item>
+        <item>Diploma Health Education</item>
+        <item>Diploma Health Insurance</item>
+        <item>Diploma Health Science in Accident &amp; Emerge</item>
+        <item>Diploma Health Science in Acupuncture</item>
+        <item>Diploma Health Science in Diabetology</item>
+        <item>Diploma Health Science in Echo-Cardiography</item>
+        <item>Diploma Health Science in Family Medicine</item>
+        <item>Diploma Health Science in Medical Cosmetolo</item>
+        <item>Diploma Health Science in Medical Law</item>
+        <item>Diploma Health Science in Public Health</item>
+        <item>Diploma Health Science in Tobacco Control</item>
+        <item>Diploma Health Science in Ultrasonography</item>
+        <item>Diploma Hearing</item>
+        <item>Diploma Higher Diploma in Sanskrit /Ardhamagadhi / Pali</item>
+        <item>Diploma Hindi</item>
+        <item>Diploma Hindi Functional</item>
+        <item>Diploma HIV and Family Education</item>
+        <item>Diploma Home science</item>
+        <item>Diploma Horticulture Nursery Management</item>
+        <item>Diploma Hospital Administration</item>
+        <item>Diploma Hospital Laws &amp; Management</item>
+        <item>Diploma Hospital Management</item>
+        <item>Diploma Hotel Management</item>
+        <item>Diploma Hotel management &amp; Catering Technology</item>
+        <item>Diploma House Keeping</item>
+        <item>Diploma Human Resource Mgt</item>
+        <item>Diploma Human Rights</item>
+        <item>Diploma Import / export management</item>
+        <item>Diploma in Paralegal Practice (DIPP)</item>
+        <item>Diploma Indian Dairy Diploma (Dairy Husbandry)</item>
+        <item>Diploma Indian Dairy Diploma (Dairy Technology)</item>
+        <item>Diploma Indirect Taxation</item>
+        <item>Diploma Industrial Automation</item>
+        <item>Diploma Industrial Bio-technology</item>
+        <item>Diploma Industrial Electronics</item>
+        <item>Diploma Industrial Hygiene</item>
+        <item>Diploma Industrial Pollution &amp; Control</item>
+        <item>Diploma Industrial Project Engineering</item>
+        <item>Diploma Information Sciences</item>
+        <item>Diploma Information Systems Auditing</item>
+        <item>Diploma Information Technology</item>
+        <item>Diploma Instrument Technology</item>
+        <item>Diploma Instrumentation &amp; Control Engineering</item>
+        <item>Diploma Insurance Investments</item>
+        <item>Diploma Insurance Management</item>
+        <item>Diploma Insurance Marketing</item>
+        <item>Diploma Insurance Operations</item>
+        <item>Diploma Insurance Underwriting</item>
+        <item>Diploma Intellectual Property Law</item>
+        <item>Diploma Interior Design &amp; Decoration</item>
+        <item>Diploma International Banking</item>
+        <item>Diploma International Business</item>
+        <item>Diploma International Finance</item>
+        <item>Diploma International Hotel Management</item>
+        <item>Diploma International Trade</item>
+        <item>Diploma Isaikalaimani</item>
+        <item>Diploma IT in Management</item>
+        <item>Diploma Jainology</item>
+        <item>Diploma Japanese</item>
+        <item>Diploma Jewellery manufacturing</item>
+        <item>Diploma Journalism</item>
+        <item>Diploma Journalism &amp; Mass Communication</item>
+        <item>Diploma Junior Diploma in French</item>
+        <item>Diploma Junior Diploma in Modern Arabic</item>
+        <item>Diploma Junior Diploma in Persian</item>
+        <item>Diploma Junior Diploma in Russian</item>
+        <item>Diploma Kannada</item>
+        <item>Diploma Knitware Mfg &amp; Mgt</item>
+        <item>Diploma Labour Law</item>
+        <item>Diploma Labour Laws with Admn Law</item>
+        <item>Diploma Law of Taxation</item>
+        <item>Diploma law of taxes</item>
+        <item>Diploma Leadership &amp; Change management</item>
+        <item>Diploma Legislative Drafting</item>
+        <item>Diploma Leprosy</item>
+        <item>Diploma Library &amp; Information Science</item>
+        <item>Diploma Library Automation &amp; Networking</item>
+        <item>Diploma Life Insurance</item>
+        <item>Diploma Livestock Products Technology</item>
+        <item>Diploma Logistics &amp; International Transport</item>
+        <item>Diploma Logistics &amp; Port Management</item>
+        <item>Diploma Logistics &amp; Shipping</item>
+        <item>Diploma Lower Diploma in Sanskrit / Ardhamagadhi / Pali</item>
+        <item>Diploma Maintenance Engg. &amp; Mgt.</item>
+        <item>Diploma Maintenance Engineering and Management</item>
+        <item>Diploma Management</item>
+        <item>Diploma Management Accounting</item>
+        <item>Diploma Management Control Systems</item>
+        <item>Diploma Management Executive</item>
+        <item>Diploma Managerial Effectiveness</item>
+        <item>Diploma Manuscriptology</item>
+        <item>Diploma Marine Engineering</item>
+        <item>Diploma Marine Microbial Technology</item>
+        <item>Diploma Marketing Communications</item>
+        <item>Diploma Marketing Management</item>
+        <item>Diploma Marketing Management (D.M.M.)</item>
+        <item>Diploma Mass Communication</item>
+        <item>Diploma Material Management</item>
+        <item>Diploma Meat Technology</item>
+        <item>Diploma Mechanical Engineering</item>
+        <item>Diploma Mechatronics</item>
+        <item>Diploma Medical Electronics</item>
+        <item>Diploma Medical Laboratory Technology</item>
+        <item>Diploma Medical Radiography &amp; Imaging Technolog</item>
+        <item>Diploma Medical Record Science</item>
+        <item>Diploma Medical Virology</item>
+        <item>Diploma Mergers and Acquisitions</item>
+        <item>Diploma Mgt. Accounting</item>
+        <item>Diploma Mineral Exploration and Mining</item>
+        <item>Diploma Mining Engineering</item>
+        <item>Diploma Ministry</item>
+        <item>Diploma Modern Office Management</item>
+        <item>Diploma Money &amp; Banking</item>
+        <item>Diploma Motor vehicle repair maintenance</item>
+        <item>Diploma Multimedia</item>
+        <item>Diploma Multimedia Production</item>
+        <item>Diploma Multinational Corporations</item>
+        <item>Diploma Mushroom Technology</item>
+        <item>Diploma Mutual Funds</item>
+        <item>Diploma N.G.O. Management</item>
+        <item>Diploma Natural Resources</item>
+        <item>Diploma Nautical Science</item>
+        <item>Diploma Naval Architecture</item>
+        <item>Diploma Neuro O.T. Technology</item>
+        <item>Diploma Nursing</item>
+        <item>Diploma Obstetrics &amp; Gynaecology (DGO)</item>
+        <item>Diploma Office Automation</item>
+        <item>Diploma Office Management (D.O.M)</item>
+        <item>Diploma Operation Research</item>
+        <item>Diploma Operation Theatre Technique and Management</item>
+        <item>Diploma Operation Theatre Techniques</item>
+        <item>Diploma Operations Management</item>
+        <item>Diploma Ophthalmic Technology</item>
+        <item>Diploma Organizational Behavior</item>
+        <item>Diploma Oto-Rhino-Laryngology</item>
+        <item>Diploma Otorhinolaryngology (DLO)</item>
+        <item>Diploma P.G. Diploma in Cheminformatics</item>
+        <item>Diploma Packing Technology</item>
+        <item>Diploma Paediatrics</item>
+        <item>Diploma Pattern Making &amp; Garment Contruction (PMGC)</item>
+        <item>Diploma Performance Management</item>
+        <item>Diploma Performing Arts</item>
+        <item>Diploma Personnel Management</item>
+        <item>Diploma Petrocemical Technology</item>
+        <item>Diploma Petrochemical Technology</item>
+        <item>Diploma Petroleum Exploration</item>
+        <item>Diploma Petroleum Refining</item>
+        <item>Diploma Petroleum Refining Engineering</item>
+        <item>Diploma Pharmacy</item>
+        <item>Diploma Physiotherapy</item>
+        <item>Diploma Plant Protection</item>
+        <item>Diploma Plastic Engineering/Technology</item>
+        <item>Diploma Police Administration</item>
+        <item>Diploma Polymer Technology</item>
+        <item>Diploma Population and Health Mgt.</item>
+        <item>Diploma Portfolio Management</item>
+        <item>Diploma Post Graduate Diploma in Clinical Research</item>
+        <item>Diploma Post production</item>
+        <item>Diploma Prayojanmulak Hindi Padvika</item>
+        <item>Diploma Primary Education</item>
+        <item>Diploma Print Administration (D.P.A.)</item>
+        <item>Diploma Printing Technology</item>
+        <item>Diploma Production Engineering</item>
+        <item>Diploma Production Management</item>
+        <item>Diploma Production Mgt.</item>
+        <item>Diploma Professional Cookery</item>
+        <item>Diploma Professional Driving</item>
+        <item>Diploma Promoting Rational Drug Use</item>
+        <item>Diploma Psychiatric Nursing</item>
+        <item>Diploma Public Administration</item>
+        <item>Diploma Public Relations</item>
+        <item>Diploma Quality Control and Analysis of Industr</item>
+        <item>Diploma Quality Management</item>
+        <item>Diploma Quantity Surveying and Valuation</item>
+        <item>Diploma Record Technician</item>
+        <item>Diploma Refrigeration &amp; Air Conditioning</item>
+        <item>Diploma Reinsurance</item>
+        <item>Diploma Research Methodology of Education</item>
+        <item>Diploma Russian</item>
+        <item>Diploma Sales &amp; Distribution Management</item>
+        <item>Diploma Sales and Marketing</item>
+        <item>Diploma Salesmanship &amp; Advertisement</item>
+        <item>Diploma School Management</item>
+        <item>Diploma Secretarial Practice</item>
+        <item>Diploma Security Analysis</item>
+        <item>Diploma Security Management</item>
+        <item>Diploma Seed Production Technology</item>
+        <item>Diploma Senior Diploma in French</item>
+        <item>Diploma Senior Diploma in German</item>
+        <item>Diploma Senior Diploma in Russian</item>
+        <item>Diploma Services Marketing</item>
+        <item>Diploma Sociology of Health</item>
+        <item>Diploma Software Based Statistical Analysis</item>
+        <item>Diploma Software Marketing</item>
+        <item>Diploma Software Technology</item>
+        <item>Diploma Sound Engineering</item>
+        <item>Diploma Special Education (Autism Spec. Disorders)</item>
+        <item>Diploma Special Education (Hearing Impairment)</item>
+        <item>Diploma Sports Journalism</item>
+        <item>Diploma Sports Medicine in Ayurveda</item>
+        <item>Diploma Stores Management</item>
+        <item>Diploma Strategic finance control</item>
+        <item>Diploma Strategic Marketing</item>
+        <item>Diploma Sugar Technology</item>
+        <item>Diploma Survey Engineering</item>
+        <item>Diploma Taxation</item>
+        <item>Diploma Taxation Law</item>
+        <item>Diploma Teacher Education Course</item>
+        <item>Diploma Technical Writing</item>
+        <item>Diploma Telecommunication Technology</item>
+        <item>Diploma Television &amp; Video Production</item>
+        <item>Diploma Television Journalism</item>
+        <item>Diploma Theatre Art</item>
+        <item>Diploma Training &amp; Development</item>
+        <item>Diploma Translation</item>
+        <item>Diploma Treasury</item>
+        <item>Diploma Urdu</item>
+        <item>Diploma Value Added Products from Fruits</item>
+        <item>Diploma Value Added Products from Fruits &amp; Vegetab</item>
+        <item>Diploma Value-added Products from Cereals, Pulses</item>
+        <item>Diploma Video Production Management &amp; Marketing</item>
+        <item>Diploma Visual Arts &amp; Communications</item>
+        <item>Diploma Visual Communication</item>
+        <item>Diploma VLSI Design</item>
+        <item>Diploma Vyawaharik Hindi Padvika and Madhyamik Hindi Adhya</item>
+        <item>Diploma Waste Management</item>
+        <item>Diploma Watershed Management (DWM)</item>
+        <item>Diploma Web design and Engineering</item>
+        <item>Diploma Web journalism</item>
+        <item>Diploma Welding Engineering &amp; Technology</item>
+        <item>Diploma Welding Engineering and Technology</item>
+        <item>Diploma Womens empowerment and development</item>
+        <item>Diploma X-Ray Technician</item>
+        <item>Diploma Yogic Science (DYSc)</item>
+        <item>Diploma Youth &amp; Dev. Wor</item>
+        <item>Diploma Youth Development Work</item>
+        <item>Executive Diploma Export Management</item>
+        <item>Executive MHM in International Hotel Management</item>
+        <item>Executive MHM International Hospitality Management</item>
+        <item>Graduate Diploma in Business Administration(GDBA)</item>
+        <item>Graduate Diploma in Chemical Engineering (GDCE)</item>
+        <item>Graduate Diploma in Civil Engineering (GDCE)</item>
+        <item>Graduate Diploma in Computer Application(GDCA)</item>
+        <item>Graduate Diploma in Electrical Engineering (GDEE)</item>
+        <item>Graduate Diploma in Electronics Engineering (GDEE)</item>
+        <item>Graduate Diploma in Management (GDM)</item>
+        <item>Graduate Diploma in Mechanical Engineering (GDME)</item>
+        <item>Graduate Diploma in Public Procurement</item>
+        <item>Graduate Mechanical Engineering(G.M.E)</item>
+        <item>M.A Advertisement and Public Relations</item>
+        <item>M.A Ancient History and Archaeology</item>
+        <item>M.A Anthropology</item>
+        <item>M.A Applied Art</item>
+        <item>M.A Broadcast Communication</item>
+        <item>M.A Career Guidance</item>
+        <item>M.A CC and E</item>
+        <item>M.A Coastal Resource Economics &amp; Management</item>
+        <item>M.A Continuing Education Management</item>
+        <item>M.A Dance</item>
+        <item>M.A Drama</item>
+        <item>M.A Drawing and Painting</item>
+        <item>M.A Economics</item>
+        <item>M.A Education</item>
+        <item>M.A Fine Arts</item>
+        <item>M.A Folk Arts</item>
+        <item>M.A Gandhian Thought</item>
+        <item>M.A Geography</item>
+        <item>M.A Graphic Arts</item>
+        <item>M.A Historical Studies</item>
+        <item>M.A History</item>
+        <item>M.A Home Science</item>
+        <item>M.A Hospital Administration</item>
+        <item>M.A Humanities &amp; Social Science</item>
+        <item>M.A Indian Economy</item>
+        <item>M.A Indian Logic and Epistemology</item>
+        <item>M.A International Relations</item>
+        <item>M.A Islamic Studies</item>
+        <item>M.A Jainology</item>
+        <item>M.A Lalit Kala</item>
+        <item>M.A M.W.S.(Women’s Studies)</item>
+        <item>M.Lib.</item>
+        <item>M.Phil</item>
+        <item>M.Phil Ancient History and Archaeology</item>
+        <item>M.Phil Applied Chemistry</item>
+        <item>M.Phil Applied Economics</item>
+        <item>M.Phil Applied Mathematics</item>
+        <item>M.Phil Applied Physics</item>
+        <item>M.Phil Aquaculture</item>
+        <item>M.Phil Arabic</item>
+        <item>M.Phil Bio Chemistry</item>
+        <item>M.Phil Bio Technology</item>
+        <item>M.Phil Botony</item>
+        <item>M.Phil Chemistry</item>
+        <item>M.Phil Christian Studies</item>
+        <item>M.Phil Commerce</item>
+        <item>M.Phil Communication Studies</item>
+        <item>M.Phil Computational Linguistics</item>
+        <item>M.Phil Computer Science</item>
+        <item>M.Phil Continuing Education Management</item>
+        <item>M.Phil Corporate Secretaryship</item>
+        <item>M.Phil Costume Design &amp; Fashion</item>
+        <item>M.Phil Defence and Strategic Studies</item>
+        <item>M.Phil Drawing and Painting</item>
+        <item>M.Phil Economics</item>
+        <item>M.Phil Education</item>
+        <item>M.Phil Education (Interdisciplinary)</item>
+        <item>M.Phil Endocrinology</item>
+        <item>M.Phil English</item>
+        <item>M.Phil Entrepreneurship</item>
+        <item>M.Phil Environmental Science</item>
+        <item>M.Phil Environmental Toxicology</item>
+        <item>M.Phil Folk Arts</item>
+        <item>M.Phil Foreign Policy studies</item>
+        <item>M.Phil French</item>
+        <item>M.Phil Gandhian Thought</item>
+        <item>M.Phil Geoengineering</item>
+        <item>M.Phil Geography</item>
+        <item>M.Phil Geology</item>
+        <item>M.Phil Hindi</item>
+        <item>M.Phil Home Management</item>
+        <item>M.Phil Home Science</item>
+        <item>M.Phil Hospital &amp; Health Systems Management</item>
+        <item>M.Phil Human Development</item>
+        <item>M.Phil Instrumentation</item>
+        <item>M.Phil International Business</item>
+        <item>M.Phil Islamic Studies</item>
+        <item>M.Phil Library and Information Science</item>
+        <item>M.Phil Malayalam</item>
+        <item>M.Phil Management</item>
+        <item>M.Phil Management Studies</item>
+        <item>M.Phil Marathi</item>
+        <item>M.Phil Mathematics</item>
+        <item>M.Phil Microbiology</item>
+        <item>M.Phil Nuclear Physics</item>
+        <item>M.Phil Optometry</item>
+        <item>M.Phil Organic Chemistry</item>
+        <item>M.Phil Oriya</item>
+        <item>M.Phil Persian</item>
+        <item>M.Phil Philosophy</item>
+        <item>M.Phil Photonics</item>
+        <item>M.Phil Physical Education</item>
+        <item>M.Phil Physics</item>
+        <item>M.Phil Police Administration</item>
+        <item>M.Phil Political Science</item>
+        <item>M.Phil Psychiatric Social Work</item>
+        <item>M.Phil Public Administration</item>
+        <item>M.Phil Public Affairs</item>
+        <item>M.Phil Scientific Instrumentation</item>
+        <item>M.Phil Social Work</item>
+        <item>M.Phil South and South-East Asian Studies</item>
+        <item>M.Phil Tamil Literature</item>
+        <item>M.Phil Tamil Studies</item>
+        <item>M.Phil Telugu</item>
+        <item>M.Phil Theatre Arts</item>
+        <item>M.Phil Urdu</item>
+        <item>M.Phil Vaishnavism</item>
+        <item>M.Phil Women Education</item>
+        <item>M.Phil Zoology</item>
+        <item>M.Phil. Electronics</item>
+        <item>M.Phil. Plant Biology &amp; Plant Biotechnology</item>
+        <item>M.S Skin &amp; STD</item>
+        <item>M.S.(Pharm.)Medicinal Chemistry</item>
+        <item>M.S.(Pharm.)Pharmaceutical Analysis</item>
+        <item>M.S.(Pharm.)Pharmaceutics</item>
+        <item>M.S.(Pharm.)Pharmacology &amp; Toxicology</item>
+        <item>M.Sc (Agriculture) Entomology</item>
+        <item>M.Sc (Agriculture) Genetics &amp; Plant Breeding</item>
+        <item>M.Sc (Agriculture) Hort(Floriculture &amp; Land Scaping)</item>
+        <item>M.Sc (Agriculture) Horticulture (Vegetable Science)</item>
+        <item>M.Sc (Agriculture) Plant Protection</item>
+        <item>M.Sc (Agriculture) Seed Science &amp; Technology</item>
+        <item>M.Sc (Bioelectronics and Biosensors)</item>
+        <item>M.Sc Adolescent Health and Education (M.H.Sc)</item>
+        <item>M.Sc Agricultural Economics</item>
+        <item>M.Sc Agricultural Extension</item>
+        <item>M.Sc Agriculture</item>
+        <item>M.Sc Agriculture (Crop Physiology)</item>
+        <item>M.Sc Agriculture Biotechnology</item>
+        <item>M.Sc AgricultureHort.FruitProduction&amp;Post Harvest&amp;Tech</item>
+        <item>M.Sc Agro-forestry</item>
+        <item>M.Sc Agronomy</item>
+        <item>M.Sc Allied Health Sciences (Physician Assistant)</item>
+        <item>M.Sc Anaesthesiology &amp; Intensive Care Technology</item>
+        <item>M.Sc Analytical Chemistry</item>
+        <item>M.Sc Anatomy</item>
+        <item>M.Sc Animal Genetics &amp; Breeding</item>
+        <item>M.Sc Animal Husbandry</item>
+        <item>M.Sc Animal Nutrition</item>
+        <item>M.Sc Animal Production Management</item>
+        <item>M.Sc Anthropology</item>
+        <item>M.Sc Applied and Industrial Mathematics</item>
+        <item>M.Sc Applied Chemistry</item>
+        <item>M.Sc Applied Electronics</item>
+        <item>M.Sc Applied Ergonomy (M.H.Sc)</item>
+        <item>M.Sc Applied Geology</item>
+        <item>M.Sc Applied Mathematics</item>
+        <item>M.Sc Applied Microbiology</item>
+        <item>M.Sc Aquaculture</item>
+        <item>M.Sc Bio Chemistry</item>
+        <item>M.Sc Bio Informatics</item>
+        <item>M.Sc Biology (hons)</item>
+        <item>M.Sc Biomedical Genetics</item>
+        <item>M.Sc Biophysics</item>
+        <item>M.Sc BioTechnology</item>
+        <item>M.Sc Botany</item>
+        <item>M.Sc Business Economics</item>
+        <item>M.Sc Business Process Outsourcing</item>
+        <item>M.Sc Cardiac Perfusion Technology</item>
+        <item>M.Sc Cardio Vascular Technology</item>
+        <item>M.Sc Catering Science &amp; Hotel Management</item>
+        <item>M.Sc Chemistry</item>
+        <item>M.Sc Clinical Nutrition</item>
+        <item>M.Sc Clinical Research &amp; Regulatory Affairs</item>
+        <item>M.Sc Clinical virology</item>
+        <item>M.Sc Community Health Nursing</item>
+        <item>M.Sc Costume Design and Fashion</item>
+        <item>M.Sc Dairy Technology</item>
+        <item>M.Sc Data Mining &amp; Warehousing</item>
+        <item>M.Sc Diabetes Science</item>
+        <item>M.Sc Dialysis Therapy</item>
+        <item>M.Sc Diatetics</item>
+        <item>M.Sc E – Media and Communication</item>
+        <item>M.Sc Ecological Restoration</item>
+        <item>M.Sc Economics</item>
+        <item>M.Sc Electro Chemistry</item>
+        <item>M.Sc Electronic Media</item>
+        <item>M.Sc Electronic Science</item>
+        <item>M.Sc Electronics</item>
+        <item>M.Sc Environmental Science &amp; Technology</item>
+        <item>M.Sc Family Resource Management (FRM)</item>
+        <item>M.Sc Finance</item>
+        <item>M.Sc Fleet Operations Management</item>
+        <item>M.Sc Food Chemistry</item>
+        <item>M.Sc Food Science &amp; Technology</item>
+        <item>M.Sc Foods and Nutrition</item>
+        <item>M.Sc Forensic Science</item>
+        <item>M.Sc Forestry</item>
+        <item>M.Sc Genetical science</item>
+        <item>M.Sc Geography</item>
+        <item>M.Sc Geo-Informatics</item>
+        <item>M.Sc Geology</item>
+        <item>M.Sc Hardware &amp; Networking</item>
+        <item>M.Sc Health Care &amp; Hospital Management</item>
+        <item>M.Sc Home Science (Food Service Management)</item>
+        <item>M.Sc Hospital Administration</item>
+        <item>M.Sc Hospitality Management</item>
+        <item>M.Sc Hotel Management</item>
+        <item>M.Sc Human Development</item>
+        <item>M.Sc Industrial Chemistry</item>
+        <item>M.Sc Industrial Microbiology</item>
+        <item>M.Sc Inorganic Chemistry</item>
+        <item>M.Sc Integrated Physics and Maths</item>
+        <item>M.Sc Living Science</item>
+        <item>M.Sc Management Information Systems</item>
+        <item>M.Sc Marine and Coastal Studies</item>
+        <item>M.Sc Marine Biotechnology</item>
+        <item>M.Sc Materials Science</item>
+        <item>M.Sc Mathematics &amp; Computing</item>
+        <item>M.Sc MCAJ + Cinema</item>
+        <item>M.Sc MCAJ + Electronic Media (Radio &amp; TV)</item>
+        <item>M.Sc MCAJ + Mass Communication</item>
+        <item>M.Sc Media Technology</item>
+        <item>M.Sc Medical Anatomy</item>
+        <item>M.Sc Medical Biochemistry</item>
+        <item>M.Sc Medical Informatics</item>
+        <item>M.Sc Medical Laboratory Technology</item>
+        <item>M.Sc Medical Physics</item>
+        <item>M.Sc Medical Physiology</item>
+        <item>M.Sc Medical Surgical Nursing</item>
+        <item>M.Sc Medico – Legal Practice (M.H.Sc)</item>
+        <item>M.Sc Microbial Biotechnology</item>
+        <item>M.Sc Microbiology</item>
+        <item>M.Sc Molecular Biology</item>
+        <item>M.Sc MS (Embedded Systems)</item>
+        <item>M.Sc Multimedia &amp; Visual Communication</item>
+        <item>M.Sc Multimedia and Multimedia Production</item>
+        <item>M.Sc Nanoscience</item>
+        <item>M.Sc Nanotechnology</item>
+        <item>M.Sc Nautical Science</item>
+        <item>M.Sc Neuro Electro Physiology</item>
+        <item>M.Sc Neuro-Science</item>
+        <item>M.Sc Nursing</item>
+        <item>M.Sc Obstetrics &amp; Gynecology Nursing</item>
+        <item>M.Sc Occupational Therapy (M.H.Sc)</item>
+        <item>M.Sc Oceanography &amp; Coastal Area Studies</item>
+        <item>M.Sc Organic Chemistry</item>
+        <item>M.Sc Paediatric Nursing</item>
+        <item>M.Sc Pharmaceutical Chemistry</item>
+        <item>M.Sc Pharmacology</item>
+        <item>M.Sc Photonics and Bio- Photonics</item>
+        <item>M.Sc Physical Chemistry</item>
+        <item>M.Sc Physiology</item>
+        <item>M.Sc Physiotherapy (M.H.Sc)</item>
+        <item>M.Sc Polymer Chemistry</item>
+        <item>M.Sc Poultry Production</item>
+        <item>M.Sc Preventive Cardiology (M.H.Sc)</item>
+        <item>M.Sc Psychiatric Nursing</item>
+        <item>M.Sc Public Health (M.H.Sc)</item>
+        <item>M.Sc Renal Science and Dialysis Technology</item>
+        <item>M.Sc Reproductive and Sexual Medicine (M.H.Sc)</item>
+        <item>M.Sc Respiratory Therapy</item>
+        <item>M.Sc Science &amp; Technology Communication</item>
+        <item>M.Sc Science Communication</item>
+        <item>M.Sc Sericulture</item>
+        <item>M.Sc Silk technology</item>
+        <item>M.Sc Software Engineering</item>
+        <item>M.Sc Soil Science &amp; Agricultural Chemistry</item>
+        <item>M.Sc Theoretical Computer Science</item>
+        <item>M.Sc Visual Communication</item>
+        <item>M.Sc Wellness Health Science (M.H.Sc)</item>
+        <item>M.Sc WildLife Biology</item>
+        <item>M.Sc. (Animal Bio-Technology)</item>
+        <item>M.Sc. (Animal Science)</item>
+        <item>M.Sc. (Electronic &amp; Instrumentation)</item>
+        <item>M.Sc. (Industrial Bio-Technology)</item>
+        <item>M.Sc. (Microbial Bio-Technology)</item>
+        <item>M.Sc. (Plant Science)</item>
+        <item>M.Sc. Animal Science</item>
+        <item>M.Sc. Audio Speech Therapy</item>
+        <item>M.Sc. Insurance Business</item>
+        <item>M.Sc. Military Studies</item>
+        <item>M.Sc. Real Estate Valuation</item>
+        <item>M.Sc. Software Systems</item>
+        <item>M.Sc.(ASLP)</item>
+        <item>M.Sc.(Plant Biology and Plant Bio-Technology)</item>
+        <item>M.Sc.Virology</item>
+        <item>M.Tech Advance Communication System Engineering</item>
+        <item>M.Tech Advanced Computing</item>
+        <item>M.Tech Advanced Manufacturing</item>
+        <item>M.Tech Agricultural Engg Agricultural Process&amp;Food Engg.</item>
+        <item>M.Tech Agricultural Engineering (Irrigation &amp; Drainage En</item>
+        <item>M.Tech Agricultural Engineering (Renewable Energy)</item>
+        <item>M.Tech Agricultural Engineering (Soil Water Conservation</item>
+        <item>M.Tech Agricultural Engineering Farm Machinery&amp;Power Engg</item>
+        <item>M.Tech Agricultural Water Management</item>
+        <item>M.Tech Applied Electronics and Instrumentation</item>
+        <item>M.Tech Applied Geology</item>
+        <item>M.Tech Applied Geophysics</item>
+        <item>M.Tech Artificial Intelligence</item>
+        <item>M.Tech Automotive Engineering</item>
+        <item>M.Tech Avionics</item>
+        <item>M.Tech Bio Mineral Processing</item>
+        <item>M.Tech Bio-chemical Engineering</item>
+        <item>M.Tech Bioinformatics</item>
+        <item>M.Tech Biomedical Engineering</item>
+        <item>M.Tech Bio-Medical Signal Processing &amp; IT</item>
+        <item>M.Tech Bio-Pharmaceutical Technology</item>
+        <item>M.Tech Biotechnology</item>
+        <item>M.Tech Building Automation</item>
+        <item>M.Tech CAD / CAM</item>
+        <item>M.Tech Chemical engineering</item>
+        <item>M.Tech Civil Engineering</item>
+        <item>M.Tech Clean Coal &amp; Energy Technology</item>
+        <item>M.Tech Communication Systems</item>
+        <item>M.Tech Computational Engineering &amp; Networking</item>
+        <item>M.Tech Computational Mechanics</item>
+        <item>M.Tech Computer Aided Structural Engineering</item>
+        <item>M.Tech Computer and Communication</item>
+        <item>M.Tech Computer and Information Science</item>
+        <item>M.Tech Computer Application</item>
+        <item>M.Tech Computer Assisted Manufacturing</item>
+        <item>M.Tech Computer Integrated Manufacturing</item>
+        <item>M.Tech Computer Network Engineering</item>
+        <item>M.Tech Computer Networks &amp; Information Security</item>
+        <item>M.Tech Computer Science &amp; Engg. - Information Security</item>
+        <item>M.Tech Computer Science &amp; Engineering</item>
+        <item>M.Tech Computer Science &amp; Technology</item>
+        <item>M.Tech Computer Vision &amp; Image Processing</item>
+        <item>M.Tech Construction Management</item>
+        <item>M.Tech Construction Technology</item>
+        <item>M.Tech Control Systems</item>
+        <item>M.Tech Cyber Security</item>
+        <item>M.Tech Dairy Technology</item>
+        <item>M.Tech Data Mining</item>
+        <item>M.Tech Design Engineering</item>
+        <item>M.Tech Digital &amp; Wireless Communication Engineerin</item>
+        <item>M.Tech Digital Communication and Network</item>
+        <item>M.Tech Digital Electronics</item>
+        <item>M.Tech Digital Electronics and Communication Systems(DECS</item>
+        <item>M.Tech Drilling Engineering</item>
+        <item>M.Tech Electrical &amp; Electronics Engineering</item>
+        <item>M.Tech Electrical Engineering</item>
+        <item>M.Tech Electrical machines</item>
+        <item>M.Tech Electrical Power System</item>
+        <item>M.Tech Electronic Instrumentation &amp; Control</item>
+        <item>M.Tech Electronics and Communication Engineering</item>
+        <item>M.Tech Electronics Engineering</item>
+        <item>M.Tech Energy &amp; Environmental Engineering</item>
+        <item>M.Tech Energy Systems engineering</item>
+        <item>M.Tech Engineering Design</item>
+        <item>M.Tech Engineering Geology</item>
+        <item>M.Tech Environmental Engineering</item>
+        <item>M.Tech Fluids &amp; Thermal Engineering</item>
+        <item>M.Tech Food Technology (Food Chain Management)</item>
+        <item>M.Tech Food Technology (Food Engineering)</item>
+        <item>M.Tech Food Technology (Food Laws and Policies)</item>
+        <item>M.Tech Food Technology (Food Process Engineering)</item>
+        <item>M.Tech Food Technology (Food Quality Management)</item>
+        <item>M.Tech Fuel Engineering</item>
+        <item>M.Tech Future Studies and Planning</item>
+        <item>M.Tech Genetic Engineering</item>
+        <item>M.Tech Geological Technology</item>
+        <item>M.Tech Geophysical Technology</item>
+        <item>M.Tech Geotechnical</item>
+        <item>M.Tech Guidance and Navigation Controll</item>
+        <item>M.Tech High Voltage Engineering</item>
+        <item>M.Tech Highway Engineering</item>
+        <item>M.Tech Hydraulics Engineering</item>
+        <item>M.Tech Hydrology and Water Resources</item>
+        <item>M.Tech Image Processing</item>
+        <item>M.Tech Industrial Biotechnology</item>
+        <item>M.Tech Industrial Engineering</item>
+        <item>M.Tech Industrial Engineering &amp; Management</item>
+        <item>M.Tech Industrial Process Equipment Design</item>
+        <item>M.Tech Information and Communication Technology</item>
+        <item>M.Tech Information Retrieval</item>
+        <item>M.Tech Information Security</item>
+        <item>M.Tech Information Systems and Management</item>
+        <item>M.Tech Information Technology</item>
+        <item>M.Tech Instrumentation and Control Engineering</item>
+        <item>M.Tech Integrated Design &amp; Manufacturing</item>
+        <item>M.Tech Irrigation Engineering</item>
+        <item>M.Tech Laser and Electro Optical Engineering</item>
+        <item>M.Tech Leather Technology</item>
+        <item>M.Tech Longwall &amp; Mine Mechanisation</item>
+        <item>M.Tech M.FTech. (Master of Fashion Technology)</item>
+        <item>M.Tech Machine Design</item>
+        <item>M.Tech Maintenance Engineering Tribology</item>
+        <item>M.Tech Manufacturing Systems Engineering</item>
+        <item>M.Tech Marine Engineering Management</item>
+        <item>M.Tech Mechanical Engineering</item>
+        <item>M.Tech Medical Electronics</item>
+        <item>M.Tech Medical Nanotechnology</item>
+        <item>M.Tech Micro Electronics &amp; Control Systems</item>
+        <item>M.Tech Microwave &amp; Millimeter waves</item>
+        <item>M.Tech Microwave and TV</item>
+        <item>M.Tech Mine Planning &amp; Design</item>
+        <item>M.Tech Mineral Engineering</item>
+        <item>M.Tech Mineral Exploration</item>
+        <item>M.Tech Mineral Processing</item>
+        <item>M.Tech Mining Engineering</item>
+        <item>M.Tech Mining Geophysics</item>
+        <item>M.Tech Mining Machinery Engineering</item>
+        <item>M.Tech Nanoelectronics</item>
+        <item>M.Tech Nanomedical Sciences</item>
+        <item>M.Tech Nanotechnology</item>
+        <item>M.Tech Network Security</item>
+        <item>M.Tech Neural Networks</item>
+        <item>M.Tech Nuclear Engineering</item>
+        <item>M.Tech Nuclear Science and Technology</item>
+        <item>M.Tech Open Cast Mining</item>
+        <item>M.Tech Opto-Electronics and Laser Technology</item>
+        <item>M.Tech Petroleum Engineering</item>
+        <item>M.Tech Petroleum Exploration</item>
+        <item>M.Tech Petroleum Geology</item>
+        <item>M.Tech Petroleum Refinery Engineering</item>
+        <item>M.Tech Petroleum Refining and Petrochemicals Engineering</item>
+        <item>M.Tech Petroleum Technology</item>
+        <item>M.Tech Pharmaceutical Technology</item>
+        <item>M.Tech Pipeline Engineering</item>
+        <item>M.Tech Polymer Technology</item>
+        <item>M.Tech Power Electronics</item>
+        <item>M.Tech Power Systems</item>
+        <item>M.Tech Process Control</item>
+        <item>M.Tech Product Design and Manufacture</item>
+        <item>M.Tech Production &amp; Industrial Engineering</item>
+        <item>M.Tech Production &amp; Industrial Engineering (Mechanical)</item>
+        <item>M.Tech Production Engineering</item>
+        <item>M.Tech Production Management</item>
+        <item>M.Tech Propulsion Engineering</item>
+        <item>M.Tech Real Time Systems</item>
+        <item>M.Tech Refrigeration and Air-conditioning</item>
+        <item>M.Tech Remote Sensing</item>
+        <item>M.Tech Remote Sensing &amp; Wireless Sensor Networks</item>
+        <item>M.Tech Remote Sensing and Geographical Information System</item>
+        <item>M.Tech Renewable Energy</item>
+        <item>M.Tech Rock Excavation Engineering</item>
+        <item>M.Tech Sensor System Technology</item>
+        <item>M.Tech Software Engineering</item>
+        <item>M.Tech Soil Mechanics and Foundation Engineering</item>
+        <item>M.Tech Stress &amp; Vibration Analysis of Machinery</item>
+        <item>M.Tech Structural Engineering</item>
+        <item>M.Tech Systems Management</item>
+        <item>M.Tech Telecommunication Engineering</item>
+        <item>M.Tech Thermal Power Engineering</item>
+        <item>M.Tech Thermal Science</item>
+        <item>M.Tech Thermal System Design</item>
+        <item>M.Tech Tool Engineering</item>
+        <item>M.Tech Traffic and Transportation</item>
+        <item>M.Tech Transportation systems engineering</item>
+        <item>M.Tech Urban Engineering</item>
+        <item>M.Tech VLSI Design</item>
+        <item>M.Tech VLSI system design</item>
+        <item>M.Tech Water Resources Engineering and Management</item>
+        <item>M.Tech Web Technologies</item>
+        <item>M.Tech Wireless Communication</item>
+        <item>M.Tech Wireless Sensor Networks and Applications</item>
+        <item>M.Tech. in Industrial Electronics</item>
+        <item>M.Tech. Turbo machines</item>
+        <item>Master in Advanced Studies in Teaching &amp; Learning</item>
+        <item>Master in Arch. Digital Media</item>
+        <item>Master in Biotech</item>
+        <item>Master in Business Economics</item>
+        <item>Master in Business Studies (MBS)</item>
+        <item>Master in Chemical Engineering (MCE)</item>
+        <item>Master in Design (Communication Design)</item>
+        <item>Master in Electrical Engineering (MEE)</item>
+        <item>Master in Financial Management (M.F.M)</item>
+        <item>Master in Human Resources Development Management</item>
+        <item>Master in International Business</item>
+        <item>Master in Marketing Management (M.M.M)</item>
+        <item>Master in Mass Comm. Journalism &amp; Advtg.</item>
+        <item>Master in MSN Clinical Nurse specialist</item>
+        <item>Master in Personnel Management</item>
+        <item>Master in Plan Architectural Conservation</item>
+        <item>Master in Plan Building Engineering and Management</item>
+        <item>Master in QA Techniques</item>
+        <item>Master Integrated Post Graduate(IPG) Course in ICT</item>
+        <item>Master of Arts - Distance Education (MADE)</item>
+        <item>Master of Arts - Economics (MEC)</item>
+        <item>Master of Arts - English (MEG)</item>
+        <item>Master of Arts - Hindi (MHD)</item>
+        <item>Master of Arts - History (MAH)</item>
+        <item>Master of Arts - Political Science (MPS)</item>
+        <item>Master of Arts - Public Administration (MPA)</item>
+        <item>Master of Arts - Sociology (MSO)</item>
+        <item>Master of Arts in Distance Education</item>
+        <item>Master of Arts Political Science (MPS)</item>
+        <item>Master of Business Management</item>
+        <item>Master of Communication &amp; Journalism</item>
+        <item>Master of Computer Applications (MCA)</item>
+        <item>Master of Computer Management (M.C.M)</item>
+        <item>Master of Computer Science</item>
+        <item>Master of Dance</item>
+        <item>Master of Design - M. Des.</item>
+        <item>Master of Design (M.Des.)</item>
+        <item>Master of Fashion Management (M.F.M.)</item>
+        <item>Master of Finance and Accounting</item>
+        <item>Master of Financial Management</item>
+        <item>Master of Fine Arts (M.F.A.)</item>
+        <item>Master of Intellectual Property Law (MIPL)</item>
+        <item>Master of International Business (M.I.B.)</item>
+        <item>Master of Journalism and Mass Communication</item>
+        <item>Master of L.I.S</item>
+        <item>Master of Labour Laws and Labour Welfare</item>
+        <item>Master of Library &amp; Information Sciences (MLIS)</item>
+        <item>Master of M.I.M</item>
+        <item>Master of Management Studies (M.M.S)</item>
+        <item>Master of Marketing Management (M.M.M.)</item>
+        <item>Master of mass communication</item>
+        <item>Master of Optometry</item>
+        <item>Master of Oriental Learning (M.O.L)</item>
+        <item>Master of Painting</item>
+        <item>Master of Personnel Management (MPM)</item>
+        <item>Master of Pharmacognosy</item>
+        <item>Master of Pharmacology</item>
+        <item>Master of Physical Education (M.P.Ed.)</item>
+        <item>Master of Physiotherapy (M.P.T)</item>
+        <item>Master of Plan Housing with Regional Planning</item>
+        <item>Master of Plan Industrial Design</item>
+        <item>Master of Plan Landscape Architecture</item>
+        <item>Master of Plan Transport Planning</item>
+        <item>Master of Plan Urban Design</item>
+        <item>Master of Plan Urban Planning</item>
+        <item>Master of Quality Assurance</item>
+        <item>Master of Science Dietetics &amp; Food Service Mgmt.</item>
+        <item>Master of Science Hospitality Administration (MHA)</item>
+        <item>Master of Sculpture</item>
+        <item>Master of Social Work (M.S.W)</item>
+        <item>Master of Theology</item>
+        <item>Master of Veterinary Science (M.V.Sc.)</item>
+        <item>Master of Visual Arts (M.V.A)</item>
+        <item>Master of Women Studies (MWS)</item>
+        <item>Master Program in Civil Engineering (MCE)</item>
+        <item>Masters in International Hotel Mgmt (MHM)</item>
+        <item>Masters in Public Health (MPH)</item>
+        <item>Microsoft Certified Trainers</item>
+        <item>MS Accounting</item>
+        <item>MS Aerospace Engineering</item>
+        <item>MS Anatomy</item>
+        <item>MS Biochemistry</item>
+        <item>MS Biomedical Engineering</item>
+        <item>MS Biophysics</item>
+        <item>MS Biotechnology</item>
+        <item>MS Chemical</item>
+        <item>MS Chemical Physics</item>
+        <item>MS Chemistry</item>
+        <item>MS Civil</item>
+        <item>MS College Student Personnel Services &amp; Administratio</item>
+        <item>MS Community &amp; Economic Development</item>
+        <item>MS Community Service Counseling</item>
+        <item>MS Counseling</item>
+        <item>MS Dental Sciences</item>
+        <item>MS Economics</item>
+        <item>MS Education Management</item>
+        <item>MS Electrical</item>
+        <item>MS Embedded Systems</item>
+        <item>MS English</item>
+        <item>MS ENT</item>
+        <item>MS Environmental Sciences</item>
+        <item>MS Finance</item>
+        <item>MS French</item>
+        <item>MS General Surgery</item>
+        <item>MS Genetics</item>
+        <item>MS Gerontology</item>
+        <item>MS Greek</item>
+        <item>MS Health Systems</item>
+        <item>MS History</item>
+        <item>MS Human Services</item>
+        <item>MS Industrial Technologies</item>
+        <item>MS Instrumentation</item>
+        <item>MS International Management (MSIM)</item>
+        <item>MS Kinesiology</item>
+        <item>MS Mathematics</item>
+        <item>MS Mechanics</item>
+        <item>MS Medical Sociology</item>
+        <item>MS Mental Disabilities</item>
+        <item>MS Metallurgy</item>
+        <item>MS Microbiology</item>
+        <item>MS Networking</item>
+        <item>MS Neurobiology and Anatomy</item>
+        <item>MS Neuroscience</item>
+        <item>MS Nursing</item>
+        <item>MS OBG</item>
+        <item>MS Obstetrics and Gynecology</item>
+        <item>MS Oceanography</item>
+        <item>MS Orthopaediatrics</item>
+        <item>MS Orthopedic</item>
+        <item>MS Orthopedics</item>
+        <item>MS Otorhinolaryngology</item>
+        <item>MS Pathology</item>
+        <item>MS Petroleum &amp; Exploration</item>
+        <item>MS Pharmacology</item>
+        <item>MS Physics</item>
+        <item>MS Political Science</item>
+        <item>MS Religion</item>
+        <item>MS Research</item>
+        <item>MS Shalakya Tantra</item>
+        <item>MS Shalya Tantra</item>
+        <item>MS Social Science</item>
+        <item>MS Spanish</item>
+        <item>MS Telecommunication</item>
+        <item>MS Toxicology</item>
+        <item>MS Training Systems</item>
+        <item>Other Certifications</item>
+        <item>Other Diplomas</item>
+        <item>P.B.B.Sc Nursing</item>
+        <item>PG Diploma</item>
+        <item>PG Diploma Advertising and Salesmanship</item>
+        <item>PG Diploma Alternative Dispute Resolution</item>
+        <item>PG Diploma Animation Film Design</item>
+        <item>PG Diploma Banking and Insurance</item>
+        <item>PG Diploma Capital Markets &amp; Merchant Banking</item>
+        <item>PG Diploma Clinical Data Management</item>
+        <item>PG Diploma Clinical Research (PGDCR)</item>
+        <item>PG Diploma Co-operative Management</item>
+        <item>PG Diploma Design and Construction of Concret</item>
+        <item>PG Diploma Environmental Management</item>
+        <item>PG Diploma Finance and Taxation</item>
+        <item>PG Diploma Financial Planning &amp; Wealth Management</item>
+        <item>PG Diploma Hospital and Health Care Management</item>
+        <item>PG Diploma Hospital Management (PGDHM)</item>
+        <item>PG Diploma in Natural Resource Management (PGDNRM)</item>
+        <item>PG Diploma International Business</item>
+        <item>PG Diploma Legislative Drafting</item>
+        <item>PG Diploma Management (International Business)</item>
+        <item>PG Diploma Multimedia Design</item>
+        <item>PG Diploma Multimedia Technology</item>
+        <item>PG Diploma Pharmacovigilance (PGDPhV)</item>
+        <item>PG Diploma Science &amp; Development Communication</item>
+        <item>PG Diploma Science Communication</item>
+        <item>PG Diploma Software Development</item>
+        <item>PG Diploma Water Resources Development and Ma</item>
+        <item>PG Professional Diploma in Spl.Edu. (MR)</item>
+        <item>PG Professional Diploma in Spl.Edu.(HI)</item>
+        <item>PGDACM</item>
+        <item>PGDSM</item>
+        <item>Ph.D</item>
+        <item>Ph.D Farm Machinery and Power Engineering</item>
+        <item>Ph.D Irrigation &amp; Water Management</item>
+        <item>Ph.D Physics</item>
+        <item>Ph.D Soil and Water Conservation</item>
+        <item>Ph.D Zoology</item>
+        <item>Ph.D (Bioelectronics and Biosensors)</item>
+        <item>Ph.D Accounting</item>
+        <item>Ph.D Aerospace Engineering</item>
+        <item>Ph.D Agriculture</item>
+        <item>Ph.D Anatomy</item>
+        <item>Ph.D Applied Art</item>
+        <item>Ph.D Aquaculture</item>
+        <item>Ph.D Arabic</item>
+        <item>Ph.D Assamese</item>
+        <item>Ph.D Ayurved Siddhant</item>
+        <item>Ph.D Ayurved Siddhant &amp; Darshan</item>
+        <item>Ph.D Biochemistry</item>
+        <item>Ph.D Biology</item>
+        <item>Ph.D Biomedical Engineering</item>
+        <item>Ph.D Biophysics</item>
+        <item>Ph.D Bio-Technology</item>
+        <item>Ph.D Botany</item>
+        <item>Ph.D Business Administartion</item>
+        <item>Ph.D Cardiac Rehabilitation</item>
+        <item>Ph.D Chemical Engineering</item>
+        <item>Ph.D Chemical Physics</item>
+        <item>Ph.D Chemical Technology</item>
+        <item>Ph.D Chemistry</item>
+        <item>Ph.D Civil Engineering</item>
+        <item>Ph.D College Student Personnel Services &amp; Administratio</item>
+        <item>Ph.D Commerce</item>
+        <item>Ph.D Communications</item>
+        <item>Ph.D Community &amp; Economic Development</item>
+        <item>Ph.D Community Service Counseling</item>
+        <item>Ph.D Computer Science Engineering</item>
+        <item>Ph.D Comunications</item>
+        <item>Ph.D Control Systems</item>
+        <item>Ph.D Counseling</item>
+        <item>Ph.D Dance</item>
+        <item>Ph.D Data Mining</item>
+        <item>Ph.D Dental Sciences</item>
+        <item>Ph.D Drama</item>
+        <item>Ph.D Dravya Guna</item>
+        <item>Ph.D Economics</item>
+        <item>Ph.D Education</item>
+        <item>Ph.D Education (Interdisciplinary)</item>
+        <item>Ph.D Electrical and Electronics Engineering</item>
+        <item>Ph.D Electrical Engineering</item>
+        <item>Ph.D Embedded Systems</item>
+        <item>Ph.D Energy Systems</item>
+        <item>Ph.D Engineering</item>
+        <item>Ph.D English</item>
+        <item>Ph.D Environmental Science</item>
+        <item>Ph.D Finance</item>
+        <item>Ph.D Fine Arts</item>
+        <item>Ph.D Fish Processing</item>
+        <item>Ph.D French</item>
+        <item>Ph.D Genetics</item>
+        <item>Ph.D Geography</item>
+        <item>Ph.D Geology</item>
+        <item>Ph.D Geoscience &amp; Geophysics</item>
+        <item>Ph.D Geriatric Rehabilitation</item>
+        <item>Ph.D German</item>
+        <item>Ph.D Gerontology</item>
+        <item>Ph.D Graphic Design</item>
+        <item>Ph.D Greek</item>
+        <item>Ph.D Gujarati</item>
+        <item>Ph.D Health Systems</item>
+        <item>Ph.D Hindi</item>
+        <item>Ph.D History</item>
+        <item>Ph.D Home science</item>
+        <item>Ph.D Human Services</item>
+        <item>Ph.D Image Processing</item>
+        <item>Ph.D Industrial Technologies</item>
+        <item>Ph.D Information Retrieval</item>
+        <item>Ph.D Information Science &amp; Engineering (IS)</item>
+        <item>Ph.D Instrumentation</item>
+        <item>Ph.D Integrated and Applied Science</item>
+        <item>Ph.D International Management</item>
+        <item>Ph.D Italian Studies</item>
+        <item>Ph.D Kannada</item>
+        <item>Ph.D Kayachikitsa</item>
+        <item>Ph.D Kinesiology</item>
+        <item>Ph.D Kriya Sharir</item>
+        <item>Ph.D Latin</item>
+        <item>Ph.D Logistics and Supply Chain Management</item>
+        <item>Ph.D Management Studies</item>
+        <item>Ph.D Marathi</item>
+        <item>Ph.D Maths</item>
+        <item>Ph.D Mechanical Engineering</item>
+        <item>Ph.D Media and Mass Communication</item>
+        <item>Ph.D Medicinal Chemistry</item>
+        <item>Ph.D Mental Disabilities</item>
+        <item>Ph.D Metallurgy</item>
+        <item>Ph.D Meteorology</item>
+        <item>Ph.D Microbiology</item>
+        <item>Ph.D Microwave Enginering</item>
+        <item>Ph.D Mobile Communications</item>
+        <item>Ph.D Network Security</item>
+        <item>Ph.D Networking</item>
+        <item>Ph.D Neural Networks</item>
+        <item>Ph.D Neurobiology and Anatomy</item>
+        <item>Ph.D Neuroscience</item>
+        <item>Ph.D Nursing</item>
+        <item>Ph.D Oceanography</item>
+        <item>Ph.D Oriya</item>
+        <item>Ph.D Painting</item>
+        <item>Ph.D Pathology</item>
+        <item>Ph.D Persian</item>
+        <item>Ph.D Pharmaceutical Science</item>
+        <item>Ph.D Pharmaceutics</item>
+        <item>Ph.D Pharmacology</item>
+        <item>Ph.D Pharmacology &amp; Toxicology</item>
+        <item>Ph.D Pharmacy</item>
+        <item>Ph.D Philosophy</item>
+        <item>Ph.D Photonics</item>
+        <item>Ph.D Physics</item>
+        <item>Ph.D Planning and Architecture</item>
+        <item>Ph.D Political Science</item>
+        <item>Ph.D Polymer Science &amp; Technology</item>
+        <item>Ph.D Power Electronics</item>
+        <item>Ph.D Quantitative techniques</item>
+        <item>Ph.D Rabindra Sangeet</item>
+        <item>Ph.D Radar Engineering</item>
+        <item>Ph.D Religion</item>
+        <item>Ph.D Renewable Energy Sources</item>
+        <item>Ph.D Rog Nidan</item>
+        <item>Ph.D Sanskrit</item>
+        <item>Ph.D Screen and Play Writing</item>
+        <item>Ph.D Sculpture</item>
+        <item>Ph.D Signal procesing</item>
+        <item>Ph.D Signal Processing</item>
+        <item>Ph.D Social Science</item>
+        <item>Ph.D Soil &amp; Water Conservation Engineering</item>
+        <item>Ph.D Spanish</item>
+        <item>Ph.D Sports Nutrition</item>
+        <item>Ph.D Sports Science &amp; Rehabilitation</item>
+        <item>Ph.D Tamil</item>
+        <item>Ph.D Telecommunication</item>
+        <item>Ph.D Telugu</item>
+        <item>Ph.D Toxicology</item>
+        <item>Ph.D Trade &amp; Environment</item>
+        <item>Ph.D Training Systems</item>
+        <item>Ph.D Urdu</item>
+        <item>Ph.D VlSI</item>
+        <item>Ph.D Wireless Communications</item>
+        <item>Ph.D Zoology</item>
+        <item>Ph.D. Banking and Finance</item>
+        <item>Ph.D. Electronics</item>
+        <item>Ph.D. Food Processing Technology (FPE)</item>
+        <item>Ph.D. Forestry</item>
+        <item>Ph.D. in Law</item>
+        <item>Ph.D. Management Science</item>
+        <item>Ph.D. Nano Science &amp; Technology</item>
+        <item>Ph.D. Sericulture</item>
+        <item>Ph.D.V.Sc.</item>
+        <item>PhD Information Systems and Management</item>
+        <item>Phd Nursing</item>
+        <item>Post Graduate Certificate Cyber Law (PGCCL)</item>
+        <item>Post Graduate Certificate Cyber Law (PGCCL_OL)</item>
+        <item>Post Graduate Diploma</item>
+        <item>Post Graduate Diploma Computer Aided Design of Concrete structures</item>
+        <item>Post Graduate Diploma Accounting Software</item>
+        <item>Post Graduate Diploma Advanced Computer Arts</item>
+        <item>Post Graduate Diploma Advanced Computing</item>
+        <item>Post Graduate Diploma Advanced Diploma in German</item>
+        <item>Post Graduate Diploma Advanced Diploma in Russian</item>
+        <item>Post Graduate Diploma Advertising</item>
+        <item>Post Graduate Diploma Advertising and Public Relation</item>
+        <item>Post Graduate Diploma Advertising Mass Communication</item>
+        <item>Post Graduate Diploma Agricultural Water Management</item>
+        <item>Post Graduate Diploma Applied Linguistics</item>
+        <item>Post Graduate Diploma Applied Operations Resear</item>
+        <item>Post Graduate Diploma Archival Science &amp; Manuscriptology</item>
+        <item>Post Graduate Diploma Audio Engineering</item>
+        <item>Post Graduate Diploma Audio Programm Production (PGDAPP)</item>
+        <item>Post Graduate Diploma Audio Programme Production</item>
+        <item>Post Graduate Diploma Aviation Management</item>
+        <item>Post Graduate Diploma Bakery science and technology</item>
+        <item>Post Graduate Diploma Bio-informatics</item>
+        <item>Post Graduate Diploma Broadcast Mangement and Journalism</item>
+        <item>Post Graduate Diploma Broadcasting and Journalism</item>
+        <item>Post Graduate Diploma Business Administration</item>
+        <item>Post Graduate Diploma Business Management</item>
+        <item>Post Graduate Diploma Chemical Engineering (PGDCE)</item>
+        <item>Post Graduate Diploma Civil Engineering (PGDCE)</item>
+        <item>Post Graduate Diploma Communication (PGDPC )</item>
+        <item>Post Graduate Diploma Community Cardiology</item>
+        <item>Post Graduate Diploma Community Cardiology (PGDCC)</item>
+        <item>Post Graduate Diploma Computer Science &amp; Management</item>
+        <item>Post Graduate Diploma Content Creation and Management</item>
+        <item>Post Graduate Diploma Criminal Justice (PGDCJ )</item>
+        <item>Post Graduate Diploma Criminology and Forensic Science</item>
+        <item>Post Graduate Diploma Cyber Laws</item>
+        <item>Post Graduate Diploma Cyber Security</item>
+        <item>Post Graduate Diploma Dairy Technology</item>
+        <item>Post Graduate Diploma Data Mining</item>
+        <item>Post Graduate Diploma Developmental Rehabilitation</item>
+        <item>Post Graduate Diploma Digital Instruments</item>
+        <item>Post Graduate Diploma Disaster Management</item>
+        <item>Post Graduate Diploma Disaster Management (PGDDM)</item>
+        <item>Post Graduate Diploma Distance Education (PGDDE)</item>
+        <item>Post Graduate Diploma Early Childhood Education</item>
+        <item>Post Graduate Diploma Early Intervention</item>
+        <item>Post Graduate Diploma Eco-criticism</item>
+        <item>Post Graduate Diploma e-Commerce</item>
+        <item>Post Graduate Diploma Educational Management and Administration</item>
+        <item>Post Graduate Diploma Educational Technology</item>
+        <item>Post Graduate Diploma Electrical Energy Management and Energy Audit</item>
+        <item>Post Graduate Diploma Electrical Engineering (PGDEE)</item>
+        <item>Post Graduate Diploma Electronics and Instrumentation</item>
+        <item>Post Graduate Diploma Electronics Engineering (PGDEE)</item>
+        <item>Post Graduate Diploma Emergency Medical Care</item>
+        <item>Post Graduate Diploma Endoscopy Technology</item>
+        <item>Post Graduate Diploma Enterprise management and entrepreneurship</item>
+        <item>Post Graduate Diploma Entrepreneurship</item>
+        <item>Post Graduate Diploma Environment Management</item>
+        <item>Post Graduate Diploma Environmental and Sustainable Development</item>
+        <item>Post Graduate Diploma Environmental and Sustainable Development (PGDESD)</item>
+        <item>Post Graduate Diploma Environmental Law (PGDENL</item>
+        <item>Post Graduate Diploma Executive P.G.D. in Capital And Financial Markets</item>
+        <item>Post Graduate Diploma Executive P.G.D. in Industrial Marketing(EPGDIM)</item>
+        <item>Post Graduate Diploma Executive P.G.D. in International Business(EPGDIB)</item>
+        <item>Post Graduate Diploma Film and TV production</item>
+        <item>Post Graduate Diploma Finance and Marketing</item>
+        <item>Post Graduate Diploma Financial Management (PGDFM)</item>
+        <item>Post Graduate Diploma Financial Reporting &amp; Control</item>
+        <item>Post Graduate Diploma Fleet management</item>
+        <item>Post Graduate Diploma Food Science and Technology</item>
+        <item>Post Graduate Diploma Foreign Trade</item>
+        <item>Post Graduate Diploma French</item>
+        <item>Post Graduate Diploma Functional Hindi &amp; Translation</item>
+        <item>Post Graduate Diploma Geographic Information Systems and Remote Sensing</item>
+        <item>Post Graduate Diploma Geographical Cartography</item>
+        <item>Post Graduate Diploma Geo-informatics</item>
+        <item>Post Graduate Diploma GERIATRIC MEDICINE</item>
+        <item>Post Graduate Diploma Geriatric Medicine (PGDGM)</item>
+        <item>Post Graduate Diploma Graphic Arts</item>
+        <item>Post Graduate Diploma Ground Water Exploration</item>
+        <item>Post Graduate Diploma Guidance and Counselling</item>
+        <item>Post Graduate Diploma Health Insurance</item>
+        <item>Post Graduate Diploma Health Science in Accident and Emergency Care</item>
+        <item>Post Graduate Diploma Health Science in Acupuncture</item>
+        <item>Post Graduate Diploma Health Science in Adolescent Health Care</item>
+        <item>Post Graduate Diploma Health Science in Diabetology</item>
+        <item>Post Graduate Diploma Health Science in Echo-Cardiography</item>
+        <item>Post Graduate Diploma Health Science in Family Medicine</item>
+        <item>Post Graduate Diploma Health Science in Maternity and Neonatal Care</item>
+        <item>Post Graduate Diploma Health Science in Medical Cosmetology</item>
+        <item>Post Graduate Diploma Health Science in Medical Law and Ethics</item>
+        <item>Post Graduate Diploma Health Science in Public Health</item>
+        <item>Post Graduate Diploma Health Science in Tobacco Control</item>
+        <item>Post Graduate Diploma Health Science in Ultrasonography</item>
+        <item>Post Graduate Diploma Higher Education (PGDHE)</item>
+        <item>Post Graduate Diploma Hospital and Health Management</item>
+        <item>Post Graduate Diploma Hospital and Health Management (PGDHHM)</item>
+        <item>Post Graduate Diploma Hospital Billing</item>
+        <item>Post Graduate Diploma Human Resource Management (PGDHRM)</item>
+        <item>Post Graduate Diploma Hydro Power Plant Engineering</item>
+        <item>Post Graduate Diploma I.T. System and Security</item>
+        <item>Post Graduate Diploma Import and Export Management (PGDIEM)</item>
+        <item>Post Graduate Diploma in Environmental Law Online</item>
+        <item>Post Graduate Diploma Information Technology</item>
+        <item>Post Graduate Diploma Insurance Management</item>
+        <item>Post Graduate Diploma Intellectual Property Right (PGDIPR)</item>
+        <item>Post Graduate Diploma Intellectual Property Rights</item>
+        <item>Post Graduate Diploma International Business Language (CCIBL)</item>
+        <item>Post Graduate Diploma International Business Operation (PGDIBO)</item>
+        <item>Post Graduate Diploma Internet Technology</item>
+        <item>Post Graduate Diploma Journalism</item>
+        <item>Post Graduate Diploma Journalism &amp; Mass Communication</item>
+        <item>Post Graduate Diploma Journalism (Hindi)</item>
+        <item>Post Graduate Diploma Journalism (Oriya)</item>
+        <item>Post Graduate Diploma Journalism (Radio &amp; TV)</item>
+        <item>Post Graduate Diploma Legal Process Outsourcing (PGDLPO)</item>
+        <item>Post Graduate Diploma Library Automation and Networking</item>
+        <item>Post Graduate Diploma Library Automation and Networking (PGDLAN)</item>
+        <item>Post Graduate Diploma Logistics Management</item>
+        <item>Post Graduate Diploma Management (Communications)</item>
+        <item>Post Graduate Diploma Management (Finance)</item>
+        <item>Post Graduate Diploma Management (HR)</item>
+        <item>Post Graduate Diploma Management (Marketing)</item>
+        <item>Post Graduate Diploma Management (PGDIM)</item>
+        <item>Post Graduate Diploma Management (Services)</item>
+        <item>Post Graduate Diploma Management (Triple Specializ</item>
+        <item>Post Graduate Diploma Marketing Management</item>
+        <item>Post Graduate Diploma Marketing Management (PGDMM)</item>
+        <item>Post Graduate Diploma MassComm. Journalism &amp; Advtg.</item>
+        <item>Post Graduate Diploma Material Management</item>
+        <item>Post Graduate Diploma Material Science</item>
+        <item>Post Graduate Diploma Maternal &amp; Child Health</item>
+        <item>Post Graduate Diploma Maternal and Child Health (PGDMCH)</item>
+        <item>Post Graduate Diploma Mechanical Engineering (PGDME)</item>
+        <item>Post Graduate Diploma Media management &amp; TV production</item>
+        <item>Post Graduate Diploma Medical Informatics</item>
+        <item>Post Graduate Diploma Medical Microbiology</item>
+        <item>Post Graduate Diploma Medical Transcription</item>
+        <item>Post Graduate Diploma Mineral Exploration and Mining</item>
+        <item>Post Graduate Diploma Mobile Computing</item>
+        <item>Post Graduate Diploma Museology</item>
+        <item>Post Graduate Diploma Natural Resources</item>
+        <item>Post Graduate Diploma NGO Management</item>
+        <item>Post Graduate Diploma Operations Management (PGDOM)</item>
+        <item>Post Graduate Diploma Pain and Palliative Medicine</item>
+        <item>Post Graduate Diploma Painting, Sculpture, Applied Arts</item>
+        <item>Post Graduate Diploma Personnel Management</item>
+        <item>Post Graduate Diploma Pharmacy Practice and Drug Store Management</item>
+        <item>Post Graduate Diploma Physician Assistant</item>
+        <item>Post Graduate Diploma Piping Design &amp; Engineering</item>
+        <item>Post Graduate Diploma Plantation Management</item>
+        <item>Post Graduate Diploma PMIR (Personnel Management &amp; Industrial Relations)</item>
+        <item>Post Graduate Diploma Post Graduate Diploma in Craft Marketing</item>
+        <item>Post Graduate Diploma Post Graduate Diploma in Diabetes Education</item>
+        <item>Post Graduate Diploma Power Plant Instrumentation and Control</item>
+        <item>Post Graduate Diploma Pre-Primary Education</item>
+        <item>Post Graduate Diploma Print and Photo journalism</item>
+        <item>Post Graduate Diploma Promoting Rational Drug Use</item>
+        <item>Post Graduate Diploma Psychological Counselling</item>
+        <item>Post Graduate Diploma Public Relations</item>
+        <item>Post Graduate Diploma Quantity Surveying and Valuation</item>
+        <item>Post Graduate Diploma Radio Prasaran (PGDRP)</item>
+        <item>Post Graduate Diploma Radio Programme Production and Management (PGDRPPM)</item>
+        <item>Post Graduate Diploma Remote Sensing and Geographical Information System</item>
+        <item>Post Graduate Diploma Renewable Energy</item>
+        <item>Post Graduate Diploma Retail Management</item>
+        <item>Post Graduate Diploma Retail Marketing</item>
+        <item>Post Graduate Diploma Retailing</item>
+        <item>Post Graduate Diploma Rurual development management.</item>
+        <item>Post Graduate Diploma Safe Transportation</item>
+        <item>Post Graduate Diploma School Leadership &amp; Management for Head Teachers</item>
+        <item>Post Graduate Diploma Software Marketing</item>
+        <item>Post Graduate Diploma Sports Management</item>
+        <item>Post Graduate Diploma Supply chain &amp; operations management</item>
+        <item>Post Graduate Diploma Supply Chain Management</item>
+        <item>Post Graduate Diploma Taxation</item>
+        <item>Post Graduate Diploma Technology Management</item>
+        <item>Post Graduate Diploma Telecom Management</item>
+        <item>Post Graduate Diploma Television Journalism</item>
+        <item>Post Graduate Diploma Television Journalism &amp; Video Production</item>
+        <item>Post Graduate Diploma Theatre Arts</item>
+        <item>Post Graduate Diploma Thermal Power Plant Engineering</item>
+        <item>Post Graduate Diploma Translation (PGDT)</item>
+        <item>Post Graduate Diploma Urdu Paleography</item>
+        <item>Post Graduate Diploma Visual Arts</item>
+        <item>Post Graduate Diploma VLSI and embedded system</item>
+        <item>Post Graduate Diploma VLSI Design</item>
+        <item>Post Graduate Diploma Watershed Management</item>
+        <item>Post Graduate Diploma Wireless and Mobile Compu</item>
+        <item>Post-Graduate Certificate Agriculture Policy</item>
+        <item>Post-Graduate Certificate Patent Practice (PGCP)</item>
+        <item>Post-Graduate Diploma in Book Publishing (PGDBP)</item>
+        <item>Post-Graduate Diploma in Information Management</item>
+        <item>B.E Humanities and Sciences</item>
+        <item>BACHELOR OF HOTEL MANAGEMENT</item>
+        <item>BBA</item>
+        <item>BBA (F&amp;A)</item>
+        <item>BBA(F&amp;I)</item>
+        <item>BBA(HONOURS)</item>
+        <item>BBA(TOURISM &amp; TRAVEL MANAGEMENT)</item>
+        <item>BCOM</item>
+        <item>BCOM (FINANCE &amp; ACCOUNTANCY)</item>
+        <item>BCOM (HONOURS)</item>
+        <item>BCOM (MORNING)</item>
+        <item>BCOM (PROFESSIONAL)</item>
+        <item>B.Tech Advance Communication System Engineering</item>
+        <item>B.Tech Advanced Computing</item>
+        <item>B.Tech Advanced Manufacturing</item>
+        <item>B.Tech Agricultural Engineering </item>
+        <item>B.Tech Artificial Intelligence</item>
+        <item>B.Tech Automobile Engineering</item>
+        <item>B.Tech Automotive Engineering</item>
+        <item>B.Tech Bio Mineral Processing</item>
+        <item>B.Tech Bio-chemical Engineering</item>
+        <item>B.Tech Bio-Pharmaceutical Technology</item>
+        <item>B.Tech Bioinformatics</item>
+        <item>B.Tech Biomedical Engineering</item>
+        <item>B.Tech Biotechnology</item>
+        <item>B.Tech Chemical engineering</item>
+        <item>B.Tech Civil Engineering</item>
+        <item>B.Tech Communication Systems</item>
+        <item>B.Tech Computer Science &amp; Engineering</item>
+        <item>B.Tech Design Engineering</item>
+        <item>B.Tech Digital Electronics</item>
+        <item>B.Tech Electrical &amp; Electronics Engineering</item>
+        <item>B.Tech Electrical Engineering</item>
+        <item>B.Tech Electronic Instrumentation &amp; Control</item>
+        <item>B.Tech Electronics and Communication Engineering</item>
+        <item>B.Tech Electronics Engineering</item>
+        <item>B.Tech Energy &amp; Environmental Engineering</item>
+        <item>B.Tech Engineering Design</item>
+        <item>B.Tech Environmental Engineering</item>
+        <item>B.Tech Fluids &amp; Thermal Engineering</item>
+        <item>B.Tech Food Technology</item>
+        <item>B.Tech Fuel Engineering</item>
+        <item>B.Tech Genetic Engineering</item>
+        <item>B.Tech Industrial Engineering</item>
+        <item>B.Tech Information Security</item>
+        <item>B.Tech Information Technology</item>
+        <item>B.Tech Information &amp; Communication Technology</item>
+        <item>B.Tech Instrumentation and Control Engineering</item>
+        <item>B.Tech Machine Design</item>
+        <item>B.Tech Marine Engineering Management</item>
+        <item>B.Tech Mechanical Engineering</item>
+        <item>B.Tech Mechatronics</item>
+        <item>B.Tech Mineral Engineering</item>
+        <item>B.Tech Nanoelectronics</item>
+        <item>B.Tech Nanotechnology</item>
+        <item>B.Tech Nuclear Engineering</item>
+        <item>B.Tech Petroleum Engineering</item>
+        <item>B.Tech Pharmaceutical Technology</item>
+        <item>B.Tech Production &amp; Industrial Engineering</item>
+        <item>B.Tech Production Engineering</item>
+        <item>B.Tech Renewable Energy</item>
+        <item>B.Tech Telecommunication Engineering</item>
+    </string-array>
+    <string name="title_activity_agreement">AgreementActivity</string>
+    <string name="title_activity_add_signature">AddSignatureActivity</string>
+    <string name="title_activity_pending_flash_approval">PendingFlashApprovalActivity</string>
+    <string name="place_details">Add your College</string>
+    <string name="title_activity_hard_rejected_user">HardRejectedUserActivity</string>
+    <string name="title_activity_form_incomplete_details">FormIncompleteDetails</string>
+    <string name="title_activity_profile_form_step2">ProfileFormStep2</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_setup_auto_repayments">SetupAutoRepayments</string>
+    <string name="title_activity_pending7k_approval">Pending7kApprovalActivity</string>
+    <string name="title_activity_profile_form_step3">ProfileFormStep3</string>
+    <string name="title_activity_pending60k_approval">Pending60kApprovalActivity</string>
+    <string name="title_activity_account_settings">AccountSettingsActivity</string>
+    <string name="title_activity_change_password">ChangePasswordActivity</string>
+    <string name="title_activity_forgot_password">ForgotPassword</string>
+    <string name="title_activity_verify_otp">VerifyOTP</string>
+    <string name="title_activity_delete_account">DeleteAccountActivity</string>
+    <string name="title_activity_flash_approved">FlashApprovedActivity</string>
+    <string name="confirmation_email_link">An email verification has been sent to your mail id.</string>
+
+
 </resources>

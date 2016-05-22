@@ -93,7 +93,7 @@
 
                 android:layout_centerHorizontal="true"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                android:src="@drawable/snapdeal" />
+                />
 
             <ImageView
                 android:id="@+id/productDisplay"
@@ -103,7 +103,7 @@
                 android:layout_below="@id/logo"
 
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/product"
+
 
                 />
 
@@ -118,7 +118,7 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="Apple iPhone 6s"
+
 
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="#33A4D0" />
@@ -132,7 +132,7 @@
 
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:text="Manufacture: Apple" />
+                />
 
             <RelativeLayout
                 android:id="@+id/rlmanProd"
@@ -403,7 +403,7 @@
                     android:layout_centerHorizontal="true"
                     android:text="Rs.20,000"
                     android:visibility="gone"
-                     />
+                    />
 
                 <Spinner
                     android:id="@+id/spinnerItem"
@@ -487,6 +487,12 @@
 
                             android:text="Rs.20,000"
                             android:textCursorDrawable="@null" />
+                        <TextView
+                            android:text="Rs"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@id/dValue"
+                            />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -558,7 +564,7 @@
                 android:id="@+id/plusRelative"
                 android:layout_width="52dp"
                 android:layout_height="56dp"
-android:visibility="gone"
+                android:visibility="gone"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/durationLayout"
                 android:layout_marginRight="16dp"
@@ -881,7 +887,7 @@ android:visibility="gone"
     <indwin.c3.shareapp.GIFView
         android:layout_width="24dp"
         android:layout_height="24dp"
-android:visibility="gone"
+        android:visibility="gone"
         android:layout_centerInParent="true"
         android:backgroundTint="#21ae50"
         android:foregroundTint="#21ae50" />
@@ -923,5 +929,12 @@ android:visibility="gone"
         android:layout_centerHorizontal="true"
         android:text="Increm"
         android:visibility="gone" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/cover"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#cc000000">
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_horizontal"
+              android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="20dp"
+        android:text="Wait a moment!"
+        android:textColor="@color/colorBlack"
+        android:textSize="32sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Are you sure you want to leave us? \nAs long as youhave no active orders,\nyou will not be charged anything."
+        />
+
+    <Button
+        android:id="@+id/continue_buddy"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/buddy_green"
+        android:text="Continue with buddy"
+        android:textColor="@color/colorwhite"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="If you sure you want to leave,\npress the button below:"/>
+
+    <Button
+        android:id="@+id/delete_account"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/buddy_red"
+        android:text="Delete Account"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/colorwhite"
+        android:textSize="12sp"/>
+
+</LinearLayout>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#44c2a6"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="indwin.c3.shareapp.activities.AddSignatureActivity"
+    tools:showIn="@layout/activity_add_signature">
+
+    <RelativeLayout
+        android:id="@+id/signature_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <indwin.c3.shareapp.utils.InkView
+            android:id="@+id/ink"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@color/colorwhite" />
+
+        <ImageButton
+            android:id="@+id/clear_signature"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/refresh" />
+
+        <ImageButton
+            android:id="@+id/change_size_signature"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_toLeftOf="@id/clear_signature"
+            android:background="@color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/maximize" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/note_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signature_relative_layout"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="top">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/infotip" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:lines="3"
+            android:text="Move your finger slowly while signing to get a smoother and more accurate signature"
+            android:textColor="@color/colorwhite"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/save_signature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="Save"
+        android:textAllCaps="false"
+        android:textColor="@color/colorwhite"
+        android:textSize="16sp" />
+</RelativeLayout>

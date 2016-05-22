@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#44c2a6">
+
+    <!--<Button-->
+    <!--android:layout_width="30dp"-->
+    <!--android:layout_height="30dp"-->
+    <!--android:background="@drawable/arrow_up"-->
+    <!--android:layout_gravity="center_horizontal" />-->
+
+    <Button
+        android:id="@+id/previous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="Previous"
+        android:textAllCaps="false"
+        android:textColor="@color/colorwhite"
+        android:textSize="16sp"/>
+
+    <TextView
+           android:id="@+id/details_submitted_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentBottom="true"
+           android:visibility="gone"
+           android:layout_centerHorizontal="true"
+           android:layout_marginEnd="16dp"
+           android:layout_marginRight="16dp"
+           android:layout_marginTop="8dp"
+           android:background="?android:attr/selectableItemBackground"
+           android:text="Details submitted! Contact us for changes "
+           android:layout_marginBottom="20dp"
+           android:textAllCaps="false"
+           android:textColor="@color/colorwhite"
+           android:textSize="16sp"/>
+
+
+    <Button
+        android:id="@+id/save_and_proceed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="Save and proceed"
+        android:textAllCaps="false"
+        android:textColor="@color/colorwhite"
+        android:textSize="16sp"/>
+
+    <android.support.v7.widget.CardView android:id="@+id/fragment1_card_view"
+                                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="300dp"
+                                        android:layout_above="@id/previous"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginTop="-8dp"
+                                        card_view:cardBackgroundColor="@android:color/white"
+                                        card_view:cardCornerRadius="4dp"
+                                        card_view:cardElevation="2dp"
+                                        card_view:cardUseCompatPadding="true">
+
+        <ScrollView
+            android:id="@+id/parent_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/aadhar_pan_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#44c2a6"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/editext_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:text="Enter your"
+                        android:textColor="#44c2a6"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/edittext_carview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/editext_header"
+                        android:layout_toRightOf="@id/editext_header"
+                        android:background="#44c2a6"
+                        android:gravity="center_vertical"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="2dp"
+                        card_view:cardUseCompatPadding="true">
+
+                        <Spinner
+                            android:id="@+id/aadhar_or_pan_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#44c2a6"
+                            android:gravity="center"/>
+                    </android.support.v7.widget.CardView>
+
+                    <ImageView
+                        android:id="@+id/incomplete_aadhar"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/edittext_carview"
+                        android:layout_toRightOf="@id/edittext_carview"
+                        android:src="@drawable/incomplete"
+                        android:visibility="gone"/>
+
+                    <ImageView
+                        android:id="@+id/complete_aadhar"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/aadhar_pan_header"
+                        android:layout_toRightOf="@id/aadhar_pan_header"
+                        android:src="@drawable/complete"
+                        android:visibility="gone"/>
+
+                    <ImageButton
+                        android:id="@+id/aadhar_helptip"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="2dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/helptip"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/aadhar_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone"/>
+
+                    <EditText
+                        android:id="@+id/edit_aadhar_number"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginStart="-4dp"
+                        android:hint="Aadhar Number"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapCharacters"
+                        android:singleLine="true"
+                        android:textSize="16sp"/>
+
+                    <ImageButton
+                        android:id="@+id/edit_user_aadhar"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="8dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/edit"
+                        android:tint="#44c2a6"
+                        android:visibility="gone"/>
+
+                    <Button
+                        android:id="@+id/save_user_aadhar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:text="Save"
+                        android:textAllCaps="false"
+                        android:textColor="#44c2a6"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/incorrect_format_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="2dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/incomplete"/>
+
+                    <TextView
+                        android:id="@+id/incorrect_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:text="Incorrect format!"
+                        android:textColor="@color/intercomsdk_red"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/address_proof_header"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:text="Upload your Permanent Address Proof"
+                        android:textColor="#44c2a6"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <ImageView
+                        android:id="@+id/incomplete_address_proof"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/address_proof_header"
+                        android:layout_toRightOf="@id/address_proof_header"
+                        android:src="@drawable/incomplete"
+                        android:visibility="gone"/>
+
+                    <ImageView
+                        android:id="@+id/complete_address_proof"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/address_proof_header"
+                        android:layout_toRightOf="@id/address_proof_header"
+                        android:src="@drawable/complete"
+                        android:visibility="gone"/>
+
+                    <ImageButton
+                        android:id="@+id/address_helptip"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="2dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/helptip"/>
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvImages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/agreement"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Agreement"
+                        android:textColor="#44c2a6"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <ImageView
+                        android:id="@+id/incomplete_agreement"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/agreement"
+                        android:layout_toRightOf="@id/agreement"
+                        android:src="@drawable/incomplete"
+                        android:visibility="gone"/>
+
+                    <ImageView
+                        android:id="@+id/complete_agreement"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/agreement"
+                        android:layout_toRightOf="@id/agreement"
+                        android:src="@drawable/complete"
+                        android:visibility="gone"/>
+
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/agreement_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#44c2a6"
+                    android:text="Agreement"
+                    android:textColor="@color/colorwhite"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/formPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/fragment1_card_view"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/goto_fragment1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:elevation="1dp"
+            android:focusable="false"
+            android:padding="4dp"
+            android:text="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#ffffff"/>
+
+        <ImageView
+            android:id="@+id/incomplete_step_1"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginLeft="-16dp"
+            android:layout_marginStart="-16dp"
+            android:src="@drawable/incomplete"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/goto_fragment2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:elevation="1dp"
+            android:focusable="false"
+            android:padding="4dp"
+            android:text="2"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#ffffff"/>
+
+        <ImageView
+            android:id="@+id/incomplete_step_2"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginLeft="-16dp"
+            android:layout_marginStart="-16dp"
+            android:src="@drawable/incomplete"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/goto_fragment3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:elevation="1dp"
+                android:focusable="false"
+                android:padding="4dp"
+                android:text="3"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#ffffff"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/up_arrow"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/incomplete_step_3"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginLeft="-16dp"
+            android:layout_marginStart="-16dp"
+            android:src="@drawable/incomplete"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/verify_image_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/formPager"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:minHeight="100dp"
+        android:src="@mipmap/step1fragment3"/>
+
+</RelativeLayout>

@@ -6,6 +6,7 @@ package indwin.c3.shareapp;
 public class Email {
     private String email;
     private String type;
+
     public String getemail() {
         return email;
     }
@@ -13,6 +14,7 @@ public class Email {
     public String getemail_type() {
         return type;
     }
+
     public void setemail(String email) {
         this.email = email;
     }

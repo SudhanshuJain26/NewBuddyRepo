@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#eeb85f"
+                android:orientation="vertical">
+
+    <Button
+        android:id="@+id/previous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="Previous"
+        android:textAllCaps="false"
+        android:textColor="@color/colorwhite"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/details_submitted_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="Details submitted! Contact us for changes "
+        android:textAllCaps="false"
+        android:textColor="@color/colorwhite"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/save_and_proceed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="Save and proceed"
+        android:textAllCaps="false"
+        android:textColor="@color/colorwhite"
+        android:textSize="16sp"/>
+
+    <android.support.v7.widget.CardView android:id="@+id/fragment1_card_view"
+                                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="300dp"
+                                        android:layout_above="@id/save_and_proceed"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginTop="-8dp"
+                                        card_view:cardBackgroundColor="@android:color/white"
+                                        card_view:cardCornerRadius="4dp"
+                                        card_view:cardElevation="2dp"
+                                        card_view:cardUseCompatPadding="true">
+
+        <ScrollView
+            android:id="@+id/parent_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Setup Automatic Repayments"
+                            android:textColor="#eeb85f"
+                            android:textStyle="bold"/>
+
+                        <ImageView
+                            android:id="@+id/incomplete_repayments"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/incomplete"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/complete_repayments"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/complete"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/auto_repayment_helptip"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="2dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/helptip"
+                        android:visibility="gone"/>
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/setup_repayments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/border_radius_yellow"
+                    android:text="Setup"
+                    android:textColor="@color/colorwhite"
+                    android:textSize="16sp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/bank_acc_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:visibility="gone"/>
+
+                    <ImageButton
+                        android:id="@+id/edit_bank_acc"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/edit"
+                        android:tint="#44c2a6"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Get a classmate to vouch for you"
+                            android:textColor="#eeb85f"
+                            android:textStyle="bold"/>
+
+                        <ImageView
+                            android:id="@+id/incomplete_classmate"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/incomplete"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/complete_classmate"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/complete"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/classmate_helptip"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="2dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/helptip"/>
+                </RelativeLayout>
+
+                <EditText
+                    android:id="@+id/classmate_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="-4dp"
+                    android:layout_marginStart="-4dp"
+                    android:width="240dp"
+                    android:hint="Classmate's Name"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textSize="16sp"/>
+
+                <EditText
+                    android:id="@+id/classmate_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="-4dp"
+                    android:layout_marginStart="-4dp"
+                    android:width="240dp"
+                    android:hint="Classmate's phone number"
+                    android:inputType="phone"
+                    android:singleLine="true"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/incorrect_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Incorrect phone"
+                    android:textColor="@color/intercomsdk_red"
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Schedule College Verification"
+                            android:textColor="#eeb85f"
+                            android:textStyle="bold"/>
+
+                        <ImageView
+                            android:id="@+id/incomplete_verification_date"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/incomplete"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/complete_verification_date"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/complete"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/verification_helptip"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="2dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/helptip"/>
+                </RelativeLayout>
+
+                <EditText
+                    android:id="@+id/verification_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="-4dp"
+                    android:layout_marginStart="-4dp"
+                    android:width="240dp"
+                    android:drawableEnd="@drawable/calendar"
+                    android:drawableRight="@drawable/calendar"
+                    android:focusable="false"
+                    android:hint="Pick a conveient date"
+                    android:inputType="none"
+                    android:singleLine="true"
+                    android:textSize="16sp"
+                    android:visibility="visible"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Have you taken an education loan before?"
+                            android:textColor="#eeb85f"
+                            android:textStyle="bold"/>
+
+                        <ImageView
+                            android:id="@+id/incomplete_student_loan"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/incomplete"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/complete_student_loan"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/complete"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <Spinner
+                    android:id="@+id/student_loan"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"/>
+
+                <View
+                    android:layout_width="200dp"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="32dp"
+                    android:alpha="0.6"
+                    android:background="#000000"/>
+
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/formPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/fragment1_card_view"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/goto_fragment1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:elevation="1dp"
+            android:focusable="false"
+            android:padding="4dp"
+            android:text="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#ffffff"/>
+
+        <ImageView
+            android:id="@+id/incomplete_step_1"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginLeft="-16dp"
+            android:layout_marginStart="-16dp"
+            android:src="@drawable/incomplete"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/goto_fragment2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:elevation="1dp"
+            android:focusable="false"
+            android:padding="4dp"
+            android:text="2"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#ffffff"/>
+
+        <ImageView
+            android:id="@+id/incomplete_step_2"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginLeft="-16dp"
+            android:layout_marginStart="-16dp"
+            android:src="@drawable/incomplete"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/goto_fragment3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:elevation="1dp"
+                android:focusable="false"
+                android:padding="4dp"
+                android:text="3"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#ffffff"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/up_arrow"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/incomplete_step_3"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginLeft="-16dp"
+            android:layout_marginStart="-16dp"
+            android:src="@drawable/incomplete"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/verify_image_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/formPager"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:minHeight="100dp"
+        android:src="@mipmap/step2fragment3"/>
+</RelativeLayout>

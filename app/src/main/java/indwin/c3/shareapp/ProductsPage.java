@@ -1,17 +1,17 @@
 package indwin.c3.shareapp;
 
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ListPopupWindow;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -22,7 +22,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -30,15 +29,28 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListPopupWindow;
-import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -48,43 +60,22 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.LogRecord;
-
-import android.os.Handler;
-import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import indwin.c3.shareapp.activities.ProfileActivity;
+import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
-
-import static indwin.c3.shareapp.R.drawable.roundedgrey;
-import static indwin.c3.shareapp.R.drawable.roundedproducts;
 
 public class ProductsPage extends AppCompatActivity {
     private TextView inc, priceChange, status, creditBalance, creditLimit, cashBack, availbal, availbalmsg, knowmore;
     private EditText hve, queryN;
     private int checkImg = 1, searchPrice, currDay;
-    private String userProfileStatus="";
+    private String userProfileStatus = "";
     String sellerNme1 = "", productId1 = "";
-    private String s="";
-    private String whichCoupon="";
-    private int checkCorrectdis = 1, dopay2=0;
+    private String s = "";
+    private String whichCoupon = "";
+    private int checkCorrectdis = 1, dopay2 = 0;
     private String formstatus, name, fbid, rejectionReason, urlImg, email, uniqueCode, verificationdate, searchTitle, searchBrand, searchCategory, searchSubcategory, description, specification, review, infor;
     private String crcode = "", creduserid = "", truth = "", page = "";
     private Button butcheck;
@@ -94,7 +85,7 @@ public class ProductsPage extends AppCompatActivity {
     private android.os.Handler rep;
     private boolean mAutoIncrement = false;
     private boolean mAutoDecrement = false;
-    public int mValue = 0, mValue2 = 0, dee, cb = 0,mDis=0,checkD=0;
+    public int mValue = 0, mValue2 = 0, dee, cb = 0, mDis = 0, checkD = 0;
     private RelativeLayout overview, det, infoLayout, desLayout, specLayout, retLayout, spiii, plusR;
     private View vow, vde;
     private int checkValidUrl = 0;
@@ -103,10 +94,10 @@ public class ProductsPage extends AppCompatActivity {
     private int monthsnow = 0;
     private int t = 100, count = 0;
     private Spinner spinner;
-    private int checkLenghtedittext=0;
+    private int checkLenghtedittext = 0;
     private int value = 0;
-    private int maxValue = 0,minProd=0;
-    private String type="";
+    private int maxValue = 0, minProd = 0;
+    private String type = "";
 
     private int[] myMonths = {1, 2, 3, 6, 9, 12, 15, 18};
     private String selectedText = "", downPayment = "";
@@ -115,12 +106,13 @@ public class ProductsPage extends AppCompatActivity {
     private int sellingPrice, monthsallowed, spInc, spDec, dayToday, cuurr;
     private TextView brandName, sellingRs, pname;
     private EditText query, dValue, queryNew;
-    private String userCode="";
+    private String userCode = "";
     private TextView emiAmount, titlePro, totalLoan, detInfo, detSpec, detRet, detDes;
     private ImageView seller, spinnArr, plus, productImg;
     private RelativeLayout minusR;
-    private int checkCashback=0;
+    private int checkCashback = 0;
     private SharedPreferences st;
+
     //BroadcastReceiver broadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +134,7 @@ public class ProductsPage extends AppCompatActivity {
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
 
-//                        Intent in = new Intent(HomePage.this, ViewForm.class);
+                        //                        Intent in = new Intent(HomePage.this, ViewForm.class);
 
                         // paste = (TextView) findViewById(R.id.pasteAg);
                         queryNew.requestFocus();
@@ -159,29 +151,33 @@ public class ProductsPage extends AppCompatActivity {
         {
             setContentView(R.layout.activity_products_page);
             try {
+                SharedPreferences user = getSharedPreferences("token", Context.MODE_PRIVATE);
+
+                userCode = user.getString("formStatus", "");
+                userProfileStatus = user.getString("profileStatus", "");
                 productId1 = getIntent().getExtras().getString("product");
                 sellerNme1 = getIntent().getExtras().getString("seller");
                 sellerNme = sellerNme1;
                 new linkSearch().execute();
             } catch (Exception e) {
             }
-//            correctUrl();
-//            queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//                @Override
-//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-//
-////                        Intent in = new Intent(HomePage.this, ViewForm.class);
-//
-//                        // paste = (TextView) findViewById(R.id.pasteAg);
-//                        queryNew.requestFocus();
-//                        //clickpaste();
-//                        parse(queryNew.getText().toString().trim());
-//
-//                    }
-//                    return false;
-//                }
-//            });
+            //            correctUrl();
+            //            queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            //                @Override
+            //                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            //                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+            //
+            ////                        Intent in = new Intent(HomePage.this, ViewForm.class);
+            //
+            //                        // paste = (TextView) findViewById(R.id.pasteAg);
+            //                        queryNew.requestFocus();
+            //                        //clickpaste();
+            //                        parse(queryNew.getText().toString().trim());
+            //
+            //                    }
+            //                    return false;
+            //                }
+            //            });
         }
 
 
@@ -209,13 +205,13 @@ public class ProductsPage extends AppCompatActivity {
 
     public void editdp() {
         // Toast.makeText(ProductsPage.this, "checkdp", Toast.LENGTH_SHORT).show();
-//        String s = dValue.getText().toString();
+        //        String s = dValue.getText().toString();
         try {
-            if(("").equals(s))
-                s=dValue.getText().toString();
+            if (("").equals(s))
+                s = dValue.getText().toString();
             int dp = Integer.parseInt(s);
             Double m = sellingPrice * .2;
-            if ((dp <= sellingPrice-mDis) && (dp >= dopay2))//&& w>=mindownn
+            if ((dp <= sellingPrice - mDis) && (dp >= dopay2))//&& w>=mindownn
             {
                 // TODO: 5/14/2016
                 mValue = dp;
@@ -225,16 +221,16 @@ public class ProductsPage extends AppCompatActivity {
                 mValue = downValue.intValue();
                 dValue.setText(String.valueOf(mValue));
             }
-            s="";
+            s = "";
         } catch (Exception e) {
             Double downValue = sellingPrice * .2;
             mValue = downValue.intValue();
             dValue.setText(String.valueOf(mValue));
-            s="";
+            s = "";
         }
 
         Double emi = calculateEmi(Double.valueOf(sellingPrice - mValue), Double.valueOf(sellingPrice), monthsnow);
-//            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
+        //            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
         Double tot = emi * monthsnow + mValue;
         totalLoan.setText(String.valueOf(Math.round(tot)));
 
@@ -244,7 +240,7 @@ public class ProductsPage extends AppCompatActivity {
     }
 
     public void increment() {
-        if (mValue + 1 <= sellingPrice-mDis) {
+        if (mValue + 1 <= sellingPrice - mDis) {
             mValue += 1;
             spInc = sellingPrice - mValue;
             Double emi = calculateEmi(Double.valueOf(spInc), Double.valueOf(sellingPrice), monthsnow);
@@ -263,7 +259,7 @@ public class ProductsPage extends AppCompatActivity {
             spInc = sellingPrice - mValue;
 
             Double emi = calculateEmi(Double.valueOf(spInc), Double.valueOf(sellingPrice), monthsnow);
-//            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
+            //            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
             Double tot = emi * monthsnow + mValue;
             totalLoan.setText(String.valueOf(Math.round(tot)));
             emiAmount.setText(String.valueOf(Math.round(emi)));
@@ -326,7 +322,7 @@ public class ProductsPage extends AppCompatActivity {
         sellingRs = (TextView) findViewById(R.id.sellerMrpValue);
         titlePro = (TextView) findViewById(R.id.titleProduct);
         query = (EditText) findViewById(R.id.query);
-//    querylearFocus();
+        //    querylearFocus();
         plus = (ImageView) findViewById(R.id.plusImg);
         seller = (ImageView) findViewById(R.id.logo);
         spinnArr = (ImageView) findViewById(R.id.spinnArr);
@@ -356,7 +352,7 @@ public class ProductsPage extends AppCompatActivity {
             creditBalance.setText(getApplicationContext().getString(R.string.Rs) + fcbv);
             creditLimit.setText(getApplicationContext().getString(R.string.Rs) + cl);
             cashBack.setText(getApplicationContext().getString(R.string.Rs) + cb);
-//            CircleImageView profile=(CircleImageView)findViewById(R.id.profile_image);
+            //            CircleImageView profile=(CircleImageView)findViewById(R.id.profile_image);
             status.setText(sta);
             pname.setText(st.getString("productdpname", ""));
             SharedPreferences p = getSharedPreferences("proid", Context.MODE_PRIVATE);
@@ -370,24 +366,25 @@ public class ProductsPage extends AppCompatActivity {
             String t = e.toString();
         }
         TextView checkout = (TextView) findViewById(R.id.checkout);
-        try{
+        try {
             Picasso.with(this)
                     .load(urlforImage)
                     .placeholder(R.drawable.emptyimageproducts)
-                    .into(productImg);}
-        catch (Exception e){}
+                    .into(productImg);
+        } catch (Exception e) {
+        }
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userProfileStatus.equals("approved")){
+                if (userProfileStatus.equals("approved")) {
                     if (checkCorrectdis == 1) {
                         try {
                             Map userMap = new HashMap<>();
                             userMap.put("PRODUCT_CLICKED", title);
                             userMap.put("EMI_SELECTED", emiAmount.getText().toString());
                             userMap.put("DOWNPAYMENT", dValue.getText().toString());
-//                        userMap.put("phone", mPhone);
-//                        System.out.println("Intercom data 4" + mPhone);
+                            //                        userMap.put("phone", mPhone);
+                            //                        System.out.println("Intercom data 4" + mPhone);
                             Intercom.client().updateUser(userMap);
                         } catch (Exception e) {
                             System.out.println("Intercom two" + e.toString());
@@ -395,12 +392,12 @@ public class ProductsPage extends AppCompatActivity {
 
                         Intent in = new Intent(ProductsPage.this, ConfirmOrder.class);
                         in.putExtra("title", title);
-                        in.putExtra("prid",productId1);
+                        in.putExtra("prid", productId1);
                         in.putExtra("brand", brand);
 
-                        in.putExtra("cashback",checkCashback);
-                        in.putExtra("whichCoupon",whichCoupon);
-                        in.putExtra("discount",mDis);
+                        in.putExtra("cashback", checkCashback);
+                        in.putExtra("whichCoupon", whichCoupon);
+                        in.putExtra("discount", mDis);
                         in.putExtra("monthforemi", monthsnow);
                         in.putExtra("daytoday", dayToday);
                         System.out.print("che" + dayToday + "buddy");
@@ -409,21 +406,21 @@ public class ProductsPage extends AppCompatActivity {
                         in.putExtra("sellingprice", searchPrice);
                         in.putExtra("seller", sellerNme);
                         in.putExtra("image", urlforImage);
-//                    in.putExtra("discount", 0);
+                        //                    in.putExtra("discount", 0);
                         in.putExtra("emi", emiAmount.getText().toString());
                         in.putExtra("months", selectedText);
                         SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor et=cred.edit();
-                        et.putString("title",title);
-                        et.putString("prid",productId1);
-                        et.putInt("sp",searchPrice);
+                        SharedPreferences.Editor et = cred.edit();
+                        et.putString("title", title);
+                        et.putString("prid", productId1);
+                        et.putInt("sp", searchPrice);
                         et.putString("brand", brand);
                         et.putInt("checkCashback", checkCashback);
-                        if((mDis!=0))
+                        if ((mDis != 0))
                             et.putString("whichCoupon", whichCoupon);
                         et.putInt("monthtenure", monthsnow);
                         et.putInt("discount", mDis);
-                        et.putString("seller",sellerNme1);
+                        et.putString("seller", sellerNme1);
                         et.commit();
 
                         startActivity(in);
@@ -431,15 +428,13 @@ public class ProductsPage extends AppCompatActivity {
 
                     }
                     //     finish();in.putE
-                }
-                else if(userProfileStatus.equals("waitlisted")||userProfileStatus.equals("declined"))
-                {
+                } else if (userProfileStatus.equals("waitlisted") || userProfileStatus.equals("declined")) {
                     LayoutInflater inflater = (LayoutInflater) (ProductsPage.this).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                 View   parent = inflater.inflate(R.layout.activity_products_page, null, false);
+                    //                 View   parent = inflater.inflate(R.layout.activity_products_page, null, false);
                     View popUpView = inflater.inflate(R.layout.popupwaitlisted, null, false);
 
                     final PopupWindow popup = new PopupWindow(popUpView);
-//                        580, true);
+                    //                        580, true);
 
                     popup.setContentView(popUpView);
                     popup.setWidth(ListPopupWindow.WRAP_CONTENT);
@@ -447,11 +442,11 @@ public class ProductsPage extends AppCompatActivity {
                     popup.showAtLocation(popUpView, Gravity.CENTER, 0, 0);
 
                     RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
-//                prod.setTi(Color.parseColor("#CC000000"));
+                    //                prod.setTi(Color.parseColor("#CC000000"));
                     cover.setVisibility(View.VISIBLE);
                     //    <TextView Talk to us to find out more
 
-                    TextView talk=(TextView)popUpView.findViewById(R.id.talk);
+                    TextView talk = (TextView) popUpView.findViewById(R.id.talk);
                     String set = "<font color=#3380B6>Talk to us </font> <font color=#33A4D0>to find out more</font>";
                     talk.setText(Html.fromHtml(set));
                     talk.setOnClickListener(new View.OnClickListener() {
@@ -461,7 +456,7 @@ public class ProductsPage extends AppCompatActivity {
 
                         }
                     });
-                    TextView ok=(TextView)popUpView.findViewById(R.id.ok);
+                    TextView ok = (TextView) popUpView.findViewById(R.id.ok);
                     ok.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -470,15 +465,45 @@ public class ProductsPage extends AppCompatActivity {
                             cover.setVisibility(View.INVISIBLE);
                         }
                     });
-//                    String set = "<font color=#664A4A4A>Checkout the ratings and reviews for this product. </font> <font color=#33A4D0>Click here</font>";
-//                    detRet.setText(Html.fromHtml(set));
+                    //                    String set = "<font color=#664A4A4A>Checkout the ratings and reviews for this product. </font> <font color=#33A4D0>Click here</font>";
+                    //                    detRet.setText(Html.fromHtml(set));
+
+                } else if (AppUtils.isEmpty(userProfileStatus) || userProfileStatus.equals(Constants.STATUS.APPLIED.toString())) {
+                    LayoutInflater inflater = (LayoutInflater) (ProductsPage.this).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    //                 View   parent = inflater.inflate(R.layout.activity_products_page, null, false);
+                    View popUpView = inflater.inflate(R.layout.popupapplied, null, false);
+
+                    final PopupWindow popup = new PopupWindow(popUpView);
+                    //                        580, true);
+
+                    popup.setContentView(popUpView);
+                    popup.setWidth(ListPopupWindow.WRAP_CONTENT);
+                    popup.setHeight(ListPopupWindow.WRAP_CONTENT);
+                    popup.showAtLocation(popUpView, Gravity.CENTER, 0, 0);
+
+                    final RelativeLayout cover1 = (RelativeLayout) findViewById(R.id.cover);
+                    //                prod.setTi(Color.parseColor("#CC000000"));
+                    cover1.setVisibility(View.VISIBLE);
+                    //    <TextView Talk to us to find out more
+
+
+                    TextView ok = (TextView) popUpView.findViewById(R.id.ok1);
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popup.dismiss();
+                            Intent profile = new Intent(ProductsPage.this, ProfileActivity.class);
+                            startActivity(profile);
+                            finish();
+                            overridePendingTransition(0, 0);
+                            //RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
+                            cover1.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
 
                 }
-                else  if(userProfileStatus.equals("waitlisted")||userProfileStatus.equals("declined"))
-                {
 
-
-                }
             }
         });
         det.setVisibility(View.GONE);
@@ -499,11 +524,11 @@ public class ProductsPage extends AppCompatActivity {
 
                 } else {
 
-//                    ImageView t = (ImageView) findViewById(R.id.dropdes);
+                    //                    ImageView t = (ImageView) findViewById(R.id.dropdes);
                     t.setRotationX(180);
                     detInfo.setVisibility(View.VISIBLE);
                     detInfo.setText(infor);
-//                    t.set
+                    //                    t.set
 
                 }
 
@@ -601,7 +626,7 @@ public class ProductsPage extends AppCompatActivity {
                 vow.setVisibility(View.VISIBLE);
             }
         });
-//        hve.setFocusable(false);
+        //        hve.setFocusable(false);
         hve.addTextChangedListener(new TextWatcher() {
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -646,16 +671,16 @@ public class ProductsPage extends AppCompatActivity {
         hve.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-//int t=hve.getText().toString().length();
-//                Boolean ttt = hve.hasSelection();
+                //int t=hve.getText().toString().length();
+                //                Boolean ttt = hve.hasSelection();
 
 
-//                Toast.makeText(ProductsPage.this, "" + ttt, Toast.LENGTH_SHORT).show();
-//                hve.setFocusableInTouchMode(true);
+                //                Toast.makeText(ProductsPage.this, "" + ttt, Toast.LENGTH_SHORT).show();
+                //                hve.setFocusableInTouchMode(true);
                 RelativeLayout cash = (RelativeLayout) findViewById(R.id.cashback);
                 cash.setVisibility(View.VISIBLE);
-//
-//
+                //
+                //
                 return false;
             }
         });
@@ -666,7 +691,6 @@ public class ProductsPage extends AppCompatActivity {
         RelativeLayout plus = (RelativeLayout) findViewById(R.id.plusRelative);
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
-
 
 
             public void onClick(View v) {
@@ -694,7 +718,7 @@ public class ProductsPage extends AppCompatActivity {
                         //setEmi(sellingPrice);
                     }
 
-//                    Toast.makeText(ProductsPage.this, "checked hai", Toast.LENGTH_SHORT).show();
+                    //                    Toast.makeText(ProductsPage.this, "checked hai", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -705,7 +729,7 @@ public class ProductsPage extends AppCompatActivity {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 if (hve.getKeyListener() == null) {
                     hve.setBackgroundResource(R.drawable.roundedblue);
@@ -719,28 +743,29 @@ public class ProductsPage extends AppCompatActivity {
                 } else {
 
 
-//                Toast.makeText(ProductsPage.this, "cccc", Toast.LENGTH_SHORT).show();
+                    //                Toast.makeText(ProductsPage.this, "cccc", Toast.LENGTH_SHORT).show();
                     crcode = hve.getText().toString().trim().toUpperCase();
                     if ((crcode.length() != 0) && (couCode.isChecked())) {
 
                         new COUPON().execute();
-                    }}
+                    }
+                }
                 ImageView pl = (ImageView) findViewById(R.id.plus);
-//                    Drawable.ConstantState d = pl.getDrawable().getConstantState();
-//                    Drawable.ConstantState d1 = getResources().getDrawable(R.drawable.cancel).getConstantState();
-//                    Drawable p = pl.getDrawable();
-//                Drawable r=DrR.drawable.cancel;
-//                Drawable i=R.drawable.cancel;
-//                if (pl.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.cancel).getConstantState())) {
+                //                    Drawable.ConstantState d = pl.getDrawable().getConstantState();
+                //                    Drawable.ConstantState d1 = getResources().getDrawable(R.drawable.cancel).getConstantState();
+                //                    Drawable p = pl.getDrawable();
+                //                Drawable r=DrR.drawable.cancel;
+                //                Drawable i=R.drawable.cancel;
+                //                if (pl.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.cancel).getConstantState())) {
                 if ((checkImg == 2) || (checkImg == 3)) {
                     ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
                     sellingPrice = searchPrice;
-                    System.out.println("entering here"+checkImg);
-                    checkD=0;
-                    checkCashback=0;
-                    Double doPay=(searchPrice*.2);
-                    dopay2=doPay.intValue();
-                    mValue=dopay2;
+                    System.out.println("entering here" + checkImg);
+                    checkD = 0;
+                    checkCashback = 0;
+                    Double doPay = (searchPrice * .2);
+                    dopay2 = doPay.intValue();
+                    mValue = dopay2;
                     setEmi(sellingPrice);
                     appcBack.setChecked(false);
                     couCode.setChecked(true);
@@ -750,7 +775,6 @@ public class ProductsPage extends AppCompatActivity {
                 }
 
 
-
             }
 
         });
@@ -758,54 +782,52 @@ public class ProductsPage extends AppCompatActivity {
         appcBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!userCode.equals("flashApproved")){
+                if (!userCode.equals("flashApproved")) {
                     int checkD = 0;
                     if (appcBack.isChecked()) {
                         // TODO: 4/21/2016 do something with cashback
                         checkD = 1;
 
                         sellingPrice = spDec;
-                        Double doPay=(searchPrice*.2);
-                        dopay2=doPay.intValue();
+                        Double doPay = (searchPrice * .2);
+                        dopay2 = doPay.intValue();
 
-                        checkCashback=1;
-                        if(cb<=dopay2)
-                        {mDis=cb;
+                        checkCashback = 1;
+                        if (cb <= dopay2) {
+                            mDis = cb;
 
-                            dopay2=dopay2-cb;
-                            mValue=dopay2;
-                            checkD=1;
-                            setEmi(1);}
-                        else {
+                            dopay2 = dopay2 - cb;
+                            mValue = dopay2;
+                            checkD = 1;
+                            setEmi(1);
+                        } else {
 
-                            if (sellingPrice - cb<0)
-                            {
-                                checkD=0;
+                            if (sellingPrice - cb < 0) {
+                                checkD = 0;
 
-                                mDis=sellingPrice;
+                                mDis = sellingPrice;
                                 sellingPrice = 0;
                                 setEmi(2);
-                            }
-                            else
-                            {
+                            } else {
 
-                                checkD=0;
-                                mDis=cb;
-                                sellingPrice = sellingPrice-mDis;
+                                checkD = 0;
+                                mDis = cb;
+                                sellingPrice = sellingPrice - mDis;
                                 setEmi(2);
 
-                            }}
+                            }
+                        }
 
 
                         dee = 1;
 
-//                    sellingPrice = sellingPrice - cb;
+                        //                    sellingPrice = sellingPrice - cb;
                         hve.setBackgroundResource(R.drawable.roundedyellow);
                         ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#F28E52"));
                         setEmi(sellingPrice);
                         couCode.setChecked(false);
                         checkCorrectdis = 1;
-                        if(cb!=0)
+                        if (cb != 0)
                             hve.setText(getApplicationContext().getString(R.string.Rs) + cb + " Cashback applied!");
                         hve.setKeyListener(null);
                         hve.setTextColor(Color.parseColor("#F28E52"));
@@ -814,17 +836,16 @@ public class ProductsPage extends AppCompatActivity {
 
                         ((ImageView) findViewById(R.id.plus)).setImageResource(R.drawable.cancel);
                         checkImg = 2;
-//                    ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
-//                    if (cb == 0)
-//                        Toast.makeText(ProductsPage.this, "zero cashback", Toast.LENGTH_SHORT).show();
+                        //                    ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
+                        //                    if (cb == 0)
+                        //                        Toast.makeText(ProductsPage.this, "zero cashback", Toast.LENGTH_SHORT).show();
                     }
 
 
-                }
-                else
-                {
+                } else {
                     Toast.makeText(ProductsPage.this, "You cannot apply Cashback!", Toast.LENGTH_SHORT).show();
-                }}
+                }
+            }
         });
 
 
@@ -868,7 +889,7 @@ public class ProductsPage extends AppCompatActivity {
     }
 
     private class COUPON extends
-            AsyncTask<String, Void, String> {
+                         AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             spinner.setVisibility(View.VISIBLE);
@@ -884,22 +905,22 @@ public class ProductsPage extends AppCompatActivity {
                 // userid=12&productid=23&action=add
                 // TYPE: POST
                 SharedPreferences red = getSharedPreferences("Referral", Context.MODE_PRIVATE);
-//                String referralinst=red.getString("referrer","");
+                //                String referralinst=red.getString("referrer","");
 
                 payload.put("phone", creduserid);
 
                 payload.put("code", crcode);
-//                // payload.put("college", mCollege);
-//                if(mRef.trim().length()>0)
-//                    payload.put("refCode",mRef);
-//                if((mRef.trim().length()==0)&&(referralinst.trim().length()!=0)) {
+                //                // payload.put("college", mCollege);
+                //                if(mRef.trim().length()>0)
+                //                    payload.put("refCode",mRef);
+                //                if((mRef.trim().length()==0)&&(referralinst.trim().length()!=0)) {
                 //
                 //
                 //    Toast.makeText(Inviteform.this,referralinst,Toast.LENGTH_LONG).show();
-//                    payload.put("refCode", referralinst.trim());
-//                }
-//                payload.put("phone", mPhone);
-//                payload.put("offlineForm",false);
+                //                    payload.put("refCode", referralinst.trim());
+                //                }
+                //                payload.put("phone", mPhone);
+                //                payload.put("offlineForm",false);
                 // payload.put("action", details.get("action"));
 
                 HttpParams httpParameters = new BasicHttpParams();
@@ -911,7 +932,7 @@ public class ProductsPage extends AppCompatActivity {
                 //api/login/sendotp
                 String url2 = getApplicationContext().getString(R.string.server) + "api/promo/coupon";
                 HttpPost httppost = new HttpPost(url2);
-//                HttpDelete
+                //                HttpDelete
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
                 httppost.setHeader("x-access-token", tok_sp);
@@ -943,11 +964,11 @@ public class ProductsPage extends AppCompatActivity {
                         truth = resp.getString("msg");
                         value = data1.getInt("value");
                         maxValue = data1.getInt("maxValue");
-                        minProd=data1.getInt("minProdValue");
-                        type=data1.getString("type");
-                        if(searchPrice<minProd)
+                        minProd = data1.getInt("minProdValue");
+                        type = data1.getString("type");
+                        if (searchPrice < minProd)
                             return "min";
-                        if(userCode.equals("flashApproved")){
+                        if (userCode.equals("flashApproved")) {
                             return "flash";
                         }
                         return "win";
@@ -965,53 +986,48 @@ public class ProductsPage extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             if (result.equals("win")) {
-                int dis=0;
-                if(type.equals("flat"))
-                    dis= value;
-                else
-                if(type.equals("percentage"))
-                {
-                    Double dd=searchPrice*.2;
-                    int newdis=dd.intValue();
-                    if(newdis<=value)
-                        dis=newdis;
+                int dis = 0;
+                if (type.equals("flat"))
+                    dis = value;
+                else if (type.equals("percentage")) {
+                    Double dd = searchPrice * .2;
+                    int newdis = dd.intValue();
+                    if (newdis <= value)
+                        dis = newdis;
                     else
-                        dis=value;
+                        dis = value;
                 }
                 ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
-                Double doPay=(searchPrice*.2);
-                dopay2=doPay.intValue();
-                whichCoupon=crcode;
+                Double doPay = (searchPrice * .2);
+                dopay2 = doPay.intValue();
+                whichCoupon = crcode;
 
-                if(dis<=dopay2)
-                {mDis=dis;
+                if (dis <= dopay2) {
+                    mDis = dis;
 
-                    dopay2=dopay2-dis;
-                    mValue=dopay2;
-                    checkD=1;
-                    setEmi(1);}
-                else {
+                    dopay2 = dopay2 - dis;
+                    mValue = dopay2;
+                    checkD = 1;
+                    setEmi(1);
+                } else {
 
-                    if (sellingPrice - dis<0)
-                    {
-                        checkD=0;
-                        mDis=sellingPrice;
+                    if (sellingPrice - dis < 0) {
+                        checkD = 0;
+                        mDis = sellingPrice;
                         sellingPrice = 0;
                         setEmi(2);
-                    }
-                    else
-                    {
+                    } else {
 
-                        checkD=0;
-                        mDis=dis;
-                        sellingPrice = sellingPrice-mDis;
+                        checkD = 0;
+                        mDis = dis;
+                        sellingPrice = sellingPrice - mDis;
                         setEmi(2);
 
                     }
 
                 }
 
-//                hve.setFocusable(false);
+                //                hve.setFocusable(false);
 
                 hve.setBackgroundResource(R.drawable.roundedproducts);
                 hve.setTextColor(Color.parseColor("#44C2A6"));
@@ -1019,27 +1035,28 @@ public class ProductsPage extends AppCompatActivity {
                 ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
                 hve.setText(truth);
                 checkCorrectdis = 1;
-                checkImg=2;
+                checkImg = 2;
                 ((ImageView) findViewById(R.id.plus)).setImageResource(R.drawable.cancel);
 
                 hve.setKeyListener(null);
-//                Toast.makeText(ProductsPage.this, value, Toa/st.LENGTH_SHORT).show();
+                //                Toast.makeText(ProductsPage.this, value, Toa/st.LENGTH_SHORT).show();
             } else {
                 checkCorrectdis = 1;
-                if(result.contains("min")) {
+                if (result.contains("min")) {
                     Toast.makeText(ProductsPage.this, "Minimum product value to use this Coupon is " + minProd, Toast.LENGTH_SHORT).show();
-                    truth="Invalid Code";
+                    truth = "Invalid Code";
                 }
-                if(result.contains("flash")) {
+                if (result.contains("flash")) {
                     Toast.makeText(ProductsPage.this, "You cannot apply Cashback!", Toast.LENGTH_SHORT).show();
-                    truth="Invalid Code";}
+                    truth = "Invalid Code";
+                }
                 hve.setText(truth);
                 checkImg = 3;
                 //hve.setFocusable(false);
 
                 hve.setKeyListener(null);
                 checkCorrectdis = 0;
-//                hve.setFocusable(false);
+                //                hve.setFocusable(false);
                 hve.setBackgroundResource(R.drawable.roundedred);
                 hve.setTextColor(Color.parseColor("#D48080"));
                 ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#D48080"));
@@ -1057,7 +1074,7 @@ public class ProductsPage extends AppCompatActivity {
         Double diff = 18.0;
         try {
 
-//            Long milli = courseDate.getTime();
+            //            Long milli = courseDate.getTime();
             Date date = new Date();
             String curr = df.format(date);
             String currentDay = "";
@@ -1098,19 +1115,20 @@ public class ProductsPage extends AppCompatActivity {
         mValue = v.intValue();
         mValue2 = v.intValue();
         monthsnow = Integer.parseInt(t);
-        if(sellingP==1)
-        {dValue.setText(String.valueOf(Math.round(dopay2)));
-            emiAmount.setText(String.valueOf(Math.round(calculateEmi(sellingPrice * 0.8-mDis, Double.valueOf(sellingPrice), monthsnow))));
-            Double tot = calculateEmi(sellingPrice * 0.8-mDis, Double.valueOf(sellingPrice), monthsnow) * monthsnow + dopay2;
-            Double r=(sellingPrice * 0.2-mDis);
-            mValue=r.intValue();
-            totalLoan.setText(String.valueOf(tot));}
-        else{
+        if (sellingP == 1) {
+            dValue.setText(String.valueOf(Math.round(dopay2)));
+            emiAmount.setText(String.valueOf(Math.round(calculateEmi(sellingPrice * 0.8 - mDis, Double.valueOf(sellingPrice), monthsnow))));
+            Double tot = calculateEmi(sellingPrice * 0.8 - mDis, Double.valueOf(sellingPrice), monthsnow) * monthsnow + dopay2;
+            Double r = (sellingPrice * 0.2 - mDis);
+            mValue = r.intValue();
+            totalLoan.setText(String.valueOf(tot));
+        } else {
             dValue.setText(String.valueOf(Math.floor(sellingPrice * .2)));
             emiAmount.setText(String.valueOf(Math.round(calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow))));
             Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
-            totalLoan.setText(String.valueOf(Math.round(tot)));}
-//        Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
+            totalLoan.setText(String.valueOf(Math.round(tot)));
+        }
+        //        Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -1133,10 +1151,10 @@ public class ProductsPage extends AppCompatActivity {
     }
 
     public class linkSearch extends
-            AsyncTask<String, Void, String> {
+                            AsyncTask<String, Void, String> {
         @Override
         public void onPreExecute() {
-//            spinner.setVisibility(View.VISIBLE);
+            //            spinner.setVisibility(View.VISIBLE);
         }
 
 
@@ -1144,14 +1162,14 @@ public class ProductsPage extends AppCompatActivity {
         public String doInBackground(String... data) {
 
             //  String urldisplay = data[0];
-//               HashMap<String, String> details = data[0];
+            //               HashMap<String, String> details = data[0];
             JSONObject payload = new JSONObject();
             try {
                 // userid=12&productid=23&action=add
                 // TYPE: get
                 String url = getApplicationContext().getString(R.string.server) + "api/product?productId=" + productId1 + "&seller=" + sellerNme1 + "&userid=" + creduserid;
 
-//                String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NTY3MjY1NzMsImV4cCI6MTQ1Njc2MjU3M30.98mQFcYm5Uf3Fd7ZNPD-OwMIfObu7vfoq9zNtCCLfyI";
+                //                String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NTY3MjY1NzMsImV4cCI6MTQ1Njc2MjU3M30.98mQFcYm5Uf3Fd7ZNPD-OwMIfObu7vfoq9zNtCCLfyI";
                 // payload.put("action", details.get("action"));
 
 
@@ -1218,8 +1236,8 @@ public class ProductsPage extends AppCompatActivity {
             if (!result.equals("win")) {
                 System.out.println("Error while computing data");
             } else {
-                Double doPay=(searchPrice*.2);
-                dopay2=doPay.intValue();
+                Double doPay = (searchPrice * .2);
+                dopay2 = doPay.intValue();
 
                 show();
             }
@@ -1246,7 +1264,7 @@ public class ProductsPage extends AppCompatActivity {
             }
             //       Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
         }
-//snapdeal
+        //snapdeal
 
         else if (parseString.contains("snapdeal")) {
             sellerNme1 = "snapdeal";
@@ -1277,7 +1295,7 @@ public class ProductsPage extends AppCompatActivity {
             sellerNme1 = "paytm";
             checkValidFromApis = 1;
         }
-//amazon
+        //amazon
         else if (parseString.contains("amazon")) {
             sellerNme1 = "amazon";
             int w = 0;
@@ -1318,10 +1336,10 @@ public class ProductsPage extends AppCompatActivity {
                 checkValidUrl = 1;
             }
 
-        } else if (parseString.contains("shopclues"))
-        {sellerNme1="shopclues";
-            checkValidFromApis = 1;}
-        else
+        } else if (parseString.contains("shopclues")) {
+            sellerNme1 = "shopclues";
+            checkValidFromApis = 1;
+        } else
             checkValidUrl = 1;
 
         if ((checkValidFromApis == 0) && (checkValidUrl == 0)) {
@@ -1340,20 +1358,20 @@ public class ProductsPage extends AppCompatActivity {
             startActivity(in);
             finish();
             page = "pay";
-//            paytmUrl();
+            //            paytmUrl();
         }
         if (checkValidUrl == 1) {
             //monkey page
             Intent in = new Intent(ProductsPage.this, ProductsPage.class);
-//            query.setText("");
+            //            query.setText("");
 
             in.putExtra("page", "monkey");
             startActivity(in);
             //finish();
             page = "monkey";
-//            wrongUrl();//
+            //            wrongUrl();//
         }
-//        Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
+        //        Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
 
         sellerNme = sellerNme1;
     }
@@ -1370,7 +1388,7 @@ public class ProductsPage extends AppCompatActivity {
     public void paytmUrl() {
         setContentView(R.layout.paytmjab);
         String seller = getIntent().getExtras().getString("seller");
-//        String seller = getIntent().getExtras().getString("seller");
+        //        String seller = getIntent().getExtras().getString("seller");
         ImageView logo = (ImageView) findViewById(R.id.logod);
         if ("paytm".equals(seller)) {
             logo.setImageResource(R.drawable.paytm);
@@ -1387,7 +1405,6 @@ public class ProductsPage extends AppCompatActivity {
         }
 
 
-
         queryNew = (EditText) findViewById(R.id.query);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
         clickUrl();
@@ -1397,8 +1414,8 @@ public class ProductsPage extends AppCompatActivity {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String minP=editQ.getText().toString();
-                if((editQ.getText().toString().length()!=0)&&(Integer.parseInt(minP)>=50)) {
+                String minP = editQ.getText().toString();
+                if ((editQ.getText().toString().length() != 0) && (Integer.parseInt(minP) >= 50)) {
                     ScrollView removescrol = (ScrollView) findViewById(R.id.removescroll);
                     removescrol.setVisibility(View.GONE);
                     searchTitle = "";
@@ -1423,8 +1440,8 @@ public class ProductsPage extends AppCompatActivity {
                     if ("shopclues".equals(sellerNme1)) {
                         logo.setImageResource(R.drawable.shopclues);
                     }
-//                JSONObject img = new JSONObject(data1.getString("imgUrls"));
-//                urlImg = img.getString("400x400");
+                    //                JSONObject img = new JSONObject(data1.getString("imgUrls"));
+                    //                urlImg = img.getString("400x400");
                     urlforImage = "";
                     brand = searchBrand;
                     try {
@@ -1446,9 +1463,9 @@ public class ProductsPage extends AppCompatActivity {
 
 
                     show();
-                }
-                else
-                    editQ.setText("");}
+                } else
+                    editQ.setText("");
+            }
 
         });
 
@@ -1471,14 +1488,14 @@ public class ProductsPage extends AppCompatActivity {
         inc = (TextView) findViewById(R.id.check);
         butcheck = (Button) findViewById(R.id.butcheck);
         try {
-//            monthsallowed = getIntent().getExtras().getInt("monthsallowed");
-//            title = getIntent().getExtras().getString("title");
-//            brand = getIntent().getExtras().getString("brand");
-//            emi = getIntent().getExtras().getDouble("emi");
-//            searchQuery = getIntent().getExtras().getString("query");
-//            sellerNme = getIntent().getExtras().getString("seller");
-//            sellingPrice = getIntent().getExtras().getInt("price");
-//            urlforImage = getIntent().getExtras().getString("image");
+            //            monthsallowed = getIntent().getExtras().getInt("monthsallowed");
+            //            title = getIntent().getExtras().getString("title");
+            //            brand = getIntent().getExtras().getString("brand");
+            //            emi = getIntent().getExtras().getDouble("emi");
+            //            searchQuery = getIntent().getExtras().getString("query");
+            //            sellerNme = getIntent().getExtras().getString("seller");
+            //            sellingPrice = getIntent().getExtras().getInt("price");
+            //            urlforImage = getIntent().getExtras().getString("image");
 
             spInc = searchPrice;
             spDec = searchPrice;
@@ -1510,7 +1527,7 @@ public class ProductsPage extends AppCompatActivity {
                 emiAmount.setText(String.valueOf(Math.round(calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow))));
                 Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
                 totalLoan.setText(String.valueOf(Math.round(tot)));
-//                    Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
+                //                    Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -1563,25 +1580,25 @@ public class ProductsPage extends AppCompatActivity {
                 }, 5000);
             }
         }).start();
-//        rep=new Handler() {
-//            @Override
-//            public void close() {
-//
-//            }
-//
-//            @Override
-//            public void flush() {
-//
-//            }
-//
-//            @Override
-//            public void publish(LogRecord record) {
-//
-//            }
-//        };
+        //        rep=new Handler() {
+        //            @Override
+        //            public void close() {
+        //
+        //            }
+        //
+        //            @Override
+        //            public void flush() {
+        //
+        //            }
+        //
+        //            @Override
+        //            public void publish(LogRecord record) {
+        //
+        //            }
+        //        };
 
 
-//        butcheck.set
+        //        butcheck.set
         minusR.setOnLongClickListener(
                 new View.OnLongClickListener() {
                     public boolean onLongClick(View arg0) {
@@ -1607,7 +1624,7 @@ public class ProductsPage extends AppCompatActivity {
                 return false;
             }
         });
-//        spinner.performClick();
+        //        spinner.performClick();
 
         plusR.setOnLongClickListener(
                 new View.OnLongClickListener() {
@@ -1642,7 +1659,7 @@ public class ProductsPage extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
 
-//                        Intent in = new Intent(HomePage.this, ViewForm.class);
+                    //                        Intent in = new Intent(HomePage.this, ViewForm.class);
 
                     // paste = (TextView) findViewById(R.id.pasteAg);
                     queryNew.requestFocus();
@@ -1654,8 +1671,8 @@ public class ProductsPage extends AppCompatActivity {
             }
         });
     }
-    public void show()
-    {
+
+    public void show() {
         monthsallowed = months(searchSubcategory, searchCategory, searchBrand, searchPrice);
         int monthscheck = 0;
         //digo
@@ -1711,7 +1728,7 @@ public class ProductsPage extends AppCompatActivity {
                 }
 
 
-//                        Toast.makeText(HomePage.this, curr, Toast.LENGTH_SHORT).show();
+                //                        Toast.makeText(HomePage.this, curr, Toast.LENGTH_SHORT).show();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -1719,7 +1736,7 @@ public class ProductsPage extends AppCompatActivity {
         if (monthsallowed > monthscheck)
             monthsallowed = monthscheck;
 
-//                Double emi = 0.0;
+        //                Double emi = 0.0;
         Double rate = 21.0 / 1200.0;
         int d = 0;
         if (searchPrice <= 5000) {
@@ -1730,16 +1747,17 @@ public class ProductsPage extends AppCompatActivity {
             else
                 d = 65 - currDay;
 
-            emi = Math.ceil((searchPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));}
+            emi = Math.ceil((searchPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
+        }
         Intent in = new Intent(ProductsPage.this, ProductsPage.class);
         in.putExtra("title", searchTitle);
         try {
             Map userMap = new HashMap<>();
             userMap.put("PRODUCT_TITLE", searchTitle);
-//                    userMap.put("email", mEmail);
-//                    userMap.put("user_id", mPhone);
-//                    userMap.put("phone", mPhone);
-//                    System.out.println("Intercom data 4" + mPhone);
+            //                    userMap.put("email", mEmail);
+            //                    userMap.put("user_id", mPhone);
+            //                    userMap.put("phone", mPhone);
+            //                    System.out.println("Intercom data 4" + mPhone);
             Intercom.client().updateUser(userMap);
         } catch (Exception e) {
             System.out.println("Intercom two" + e.toString());
@@ -1750,7 +1768,7 @@ public class ProductsPage extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
 
-//                        Intent in = new Intent(HomePage.this, ViewForm.class);
+                    //                        Intent in = new Intent(HomePage.this, ViewForm.class);
 
                     // paste = (TextView) findViewById(R.id.pasteAg);
                     queryNew.requestFocus();
@@ -1761,18 +1779,18 @@ public class ProductsPage extends AppCompatActivity {
                 return false;
             }
         });
-//                    in.putExtra("price", searchPrice);
-//                    in.putExtra("brand", searchBrand);
-//                    in.putExtra("name", name);
-//                    in.putExtra("image", urlImg);
-//                    in.putExtra("emi", emi);
-//                    in.putExtra("tot", totalLoan.getText().toString());
-//                    in.putExtra("monthsallowed", monthsallowed);
-//                    in.putExtra("seller", sellerNme1);
-//                    in.putExtra("query", queryNew.getText().toString());
-//                    in.putExtra("page", page);
-//
-//                    startActivity(in);
+        //                    in.putExtra("price", searchPrice);
+        //                    in.putExtra("brand", searchBrand);
+        //                    in.putExtra("name", name);
+        //                    in.putExtra("image", urlImg);
+        //                    in.putExtra("emi", emi);
+        //                    in.putExtra("tot", totalLoan.getText().toString());
+        //                    in.putExtra("monthsallowed", monthsallowed);
+        //                    in.putExtra("seller", sellerNme1);
+        //                    in.putExtra("query", queryNew.getText().toString());
+        //                    in.putExtra("page", page);
+        //
+        //                    startActivity(in);
 
     }
 
@@ -1821,7 +1839,7 @@ public class ProductsPage extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals("order"))
+            if (intent.getAction().equals("order"))
                 finish();
 
         }
@@ -1829,6 +1847,8 @@ public class ProductsPage extends AppCompatActivity {
 
     public void finish() {
         super.finish();
-    };
+    }
+
+    ;
 
 }

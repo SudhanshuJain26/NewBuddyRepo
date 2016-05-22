@@ -4,12 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
-import android.net.Uri;
-
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -20,19 +16,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.models.UserModel;
@@ -52,15 +37,16 @@ import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
 
 public class Landing extends AppCompatActivity {
-    int count=0;
+    int count = 0;
     ViewPager dealspager;
-    SharedPreferences sh,sh_otp,ss;
-    SharedPreferences userP ;
+    SharedPreferences sh, sh_otp, ss;
+    SharedPreferences userP;
     private ProgressBar spinner;
-   int data;
-private String phoneNumberCall="";
+    int data;
+    private String phoneNumberCall = "";
     Intent inTent;
-    private String action="",cashBack="",name = "", email = "",fbid="", formstatus = "",uniqueCode="",creditLimit="",panoradhar="",bankaccount="",collegeid="",verificationdate="",rejectionReason="",referral_code="";
+    private String action = "", cashBack = "", name = "", email = "", fbid = "", formstatus = "", uniqueCode = "", creditLimit = "", panoradhar = "", bankaccount = "", collegeid = "", verificationdate = "", rejectionReason = "", referral_code = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -288,6 +274,7 @@ private String phoneNumberCall="";
 
             }
         }
+
         protected void onPostExecute(String result) {
             if (result.equals("win")) {
 
@@ -397,18 +384,56 @@ private String phoneNumberCall="";
                             } catch (Exception e) {
                                 formstatus = "empty";
                             }
-
+                            int cashBack = 0;
                             try {
-                                cashBack = data1.getString("totalCashback");
+                                cashBack = data1.getInt("totalCashback");
                             } catch (Exception e) {
-                                cashBack = "";
+                                cashBack = 0;
                             }
-
+                            String approvedBand = "";
+                            try {
+                                approvedBand = data1.getString("approvedBand");
+                            } catch (Exception e) {
+                                approvedBand = "";
+                            }
+                            int creditLimit = 0;
+                            try {
+                                creditLimit = data1.getInt("creditLimit");
+                            } catch (Exception e) {
+                                creditLimit = 0;
+                            }
+                            int totalBorrowed = 0;
+                            try {
+                                totalBorrowed = data1.getInt("totalBorrowed");
+                            } catch (Exception e) {
+                                totalBorrowed = 0;
+                            }
+                            String nameadd = "";
+                            try {
+                                nameadd = data1.getString("college");
+                            } catch (Exception e) {
+                            }
+                            String profileStatus = "";
+                            try {
+                                profileStatus = data1.getString("profileStatus");
+                            } catch (Exception e) {
+                                profileStatus = "";
+                            }
                             SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editorP = userP.edit();
 
-                            editorP.putString("cashBack", cashBack);
+                            editorP.putString("profileStatus", profileStatus);
+
+                            editorP.putInt("creditLimit", creditLimit);
+                            editorP.putInt("totalBorrowed", totalBorrowed);
+                            editorP.putInt("cashBack", cashBack);
+                            editorP.putString("formStatus", formstatus);
+                            editorP.putString("nameadd", nameadd);
+                            editorP.putString("approvedBand", approvedBand);
+                            editorP.putString("productdpname", name);
                             editorP.commit();
+
+
                             try {
                                 rejectionReason = data1.getString("rejectionReason");
                             } catch (Exception e) {
@@ -669,14 +694,13 @@ private String phoneNumberCall="";
             if (result.equals("win")) {
 
 
-
                 if (formstatus.equals("saved")) {
                     Intent in;
 
-if(data==1)
-    in = new Intent(Landing.this, Formempty.class);
+                    if (data == 1)
+                        in = new Intent(Landing.this, Formempty.class);
                     else
-                    in = new Intent(Landing.this, HomePage.class);
+                        in = new Intent(Landing.this, HomePage.class);
 
                     // Intent in = new Intent(MainActivity.this, Inviteform.class);
                     finish();
@@ -738,11 +762,11 @@ if(data==1)
 
                 }
 
-                if (formstatus.equals("approved")||(formstatus.equals("flashApproved"))) {
-Intent in;
-                    if(data==1)
+                if (formstatus.equals("approved") || (formstatus.equals("flashApproved"))) {
+                    Intent in;
+                    if (data == 1)
                         in = new Intent(Landing.this, Approved.class);
-                    else           in = new Intent(Landing.this, HomePage.class);
+                    else in = new Intent(Landing.this, HomePage.class);
 
                     finish();
                     // Intent in = new Intent(MainActivity.this, Inviteform.class);
@@ -750,10 +774,10 @@ Intent in;
                     in.putExtra("Email", email);//  in.putExtra("Credits",creditLimit);
                     in.putExtra("Form", formstatus);
 
-                    if(formstatus.equals("approved"))
-                        in.putExtra("checkflash",0);
+                    if (formstatus.equals("approved"))
+                        in.putExtra("checkflash", 0);
                     else
-                        in.putExtra("checkflash",1);
+                        in.putExtra("checkflash", 1);
 
                     in.putExtra("fbid", fbid);
                     in.putExtra("Credits", creditLimit);
@@ -762,9 +786,9 @@ Intent in;
                     overridePendingTransition(0, 0);
                 } else if (formstatus.equals("empty")) {
 
-//                    Intent in = new Intent(MainActivity.this, Inviteform    .class);
+                    //                    Intent in = new Intent(MainActivity.this, Inviteform    .class);
                     Intent in;
-                    if(data==1)
+                    if (data == 1)
                         in = new Intent(Landing.this, Formempty.class);
                     else
                         in = new Intent(Landing.this, HomePage.class);
@@ -779,21 +803,15 @@ Intent in;
                     overridePendingTransition(0, 0);
                 }
 
-            }
-
-
-            else
-            {
-                Intent in =new Intent(Landing.this,MainActivity.class);
+            } else {
+                Intent in = new Intent(Landing.this, MainActivity.class);
                 finish();
                 startActivity(in);
-                overridePendingTransition(0,0);
-//                Toast.makeText(getApplicationContext(),"Please try again!"
-//                        ,
-//                        Toast.LENGTH_LONG).show();
+                overridePendingTransition(0, 0);
+                //                Toast.makeText(getApplicationContext(),"Please try again!"
+                //                        ,
+                //                        Toast.LENGTH_LONG).show();
             }
-
-
 
 
         }

@@ -1,7 +1,6 @@
 package indwin.c3.shareapp;
 
 import android.app.Activity;
-
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.Context;
@@ -12,43 +11,22 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-
-import android.os.AsyncTask;
-import android.os.Build;
-
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.ClipboardManager;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
-
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,17 +43,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpEntity;
@@ -83,8 +58,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -96,18 +69,11 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.intercom.android.sdk.Intercom;
-
-import java.util.Date;
-import java.util.List;
 
 import indwin.c3.shareapp.activities.ProfileActivity;
 import indwin.c3.shareapp.application.BuddyApplication;
@@ -1869,7 +1835,8 @@ public class HomePage extends AppCompatActivity {
         if (checkValidUrl == 1) {
             //monkey page
         }
-        Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
+//
+        //       Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
 
     }
 

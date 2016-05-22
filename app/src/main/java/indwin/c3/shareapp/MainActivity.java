@@ -17,9 +17,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-
 import android.support.v7.app.AlertDialog;
-
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -53,14 +51,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import java.util.jar.Manifest;
-
-
 import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
-
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
 import io.intercom.com.google.gson.Gson;
@@ -73,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     String url = "";
     static String token;
 
-    private int cashBack=0;
+    private int cashBack = 0;
 
     static Activity act;
     public static final String MyPREFERENCES = "buddy";
@@ -82,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     int d = 0;
     private ProgressBar spinner;
 
-    private String Name = "", email = "", fbid = "",courseCompletiondate="", formstatus = "", uniqueCode = "", creditLimit = "", panoradhar = "", bankaccount = "", collegeid = "", verificationdate = "", rejectionReason = "";
+    private String Name = "", email = "", fbid = "", courseCompletiondate = "", formstatus = "", uniqueCode = "", creditLimit = "", panoradhar = "", bankaccount = "", collegeid = "", verificationdate = "", rejectionReason = "";
     private EditText username, password;
     HashMap<String, String> data11;
     private TextView login;
@@ -436,7 +430,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onBackPressed() {
         Intent in = new Intent(MainActivity.this, Landing.class);
@@ -444,11 +437,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(in);
         overridePendingTransition(0, 0);
 
-        
+
     }
 
     private class ItemsByKeyword extends
-            AsyncTask<String, Void, String> {
+                                 AsyncTask<String, Void, String> {
 
         @Override
         protected void onPreExecute() {
@@ -597,7 +590,7 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
 
-if(d==1)
+            if (d == 1)
                 spinner.setVisibility(View.GONE);
             if (!result.contains("win")) {
                 login.setTextColor(Color.parseColor("#66ffffff"));
@@ -716,17 +709,17 @@ if(d==1)
                             //  getALlContacts();
                             //  getALlContacts();
 
-//                            getAllSms();
+                            //                            getAllSms();
 
-//                    getALlContacts();
+                            //                    getALlContacts();
                         }
 
                     }).start();
-//                    Snackbar.make(view,"Permission Granted, Now you can access location data.",Snackbar.LENGTH_LONG).show();
+                    //                    Snackbar.make(view,"Permission Granted, Now you can access location data.",Snackbar.LENGTH_LONG).show();
 
                 } else {
 
-//                    Snackbar.make(view,"Permission Denied, You cannot access location data.",Snackbar.LENGTH_LONG).show();
+                    //                    Snackbar.make(view,"Permission Denied, You cannot access location data.",Snackbar.LENGTH_LONG).show();
 
                 }
                 break;
@@ -736,14 +729,14 @@ if(d==1)
                         public void run() {
 
 
-//                            getALlContacts();
-//                            getAllSms(
+                            //                            getALlContacts();
+                            //                            getAllSms(
 
-//                    getALlContacts();
+                            //                    getALlContacts();
                         }
 
                     }).start();
-//                    Snackbar.make(view,"Permission Granted, Now you can access location data.",Snackbar.LENGTH_LONG).show();
+                    //                    Snackbar.make(view,"Permission Granted, Now you can access location data.",Snackbar.LENGTH_LONG).show();
 
                 } else {
 
@@ -855,40 +848,40 @@ if(d==1)
                     }
 
 
-                    try{
-                        cashBack=data.getInt("totalCashback");
+                    try {
+                        cashBack = data.getInt("totalCashback");
+                    } catch (Exception e) {
+                        cashBack = 0;
                     }
-                    catch(Exception e)
-                    {
-                        cashBack=0;
+                    String approvedBand = "";
+                    try {
+                        approvedBand = data.getString("approvedBand");
+                    } catch (Exception e) {
+                        approvedBand = "";
                     }
-                    String approvedBand="";
-                    try{
-                        approvedBand=data.getString("approvedBand");
+                    int creditLimit = 0;
+                    try {
+                        creditLimit = data.getInt("creditLimit");
+                    } catch (Exception e) {
+                        creditLimit = 0;
                     }
-                    catch(Exception e)
-                    {
-                        approvedBand="";
+                    int totalBorrowed = 0;
+                    try {
+                        totalBorrowed = data.getInt("totalBorrowed");
+                    } catch (Exception e) {
+                        totalBorrowed = 0;
                     }
-                    int creditLimit=0;
-                    try{
-                       creditLimit=data.getInt("creditLimit");
-                    }
-                    catch(Exception e)
-                    {
-                        creditLimit=0;
-                    }
-                    int totalBorrowed=0;
-                    try{
-                        totalBorrowed=data.getInt("totalBorrowed");
-                    }
-                    catch(Exception e)
-                    {
-                        totalBorrowed=0;
+                    String profileStatus = "";
+                    try {
+                        profileStatus = data.getString("profileStatus");
+                    } catch (Exception e) {
+                        profileStatus = "";
                     }
                     SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editorP = userP.edit();
-                    editorP.putString("approvedBand",approvedBand);
+                    editorP.putString("approvedBand", approvedBand);
+                    editorP.putString("profileStatus", profileStatus);
+                    editorP.putString("formStatus", formstatus);
                     editorP.putInt("creditLimit", creditLimit);
                     editorP.putInt("totalBorrowed", totalBorrowed);
                     editorP.putInt("cashBack", cashBack);
@@ -1234,17 +1227,17 @@ if(d==1)
                     overridePendingTransition(0, 0);
                 }
 
-                if (formstatus.equals("approved")||(formstatus.equals("flashApproved"))) {
+                if (formstatus.equals("approved") || (formstatus.equals("flashApproved"))) {
 
                     Intent in = new Intent(MainActivity.this, HomePage.class);
                     // Intent in = new Intent(MainActivity.this, Inviteform.class);
                     finish();
                     in.putExtra("Name", Name);
 
-                    if(formstatus.equals("approved"))
-                        in.putExtra("checkflash",0);
+                    if (formstatus.equals("approved"))
+                        in.putExtra("checkflash", 0);
                     else
-                        in.putExtra("checkflash",1);
+                        in.putExtra("checkflash", 1);
 
 
                     in.putExtra("fbid", fbid);
@@ -1266,7 +1259,6 @@ if(d==1)
                     startActivity(in);
                     overridePendingTransition(0, 0);
                 }
-
 
 
             }
@@ -1760,26 +1752,23 @@ if(d==1)
     }
 
 
-    public void setAlarm()
-    {
+    public void setAlarm() {
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         int interval = 5000;
-long timeToset=1459871688+21600;
-        long curr=System.currentTimeMillis()/1000;
-        int w=1;
-        while(w==1)
-        {
-            if(timeToset<curr)
-            {
-                timeToset+=24*60*60;
-            }
-            else
-                w=0;
+        long timeToset = 1459871688 + 21600;
+        long curr = System.currentTimeMillis() / 1000;
+        int w = 1;
+        while (w == 1) {
+            if (timeToset < curr) {
+                timeToset += 24 * 60 * 60;
+            } else
+                w = 0;
         }
         ;//+21600000;
-        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeToset*1000, 24*60*60*1000, pendingIntent);
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeToset * 1000, 24 * 60 * 60 * 1000, pendingIntent);
         //Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
     }
+
     public void getAllSms() {
         JSONArray smsJ = new JSONArray();
 

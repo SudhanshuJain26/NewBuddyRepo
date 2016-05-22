@@ -14,32 +14,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-
-
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
@@ -55,11 +29,14 @@ import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +47,6 @@ import indwin.c3.shareapp.models.TrendingMapWrapper;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
-
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
 
@@ -100,7 +76,7 @@ public class Splash extends AppCompatActivity {
     Intent intent;
     Uri data;
 
-    private String cashBack,approvedBand="";
+    private String cashBack, approvedBand = "";
     Gson gson;
 
 
@@ -112,15 +88,14 @@ public class Splash extends AppCompatActivity {
     private Tracker mTracker;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notify = 0;
 
-        SharedPreferences t1=getSharedPreferences("cred", Context.MODE_PRIVATE);
-        SharedPreferences.Editor e1=t1.edit();
-        e1.putInt("add",0);
+        SharedPreferences t1 = getSharedPreferences("cred", Context.MODE_PRIVATE);
+        SharedPreferences.Editor e1 = t1.edit();
+        e1.putInt("add", 0);
         e1.commit();
         BuddyApplication application = (BuddyApplication) getApplication();
         mTracker = application.getDefaultTracker();
@@ -263,7 +238,6 @@ public class Splash extends AppCompatActivity {
         super.onResume();
 
 
-
         AppUtils.sendGoogleAnalytics((BuddyApplication) getApplication());
 
         //        Toast.makeText(Splash.this, "onresume", Toast.LENGTH_LONG).show();
@@ -343,7 +317,6 @@ public class Splash extends AppCompatActivity {
                 // payload.put("action", details.get("action"));
 
 
-
                 HttpResponse response = AppUtils.connectToServerPost(url, null, null);
                 if (response != null) {
                     HttpEntity ent = response.getEntity();
@@ -405,7 +378,7 @@ public class Splash extends AppCompatActivity {
     }
 
     public class trending extends
-         AsyncTask<String, Void, String> {
+                          AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             //            spinner.setVisibility(View.VISIBLE);
@@ -421,7 +394,6 @@ public class Splash extends AppCompatActivity {
             try {
                 // userid=12&productid=23&action=add
                 // TYPE: get
-                String url = getApplicationContext().getString(R.string.server) + "api/product/trending?category=" + urldisplay;
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
 
@@ -445,7 +417,9 @@ public class Splash extends AppCompatActivity {
                     urldisplay = "apparels";
                 else if (urldisplay.equals("Health%20and%20Beauty"))
                     urldisplay = "homeandbeauty";
-                HttpResponse response = AppUtils.connectToServerGet(urldisplay, tok_sp, null);
+                String url = getApplicationContext().getString(R.string.server) + "api/product/trending?category=" + urldisplay;
+
+                HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
                 if (response != null) {
                     HttpEntity ent = response.getEntity();
                     String responseString = EntityUtils.toString(ent, "UTF-8");
@@ -760,18 +734,54 @@ public class Splash extends AppCompatActivity {
                             } catch (Exception e) {
                                 formstatus = "empty";
                             }
-
+                            int totalCashBack = 0;
                             try {
-                                cashBack = data1.getString("totalCashback");
+                                totalCashBack = data1.getInt("totalCashback");
                             } catch (Exception e) {
-                                cashBack = "";
+                                totalCashBack = 0;
                             }
-
+                            try {
+                                approvedBand = data1.getString("approvedBand");
+                            } catch (Exception e) {
+                                approvedBand = "";
+                            }
+                            int creditLimit = 0;
+                            try {
+                                creditLimit = data1.getInt("creditLimit");
+                            } catch (Exception e) {
+                                creditLimit = 0;
+                            }
+                            int totalBorrowed = 0;
+                            try {
+                                totalBorrowed = data1.getInt("totalBorrowed");
+                            } catch (Exception e) {
+                                totalBorrowed = 0;
+                            }
+                            String nameadd = "";
+                            try {
+                                nameadd = data1.getString("college");
+                            } catch (Exception e) {
+                            }
+                            String profileStatus = "";
+                            try {
+                                profileStatus = data1.getString("profileStatus");
+                            } catch (Exception e) {
+                                profileStatus = "";
+                            }
                             SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editorP = userP.edit();
 
-                            editorP.putString("cashBack", cashBack);
+                            editorP.putInt("creditLimit", creditLimit);
+                            editorP.putString("profileStatus", profileStatus);
+                            editorP.putInt("totalBorrowed", totalBorrowed);
+                            editorP.putInt("cashBack", totalCashBack);
+                            editorP.putString("nameadd", nameadd);
+                            editorP.putString("formStatus", formstatus);
+                            editorP.putString("approvedBand", approvedBand);
+                            editorP.putString("productdpname", name);
                             editorP.commit();
+
+
                             try {
                                 rejectionReason = data1.getString("rejectionReason");
                             } catch (Exception e) {
@@ -846,7 +856,6 @@ public class Splash extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-
 
 
             if (result.equals("win")) {

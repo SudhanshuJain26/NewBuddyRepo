@@ -531,7 +531,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         } else {
             user.setIncompleteAadhar(false);
         }
-        if (addressProofs.size() == 1) {
+        if (addressProofs.size() <= 1) {
             incompleteAddress.setVisibility(View.VISIBLE);
             user.setIncompletePermanentAddress(true);
         } else {

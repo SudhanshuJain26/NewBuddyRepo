@@ -15,7 +15,8 @@
     <string name="fblogin">Connect your account</string>
 
     <!--<string name="server">http://ninja.hellobuddy.in/</string>-->
-    <string name="web">http://54.169.128.156:7777</string>
+    <string name="crashed_report">An error occurred.</string>
+    <string name="web">https://hellobuddy.in/</string>
     <string name="title_activity_facebook_auth">FacebookAuth</string>
     <string name="h2"><i>Phone Number</i></string>
     <string name="buddyagent"><i>2131296332</i></string>

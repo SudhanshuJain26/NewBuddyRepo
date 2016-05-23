@@ -146,7 +146,7 @@ public class DatePicker {
                         long currentTime = currentDate.getTime();
                         long selectedTime = c.getTime().getTime();
                         if ((selectedTime < (3 * dayMillisec + currentTime)) || (selectedTime > (30 * dayMillisec) + currentTime)) {
-                            Toast.makeText(activity, "Sorry, can't do it then!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "Minimum verification date should be 3 days and can be max upto 30 days from now!", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     } catch (Exception e) {

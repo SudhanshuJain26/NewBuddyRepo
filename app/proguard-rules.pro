@@ -1,14 +1,14 @@
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
-<<<<<<< HEAD
+
 # in /home/buddy/Android/Sdk/tools/proguard/proguard-android.txt
 # You can edit the include path and order by changing the proguardFiles
 # directive in build.gradle.
-=======
+
 # in /Applications/Android Studio.app/sdk/tools/proguard/proguard-android.txt
 # You can edit the include path and order by changing the ProGuard
 # include property in project.properties.
->>>>>>> 134ceeac9a07df789cc99f9359864107843af879
+
 #
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
@@ -18,11 +18,8 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-<<<<<<< HEAD
-=======
+
+
 
 # Obfuscation parameters:
 #-dontobfuscate
@@ -52,6 +49,8 @@
 # Ignore warnings: https://github.com/square/retrofit/issues/435
 -dontwarn com.google.appengine.api.urlfetch.**
 -keep public class android.net.http.SslError
+-keep  class indwin.c3.shareapp.adapters.PlaceAutocompleteAdapter
+
 -keep public class android.webkit.WebViewClient
 -keep class org.apache.http.** { *; }
 # Keep the pojos used by GSON or Jackson
@@ -61,6 +60,38 @@
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.** { *; }
 
+-keep class com.cloudinary.** { *; }
+
+-keep class com.github.ParkSangGwon.** { *; }
+
+-keep class uk.co.chrisjenx.** { *; }
+
+-keep class com.facebook.** { *; }
+
+-keep class com.balysv.** { *; }
+
+-keep class de.hdodenhof.** { *; }
+-keep class com.google.android.gms.** { *; }
+-keep class com.pixplicity.sharp.** { *; }
+
+-keep class ch.acra.sharp.** { *; }
+
+
+
+-keepnames class * implements java.io.Serializable
+
+-keepclassmembers class * implements java.io.Serializable {
+     static final long serialVersionUID;
+     private static final java.io.ObjectStreamField[] serialPersistentFields;
+     !static !transient <fields>;
+     !private <fields>;
+     !private <methods>;
+     private void writeObject(java.io.ObjectOutputStream);
+     private void readObject(java.io.ObjectInputStream);
+     java.lang.Object writeReplace();
+     java.lang.Object readResolve();
+ }
+-keep class org.acra.**{*;}
 # Keep Jackson stuff
 -keep class org.codehaus.** { *; }
 -keep class com.fasterxml.jackson.annotation.** { *; }
@@ -87,4 +118,7 @@
 -keepclassmembers class * {
     @com.squareup.picasso.** *;
 }
->>>>>>> 134ceeac9a07df789cc99f9359864107843af879
+-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+  public *;
+}
+

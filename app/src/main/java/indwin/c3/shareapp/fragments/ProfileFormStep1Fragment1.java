@@ -418,11 +418,17 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                     return;
                 }
                 if (isValidEmail(userEmailEditText.getText())) {
+                    if (AppUtils.isNotEmpty(user.getEmail()) && user.getEmail().equals(userEmailEditText.getText().toString())) {
+
+                    } else {
+                        user.setEmailVerified(false);
+                        verifyEmail.setText("Verify");
+                    }
+
                     incorrectEmail.setVisibility(View.GONE);
                     user.setEmail(userEmailEditText.getText().toString());
                     //userEmail.setText(user.getEmail());
                     editEmail.setVisibility(View.VISIBLE);
-                    verifyEmail.setText("Verify");
                     verifyEmail.setVisibility(View.VISIBLE);
                     saveEmail.setVisibility(View.GONE);
                     userEmailEditText.setVisibility(View.GONE);

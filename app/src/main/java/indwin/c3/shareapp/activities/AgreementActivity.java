@@ -121,11 +121,10 @@ public class AgreementActivity extends AppCompatActivity {
 
                             @Override
                             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 300, 180, false));
+                                Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 300, 100, false));
                                 d.setColorFilter(new
                                         PorterDuffColorFilter(getResources().getColor(R.color.colorSignature), PorterDuff.Mode.MULTIPLY));
-                                addSignature.setPadding(0, 0, 0, 0);
-
+                                //addSignature.setPadding(0, 0, 0, 0);
                                 addSignature.setCompoundDrawablesWithIntrinsicBounds(null, d, null, null);
                                 if (!user.isAppliedFor1k()) {
                                     addSignature.setText("Edit?");
@@ -166,10 +165,14 @@ public class AgreementActivity extends AppCompatActivity {
             }
 
             if (AppUtils.isNotEmpty(user.getSelfie())) {
-                takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, (getResources().getDrawable(R.drawable.downloading)), null, null);
+                Drawable d = getResources().getDrawable(R.drawable.downloading);
 
+                Bitmap bitmap = ((BitmapDrawable) d).getBitmap();
 
+                Drawable nd = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 300, 180, false));
+                takeASelfie.setPadding(0, 0, 0, 0);
                 takeASelfie.setText("");
+                takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, nd, null, null);
                 String path = user.getSelfie();
                 if (path.contains("http")) {
 
@@ -199,14 +202,14 @@ public class AgreementActivity extends AppCompatActivity {
                 } else {
                     final File imgFile = new File(path);
                     if (imgFile.exists()) {
-                        Drawable d = Drawable.createFromPath(user.getSelfie());
+                        Drawable downloading = Drawable.createFromPath(user.getSelfie());
 
-                        Bitmap bitmap = ((BitmapDrawable) d).getBitmap();
+                        Bitmap downloadingBitmap = ((BitmapDrawable) downloading).getBitmap();
 
-                        Drawable nd = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 300, 300, false));
+                        Drawable downloadingResizedDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(downloadingBitmap, 300, 300, false));
                         takeASelfie.setPadding(0, 0, 0, 0);
                         takeASelfie.setText("");
-                        takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, nd, null, null);
+                        takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, downloadingResizedDrawable, null, null);
                         isSelfieAdded = true;
 
 
@@ -266,12 +269,18 @@ public class AgreementActivity extends AppCompatActivity {
         acceptTerms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isSelfieAdded && isSignatureAdded && ProfileFormStep1Fragment3.completeAgreement != null) {
+                UserModel userSaved = AppUtils.getUserObject(AgreementActivity.this);
+                if (AppUtils.isNotEmpty(userSaved.getSignature())) {
+
+                    user.setSignature(userSaved.getSignature());
+                    user.setUpdateSignature(userSaved.isUpdateSignature());
+                }
+                if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature()) && ProfileFormStep1Fragment3.completeAgreement != null) {
 
                     ProfileFormStep1Fragment3.completeAgreement.setVisibility(View.VISIBLE);
                     finish();
                 } else {
-                    if (!isSelfieAdded)
+                    if (AppUtils.isEmpty(user.getSelfie()))
                         Toast.makeText(AgreementActivity.this, "Please add a selfie", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(AgreementActivity.this, "Please add a signature", Toast.LENGTH_SHORT).show();
@@ -390,7 +399,6 @@ public class AgreementActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        user = AppUtils.getUserObject(this);
     }
 
     public String[] hasPermissions(Context context, final String... permissions) {

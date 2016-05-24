@@ -652,7 +652,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     }
 
     private void checkIncomplete() {
-        if (collegeIds.size() == 1) {
+        if (collegeIds.size() <= 1) {
             incompleteCollegeId.setVisibility(View.VISIBLE);
             user.setIncompleteCollegeId(true);
         } else {

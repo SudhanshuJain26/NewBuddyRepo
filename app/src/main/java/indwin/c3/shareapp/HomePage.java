@@ -455,7 +455,7 @@ public class HomePage extends AppCompatActivity {
                 } else if (Constants.STATUS.APPROVED.toString().equals(user.getProfileStatus())) {
 
                     if (Constants.STATUS.APPROVED.toString().equals(status60K)) {
-                        name1.setText("Congrats " + name + ",");
+                        name1.setText("Congrats " + user.getName() + ",");
                         line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Happy shopping!");
                     } else if (Constants.STATUS.APPROVED.toString().equals(status7K)) {
                         line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Go ahead and shop or complete your profile to apply for a higher credit limit.");

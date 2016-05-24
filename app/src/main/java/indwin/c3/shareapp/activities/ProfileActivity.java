@@ -189,6 +189,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             System.out.println(e.toString() + "int empty");
                         }
                         intform = new Intent(ProfileActivity.this, MainActivity.class);
+                        intform.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         finish();
                         break;
                     default:

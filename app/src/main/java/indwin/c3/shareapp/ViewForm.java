@@ -1,29 +1,16 @@
 package indwin.c3.shareapp;
 
 import android.annotation.SuppressLint;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-
-import android.os.Environment;
-import android.os.Parcelable;
-import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -34,11 +21,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.ConsoleMessage;
-
-import android.webkit.JavascriptInterface;
-import android.webkit.JsResult;
-
-
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -62,15 +44,10 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-
-import java.io.File;
-
-
 import java.net.URLEncoder;
 import java.util.Calendar;
 
 import im.delight.android.webview.AdvancedWebView;
-
 import indwin.c3.shareapp.activities.ProfileActivity;
 import io.intercom.android.sdk.Intercom;
 
@@ -399,6 +376,7 @@ in.putExtra("checksharefromweb",1);
                         editorabc2.clear();
                         editorabc2.commit();
                         intform = new Intent(ViewForm.this, MainActivity.class);
+                        intform.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         finish();
                         startActivity(intform);
                         overridePendingTransition(0, 0);

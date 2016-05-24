@@ -276,7 +276,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
     }
 
     private void checkIncomplete() {
-        if (bankStmts.size() <= 1) {
+        if (bankStmts.size() == 1) {
             user.setIncompleteBankStmt(true);
         } else {
             bankStmts.remove(bankStmts.size() - 1);

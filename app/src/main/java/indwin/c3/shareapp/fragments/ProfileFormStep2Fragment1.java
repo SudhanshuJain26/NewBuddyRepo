@@ -306,7 +306,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         }
 
         if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails()
-                || AppUtils.isEmpty(user.getVerificationDate()) || AppUtils.isEmpty(user.getStudentLoan()))
+                || user.isIncompleteVerificationDate() || AppUtils.isEmpty(user.getStudentLoan()))
 
         {
             incompleteStep3.setVisibility(View.VISIBLE);

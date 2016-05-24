@@ -56,7 +56,7 @@ public class ImageUploaderRecyclerAdapter extends
     public void onBindViewHolder(ImageUploaderRecyclerAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
         if (images.get(position).equals("add")) {
-            Picasso.with(mContext).load(images.get(position)).fit().centerInside().placeholder(R.drawable.plus_transparent).into(viewHolder.image);
+            Picasso.with(mContext).load(images.get(position)).fit().centerInside().placeholder(R.drawable.plus).into(viewHolder.image);
         } else {
             viewHolder.image.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -64,7 +64,7 @@ public class ImageUploaderRecyclerAdapter extends
 
                     Intent intent = new Intent(mContext, FullScreenActivity.class);
                     intent.putExtra(AppUtils.IMAGE, images);
-                    intent.putExtra(Constants.DISABLE_ADD, disableAddButton);
+                    intent.putExtra(Constants.DISABLE_ADD,disableAddButton);
                     intent.putExtra(AppUtils.POSITION, position);
                     intent.putExtra(AppUtils.HEADING, title);
                     mContext.startActivity(intent);

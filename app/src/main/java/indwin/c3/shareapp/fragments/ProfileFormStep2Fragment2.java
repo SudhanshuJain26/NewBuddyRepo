@@ -249,7 +249,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             incompleteStep1.setVisibility(View.VISIBLE);
         }
 
-     if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails() || AppUtils.isEmpty(user.getVerificationDate()) || AppUtils.isEmpty(user.getStudentLoan())) {
+        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails() || user.isIncompleteVerificationDate() || AppUtils.isEmpty(user.getStudentLoan())) {
             incompleteStep3.setVisibility(View.VISIBLE);
         }
         return rootView;

@@ -1076,17 +1076,14 @@ public class Splash extends AppCompatActivity {
                             user.setFamilyMemberType2(familyJson.getString("relation"));
                             user.setProfessionFamilyMemberType2(familyJson.getString("occupation"));
                             user.setPhoneFamilyMemberType2(familyJson.getString("phone"));
-
-
-                                user.setPrefferedLanguageFamilyMemberType2(familyJson.getString("preferredLanguage"));
+                            user.setPrefferedLanguageFamilyMemberType2(familyJson.getString("preferredLanguage"));
                         }
                     } else {
                         if (familyJson.getString("relation") != null) {
                             user.setFamilyMemberType1(familyJson.getString("relation"));
                             user.setProfessionFamilyMemberType1(familyJson.getString("occupation"));
                             user.setPhoneFamilyMemberType1(familyJson.getString("phone"));
-                            if (familyJson.opt("preferredLanguage") != null)
-                                user.setPrefferedLanguageFamilyMemberType1(familyJson.getString("preferredLanguage"));
+                            user.setPrefferedLanguageFamilyMemberType1(familyJson.getString("preferredLanguage"));
                         }
                     }
                 }

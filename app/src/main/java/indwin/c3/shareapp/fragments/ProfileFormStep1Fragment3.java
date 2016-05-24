@@ -292,7 +292,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 if ((user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender() || user.isIncompleteRollNumber()
                         || user.isIncompleteAadhar() || user.isIncompleteCollegeDetails()
                         || user.isIncompleteCollegeId() || user.isIncompletePermanentAddress())
-                        && !mPrefs.getBoolean("skipIncompleteMessage", false) || !AppUtils.isNotEmpty(user.getSelfie()) || !AppUtils.isNotEmpty(user.getSignature())) {
+                        && !mPrefs.getBoolean("skipIncompleteMessage", false) || AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
 
                     final Dialog dialog1 = new Dialog(getActivity());
                     dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -531,7 +531,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         } else {
             user.setIncompleteAadhar(false);
         }
-        if (addressProofs.size() == 1) {
+        if (addressProofs.size() <= 1) {
             incompleteAddress.setVisibility(View.VISIBLE);
             user.setIncompletePermanentAddress(true);
         } else {

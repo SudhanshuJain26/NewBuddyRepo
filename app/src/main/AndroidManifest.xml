@@ -369,9 +369,14 @@ android:hardwareAccelerated="false"
             android:label="@string/title_choose_image"
             android:screenOrientation="portrait"/>
 
+        <!--<meta-data-->
+            <!--android:name="com.google.android.geo.API_KEY"-->
+            <!--android:value="AIzaSyCycZqtZSmTw6xKwyTKyXXmZZRHjw58llY"/>-->
+
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCycZqtZSmTw6xKwyTKyXXmZZRHjw58llY"/>
+                    android:name="com.google.android.geo.API_KEY"
+                    android:value="AIzaSyBfSi2VuUcXXiqOzwrr9lNKKCQey5Pc8Tg"/>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>

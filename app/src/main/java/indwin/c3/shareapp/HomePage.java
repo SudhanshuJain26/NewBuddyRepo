@@ -111,7 +111,7 @@ public class HomePage extends AppCompatActivity {
     private TextView paste, tren, products, lappy, fashion, beau, ent, foot, but;
     //    Map<String,Map<int,V>> map;
 
-//    HashMap<String, HashMap<String,String>> image;
+    //    HashMap<String, HashMap<String,String>> image;
     private android.content.ClipboardManager myClipboard;
     private String spin = "";
     private String productId = "";
@@ -455,7 +455,7 @@ public class HomePage extends AppCompatActivity {
                 } else if (Constants.STATUS.APPROVED.toString().equals(user.getProfileStatus())) {
 
                     if (Constants.STATUS.APPROVED.toString().equals(status60K)) {
-                        name1.setText("Congrats " + name + ",");
+                        name1.setText("Congrats " + user.getName() + ",");
                         line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Happy shopping!");
                     } else if (Constants.STATUS.APPROVED.toString().equals(status7K)) {
                         line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Go ahead and shop or complete your profile to apply for a higher credit limit.");
@@ -607,7 +607,7 @@ public class HomePage extends AppCompatActivity {
                             //  finish();
                             startActivity(intform);
                             overridePendingTransition(0, 0);
- //                        intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+                            //                        intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
                             //                        intform.putExtra("which_page",3);
                             //                        finish();
                             //                        startActivity(intform);
@@ -746,6 +746,7 @@ public class HomePage extends AppCompatActivity {
                                 System.out.println(e.toString() + "int empty");
                             }
                             intform = new Intent(HomePage.this, MainActivity.class);
+                            intform.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             Splash.checkNot = 1;
 
                             clickpaste();
@@ -800,9 +801,6 @@ public class HomePage extends AppCompatActivity {
 
             //calling sync state is necessay or else your hamburger icon wont show up
             actionBarDrawerToggle.syncState();
-
-
-
 
 
             paste.setVisibility(View.GONE);
@@ -862,7 +860,7 @@ public class HomePage extends AppCompatActivity {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
 
 
-//                        Intent in = new Intent(HomePage.this, ViewForm.class);
+                        //                        Intent in = new Intent(HomePage.this, ViewForm.class);
                         Splash.checkNot = 1;
                         paste = (TextView) findViewById(R.id.pasteAg);
                         query.requestFocus();
@@ -877,16 +875,16 @@ public class HomePage extends AppCompatActivity {
                             in.putExtra("query", query.getText().toString());
                             query.setText("");
                             in.putExtra("page", "api");
-                            checkValidFromApis=0;
-                            checkValidUrl=0;
+                            checkValidFromApis = 0;
+                            checkValidUrl = 0;
                             startActivity(in);
-//                            if (time + 5 < userP.getLong("expires", 0))
-////                                new checkAuth().execute(url);//
-//                            {
-//                                new linkSearch().execute();
-//                            } else
-//                                //   new checkAuth().execute(url);
-//                                new AuthTokc().execute("cc");
+                            //                            if (time + 5 < userP.getLong("expires", 0))
+                            ////                                new checkAuth().execute(url);//
+                            //                            {
+                            //                                new linkSearch().execute();
+                            //                            } else
+                            //                                //   new checkAuth().execute(url);
+                            //                                new AuthTokc().execute("cc");
 
                         } else if (checkValidUrl == 1) {
                             //monkey page
@@ -895,26 +893,26 @@ public class HomePage extends AppCompatActivity {
                             in.putExtra("query", query.getText().toString());
                             in.putExtra("page", "monkey");
                             startActivity(in);
-                            checkValidFromApis=0;
-                            checkValidUrl=0;
-//                            finish();
+                            checkValidFromApis = 0;
+                            checkValidUrl = 0;
+                            //                            finish();
                             page = "monkey";
                         } else if ((checkValidFromApis == 1)) {
                             //not monley page
                             query.setText("");
                             Intent in = new Intent(HomePage.this, ProductsPage.class);
-                            in.putExtra("query",query.getText().toString());
+                            in.putExtra("query", query.getText().toString());
                             in.putExtra("seller", sellerNme);
                             in.putExtra("page", "pay");
                             startActivity(in);
-                            checkValidFromApis=0;
-                            checkValidUrl=0;
-//                            finish();
+                            checkValidFromApis = 0;
+                            checkValidUrl = 0;
+                            //                            finish();
                             page = "pay";
                         }
-//                        in.putExtra("url", query.getText().toString());
-//                        in.putExtra("which_page", 9);
-//                        startActivity(in);
+                        //                        in.putExtra("url", query.getText().toString());
+                        //                        in.putExtra("which_page", 9);
+                        //                        startActivity(in);
                         //  Toast.makeText(HomePage.this,"oscar goes to caprio",Toast.LENGTH_LONG).show();
                         //TODO: do something
                     }
@@ -999,67 +997,67 @@ public class HomePage extends AppCompatActivity {
                         }
                         cardclick();
                         //final Intent send1=new Intent(HomePage.this,ViewForm.class);
-//                        card1.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                query.clearFocus();
-//                                //     Toast.makeText(HomePage.this,"checknow",Toast.LENGTH_LONG).show();
-//                                Intent send1 = new Intent(HomePage.this, ViewForm.class);
-//                                send1.putExtra("prodid", Splash.fkid1.get(spin).get("0"));
-//                                send1.putExtra("ecom", Splash.sellers.get(spin).get("0"));
-//                                send1.putExtra("which_page", 10);
-//                                Splash.checkNot = 1;
-//                                paste = (TextView) findViewById(R.id.pasteAg);
-//                                clickpaste();
-//                                startActivity(send1);
-//                            }
-//                        });
-//                        card2.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                query.clearFocus();
-//                                Intent send1 = new Intent(HomePage.this, ViewForm.class);
-//                                send1.putExtra("prodid", Splash.fkid1.get(spin).get("1"));
-//                                send1.putExtra("ecom", Splash.sellers.get(spin).get("1"));
-//                                send1.putExtra("which_page", 10);
-//                                Splash.checkNot = 1;
-//                                paste = (TextView) findViewById(R.id.pasteAg);
-//                                clickpaste();
-//                                startActivity(send1);
-//
-//                            }
-//                        });
-//                        card3.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                query.clearFocus();
-//                                Intent send1 = new Intent(HomePage.this, ViewForm.class);
-//
-//                                send1.putExtra("prodid", Splash.fkid1.get(spin).get("2"));
-//                                send1.putExtra("ecom", Splash.sellers.get(spin).get("2"));
-//                                send1.putExtra("which_page", 10);
-//                                Splash.checkNot = 1;
-//                                paste = (TextView) findViewById(R.id.pasteAg);
-//                                clickpaste();
-//                                startActivity(send1);
-//                            }
-//                        });
-//                        card4.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                query.clearFocus();
-//                                Intent send1 = new Intent(HomePage.this, ViewForm.class);
-//                                send1.putExtra("prodid", Splash.fkid1.get(spin).get("3"));
-//                                send1.putExtra("ecom", Splash.sellers.get(spin).get("3"));
-//                                send1.putExtra("which_page", 10);
-//                                Splash.checkNot = 1;
-//                                paste = (TextView) findViewById(R.id.pasteAg);
-//                                clickpaste();
-//                                startActivity(send1);
-//                            }
-//                        });
-//                    if(position==3)
-//                        Toast.makeText(HomePage.this,"checknow",Toast.LENGTH_LONG).show();
+                        //                        card1.setOnClickListener(new View.OnClickListener() {
+                        //                            @Override
+                        //                            public void onClick(View v) {
+                        //                                query.clearFocus();
+                        //                                //     Toast.makeText(HomePage.this,"checknow",Toast.LENGTH_LONG).show();
+                        //                                Intent send1 = new Intent(HomePage.this, ViewForm.class);
+                        //                                send1.putExtra("prodid", Splash.fkid1.get(spin).get("0"));
+                        //                                send1.putExtra("ecom", Splash.sellers.get(spin).get("0"));
+                        //                                send1.putExtra("which_page", 10);
+                        //                                Splash.checkNot = 1;
+                        //                                paste = (TextView) findViewById(R.id.pasteAg);
+                        //                                clickpaste();
+                        //                                startActivity(send1);
+                        //                            }
+                        //                        });
+                        //                        card2.setOnClickListener(new View.OnClickListener() {
+                        //                            @Override
+                        //                            public void onClick(View v) {
+                        //                                query.clearFocus();
+                        //                                Intent send1 = new Intent(HomePage.this, ViewForm.class);
+                        //                                send1.putExtra("prodid", Splash.fkid1.get(spin).get("1"));
+                        //                                send1.putExtra("ecom", Splash.sellers.get(spin).get("1"));
+                        //                                send1.putExtra("which_page", 10);
+                        //                                Splash.checkNot = 1;
+                        //                                paste = (TextView) findViewById(R.id.pasteAg);
+                        //                                clickpaste();
+                        //                                startActivity(send1);
+                        //
+                        //                            }
+                        //                        });
+                        //                        card3.setOnClickListener(new View.OnClickListener() {
+                        //                            @Override
+                        //                            public void onClick(View v) {
+                        //                                query.clearFocus();
+                        //                                Intent send1 = new Intent(HomePage.this, ViewForm.class);
+                        //
+                        //                                send1.putExtra("prodid", Splash.fkid1.get(spin).get("2"));
+                        //                                send1.putExtra("ecom", Splash.sellers.get(spin).get("2"));
+                        //                                send1.putExtra("which_page", 10);
+                        //                                Splash.checkNot = 1;
+                        //                                paste = (TextView) findViewById(R.id.pasteAg);
+                        //                                clickpaste();
+                        //                                startActivity(send1);
+                        //                            }
+                        //                        });
+                        //                        card4.setOnClickListener(new View.OnClickListener() {
+                        //                            @Override
+                        //                            public void onClick(View v) {
+                        //                                query.clearFocus();
+                        //                                Intent send1 = new Intent(HomePage.this, ViewForm.class);
+                        //                                send1.putExtra("prodid", Splash.fkid1.get(spin).get("3"));
+                        //                                send1.putExtra("ecom", Splash.sellers.get(spin).get("3"));
+                        //                                send1.putExtra("which_page", 10);
+                        //                                Splash.checkNot = 1;
+                        //                                paste = (TextView) findViewById(R.id.pasteAg);
+                        //                                clickpaste();
+                        //                                startActivity(send1);
+                        //                            }
+                        //                        });
+                        //                    if(position==3)
+                        //                        Toast.makeText(HomePage.this,"checknow",Toast.LENGTH_LONG).show();
                         // your code here
                     }
 
@@ -1432,27 +1430,28 @@ public class HomePage extends AppCompatActivity {
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 productId = Splash.fkid1.get(spin).get("0");
                 sellerNme = Splash.sellers.get(spin).get("0");
-//                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                //                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 Intent in = new Intent(HomePage.this, ProductsPage.class);
                 in.putExtra("seller", sellerNme);
                 in.putExtra("product", productId);
-//                in.putExtra("query",query.getText().toString());
+                //                in.putExtra("query",query.getText().toString());
                 in.putExtra("page", "api");
                 startActivity(in);
                 if (time + 5 < userP.getLong("expires", 0))
-//                                new checkAuth().execute(url);//
+                //                                new checkAuth().execute(url);//
                 {
-                 //   new linkSearch().execute();
-                } else{}
-                    //   new checkAuth().execute(url);
-//                    new AuthTokc().execute("cc");
+                    //   new linkSearch().execute();
+                } else {
+                }
+                //   new checkAuth().execute(url);
+                //                    new AuthTokc().execute("cc");
 
                 Splash.checkNot = 1;
                 paste = (TextView) findViewById(R.id.pasteAg);
-//                clickpaste();
-//                send1.putExtra("prodid", Splash.fkid1.get(spin).get("0"));
-//                send1.putExtra("ecom", Splash.sellers.get(spin).get("0"));
-//                send1.putExtra("which_page", 10);
+                //                clickpaste();
+                //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("0"));
+                //                send1.putExtra("ecom", Splash.sellers.get(spin).get("0"));
+                //                send1.putExtra("which_page", 10);
                 //
                 // sestartActivity(send1);
 
@@ -1463,31 +1462,32 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View v) {
                 query.clearFocus();
 
-//                Intent send1 = new Intent(HomePage.this, ViewForm.class);
-//                send1.putExtra("prodid", Splash.fkid1.get(spin).get("1"));
+                //                Intent send1 = new Intent(HomePage.this, ViewForm.class);
+                //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("1"));
                 Splash.checkNot = 1;
                 paste = (TextView) findViewById(R.id.pasteAg);
                 clickpaste();
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 productId = Splash.fkid1.get(spin).get("1");
                 sellerNme = Splash.sellers.get(spin).get("1");
-//                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                //                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 Intent in = new Intent(HomePage.this, ProductsPage.class);
                 in.putExtra("seller", sellerNme);
                 in.putExtra("product", productId);
                 in.putExtra("page", "api");
                 startActivity(in);
                 if (time + 5 < userP.getLong("expires", 0))
-//                                new checkAuth().execute(url);//
+                //                                new checkAuth().execute(url);//
                 {
-                   // new linkSearch().execute();
+                    // new linkSearch().execute();
                 } else
-                    //   new checkAuth().execute(url);
-                   // new AuthTokc().execute("cc");
-                {}
-//                send1.putExtra("ecom", Splash.sellers.get(spin).get("1"));
-//                send1.putExtra("which_page", 10);
-//                startActivity(send1);
+                //   new checkAuth().execute(url);
+                // new AuthTokc().execute("cc");
+                {
+                }
+                //                send1.putExtra("ecom", Splash.sellers.get(spin).get("1"));
+                //                send1.putExtra("which_page", 10);
+                //                startActivity(send1);
 
             }
         });
@@ -1496,32 +1496,32 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View v) {
                 query.clearFocus();
 
-//                Intent send1 = new Intent(HomePage.this, ViewForm.class);
+                //                Intent send1 = new Intent(HomePage.this, ViewForm.class);
                 Splash.checkNot = 1;
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 productId = Splash.fkid1.get(spin).get("2");
                 sellerNme = Splash.sellers.get(spin).get("2");
-//                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                //                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 Intent in = new Intent(HomePage.this, ProductsPage.class);
                 in.putExtra("seller", sellerNme);
                 in.putExtra("product", productId);
                 in.putExtra("page", "api");
                 startActivity(in);
-//                if (time + 5 < userP.getLong("expires", 0))
-////                                new checkAuth().execute(url);//
-//                {
-//                    new linkSearch().execute();
-//                } else
-//                    //   new checkAuth().execute(url);
-//                    new AuthTokc().execute("cc");
+                //                if (time + 5 < userP.getLong("expires", 0))
+                ////                                new checkAuth().execute(url);//
+                //                {
+                //                    new linkSearch().execute();
+                //                } else
+                //                    //   new checkAuth().execute(url);
+                //                    new AuthTokc().execute("cc");
 
                 paste = (TextView) findViewById(R.id.pasteAg);
-           //     clickpaste();
-//                send1.putExtra("prodid", Splash.fkid1.get(spin).get("2"));
-//                send1.putExtra("ecom", Splash.sellers.get(spin).get("2"));
-//                send1.putExtra("which_page", 10);
-//                send1.putExtra("which_page", 10);
-//                startActivity(send1);
+                //     clickpaste();
+                //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("2"));
+                //                send1.putExtra("ecom", Splash.sellers.get(spin).get("2"));
+                //                send1.putExtra("which_page", 10);
+                //                send1.putExtra("which_page", 10);
+                //                startActivity(send1);
 
             }
         });
@@ -1531,30 +1531,30 @@ public class HomePage extends AppCompatActivity {
                 query.clearFocus();
                 Splash.checkNot = 1;
 
-//                paste = (TextView) findViewById(R.id.pasteAg);
+                //                paste = (TextView) findViewById(R.id.pasteAg);
                 clickpaste();
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 productId = Splash.fkid1.get(spin).get("3");
                 sellerNme = Splash.sellers.get(spin).get("3");
-//                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                //                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 Intent in = new Intent(HomePage.this, ProductsPage.class);
                 in.putExtra("seller", sellerNme);
                 in.putExtra("product", productId);
                 in.putExtra("page", "api");
                 startActivity(in);
-//                if (time + 5 < userP.getLong("expires", 0))
-////                                new checkAuth().execute(url);//
-//                {
-//                    new linkSearch().execute();
-//                } else
-//                    //   new checkAuth().execute(url);
-//                    new AuthTokc().execute("cc");
+                //                if (time + 5 < userP.getLong("expires", 0))
+                ////                                new checkAuth().execute(url);//
+                //                {
+                //                    new linkSearch().execute();
+                //                } else
+                //                    //   new checkAuth().execute(url);
+                //                    new AuthTokc().execute("cc");
 
-//                Intent send1 = new Intent(HomePage.this, ViewForm.class);
-//                send1.putExtra("prodid", Splash.fkid1.get(spin).get("3"));
-//                send1.putExtra("ecom", Splash.sellers.get(spin).get("3"));
-//                send1.putExtra("which_page", 10);
-//                startActivity(send1);
+                //                Intent send1 = new Intent(HomePage.this, ViewForm.class);
+                //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("3"));
+                //                send1.putExtra("ecom", Splash.sellers.get(spin).get("3"));
+                //                send1.putExtra("which_page", 10);
+                //                startActivity(send1);
             }
         });
     }
@@ -1768,9 +1768,9 @@ public class HomePage extends AppCompatActivity {
             if (pos != -1) {
 
                 for (int j = pos + 1; j < parseString.length(); j++) {
-                       if(((parseString.charAt(j))>='0')&&(parseString.charAt(j)<='9'))
+                    if (((parseString.charAt(j)) >= '0') && (parseString.charAt(j) <= '9'))
 
-                    productId += parseString.charAt(j);
+                        productId += parseString.charAt(j);
                     else break;
 
 
@@ -1792,7 +1792,7 @@ public class HomePage extends AppCompatActivity {
             sellerNme = "paytm";
             checkValidFromApis = 1;
         }
-//amazon
+        //amazon
         else if (parseString.contains("amazon")) {
             sellerNme = "amazon";
             int w = 0;
@@ -1848,7 +1848,7 @@ public class HomePage extends AppCompatActivity {
         if (checkValidUrl == 1) {
             //monkey page
         }
-//
+        //
         //       Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
 
     }
@@ -1894,7 +1894,7 @@ public class HomePage extends AppCompatActivity {
 
     public class AuthTokc extends
 
-            AsyncTask<String, Void, String> {
+                          AsyncTask<String, Void, String> {
 
 
         private String apiN = "";
@@ -1972,12 +1972,11 @@ public class HomePage extends AppCompatActivity {
     }
 
 
-
     public class linkSearch extends
-            AsyncTask<String, Void, String> {
+                            AsyncTask<String, Void, String> {
         @Override
         public void onPreExecute() {
-//            spinner.setVisibility(View.VISIBLE);
+            //            spinner.setVisibility(View.VISIBLE);
 
         }
 
@@ -2024,7 +2023,7 @@ public class HomePage extends AppCompatActivity {
 
                         JSONObject img = new JSONObject(data1.getString("imgUrls"));
                         urlImg = img.getString("400x400");
-//                        infor=data1.getString("")
+                        //                        infor=data1.getString("")
                         try {
                             specification = data1.getString("specificaiton");
                         } catch (Exception e) {
@@ -2140,10 +2139,10 @@ public class HomePage extends AppCompatActivity {
                 try {
                     Map userMap = new HashMap<>();
                     userMap.put("PRODUCT_TITLE", searchTitle);
-//                    userMap.put("email", mEmail);
-//                    userMap.put("user_id", mPhone);
-//                    userMap.put("phone", mPhone);
-//                    System.out.println("Intercom data 4" + mPhone);
+                    //                    userMap.put("email", mEmail);
+                    //                    userMap.put("user_id", mPhone);
+                    //                    userMap.put("phone", mPhone);
+                    //                    System.out.println("Intercom data 4" + mPhone);
                     Intercom.client().updateUser(userMap);
                 } catch (Exception e) {
                     System.out.println("Intercom two" + e.toString());
@@ -2156,7 +2155,6 @@ public class HomePage extends AppCompatActivity {
                 in.putExtra("desc", "");
 
 
-
                 in.putExtra("monthsallowed", monthsallowed);
                 in.putExtra("seller", sellerNme);
                 in.putExtra("query", q);
@@ -2165,7 +2163,7 @@ public class HomePage extends AppCompatActivity {
                 startActivity(in);
                 query.setText("");
 
-//                    Toast.makeText(HomePage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
+                //                    Toast.makeText(HomePage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
 
 
             }

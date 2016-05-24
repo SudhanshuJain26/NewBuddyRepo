@@ -205,8 +205,22 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                 user.setIncompleteVerificationDate(false);
             } catch (ParseException e) {
                 e.printStackTrace();
-                user.setVerificationDate("");
-                user.setIncompleteVerificationDate(true);
+                try {
+                    spf = new SimpleDateFormat("dd MMM yyyy");
+                    Date verificationDate = spf.parse(user.getVerificationDate());
+                    verificationDateEditText.setText(spf.format(verificationDate));
+                    completeVerifcationDate.setVisibility(View.VISIBLE);
+                    spf = new SimpleDateFormat("yyyy-MM-dd");
+                    user.setUpdateVerificationDate(true);
+                    user.setVerificationDate(spf.format(verificationDate));
+                    user.setIncompleteVerificationDate(false);
+
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                    user.setVerificationDate("");
+                    user.setIncompleteVerificationDate(true);
+                }
+
             }
 
         }

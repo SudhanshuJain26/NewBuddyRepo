@@ -37,6 +37,8 @@
     </RelativeLayout>
 
 
+
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -151,6 +153,7 @@ android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:textColor="#F28E52" />
             </RelativeLayout>
 
+
             <android.support.v7.widget.CardView
                 android:id="@+id/cardAddress"
                 android:layout_width="match_parent"
@@ -194,4 +197,14 @@ android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:rotationY="180"
         android:src="@drawable/back11"
         android:tint="#ffffff" />
+    <indwin.c3.shareapp.GIFView
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+
+        android:id="@+id/loading"
+        android:layout_centerInParent="true"
+        android:backgroundTint="#21ae50"
+        android:foregroundTint="#21ae50" />
+
+
 </RelativeLayout>

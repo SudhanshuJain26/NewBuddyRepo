@@ -677,6 +677,19 @@ public class HomePage extends AppCompatActivity {
                             startActivity(intform);
                             overridePendingTransition(0, 0);
                             return true;
+                        case R.id.Recharge:
+
+
+                            intform = new Intent(HomePage.this, ViewForm.class);
+                            Splash.checkNot = 1;
+
+                            clickpaste();
+
+                            intform.putExtra("which_page", 999);
+                            intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+                            startActivity(intform);
+                            overridePendingTransition(0, 0);
+                            return true;
                         case R.id.Share:
 
                             SharedPreferences sh_otp = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);

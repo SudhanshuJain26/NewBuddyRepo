@@ -758,6 +758,14 @@ public class Splash extends AppCompatActivity {
                                 totalBorrowed = 0;
                             }
                             String nameadd = "";
+                            String  courseend="";
+
+                            try {
+                               courseend = data1.getString("courseCompletionDate");
+                            } catch (Exception e) {
+                            courseend="";
+                            }
+
                             try {
                                 nameadd = data1.getString("college");
                             } catch (Exception e) {
@@ -774,6 +782,7 @@ public class Splash extends AppCompatActivity {
                             editorP.putInt("creditLimit", creditLimit);
                             editorP.putString("profileStatus", profileStatus);
                             editorP.putInt("totalBorrowed", totalBorrowed);
+                            editorP.putString("course", courseend);
                             editorP.putInt("cashBack", totalCashBack);
                             editorP.putString("nameadd", nameadd);
                             editorP.putString("formStatus", formstatus);

@@ -341,7 +341,7 @@
         <activity
             android:name=".Editaddress"
             android:configChanges="orientation"
-
+android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
 
@@ -356,6 +356,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SendOtpaddress"
             android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
 <activity

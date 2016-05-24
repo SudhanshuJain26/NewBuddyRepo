@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,31 +29,45 @@ import org.json.JSONObject;
 public class SendOtpaddress extends AppCompatActivity {
 private String token="";
     private String userid="";
+    private GIFView loader;
+    TextView send;
 //    BroadcastReceiver broadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_otpaddress);
-        TextView send=(TextView)findViewById(R.id.send);
+        ImageView back=(ImageView)findViewById(R.id.backo22);
+//        ImageView back=(ImageView)findViewById(R.id.backo11);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+finish();
+//                onBackPressed();
+            }
+        });
+
+        send=(TextView)findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                send.setVisibility(View.INVISIBLE);
                 new ItemsByKeyword().execute();
 
             }
         });
         TextView msg=(TextView)findViewById(R.id.buddyLogo);
-
+loader=(GIFView)findViewById(R.id.loading);
         registerReceiver(broadcastReceiver, new IntentFilter("order"));
         SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
         msg.setText("To change your address, please verify with OTP first.Your OTP will be sent to +91-"+get.getString("phone_number",""));
     }
     private class ItemsByKeyword extends
             AsyncTask<String, Void, String> {
-//        @Override
-//        protected void onPreExecute() {
+        @Override
+        protected void onPreExecute() {
 //            spinner.setVisibility(View.VISIBLE);
-//        }
+        loader.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -208,6 +223,8 @@ private String token="";
         }
 
         protected void onPostExecute(String result) {
+            send.setVisibility(View.VISIBLE);
+            loader.setVisibility(View.GONE);
 if(result.contains("win"))
 {
     Intent i =new Intent(SendOtpaddress.this,Otp.class);

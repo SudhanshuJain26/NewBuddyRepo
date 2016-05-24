@@ -137,6 +137,20 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         editornew.commit();
                         intform = new Intent(ProfileActivity.this, Share.class);
                         break;
+                    case R.id.Recharge:
+
+
+                        intform = new Intent(ProfileActivity.this, ViewForm.class);
+
+
+                        //clickpaste();
+
+                        intform.putExtra("which_page", 999);
+                        intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+                        startActivity(intform);
+                        overridePendingTransition(0, 0);
+                        return true;
+
                     case R.id.log:
                         Splash.notify = 0;
                         SharedPreferences preferences = getSharedPreferences("buddyotp", 0);

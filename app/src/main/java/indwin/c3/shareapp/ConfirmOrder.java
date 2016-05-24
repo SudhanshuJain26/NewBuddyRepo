@@ -32,7 +32,10 @@ public class ConfirmOrder extends AppCompatActivity {
     private TextView tit, brand, sellerMrpValue, flexVal, checkOutnow, servicepr, downP, sellerpr;
     private ImageView prod, seller;
     View parent;
-    private int downPayment = 0, loanAmt = 0, datToday = 0, newemi = 0, w = 0;
+    private  PopupWindow popup;
+    private  int serviceCharge;
+    private int downPayment = 0, loanAmt = 0, datToday = 0, w = 0;
+    private long newemi=0;
     String sellerName = "";
 //    BroadcastReceiver broadcastReceiver;
 
@@ -118,25 +121,34 @@ public class ConfirmOrder extends AppCompatActivity {
         } else if (sellerName.equals("jabong")) {
             seller.setImageResource(R.drawable.jabong);
         }
-        final int serviceCharge = calcServ(sellerName, getIntent().getExtras().getInt("sellingprice"), loanAmt);
-        if (downPayment == 0) {
-            downPayment = serviceCharge;
-        }
+        serviceCharge = calcServ(sellerName, getIntent().getExtras().getInt("sellingprice"), loanAmt);
+//        if (downPayment == 0) {
+//            downPayment = serviceCharge;
+//        }
+        downPayment+=serviceCharge;
         //   sellerMrpValue.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(getIntent().getExtras().getInt("sellingprice")));
         servicepr.setText(getApplicationContext().getString(R.string.Rs) + " " + downPayment);
         final int dis = getIntent().getExtras().getInt("discount");
-        newemi = emiWithservice(getIntent().getExtras().getInt("sellingprice") - dis - downPayment + serviceCharge, getIntent().getExtras().getInt("sellingprice"), (getIntent().getExtras().getInt("monthforemi")));
+//        newemi = emiWithservice(getIntent().getExtras().getInt("sellingprice") - dis - downPayment + serviceCharge, getIntent().getExtras().getInt("sellingprice"), (getIntent().getExtras().getInt("monthforemi")));
 //        Toast.makeText(ConfirmOrder.this, newemi, Toast.LENGTH_SHORT).show();
-        if (downPayment == 0)
-            newemi = 0;
+//        if (downPayment == 0)
+//            newemi = 0;
+        String emifromProd="";
+        try{
+                emifromProd=getIntent().getExtras().getString("emi");}
+    catch(Exception e)
+    {}
+//        Double em=Double.valueOf(emifromProd);
+        newemi=getIntent().getExtras().getLong("emicheck");
         System.out.println(newemi + "may14");
         String t = newemi + " /month" + " x " + getIntent().getExtras().getString("months");
-        flexVal.setText(getApplicationContext().getString(R.string.Rs) + newemi);
+        flexVal.setText(getApplicationContext().getString(R.string.Rs) + newemi+"/month");
         TextView totalPay = (TextView) findViewById(R.id.emimonths);
-        w = (getIntent().getExtras().getInt("monthforemi")) * newemi + downPayment;
+        long ww=0;
+        ww = (getIntent().getExtras().getInt("monthforemi")) * newemi + downPayment;
         if (downPayment == 0)
-            w = serviceCharge;
-        totalPay.setText(getApplicationContext().getString(R.string.Rs) + w);
+            ww = serviceCharge;
+        totalPay.setText(getApplicationContext().getString(R.string.Rs) + ww);
         checkOutnow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +156,7 @@ public class ConfirmOrder extends AppCompatActivity {
                 SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
                 SharedPreferences.Editor et = cred.edit();
                 et.putInt("service", serviceCharge);
-                et.putInt("emi", newemi);
+                et.putInt("emi", (int)newemi);
                 et.putInt("downpayment", downPayment);
                 et.putInt("tot", w);
                 EditText e = (EditText) findViewById(R.id.edtWant);
@@ -167,7 +179,7 @@ public class ConfirmOrder extends AppCompatActivity {
                 parent = inflater.inflate(R.layout.activity_confirm_order, null, false);
                 View popUpView = inflater.inflate(R.layout.popup, null, false);
 
-                final PopupWindow popup = new PopupWindow(popUpView);
+                 popup = new PopupWindow(popUpView);
 //                        580, true);
 
                 popup.setContentView(popUpView);
@@ -193,9 +205,11 @@ public class ConfirmOrder extends AppCompatActivity {
                 });
                 sp.setText(getApplicationContext().getString(R.string.Rs) + getIntent().getExtras().getInt("sellingprice"));
                 svc.setText(getApplicationContext().getString(R.string.Rs) + serviceCharge);
-                int interest = newemi * (getIntent().getExtras().getInt("monthforemi")) + downPayment - getIntent().getExtras().getInt("sellingprice");
+                int interest = 0;
                 if (interest < 0)
                     interest = 0;
+                int ll=(int)(newemi*getIntent().getExtras().getInt("monthforemi"));
+                interest=ll-getIntent().getExtras().getInt("sellingprice")+downPayment-serviceCharge;
                 inter.setText(getApplicationContext().getString(R.string.Rs) + interest);
                 disc.setText(getApplicationContext().getString(R.string.Rs) + dis);
                 TextView sc = (TextView) popUpView.findViewById(R.id.textPop);
@@ -327,5 +341,18 @@ public class ConfirmOrder extends AppCompatActivity {
         super.finish();
     }
 
-    ;
+    @Override
+    public void onBackPressed() {
+        try{
+        if (popup.isShowing()) {
+            popup.dismiss();
+            RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
+//                prod.setTi(Color.parseColor("#CC000000"));
+            cover.setVisibility(View.GONE);}
+        else
+        {finish();}}
+        catch (Exception e)
+        {finish();}
+//        super.onBackPressed();
+    }
 }

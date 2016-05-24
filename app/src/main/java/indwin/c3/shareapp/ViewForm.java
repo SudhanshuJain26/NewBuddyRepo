@@ -165,6 +165,9 @@ else
         if(which_page==15)
             test.setText("Safety and Security");
 
+        else
+        if(which_page==999)
+            test.setText("Recharge Paytm Wallet");
 
         spinner=(ProgressBar)findViewById(R.id.progressBar1);
 
@@ -225,6 +228,9 @@ else
             navigationView.getMenu().getItem(7).setChecked(true);
         else
         if(which_page==15)
+            navigationView.getMenu().getItem(7).setChecked(true);
+        else
+        if(which_page==999)
             navigationView.getMenu().getItem(8).setChecked(true);
         else if(which_page==16)
             navigationView.getMenu().getItem(2).setChecked(true);
@@ -336,6 +342,20 @@ in.putExtra("checksharefromweb",1);
                         startActivity(in);
                         overridePendingTransition(0, 0);
                         return true;
+                    case R.id.Recharge:
+
+
+                        intform = new Intent(ViewForm.this, ViewForm.class);
+                        Splash.checkNot = 1;
+
+//                        clickpaste();
+
+                        intform.putExtra("which_page", 999);
+                        intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+                        startActivity(intform);
+                        overridePendingTransition(0, 0);
+                        return true;
+
                     case R.id.log:
                         try {
 
@@ -590,6 +610,11 @@ in.putExtra("checksharefromweb",1);
                         url=getApplicationContext().getString(R.string.web)+"/security" +
                                 "?m=no&userid="+userid+"&key="+result;
                         break;
+                    case 99:
+                        url=getApplicationContext().getString(R.string.web)+"/security" +
+                                "?m=no&userid="+userid+"&key="+result;
+                        break;
+
                     case 16:
                         url=getApplicationContext().getString(R.string.web)+"/orders" +
                                 "?m=no&userid="+userid+"&key="+result;

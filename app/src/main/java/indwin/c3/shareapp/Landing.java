@@ -419,6 +419,14 @@ public class Landing extends AppCompatActivity {
                             } catch (Exception e) {
                                 profileStatus = "";
                             }
+                            String  courseend="";
+
+                            try {
+                                courseend = data1.getString("courseCompletionDate");
+                            } catch (Exception e) {
+                                courseend="";
+                            }
+
                             SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editorP = userP.edit();
 
@@ -428,6 +436,7 @@ public class Landing extends AppCompatActivity {
                             editorP.putInt("totalBorrowed", totalBorrowed);
                             editorP.putInt("cashBack", cashBack);
                             editorP.putString("formStatus", formstatus);
+                            editorP.putString("course", courseend);
                             editorP.putString("nameadd", nameadd);
                             editorP.putString("approvedBand", approvedBand);
                             editorP.putString("productdpname", name);

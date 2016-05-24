@@ -10,7 +10,7 @@
         android:background="#F28E52">
 
         <ImageView
-            android:id="@+id/backo"
+            android:id="@+id/backo11"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginBottom="8dp"
@@ -27,7 +27,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
-            android:layout_toRightOf="@id/backo"
+            android:layout_toRightOf="@id/backo11"
             android:text="Verify OTP"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffff" />

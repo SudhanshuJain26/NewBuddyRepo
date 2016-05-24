@@ -67,6 +67,12 @@ android:icon="@drawable/howitworks"
             android:icon="@drawable/safety"
 
             android:title="Safety and Security" />
+        <item
+            android:id="@+id/Recharge"
+            android:checked="false"
+            android:color="#21A5E0"
+            android:icon="@drawable/rechargewallet"
+            android:title="Recharge Paytm Wallet" />
 
         <item
             android:id="@+id/Share"

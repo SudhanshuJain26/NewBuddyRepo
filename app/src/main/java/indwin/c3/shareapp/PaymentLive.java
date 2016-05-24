@@ -467,14 +467,17 @@ t=t.concat(SALT);
             Intent in=new Intent(PaymentLive.this,Ordersuccessfailure.class);
 //            Toast.makeText(PaymentLive.this, url, Toast.LENGTH_SHORT).show();
             if(url.contains("ordersuccess")) {
-                check++;
-                if(check==1)
+//                check++;
+//                if(check==1)
                 {
+                    try{
 String orderid=url.substring(url.indexOf('=')+1,url.indexOf('&'));
                //
                 in.putExtra("orderId",orderid);
                 startActivity(in);
                 finish();}
+                catch (Exception e)
+                {}}
 
             }
 else

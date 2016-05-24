@@ -21,6 +21,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -80,6 +81,14 @@ public class Otp extends AppCompatActivity {
         if(ot_check==3)
         {
             setContentView(R.layout.verifyotp);
+            ImageView back=(ImageView)findViewById(R.id.backo11);
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    onBackPressed();
+                }
+            });
             TextView t=(TextView)findViewById(R.id.buddyLogo);
             SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
             t.setText("To change your password, please verify with OTP first.Your OTP will be sent to +91-"+get.getString("phone_number",""));}
@@ -220,6 +229,7 @@ public class Otp extends AppCompatActivity {
                 System.out.println("got the code information");
                 if (code.length() == 4) {
                     try {
+
                         otp1.setText(String.valueOf(code));
                         otp2.setText(String.valueOf(code.charAt(1)));
                         otp3.setText(String.valueOf(code.charAt(2)));
@@ -260,9 +270,17 @@ public class Otp extends AppCompatActivity {
                 //  textview.setText(String.valueOf(s.length());
                 if (s.length() == 4) {
                     verify.setEnabled(true);
+                    if(ot_check==3)
+                        verify.setTextColor(Color.parseColor("#664A4A4A"));
+                    else
                     verify.setTextColor(Color.parseColor("#ffffff"));
                 } else
-                    verify.setTextColor(Color.parseColor("#66ffffff"));
+
+                {
+                    if(ot_check==3)
+                        verify.setTextColor(Color.parseColor("#664A4A4A"));
+                    else
+                    verify.setTextColor(Color.parseColor("#66ffffff"));}
 
             }
 
@@ -301,6 +319,9 @@ public class Otp extends AppCompatActivity {
                     }
                 } else {
                     verify.setEnabled(true);
+                    if(ot_check==3)
+                        verify.setTextColor(Color.parseColor("#664A4A4A"));
+                    else
                     verify.setTextColor(Color.parseColor("#66ffffff"));
                     rwarn.setVisibility(View.VISIBLE);
                     otp1.setBackgroundResource(R.drawable.texted2);
@@ -543,9 +564,17 @@ public class Otp extends AppCompatActivity {
         protected void onPostExecute(String result) {
             if(ot_check!=3){
                 verify.setEnabled(true);
+
                 verify.setTextColor(Color.parseColor("#ffffff"));
                 d = 0;
                 spinner.setVisibility(View.GONE);}
+            if(ot_check==3){
+                verify.setEnabled(true);
+
+                verify.setTextColor(Color.parseColor("#664A4A4A"));
+                d = 0;
+//                spinner.setVisibility(View.GONE);
+            }
 //                    inotp.putExtra("Name", mName);
 //                    inotp.putExtra("Email",email.getText().toString());
 //                    inotp.putExtra("College",college.getText().toString());

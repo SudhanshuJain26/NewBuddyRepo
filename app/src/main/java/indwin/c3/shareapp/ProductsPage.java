@@ -70,7 +70,10 @@ import io.intercom.android.sdk.Intercom;
 public class ProductsPage extends AppCompatActivity {
     private TextView inc, priceChange, status, creditBalance, creditLimit, cashBack, availbal, availbalmsg, knowmore;
     private EditText hve, queryN;
+    private long EMIcheck=0;
+    private GIFView loader;
     private int checkImg = 1, searchPrice, currDay;
+    private ScrollView viewDetail;
     private String userProfileStatus = "";
     String sellerNme1 = "", productId1 = "";
     private String s = "";
@@ -108,7 +111,9 @@ public class ProductsPage extends AppCompatActivity {
     private EditText query, dValue, queryNew;
     private String userCode = "";
     private TextView emiAmount, titlePro, totalLoan, detInfo, detSpec, detRet, detDes;
-    private ImageView seller, spinnArr, plus, productImg;
+    private ImageView seller, spinnArr,
+
+    plus, productImg;
     private RelativeLayout minusR;
     private int checkCashback = 0;
     private SharedPreferences st;
@@ -158,8 +163,11 @@ public class ProductsPage extends AppCompatActivity {
                 productId1 = getIntent().getExtras().getString("product");
                 sellerNme1 = getIntent().getExtras().getString("seller");
                 sellerNme = sellerNme1;
+                loader=(GIFView)findViewById(R.id.loading);
+                viewDetail=(ScrollView)findViewById(R.id.viewDetail);
                 new linkSearch().execute();
             } catch (Exception e) {
+                String t=e.toString();
             }
             //            correctUrl();
             //            queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -211,49 +219,74 @@ public class ProductsPage extends AppCompatActivity {
                 s = dValue.getText().toString();
             int dp = Integer.parseInt(s);
             Double m = sellingPrice * .2;
+
             if ((dp <= sellingPrice - mDis) && (dp >= dopay2))//&& w>=mindownn
             {
                 // TODO: 5/14/2016
                 mValue = dp;
+                cb = st.getInt("cashBack", 0);
+                int cl = st.getInt("creditLimit", 0);
+                int cbv = st.getInt("totalBorrowed", 0);
+                int fcbv = cl - cbv;
+
+
+                if(sellingPrice-mValue>fcbv)
+                    mValue=sellingPrice-fcbv;
 
             } else {
                 Double downValue = sellingPrice * .2;
+                if((sellingPrice<=1000)&&(sellingPrice>150))
+                    downValue=0.0;
                 mValue = downValue.intValue();
-                dValue.setText(String.valueOf(mValue));
+                cb = st.getInt("cashBack", 0);
+                int cl = st.getInt("creditLimit", 0);
+                int cbv = st.getInt("totalBorrowed", 0);
+                int fcbv = cl - cbv;
+
+
+                if(sellingPrice-mValue>fcbv)
+                    mValue=sellingPrice-fcbv;
+//
+
+//     dValue.setText(String.valueOf(mValue));
             }
             s = "";
         } catch (Exception e) {
             Double downValue = sellingPrice * .2;
+            if((sellingPrice<=1000)&&(sellingPrice>150))
+                downValue=0.0;
             mValue = downValue.intValue();
             dValue.setText(String.valueOf(mValue));
             s = "";
         }
-
+        dValue.setText(String.valueOf(mValue));
         Double emi = calculateEmi(Double.valueOf(sellingPrice - mValue), Double.valueOf(sellingPrice), monthsnow);
         //            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
         Double tot = emi * monthsnow + mValue;
         totalLoan.setText(String.valueOf(Math.round(tot)));
-
-        emiAmount.setText(String.valueOf(Math.round(emi)));
+EMIcheck=Math.round(emi);
+        emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi))+"/month");
         //calculate emi and set emi call
 
     }
 
     public void increment() {
+        if(monthsnow!=0){
         if (mValue + 1 <= sellingPrice - mDis) {
             mValue += 1;
             spInc = sellingPrice - mValue;
             Double emi = calculateEmi(Double.valueOf(spInc), Double.valueOf(sellingPrice), monthsnow);
             Double tot = emi * monthsnow + mValue;
             totalLoan.setText(String.valueOf(Math.round(tot)));
-            emiAmount.setText(String.valueOf(Math.round(emi)));
+            EMIcheck=Math.round(emi);
+            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi))+"/month");
             dValue.setText(String.valueOf(Math.round(mValue)));
-        }
+        }}
     }
 
     public void decrement() {
 
-
+        if(monthsnow!=0){
         if (mValue - 1 >= dopay2) {
             mValue -= 1;
             spInc = sellingPrice - mValue;
@@ -262,15 +295,17 @@ public class ProductsPage extends AppCompatActivity {
             //            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
             Double tot = emi * monthsnow + mValue;
             totalLoan.setText(String.valueOf(Math.round(tot)));
-            emiAmount.setText(String.valueOf(Math.round(emi)));
+            EMIcheck=Math.round(emi);
+            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi))+"/month");
             dValue.setText(String.valueOf(Math.round(mValue)));
         }
-    }
+    }}
 
     public void initText() {
         couCode = (RadioButton) findViewById(R.id.radioCou);
         detInfo = (TextView) findViewById(R.id.detInfo);
         knowmore = (TextView) findViewById(R.id.knowmore);
+
         detSpec = (TextView) findViewById(R.id.detSpec);
         availbal = (TextView) findViewById(R.id.availbal);
         spiii = (RelativeLayout) findViewById(R.id.downRupees);
@@ -304,7 +339,10 @@ public class ProductsPage extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     dValue.clearFocus();
+                    if(monthsnow!=0)
                     editdp();
+                    else
+                        dValue.setText(String.valueOf(mValue));
                     // Toast.makeText(ProductsPage.this, "c", Toast.LENGTH_SHORT).show();
 
 
@@ -344,7 +382,17 @@ public class ProductsPage extends AppCompatActivity {
             int cl = st.getInt("creditLimit", 0);
             int cbv = st.getInt("totalBorrowed", 0);
             int fcbv = cl - cbv;
-            Double mind = sellingPrice * .2;
+            Double mind =0.0;
+            if(searchPrice>=1000)
+            mind=sellingPrice * .2;
+            else
+            if((searchPrice<=1000)&&(searchPrice>150))
+            mind=0.0;
+
+            if(sellingPrice-mind>fcbv)
+            {
+                mind=Double.valueOf(sellingPrice)-fcbv;
+            }
             availbal.setText(getApplicationContext().getString(R.string.Rs) + fcbv);
 
             availbalmsg.setText("Minimum Downpayment for this product: " + getApplicationContext().getString(R.string.Rs) + mind.intValue());
@@ -373,6 +421,9 @@ public class ProductsPage extends AppCompatActivity {
                     .into(productImg);
         } catch (Exception e) {
         }
+        SharedPreferences user = getSharedPreferences("token", Context.MODE_PRIVATE);
+        userProfileStatus = user.getString("profileStatus", "");
+        userCode = user.getString("formStatus", "");
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -381,7 +432,7 @@ public class ProductsPage extends AppCompatActivity {
                         try {
                             Map userMap = new HashMap<>();
                             userMap.put("PRODUCT_CLICKED", title);
-                            userMap.put("EMI_SELECTED", emiAmount.getText().toString());
+                            userMap.put("EMI_SELECTED", EMIcheck);
                             userMap.put("DOWNPAYMENT", dValue.getText().toString());
                             //                        userMap.put("phone", mPhone);
                             //                        System.out.println("Intercom data 4" + mPhone);
@@ -394,7 +445,7 @@ public class ProductsPage extends AppCompatActivity {
                         in.putExtra("title", title);
                         in.putExtra("prid", productId1);
                         in.putExtra("brand", brand);
-
+in.putExtra("emicheck",EMIcheck);
                         in.putExtra("cashback", checkCashback);
                         in.putExtra("whichCoupon", whichCoupon);
                         in.putExtra("discount", mDis);
@@ -764,7 +815,18 @@ public class ProductsPage extends AppCompatActivity {
                     checkD = 0;
                     checkCashback = 0;
                     Double doPay = (searchPrice * .2);
+                    if((sellingPrice<=1000)&&(sellingPrice>150))
+                        doPay=0.0;
                     dopay2 = doPay.intValue();
+                    cb = st.getInt("cashBack", 0);
+                    int cl = st.getInt("creditLimit", 0);
+                    int cbv = st.getInt("totalBorrowed", 0);
+                    int fcbv = cl - cbv;
+
+                    if(searchPrice-dopay2>fcbv)
+                    {
+                        dopay2=searchPrice-fcbv;
+                    }
                     mValue = dopay2;
                     setEmi(sellingPrice);
                     appcBack.setChecked(false);
@@ -778,10 +840,17 @@ public class ProductsPage extends AppCompatActivity {
             }
 
         });
-
+if(cb==0){
+    appcBack.setChecked(false);
+        appcBack.setEnabled(false);}
+        else
+{
+    appcBack.setChecked(false);
+    appcBack.setEnabled(true);}
         appcBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(cb!=0){
                 if (!userCode.equals("flashApproved")) {
                     int checkD = 0;
                     if (appcBack.isChecked()) {
@@ -790,17 +859,21 @@ public class ProductsPage extends AppCompatActivity {
 
                         sellingPrice = spDec;
                         Double doPay = (searchPrice * .2);
+                        if((searchPrice<=1000)&&(searchPrice>150))
+                            doPay=0.0;
                         dopay2 = doPay.intValue();
+                        cb = st.getInt("cashBack", 0);
+                        int cl = st.getInt("creditLimit", 0);
+                        int cbv = st.getInt("totalBorrowed", 0);
+                        int fcbv = cl - cbv;
+
+                        if(searchPrice-dopay2>fcbv)
+                        {
+                            dopay2=searchPrice-fcbv;
+                        }
+
 
                         checkCashback = 1;
-                        if (cb <= dopay2) {
-                            mDis = cb;
-
-                            dopay2 = dopay2 - cb;
-                            mValue = dopay2;
-                            checkD = 1;
-                            setEmi(1);
-                        } else {
 
                             if (sellingPrice - cb < 0) {
                                 checkD = 0;
@@ -816,7 +889,7 @@ public class ProductsPage extends AppCompatActivity {
                                 setEmi(2);
 
                             }
-                        }
+
 
 
                         dee = 1;
@@ -824,10 +897,10 @@ public class ProductsPage extends AppCompatActivity {
                         //                    sellingPrice = sellingPrice - cb;
                         hve.setBackgroundResource(R.drawable.roundedyellow);
                         ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#F28E52"));
-                        setEmi(sellingPrice);
+//                        setEmi(sellingPrice);
                         couCode.setChecked(false);
                         checkCorrectdis = 1;
-                        if (cb != 0)
+
                             hve.setText(getApplicationContext().getString(R.string.Rs) + cb + " Cashback applied!");
                         hve.setKeyListener(null);
                         hve.setTextColor(Color.parseColor("#F28E52"));
@@ -846,17 +919,44 @@ public class ProductsPage extends AppCompatActivity {
                     Toast.makeText(ProductsPage.this, "You cannot apply Cashback!", Toast.LENGTH_SHORT).show();
                 }
             }
+            else
+                    Toast.makeText(ProductsPage.this, "No Cashback to apply!", Toast.LENGTH_SHORT).show();
+            }
         });
 
 
         Double loan = monthsallowed * emi;
+        cb = st.getInt("cashBack", 0);
+        int cl = st.getInt("creditLimit", 0);
+        int cbv = st.getInt("totalBorrowed", 0);
+        int fcbv = cl - cbv;
+        Double ddd2=sellingPrice*.2;
+        if((searchPrice<=1000)&&(searchPrice>150))
+            ddd2=0.0;
+
         loan += sellingPrice * .2;
+        if(searchPrice-ddd2.intValue()>fcbv)
+        {
+            loan+=searchPrice-fcbv;
+        }
         totalLoan.setText(String.valueOf(Math.round(loan)));
         Double downValue = sellingPrice * .2;
+        if((searchPrice<=1000)&&(searchPrice>150))
+            downValue=0.0;
+
+
         mValue = downValue.intValue();
         mValue2 = downValue.intValue();
-        dValue.setText(String.valueOf(Math.round(downValue)));
-        emiAmount.setText(String.valueOf(Math.round(emi)));
+
+        if(searchPrice-downValue.intValue()>fcbv)
+        { mValue = searchPrice-fcbv;
+            mValue2 = searchPrice-fcbv;
+        }
+//        dValue.setText(String.valueOf(Math.round(downValue)));
+//        if(searchPrice-downValue.intValue()>fcbv)
+            dValue.setText(String.valueOf(Math.round(mValue)));
+        EMIcheck=Math.round(emi);
+        emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi)+"/month"));
         priceChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -883,7 +983,7 @@ public class ProductsPage extends AppCompatActivity {
         else if (sellerNme.equals("snapdeal"))
 
             seller.setImageResource(R.drawable.snapdeal);
-        sellingRs.setText(String.valueOf(Math.round(sellingPrice)));
+        sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
         titlePro.setText(searchTitle);
         query.setText(searchQuery);
     }
@@ -908,6 +1008,7 @@ public class ProductsPage extends AppCompatActivity {
                 //                String referralinst=red.getString("referrer","");
 
                 payload.put("phone", creduserid);
+
 
                 payload.put("code", crcode);
                 //                // payload.put("college", mCollege);
@@ -962,10 +1063,30 @@ public class ProductsPage extends AppCompatActivity {
                     } else {
                         JSONObject data1 = new JSONObject(resp.getString("data"));
                         truth = resp.getString("msg");
-                        value = data1.getInt("value");
-                        maxValue = data1.getInt("maxValue");
-                        minProd = data1.getInt("minProdValue");
-                        type = data1.getString("type");
+                        try{
+                        value = data1.getInt("value");}
+                        catch (Exception e)
+                        {
+                            value=0;
+                        }
+                        try{
+                        maxValue = data1.getInt("maxValue");}
+                        catch (Exception e)
+                        {
+                            maxValue=0;
+                        }
+                        try{
+                        minProd = data1.getInt("minProdValue");}
+                        catch (Exception e)
+                        {
+                            minProd=0;
+                        }
+                        try{
+                        type = data1.getString("type");}
+                        catch (Exception e)
+                        {
+                            type="flat";
+                        }
                         if (searchPrice < minProd)
                             return "min";
                         if (userCode.equals("flashApproved")) {
@@ -991,6 +1112,8 @@ public class ProductsPage extends AppCompatActivity {
                     dis = value;
                 else if (type.equals("percentage")) {
                     Double dd = searchPrice * .2;
+                    if((searchPrice<=1000)&&(searchPrice>150))
+                        dd=0.0;
                     int newdis = dd.intValue();
                     if (newdis <= value)
                         dis = newdis;
@@ -999,17 +1122,21 @@ public class ProductsPage extends AppCompatActivity {
                 }
                 ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
                 Double doPay = (searchPrice * .2);
+                if((searchPrice<=1000)&&(searchPrice>150))
+                    doPay=0.0;
                 dopay2 = doPay.intValue();
+                cb = st.getInt("cashBack", 0);
+                int cl = st.getInt("creditLimit", 0);
+                int cbv = st.getInt("totalBorrowed", 0);
+                int fcbv = cl - cbv;
+//                if((searchPrice<=1000)&&(searchPrice>150))
+//                    dopay2=0;
+                if(searchPrice-dopay2>fcbv)
+                {
+                    dopay2=sellingPrice-fcbv;
+                }
                 whichCoupon = crcode;
 
-                if (dis <= dopay2) {
-                    mDis = dis;
-
-                    dopay2 = dopay2 - dis;
-                    mValue = dopay2;
-                    checkD = 1;
-                    setEmi(1);
-                } else {
 
                     if (sellingPrice - dis < 0) {
                         checkD = 0;
@@ -1025,7 +1152,7 @@ public class ProductsPage extends AppCompatActivity {
 
                     }
 
-                }
+
 
                 //                hve.setFocusable(false);
 
@@ -1068,6 +1195,8 @@ public class ProductsPage extends AppCompatActivity {
     }
 
     public Double calculateEmi(Double principal, Double searchPrice, int months) {
+        if(months==0){
+            return 0.0;}
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         int currDay = 0;
         Date courseDate;
@@ -1112,19 +1241,48 @@ public class ProductsPage extends AppCompatActivity {
             i++;
         }
         Double v = Math.floor(sellingPrice * .2);
+        if((sellingPrice<=1000)&&(sellingPrice>150))
+            v=0.0;
+        cb = st.getInt("cashBack", 0);
+        int cl = st.getInt("creditLimit", 0);
+        int cbv = st.getInt("totalBorrowed", 0);
+        int fcbv = cl - cbv;
         mValue = v.intValue();
         mValue2 = v.intValue();
+        if(t.contains("No"))
+            t="0";
         monthsnow = Integer.parseInt(t);
         if (sellingP == 1) {
-            dValue.setText(String.valueOf(Math.round(dopay2)));
-            emiAmount.setText(String.valueOf(Math.round(calculateEmi(sellingPrice * 0.8 - mDis, Double.valueOf(sellingPrice), monthsnow))));
+            if(sellingPrice-mValue>fcbv)
+                mValue=sellingPrice-fcbv;
+
+            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0 - mDis, Double.valueOf(sellingPrice), monthsnow)))+"/month");
             Double tot = calculateEmi(sellingPrice * 0.8 - mDis, Double.valueOf(sellingPrice), monthsnow) * monthsnow + dopay2;
-            Double r = (sellingPrice * 0.2 - mDis);
-            mValue = r.intValue();
+//            Double r = (mValue - mDis);
+            mValue = mValue-mDis;
+            dValue.setText(String.valueOf(Math.round(mValue)));
             totalLoan.setText(String.valueOf(tot));
         } else {
-            dValue.setText(String.valueOf(Math.floor(sellingPrice * .2)));
-            emiAmount.setText(String.valueOf(Math.round(calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow))));
+
+            Double l=Math.floor(sellingPrice * .2);
+            if((sellingPrice<=1000)&&(sellingPrice>150))
+                l=0.0;
+
+
+int w=0;
+            mValue=l.intValue();
+            if(t.contains("0"))
+                mValue=sellingPrice;
+//            if((sellingPrice<=1000)&&(sellingPrice>150))
+//                mValue=0;
+//            dValue.setText(String.valueOf(l.intValue()));
+            if(sellingPrice-mValue>fcbv){
+
+            mValue=sellingPrice-fcbv;
+            }
+            dValue.setText(String.valueOf(mValue));
+            EMIcheck=(Math.round(calculateEmi(sellingPrice-mValue*1.0, Double.valueOf(sellingPrice), monthsnow)));
+            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice-mValue*1.0, Double.valueOf(sellingPrice), monthsnow)))+"/month");
             Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
             totalLoan.setText(String.valueOf(Math.round(tot)));
         }
@@ -1155,6 +1313,8 @@ public class ProductsPage extends AppCompatActivity {
         @Override
         public void onPreExecute() {
             //            spinner.setVisibility(View.VISIBLE);
+            loader.setVisibility(View.VISIBLE);
+            viewDetail.setVisibility(View.GONE);
         }
 
 
@@ -1233,11 +1393,30 @@ public class ProductsPage extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+            loader.setVisibility(View.GONE);
+            viewDetail.setVisibility(View.VISIBLE);
             if (!result.equals("win")) {
                 System.out.println("Error while computing data");
             } else {
+                cb = st.getInt("cashBack", 0);
+                int cl = st.getInt("creditLimit", 0);
+                int cbv = st.getInt("totalBorrowed", 0);
+                int fcbv = cl - cbv;
                 Double doPay = (searchPrice * .2);
+                if((searchPrice<=1000)&&(searchPrice>150))
+                    doPay=0.0;
+
                 dopay2 = doPay.intValue();
+//                if((searchPrice<=1000)&&(searchPrice>150))
+//                    dopay2=0;
+                if(searchPrice-dopay2>fcbv)
+                {
+                    dopay2=searchPrice-fcbv;
+                }
+//                if(searchPrice-dopay2>fcbv)
+//                {
+//                    dopay2=searchPrice
+//                }
 
                 show();
             }
@@ -1270,14 +1449,17 @@ public class ProductsPage extends AppCompatActivity {
             sellerNme1 = "snapdeal";
             pos = parseString.lastIndexOf("/");
             if (pos != -1) {
-                for (int j = pos + 1; ; j++) {
-                    if (parseString.charAt(j) == '#')
-                        break;
-                    else {
+                for (int j = pos + 1; j < parseString.length(); j++) {
+                    if(((parseString.charAt(j))>='0')&&(parseString.charAt(j)<='9'))
+
                         productId1 += parseString.charAt(j);
-                    }
+                    else break;
+
 
                 }
+//                if(((parseString.charAt(j))>='0')&&(parseString.charAt(j)<='9'))
+//
+//                    productId1 += parseString.charAt(j);
             } else {
                 checkValidUrl = 1;
             }
@@ -1461,7 +1643,10 @@ public class ProductsPage extends AppCompatActivity {
                     }
                     infor = "The minimum downpayment is 20% of the product price and also depends on the payment band (Oxygen/Silicon/Palladium/Krypton) you lie in, which you will get to know after your college ID verification.";
 
-
+                    loader=(GIFView)findViewById(R.id.loading);
+                    viewDetail=(ScrollView)findViewById(R.id.viewDetail);
+                    loader.setVisibility(View.GONE);
+viewDetail.setVisibility(View.VISIBLE);
                     show();
                 } else
                     editQ.setText("");
@@ -1520,11 +1705,26 @@ public class ProductsPage extends AppCompatActivity {
                     i++;
                 }
                 Double v = (sellingPrice * .2);
+                if((sellingPrice<=1000)&&(sellingPrice>150))
+                    v=0.0;
                 mValue = v.intValue();
                 mValue2 = v.intValue();
+                if(t.contains("No"))
+                    t="0";
                 monthsnow = Integer.parseInt(t);
-                dValue.setText(String.valueOf(v.intValue()));
-                emiAmount.setText(String.valueOf(Math.round(calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow))));
+                cb = st.getInt("cashBack", 0);
+                int cl = st.getInt("creditLimit", 0);
+                int cbv = st.getInt("totalBorrowed", 0);
+                int fcbv = cl - cbv;
+//                Double mind = sellingPrice * .2;
+
+                if(sellingPrice-mValue>fcbv)
+                    mValue=sellingPrice-fcbv;
+                if(t.contains("0"))
+                    mValue=sellingPrice;
+                dValue.setText(String.valueOf(mValue));
+                EMIcheck=(Math.round(calculateEmi(sellingPrice -mValue*1.0, Double.valueOf(sellingPrice), monthsnow)));
+                emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0, Double.valueOf(sellingPrice), monthsnow)))+"/month");
                 Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
                 totalLoan.setText(String.valueOf(Math.round(tot)));
                 //                    Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
@@ -1550,7 +1750,16 @@ public class ProductsPage extends AppCompatActivity {
         for (int w = p; w >= 0; w--) {
             categories.add(String.valueOf(myMonths[w]) + " months");
         }
+if(searchPrice<=150)
+{
+    categories.clear();
+    categories.add("No Financing");
+}
+        else
 
+{
+    categories.add("No Financing");
+}
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
@@ -1813,7 +2022,24 @@ public class ProductsPage extends AppCompatActivity {
             if (mn < m)
                 m = mn;
         }
-        if (price < 5000) {
+        if(price<=400)
+        {
+            int mn = 1;
+        if (mn < m)
+            m = mn;
+    }
+        else if(price<=1000)
+        {
+            int mn = 2;
+            if (mn < m)
+                m = mn;
+        }
+        else if (price < 2000) {
+            int mn = 3;
+            if (mn < m)
+                m = mn;
+        }
+        else if (price < 5000) {
             int mn = 6;
             if (mn < m)
                 m = mn;

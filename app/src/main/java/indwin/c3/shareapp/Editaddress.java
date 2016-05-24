@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +40,7 @@ public class Editaddress extends AppCompatActivity {
 //    myList.add("Android");
 //    myList.add("Android1");
 int CheckSize=0;
+private  GIFView loader;
     ListView listView;
 //    BroadcastReceiver broadcastReceiver;
     @Override
@@ -46,6 +48,7 @@ int CheckSize=0;
         super.onCreate(savedInstanceState);
         registerReceiver(broadcastReceiver, new IntentFilter("order"));
         setContentView(R.layout.activity_editaddress);
+        loader=(GIFView)findViewById(R.id.loading);
         backpress();
         String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry","WebOS","Ubuntu","Windows7","Max OS X"};
       myList = new ArrayList<Deladd>();
@@ -88,7 +91,11 @@ int CheckSize=0;
     }
     private class getAddress extends
             AsyncTask<String, Void, String> {
-
+        @Override
+        protected void onPreExecute() {
+//            spinner.setVisibility(View.VISIBLE);
+            loader.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected String doInBackground(String... data) {
@@ -209,6 +216,12 @@ if(isActive)
         }
 
         protected void onPostExecute(String result) {
+
+
+            loader.setVisibility(View.GONE);
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
            {
                 Deladd c=new Deladd();
                 c.setLine1("Add an address");

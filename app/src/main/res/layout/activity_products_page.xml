@@ -42,6 +42,8 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:id="@+id/viewDetail"
+        android:visibility="gone"
         android:layout_below="@id/toolBar"
         android:background="#ffffff">
 
@@ -488,10 +490,12 @@
                             android:text="Rs.20,000"
                             android:textCursorDrawable="@null" />
                         <TextView
-                            android:text="Rs"
+                            android:text="@string/Rs"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toLeftOf="@id/dValue"
+                            android:textAppearance="?android:textAppearanceMedium"
+
                             />
                     </RelativeLayout>
 
@@ -885,9 +889,10 @@
     </ScrollView>
 
     <indwin.c3.shareapp.GIFView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:visibility="gone"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+
+        android:id="@+id/loading"
         android:layout_centerInParent="true"
         android:backgroundTint="#21ae50"
         android:foregroundTint="#21ae50" />

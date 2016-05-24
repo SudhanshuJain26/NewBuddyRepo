@@ -877,10 +877,19 @@ public class MainActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         profileStatus = "";
                     }
+                    String  courseend="";
+
+                    try {
+                        courseend = data.getString("courseCompletionDate");
+                    } catch (Exception e) {
+                        courseend="";
+                    }
+
                     SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editorP = userP.edit();
                     editorP.putString("approvedBand", approvedBand);
                     editorP.putString("profileStatus", profileStatus);
+                    editorP.putString("course", courseend);
                     editorP.putString("formStatus", formstatus);
                     editorP.putInt("creditLimit", creditLimit);
                     editorP.putInt("totalBorrowed", totalBorrowed);

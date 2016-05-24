@@ -597,6 +597,11 @@ in.putExtra("checksharefromweb",1);
                         url=getApplicationContext().getString(R.string.web)+"/orders" +
                                 "?m=no&userid="+userid+"&key="+result;
                         break;
+                    case 999:
+                        url=getApplicationContext().getString(R.string.web)+"/recharge" +
+                                "?m=no&userid="+userid+"&key="+result;
+                        break;
+
                     case 17:
                         url=getApplicationContext().getString(R.string.web)+"/repayments" +
                                 "?m=no&userid="+userid+"&key="+result;

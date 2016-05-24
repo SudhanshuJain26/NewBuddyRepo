@@ -347,6 +347,9 @@ EMIcheck=Math.round(emi);
 
 
                 }
+                else{
+                    Toast.makeText(ProductsPage.this, "checkddd", Toast.LENGTH_SHORT).show();
+                }
                 return false;
             }
         });
@@ -440,14 +443,21 @@ EMIcheck=Math.round(emi);
                         } catch (Exception e) {
                             System.out.println("Intercom two" + e.toString());
                         }
-
+//                        if(dValue.getText().toString();)
+                        int minD=Integer.parseInt(dValue.getText().toString());
+                        if(minD<mValue)
+                            editdp();
                         Intent in = new Intent(ProductsPage.this, ConfirmOrder.class);
                         in.putExtra("title", title);
                         in.putExtra("prid", productId1);
                         in.putExtra("brand", brand);
-in.putExtra("emicheck",EMIcheck);
+                        in.putExtra("emicheck",EMIcheck);
                         in.putExtra("cashback", checkCashback);
                         in.putExtra("whichCoupon", whichCoupon);
+                        String t=hve.getText().toString();
+                        if(((hve.getText().toString().equals("")))||(hve.getText().toString().contains("Offers")))
+                        {  mDis=0;
+                        checkCashback=0;}
                         in.putExtra("discount", mDis);
                         in.putExtra("monthforemi", monthsnow);
                         in.putExtra("daytoday", dayToday);
@@ -830,6 +840,7 @@ in.putExtra("emicheck",EMIcheck);
                     mValue = dopay2;
                     setEmi(sellingPrice);
                     appcBack.setChecked(false);
+
                     couCode.setChecked(true);
                     hve.setCursorVisible(true);
                     hve.setText("");
@@ -901,7 +912,7 @@ if(cb==0){
                         couCode.setChecked(false);
                         checkCorrectdis = 1;
 
-                            hve.setText(getApplicationContext().getString(R.string.Rs) + cb + " Cashback applied!");
+                            hve.setText(getApplicationContext().getString(R.string.Rs) + mDis + " Cashback applied!");
                         hve.setKeyListener(null);
                         hve.setTextColor(Color.parseColor("#F28E52"));
                         ((RelativeLayout) findViewById(R.id.plusRelative)).setVisibility(View.VISIBLE);
@@ -1169,6 +1180,7 @@ if(cb==0){
                 //                Toast.makeText(ProductsPage.this, value, Toa/st.LENGTH_SHORT).show();
             } else {
                 checkCorrectdis = 1;
+                mDis=0;
                 if (result.contains("min")) {
                     Toast.makeText(ProductsPage.this, "Minimum product value to use this Coupon is " + minProd, Toast.LENGTH_SHORT).show();
                     truth = "Invalid Code";

@@ -1875,10 +1875,19 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
+
                     query.requestFocus();
+                    query.setText("");
                     ClipData abc = myClipboard.getPrimaryClip();
                     ClipData.Item item = abc.getItemAt(0);
                     String text = item.getText().toString();
+
+
+
+
+
+
+
 
 
                     query.setText("   " + text);

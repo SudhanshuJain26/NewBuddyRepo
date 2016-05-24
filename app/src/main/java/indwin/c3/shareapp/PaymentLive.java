@@ -136,11 +136,11 @@ public class PaymentLive  extends Activity {
             else
                 e=String.valueOf(d);
             System.out.println(e);
-long t=System.currentTimeMillis();
+            long t=System.currentTimeMillis();
             t=t/1000;
             randomStr = String.valueOf(t);
 
-             transactionId = hashCal("SHA-256", randomStr).substring(0,
+            transactionId = hashCal("SHA-256", randomStr).substring(0,
                     20);
             mInputParams.put(PARAM_TRANSACTION_ID,randomStr);
         }
@@ -149,7 +149,7 @@ long t=System.currentTimeMillis();
             mInputParams.put(PARAM_KEY, MERCHANT_KEY);
         }
         SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
-        payamt=String.valueOf(get.getInt("downpayment", 0));
+        payamt=String.valueOf(get.getInt("downpayment", 0)+get.getInt("service", 0));
         paytitle=get.getString("title", "");
         payname=get.getString("n1", "");
 //        payname="jon sno";
@@ -167,7 +167,7 @@ long t=System.currentTimeMillis();
 //        SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
         String t="lhqOEOUh"+"|"+randomStr+"|"+payamt+"|"+"Mobiles"+"|"+payname+"|"+payemail+"|||||||||||";
         hashString = hashString.concat(SALT);
-t=t.concat(SALT);
+        t=t.concat(SALT);
         mHashValue = hashCal("SHA-512", t);
         Log.v(LOG_TAG, "HASH: " + mHashValue);
 
@@ -268,7 +268,7 @@ t=t.concat(SALT);
         formParams.put(PARAM_KEY, MERCHANT_KEY);
         formParams.put(PARAM_HASH, mHashValue);
         formParams.put(PARAM_TRANSACTION_ID,
-               getNonNullValueFromHashMap(mInputParams,PARAM_TRANSACTION_ID));
+                getNonNullValueFromHashMap(mInputParams,PARAM_TRANSACTION_ID));
         formParams.put(PARAM_AMOUNT, payamt);
         formParams.put(PARAM_FIRST_NAME,
                 payname);
@@ -471,27 +471,27 @@ t=t.concat(SALT);
 //                if(check==1)
                 {
                     try{
-String orderid=url.substring(url.indexOf('=')+1,url.indexOf('&'));
-               //
-                in.putExtra("orderId",orderid);
-                startActivity(in);
-                finish();}
-                catch (Exception e)
-                {}}
+                        String orderid=url.substring(url.indexOf('=')+1,url.indexOf('&'));
+                        //
+                        in.putExtra("orderId",orderid);
+                        startActivity(in);
+                        finish();}
+                    catch (Exception e)
+                    {}}
 
             }
-else
-                if(url.contains("orderfailure")) {
-                    check++;
+            else
+            if(url.contains("orderfailure")) {
+                check++;
 //                    String orderid=url.substring(url.indexOf('=')+1,url.indexOf('&'));
-                    // Toast.makeText(PaymentLive.this, s, Toast.LENGTH_SHORT).show();
-                    if(check==1)
-                    {
+                // Toast.makeText(PaymentLive.this, s, Toast.LENGTH_SHORT).show();
+                if(check==1)
+                {
                     in.putExtra("orderId","fail");
                     startActivity(in);
                     finish();}
 
-                }
+            }
 
 
         }
@@ -680,8 +680,8 @@ else
                 payload.put("fkProductId",cred.getString("prid", ""));
                 payload.put("seller",cred.getString("seller", ""));
                 payload.put("sellingPrice",cred.getInt("sp", 0));
-                payload.put("downPayment",cred.getInt("downpayment",0));
-                int loanamt=cred.getInt("sp", 0)-cred.getInt("downpayment",0)-cred.getInt("discount",0)+cred.getInt("service", 0);
+                payload.put("downPayment",payamt);
+                int loanamt=cred.getInt("sp", 0)-cred.getInt("downpayment",0)-cred.getInt("discount",0);
                 payload.put("loanAmount",loanamt);
                 payload.put("emiTenure",cred.getInt("monthtenure",0));
                 payload.put("emi",cred.getInt("emi",0));
@@ -694,10 +694,10 @@ else
                 payload.put("deliveryAddress",cred.getString("address",""));
                 payload.put("userComments",cred.getString("usercom", ""));
                 payload.put("serviceCharges",cred.getInt("service",0));
-                payload.put("totalPayable" ,cred.getInt("emi",0)*cred.getInt("monthtenure",0)+cred.getInt("downpayment",0));
+                payload.put("totalPayable" ,cred.getInt("emi",0)*cred.getInt("monthtenure",0)+cred.getInt("downpayment",0)+cred.getInt("service",0));
 //
-                if(cred.getInt("cashback",0)==1)
-                payload.put("isCashbackApplied" ,true);
+                if(cred.getInt("checkCashback",0)==1)
+                    payload.put("isCashbackApplied" ,true);
 //  payload.put("userid","7070362045");
 
 
@@ -757,4 +757,4 @@ else
         }}
 
 
-        }
+}

@@ -135,9 +135,9 @@ public class ConfirmOrder extends AppCompatActivity {
 //            newemi = 0;
         String emifromProd="";
         try{
-                emifromProd=getIntent().getExtras().getString("emi");}
-    catch(Exception e)
-    {}
+            emifromProd=getIntent().getExtras().getString("emi");}
+        catch(Exception e)
+        {}
 //        Double em=Double.valueOf(emifromProd);
         newemi=getIntent().getExtras().getLong("emicheck");
         System.out.println(newemi + "may14");
@@ -146,8 +146,8 @@ public class ConfirmOrder extends AppCompatActivity {
         TextView totalPay = (TextView) findViewById(R.id.emimonths);
         long ww=0;
         ww = (getIntent().getExtras().getInt("monthforemi")) * newemi + downPayment;
-        if (downPayment == 0)
-            ww = serviceCharge;
+//        if (downPayment == 0)
+//            ww = serviceCharge;
         totalPay.setText(getApplicationContext().getString(R.string.Rs) + ww);
         checkOutnow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,7 +157,7 @@ public class ConfirmOrder extends AppCompatActivity {
                 SharedPreferences.Editor et = cred.edit();
                 et.putInt("service", serviceCharge);
                 et.putInt("emi", (int)newemi);
-                et.putInt("downpayment", downPayment);
+                et.putInt("downpayment", downPayment-serviceCharge);
                 et.putInt("tot", w);
                 EditText e = (EditText) findViewById(R.id.edtWant);
                 et.putString("usercom", e.getText().toString());
@@ -179,7 +179,7 @@ public class ConfirmOrder extends AppCompatActivity {
                 parent = inflater.inflate(R.layout.activity_confirm_order, null, false);
                 View popUpView = inflater.inflate(R.layout.popup, null, false);
 
-                 popup = new PopupWindow(popUpView);
+                popup = new PopupWindow(popUpView);
 //                        580, true);
 
                 popup.setContentView(popUpView);
@@ -209,7 +209,7 @@ public class ConfirmOrder extends AppCompatActivity {
                 if (interest < 0)
                     interest = 0;
                 int ll=(int)(newemi*getIntent().getExtras().getInt("monthforemi"));
-                interest=ll-getIntent().getExtras().getInt("sellingprice")+downPayment-serviceCharge;
+                interest=ll-getIntent().getExtras().getInt("sellingprice")+downPayment-serviceCharge+dis;
                 inter.setText(getApplicationContext().getString(R.string.Rs) + interest);
                 disc.setText(getApplicationContext().getString(R.string.Rs) + dis);
                 TextView sc = (TextView) popUpView.findViewById(R.id.textPop);
@@ -344,13 +344,13 @@ public class ConfirmOrder extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         try{
-        if (popup.isShowing()) {
-            popup.dismiss();
-            RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
+            if (popup.isShowing()) {
+                popup.dismiss();
+                RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
 //                prod.setTi(Color.parseColor("#CC000000"));
-            cover.setVisibility(View.GONE);}
-        else
-        {finish();}}
+                cover.setVisibility(View.GONE);}
+            else
+            {finish();}}
         catch (Exception e)
         {finish();}
 //        super.onBackPressed();

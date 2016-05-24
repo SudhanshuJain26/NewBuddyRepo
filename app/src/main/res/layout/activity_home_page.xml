@@ -189,6 +189,7 @@
                         android:layout_below="@id/not"
                         android:background="@drawable/roundededit"
                         android:cursorVisible="false"
+
                         android:drawableLeft="@drawable/search"
                         android:hint="                Paste a product page link here"
                         android:imeOptions="actionDone"

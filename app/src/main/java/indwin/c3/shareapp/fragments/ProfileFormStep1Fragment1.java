@@ -194,7 +194,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                                         Toast.makeText(getActivity(), "Please grant all permissions to complete your profile!", Toast.LENGTH_SHORT).show();
                                         LoginManager.getInstance().logInWithReadPermissions(ProfileFormStep1Fragment1.this, Arrays.asList("user_friends", "email", "user_birthday"));
                                     }
-                                    LoginManager.getInstance().logOut();
                                     Toast.makeText(getActivity(), "Please try again!", Toast.LENGTH_SHORT).show();
 
                                     //   finish();

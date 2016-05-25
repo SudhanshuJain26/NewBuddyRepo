@@ -67,11 +67,13 @@ public class ConfirmOrder extends AppCompatActivity {
 
     public void set() {
         try {
+            prod.setVisibility(View.VISIBLE);
             Picasso.with(this)
                     .load(getIntent().getExtras().getString("image"))
                     .placeholder(R.drawable.emptyimageproducts)
                     .into(prod);
         } catch (Exception e) {
+            prod.setVisibility(View.INVISIBLE);
         }
         downPayment = (int) (Double.parseDouble(getIntent().getExtras().getString("down")));
         downP.setText(getApplicationContext().getString(R.string.Rs) + downPayment);

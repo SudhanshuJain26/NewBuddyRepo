@@ -793,7 +793,11 @@ public class MainActivity extends AppCompatActivity {
                     //profile url to be included later
                     email = data.getString("email");
                     Name = data.getString("name");
+                    SharedPreferences sharedpreferences111 = getSharedPreferences("token", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor111 = sharedpreferences111.edit();
 
+                    editor111.putString("productdpname", Name);
+                    editor111.commit();
                     SharedPreferences sharedpreferences11 = getSharedPreferences("cred", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor11 = sharedpreferences11.edit();
                     editor11.putString("n1", Name);

@@ -60,7 +60,7 @@ public class PaymentLive  extends Activity {
     private static final String SALT = "QsBtDKH3k8";// "YBLKG80u";
     private static final String BASE_URL = "https://test.payu.in";
     private static final String PAYMENT_URL = BASE_URL + "/_payment";
-
+    private String orderI="";
     public static final String PARAM_KEY = "key";
     public static final String PARAM_TRANSACTION_ID = "txnid";
     public static final String PARAM_AMOUNT = "amount";
@@ -477,12 +477,21 @@ public class PaymentLive  extends Activity {
                 {
                     try{
                         String orderid=url.substring(url.indexOf('=')+1,url.indexOf('&'));
-                        //
-                        in.putExtra("orderId",orderid);
-                        startActivity(in);
-                        finish();}
+                        //ordee
+                        orderI=orderid;
+                        new ValidateForm().execute();
+
+                    }
                     catch (Exception e)
-                    {}}
+                    {
+                        String orderid=url.substring(url.indexOf('=')+1);
+                        //
+                        orderI=orderid;
+                        new ValidateForm().execute();
+//                        in.putExtra("orderId",orderI);
+//                        startActivity(in);
+//                        finish();
+                    }}
 
             }
             else
@@ -763,7 +772,10 @@ public class PaymentLive  extends Activity {
 //            Toast.makeText(PaymentLive.this, transactionId, Toast.LENGTH_SHORT).show();
 
             if(!result.equals("fail"))
-            {new ValidateForm().execute();}
+            {
+//                new ValidateForm().execute();
+                configureWebView();
+            }
 
         }}
 
@@ -914,7 +926,12 @@ public class PaymentLive  extends Activity {
 
         protected void onPostExecute(String result) {
 
-            configureWebView();
-            if (result.equals("win")) {}}}
+
+            if (result.equals("win")) {
+                Intent in=new Intent(PaymentLive.this,Ordersuccessfailure.class);
+                in.putExtra("orderId",orderI);
+                startActivity(in);
+                finish();
+            }}}
 
 }

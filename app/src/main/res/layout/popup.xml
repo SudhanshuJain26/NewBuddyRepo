@@ -130,6 +130,6 @@ android:layout_below="@id/textPopseller"
         android:id="@+id/cbfaq"
         android:layout_below="@id/textcas"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:textColor="@color/colorwhite"
+        android:textColor="#21A5E0"
         android:text="Check out FAQ's for more details"/>
 </RelativeLayout>

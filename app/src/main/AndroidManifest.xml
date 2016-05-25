@@ -336,7 +336,8 @@
         <activity
             android:name=".Editaddress"
             android:configChanges="orientation"
-            android:hardwareAccelerated="false"
+
+
 
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"

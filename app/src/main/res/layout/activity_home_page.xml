@@ -199,17 +199,17 @@
                         android:singleLine="true"
                         android:textAppearance="?android:textAppearanceSmall"/>
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/pasteAg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/link"
                         android:layout_centerHorizontal="true"
-                        android:background="@drawable/roundeditagain"
+                        android:visibility="gone"
+                        android:src="@drawable/pasteiconnew"
                         android:padding="4dp"
-                        android:text="Paste?"
-                        android:textColor="#21A5E0"
-                        android:visibility="gone"/>
+
+                        />
 
 
                     <TextView

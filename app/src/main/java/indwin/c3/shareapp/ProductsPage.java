@@ -1,5 +1,6 @@
 package indwin.c3.shareapp;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -274,7 +275,7 @@ public class ProductsPage extends AppCompatActivity {
         Double tot = emi * monthsnow + mValue;
         totalLoan.setText(String.valueOf(Math.round(tot)));
 EMIcheck=Math.round(emi);
-        emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi))+"/month");
+        emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi))+" per month");
         //calculate emi and set emi call
 
     }
@@ -288,7 +289,7 @@ EMIcheck=Math.round(emi);
             Double tot = emi * monthsnow + mValue;
             totalLoan.setText(String.valueOf(Math.round(tot)));
             EMIcheck=Math.round(emi);
-            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi))+"/month");
+            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi))+" per month");
             dValue.setText(String.valueOf(Math.round(mValue)));
         }}
     }
@@ -305,7 +306,7 @@ EMIcheck=Math.round(emi);
             Double tot = emi * monthsnow + mValue;
             totalLoan.setText(String.valueOf(Math.round(tot)));
             EMIcheck=Math.round(emi);
-            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi))+"/month");
+            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi))+" per month");
             dValue.setText(String.valueOf(Math.round(mValue)));
         }
     }}
@@ -377,6 +378,12 @@ EMIcheck=Math.round(emi);
         seller = (ImageView) findViewById(R.id.logo);
         spinnArr = (ImageView) findViewById(R.id.spinnArr);
         productImg = (ImageView) findViewById(R.id.productDisplay);
+        if(getIntent().getExtras().getString("page").equals("pay"))
+            productImg.setVisibility(View.GONE);
+        else
+            productImg.setVisibility(View.VISIBLE);
+
+
         totalLoan = (TextView) findViewById(R.id.calTotalPay);
         pname = (TextView) findViewById(R.id.pname);
         status = (TextView) findViewById(R.id.status);
@@ -555,7 +562,7 @@ if(dummyCl==1000)
                     View popUpView = inflater.inflate(R.layout.popupapplied, null, false);
 
                      popup = new PopupWindow(popUpView);
-                    //                        580, true);
+                    //                        580F, true);
 
                     popup.setContentView(popUpView);
                     popup.setWidth(ListPopupWindow.WRAP_CONTENT);
@@ -744,6 +751,7 @@ if(dummyCl==1000)
             public void onClick(View v) {
 
                 RelativeLayout cash = (RelativeLayout) findViewById(R.id.cashback);
+                if(hve.getText().toString().trim().length()==0)
                 cash.setVisibility(View.VISIBLE);
 
 
@@ -759,6 +767,7 @@ if(dummyCl==1000)
                 //                Toast.makeText(ProductsPage.this, "" + ttt, Toast.LENGTH_SHORT).show();
                 //                hve.setFocusableInTouchMode(true);
                 RelativeLayout cash = (RelativeLayout) findViewById(R.id.cashback);
+                if(hve.getText().toString().trim().length()==0)
                 cash.setVisibility(View.VISIBLE);
                 //
                 //
@@ -807,11 +816,13 @@ if(dummyCl==1000)
         });
         final RelativeLayout enter = ((RelativeLayout) findViewById(R.id.plusRelative));
 
+
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                hideSoftKeyboard(ProductsPage.this);
+//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 if (hve.getKeyListener() == null) {
                     hve.setBackgroundResource(R.drawable.roundedblue);
                     checkCorrectdis = 1;
@@ -1004,7 +1015,7 @@ if(cb==0){
 //        if(searchPrice-downValue.intValue()>fcbv)
             dValue.setText(String.valueOf(Math.round(mValue)));
         EMIcheck=Math.round(emi);
-        emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi)+"/month"));
+        emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi)+" per month"));
         priceChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1317,7 +1328,7 @@ if(cb==0){
             if(sellingPrice-mValue>fcbv)
                 mValue=sellingPrice-fcbv;
 
-            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0 - mDis, Double.valueOf(sellingPrice), monthsnow)))+"/month");
+            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0 - mDis, Double.valueOf(sellingPrice), monthsnow)))+" per month");
             Double tot = calculateEmi(sellingPrice * 0.8 - mDis, Double.valueOf(sellingPrice), monthsnow) * monthsnow + dopay2;
 //            Double r = (mValue - mDis);
             mValue = mValue-mDis;
@@ -1343,7 +1354,7 @@ int w=0;
             }
             dValue.setText(String.valueOf(mValue));
             EMIcheck=(Math.round(calculateEmi(sellingPrice-mValue*1.0, Double.valueOf(sellingPrice), monthsnow)));
-            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice-mValue*1.0, Double.valueOf(sellingPrice), monthsnow)))+"/month");
+            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice-mValue*1.0, Double.valueOf(sellingPrice), monthsnow)))+" per month");
             Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
             totalLoan.setText(String.valueOf(Math.round(tot)));
         }
@@ -1449,11 +1460,20 @@ int w=0;
         }
 
         protected void onPostExecute(String result) {
-            loader.setVisibility(View.GONE);
-            viewDetail.setVisibility(View.VISIBLE);
+
             if (!result.equals("win")) {
                 System.out.println("Error while computing data");
+                Intent in=new Intent(ProductsPage.this,ProductsPage.class);
+                in.putExtra("page","pay");
+                in.putExtra("seller", getIntent().getExtras().getString("seller"));
+                finish();
+                startActivity(in);
+                loader.setVisibility(View.GONE);
+                viewDetail.setVisibility(View.VISIBLE);
+//                getIntent().getExtras().getString("seller");
             } else {
+                loader.setVisibility(View.GONE);
+                viewDetail.setVisibility(View.VISIBLE);
                 cb = st.getInt("cashBack", 0);
                 int cl = st.getInt("creditLimit", 0);
                 int cbv = st.getInt("totalBorrowed", 0);
@@ -1659,6 +1679,18 @@ int w=0;
             logo.setImageResource(R.drawable.shopclues);
         }
 
+        if ("flipkart".equals(seller)) {
+            logo.setImageResource(R.drawable.flipart);
+        }
+
+        if ("amazon".equals(seller)) {
+            logo.setImageResource(R.drawable.amazon);
+        }
+
+        if ("snapdeal".equals(seller)) {
+            logo.setImageResource(R.drawable.snapdeal);
+        }
+
 
         queryNew = (EditText) findViewById(R.id.query);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -1738,7 +1770,7 @@ viewDetail.setVisibility(View.VISIBLE);
             dummyCl=1000;
             fcbv=100000000;
         }
-if(dummyCl==0)
+if(dummyCl==1000)
         aval.setText(getApplicationContext().getString(R.string.Rs) + "0");
         else
     aval.setText(getApplicationContext().getString(R.string.Rs) + fcbv);
@@ -1809,7 +1841,7 @@ if(dummyCl==0)
                     mValue=sellingPrice;
                 dValue.setText(String.valueOf(mValue));
                 EMIcheck=(Math.round(calculateEmi(sellingPrice -mValue*1.0, Double.valueOf(sellingPrice), monthsnow)));
-                emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0, Double.valueOf(sellingPrice), monthsnow)))+"/month");
+                emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0, Double.valueOf(sellingPrice), monthsnow)))+" per month");
                 Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
                 totalLoan.setText(String.valueOf(Math.round(tot)));
                 //                    Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
@@ -2173,5 +2205,8 @@ if(searchPrice<=150)
     }
 
     ;
-
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
 }

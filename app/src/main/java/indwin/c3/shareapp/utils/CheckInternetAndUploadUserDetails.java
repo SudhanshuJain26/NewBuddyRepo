@@ -127,6 +127,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewCollegeIds().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
+                        if(user.getNewCollegeIds()!=null)
                         user.getNewCollegeIds().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
 
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
@@ -153,6 +154,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewAddressProofs().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
+                       if(user.getNewAddressProofs()!=null)
                         user.getNewAddressProofs().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
@@ -178,6 +180,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewBankStmts().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
+                        if(user.getNewBankStmts()!=null)
                         user.getNewBankStmts().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
 
                         i++;
@@ -204,6 +207,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewBankProofs().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
+                        if(user.getNewBankProofs()!=null)
                         user.getNewBankProofs().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
 
                         i++;

@@ -321,7 +321,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                     return;
                 }
                 String json = gson.toJson(user);
-                //mPrefs.edit().putBoolean("updatingDB", false).apply();
+                mPrefs.edit().putBoolean("updatingDB", false).apply();
                 mPrefs.edit().putString("UserObject", json).apply();
                 Context context = getActivity();
                 Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);

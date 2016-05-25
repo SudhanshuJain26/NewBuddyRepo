@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 import indwin.c3.shareapp.Landing;
 import indwin.c3.shareapp.MainActivity;
@@ -57,6 +64,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private TextView hiName;
     private LinearLayout layout, middleLayout;
     UserModel user;
+    private String formstatus, name, fbid, rejectionReason, email, uniqueCode, verificationdate, searchTitle, searchBrand, searchCategory, searchSubcategory, description, specification, review, infor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +91,30 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             });
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+        boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+        if (!isUpdatingDB) {
+
+            new ValidateForm().execute();
+        } else {
+            Runnable myRunnable = new Runnable() {
+
+                public void run() {
+                    try {
+                        Thread.sleep(10000);
+
+                    } catch (Exception e) {
+
+                    }
+                    new ValidateForm().execute();
+                }
+
+
+            };
+            Thread thread = new Thread(myRunnable);
+            thread.start();
+
         }
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -414,6 +446,199 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+
+    private class ValidateForm extends
+                               AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+
+        @Override
+        protected String doInBackground(String... data) {
+            SharedPreferences ss = getSharedPreferences("cred", Context.MODE_PRIVATE);
+            JSONObject payload = new JSONObject();
+            try {
+                String url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + ss.getString("phone_number", "");
+                try {
+
+                } catch (Exception e) {
+                    System.out.println("dio " + e.toString());
+                }
+                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                String tok_sp = toks.getString("token_value", "");
+
+
+                HttpResponse response = AppUtils.connectToServerGet(url2, tok_sp, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+
+                    if (response.getStatusLine().getStatusCode() != 200) {
+
+                        Log.e("MeshCommunication", "Server returned code "
+                                + response.getStatusLine().getStatusCode());
+                        return "fail";
+                    } else {
+                        JSONObject resp = new JSONObject(responseString);
+                        JSONObject data1 = new JSONObject(resp.getString("data"));
+                        try {
+
+
+                            Gson gson = new Gson();
+                            UserModel user = AppUtils.getUserObject(ProfileActivity.this);
+                            if (user == null)
+                                user = new UserModel();
+                            name = data1.getString("name");
+                            email = data1.getString("email");
+                            user.setName(name);
+                            user.setEmail(email);
+                            if (!data1.getBoolean("offlineForm"))
+                                AppUtils.checkDataForNormalUser(user, gson, data1);
+                            else
+                                checkDataForOfflineUser(user, gson, data1);
+
+                            AppUtils.saveUserObject(ProfileActivity.this, user);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            try {
+                                String creditLimit = data1.getString("creditLimit");
+                            } catch (Exception e) {
+                            }
+                            try {
+                                fbid = data1.getString("fbConnected");
+                            } catch (Exception e) {
+                                fbid = "empty";
+                            }
+                            if (fbid.equals("") || (fbid.equals("false")))
+                                fbid = "empty";
+                            try {
+                                formstatus = data1.getString("formStatus");
+                            } catch (Exception e) {
+                                formstatus = "empty";
+                            }
+                            int cashBack = 0;
+                            try {
+                                cashBack = data1.getInt("totalCashback");
+                            } catch (Exception e) {
+                                cashBack = 0;
+                            }
+                            String approvedBand = "";
+                            try {
+                                approvedBand = data1.getString("approvedBand");
+                            } catch (Exception e) {
+                                approvedBand = "";
+                            }
+                            int creditLimit = 0;
+                            try {
+                                creditLimit = data1.getInt("creditLimit");
+                            } catch (Exception e) {
+                                creditLimit = 0;
+                            }
+                            int totalBorrowed = 0;
+                            try {
+                                totalBorrowed = data1.getInt("totalBorrowed");
+                            } catch (Exception e) {
+                                totalBorrowed = 0;
+                            }
+                            String nameadd = "";
+                            try {
+                                nameadd = data1.getString("college");
+                            } catch (Exception e) {
+                            }
+                            String profileStatus = "";
+                            try {
+                                profileStatus = data1.getString("profileStatus");
+                            } catch (Exception e) {
+                                profileStatus = "";
+                            }
+                            String courseend = "";
+
+                            try {
+                                courseend = data1.getString("courseCompletionDate");
+                            } catch (Exception e) {
+                                courseend = "";
+                            }
+
+                            SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editorP = userP.edit();
+
+                            editorP.putString("profileStatus", profileStatus);
+
+                            editorP.putInt("creditLimit", creditLimit);
+                            editorP.putInt("totalBorrowed", totalBorrowed);
+                            editorP.putInt("cashBack", cashBack);
+                            editorP.putString("formStatus", formstatus);
+                            editorP.putString("course", courseend);
+                            editorP.putString("nameadd", nameadd);
+                            editorP.putString("approvedBand", approvedBand);
+                            editorP.putString("productdpname", name);
+                            editorP.commit();
+
+
+                            try {
+                                rejectionReason = data1.getString("rejectionReason");
+                            } catch (Exception e) {
+                            }
+                            if (formstatus.equals(""))
+                                formstatus = "empty";
+
+                            try {
+                                verificationdate = data1.getString("collegeIdVerificationDate");
+                            } catch (Exception e) {
+                                verificationdate = "NA";
+                            }
+                            if (verificationdate.equals(""))
+                                verificationdate = "NA";
+                            try {
+                                String dpid = data1.getString("fbUserId");
+                                SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor2 = sf.edit();
+                                editor2.putString("dpid", dpid);
+
+                                //  editor2.putString("password", password.getText().toString());
+                                editor2.commit();
+                            } catch (Exception e) {
+                            }
+
+                        } catch (Exception e) {
+                        }
+                        if (resp.getString("msg").contains("error")) {
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return resp.getString("msg");
+                        } else {
+                            return "win";
+                        }
+
+                    }
+                }
+                return "fail";
+
+            } catch (Exception e) {
+                Log.e("mesherror", e.getMessage());
+                return "fail";
+
+            }
+        }
+    }
+
+
+    private void checkDataForOfflineUser(UserModel user, Gson gson, JSONObject data1) {
+        try {
+            SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+            sh.edit().putBoolean("visitedFormStep1Fragment1", true).apply();
+            sh.edit().putBoolean("visitedFormStep1Fragment2", true).apply();
+            sh.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
+            AppUtils.checkDataForNormalUser(user, gson, data1);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
 
     private void incomplete1k() {
         if (mPrefs.getBoolean("visitedFormStep1Fragment1", false)) {

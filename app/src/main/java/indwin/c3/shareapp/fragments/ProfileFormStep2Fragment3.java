@@ -384,7 +384,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                     user.setGpaTypeUpdate(true);
                 }
                 AppUtils.saveUserObject(getActivity(), user);
-                //mPrefs.edit().putBoolean("updatingDB", false).apply();
+                mPrefs.edit().putBoolean("updatingDB", false).apply();
                 Context context = getActivity();
                 Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
                 getContext().sendBroadcast(intent);

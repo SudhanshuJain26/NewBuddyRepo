@@ -122,3 +122,4 @@
   public *;
 }
 
+-keep class com.commonsware.cwac.** { *; }

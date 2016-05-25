@@ -281,7 +281,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         if (user.getCollegeIds() != null && user.getCollegeIds().size() > 0) {
             user.setIncompleteCollegeId(false);
         }
-        if (user.isIncompleteAadhar() || !(user.getAddressProofs() != null && user.getAddressProofs().size() > 0) || (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())))
+        if (user.isIncompleteAadhar() || user.isIncompleteAddressDetails() || user.isInCompleteAgreement())
 
         {
             incompleteStep3.setVisibility(View.VISIBLE);

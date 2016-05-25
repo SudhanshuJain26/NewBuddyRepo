@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -37,6 +36,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.commonsware.cwac.cam2.CameraActivity;
+import com.commonsware.cwac.cam2.Facing;
+import com.commonsware.cwac.cam2.ZoomStyle;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -292,23 +294,36 @@ public class AgreementActivity extends AppCompatActivity {
     }
 
     private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(photoFile));
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
+        try {
+            Intent takePictureIntent = new CameraActivity.IntentBuilder(AgreementActivity.this)
+                    .skipConfirm()
+                    .to(createImageFile()).facing(Facing.FRONT)
+                    .debug()
+                    .zoomStyle(ZoomStyle.SEEKBAR)
+                    .updateMediaStore()
+                    .build();
+            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+        } catch (Exception e) {
+
+
         }
+        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //// Ensure that there's a camera activity to handle the intent
+        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        //    // Create the File where the photo should go
+        //    File photoFile = null;
+        //    try {
+        //        photoFile = createImageFile();
+        //    } catch (IOException ex) {
+        //        // Error occurred while creating the File
+        //    }
+        //    // Continue only if the File was successfully created
+        //    if (photoFile != null) {
+        //        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+        //                Uri.fromFile(photoFile));
+        //        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+        //    }
+        //}
     }
 
     private File createImageFile() throws IOException {
@@ -389,7 +404,7 @@ public class AgreementActivity extends AppCompatActivity {
         super.onBackPressed();
 
         if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
-
+            user.setInCompleteAgreement(true);
             ProfileFormStep1Fragment3.incompleteAgreement.setVisibility(View.VISIBLE);
             ProfileFormStep1Fragment3.completeAgreement.setVisibility(View.GONE);
         }

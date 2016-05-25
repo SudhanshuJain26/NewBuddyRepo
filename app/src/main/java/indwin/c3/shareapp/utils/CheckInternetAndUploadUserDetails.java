@@ -47,11 +47,32 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
     String selfieUrl = "", signatureUrl = "";
 
     @Override
-    public synchronized void onReceive(Context context, Intent arg1) {
+    public synchronized void onReceive(final Context context, final Intent arg1) {
         mContext = context;
         mPrefs = mContext.getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        if (!mPrefs.getBoolean("updatingDB", false)) {
+        boolean isUpdatingDB = mPrefs.getBoolean("updatingDB", false);
+
+        if (!isUpdatingDB) {
+
             new AsyncTaskRunner().execute();
+        } else {
+            Runnable myRunnable = new Runnable() {
+
+                public void run() {
+                    try {
+                        Thread.sleep(10000);
+
+                    } catch (Exception e) {
+
+                    }
+                    onReceive(context, arg1);
+                }
+
+
+            };
+            Thread thread = new Thread(myRunnable);
+               thread.start();
+
         }
     }
 
@@ -106,6 +127,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewCollegeIds().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
+                        user.getNewCollegeIds().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
+
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
                         i++;
@@ -130,6 +153,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewAddressProofs().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
+                        user.getNewAddressProofs().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
                         i++;
@@ -154,6 +178,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewBankStmts().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
+                        user.getNewBankStmts().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
+
                         i++;
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
@@ -178,6 +204,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewBankProofs().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
+                        user.getNewBankProofs().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
+
                         i++;
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);

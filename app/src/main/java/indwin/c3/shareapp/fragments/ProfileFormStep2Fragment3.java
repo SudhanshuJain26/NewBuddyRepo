@@ -253,7 +253,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
             incompleteStep1.setVisibility(View.VISIBLE);
         }
         if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails()
-                || user.isIncompleteVerificationDate() || AppUtils.isEmpty(user.getStudentLoan())) {
+                || user.isIncompleteVerificationDate() || user.isIncompleteStudentLoan()) {
             incompleteStep3.setVisibility(View.VISIBLE);
             if (user.isIncompleteRepaymentSetup()) {
                 incompleteSetupRepayments.setVisibility(View.VISIBLE);
@@ -323,7 +323,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         saveAndProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData();
+
                 if (!ValidationUtils.isValidPhoneNumber(classmatePhone.getText().toString())) {
                     incorrectPhone.setVisibility(View.VISIBLE);
                 }
@@ -384,7 +384,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                     user.setGpaTypeUpdate(true);
                 }
                 AppUtils.saveUserObject(getActivity(), user);
-                mPrefs.edit().putBoolean("updatingDB", false).apply();
+                //mPrefs.edit().putBoolean("updatingDB", false).apply();
                 Context context = getActivity();
                 Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
                 getContext().sendBroadcast(intent);
@@ -433,10 +433,14 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         if (AppUtils.isNotEmpty(userSaved.getBankIfsc())) {
             user.setUpdateBankIfsc(userSaved.isUpdateBankIfsc());
             user.setBankIfsc(userSaved.getBankIfsc());
+        } else {
+            user.setIncompleteRepaymentSetup(true);
         }
         if (AppUtils.isNotEmpty(userSaved.getBankAccNum())) {
             user.setUpdateBankAccNum(userSaved.isUpdateBankAccNum());
             user.setBankAccNum(userSaved.getBankAccNum());
+        } else {
+            user.setIncompleteRepaymentSetup(true);
         }
     }
 
@@ -478,6 +482,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
     }
 
     private void checkIncomplete() {
+        saveData();
         if (bankAccNum.getText().length() <= 0) {
             user.setIncompleteRepaymentSetup(true);
         } else {
@@ -495,6 +500,10 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                 user.setClassmatePhone(classmatePhone.getText().toString());
                 user.setUpdateClassmatePhone(true);
             }
+        }
+        if (!selectedStudentLoan) {
+            user.setIncompleteStudentLoan(true);
+
         }
         if (updateUserVerificationDate) {
             user.setIncompleteVerificationDate(false);

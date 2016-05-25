@@ -249,9 +249,13 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             incompleteStep1.setVisibility(View.VISIBLE);
         }
 
-        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails() || user.isIncompleteVerificationDate() || AppUtils.isEmpty(user.getStudentLoan())) {
+        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails()
+                || user.isIncompleteVerificationDate() || user.isIncompleteStudentLoan())
+
+        {
             incompleteStep3.setVisibility(View.VISIBLE);
         }
+
         return rootView;
     }
 
@@ -391,7 +395,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         saveAndProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkIncomplete();
+
                 if (AppUtils.isNotEmpty(prefLangFamilyMember1.getText().toString())) {
                     user.setPrefferedLanguageFamilyMemberType1(prefLangFamilyMember1.getText().toString());
                     user.setUpdatePreferredLanguageFamilyMemberType1(true);
@@ -410,6 +414,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                         user.setUpdatePhoneFamilyMemberType2(true);
                     }
                 }
+                checkIncomplete();
                 String json = gson.toJson(user);
                 mPrefs.edit().putString("UserObject", json).apply();
                 Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);

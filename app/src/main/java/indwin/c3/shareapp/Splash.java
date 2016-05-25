@@ -46,6 +46,7 @@ import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.models.TrendingMapWrapper;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
@@ -107,6 +108,12 @@ public class Splash extends AppCompatActivity {
         String json = sh.getString("UserObject", "");
         setNewIdsNull(json);
         json = sh.getString("UserObject", "");
+        boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+        if (isUpdatingDB) {
+            sh.edit().putBoolean("updatingDB", false);
+            Intent intent = new Intent(this, CheckInternetAndUploadUserDetails.class);
+            sendBroadcast(intent);
+        }
 
         sh_otp = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
         setContentView(R.layout.activity_splash);
@@ -758,12 +765,12 @@ public class Splash extends AppCompatActivity {
                                 totalBorrowed = 0;
                             }
                             String nameadd = "";
-                            String  courseend="";
+                            String courseend = "";
 
                             try {
-                               courseend = data1.getString("courseCompletionDate");
+                                courseend = data1.getString("courseCompletionDate");
                             } catch (Exception e) {
-                            courseend="";
+                                courseend = "";
                             }
 
                             try {
@@ -1085,7 +1092,7 @@ public class Splash extends AppCompatActivity {
                             user.setProfessionFamilyMemberType1(familyJson.getString("occupation"));
                             user.setPhoneFamilyMemberType1(familyJson.getString("phone"));
                             if (familyJson.opt("preferredLanguage") != null)
-                                user.setPrefferedLanguageFamilyMemberType2(familyJson.getString("preferredLanguage"));
+                                user.setPrefferedLanguageFamilyMemberType1(familyJson.getString("preferredLanguage"));
                         }
                     }
                 }

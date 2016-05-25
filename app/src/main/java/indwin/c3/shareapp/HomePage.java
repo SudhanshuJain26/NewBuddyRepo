@@ -450,7 +450,7 @@ public class HomePage extends AppCompatActivity {
                 but.setVisibility(View.GONE);
                 if (Constants.STATUS.DECLINED.toString().equals(user.getProfileStatus()) || Constants.STATUS.WAITLISTED.equals(user.getProfileStatus())) {
 
-                    line1.setText("Your profile has currently been waitlisted for approval. Touch here to find out more.");
+                    line1.setText("Your app_form has currently been waitlisted for approval. Touch here to find out more.");
 
                 } else if (Constants.STATUS.APPROVED.toString().equals(user.getProfileStatus())) {
 

@@ -113,7 +113,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
         try {
             addressProofs = user.getAddressProofs();
-            if (addressProofs == null) {
+            if (addressProofs == null || addressProofs.size() == 0) {
                 addressProofs = new ArrayList<>();
             } else {
                 completeAddress.setVisibility(View.VISIBLE);
@@ -243,10 +243,10 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         }
         aadharOrPan.setAdapter(adapter);
 
-        if (AppUtils.isEmpty(user.getSignature()) || AppUtils.isEmpty(user.getSelfie())) {
+        if (user.isInCompleteAgreement()) {
 
             incompleteAgreement.setVisibility(View.VISIBLE);
-        } else if (AppUtils.isNotEmpty(user.getSignature()) && AppUtils.isNotEmpty(user.getSelfie())) {
+        } else if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature())) {
 
             completeAgreement.setVisibility(View.VISIBLE);
         }
@@ -259,7 +259,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails() || user.isIncompleteRollNumber()) {
             incompleteStep2.setVisibility(View.VISIBLE);
         }
-        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress() || (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature()))) {
+        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress() || user.isIncompleteAddressDetails() || user.isInCompleteAgreement()) {
             incompleteStep3.setVisibility(View.VISIBLE);
             if (user.isIncompleteAadhar())
                 incompleteAadhar.setVisibility(View.VISIBLE);
@@ -276,18 +276,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             public void onClick(View v) {
                 user = AppUtils.getUserObject(getActivity());
 
-                UserModel userSP = AppUtils.getUserObject(getActivity());
-                if (AppUtils.isNotEmpty(userSP.getSignature())) {
-                    user.setSignature(userSP.getSignature());
-                    user.setUpdateSignature(userSP.isUpdateSignature());
-
-                }
-
-                if (AppUtils.isNotEmpty(userSP.getSelfie())) {
-                    user.setSelfie(userSP.getSelfie());
-                    user.setUpdateSelfie(userSP.isUpdateSelfie());
-
-                }
+                saveSelfieAndSignature();
                 checkIncomplete();
                 if ((user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender() || user.isIncompleteRollNumber()
                         || user.isIncompleteAadhar() || user.isIncompleteCollegeDetails()
@@ -332,7 +321,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                     return;
                 }
                 String json = gson.toJson(user);
-                mPrefs.edit().putBoolean("updatingDB", false).apply();
+                //mPrefs.edit().putBoolean("updatingDB", false).apply();
                 mPrefs.edit().putString("UserObject", json).apply();
                 Context context = getActivity();
                 Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
@@ -443,6 +432,21 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
     }
 
+    private void saveSelfieAndSignature() {
+        UserModel userSP = AppUtils.getUserObject(getActivity());
+        if (AppUtils.isNotEmpty(userSP.getSignature())) {
+            user.setSignature(userSP.getSignature());
+            user.setUpdateSignature(userSP.isUpdateSignature());
+
+        }
+
+        if (AppUtils.isNotEmpty(userSP.getSelfie())) {
+            user.setSelfie(userSP.getSelfie());
+            user.setUpdateSelfie(userSP.isUpdateSelfie());
+
+        }
+    }
+
     private void getAllViews(View rootView) {
         uploadImageMsgTv = (TextView) rootView.findViewById(R.id.address_proof_header);
         completeAgreement = (ImageView) rootView.findViewById(R.id.complete_agreement);
@@ -526,6 +530,10 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     }
 
     private void checkIncomplete() {
+        saveSelfieAndSignature();
+        if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
+            user.setInCompleteAgreement(true);
+        }
         if (aadharNuber.getVisibility() == View.GONE) {
             user.setIncompleteAadhar(true);
         } else {

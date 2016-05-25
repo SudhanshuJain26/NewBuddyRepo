@@ -31,7 +31,9 @@ repositories {
     maven { url "https://repo.commonsware.com.s3.amazonaws.com" }
     maven { url "https://jitpack.io" }
     maven { url "http://dl.bintray.com/pixplicity/android" }
-
+    maven {
+        url "https://s3.amazonaws.com/repo.commonsware.com"
+    }
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -64,6 +66,8 @@ dependencies {
     compile('ch.acra:acra:4.7.0') {
         exclude group: 'org.json'
     }
+
+    compile 'com.commonsware.cwac:cam2:0.5.11'
 
 
 }

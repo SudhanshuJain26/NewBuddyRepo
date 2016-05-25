@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -74,11 +75,14 @@ public class AgreementActivity extends AppCompatActivity {
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     public static final int PERMISSION_ALL = 0;
     private Target loadTarget, loadTargetSelfie;
+    int widthSelfie = 200, heightSelfie = 180;
+    private ColorDrawable cd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agreement);
+        cd = new ColorDrawable(0xFFFFFF);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
@@ -169,12 +173,8 @@ public class AgreementActivity extends AppCompatActivity {
             if (AppUtils.isNotEmpty(user.getSelfie())) {
                 Drawable d = getResources().getDrawable(R.drawable.downloading);
 
-                Bitmap bitmap = ((BitmapDrawable) d).getBitmap();
 
-                Drawable nd = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 300, 180, false));
-                takeASelfie.setPadding(0, 0, 0, 0);
-                takeASelfie.setText("");
-                takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, nd, null, null);
+                populateSelfie(null, d);
                 String path = user.getSelfie();
                 if (path.contains("http")) {
 
@@ -204,15 +204,10 @@ public class AgreementActivity extends AppCompatActivity {
                 } else {
                     final File imgFile = new File(path);
                     if (imgFile.exists()) {
-                        Drawable downloading = Drawable.createFromPath(user.getSelfie());
+                        Drawable drawable = Drawable.createFromPath(user.getSelfie());
 
-                        Bitmap downloadingBitmap = ((BitmapDrawable) downloading).getBitmap();
 
-                        Drawable downloadingResizedDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(downloadingBitmap, 300, 300, false));
-                        takeASelfie.setPadding(0, 0, 0, 0);
-                        takeASelfie.setText("");
-                        takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, downloadingResizedDrawable, null, null);
-                        isSelfieAdded = true;
+                        populateSelfie(null, drawable);
 
 
                     }
@@ -345,9 +340,15 @@ public class AgreementActivity extends AppCompatActivity {
     }
 
     public void handleLoadedBitmap(Bitmap b) {
-        Drawable nd = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(b, 300, 300, false));
-        takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, nd, null, null);
-        takeASelfie.setPadding(0, 0, 0, 0);
+        populateSelfie(b, null);
+    }
+
+    private void populateSelfie(Bitmap bitmap, Drawable d) {
+        if (bitmap != null) {
+            d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, widthSelfie, heightSelfie, false));
+        }
+        takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.transparent_cam), null, null);
+        takeASelfie.setBackgroundDrawable(d);
         takeASelfie.setText("");
         isSelfieAdded = true;
     }
@@ -374,15 +375,9 @@ public class AgreementActivity extends AppCompatActivity {
 
                 return;
             }
-            Bitmap bitmap = ((BitmapDrawable) d).getBitmap();
 
-            Drawable nd = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 300, 300, false));
 
-            takeASelfie.setText("");
-            takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, nd, null, null);
-            isSelfieAdded = true;
-            takeASelfie.setPadding(0, 0, 0, 0);
-            user.setSelfie(mCurrentPhotoPath);
+            populateSelfie(null, d);
             user.setUpdateSelfie(true);
             AppUtils.saveUserObject(this, user);
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resultCode == Activity.RESULT_OK) {

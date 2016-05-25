@@ -715,6 +715,11 @@ public class Splash extends AppCompatActivity {
                             sh.edit().putString("UserObject", json).apply();
                             name = data1.getString("name");
                             email = data1.getString("email");
+                            SharedPreferences sharedpreferences11 = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor11 = sharedpreferences11.edit();
+                            editor11.putString("n1", name);
+                            editor11.putString("e1", email);
+                            editor11.commit();
                         } catch (Exception e) {
                         }
                         try {

@@ -195,6 +195,8 @@ public class ConfirmOrder extends AppCompatActivity {
                 TextView inter = (TextView) popUpView.findViewById(R.id.textPopserintamt);
                 TextView disc = (TextView) popUpView.findViewById(R.id.textPopserdisamt);
                 TextView faq = (TextView) popUpView.findViewById(R.id.cbfaq);
+                TextView sellerss = (TextView) popUpView.findViewById(R.id.textPopseller);
+                sellerss.setText("Charged by "+getIntent().getExtras().getString("seller"));
                 faq.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

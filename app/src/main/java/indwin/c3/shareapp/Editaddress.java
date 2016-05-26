@@ -40,7 +40,7 @@ public class Editaddress extends AppCompatActivity {
 //    myList.add("Android");
 //    myList.add("Android1");
 int CheckSize=0;
-private  GIFView loader;
+private  ImageView loader;
     ListView listView;
 //    BroadcastReceiver broadcastReceiver;
     @Override
@@ -48,7 +48,7 @@ private  GIFView loader;
         super.onCreate(savedInstanceState);
         registerReceiver(broadcastReceiver, new IntentFilter("order"));
         setContentView(R.layout.activity_editaddress);
-        loader=(GIFView)findViewById(R.id.loading);
+        loader=(ImageView)findViewById(R.id.loading);
         backpress();
         String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry","WebOS","Ubuntu","Windows7","Max OS X"};
       myList = new ArrayList<Deladd>();

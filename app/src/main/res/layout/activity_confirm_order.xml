@@ -229,15 +229,7 @@ android:layout_toRightOf="@id/sellerMrpValue"
         android:text="TOTAL PAYABLE AMOUNT"
         android:id="@+id/down"
         />
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:id="@+id/detailsDis"
-               android:textColor="#21A5E0"
-               android:layout_marginLeft="@dimen/activity_horizontal_margin"
-               android:layout_toRightOf="@id/down"
-               android:layout_below="@id/down"
-               android:text="Details"/>
+
 
         <RelativeLayout
         android:layout_width="wrap_content"
@@ -277,6 +269,15 @@ android:layout_marginTop="@dimen/four"
 
                 android:textColor="#000000"
                 />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/detailsDis"
+                android:textColor="#21A5E0"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_toRightOf="@id/emimonths"
+
+                android:text="Details"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -329,7 +330,7 @@ android:layout_marginTop="@dimen/four"
             android:textStyle="italic"
             android:hint="Size and color, delivery options or anything else ..."
             android:layout_marginBottom="100dp"
-            android:background="@drawable/roundedproducts"
+            android:background="@drawable/roundedgrey"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"/>

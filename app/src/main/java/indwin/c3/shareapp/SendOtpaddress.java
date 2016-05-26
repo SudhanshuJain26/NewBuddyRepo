@@ -231,6 +231,7 @@ if(result.contains("win"))
     i.putExtra("send",3);
     i.putExtra("phone_number",userid);
     startActivity(i);
+    finish();
 }
         }}
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {

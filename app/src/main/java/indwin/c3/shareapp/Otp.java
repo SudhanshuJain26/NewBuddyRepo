@@ -487,6 +487,13 @@ public class Otp extends AppCompatActivity {
                             }
                             if (panoradhar.equals(""))
                                 panoradhar = "NA";
+                            String profileStatus = "";
+                            try {
+                                profileStatus = data1.getString("profileStatus");
+                            } catch (Exception e) {
+                                profileStatus = "";
+                            }
+
                             try {
                                 bankaccount = data1.getString("bankAccountNumber");
                             } catch (Exception e) {
@@ -508,6 +515,15 @@ public class Otp extends AppCompatActivity {
                             }
                             if (collegeid.equals(""))
                                 collegeid = "NA";
+                            try{
+                                SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editorP = userP.edit();
+
+
+                                editorP.putString("profileStatus", profileStatus);
+                                editorP.commit();
+                            }
+                            catch (Exception e){}
                             try {
                                 String dpid = data1.getString("fbUserId");
                                 SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);

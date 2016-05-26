@@ -67,11 +67,13 @@ public class ConfirmOrder extends AppCompatActivity {
 
     public void set() {
         try {
+            prod.setVisibility(View.VISIBLE);
             Picasso.with(this)
                     .load(getIntent().getExtras().getString("image"))
                     .placeholder(R.drawable.emptyimageproducts)
                     .into(prod);
         } catch (Exception e) {
+            prod.setVisibility(View.INVISIBLE);
         }
         downPayment = (int) (Double.parseDouble(getIntent().getExtras().getString("down")));
         downP.setText(getApplicationContext().getString(R.string.Rs) + downPayment);
@@ -141,6 +143,7 @@ public class ConfirmOrder extends AppCompatActivity {
 //        Double em=Double.valueOf(emifromProd);
         newemi=getIntent().getExtras().getLong("emicheck");
         System.out.println(newemi + "may14");
+
         String t = newemi + " /month" + " x " + getIntent().getExtras().getString("months");
         flexVal.setText(getApplicationContext().getString(R.string.Rs) + newemi+"/month");
         TextView totalPay = (TextView) findViewById(R.id.emimonths);
@@ -195,6 +198,8 @@ public class ConfirmOrder extends AppCompatActivity {
                 TextView inter = (TextView) popUpView.findViewById(R.id.textPopserintamt);
                 TextView disc = (TextView) popUpView.findViewById(R.id.textPopserdisamt);
                 TextView faq = (TextView) popUpView.findViewById(R.id.cbfaq);
+                TextView sellerss = (TextView) popUpView.findViewById(R.id.textPopseller);
+                sellerss.setText("Charged by "+getIntent().getExtras().getString("seller"));
                 faq.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -210,6 +215,16 @@ public class ConfirmOrder extends AppCompatActivity {
                     interest = 0;
                 int ll=(int)(newemi*getIntent().getExtras().getInt("monthforemi"));
                 interest=ll-getIntent().getExtras().getInt("sellingprice")+downPayment-serviceCharge+dis;
+                if(getIntent().getExtras().getInt("sellingprice")<5000)
+                {
+                    Long lo=(getIntent().getExtras().getInt("monthforemi")) * newemi;
+                    if(getIntent().getExtras().getInt("sellingprice")<5000)
+                    {
+                        int w=emiWithservice(lo.intValue(),333,getIntent().getExtras().getInt("monthforemi"));
+                        inter.setText(getApplicationContext().getString(R.string.Rs) + w);
+                    }
+                }
+                else
                 inter.setText(getApplicationContext().getString(R.string.Rs) + interest);
                 disc.setText(getApplicationContext().getString(R.string.Rs) + dis);
                 TextView sc = (TextView) popUpView.findViewById(R.id.textPop);
@@ -235,13 +250,11 @@ public class ConfirmOrder extends AppCompatActivity {
         Double emi = 0.0;
         Double rate = 21.0 / 1200.0;
         int d = 0;
-        if (sellingP <= 5000) {
-            emi = principal * 1.0 / months;
-        } else {
+
 
             d = getIntent().getExtras().getInt("daytoday");
             emi = Math.floor((principal * rate * Math.pow(1 + rate, months - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, months) - 1));
-        }
+
 
         return emi.intValue();
     }

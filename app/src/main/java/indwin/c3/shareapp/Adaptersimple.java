@@ -41,6 +41,7 @@ import java.util.ArrayList;
  * Created by Aniket Verma(Digo) on 4/24/2016.
  */
 public class Adaptersimple extends BaseAdapter {
+    RadioButton checkRR;
     private final Context context;
     int selectedPosition;
     private RadioButton checkR;
@@ -97,18 +98,74 @@ public class Adaptersimple extends BaseAdapter {
         textAdd2 = (TextView) rowView.findViewById(R.id.addRess2);
         textAdd3 = (TextView) rowView.findViewById(R.id.addRess3);
 //        textAdd4 = (TextView) rowView.findViewById(R.id.addRess4);
-        final RelativeLayout rradd = (RelativeLayout) rowView.findViewById(R.id.rradd);
+        final RelativeLayout rradd = (RelativeLayout) rowView.findViewById(R.id.cardAdd);
         final TextView textView3 = (TextView) rowView.findViewById(R.id.addRess3);
         final TextView textView2 = (TextView) rowView.findViewById(R.id.addRess2);
         final ImageView imicon = (ImageView) rowView.findViewById(R.id.img);
          edit = (ImageView) rowView.findViewById(R.id.edit);
+        if(position==0)
+            edit.setVisibility(View.INVISIBLE);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+if(position!=0){
+                SharedPreferences tt=context.getSharedPreferences("cred", Context.MODE_PRIVATE);
+                int w=tt.getInt("add",0);
+                if(w==0) {
+
+                    Intent inSend=new Intent(context,SendOtpaddress.class);
+                    ((Activity)context).finish();
+                    context.startActivity(inSend);
+                }
+                else{
+
+                    Deladd d=new Deladd();
+                    try{
+
+                        editnow=myList.get(position).getAdd().toString();}
+                    catch (Exception e)
+                    {}
+
+                    getli=myList.get(position).getLine1().toString();
+//                Toast.makeText(context, t, Toast.LENGTH_SHORT).show();
+
+
+
+
+                    RelativeLayout r = (RelativeLayout) vi.findViewById(R.id.cardeditAdd1);
+                    r.setVisibility(View.VISIBLE);
+                    ListView l = (ListView) vi.findViewById(R.id.list1);
+                    l.setVisibility(View.GONE);
+                    edt1=(EditText)vi.findViewById(R.id.edtAdd11);
+                    edt2=(EditText)vi.findViewById(R.id.edtAdd22);
+                    edt3=(EditText)vi.findViewById(R.id.edtAdd33);
+                    edt4=(EditText)vi.findViewById(R.id.edtAdd44);
+
+                    if(getli.contains("address"))
+                    {
+
+                        delete.setVisibility(View.GONE);}
+                    else
+                        delete.setVisibility(View.VISIBLE);
+                    textAdd1.setVisibility(View.GONE);
+                    textAdd2.setVisibility(View.GONE);
+                    textAdd3.setVisibility(View.GONE);
+//                    Toast.makeText(context, "True that yo" + position, Toast.LENGTH_SHORT).show();
+//                    ((ImageView)rowView.findViewById(R.id.edit)).setVisibility(View.INVISIBLE);
+
+                    //edit.setVisibility(View.VISIBLE);
+                }
+            }}
+        });
         final RadioButton rd = (RadioButton) rowView.findViewById(R.id.radioAdd);
         SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
         if(position==0){
             SharedPreferences.Editor e1=cred.edit();
             String cc=myList.get(position).getLine1().toString();
-            e1.putString("address",cc);
+            e1.putString("address", cc);
             e1.commit();
+//            rd.setChecked(true);
+            checkRR=rd;
             rd.setChecked(true);
             checkR = (RadioButton) rowView.findViewById(R.id.radioAdd);
 
@@ -169,17 +226,23 @@ public class Adaptersimple extends BaseAdapter {
         delete = (TextView) par.findViewById(R.id.delete);
 //        String cc=((TextView) par.findViewById(R.id.addRess2)).getText().toString();
   //      Toast.makeText(context, cc, Toast.LENGTH_SHORT).show();
+        //radio now
         rradd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+        }});
+//radio ten
+        rradd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(position==myList.size()-1){
                 SharedPreferences tt=context.getSharedPreferences("cred", Context.MODE_PRIVATE);
                 int w=tt.getInt("add",0);
-                if(w==0)
-                {
+                if(w==0) {
+
                     Intent inSend=new Intent(context,SendOtpaddress.class);
                     ((Activity)context).finish();
                     context.startActivity(inSend);
-
                 }
                 else{
 
@@ -219,6 +282,67 @@ Deladd d=new Deladd();
 
                 //edit.setVisibility(View.VISIBLE);
                  }}
+                else if(position!=myList.size()-1){
+                    ViewGroup f = (ViewGroup) v;
+
+                    RadioButton dd = null;
+                    View ttt = null;
+                    for (int itemPos = 0; itemPos < f.getChildCount(); itemPos++) {
+                        View view = f.getChildAt(itemPos);
+
+                        if (view instanceof RadioButton) {
+                            ttt = view;
+                            dd = (RadioButton) view; //Found it!
+                            break;
+                        }
+                    }
+//                    dd.setChecked(true);
+
+                    if (checkRR == null) {
+//                        View r=rowView.findViewById(R.id.edit);
+//                        im = (ImageView) check.findViewById(R.id.edit);
+//r.setVisibility(View.GONE);
+
+                        checkRR = dd;
+                        // im.setVisibility(View.VISIBLE);
+                        checkRR.setChecked(true);
+                    }
+
+                    if (checkRR == (RadioButton) ttt)
+                        return;
+
+// Otherwise, uncheck the currently checked RadioButton, check the newly checked
+// RadioButton, and store it for future reference.
+                    checkRR.setChecked(false);
+//                    im.setVisibility(View.INVISIBLE);
+//                    ((ImageView) rowView.findViewById(R.id.edit)).setVisibility(View.INVISIBLE);
+//                    ((ImageView) v.findViewById(R.id.edit)).setVisibility(View.VISIBLE);
+//                    ((ImageView) check.findViewById(R.id.edit)).setVisibility(View.VISIBLE);
+                    ((RadioButton) ttt).setChecked(true);
+                    View p = parent.getRootView();
+//                    String cc=myList.get(position).getLine1().toString()+myList.get(position).getLine2().toString()+myList.get(position).getcity().toString()+myList.get(position).getstate().toString();
+                    //     Toast.makeText(context, cc, Toast.LENGTH_S
+
+
+                    checkRR = (RadioButton) ttt;
+//                    checkR = (RadioButton) v.findViewById(R.id.radioAdd);
+//                    im = ((ImageView) check.findViewById(R.id.edit));
+//check
+//                    Intent inSend=new Intent(context,SendOtpaddress.class);
+//                    ((Activity)context).finish();
+//                    context.startActivity(inSend);
+                    SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor e1 = cred.edit();
+                    String cc = "";
+                    if (position != 0)
+                        cc = myList.get(position).getLine1().toString() + myList.get(position).getLine2().toString() + myList.get(position).getcity().toString() + myList.get(position).getstate().toString();
+                    else
+                        cc = myList.get(position).getLine1().toString();
+                    e1.putString("address", cc);
+                    e1.commit();
+                    Toast.makeText(context, cc, Toast.LENGTH_SHORT).show();
+                }
+            }
         });
         if (position == myList.size() - 1) {
             ((ImageView) rowView.findViewById(R.id.edit)).setVisibility(View.INVISIBLE);
@@ -454,6 +578,7 @@ if((!del1.equals("delete"))&&!(getli.contains("address")))
 
         protected void onPostExecute(String result) {
             if (result.equals("win")) {
+
 
 //                context.list.setParams(mParam);
                 Deladd c=new Deladd();

@@ -16,7 +16,7 @@
 
     <!--<string name="server">http://ninja.hellobuddy.in/</string>-->
     <string name="crashed_report">An error occurred.</string>
-    <string name="web">https://hellobuddy.in/</string>
+    <string name="web">https://mobile.hellobuddy.in/</string>
     <string name="title_activity_facebook_auth">FacebookAuth</string>
     <string name="h2"><i>Phone Number</i></string>
     <string name="buddyagent"><i>2131296332</i></string>

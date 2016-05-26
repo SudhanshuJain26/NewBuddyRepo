@@ -23,6 +23,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -46,6 +48,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
+
 public class PaymentLive  extends Activity {
     private static final String LOG_TAG = "PaymentTestActivity";
     private String payname,payemail,payamt,paytitle,payphone;
@@ -55,7 +60,7 @@ public class PaymentLive  extends Activity {
     private static final String SALT = "QsBtDKH3k8";// "YBLKG80u";
     private static final String BASE_URL = "https://test.payu.in";
     private static final String PAYMENT_URL = BASE_URL + "/_payment";
-
+    private String orderI="";
     public static final String PARAM_KEY = "key";
     public static final String PARAM_TRANSACTION_ID = "txnid";
     public static final String PARAM_AMOUNT = "amount";
@@ -472,12 +477,21 @@ public class PaymentLive  extends Activity {
                 {
                     try{
                         String orderid=url.substring(url.indexOf('=')+1,url.indexOf('&'));
-                        //
-                        in.putExtra("orderId",orderid);
-                        startActivity(in);
-                        finish();}
+                        //ordee
+                        orderI=orderid;
+                        new ValidateForm().execute();
+
+                    }
                     catch (Exception e)
-                    {}}
+                    {
+                        String orderid=url.substring(url.indexOf('=')+1);
+                        //
+                        orderI=orderid;
+                        new ValidateForm().execute();
+//                        in.putExtra("orderId",orderI);
+//                        startActivity(in);
+//                        finish();
+                    }}
 
             }
             else
@@ -683,6 +697,9 @@ public class PaymentLive  extends Activity {
                 payload.put("downPayment",payamt);
                 int loanamt=cred.getInt("sp", 0)-cred.getInt("downpayment",0)-cred.getInt("discount",0);
                 payload.put("loanAmount",loanamt);
+                if(cred.getInt("emi",0)==0)
+                    payload.put("emiTenure",0);
+                else
                 payload.put("emiTenure",cred.getInt("monthtenure",0));
                 payload.put("emi",cred.getInt("emi",0));
                 payload.put("interestPayable",cred.getInt("emi",0)*cred.getInt("monthtenure",0)-loanamt);
@@ -753,8 +770,168 @@ public class PaymentLive  extends Activity {
 
         protected void onPostExecute(String result) {
 //            Toast.makeText(PaymentLive.this, transactionId, Toast.LENGTH_SHORT).show();
-            configureWebView();
+
+            if(!result.equals("fail"))
+            {
+//                new ValidateForm().execute();
+                configureWebView();
+            }
+
         }}
 
+    private class ValidateForm extends
+            AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... data) {
+
+            // String urldisplay = data[0];
+            //   HashMap<String, String> details = data[0];
+            JSONObject payload = new JSONObject();
+            try {
+                // userid=12&productid=23&action=add
+                // TYPE: POST
+
+                // payload.put("action", details.get("action"));
+
+                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                String tok_sp = toks.getString("token_value", "");
+                SharedPreferences ph = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                String userId = ph.getString("phone_number", "");
+                String url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + userId;
+
+                HttpResponse response = AppUtils.connectToServerGet(url2, tok_sp, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+
+                    if (response.getStatusLine().getStatusCode() != 200) {
+
+                        Log.e("MeshCommunication", "Server returned code "
+                                + response.getStatusLine().getStatusCode());
+                        return "fail";
+                    } else {
+                        JSONObject resp = new JSONObject(responseString);
+                        JSONObject data1 = new JSONObject(resp.getString("data"));
+
+                        try {
+
+                            String fbid="";
+                            try {
+                                fbid = data1.getString("fbConnected");
+                            } catch (Exception e) {
+                                fbid = "empty";
+                            }
+                            if (fbid.equals("") || (fbid.equals("false")))
+                                fbid = "empty";
+                            String formstatus="";
+                            try {
+                                formstatus = data1.getString("formStatus");
+                            } catch (Exception e) {
+                                formstatus = "empty";
+                            }
+                            int totalCashBack = 0;
+                            try {
+                                totalCashBack = data1.getInt("totalCashback");
+                            } catch (Exception e) {
+                                totalCashBack = 0;
+                            }
+                            String approvedBand="";
+                            try {
+                                approvedBand = data1.getString("approvedBand");
+                            } catch (Exception e) {
+                                approvedBand = "";
+                            }
+                            int creditLimit = 0;
+                            try {
+                                creditLimit = data1.getInt("creditLimit");
+                            } catch (Exception e) {
+                                creditLimit = 0;
+                            }
+                            int totalBorrowed = 0;
+                            try {
+                                totalBorrowed = data1.getInt("totalBorrowed");
+                            } catch (Exception e) {
+                                totalBorrowed = 0;
+                            }
+                            String nameadd = "";
+                            String  courseend="";
+
+                            try {
+                                courseend = data1.getString("courseCompletionDate");
+                            } catch (Exception e) {
+                                courseend="";
+                            }
+
+                            try {
+                                nameadd = data1.getString("college");
+                            } catch (Exception e) {
+                            }
+                            String profileStatus = "";
+                            try {
+                                profileStatus = data1.getString("profileStatus");
+                            } catch (Exception e) {
+                                profileStatus = "";
+                            }
+                            SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editorP = userP.edit();
+
+                            editorP.putInt("creditLimit", creditLimit);
+
+                            editorP.putInt("totalBorrowed", totalBorrowed);
+
+                            editorP.putInt("cashBack", totalCashBack);
+
+
+                            editorP.commit();
+
+
+                            try {
+                                String dpid = data1.getString("fbUserId");
+                                SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor2 = sf.edit();
+                                editor2.putString("dpid", dpid);
+
+                                //  editor2.putString("password", password.getText().toString());
+                                editor2.commit();
+                            } catch (Exception e) {
+                            }
+
+                        } catch (Exception e) {
+                        }
+
+                        if (resp.getString("msg").contains("error")) {
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return resp.getString("msg");
+                        } else {
+
+                            return "win";
+
+                        }
+
+                    }
+                } else {
+                    return "fail";
+
+                }
+
+            } catch (Exception e) {
+                Log.e("mesherror", e.getMessage());
+                return "fail";
+
+            }
+        }
+
+        protected void onPostExecute(String result) {
+
+
+            if (result.equals("win")) {
+                Intent in=new Intent(PaymentLive.this,Ordersuccessfailure.class);
+                in.putExtra("orderId",orderI);
+                startActivity(in);
+                finish();
+            }}}
 
 }

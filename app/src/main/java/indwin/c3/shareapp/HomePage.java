@@ -108,7 +108,8 @@ public class HomePage extends AppCompatActivity {
     private RecyclerView mRecycler;
     private int checkedit = 0, currDay;
     private BroadcastReceiver broadcastReceiver;
-    private TextView paste, tren, products, lappy, fashion, beau, ent, foot, but;
+    private TextView  tren, products, lappy, fashion, beau, ent, foot, but;
+    ImageView paste;
     //    Map<String,Map<int,V>> map;
 
     //    HashMap<String, HashMap<String,String>> image;
@@ -157,7 +158,7 @@ public class HomePage extends AppCompatActivity {
         else {
             setContentView(R.layout.activity_home_page);
 
-            paste = (TextView) findViewById(R.id.pasteAg);
+            paste = (ImageView) findViewById(R.id.pasteAg);
 
             ImageView img1 = (ImageView) findViewById(R.id.img1);
             img1.setOnClickListener(new View.OnClickListener() {
@@ -863,7 +864,7 @@ public class HomePage extends AppCompatActivity {
 
                         //                        Intent in = new Intent(HomePage.this, ViewForm.class);
                         Splash.checkNot = 1;
-                        paste = (TextView) findViewById(R.id.pasteAg);
+                        paste = (ImageView) findViewById(R.id.pasteAg);
                         query.requestFocus();
                         clickpaste();
                         parse(query.getText().toString().trim());
@@ -1449,11 +1450,13 @@ public class HomePage extends AppCompatActivity {
                 //                    new AuthTokc().execute("cc");
 
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
-                //                clickpaste();
-                //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("0"));
-                //                send1.putExtra("ecom", Splash.sellers.get(spin).get("0"));
-                //                send1.putExtra("which_page", 10);
+
+                paste = (ImageView) findViewById(R.id.pasteAg);
+//                clickpaste();
+//                send1.putExtra("prodid", Splash.fkid1.get(spin).get("0"));
+//                send1.putExtra("ecom", Splash.sellers.get(spin).get("0"));
+//                send1.putExtra("which_page", 10);
+
                 //
                 // sestartActivity(send1);
 
@@ -1467,7 +1470,7 @@ public class HomePage extends AppCompatActivity {
                 //                Intent send1 = new Intent(HomePage.this, ViewForm.class);
                 //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("1"));
                 Splash.checkNot = 1;
-                paste = (TextView) findViewById(R.id.pasteAg);
+                paste = (ImageView) findViewById(R.id.pasteAg);
                 clickpaste();
                 Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                 productId = Splash.fkid1.get(spin).get("1");
@@ -1517,13 +1520,14 @@ public class HomePage extends AppCompatActivity {
                 //                    //   new checkAuth().execute(url);
                 //                    new AuthTokc().execute("cc");
 
-                paste = (TextView) findViewById(R.id.pasteAg);
-                //     clickpaste();
-                //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("2"));
-                //                send1.putExtra("ecom", Splash.sellers.get(spin).get("2"));
-                //                send1.putExtra("which_page", 10);
-                //                send1.putExtra("which_page", 10);
-                //                startActivity(send1);
+
+                paste = (ImageView) findViewById(R.id.pasteAg);
+           //     clickpaste();
+//                send1.putExtra("prodid", Splash.fkid1.get(spin).get("2"));
+//                send1.putExtra("ecom", Splash.sellers.get(spin).get("2"));
+//                send1.putExtra("which_page", 10);
+//                send1.putExtra("which_page", 10);
+//                startActivity(send1);
 
             }
         });
@@ -2149,6 +2153,8 @@ public class HomePage extends AppCompatActivity {
                     //                    System.out.println("Intercom data 4" + mPhone);
                     Intercom.client().updateUser(userMap);
                 } catch (Exception e) {
+
+
                     System.out.println("Intercom two" + e.toString());
                 }
                 in.putExtra("price", searchPrice);

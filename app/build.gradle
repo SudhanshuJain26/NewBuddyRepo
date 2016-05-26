@@ -25,9 +25,7 @@ android {
 }
 
 repositories {
-    maven {
-        url 'https://dl.bintray.com/intercom/intercom-maven'
-    }
+    maven { url 'https://dl.bintray.com/intercom/intercom-maven' }
     maven { url "https://repo.commonsware.com.s3.amazonaws.com" }
     maven { url "https://jitpack.io" }
     maven { url "http://dl.bintray.com/pixplicity/android" }

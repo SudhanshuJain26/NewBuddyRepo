@@ -211,6 +211,18 @@ android:id="@+id/removescroll"
                 android:layout_below="@id/msgRel"
                 android:layout_margin="@dimen/activity_horizontal_margin"
                 android:text="Read more details about the product,seller and shipping on Product Page." />
+
+            <ImageView
+                android:id="@+id/pasteAg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/borderView"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"
+                android:src="@drawable/pasteiconnew"
+                android:padding="4dp"
+
+                />
         </RelativeLayout>
 
     </ScrollView>

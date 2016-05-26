@@ -6,30 +6,52 @@
     <string name="closeDrawer">Navigation View</string>
     <string name="openDrawer">Navigation View Closed</string>
     <string name="a20dp">20dp</string>
-    <string name="msgapl">You have not yet applied for EMI Financing.Apply now to get access to a selction of fast,new laptops and upgrade your student life!</string>
+    <string name="msgapl">You have not yet applied for EMI Financing.Apply now to get access to a
+        selction of fast,new laptops and upgrade your student life!
+    </string>
     <string name="title_activity_login_with_otp">Login_with_otp</string>
     <string name="title_activity_splash">Splash</string>
     <string name="facebook_app_id">926872150723069</string>
     <string name="Rs">\u20B9</string>
-    <string name="hint1"><i>Enter OTP</i></string>
+    <string name="hint1">
+        <i>Enter OTP</i>
+    </string>
     <string name="fblogin">Connect your account</string>
 
-    <!--<string name="server">http://ninja.hellobuddy.in/</string>-->
     <string name="crashed_report">An error occurred.</string>
-    <string name="web">https://mobile.hellobuddy.in/</string>
+    <string name="web">https://hellobuddy.in/</string>
     <string name="title_activity_facebook_auth">FacebookAuth</string>
-    <string name="h2"><i>Phone Number</i></string>
-    <string name="buddyagent"><i>2131296332</i></string>
-    <string name="h3"><i>Password</i></string>
-    <string name="h4"><i>Name</i></string>
-    <string name="h5"><i>Email</i></string>
-    <string name="h6"><i>Phone</i></string>
-    <string name="h7"><i>Referral Code</i></string>
-    <string name="h8"><i>New Password</i></string>
-    <string name="h9"><i>Re-enter new Password</i></string>
+    <string name="h2">
+        <i>Phone Number</i>
+    </string>
+    <string name="buddyagent">
+        <i>2131296332</i>
+    </string>
+    <string name="h3">
+        <i>Password</i>
+    </string>
+    <string name="h4">
+        <i>Name</i>
+    </string>
+    <string name="h5">
+        <i>Email</i>
+    </string>
+    <string name="h6">
+        <i>Phone</i>
+    </string>
+    <string name="h7">
+        <i>Referral Code</i>
+    </string>
+    <string name="h8">
+        <i>New Password</i>
+    </string>
+    <string name="h9">
+        <i>Re-enter new Password</i>
+    </string>
 
     <string name="title_activity_profile_form_step1">ProfileFormStep1</string>
-    <string name="server">https://ssl.hellobuddy.in/</string>
+    <!--<string name="server">https://ssl.hellobuddy.in/</string>-->
+    <string name="server">https://ninja.hellobuddy.in/</string>
     <string name="title_choose_image">Choose an Image</string>
     <string-array name="aadhar_or_pan">
         <item>Aadhar Number</item>
@@ -153,19 +175,20 @@
     <string-array name="colleges">
         <item>Other</item>
         <item>A.J.COLLEGE OF NURSING, Bangalore, T Dasarahalli</item>
-        <item>Aakash Institute of Business Management, Mallathalli,  Nagarbhavi</item>
+        <item>Aakash Institute of Business Management, Mallathalli, Nagarbhavi</item>
         <item>Aakson Group of Institutions, R.T. Nagar, Bangalore</item>
         <item>AAT College, Malleswaram, Bangalore</item>
         <item>Abbas khan College for Women ,Cubbonpet</item>
         <item>Academic Center for Clinical Studies, Vasanth Nagar, Bangalore</item>
-        <item>Academy of Business Management, Tourism &amp;  Research, Electronic City, Bangalore</item>
-        <item>Acharya &amp;  B.M. Reddy College Of Pharmacy, Bangalore</item>
+        <item>Academy of Business Management, Tourism &amp; Research, Electronic City, Bangalore
+        </item>
+        <item>Acharya &amp; B.M. Reddy College Of Pharmacy, Bangalore</item>
         <item>Acharya Bangalore B-School (ABBS), Off Magadi Road, Bangalore</item>
         <item>Acharya Institute of Health Sciences, R.T. Nagar, Bangalore</item>
         <item>Acharya Institute of Management and Sciences (AIMS), Peenya</item>
         <item>Acharya Institute of Technology, Radhakrishnan Road</item>
         <item>Acharya Pathasala College, Narasimha Raja Colony</item>
-        <item>Acharya School of Management,  Dr. Sarvepalli Radhakrishnan Road,</item>
+        <item>Acharya School of Management, Dr. Sarvepalli Radhakrishnan Road,</item>
         <item>Acharya\'s NR School of Nursing, Hessarghatta Road, Bangalore</item>
         <item>Acharya’s NRV School of Architecture</item>
         <item>Acliv Technology and Management Academy (ATMA College), Hosur Road</item>
@@ -175,15 +198,20 @@
         <item>Adarsha Education Society Seethadevi Ratanchand College – Chamarajpet</item>
         <item>Adarsha Institute of Technology, Kundana, Bangalore</item>
         <item>Aditya Academy of Architecture and design, Yelahanaka, Bangalore</item>
-        <item>Aditya Bangalore Institute of Pharmacy Education &amp;  Research (ABIPER), Yelahanaka, Bangalore</item>
-        <item>Aditya Institute of Management Studies &amp;  Research, Bangalore, Yelahanaka, Bangalore</item>
-        <item>AECS Maaruti College of Dental Sciences &amp;  Research Centre, Bangalore</item>
-        <item>Aegis School of Business and Telecommunication, Bangalore, Koramangala, Bangalore</item>
+        <item>Aditya Bangalore Institute of Pharmacy Education &amp; Research (ABIPER), Yelahanaka,
+            Bangalore
+        </item>
+        <item>Aditya Institute of Management Studies &amp; Research, Bangalore, Yelahanaka,
+            Bangalore
+        </item>
+        <item>AECS Maaruti College of Dental Sciences &amp; Research Centre, Bangalore</item>
+        <item>Aegis School of Business and Telecommunication, Bangalore, Koramangala, Bangalore
+        </item>
         <item>Agragami Institute of Management and Technology, Yelahanaka, Bangalore</item>
         <item>AIM MDS Bangalore, Bangalore</item>
         <item>Aimfill International, Bangalore, Jayanagar, Bangalore</item>
         <item>Al-Ameen Institute of Management Studies, Hosur Road, Bangalore</item>
-        <item>Alliance University , BTM 1st Stage </item>
+        <item>Alliance University , BTM 1st Stage</item>
         <item>Alliance University, Anekal, Bangalore</item>
         <item>Alliance University,BTM 2nd Stage</item>
         <item>Alpha College of Engineering, Kannur, Bangalore</item>
@@ -195,11 +223,11 @@
         <item>Amruta Institute of Engineering and Management Sciences, Bidadi, Bangalore</item>
         <item>Apollo MedSkills, Bangalore, Bannerghatta Road, Bangalore</item>
         <item>APS College of Engineering (APSCE), Kanakapura Road, Bangalore</item>
-        <item>Army Institute of Fashion &amp;  Design, Kothanur, Bangalore</item>
+        <item>Army Institute of Fashion &amp; Design, Kothanur, Bangalore</item>
         <item>Army Institute of Hotel Management and Catering Technology</item>
         <item>Aruna Design College, Infantry Road, Bangalore</item>
         <item>Atria Institute of Technology, Anand Nagar, Bangalore</item>
-        <item>B. E. S. First Grade College of Arts, Commerce &amp;  Sceince</item>
+        <item>B. E. S. First Grade College of Arts, Commerce &amp; Sceince</item>
         <item>B. M. Setty Government First Grade College</item>
         <item>B.E.L. First Grade College – Jalahalli</item>
         <item>B.H.S. First Grade College – Jayanagar 4th Block</item>
@@ -208,7 +236,9 @@
         <item>B.N.M Institute of Technology (BNMIT), Banashankari, Bangalore</item>
         <item>Baldwin First Grade College – Richmond Road</item>
         <item>Baldwin Methodist College – Hosur Road, Near Shooley Circle</item>
-        <item>Balija Education and Cultural Society’s College – Balija Hostel Building, Chamarajapet</item>
+        <item>Balija Education and Cultural Society’s College – Balija Hostel Building,
+            Chamarajapet
+        </item>
         <item>Bangalore City College (BCC Bangalore ), Banasavadi, Bangalore</item>
         <item>Bangalore Institute of Dental Sciences - Karnataka, Hosur Road, Bangalore</item>
         <item>Bangalore Institute of International Management (BIIM), Mysore Road, Bangalore</item>
@@ -240,17 +270,19 @@
         <item>Cambridge Institute of Technology (CITech), K R Puram, Bangalore</item>
         <item>Canara Bank School of Management Studies, Palace Road, Bangalore</item>
         <item>Career Craft School of Business, Jayanagar, Bangalore</item>
-        <item>Cavalier Animation and Media College (Cavalier Animation) | Kalyan Nagar, Bangalore</item>
+        <item>Cavalier Animation and Media College (Cavalier Animation) | Kalyan Nagar, Bangalore
+        </item>
         <item>Center for Management Studies, Jain University, Bangalore</item>
         <item>Central College – Near Vidhana Soudha, Bangalore</item>
         <item>Centre for Development of Advanced Computing, Bangalore</item>
-        <item>Chamarajapet Education Society’s First Grade College – Sirsi Circle, Chamarajapet</item>
+        <item>Chamarajapet Education Society’s First Grade College – Sirsi Circle, Chamarajapet
+        </item>
         <item>Chinmaya Institute of Management, Cooke Town, Bangalore</item>
         <item>Christ University (CU), Hosur Road, Bangalore</item>
         <item>Christ University Faculty of Engineering, Mysore Road, Bangalore</item>
         <item>City College, Jayanagar, Bangalore</item>
         <item>City Engineering College (CEC, Banglore), Kanakapura Road, Bangalore</item>
-        <item>Clinwell Kriger Training &amp;  Research Institute, Koramangala, Bangalore</item>
+        <item>Clinwell Kriger Training &amp; Research Institute, Koramangala, Bangalore</item>
         <item>CMR Institute of Management Studies (CMRIMS), H.R.B.R. Layout, Bangalore</item>
         <item>CMR Institute of Technology (CMRIT), I.T. Park Road, Bangalore</item>
         <item>CMS Business School, J.P. Nagar, Bangalore</item>
@@ -260,7 +292,9 @@
         <item>CRO Careers, Ganga Nagar, Bangalore</item>
         <item>Dayananda Sagar Institutions (DSI), Kanakapura Road, Bangalore</item>
         <item>Dayananda Sagar Institutions (DSI), Kumaraswamy Layout, Bangalore</item>
-        <item>Department of Management Studies,Indian Institute of Science (DOMS IISC), Devasandra Lake, Bangalor</item>
+        <item>Department of Management Studies,Indian Institute of Science (DOMS IISC), Devasandra
+            Lake, Bangalor
+        </item>
         <item>Diva Fashion Academy, RajajiNagar, Bangalore</item>
         <item>Don Bosco Group of Institution, Bommanahalli , Bangalore</item>
         <item>Don Bosco Group of Institutions (DBGI), Mysore Road, Bangalore</item>
@@ -269,20 +303,22 @@
         <item>Dr. Ambedkar Institute of Technology (Dr. AIT), Mallathalli, Bangalore</item>
         <item>Dr. B.R. Ambedkar Medical College, Shampura, Bangalore</item>
         <item>Dr. Gopalraju Government First Grade College</item>
-        <item>Dr. John\'s School &amp;  College of Nursing, Bangalore</item>
+        <item>Dr. John\'s School &amp; College of Nursing, Bangalore</item>
         <item>Dr. S. Gopalaraju Government First Grade College – Anekal</item>
-        <item>Dream Zone..School of Creative Studies, A Division of CADD Centre, Basaveshwaranagar, Bangalore</item>
+        <item>Dream Zone..School of Creative Studies, A Division of CADD Centre, Basaveshwaranagar,
+            Bangalore
+        </item>
         <item>Dreamzone - School Of Interior Architecture and Design, Koramangala, Bangalore</item>
         <item>Dreamzone-School of Interior Architecture and Design, Yelahanaka, Bangalore</item>
-        <item>East Point College Of Engineering &amp;  Technology , Aavalahalli,Bangalore</item>
+        <item>East Point College Of Engineering &amp; Technology , Aavalahalli,Bangalore</item>
         <item>East Point College of Management, Bidarahalli, Bangalore</item>
         <item>East West Group Of Institutions, Vishwaneedam, Bangalore</item>
         <item>Focus Institute of Pharma Skills, Bangalore</item>
         <item>Fortune Institute of Fashion Technology and Arts</item>
-        <item>Frameboxx Animation &amp;  Visual Effects | Indiranagar, Bangalore</item>
+        <item>Frameboxx Animation &amp; Visual Effects | Indiranagar, Bangalore</item>
         <item>Gaai’s Beauty Institute, Mathikere, Bangalore</item>
         <item>Ganga Kaveri Group of Institutions - Bangalore</item>
-        <item>Garden City College of Science &amp;  Management Studies, Battarahalli</item>
+        <item>Garden City College of Science &amp; Management Studies, Battarahalli</item>
         <item>Gautham Educational Academy - Bangalore</item>
         <item>Gems B School, Bangalore (GEMS Bangalore), Vasanth Nagar, Bangalore</item>
         <item>GIBS Business School, Bannerghatta Road, Bangalore</item>
@@ -293,10 +329,14 @@
         <item>Gokula Education Turst Hotel Management College – M S Ramaiah Double Road</item>
         <item>Gopalan College of Engineering and Management, Whitefield, Bangalore</item>
         <item>Goutham College, Basaveshwaranagar, Bangalore</item>
-        <item>Government Arts, Commerce &amp;  Science College – Vijayanagar</item>
+        <item>Government Arts, Commerce &amp; Science College – Vijayanagar</item>
         <item>Government R C College – Near Basaveshwara Circle, Vidhana Soudha, Bangalore</item>
-        <item>Government Sri Krishnarajendra Silver Jubilee Technological Institute, Sampangirama Nagar, Bangalore</item>
-        <item>Govt. Ramanarayana Chellaram College of Commerce &amp;  Management, Palace Road, Bangalore</item>
+        <item>Government Sri Krishnarajendra Silver Jubilee Technological Institute, Sampangirama
+            Nagar, Bangalore
+        </item>
+        <item>Govt. Ramanarayana Chellaram College of Commerce &amp; Management, Palace Road,
+            Bangalore
+        </item>
         <item>GRV Business Management Academy, Ganga Nagar, Bangalore</item>
         <item>GSS Institute of Technology, Raja Rajeshwari Nagar, Bangalore</item>
         <item>Gupta College of Management and Technology, Banashankari, Bangalore</item>
@@ -309,7 +349,7 @@
         <item>IACT Global Education | Kempe Gowda Road, Bangalore</item>
         <item>IBMR Business Schools, Bangalore, Hosur Road, Bangalore</item>
         <item>IBS Business School, Bangalore, Mysore Road, Bangalore</item>
-        <item>ICAT Design &amp;  Media College, Bangalore, Hosur Road, Bangalore</item>
+        <item>ICAT Design &amp; Media College, Bangalore, Hosur Road, Bangalore</item>
         <item>ICBIO - Innovative centre for Biosciences, Bangalore</item>
         <item>ICBio Clinical Research, Yelahanaka, Bangalore</item>
         <item>IDA - Interior Design Academy | Indiranagar, Bangalore</item>
@@ -318,10 +358,10 @@
         <item>Image College of Arts Animation and Technology - Bangalore</item>
         <item>Imarticus Learning | Koramangala, Bangalore</item>
         <item>IMER - Institute of Management Excellence and Research</item>
-        <item>Impact Institute  Sahakara Nagar, Bangalor</item>
+        <item>Impact Institute Sahakara Nagar, Bangalor</item>
         <item>Imperial College of Business Studies, Bangalore, BTM 2nd Stage, Bangalore</item>
         <item>Indian Academy Degree College, Kalyan Nagar, Bangalore</item>
-        <item>Indian Academy Group Of Institutions , Kalyan Nagar </item>
+        <item>Indian Academy Group Of Institutions , Kalyan Nagar</item>
         <item>Indian Institute of Fashion Technology, Vijayanagar, Bangalore</item>
         <item>Indian Institute of Film and Animation (IIFA Multimedia), Srinivasanagar,</item>
         <item>Indian Institute of Management, Bangalore (IIM B)</item>
@@ -335,24 +375,33 @@
         <item>Innovative Business School, Bangalore, Jayanagar, Bangalore</item>
         <item>Institute for Creative Excellence, Koramangala, Bangalore</item>
         <item>Institute of Aerospace Medicine (IAM) - Karnataka, Bangalore</item>
-        <item>Institute of Business Management &amp;  Research – International Business School, Koramangala, Bangalore</item>
-        <item>Institute of Business Management &amp;  Technology, Banashankari, Bangalore</item>
+        <item>Institute of Business Management &amp; Research – International Business School,
+            Koramangala, Bangalore
+        </item>
+        <item>Institute of Business Management &amp; Technology, Banashankari, Bangalore</item>
         <item>Institute of Clinical Research (ICRI Bangalore), Indiranagar, Bangalore</item>
         <item>Institute of Health Management Research, Electronic City Phase 1, Bangalore</item>
-        <item>Institute of Logistics &amp;  Aviation Management, Bangalore, Indiranagar, Bangalore</item>
-        <item>International Academy of Management &amp;  Entrepreneurship (IAME), Kanakapura Road</item>
+        <item>Institute of Logistics &amp; Aviation Management, Bangalore, Indiranagar, Bangalore
+        </item>
+        <item>International Academy of Management &amp; Entrepreneurship (IAME), Kanakapura Road
+        </item>
         <item>International Facility Management Institute - Bangalore</item>
-        <item>International Institute of Business Studies, Bangalore (IIBS), R.T. Nagar, Bangalore</item>
+        <item>International Institute of Business Studies, Bangalore (IIBS), R.T. Nagar, Bangalore
+        </item>
         <item>International Institute of Fashion Design, Bangalore, M. G. Road, Bangalore</item>
         <item>International Institute of Industrial Safety Management, Nagarbhavi, Bangalore</item>
         <item>International Institute of Information Technology, Hosur Road, Bangalore</item>
-        <item>International Institute of Management and Technical Studies, Bangalore, Basavanagudi, Bangalore</item>
-        <item>International School of Business &amp;  Media,Banglore (ISB&amp; M, Banglore),</item>
-        <item>International School of Management Excellence (ISME, Bangalore), Sarjapur Road, Bangalore</item>
+        <item>International Institute of Management and Technical Studies, Bangalore, Basavanagudi,
+            Bangalore
+        </item>
+        <item>International School of Business &amp; Media,Banglore (ISB&amp; M, Banglore),</item>
+        <item>International School of Management Excellence (ISME, Bangalore), Sarjapur Road,
+            Bangalore
+        </item>
         <item>International School of Management Sciences | Kanakapura Road, Bangalore</item>
         <item>ISBR Business School, Bangalore(ISBR), Electronic City, Bangalore</item>
         <item>Islamiah Institute of Technology, Bannerghatta Road, Bangalore</item>
-        <item>Islamic Mission Of India Society College of Arts &amp;  Science –</item>
+        <item>Islamic Mission Of India Society College of Arts &amp; Science –</item>
         <item>ITM Business School, Bangalore, Bannerghatta Road, Bangalore</item>
         <item>IZee Business School, Electronic City, Bangalore</item>
         <item>J.S.S. Mahavidyalaya First Grade College for Women – BTM Layout</item>
@@ -364,7 +413,9 @@
         <item>JD Institute of Fashion Technology, Lavelle Road, Bangalore</item>
         <item>JD Institute of Fashion Technology, Yelahanaka, Bangalore</item>
         <item>Jnana Vikas Institute of Technology, Bidadi, Bangalore</item>
-        <item>JSS Academy of Technical Education, Banglore (JSSATEB), Uttarahalli Main Road, Bangalore</item>
+        <item>JSS Academy of Technical Education, Banglore (JSSATEB), Uttarahalli Main Road,
+            Bangalore
+        </item>
         <item>Jyothy Institute of Technology, Kanakapura Road, Bangalore</item>
         <item>Jyoti Nivas College, Koramangala, Bangalore</item>
         <item>K.S. School of Engineering and Management (KSSEM), Kanakapura Road, Bangalore</item>
@@ -381,7 +432,9 @@
         <item>KKECS Institute of Management, Malleswaram, Bangalore</item>
         <item>KNS Institute of Technology, Yelahanaka, Bangalore</item>
         <item>Koshys B-School, Hennur-Bagalur Road, Bangalore</item>
-        <item>Krishnadevaraya College Of Dental Sciences &amp;  Hospital, airport(new airport), Bangalore</item>
+        <item>Krishnadevaraya College Of Dental Sciences &amp; Hospital, airport(new airport),
+            Bangalore
+        </item>
         <item>Kristu Jayanti College (KJC, Kothanur), Kothanur, Bangalore</item>
         <item>Krupanidhi College, Vivek Nagar, Bangalore</item>
         <item>Krupanidhi School of Management(KSM - BANGALORE), Sarjapur Road, Bangalore</item>
@@ -390,17 +443,18 @@
         <item>Learntech World Wide Educational Trust, Bangalore</item>
         <item>LISAA School of Design,Hosur Main Road, Adugodi, Bangalore</item>
         <item>LORAA Business Academy, Bommanahalli, Bangalore</item>
-        <item>Lorven College of Science &amp;  Management, Anekal, Bangalore</item>
+        <item>Lorven College of Science &amp; Management, Anekal, Bangalore</item>
         <item>Lotus Clinical Research Academy, Koramangala, Bangalore</item>
         <item>M E S College Of Arts Commerce andScience Malleswaram, Bangalore</item>
         <item>M R Ambedkar Dental College - Karnataka, Bangalore</item>
-        <item>M.E.S. College of Arts, Science &amp;  Commerce – Malleshwaram</item>
+        <item>M.E.S. College of Arts, Science &amp; Commerce – Malleshwaram</item>
         <item>M.S Engineering College, airport(new airport), Bangalore</item>
         <item>M.S. Ramaiah College, MSR Nagar, Bangalore</item>
         <item>M.V.J. College of Engineering, Whitefield, Bangalore</item>
-        <item>Maaruti College of Dental Sciences &amp;  Research Centre, Bangalore</item>
+        <item>Maaruti College of Dental Sciences &amp; Research Centre, Bangalore</item>
         <item>Maharani Lakshmi Ammanni College for Women, Malleswaram, Bangalore</item>
-        <item>Maharani’s Arts &amp;  Commerce College for Women – Near Vidhana Soudha, Bangalore</item>
+        <item>Maharani’s Arts &amp; Commerce College for Women – Near Vidhana Soudha, Bangalore
+        </item>
         <item>Maharishi Institute of Management, Brigade Road, Bangalore</item>
         <item>Mahatma Gandhi University, Bangalore, Bangalore</item>
         <item>Malleshwaram Women’s Association First Grade College – Malleshwaram</item>
@@ -421,9 +475,11 @@
         <item>Mount Carmel College, Palace Road, Bangalore</item>
         <item>MP Birla Institute of Management (MPBIM), Race Course Road, Bangalore</item>
         <item>MVJ College of Engineering, ITPL Main Road</item>
-        <item>MVJ Medical College &amp;  Research Hospital, Hoskote, Bangalore</item>
+        <item>MVJ Medical College &amp; Research Hospital, Hoskote, Bangalore</item>
         <item>NMKRV First Grade College for Women – Jayanagar</item>
-        <item>Nagarjuna College of Engineering &amp;  Technology (NCET Devanahalli), Devanhalli, Bangalore</item>
+        <item>Nagarjuna College of Engineering &amp; Technology (NCET Devanahalli), Devanhalli,
+            Bangalore
+        </item>
         <item>NAISH Business School, Koramangala, Bangalore</item>
         <item>Nandini First Grade College – West of Chord Road, Mahalaksmipuram</item>
         <item>Nargund College of Pharmacy - Karnataka, Bangalore</item>
@@ -432,10 +488,12 @@
         <item>National Education Trust First Grade College – Hennuru Road</item>
         <item>National Institute of Business Excellence, Electronic City, Bangalore</item>
         <item>National Institute of Creative Communication, Hennur Main Road, Bangalore</item>
-        <item>National Institute of Fashion Technology (NIFT), Bengaluru, H.S.R Layout, Bangalore</item>
+        <item>National Institute of Fashion Technology (NIFT), Bengaluru, H.S.R Layout, Bangalore
+        </item>
         <item>National Institute of Management Studies, Bangalore, Vijayanagar, Bangalore</item>
         <item>National Institute of Mental Health and Neuro Sciences, Hosur Road, Bangalore</item>
-        <item>National Institute of Retail and Management, Bangalore, H.B.R. Layout, Bangalore</item>
+        <item>National Institute of Retail and Management, Bangalore, H.B.R. Layout, Bangalore
+        </item>
         <item>National Institute of Unani Medicine (NIUM) - Karnataka, Magadi Road</item>
         <item>National School of Business (NSB, Banglore) | J.P. Nagar, Bangalore</item>
         <item>National School of Fashion Arts And Design, airport(new airport), Bangalore</item>
@@ -443,15 +501,19 @@
         <item>New Horizon College ,Kadubeesanahalli, , Marathahalli, Bangalore</item>
         <item>New Horizon College ,Kasturinagar, Bangalore</item>
         <item>NIAM Institute Of Applied Management, Bangalore, Jayanagar, Bangalore</item>
-        <item>NICC - International College of Media and Design,  Near Hennur Bande, Kalyan Nagar Post, Bangalore</item>
+        <item>NICC - International College of Media and Design, Near Hennur Bande, Kalyan Nagar
+            Post, Bangalore
+        </item>
         <item>Nidhi Infotech, Jayanagar, Bangalore</item>
         <item>Nihongo Bashi Centre for Japanese Management Studies</item>
-        <item>NIIT Imperia Centre For Advanced Learning - Jayanagar 3rd Block,  Bangalore</item>
-        <item>NIS Academy,  Basavanagudi, Bangalore</item>
+        <item>NIIT Imperia Centre For Advanced Learning - Jayanagar 3rd Block, Bangalore</item>
+        <item>NIS Academy, Basavanagudi, Bangalore</item>
         <item>Nisa School of Nursing - Karnatak, Madivala, Bangalore</item>
         <item>Nitte Meenakshi Institute of Technology (NMIT), Yelahanaka, Bangalore</item>
         <item>NITTE School of Management (NSOM), Govindapura, Bangalore</item>
-        <item>Nitya Jyothi Education Society’s First Grade College – Chikkasandra, Hesarghatta Road</item>
+        <item>Nitya Jyothi Education Society’s First Grade College – Chikkasandra, Hesarghatta
+            Road
+        </item>
         <item>NMKRV College For Women, Jaya Nagar East, Bangalore</item>
         <item>Noble School of Business, J.P. Nagar, Bangalore</item>
         <item>NSB School of Management Studies, Hosur Road, Bangalore</item>
@@ -460,7 +522,9 @@
         <item>PC Nursing College - Karnataka, Bangalore</item>
         <item>Padmashree Institute , Nagarbhavi, Bangalore</item>
         <item>Parents Association First Grade College – Rajajinagar 5th Block</item>
-        <item>Parsons School of Design, Online Executive Programs (Talentedge), Ramamurthy Nagar, Bangalore</item>
+        <item>Parsons School of Design, Online Executive Programs (Talentedge), Ramamurthy Nagar,
+            Bangalore
+        </item>
         <item>PES College of Pharmacy, Hanumanth Nagar, Bangalore</item>
         <item>PES Institute of Technology, South Campus (PESCE), Hosur Road, Bangalore</item>
         <item>PES University (PESIT), Banashankari, Bangalore</item>
@@ -468,14 +532,17 @@
         <item>Pragati Business Management College – HMT Layout, R T Nagar</item>
         <item>Presidency College, Hebbal, Bangalore</item>
         <item>Presidency University, Yelahanaka, Bangalore</item>
-        <item>Prin. L. N. Welingkar Institute of Management development &amp;  Research (WeSchool), Hosur Road, Bangalore</item>
-        <item>RV College of Commerce &amp;  Management – Banashankari, 3rd Stage</item>
-        <item>RV Dental College &amp;  Hospital - Karnataka, Bangalore</item>
+        <item>Prin. L. N. Welingkar Institute of Management development &amp; Research (WeSchool),
+            Hosur Road, Bangalore
+        </item>
+        <item>RV College of Commerce &amp; Management – Banashankari, 3rd Stage</item>
+        <item>RV Dental College &amp; Hospital - Karnataka, Bangalore</item>
         <item>R. R. Institute of Technology, Hessarghatta Road, Bangalore</item>
         <item>R. V. Institute of Management (RVIM), Jayanagar, Bangalore</item>
         <item>R.B.A.N.MS. Evening College – Gangadhara Shetty Road</item>
-        <item>R.K.Institute of Management and Computer Science,Koramangala, Jakasandra, Bangalore</item>
-        <item>R.R. Institute of Advanced Studies,Heseraghatta Main Road,  Bangalore</item>
+        <item>R.K.Institute of Management and Computer Science,Koramangala, Jakasandra, Bangalore
+        </item>
+        <item>R.R. Institute of Advanced Studies,Heseraghatta Main Road, Bangalore</item>
         <item>R.V.College of Engineering (RVCE), Mysore Road, Bangalore</item>
         <item>Raffles Millennium International, Bangalore, Koramangala, Bangalore</item>
         <item>Rai Business School, Bangalore, Bangalore</item>
@@ -484,19 +551,20 @@
         <item>Rajendra Education Society’s First Grade College – Sunkadakatte, Magadi Road</item>
         <item>Rajiv Gandhi Institute of Technology, R.T. Nagar, Bangalore</item>
         <item>Rangnekar Institute of Management Studies and Research | RajajiNagar, Bangalore</item>
-        <item>RBANMS First Grade College ,  Annaswamy Mudaliar Rd , Banagalore</item>
+        <item>RBANMS First Grade College , Annaswamy Mudaliar Rd , Banagalore</item>
         <item>RD International - Consultancy, Church Street</item>
-        <item>Regional Institute of Cooperative Management, Bangalore, Padmanabhanagar, Bangalore</item>
+        <item>Regional Institute of Cooperative Management, Bangalore, Padmanabhanagar, Bangalore
+        </item>
         <item>Reva University, Yelahanaka, Bangalore</item>
         <item>Rhenium Academy of Clinical Research., Bangalore</item>
         <item>Right Brain Art Animation Academy | Indiranagar, Bangalore</item>
         <item>RJS Institute of Management Studies (RJSIMS), Koramangala, Bangalore</item>
         <item>RNS Institute of Technology (RNSIT), Channasandra, Bangalore</item>
-        <item>RS College of Management &amp;  Science, Doddaballapur Rd., Bangalore</item>
+        <item>RS College of Management &amp; Science, Doddaballapur Rd., Bangalore</item>
         <item>S B International, Khb Colony</item>
         <item>S J E S Educational Institution, Old Madras Road, Bangalore</item>
         <item>S. Nijalingappa College – Rajajinagar, 2nd Block</item>
-        <item>S.E.A. College of Engineering &amp;  Technology, K R Puram, Bangalore</item>
+        <item>S.E.A. College of Engineering &amp; Technology, K R Puram, Bangalore</item>
         <item>S.J.R.C. College for Women – Rajajinagar</item>
         <item>S.L.N. College – Fort, Chamarajapet</item>
         <item>S.M.K.R.V. College – J. P. Nagar</item>
@@ -509,7 +577,7 @@
         <item>Sapthagiri College of Engineering, Hessarghatta Road, Bangalore</item>
         <item>Sardar Vallabai Patel Education Society College – Sarjapur, Anekal</item>
         <item>Sarvodaya College of law, Mahalakshmipuram Layout, Bangalore</item>
-        <item>Sarvodaya College of Nursing - Magadi Main Road, Bangalore </item>
+        <item>Sarvodaya College of Nursing - Magadi Main Road, Bangalore</item>
         <item>SB Group of Institutions, Yelahanaka, Bangalore</item>
         <item>Scribblers Medical Transcription Pvt.Ltd, Shampura, Bangalore</item>
         <item>SCT Institute of Technology, Vignana Nagar, Bangalore</item>
@@ -520,7 +588,9 @@
         <item>Sha-Shib College of Engineering, Chikkaballapur, Bangalore</item>
         <item>Shri Bhaghavan Mahaveer Jain College, Jayanagar</item>
         <item>Shri Pillappa College of Engineering, Hessarghatta Road, Bangalore</item>
-        <item>Shri Sai Siddhartha Institute of Aviation &amp;  Management, Sahakara Nagar, Bangalore</item>
+        <item>Shri Sai Siddhartha Institute of Aviation &amp; Management, Sahakara Nagar,
+            Bangalore
+        </item>
         <item>Shristi School of Art Design and Technology ,Doddaballapur Road</item>
         <item>Sidvin School of Business (SIDVIN), Banashankari, Bangalore</item>
         <item>SIET Institute Of Management, Mysore Road, Bangalore</item>
@@ -529,20 +599,27 @@
         <item>Sindhi Institute of Management (SIM), Hebbal, Bangalore</item>
         <item>Sir M Visvesvaraya Institute of Technology, Yelahanaka, Bangalore</item>
         <item>SJB Institute of Technology (SJBIT), Kengeri, Bangalore</item>
-        <item>SJES College of Management Studies, Microsoft IT Academy, Old Madras Road, Bangalore</item>
-        <item>SKM Educational Institutions, SKM Educational Institutions, Bangalore ,Bangalore</item>
+        <item>SJES College of Management Studies, Microsoft IT Academy, Old Madras Road, Bangalore
+        </item>
+        <item>SKM Educational Institutions, SKM Educational Institutions, Bangalore ,Bangalore
+        </item>
         <item>SMT. NAGARATHNAMMA COLLEGE OF NURSING, Bangalore</item>
         <item>Smt. Neelam K.A. Sathyanarayana Sheetty Government College</item>
-        <item>Sree Sevalal College of Dental Sciences &amp;  Hospital - Karnataka, Mahalakshmipuram, Bangalore</item>
+        <item>Sree Sevalal College of Dental Sciences &amp; Hospital - Karnataka, Mahalakshmipuram,
+            Bangalore
+        </item>
         <item>Sri Belimatha Maha Samasthana Institute of Technology, Indiranagar, Bangalore</item>
         <item>Sri Kongadiyappa College, Doddaballapur</item>
         <item>Sri Krishna Institute of Technology, Hessarghatta Road, Bangalore</item>
         <item>Sri Krishna Rukmini College of Nursing (SKRCN) - Karnataka, Bangalore</item>
-        <item>Sri Rajiv Gandhi College of Dental Sciences and Hospital (SRGCDS) - Karnataka, R.T. Nagar, Bangalore</item>
+        <item>Sri Rajiv Gandhi College of Dental Sciences and Hospital (SRGCDS) - Karnataka, R.T.
+            Nagar, Bangalore
+        </item>
         <item>Sri Revana Siddeshwara Institute of Technology, airport(new airport), Bangalore</item>
         <item>Sri Sairam College of Engineering, Anekal, Bangalore</item>
-        <item>Sri Vekateshwara Dental College &amp;  Hospital - Karnataka, Bangalore</item>
-        <item>Sri Venkateshwara College of Engineering (SVCE Bangalore), Yelahanaka, Bangalore</item>
+        <item>Sri Vekateshwara Dental College &amp; Hospital - Karnataka, Bangalore</item>
+        <item>Sri Venkateshwara College of Engineering (SVCE Bangalore), Yelahanaka, Bangalore
+        </item>
         <item>Sri Venkateshwara Institute of Nursing Sciences, Hosur Road, Bangalore</item>
         <item>Sri Vidya Vinayaka Institute of Technology, Seshadri Road, Bangalore</item>
         <item>Srishti School of Art, Design and Technology, Doddaballapur Rd., Bangalore</item>
@@ -553,7 +630,7 @@
         <item>St. Francis DE Sales College (SFS), Hebbagodi</item>
         <item>St Josephs College of Commerce, Brigade Road</item>
         <item>St. Anne’s First Grade College for Women – Ramamurthynagar</item>
-        <item>St. George College of Management, Science &amp;  Nursing, Banasavadi, Bangalore</item>
+        <item>St. George College of Management, Science &amp; Nursing, Banasavadi, Bangalore</item>
         <item>St. John\'s College of Physiotherapy, Yelahanaka, Bangalore</item>
         <item>St. John\'s Medical College, Sarjapur Road, Bangalore</item>
         <item>St.Hopkins Group of Institution, Sampangirama Nagar, Bangalore</item>
@@ -574,9 +651,10 @@
         <item>University Visvesvaraya College of Engineering, Sampangirama Nagar, Bangalore</item>
         <item>V. V. N. Degree College, Vanivilas Road</item>
         <item>Vanguard Business School, Hosur Road, Bangalore</item>
-        <item>Vasan Institute of Ophthalmology &amp;  Research, Raja Rajeshwari Nagar, Bangalore</item>
+        <item>Vasan Institute of Ophthalmology &amp; Research, Raja Rajeshwari Nagar, Bangalore
+        </item>
         <item>Vasavi Education Trust First Grade College – J P Nagar 2nd Stage</item>
-        <item>Vasavi Institute of Management &amp;  Advanced Studies, Banashankari, Bangalore</item>
+        <item>Vasavi Institute of Management &amp; Advanced Studies, Banashankari, Bangalore</item>
         <item>Vasavi Jnana Peeta Evening College – Vijayanagar</item>
         <item>Vasavi Jnana Peeta First Grade College – Jayanagar</item>
         <item>Vasavi Vidyaniketan College for Women – Vanivilas Road, Basavanagudi</item>
@@ -589,17 +667,21 @@
         <item>Virginia Commonwealth University, Jayanagar, Bangalore</item>
         <item>Vision India Institute of Technology,Narayanapura Cross Rd</item>
         <item>Visveswarapuram College – K R Road, V V Puram</item>
-        <item>Vivekanada Degree College of Arts, Science, Commerce &amp;  Post Graduate Studies, Raja Rajeshwari Nagar, Bangalore</item>
+        <item>Vivekanada Degree College of Arts, Science, Commerce &amp; Post Graduate Studies, Raja
+            Rajeshwari Nagar, Bangalore
+        </item>
         <item>Vivekananda First Grade College – Rajajinagar</item>
-        <item>VLCC Institute of Beauty &amp;  Nutrition, Airport (Old Airport), Bangalore</item>
+        <item>VLCC Institute of Beauty &amp; Nutrition, Airport (Old Airport), Bangalore</item>
         <item>Vogue Institute of Fashion Technology, Richmond Road, Bangalore</item>
-        <item>VOKKALIGARA SANGHA DENTAL COLLEGE &amp;  HOSPITAL, K R Puram, Bangalore</item>
+        <item>VOKKALIGARA SANGHA DENTAL COLLEGE &amp; HOSPITAL, K R Puram, Bangalore</item>
         <item>Vydehi Institute of Medical Sciences and Research Centre, Whitefield, Bangalore</item>
         <item>Wider Horizons, Madivala, Bangalore</item>
         <item>Wisdom School of Management, Indiranagar, Bangalore</item>
         <item>WLC College India, Bangalore, M. G. Road, Bangalore</item>
         <item>Wockhardt Institute of Medical Sciences - Karnataka, Bangalore</item>
-        <item>Xavier Institute of Management &amp;  Entrepreneurship, Bangalore (XIME), Hosur Road, Bangalore</item>
+        <item>Xavier Institute of Management &amp; Entrepreneurship, Bangalore (XIME), Hosur Road,
+            Bangalore
+        </item>
         <item>Yellamma Dasappa Institute of Technology, Kanakapura Road, Bangalore</item>
     </string-array>
 
@@ -2567,7 +2649,7 @@
         <item>B.Tech Advance Communication System Engineering</item>
         <item>B.Tech Advanced Computing</item>
         <item>B.Tech Advanced Manufacturing</item>
-        <item>B.Tech Agricultural Engineering </item>
+        <item>B.Tech Agricultural Engineering</item>
         <item>B.Tech Artificial Intelligence</item>
         <item>B.Tech Automobile Engineering</item>
         <item>B.Tech Automotive Engineering</item>
@@ -2635,7 +2717,8 @@
     <string name="title_activity_verify_otp">VerifyOTP</string>
     <string name="title_activity_delete_account">DeleteAccountActivity</string>
     <string name="title_activity_flash_approved">FlashApprovedActivity</string>
-    <string name="confirmation_email_link">An email verification has been sent to your mail id.</string>
+    <string name="confirmation_email_link">An email verification has been sent to your mail id.
+    </string>
 
 
 </resources>

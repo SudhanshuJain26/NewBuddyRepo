@@ -5,14 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.widget.CardView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -340,7 +336,7 @@ Deladd d=new Deladd();
                         cc = myList.get(position).getLine1().toString();
                     e1.putString("address", cc);
                     e1.commit();
-                    Toast.makeText(context, cc, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, cc, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -415,16 +411,22 @@ Deladd d=new Deladd();
                 @Override
                 public void onClick(View v) {
                     add = new Deladd();
+
                     sedt1 = edt1.getText().toString();
                     sedt2 = edt2.getText().toString();
                     sedt3 = edt3.getText().toString();
                     sedt4 = edt4.getText().toString();
 //                Toast.makeText(context, ((EditText) vi.findViewById(R.id.edtAdd1)).getText().toString(), Toast.LENGTH_SHORT).show();
+                    if((sedt1.trim().length()>0)&&(sedt2.trim().length()>0)&&(sedt3.trim().length()>0)&&(sedt4.trim().length()>0)){
                     add.setLine1(((EditText) vi.findViewById(R.id.edtAdd11)).getText().toString());
                     add.setLine2(sedt2);
                     add.setcity(sedt3);
                     add.setstate(sedt4);
-                    new addAddress().execute();
+                    new addAddress().execute();}
+                    else
+                    {
+                        Toast.makeText(context, "Please enter the complete details!", Toast.LENGTH_SHORT).show();
+                    }
 
 
                 }

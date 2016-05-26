@@ -6,25 +6,22 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
@@ -48,6 +45,7 @@ private  ImageView loader;
         super.onCreate(savedInstanceState);
         registerReceiver(broadcastReceiver, new IntentFilter("order"));
         setContentView(R.layout.activity_editaddress);
+
         loader=(ImageView)findViewById(R.id.loading);
         backpress();
         String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry","WebOS","Ubuntu","Windows7","Max OS X"};
@@ -236,6 +234,9 @@ if(isActive)
 
                 adapter.notifyDataSetChanged();
                 TextView paydo=(TextView)findViewById(R.id.paydo);
+               SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                     String payamt=String.valueOf(get.getInt("downpayment", 0)+get.getInt("service", 0));
+               paydo.setText("Pay "+getApplicationContext().getString(R.string.Rs)+payamt);
                 paydo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

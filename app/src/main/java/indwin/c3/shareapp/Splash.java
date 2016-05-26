@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import indwin.c3.shareapp.activities.ProfileActivity;
 import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.models.TrendingMapWrapper;
 import indwin.c3.shareapp.models.UserModel;
@@ -136,9 +137,9 @@ public class Splash extends AppCompatActivity {
                 finish();
                 startActivity(in);
             }
-            if (t.charAt(t.length() - 2) == 'l') {
+            if (t.contains("profile")) {
 
-                in = new Intent(Splash.this, Landing.class);
+                in = new Intent(Splash.this, ProfileActivity.class);
                 in.putExtra("cc", 1);
                 finish();
                 startActivity(in);

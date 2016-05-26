@@ -7,11 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.http.SslError;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,8 +19,6 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -48,7 +43,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 
 public class PaymentLive  extends Activity {
@@ -56,9 +50,10 @@ public class PaymentLive  extends Activity {
     private String payname,payemail,payamt,paytitle,payphone;
     public static final String EXTRA_PARAMS = "params";
     private String randomStr="";
-    private static final String MERCHANT_KEY = "lhqOEOUh";// old account "zMXH8C";
-    private static final String SALT = "QsBtDKH3k8";// "YBLKG80u";
-    private static final String BASE_URL = "https://test.payu.in";
+    private static final String MERCHANT_KEY = "n46r73";// old account "zMXH8C";
+    private static final String SALT = "L3gouXYu";// "YBLKG80u";
+    private static final String BASE_URL = "https://secure.payu.in";
+    //private static final String BASE_URL = "https://test.payu.in";
     private static final String PAYMENT_URL = BASE_URL + "/_payment";
     private String orderI="";
     public static final String PARAM_KEY = "key";
@@ -170,7 +165,7 @@ public class PaymentLive  extends Activity {
             hashString = hashString.concat("|");
         }
 //        SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
-        String t="lhqOEOUh"+"|"+randomStr+"|"+payamt+"|"+"Mobiles"+"|"+payname+"|"+payemail+"|||||||||||";
+        String t=MERCHANT_KEY+"|"+randomStr+"|"+payamt+"|"+"Mobiles"+"|"+payname+"|"+payemail+"|||||||||||";
         hashString = hashString.concat(SALT);
         t=t.concat(SALT);
         mHashValue = hashCal("SHA-512", t);
@@ -284,9 +279,9 @@ public class PaymentLive  extends Activity {
         formParams.put(PARAM_PRODUCT_INFO,
                 "Mobiles");
         formParams.put(PARAM_SUCCESS_URL,
-                "https://ssl.hellobuddy.in/payment/payu/success");
+                getApplicationContext().getString(R.string.server)+"payment/payu/success");
         formParams.put(PARAM_FAILURE_URL,
-                "https://ssl.hellobuddy.in/payment/payu/failure");
+                getApplicationContext().getString(R.string.server)+"payment/payu/failure");
         formParams.put(PARAM_LAST_NAME,
                 getNonNullValueFromHashMap(mInputParams, PARAM_LAST_NAME));
         formParams.put(PARAM_ADDRESS1,

@@ -59,7 +59,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -708,10 +707,8 @@ if(dummyCl==1000)
         knowmore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in = new Intent(ProductsPage.this, ViewForm.class);
-                                           in.putExtra("which_page", 119);
-                                           in.putExtra("reviewUrl", review);
-                                           startActivity(in);
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(review));
+                                           startActivity(browserIntent);
 
             }
         });
@@ -1261,7 +1258,7 @@ if(cb==0){
                 hve.setTextColor(Color.parseColor("#44C2A6"));
                 ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#44C2A6"));
                 ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
-                hve.setText(truth);
+                hve.setText("Code applied "+getApplicationContext().getString(R.string.Rs) + mDis + " off!");
                 checkCorrectdis = 1;
                 checkImg = 2;
                 ((ImageView) findViewById(R.id.plus)).setImageResource(R.drawable.cancel);

@@ -93,6 +93,7 @@ android:layout_below="@id/textPopseller"
         android:layout_below="@id/textPopint"
         android:text="Charged by bank providing\nthe loan against your order."/>
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -114,6 +115,7 @@ android:layout_below="@id/textPopseller"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:text=" Rs 49"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

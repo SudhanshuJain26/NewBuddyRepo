@@ -118,6 +118,17 @@ doesn't seem correct!"
  If is still doesn't work,take a screenshot of the
  product page and attach it here."
                 />
+            <ImageView
+                android:id="@+id/pasteAg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/borderView"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"
+                android:src="@drawable/pasteiconnew"
+                android:padding="4dp"
+
+                />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

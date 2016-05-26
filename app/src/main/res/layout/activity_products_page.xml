@@ -75,7 +75,7 @@
                 android:drawableLeft="@drawable/search"
                 android:paddingLeft="20dp"
                 android:singleLine="true"
-                android:text="https://flipkart.com/buddyrocks"
+                android:text=""
 
                 android:textColor="#664A4A4A"
                 android:textCursorDrawable="@null" />
@@ -86,6 +86,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@id/query"
                 android:background="#664A4A4A" />
+
 
             <ImageView
                 android:id="@+id/logo"
@@ -618,7 +619,7 @@
 
                     android:layout_toRightOf="@id/radioCou"
                     android:text="ENTER COUPON CODE"
-                    android:textAppearance="?android:textAppearanceMedium" />
+                    android:textAppearance="?android:textAppearanceSmall" />
 
                 <RadioButton
                     android:id="@+id/radioCash"
@@ -637,7 +638,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_toRightOf="@id/radioCou"
                     android:text="USE CASHBACK"
-                    android:textAppearance="?android:textAppearanceMedium" />
+                    android:textAppearance="?android:textAppearanceSmall" />
 
 
             </RelativeLayout>
@@ -659,7 +660,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Calculated Monthly Payment" />
+                    android:text="Financing" />
 
                 <TextView
                     android:id="@+id/calMonPayRs"
@@ -892,8 +893,20 @@
                     android:tint="#ffffff" />
             </RelativeLayout>
 
+            <ImageView
+                android:id="@+id/pasteAg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/borderView"
+                android:layout_centerHorizontal="true"
+android:visibility="gone"
+                android:src="@drawable/pasteiconnew"
+                android:padding="4dp"
 
+                />
         </RelativeLayout>
+
+
     </ScrollView>
 
     <indwin.c3.shareapp.GIFView

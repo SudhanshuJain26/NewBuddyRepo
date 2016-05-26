@@ -2,6 +2,7 @@ package indwin.c3.shareapp;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -76,6 +77,7 @@ public class ProductsPage extends AppCompatActivity {
     private int checkImg = 1, searchPrice, currDay;
     private ScrollView viewDetail;
     private String userProfileStatus = "";
+    private android.content.ClipboardManager myClipboard;
     String sellerNme1 = "", productId1 = "";
     private String s = "";
     private String whichCoupon = "";
@@ -106,7 +108,7 @@ public class ProductsPage extends AppCompatActivity {
 
     private int[] myMonths = {1, 2, 3, 6, 9, 12, 15, 18};
     private String selectedText = "", downPayment = "";
-
+private ImageView pasteiconnew;
     private String title, brand, sellerNme, searchQuery, urlforImage;
     private int sellingPrice, monthsallowed, spInc, spDec, dayToday, cuurr;
     private TextView brandName, sellingRs, pname;
@@ -136,6 +138,7 @@ public class ProductsPage extends AppCompatActivity {
 
             paytmUrl();
 
+
             queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -157,6 +160,10 @@ public class ProductsPage extends AppCompatActivity {
         //  if(getIntent().getExtras().getString("page").equals("api"))
         {
             setContentView(R.layout.activity_products_page);
+
+            loader=(GIFView)findViewById(R.id.loading);
+            viewDetail=(ScrollView)findViewById(R.id.viewDetail);
+
             try {
                 SharedPreferences user = getSharedPreferences("token", Context.MODE_PRIVATE);
 
@@ -165,8 +172,11 @@ public class ProductsPage extends AppCompatActivity {
                 productId1 = getIntent().getExtras().getString("product");
                 sellerNme1 = getIntent().getExtras().getString("seller");
                 sellerNme = sellerNme1;
+                try{
                 loader=(GIFView)findViewById(R.id.loading);
-                viewDetail=(ScrollView)findViewById(R.id.viewDetail);
+                viewDetail=(ScrollView)findViewById(R.id.viewDetail);}
+                catch (Exception e)
+                {}
                 new linkSearch().execute();
             } catch (Exception e) {
                 String t=e.toString();
@@ -315,6 +325,7 @@ EMIcheck=Math.round(emi);
         couCode = (RadioButton) findViewById(R.id.radioCou);
         detInfo = (TextView) findViewById(R.id.detInfo);
         knowmore = (TextView) findViewById(R.id.knowmore);
+        pasteiconnew=(ImageView)findViewById(R.id.pasteAg);
 
         detSpec = (TextView) findViewById(R.id.detSpec);
         availbal = (TextView) findViewById(R.id.availbal);
@@ -331,7 +342,9 @@ EMIcheck=Math.round(emi);
         desLayout = (RelativeLayout) findViewById(R.id.desLayout);
         retLayout = (RelativeLayout) findViewById(R.id.retLayout);
         hve = (EditText) findViewById(R.id.hve);
-        listen = hve.getKeyListener();
+        try{
+        listen = hve.getKeyListener();}
+        catch (Exception e){}
         crcode = hve.getText().toString().trim().toUpperCase();
         spinner = (Spinner) findViewById(R.id.spinnerItem);
         emiAmount = (TextView) findViewById(R.id.calMonPayRs);
@@ -1380,8 +1393,10 @@ int w=0;
         @Override
         public void onPreExecute() {
             //            spinner.setVisibility(View.VISIBLE);
+            try{
             loader.setVisibility(View.VISIBLE);
-            viewDetail.setVisibility(View.GONE);
+            viewDetail.setVisibility(View.GONE);}
+            catch(Exception e){}
         }
 
 
@@ -1468,12 +1483,18 @@ int w=0;
                 in.putExtra("seller", getIntent().getExtras().getString("seller"));
                 finish();
                 startActivity(in);
+                try{
                 loader.setVisibility(View.GONE);
-                viewDetail.setVisibility(View.VISIBLE);
+                viewDetail.setVisibility(View.VISIBLE);}
+                catch (Exception e)
+                {}
 //                getIntent().getExtras().getString("seller");
             } else {
+                try{
                 loader.setVisibility(View.GONE);
-                viewDetail.setVisibility(View.VISIBLE);
+                viewDetail.setVisibility(View.VISIBLE);}
+                catch (Exception e)
+                {}
                 cb = st.getInt("cashBack", 0);
                 int cl = st.getInt("creditLimit", 0);
                 int cbv = st.getInt("totalBorrowed", 0);
@@ -1645,6 +1666,7 @@ int w=0;
         setContentView(R.layout.wrongurl);
         queryNew = (EditText) findViewById(R.id.query);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        pasteiconnew=(ImageView)findViewById(R.id.pasteAg);
         TextView t=(TextView)findViewById(R.id.textattach);
         t.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1654,6 +1676,16 @@ int w=0;
                 } catch (Exception e) {
 
                 }
+            }
+        });
+        myClipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        queryNew.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                pasteiconnew.setVisibility(View.VISIBLE);
+                clickpaste();
+
+                return false;
             }
         });
         clickUrl();
@@ -1693,7 +1725,19 @@ int w=0;
 
 
         queryNew = (EditText) findViewById(R.id.query);
+        pasteiconnew=(ImageView)findViewById(R.id.pasteAg);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        myClipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        queryNew.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                pasteiconnew.setVisibility(View.VISIBLE);
+                clickpaste();
+
+                return false;
+            }
+        });
+
         clickUrl();
         final EditText editQ = (EditText) findViewById(R.id.editQ);
         TextView aval = (TextView) findViewById(R.id.avlbalRs);
@@ -1747,11 +1791,13 @@ int w=0;
                         review = "";
                     }
                     infor = "The minimum downpayment is 20% of the product price and also depends on the payment band (Oxygen/Silicon/Palladium/Krypton) you lie in, which you will get to know after your college ID verification.";
-
+try{
                     loader=(GIFView)findViewById(R.id.loading);
                     viewDetail=(ScrollView)findViewById(R.id.viewDetail);
                     loader.setVisibility(View.GONE);
-viewDetail.setVisibility(View.VISIBLE);
+viewDetail.setVisibility(View.VISIBLE);}
+catch ( Exception e)
+{}
                     show();
                 } else
                     editQ.setText("");
@@ -1782,6 +1828,16 @@ if(dummyCl==1000)
         queryNew = (EditText) findViewById(R.id.query);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
         backpress();
+        myClipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        queryNew.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                pasteiconnew.setVisibility(View.VISIBLE);
+                clickpaste();
+
+                return false;
+            }
+        });
         clickUrl();
         inc = (TextView) findViewById(R.id.check);
         butcheck = (Button) findViewById(R.id.butcheck);
@@ -2098,7 +2154,7 @@ if(searchPrice<=150)
 
                     // paste = (TextView) findViewById(R.id.pasteAg);
                     queryNew.requestFocus();
-                    //clickpaste();
+//                    clickpaste();
                     parse(queryNew.getText().toString().trim());
 
                 }
@@ -2208,5 +2264,28 @@ if(searchPrice<=150)
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+    public void clickpaste() {
+        pasteiconnew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+
+                    queryNew.requestFocus();
+                    queryNew.setText("");
+                    ClipData abc = myClipboard.getPrimaryClip();
+                    ClipData.Item item = abc.getItemAt(0);
+                    String text = item.getText().toString();
+
+
+                    queryNew.setText("   " + text);
+
+                    pasteiconnew.setVisibility(View.GONE);
+
+                } catch (Exception e) {
+                    Toast.makeText(ProductsPage.this, "Please copy a URL", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }

@@ -197,11 +197,14 @@ public class ProfileFormStep3Fragment1 extends Fragment {
                     scholarshipSpinner.setSelection(i);
                     completeScholarshipDetails.setVisibility(View.VISIBLE);
                     user.setIncompleteScholarship(false);
+                    checkForIncompleteScholarship();
                     break;
                 }
             }
         }
-
+        if ("Yes".equalsIgnoreCase(user.getScholarship()) || "true".equalsIgnoreCase(user.getScholarship()) && (AppUtils.isEmpty(user.getScholarshipType()) || AppUtils.isEmpty(user.getScholarshipAmount()))) {
+            user.setIncompleteScholarship(true);
+        }
 
         if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship()) {
             incompleteStep1.setVisibility(View.VISIBLE);
@@ -218,6 +221,15 @@ public class ProfileFormStep3Fragment1 extends Fragment {
             incompleteStep3.setVisibility(View.VISIBLE);
         }
         return rootView;
+    }
+
+
+    private void checkForIncompleteScholarship() {
+        if ("Yes".equalsIgnoreCase(user.getScholarship()) || "true".equalsIgnoreCase(user.getScholarship()) && (AppUtils.isEmpty(user.getScholarshipType()) || AppUtils.isEmpty(user.getScholarshipAmount()))) {
+            user.setIncompleteScholarship(true);
+            incompleteScholarshipDetails.setVisibility(View.VISIBLE);
+            completeScholarshipDetails.setVisibility(View.GONE);
+        }
     }
 
     private void getAllViews(View rootView) {
@@ -288,6 +300,7 @@ public class ProfileFormStep3Fragment1 extends Fragment {
     }
 
     private void checkIncomplete() {
+
         if (!selectedAnnualFees)
             user.setIncompleteAnnualFees(true);
         else
@@ -304,6 +317,10 @@ public class ProfileFormStep3Fragment1 extends Fragment {
             user.setIncompleteScholarship(true);
         else
             user.setIncompleteScholarship(false);
+        if ("Yes".equalsIgnoreCase(user.getScholarship()) || "true".equalsIgnoreCase(user.getScholarship()) && (AppUtils.isEmpty(user.getScholarshipType()) || AppUtils.isEmpty(user.getScholarshipAmount()))) {
+
+            user.setIncompleteScholarship(true);
+        }
 
     }
 

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -58,6 +59,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -695,10 +697,8 @@ if(dummyCl==1000)
                     detRet.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent in = new Intent(ProductsPage.this, ViewForm.class);
-                            in.putExtra("which_page", 119);
-                            in.putExtra("reviewUrl", review);
-                            startActivity(in);
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(review));
+                            startActivity(browserIntent);
                         }
                     });
                 }
@@ -764,8 +764,8 @@ if(dummyCl==1000)
             public void onClick(View v) {
 
                 RelativeLayout cash = (RelativeLayout) findViewById(R.id.cashback);
-                if(hve.getText().toString().trim().length()==0)
-                cash.setVisibility(View.VISIBLE);
+                if (hve.getText().toString().trim().length() == 0)
+                    cash.setVisibility(View.VISIBLE);
 
 
             }
@@ -780,11 +780,24 @@ if(dummyCl==1000)
                 //                Toast.makeText(ProductsPage.this, "" + ttt, Toast.LENGTH_SHORT).show();
                 //                hve.setFocusableInTouchMode(true);
                 RelativeLayout cash = (RelativeLayout) findViewById(R.id.cashback);
-                if(hve.getText().toString().trim().length()==0)
-                cash.setVisibility(View.VISIBLE);
+                if (hve.getText().toString().trim().length() == 0)
+                    cash.setVisibility(View.VISIBLE);
                 //
                 //
                 return false;
+            }
+        });
+        hve.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (hasFocus) {
+                    hve.setHint("");
+
+                }
+                else
+                    hve.setHint("Offers and Cashback");
+
             }
         });
 
@@ -1528,6 +1541,10 @@ int w=0;
 
     public void parse(String parseString) {
         productId1 = "";
+        SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
+        SharedPreferences.Editor et = cred.edit();
+        et.putString("urlprod",parseString);
+        et.commit();
         int pos = -1;
         if (parseString.contains("flipkart")) {
             sellerNme1 = "flipkart";
@@ -1543,7 +1560,7 @@ int w=0;
                 }
             } else {
                 checkValidUrl = 1;
-            }
+                   }
             //       Toast.makeText(HomePage.this, "DADA" + String.valueOf(pos), Toast.LENGTH_SHORT).show();
         }
         //snapdeal
@@ -1628,8 +1645,19 @@ int w=0;
             checkValidUrl = 1;
 
         if ((checkValidFromApis == 0) && (checkValidUrl == 0)) {
-            page = "api";
-            new linkSearch().execute();
+            {page = "api";
+           //
+//                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                Intent in = new Intent(ProductsPage.this, ProductsPage.class);
+                in.putExtra("seller", sellerNme1);
+                in.putExtra("product", productId1);
+                in.putExtra("query", parseString);
+//                query.setText("");
+                finish();
+                in.putExtra("page", "api");
+                checkValidFromApis=0;
+                checkValidUrl=0;
+                startActivity(in);}
 
 
             //make api call
@@ -1649,7 +1677,7 @@ int w=0;
             //monkey page
             Intent in = new Intent(ProductsPage.this, ProductsPage.class);
             //            query.setText("");
-
+finish();
             in.putExtra("page", "monkey");
             startActivity(in);
             //finish();

@@ -120,11 +120,11 @@ doesn't seem correct!"
                 />
             <ImageView
                 android:id="@+id/pasteAg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
                 android:layout_below="@id/borderView"
                 android:layout_centerHorizontal="true"
-                android:visibility="gone"
+
                 android:src="@drawable/pasteiconnew"
                 android:padding="4dp"
 

@@ -692,6 +692,7 @@ public class PaymentLive  extends Activity {
                 payload.put("userId",cred.getString("phone_number",""));
                 payload.put("orderStatus","pendingPayment");
                 payload.put("fkProductId",cred.getString("prid", ""));
+                payload.put("productUrl", cred.getString("urlprod",""));
                 payload.put("seller",cred.getString("seller", ""));
                 payload.put("sellingPrice",cred.getInt("sp", 0));
                 payload.put("downPayment",payamt);

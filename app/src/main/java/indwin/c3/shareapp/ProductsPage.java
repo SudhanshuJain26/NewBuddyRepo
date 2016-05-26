@@ -65,7 +65,6 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import indwin.c3.shareapp.activities.ProfileActivity;
-import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
 
@@ -702,6 +701,17 @@ if(dummyCl==1000)
                         }
                     });
                 }
+
+            }
+        });
+        TextView knowmore=(TextView)findViewById(R.id.knowmore);
+        knowmore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(ProductsPage.this, ViewForm.class);
+                                           in.putExtra("which_page", 119);
+                                           in.putExtra("reviewUrl", review);
+                                           startActivity(in);
 
             }
         });

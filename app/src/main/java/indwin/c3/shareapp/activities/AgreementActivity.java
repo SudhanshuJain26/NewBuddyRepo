@@ -13,6 +13,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -266,12 +267,8 @@ public class AgreementActivity extends AppCompatActivity {
         acceptTerms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserModel userSaved = AppUtils.getUserObject(AgreementActivity.this);
-                if (AppUtils.isNotEmpty(userSaved.getSignature())) {
 
-                    user.setSignature(userSaved.getSignature());
-                    user.setUpdateSignature(userSaved.isUpdateSignature());
-                }
+                saveSelfieAndSignature();
                 if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature()) && ProfileFormStep1Fragment3.completeAgreement != null) {
 
                     ProfileFormStep1Fragment3.completeAgreement.setVisibility(View.VISIBLE);
@@ -288,11 +285,25 @@ public class AgreementActivity extends AppCompatActivity {
 
     }
 
+    private void saveSelfieAndSignature() {
+        UserModel userSaved = AppUtils.getUserObject(AgreementActivity.this);
+        if (AppUtils.isNotEmpty(userSaved.getSignature())) {
+
+            user.setSignature(userSaved.getSignature());
+            user.setUpdateSignature(userSaved.isUpdateSignature());
+        }
+        if (AppUtils.isNotEmpty(userSaved.getSelfie())) {
+
+            user.setSelfie(userSaved.getSelfie());
+            user.setUpdateSelfie(userSaved.isUpdateSelfie());
+        }
+    }
+
     private void dispatchTakePictureIntent() {
         try {
             Intent takePictureIntent = new CameraActivity.IntentBuilder(AgreementActivity.this)
                     .skipConfirm()
-                    .to(createImageFile()).facing(Facing.FRONT)
+                    .to(createImageFile()).facing(getCamera())
                     .debug()
                     .zoomStyle(ZoomStyle.SEEKBAR)
                     .updateMediaStore()
@@ -320,6 +331,16 @@ public class AgreementActivity extends AppCompatActivity {
         //    }
         //}
     }
+    private Facing getCamera() {
+
+           Camera.CameraInfo ci = new Camera.CameraInfo();
+              for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+                  Camera.getCameraInfo(i, ci);
+                  if (ci.facing == Camera.CameraInfo.CAMERA_FACING_FRONT)
+                    return  Facing.FRONT;
+              }
+           return Facing.BACK;
+       }
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -346,8 +367,13 @@ public class AgreementActivity extends AppCompatActivity {
     private void populateSelfie(Bitmap bitmap, Drawable d) {
         if (bitmap != null) {
             d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, widthSelfie, heightSelfie, false));
+        } else {
+
+            bitmap = ((BitmapDrawable) d).getBitmap();
+            bitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, false);
         }
         takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.transparent_cam), null, null);
+        d = new BitmapDrawable(getResources(), bitmap);
         takeASelfie.setBackgroundDrawable(d);
         takeASelfie.setText("");
         isSelfieAdded = true;
@@ -368,17 +394,16 @@ public class AgreementActivity extends AppCompatActivity {
             if (d == null) {
                 user.setSelfie("");
                 isSelfieAdded = false;
-                Toast.makeText(getBaseContext(),
-                        "Error while capturing image", Toast.LENGTH_LONG)
-
-                        .show();
-
+                Toast.makeText(getBaseContext(), "Error while capturing image", Toast.LENGTH_LONG).show();
                 return;
             }
 
-
+            isSelfieAdded = true;
             populateSelfie(null, d);
             user.setUpdateSelfie(true);
+            saveSelfieAndSignature();
+            user.setSelfie(mCurrentPhotoPath);
+
             AppUtils.saveUserObject(this, user);
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resultCode == Activity.RESULT_OK) {
             hasPermissions(this, PERMISSIONS);

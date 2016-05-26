@@ -487,7 +487,7 @@
                             android:background="#ffffff"
                             android:cursorVisible="true"
                             android:singleLine="true"
-
+                            android:inputType="number"
                             android:text="Rs.20,000"
                             android:textCursorDrawable="@null" />
                         <TextView
@@ -833,7 +833,7 @@
                         android:layout_marginLeft="@dimen/activity_horizontal_margin"
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="@dimen/left"
-                        android:text="Returns"
+                        android:text="Review"
                         android:textColor="#000000" />
 
                     <ImageView

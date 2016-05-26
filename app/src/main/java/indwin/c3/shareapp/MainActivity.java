@@ -888,16 +888,22 @@ public class MainActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         courseend="";
                     }
-
+                    String nameadd="";
+                    try {
+                        nameadd = data.getString("college");
+                    } catch (Exception e) {
+                    }
                     SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editorP = userP.edit();
                     editorP.putString("approvedBand", approvedBand);
                     editorP.putString("profileStatus", profileStatus);
                     editorP.putString("course", courseend);
                     editorP.putString("formStatus", formstatus);
+                    editorP.putString("productdpname", Name);
                     editorP.putInt("creditLimit", creditLimit);
                     editorP.putInt("totalBorrowed", totalBorrowed);
                     editorP.putInt("cashBack", cashBack);
+                    editorP.putString("nameadd", nameadd);
 
                     editorP.commit();
 

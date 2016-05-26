@@ -152,6 +152,19 @@ public class ConfirmOrder extends AppCompatActivity {
 //        if (downPayment == 0)
 //            ww = serviceCharge;
         totalPay.setText(getApplicationContext().getString(R.string.Rs) + ww);
+        final EditText e = (EditText) findViewById(R.id.edtWant);
+        e.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (hasFocus) {
+                    e.setHint("");
+
+                } else
+                    e.setHint("Size and color, delivery options or anything else ...");
+
+            }
+        });
         checkOutnow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,7 +175,7 @@ public class ConfirmOrder extends AppCompatActivity {
                 et.putInt("emi", (int)newemi);
                 et.putInt("downpayment", downPayment-serviceCharge);
                 et.putInt("tot", w);
-                EditText e = (EditText) findViewById(R.id.edtWant);
+
                 et.putString("usercom", e.getText().toString());
 //                et.putString("whichCoupon", whichCoupon);
 //                et.putInt("monthtenure", monthsnow);
@@ -216,17 +229,27 @@ public class ConfirmOrder extends AppCompatActivity {
                 int ll=(int)(newemi*getIntent().getExtras().getInt("monthforemi"));
                 interest=ll-getIntent().getExtras().getInt("sellingprice")+downPayment-serviceCharge+dis;
                 if(getIntent().getExtras().getInt("sellingprice")<5000)
-                {
+                {RelativeLayout buddydis=(RelativeLayout)popUpView.findViewById(R.id.buddydiscount);
+                    buddydis.setVisibility(View.VISIBLE);
                     Long lo=(getIntent().getExtras().getInt("monthforemi")) * newemi;
                     if(getIntent().getExtras().getInt("sellingprice")<5000)
                     {
+                        TextView t=(TextView)popUpView.findViewById(R.id.textPopbuddydisamt);
+
                         int w=emiWithservice(lo.intValue(),333,getIntent().getExtras().getInt("monthforemi"));
                         inter.setText(getApplicationContext().getString(R.string.Rs) + w);
+                        t.setText("-"+getApplicationContext().getString(R.string.Rs) + w);
                     }
                 }
-                else
-                inter.setText(getApplicationContext().getString(R.string.Rs) + interest);
+                else{
+                    RelativeLayout buddydis=(RelativeLayout)popUpView.findViewById(R.id.buddydiscount);
+                    buddydis.setVisibility(View.GONE);
+                inter.setText(getApplicationContext().getString(R.string.Rs) + interest);}
+                if(dis==0)
                 disc.setText(getApplicationContext().getString(R.string.Rs) + dis);
+                else
+                    disc.setText("-"+getApplicationContext().getString(R.string.Rs) + dis);
+
                 TextView sc = (TextView) popUpView.findViewById(R.id.textPop);
                 RelativeLayout pop = (RelativeLayout) popUpView.findViewById(R.id.pop);
                 pop.setOnClickListener(new View.OnClickListener() {

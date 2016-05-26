@@ -1745,6 +1745,10 @@ public class HomePage extends AppCompatActivity {
     }
 
     public void parse(String parseString) {
+        SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
+        SharedPreferences.Editor et = cred.edit();
+        et.putString("urlprod",parseString);
+        et.commit();
         productId = "";
         int pos = -1;
         if (parseString.contains("flipkart")) {

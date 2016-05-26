@@ -331,7 +331,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             incompleteStep2.setVisibility(View.VISIBLE);
         }
 
-        if (user.isIncompleteAadhar() || user.isIncompleteAddressDetails() && user.isInCompleteAgreement()) {
+        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress() && user.isInCompleteAgreement()) {
             incompleteStep3.setVisibility(View.VISIBLE);
         }
 

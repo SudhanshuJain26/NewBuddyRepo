@@ -276,11 +276,19 @@ public class ProfileFormStep3Fragment3 extends Fragment {
     }
 
     private void checkIncomplete() {
-        if (bankStmts.size() <= 1) {
+        if (bankStmts.size() == 0) {
             user.setIncompleteBankStmt(true);
+        } else if (bankStmts.size() == 1) {
+            if ("add".equals(bankStmts.get(0))) {
+                user.setIncompleteBankStmt(true);
+            } else {
+                user.setIncompleteBankStmt(false);
+            }
         } else {
-            bankStmts.remove(bankStmts.size() - 1);
-            user.setBankStmts(bankStmts);
+            if (!user.isAppliedFor7k()) {
+                bankStmts.remove(bankStmts.size() - 1);
+                user.setBankStmts(bankStmts);
+            }
             user.setIncompleteBankStmt(false);
         }
     }

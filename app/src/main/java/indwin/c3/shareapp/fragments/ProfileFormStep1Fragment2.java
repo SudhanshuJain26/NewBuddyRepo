@@ -281,7 +281,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         if (user.getCollegeIds() != null && user.getCollegeIds().size() > 0) {
             user.setIncompleteCollegeId(false);
         }
-        if (user.isIncompleteAadhar() || user.isIncompleteAddressDetails() || user.isInCompleteAgreement())
+        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress() || user.isInCompleteAgreement())
 
         {
             incompleteStep3.setVisibility(View.VISIBLE);
@@ -652,12 +652,20 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     }
 
     private void checkIncomplete() {
-        if (collegeIds.size() <= 1) {
+        if (collegeIds.size() == 1) {
             incompleteCollegeId.setVisibility(View.VISIBLE);
             user.setIncompleteCollegeId(true);
+        } else if (collegeIds.size() == 1) {
+            if ("add".equals(collegeIds.get(0))) {
+                user.setIncompleteBankStmt(true);
+            } else {
+                user.setIncompleteBankStmt(false);
+            }
         } else {
-            collegeIds.remove(collegeIds.size() - 1);
-            user.setCollegeIds(collegeIds);
+            if (!user.isAppliedFor1k()) {
+                collegeIds.remove(collegeIds.size() - 1);
+                user.setCollegeIds(collegeIds);
+            }
             user.setIncompleteCollegeId(false);
         }
         if (AppUtils.isEmpty(addRollNumberEt.getText().toString())) {

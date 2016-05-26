@@ -108,7 +108,7 @@ public class HomePage extends AppCompatActivity {
     private RecyclerView mRecycler;
     private int checkedit = 0, currDay;
     private BroadcastReceiver broadcastReceiver;
-    private TextView  tren, products, lappy, fashion, beau, ent, foot, but;
+    private TextView tren, products, lappy, fashion, beau, ent, foot, but;
     ImageView paste;
     //    Map<String,Map<int,V>> map;
 
@@ -453,7 +453,7 @@ public class HomePage extends AppCompatActivity {
                 but.setVisibility(View.GONE);
                 if (Constants.STATUS.DECLINED.toString().equals(user.getProfileStatus()) || Constants.STATUS.WAITLISTED.equals(user.getProfileStatus())) {
 
-                    line1.setText("Your app_form has currently been waitlisted for approval. Touch here to find out more.");
+                    line1.setText("Your profile has currently been waitlisted for approval. Touch here to find out more.");
 
                 } else if (Constants.STATUS.APPROVED.toString().equals(user.getProfileStatus())) {
 
@@ -1077,7 +1077,6 @@ public class HomePage extends AppCompatActivity {
     }
 
 
-
     private void setNewIdsNull(String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
@@ -1452,10 +1451,10 @@ public class HomePage extends AppCompatActivity {
                 Splash.checkNot = 1;
 
                 paste = (ImageView) findViewById(R.id.pasteAg);
-//                clickpaste();
-//                send1.putExtra("prodid", Splash.fkid1.get(spin).get("0"));
-//                send1.putExtra("ecom", Splash.sellers.get(spin).get("0"));
-//                send1.putExtra("which_page", 10);
+                //                clickpaste();
+                //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("0"));
+                //                send1.putExtra("ecom", Splash.sellers.get(spin).get("0"));
+                //                send1.putExtra("which_page", 10);
 
                 //
                 // sestartActivity(send1);
@@ -1522,12 +1521,12 @@ public class HomePage extends AppCompatActivity {
 
 
                 paste = (ImageView) findViewById(R.id.pasteAg);
-           //     clickpaste();
-//                send1.putExtra("prodid", Splash.fkid1.get(spin).get("2"));
-//                send1.putExtra("ecom", Splash.sellers.get(spin).get("2"));
-//                send1.putExtra("which_page", 10);
-//                send1.putExtra("which_page", 10);
-//                startActivity(send1);
+                //     clickpaste();
+                //                send1.putExtra("prodid", Splash.fkid1.get(spin).get("2"));
+                //                send1.putExtra("ecom", Splash.sellers.get(spin).get("2"));
+                //                send1.putExtra("which_page", 10);
+                //                send1.putExtra("which_page", 10);
+                //                startActivity(send1);
 
             }
         });

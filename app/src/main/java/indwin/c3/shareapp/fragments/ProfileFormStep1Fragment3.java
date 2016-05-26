@@ -259,7 +259,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails() || user.isIncompleteRollNumber()) {
             incompleteStep2.setVisibility(View.VISIBLE);
         }
-        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress() || user.isIncompleteAddressDetails() || user.isInCompleteAgreement()) {
+        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress() || user.isInCompleteAgreement()) {
             incompleteStep3.setVisibility(View.VISIBLE);
             if (user.isIncompleteAadhar())
                 incompleteAadhar.setVisibility(View.VISIBLE);
@@ -539,12 +539,20 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         } else {
             user.setIncompleteAadhar(false);
         }
-        if (addressProofs.size() <= 1) {
+        if (addressProofs.size() == 0) {
             incompleteAddress.setVisibility(View.VISIBLE);
             user.setIncompletePermanentAddress(true);
+        } else if (addressProofs.size() == 1) {
+            if ("add".equals(addressProofs.get(0))) {
+                user.setIncompleteBankStmt(true);
+            } else {
+                user.setIncompleteBankStmt(false);
+            }
         } else {
-            addressProofs.remove(addressProofs.size() - 1);
-            user.setAddressProofs(addressProofs);
+            if (!user.isAppliedFor1k()) {
+                addressProofs.remove(addressProofs.size() - 1);
+                user.setAddressProofs(addressProofs);
+            }
             user.setIncompletePermanentAddress(false);
         }
     }

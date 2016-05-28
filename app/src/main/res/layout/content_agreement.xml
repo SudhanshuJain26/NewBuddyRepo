@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2">
 
-                        <Button
+                        <indwin.c3.shareapp.utils.TargetButton
                             android:id="@+id/take_a_selfie_button"
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="4">
 
-                        <Button
+                        <indwin.c3.shareapp.utils.TargetButton
                             android:id="@+id/add_signature_button"
                             android:layout_width="match_parent"
                             android:layout_height="100dp"

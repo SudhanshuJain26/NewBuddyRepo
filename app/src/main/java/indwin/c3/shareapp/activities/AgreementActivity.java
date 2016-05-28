@@ -5,13 +5,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.net.Uri;
@@ -33,7 +31,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,35 +52,30 @@ import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment3;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
-import io.intercom.com.google.gson.Gson;
+import indwin.c3.shareapp.utils.PicassoTrustAll;
+import indwin.c3.shareapp.utils.TargetButton;
 
 public class AgreementActivity extends AppCompatActivity {
 
     private WebView termsAndConditionWebView;
-    public static Button addSignature, takeASelfie;
-    public static ImageView signature;
+    private TargetButton takeASelfie, addSignature;
     private int REQUEST_TAKE_PHOTO = 13;
-    String mCurrentPhotoPath;
-    SharedPreferences mPrefs;
-    Gson gson;
-    UserModel user;
+    private String mCurrentPhotoPath;
+    private UserModel user;
     private ScrollView parentScrollView;
     private Button acceptTerms;
     public static boolean isSelfieAdded = false, isSignatureAdded = false;
     boolean deniedPermissionForever = false;
-    final static int MY_PERMISSIONS_REQUEST_CAMERA = 13;
     private static final int REQUEST_PERMISSION_SETTING = 99;
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     public static final int PERMISSION_ALL = 0;
-    private Target loadTarget, loadTargetSelfie;
+    private Target loadTarget;
     int widthSelfie = 200, heightSelfie = 180;
-    private ColorDrawable cd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agreement);
-        cd = new ColorDrawable(0xFFFFFF);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
@@ -92,11 +84,8 @@ public class AgreementActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-            mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-            gson = new Gson();
-            String json = mPrefs.getString("UserObject", "");
-            user = gson.fromJson(json, UserModel.class);
-            addSignature = (Button) findViewById(R.id.add_signature_button);
+            user = AppUtils.getUserObject(this);
+            addSignature = (TargetButton) findViewById(R.id.add_signature_button);
             termsAndConditionWebView = (WebView) findViewById(R.id.terms_and_conditions_webview);
             WebSettings settings = termsAndConditionWebView.getSettings();
             settings.setJavaScriptEnabled(true);
@@ -110,13 +99,10 @@ public class AgreementActivity extends AppCompatActivity {
                     return true;
                 }
             });
-            //termsAndConditionWebView.loadUrl(AppUtils.TnC_URL);
             termsAndConditionWebView.loadUrl(getApplicationContext().getString(R.string.web) + "termsApp");
-            takeASelfie = (Button) findViewById(R.id.take_a_selfie_button);
-
+            takeASelfie = (TargetButton) findViewById(R.id.take_a_selfie_button);
             acceptTerms = (Button) findViewById(R.id.accept_terms);
             if (AppUtils.isNotEmpty(user.getSignature())) {
-                //addSignature.setBackgroundDrawable(getResources().getDrawable(R.drawable.downloading));
                 String signatureUrl = user.getSignature();
                 if (signatureUrl.contains("http")) {
 
@@ -131,7 +117,6 @@ public class AgreementActivity extends AppCompatActivity {
                                 Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 300, 100, false));
                                 d.setColorFilter(new
                                         PorterDuffColorFilter(getResources().getColor(R.color.colorSignature), PorterDuff.Mode.MULTIPLY));
-                                //addSignature.setPadding(0, 0, 0, 0);
                                 addSignature.setCompoundDrawablesWithIntrinsicBounds(null, d, null, null);
                                 if (!user.isAppliedFor1k()) {
                                     addSignature.setText("Edit?");
@@ -146,7 +131,7 @@ public class AgreementActivity extends AppCompatActivity {
                         };
 
                     try {
-                        Picasso.with(this).load(signatureUrl).placeholder(R.drawable.downloading).into(loadTarget);
+                        Picasso.with(this).load(signatureUrl).into(loadTarget);
                     } catch (IllegalArgumentException iae) {
                         iae.printStackTrace();
                     }
@@ -155,67 +140,30 @@ public class AgreementActivity extends AppCompatActivity {
                     final File imgFile = new File(signatureUrl);
                     if (imgFile.exists()) {
                         Drawable d = Drawable.createFromPath(signatureUrl);
-
                         d.setColorFilter(new
                                 PorterDuffColorFilter(getResources().getColor(R.color.colorSignature), PorterDuff.Mode.MULTIPLY));
                         addSignature.setPadding(0, 0, 0, 0);
-
-
                         addSignature.setCompoundDrawablesWithIntrinsicBounds(null, d, null, null);
                         if (!user.isAppliedFor1k()) {
                             addSignature.setText("Edit?");
                         }
                         isSignatureAdded = true;
-
                     }
                 }
             }
 
             if (AppUtils.isNotEmpty(user.getSelfie())) {
-                Drawable d = getResources().getDrawable(R.drawable.downloading);
 
-
-                populateSelfie(null, d);
                 String path = user.getSelfie();
                 if (path.contains("http")) {
-
-                    if (loadTargetSelfie == null)
-                        loadTargetSelfie = new Target() {
-                            @Override
-                            public void onBitmapFailed(Drawable arg0) {
-                            }
-
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                handleLoadedBitmap(bitmap);
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable arg0) {
-
-                            }
-                        };
-
-                    try {
-                        Picasso.with(this).load(path).into(loadTargetSelfie);
-                    } catch (IllegalArgumentException iae) {
-                        iae.printStackTrace();
-                    }
-
+                    populateSelfie(path, null);
                 } else {
                     final File imgFile = new File(path);
                     if (imgFile.exists()) {
-                        Drawable drawable = Drawable.createFromPath(user.getSelfie());
-
-
-                        populateSelfie(null, drawable);
-
-
+                        populateSelfie(path, imgFile);
                     }
                 }
             }
-
-
             parentScrollView = (ScrollView) findViewById(R.id.parent_scrollview);
             parentScrollView.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
@@ -270,7 +218,6 @@ public class AgreementActivity extends AppCompatActivity {
 
                 saveSelfieAndSignature();
                 if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature()) && ProfileFormStep1Fragment3.completeAgreement != null) {
-
                     ProfileFormStep1Fragment3.completeAgreement.setVisibility(View.VISIBLE);
                     finish();
                 } else {
@@ -313,34 +260,18 @@ public class AgreementActivity extends AppCompatActivity {
 
 
         }
-        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //// Ensure that there's a camera activity to handle the intent
-        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-        //    // Create the File where the photo should go
-        //    File photoFile = null;
-        //    try {
-        //        photoFile = createImageFile();
-        //    } catch (IOException ex) {
-        //        // Error occurred while creating the File
-        //    }
-        //    // Continue only if the File was successfully created
-        //    if (photoFile != null) {
-        //        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-        //                Uri.fromFile(photoFile));
-        //        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-        //    }
-        //}
     }
+
     private Facing getCamera() {
 
-           Camera.CameraInfo ci = new Camera.CameraInfo();
-              for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
-                  Camera.getCameraInfo(i, ci);
-                  if (ci.facing == Camera.CameraInfo.CAMERA_FACING_FRONT)
-                    return  Facing.FRONT;
-              }
-           return Facing.BACK;
-       }
+        Camera.CameraInfo ci = new Camera.CameraInfo();
+        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+            Camera.getCameraInfo(i, ci);
+            if (ci.facing == Camera.CameraInfo.CAMERA_FACING_FRONT)
+                return Facing.FRONT;
+        }
+        return Facing.BACK;
+    }
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -360,21 +291,16 @@ public class AgreementActivity extends AppCompatActivity {
         return image;
     }
 
-    public void handleLoadedBitmap(Bitmap b) {
-        populateSelfie(b, null);
-    }
 
-    private void populateSelfie(Bitmap bitmap, Drawable d) {
-        if (bitmap != null) {
-            d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, widthSelfie, heightSelfie, false));
-        } else {
-
-            bitmap = ((BitmapDrawable) d).getBitmap();
-            bitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, false);
-        }
+    private void populateSelfie(String path, File file) {
         takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.transparent_cam), null, null);
-        d = new BitmapDrawable(getResources(), bitmap);
-        takeASelfie.setBackgroundDrawable(d);
+        if (file != null) {
+            PicassoTrustAll.getInstance(this).load(file).placeholder(getResources().getDrawable(R.drawable.downloading)).resize(widthSelfie, heightSelfie).into(takeASelfie);
+
+        } else {
+            takeASelfie.setBackgroundDrawable(getResources().getDrawable(R.drawable.downloading));
+            PicassoTrustAll.getInstance(this).load(path).placeholder(getResources().getDrawable(R.drawable.downloading)).into(takeASelfie);
+        }
         takeASelfie.setText("");
         isSelfieAdded = true;
     }
@@ -399,7 +325,7 @@ public class AgreementActivity extends AppCompatActivity {
             }
 
             isSelfieAdded = true;
-            populateSelfie(null, d);
+            populateSelfie(mCurrentPhotoPath, new File(mCurrentPhotoPath));
             user.setUpdateSelfie(true);
             saveSelfieAndSignature();
             user.setSelfie(mCurrentPhotoPath);

@@ -169,7 +169,7 @@ else
         form.setListener(this, this);
         this.form.getSettings().setUserAgentString(this.form.getSettings().getUserAgentString()
 
-                      +" "+R.string.buddyagent);
+                      +" "+getResources().getString(R.string.buddyagent));
         int t=R.string.buddyagent;
 
 //String userA=R.string.buddyagent;

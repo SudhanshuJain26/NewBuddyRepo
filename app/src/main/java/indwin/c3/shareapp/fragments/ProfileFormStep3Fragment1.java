@@ -63,7 +63,7 @@ public class ProfileFormStep3Fragment1 extends Fragment {
         gson = new Gson();
         user = AppUtils.getUserObject(getActivity());
         if (!mPrefs.getBoolean("step3Editable", true)) {
-            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment2, gotoFragment3);
+            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         mPrefs.edit().putBoolean("visitedFormStep3Fragment1", true).apply();
         if (mPrefs.getBoolean("visitedFormStep3Fragment2", false)) {

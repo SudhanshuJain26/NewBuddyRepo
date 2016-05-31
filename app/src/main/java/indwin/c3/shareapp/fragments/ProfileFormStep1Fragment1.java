@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -53,11 +52,11 @@ import java.util.Arrays;
 import java.util.Set;
 
 import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.activities.ProfileFormStep1;
 import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
 import indwin.c3.shareapp.models.FBUserModel;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
-import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.FetchLatestUserDetails;
 import indwin.c3.shareapp.utils.FetchNewToken;
 import indwin.c3.shareapp.utils.HelpTipDialog;
@@ -68,10 +67,10 @@ import io.intercom.com.google.gson.Gson;
  * Created by shubhang on 18/03/16.
  */
 public class ProfileFormStep1Fragment1 extends Fragment {
-    TextView userEmail, gotoFragment1, gotoFragment2, gotoFragment3;
+    TextView userEmail;
     ImageButton editEmail;
     EditText userEmailEditText;
-    Button saveEmail, connectSocialAccountFb, connectSocialAccountInsta, saveAndProceed;
+    Button saveEmail, connectSocialAccountFb, connectSocialAccountInsta;
     CallbackManager callbackManager;
     private String email, firstName, friends, gender, lastName, link, name, fbuserId;
     private Boolean veri;
@@ -92,6 +91,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
     boolean runningAsync = false;
     private ImageButton socialHelptip;
     private TextView incorrectEmail;
+    private Spinner genderSpinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -100,121 +100,29 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         //Inflate the layout for this fragment
         View rootView = inflater.inflate(
                 R.layout.profile_form_step1_fragment1, container, false);
+
         FacebookSdk.sdkInitialize(getActivity());
         getAllViews(rootView);
         setAllClickListener();
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep1Fragment1", true).apply();
         if (!mPrefs.getBoolean("step1Editable", true)) {
-            setViewAndChildrenEnabled(rootView, false, gotoFragment2, gotoFragment3);
+            setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();
 
 
-        if (mPrefs.getBoolean("visitedFormStep1Fragment2", false)) {
-            gotoFragment2.setAlpha(1);
-
-            gotoFragment2.setClickable(true);
-        }
-        if (mPrefs.getBoolean("visitedFormStep1Fragment3", false)) {
-            gotoFragment3.setAlpha(1);
-            gotoFragment3.setClickable(true);
-        }
-
-
         gson = new Gson();
-        user = AppUtils.getUserObject(getActivity());
-        if (user.isAppliedFor1k()) {
+        ProfileFormStep1 profileFormStep1 = (ProfileFormStep1) getActivity();
+        user = profileFormStep1.getUser();
+        if (!user.isAppliedFor1k()) {
 
-            saveAndProceed.setVisibility(View.INVISIBLE);
-            rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
+            rootView.setEnabled(false);
         }
-
 
         callbackManager = CallbackManager.Factory.create();
         loginManager = LoginManager.getInstance();
-        loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(final LoginResult loginResult) {
-                final GraphRequest request = GraphRequest.newMeRequest(
-                        loginResult.getAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(
-                                    JSONObject object,
-                                    GraphResponse response) {
-                                try {
-                                    FBUserModel fbUserModel = new Gson().fromJson(object.toString(), FBUserModel.class);
-                                    email = fbUserModel.getEmail();
-                                    firstName = fbUserModel.getFirst_name();
-                                    gender = fbUserModel.getGender();
-                                    lastName = fbUserModel.getLast_name();
-                                    link = fbUserModel.getLink();
-                                    fbuserId = fbUserModel.getId();
-                                    user.setFbUserId(fbuserId);
-                                    SharedPreferences sf = getActivity().getSharedPreferences("proid", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor2 = sf.edit();
-                                    editor2.putString("dpid", fbuserId);
-                                    editor2.commit();
-                                    name = fbUserModel.getName();
-
-                                    veri = fbUserModel.isVerified();
-
-
-                                } catch (Exception e) {
-                                    System.out.print("ds");
-                                    e.printStackTrace(); //something's seriously wrong here
-                                }
-                                Log.e("LoginActivity please", response.toString());
-                            }
-                        });
-
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,link,gender,birthday,email,first_name,last_name,location,locale,timezone,verified");
-                request.setParameters(parameters);
-                request.executeAsync();
-                new GraphRequest(
-                        loginResult.getAccessToken(),
-                        "/me/friends",
-                        null,
-                        HttpMethod.GET,
-                        new GraphRequest.Callback() {
-                            public void onCompleted(GraphResponse response) {
-                                try {
-                                    JSONObject obj = response.getJSONObject();
-                                    JSONObject summ = new JSONObject(obj.getString("summary"));
-                                    friends = summ.getString("total_count");
-                                } catch (Exception ex) {
-                                }
-
-
-                                if (AppUtils.isEmpty(name) || AppUtils.isEmpty(email) || AppUtils.isEmpty(friends)) {
-                                    Set<String> denied = loginResult.getRecentlyDeniedPermissions();
-                                    if (denied.size() > 0) {
-                                        Toast.makeText(getActivity(), "Please grant all permissions to complete your profile!", Toast.LENGTH_SHORT).show();
-                                        LoginManager.getInstance().logInWithReadPermissions(ProfileFormStep1Fragment1.this, Arrays.asList("user_friends", "email", "user_birthday"));
-                                    }
-                                    Toast.makeText(getActivity(), "Please try again!", Toast.LENGTH_SHORT).show();
-
-                                    //   finish();
-                                } else {
-                                    new fblogin().execute();
-                                }
-
-                            }
-                        }
-                ).executeAsync();
-
-            }
-
-            @Override
-            public void onCancel() {
-            }
-
-            @Override
-            public void onError(FacebookException e) {
-            }
-        });
+        registerFbCallback();
         isFbLoggedIn();
 
         if (AppUtils.isNotEmpty(user.getEmail())) {
@@ -240,14 +148,12 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         final String genderOptions[] = getResources().getStringArray(R.array.gender);
         final SpinnerHintAdapter adapter2 = new SpinnerHintAdapter(getActivity(), genderOptions, R.layout.spinner_item_underline);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner genderSpinner = (Spinner) rootView.findViewById(R.id.gender_spinner);
+        genderSpinner = (Spinner) rootView.findViewById(R.id.gender_spinner);
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position < genderOptions.length - 1) {
-                    user.setUpdateGender(true);
-                    isGenderSelected = true;
-                    user.setGender(genderOptions[position]);
+                    saveGender();
                 }
                 if (position == 1) {
                     Picasso.with(getActivity())
@@ -284,33 +190,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             }
         }
 
-        gotoFragment2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment2(true);
-            }
-        });
-
-        gotoFragment3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment3(true);
-            }
-        });
-        saveAndProceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ("Verified!".equals(verifyEmail.getText().toString())) {
-                    user.setEmailVerified(true);
-                }
-                checkIncomplete();
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
-                Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);
-                getContext().sendBroadcast(intent);
-                replaceFragment2(false);
-            }
-        });
 
         if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()) {
             incompleteStep1.setVisibility(View.VISIBLE);
@@ -338,6 +217,87 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         return rootView;
     }
 
+    private void registerFbCallback() {
+
+        loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(final LoginResult loginResult) {
+                final GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject object,
+                                    GraphResponse response) {
+                                try {
+                                    FBUserModel fbUserModel = new Gson().fromJson(object.toString(), FBUserModel.class);
+                                    email = fbUserModel.getEmail();
+                                    firstName = fbUserModel.getFirst_name();
+                                    gender = fbUserModel.getGender();
+                                    lastName = fbUserModel.getLast_name();
+                                    link = fbUserModel.getLink();
+                                    fbuserId = fbUserModel.getId();
+                                    UserModel user = AppUtils.getUserObject(getActivity());
+                                    user.setFbUserId(fbuserId);
+                                    AppUtils.saveUserObject(getActivity(), user);
+                                    SharedPreferences sf = getActivity().getSharedPreferences("proid", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor2 = sf.edit();
+                                    editor2.putString("dpid", fbuserId);
+                                    editor2.commit();
+                                    name = fbUserModel.getName();
+                                    veri = fbUserModel.isVerified();
+                                } catch (Exception e) {
+                                    System.out.print("ds");
+                                    e.printStackTrace(); //something's seriously wrong here
+                                }
+                                Log.e("LoginActivity please", response.toString());
+                            }
+                        });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,link,gender,birthday,email,first_name,last_name,location,locale,timezone,verified");
+                request.setParameters(parameters);
+                request.executeAsync();
+                new GraphRequest(
+                        loginResult.getAccessToken(),
+                        "/me/friends",
+                        null,
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                try {
+                                    JSONObject obj = response.getJSONObject();
+                                    JSONObject summ = new JSONObject(obj.getString("summary"));
+                                    friends = summ.getString("total_count");
+                                } catch (Exception ex) {
+                                }
+                                if (AppUtils.isEmpty(name) || AppUtils.isEmpty(email) || AppUtils.isEmpty(friends)) {
+                                    Set<String> denied = loginResult.getRecentlyDeniedPermissions();
+                                    if (denied.size() > 0) {
+                                        Toast.makeText(getActivity(), "Please grant all permissions to complete your profile!", Toast.LENGTH_SHORT).show();
+                                        LoginManager.getInstance().logInWithReadPermissions(ProfileFormStep1Fragment1.this, Arrays.asList("user_friends", "email", "user_birthday"));
+                                    }
+                                    Toast.makeText(getActivity(), "Please try again!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    new fblogin().execute();
+                                }
+
+                            }
+                        }
+                ).executeAsync();
+
+            }
+
+            @Override
+            public void onCancel() {
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+            }
+        });
+    }
+
 
     private void getAllViews(View rootView) {
 
@@ -349,20 +309,16 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         connectSocialAccountFb = (Button) rootView.findViewById(R.id.connect_social_account_fb);
         connectSocialAccountInsta = (Button) rootView.findViewById(R.id.connect_social_account_insta);
         //        dontHaveFb = (Button) rootView.findViewById(R.id.dont_have_fb);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
         completeEmail = (ImageView) rootView.findViewById(R.id.complete_email);
         completeFb = (ImageView) rootView.findViewById(R.id.complete_fb);
         incompleteEmail = (ImageView) rootView.findViewById(R.id.incomplete_email);
         incompleteFb = (ImageView) rootView.findViewById(R.id.incomplete_fb);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
+        incompleteStep1 = (ImageView) getActivity().findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) getActivity().findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) getActivity().findViewById(R.id.incomplete_step_3);
         completeGender = (ImageView) rootView.findViewById(R.id.complete_gender);
         incompleteGender = (ImageView) rootView.findViewById(R.id.incomplete_gender);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
+        topImage = (ImageView) getActivity().findViewById(R.id.verify_image_view2);
         socialHelptip = (ImageButton) rootView.findViewById(R.id.social_helptip);
         incorrectEmail = (TextView) rootView.findViewById(R.id.incorrect_email);
 
@@ -489,20 +445,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
 
             }
         });
-        //        dontHaveFb.setOnClickListener(new View.OnClickListener() {
-        //            @Override
-        //            public void onClick(View v) {
-        //                if (connectSocialAccountInsta.getVisibility() == View.GONE) {
-        //                    connectSocialAccountFb.setVisibility(View.GONE);
-        //                    connectSocialAccountInsta.setVisibility(View.VISIBLE);
-        //                    dontHaveFb.setText("or connect with Facebook instead");
-        //                } else {
-        //                    connectSocialAccountInsta.setVisibility(View.GONE);
-        //                    connectSocialAccountFb.setVisibility(View.VISIBLE);
-        //                    dontHaveFb.setText("Don't have a Facebook Account?");
-        //                }
-        //            }
-        //        });
 
         verifyEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -529,7 +471,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         }
     }
 
-    private void checkIncomplete() {
+    public void checkIncomplete() {
         if (!user.isEmailVerified()) {
             incompleteEmail.setVisibility(View.VISIBLE);
             user.setIncompleteEmail(true);
@@ -557,48 +499,48 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         }
     }
 
-    public void replaceFragment2(boolean check) {
-        if (check) checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep1Fragment2(), "Fragment2Tag");
-        ft.commit();
+    private void saveGender() {
+        isGenderSelected = true;
+        user.setGender(genderSpinner.getSelectedItem().toString());
+        user.setUpdateGender(true);
     }
 
-    public void replaceFragment3(boolean check) {
-        if (check)
-            checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep1Fragment3(), "Fragment3Tag");
-        ft.commit();
+    private void saveFb() {
+        user.setFbUserId(fbuserId);
+        user.setIsFbConnected(true);
+        user.setUpdateFbConnected(true);
+        UserModel user = AppUtils.getUserObject(getActivity());
+        user.setFbUserId(fbuserId);
+        user.setIsFbConnected(true);
+        user.setUpdateFbConnected(true);
+        AppUtils.saveUserObject(getActivity(), user);
     }
 
     private void saveEmail() {
+        user.setEmail(userEmail.getText().toString());
+        user.setUpdateEmail(true);
+        user.setEmailVerified(false);
+        UserModel user = AppUtils.getUserObject(getActivity());
         userEmail.setText(userEmailEditText.getText().toString());
         user.setEmail(userEmail.getText().toString());
         user.setUpdateEmail(true);
+        user.setEmailVerified(false);
         editEmail.setVisibility(View.VISIBLE);
         verifyEmail.setVisibility(View.VISIBLE);
         saveEmail.setVisibility(View.GONE);
         userEmailEditText.setVisibility(View.GONE);
         userEmail.setVisibility(View.VISIBLE);
         user.setEmailVerified(false);
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
+        AppUtils.saveUserObject(getActivity(), user);
     }
 
-    public static void setViewAndChildrenEnabled(View view, boolean enabled, View except1, View except2) {
-        if (view != except1 && view != except2) {
-            view.setEnabled(enabled);
-        }
+    public static void setViewAndChildrenEnabled(View view, boolean enabled) {
+
         if (view instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup) view;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
                 View child = viewGroup.getChildAt(i);
-                setViewAndChildrenEnabled(child, enabled, except1, except2);
+                setViewAndChildrenEnabled(child, enabled);
             }
         }
     }
@@ -677,11 +619,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             if (result.equals("win")) {
                 w++;
                 if (w == 1) {
-                    user.setFbUserId(fbuserId);
-                    user.setIsFbConnected(true);
-                    user.setUpdateFbConnected(true);
-                    String json = gson.toJson(user);
-                    mPrefs.edit().putString("UserObject", json).apply();
+                    saveFb();
                     isFbLoggedIn();
                     return;
                 }
@@ -700,6 +638,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             }
         }
     }
+
 
     public void isFbLoggedIn() {
         try {

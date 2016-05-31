@@ -111,6 +111,8 @@ public class AddSignatureActivity extends AppCompatActivity {
                     AgreementActivity.addSignature.setCompoundDrawablesWithIntrinsicBounds(null, d, null, null);
                     AgreementActivity.addSignature.setText("Edit?");
                     AgreementActivity.isSignatureAdded = true;
+
+                    UserModel user = AppUtils.getUserObject(AddSignatureActivity.this);
                     user.setSignature(mCurrentSignPath);
                     user.setUpdateSignature(true);
                     AppUtils.saveUserObject(AddSignatureActivity.this, user);

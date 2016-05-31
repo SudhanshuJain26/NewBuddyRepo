@@ -129,7 +129,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
 
 
         if (!mPrefs.getBoolean("step3Editable", true)) {
-            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment1, gotoFragment2);
+            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();
         if (mPrefs.getBoolean("visitedFormStep2Fragment2", false)) {

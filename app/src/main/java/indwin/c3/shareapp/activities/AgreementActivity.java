@@ -58,7 +58,7 @@ import indwin.c3.shareapp.utils.TargetButton;
 public class AgreementActivity extends AppCompatActivity {
 
     private WebView termsAndConditionWebView;
-    private TargetButton takeASelfie, addSignature;
+    public static TargetButton takeASelfie, addSignature;
     private int REQUEST_TAKE_PHOTO = 13;
     private String mCurrentPhotoPath;
     private UserModel user;
@@ -103,6 +103,7 @@ public class AgreementActivity extends AppCompatActivity {
             takeASelfie = (TargetButton) findViewById(R.id.take_a_selfie_button);
             acceptTerms = (Button) findViewById(R.id.accept_terms);
             if (AppUtils.isNotEmpty(user.getSignature())) {
+                addSignature.setText("");
                 String signatureUrl = user.getSignature();
                 if (signatureUrl.contains("http")) {
 
@@ -215,13 +216,11 @@ public class AgreementActivity extends AppCompatActivity {
         acceptTerms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                saveSelfieAndSignature();
-                if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature()) && ProfileFormStep1Fragment3.completeAgreement != null) {
+                if (isSelfieAdded && isSignatureAdded) {
                     ProfileFormStep1Fragment3.completeAgreement.setVisibility(View.VISIBLE);
                     finish();
                 } else {
-                    if (AppUtils.isEmpty(user.getSelfie()))
+                    if (!isSelfieAdded)
                         Toast.makeText(AgreementActivity.this, "Please add a selfie", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(AgreementActivity.this, "Please add a signature", Toast.LENGTH_SHORT).show();
@@ -232,19 +231,6 @@ public class AgreementActivity extends AppCompatActivity {
 
     }
 
-    private void saveSelfieAndSignature() {
-        UserModel userSaved = AppUtils.getUserObject(AgreementActivity.this);
-        if (AppUtils.isNotEmpty(userSaved.getSignature())) {
-
-            user.setSignature(userSaved.getSignature());
-            user.setUpdateSignature(userSaved.isUpdateSignature());
-        }
-        if (AppUtils.isNotEmpty(userSaved.getSelfie())) {
-
-            user.setSelfie(userSaved.getSelfie());
-            user.setUpdateSelfie(userSaved.isUpdateSelfie());
-        }
-    }
 
     private void dispatchTakePictureIntent() {
         try {
@@ -295,11 +281,10 @@ public class AgreementActivity extends AppCompatActivity {
     private void populateSelfie(String path, File file) {
         takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.transparent_cam), null, null);
         if (file != null) {
-            PicassoTrustAll.getInstance(this).load(file).placeholder(getResources().getDrawable(R.drawable.downloading)).resize(widthSelfie, heightSelfie).into(takeASelfie);
+            PicassoTrustAll.getInstance(this).load(file).placeholder(R.drawable.downloading).into(takeASelfie);
 
         } else {
-            takeASelfie.setBackgroundDrawable(getResources().getDrawable(R.drawable.downloading));
-            PicassoTrustAll.getInstance(this).load(path).placeholder(getResources().getDrawable(R.drawable.downloading)).into(takeASelfie);
+            PicassoTrustAll.getInstance(this).load(path).placeholder(R.drawable.downloading).into(takeASelfie);
         }
         takeASelfie.setText("");
         isSelfieAdded = true;
@@ -323,11 +308,10 @@ public class AgreementActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "Error while capturing image", Toast.LENGTH_LONG).show();
                 return;
             }
-
+            UserModel user = AppUtils.getUserObject(AgreementActivity.this);
             isSelfieAdded = true;
             populateSelfie(mCurrentPhotoPath, new File(mCurrentPhotoPath));
             user.setUpdateSelfie(true);
-            saveSelfieAndSignature();
             user.setSelfie(mCurrentPhotoPath);
 
             AppUtils.saveUserObject(this, user);

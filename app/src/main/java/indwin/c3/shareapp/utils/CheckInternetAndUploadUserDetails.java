@@ -71,7 +71,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
 
             };
             Thread thread = new Thread(myRunnable);
-               thread.start();
+            thread.start();
 
         }
     }
@@ -127,8 +127,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewCollegeIds().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
-                        if(user.getNewCollegeIds()!=null)
-                        user.getNewCollegeIds().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
+                        if (user.getNewCollegeIds() != null)
+                            user.getNewCollegeIds().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
 
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
@@ -154,8 +154,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewAddressProofs().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
-                       if(user.getNewAddressProofs()!=null)
-                        user.getNewAddressProofs().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
+                        if (user.getNewAddressProofs() != null)
+                            user.getNewAddressProofs().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
                         i++;
@@ -180,8 +180,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewBankStmts().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
-                        if(user.getNewBankStmts()!=null)
-                        user.getNewBankStmts().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
+                        if (user.getNewBankStmts() != null)
+                            user.getNewBankStmts().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
 
                         i++;
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
@@ -207,8 +207,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getNewBankProofs().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
-                        if(user.getNewBankProofs()!=null)
-                        user.getNewBankProofs().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
+                        if (user.getNewBankProofs() != null)
+                            user.getNewBankProofs().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
 
                         i++;
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
@@ -229,20 +229,22 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     }
                 }
             }
-            if (user.isUpdateSelfie()) {
+            if (user.isUpdateSelfie() && (user.getSelfieStatus() == null || AppUtils.uploadStatus.OPEN.toString().equals(user.getSelfieStatus()))) {
                 try {
                     Long tsLong = System.currentTimeMillis() / 1000;
                     String ts = tsLong.toString();
                     cloudinary.uploader().upload(user.getSelfie(),
                             ObjectUtils.asMap("public_id", user.getUserId() + "selfie" + ts));
                     selfieUrl = cloudinary.url().secure(true).generate(user.getUserId() + "selfie" + ts);
-                    user.setSelfie(selfieUrl);
+                    UserModel userDB = AppUtils.getUserObject(mContext);
+                    userDB.setSelfieStatus(AppUtils.uploadStatus.PICKED.toString());
+                    AppUtils.saveUserObject(mContext, userDB);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 updateUser = true;
             }
-            if (user.isUpdateSignature()) {
+            if (user.isUpdateSignature()&&(user.getSignatureStatus()==null|| AppUtils.uploadStatus.OPEN.toString().equals(user.getSignatureStatus()))) {
                 try {
                     Long tsLong = System.currentTimeMillis() / 1000;
                     String ts = tsLong.toString();
@@ -250,6 +252,9 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                             ObjectUtils.asMap("public_id", user.getUserId() + "signature" + ts));
                     signatureUrl = cloudinary.url().secure(true).generate(user.getUserId() + "signature" + ts);
                     user.setSignature(signatureUrl);
+                    UserModel userDB = AppUtils.getUserObject(mContext);
+                    userDB.setSignatureStatus(AppUtils.uploadStatus.PICKED.toString());
+                    AppUtils.saveUserObject(mContext, userDB);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -261,8 +266,6 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
         @Override
         protected void onPostExecute(String result) {
             if (updateUser) {
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
                 new UploadCoudinaryToServer().execute();
             }
             new UploadDetailsToServer().execute();
@@ -320,6 +323,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 HttpResponse httpresponse = client.execute(postReq);
                 String responseText = EntityUtils.toString(httpresponse.getEntity());
                 JSONObject json = new JSONObject(responseText);
+                UserModel user = AppUtils.getUserObject(mContext);
                 if (json.get("msg").toString().contains("Details updated")) {
                     JSONObject data = json.getJSONObject("data");
                     if (jsonobj.opt("collegeIDs") != null && !"".equals(jsonobj.get("collegeIDs"))) {
@@ -359,15 +363,15 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         user.setBankProofs(yourArray);
                     }
                     if (jsonobj.opt("selfie") != null && !"".equals(jsonobj.get("selfie"))) {
+                        user.setSelfie(selfieUrl);
                         user.setUpdateSelfie(false);
                     }
                     if (jsonobj.opt("signature") != null && !"".equals(jsonobj.get("signature"))) {
+                        user.setSignature(signatureUrl);
                         user.setUpdateSignature(false);
                     }
                     setImagesFromSP();
-                    String jsonUser = gson.toJson(user);
-
-                    mPrefs.edit().putString("UserObject", jsonUser).apply();
+                    AppUtils.saveUserObject(mContext, user);
                     return "success";
                 } else if (json.get("msg").toString().contains("Invalid Token")) {
                     return "authFailed";
@@ -608,6 +612,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 HttpResponse httpresponse = client.execute(putReq);
                 String responseText = EntityUtils.toString(httpresponse.getEntity());
                 JSONObject json = new JSONObject(responseText);
+                UserModel user = AppUtils.getUserObject(mContext);
                 if (json.get("msg").toString().contains("details updated")) {
                     // Need to get fields which are updated from DB so as to set what is updated.
                     if (jsonobj.opt("gpa") != null && !"".equals(jsonobj.get("gpa")))
@@ -676,9 +681,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     if (jsonobj.opt("vehicleType") != null && !"".equals(jsonobj.get("vehicleType")))
                         user.setUpdateVehicleType(false);
                     setImagesFromSP();
-                    String jsonUser = gson.toJson(user);
-
-                    mPrefs.edit().putString("UserObject", jsonUser).apply();
+                    AppUtils.saveUserObject(mContext, user);
                     return "success";
                 } else if (json.get("msg").toString().contains("Invalid Token")) {
                     return "authFailed";

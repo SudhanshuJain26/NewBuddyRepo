@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,20 +25,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,12 +45,10 @@ import java.util.regex.Pattern;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.activities.AgreementActivity;
 import indwin.c3.shareapp.activities.ImageHelperActivity;
-import indwin.c3.shareapp.activities.PendingFlashApprovalActivity;
-import indwin.c3.shareapp.activities.ProfileActivity;
+import indwin.c3.shareapp.activities.ProfileFormStep1;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
-import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import indwin.c3.shareapp.utils.VerhoeffAlgorithm;
@@ -108,8 +100,10 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         mPrefs.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
         gson = new Gson();
         String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
+        ProfileFormStep1 profileFormStep1 = (ProfileFormStep1) getActivity();
+        user = profileFormStep1.getUser();
         newaddressProofs = new HashMap<>();
+
 
         try {
             addressProofs = user.getAddressProofs();
@@ -118,7 +112,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             } else {
                 completeAddress.setVisibility(View.VISIBLE);
                 user.setIncompletePermanentAddress(false);
-                mPrefs.edit().putString("UserObject", json).apply();
             }
         } catch (Exception e) {
             addressProofs = new ArrayList<>();
@@ -153,7 +146,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         rvImages.setAdapter(adapter);
 
         if (!mPrefs.getBoolean("step1Editable", true)) {
-            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment1, gotoFragment2);
+            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
 
         setAllHelpTipsEnabled();
@@ -161,43 +154,12 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         agreementBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserModel userSP = AppUtils.getUserObject(getActivity());
 
-                if (AppUtils.isNotEmpty(userSP.getSignature())) {
-                    user.setSignature(userSP.getSignature());
-                    user.setUpdateSignature(userSP.isUpdateSignature());
-
-                }
-
-                if (AppUtils.isNotEmpty(userSP.getSelfie())) {
-                    user.setSelfie(userSP.getSelfie());
-                    user.setUpdateSelfie(userSP.isUpdateSelfie());
-
-                }
-                AppUtils.saveUserObject(getActivity(), user);
                 Intent intent = new Intent(getActivity(), AgreementActivity.class);
                 startActivity(intent);
             }
         });
-        if (user.getGender() != null && "girl".equals(user.getGender())) {
-            Picasso.with(getActivity())
-                    .load(R.mipmap.step1fragment3girl)
-                    .into(topImage);
-        }
 
-        gotoFragment1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment1(true);
-            }
-        });
-
-        gotoFragment2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment2(true);
-            }
-        });
 
         arrayAaadharOrPan = getResources().getStringArray(R.array.aadhar_or_pan);
         if (user.getPanOrAadhar() != null && !"".equals(user.getPanOrAadhar())) {
@@ -236,11 +198,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
         setOnClickListener();
-        if (user.isAppliedFor1k()) {
-            previous.setVisibility(View.INVISIBLE);
-            saveAndProceed.setVisibility(View.INVISIBLE);
-            rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
-        }
         aadharOrPan.setAdapter(adapter);
 
         if (user.isInCompleteAgreement()) {
@@ -271,68 +228,68 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
     private void setOnClickListener() {
 
-        saveAndProceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                user = AppUtils.getUserObject(getActivity());
-
-                saveSelfieAndSignature();
-                checkIncomplete();
-                if ((user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender() || user.isIncompleteRollNumber()
-                        || user.isIncompleteAadhar() || user.isIncompleteCollegeDetails()
-                        || user.isIncompleteCollegeId() || user.isIncompletePermanentAddress())
-                        && !mPrefs.getBoolean("skipIncompleteMessage", false) || AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
-
-                    final Dialog dialog1 = new Dialog(getActivity());
-                    dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog1.setContentView(R.layout.incomplete_alert_box);
-
-                    Button okay = (Button) dialog1.findViewById(R.id.okay_button);
-                    okay.setTextColor(Color.parseColor("#44c2a6"));
-                    okay.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String json = gson.toJson(user);
-                            mPrefs.edit().putString("UserObject", json).apply();
-                            Context context = getActivity();
-                            Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
-                            getContext().sendBroadcast(intent);
-
-                            dialog1.dismiss();
-                            Intent intent2 = new Intent(getActivity(), ProfileActivity.class);
-                            intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent2);
-                            getActivity().finish();
-                        }
-                    });
-
-                    CheckBox stopMessage = (CheckBox) dialog1.findViewById(R.id.check_message);
-                    stopMessage.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (((CheckBox) v).isChecked()) {
-                                mPrefs.edit().putBoolean("skipIncompleteMessage", true).apply();
-                            } else {
-                                mPrefs.edit().putBoolean("skipIncompleteMessage", false).apply();
-                            }
-                        }
-                    });
-                    dialog1.show();
-                    return;
-                }
-                String json = gson.toJson(user);
-                mPrefs.edit().putBoolean("updatingDB", false).apply();
-                mPrefs.edit().putString("UserObject", json).apply();
-                Context context = getActivity();
-                Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
-                getContext().sendBroadcast(intent);
-
-                Intent intent1 = new Intent(getActivity(), PendingFlashApprovalActivity.class);
-                startActivity(intent1);
-
-                getActivity().finish();
-            }
-        });
+        //saveAndProceed.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        user = AppUtils.getUserObject(getActivity());
+        //
+        //        saveSelfieAndSignature();
+        //        checkIncomplete();
+        //        if ((user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender() || user.isIncompleteRollNumber()
+        //                || user.isIncompleteAadhar() || user.isIncompleteCollegeDetails()
+        //                || user.isIncompleteCollegeId() || user.isIncompletePermanentAddress())
+        //                && !mPrefs.getBoolean("skipIncompleteMessage", false) || AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
+        //
+        //            final Dialog dialog1 = new Dialog(getActivity());
+        //            dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //            dialog1.setContentView(R.layout.incomplete_alert_box);
+        //
+        //            Button okay = (Button) dialog1.findViewById(R.id.okay_button);
+        //            okay.setTextColor(Color.parseColor("#44c2a6"));
+        //            okay.setOnClickListener(new View.OnClickListener() {
+        //                @Override
+        //                public void onClick(View v) {
+        //                    String json = gson.toJson(user);
+        //                    mPrefs.edit().putString("UserObject", json).apply();
+        //                    Context context = getActivity();
+        //                    Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
+        //                    getContext().sendBroadcast(intent);
+        //
+        //                    dialog1.dismiss();
+        //                    Intent intent2 = new Intent(getActivity(), ProfileActivity.class);
+        //                    intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //                    startActivity(intent2);
+        //                    getActivity().finish();
+        //                }
+        //            });
+        //
+        //            CheckBox stopMessage = (CheckBox) dialog1.findViewById(R.id.check_message);
+        //            stopMessage.setOnClickListener(new View.OnClickListener() {
+        //                @Override
+        //                public void onClick(View v) {
+        //                    if (((CheckBox) v).isChecked()) {
+        //                        mPrefs.edit().putBoolean("skipIncompleteMessage", true).apply();
+        //                    } else {
+        //                        mPrefs.edit().putBoolean("skipIncompleteMessage", false).apply();
+        //                    }
+        //                }
+        //            });
+        //            dialog1.show();
+        //            return;
+        //        }
+        //        String json = gson.toJson(user);
+        //        mPrefs.edit().putBoolean("updatingDB", false).apply();
+        //        mPrefs.edit().putString("UserObject", json).apply();
+        //        Context context = getActivity();
+        //        Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
+        //        getContext().sendBroadcast(intent);
+        //
+        //        Intent intent1 = new Intent(getActivity(), PendingFlashApprovalActivity.class);
+        //        startActivity(intent1);
+        //
+        //        getActivity().finish();
+        //    }
+        //});
         aadharHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -389,12 +346,12 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 ((TextView) parent.getChildAt(0)).setText(arrayAaadharOrPan[0]);
             }
         });
-        previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment2(true);
-            }
-        });
+        //previous.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //
+        //    }
+        //});
         saveAadhar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -455,21 +412,20 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         aadharPanHeader = (TextView) rootView.findViewById(R.id.aadhar_pan_header);
         editTextHeader = (TextView) rootView.findViewById(R.id.editext_header);
         editTextCardView = (CardView) rootView.findViewById(R.id.edittext_carview);
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
+        previous = (Button) getActivity().findViewById(R.id.previous);
         editAadharNumber = (EditText) rootView.findViewById(R.id.edit_aadhar_number);
         incompleteAadhar = (ImageView) rootView.findViewById(R.id.incomplete_aadhar);
         completeAadhar = (ImageView) rootView.findViewById(R.id.complete_aadhar);
         incompleteAddress = (ImageView) rootView.findViewById(R.id.incomplete_address_proof);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
         agreementBtn = (Button) rootView.findViewById(R.id.agreement_btn);
         currentSelected = 0;
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        previous = (Button) rootView.findViewById(R.id.previous);
+        incompleteStep1 = (ImageView) getActivity().findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) getActivity().findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) getActivity().findViewById(R.id.incomplete_step_3);
         topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
+        saveAndProceed = (Button) getActivity().findViewById(R.id.save_and_proceed);
+
+        topImage = (ImageView) getActivity().findViewById(R.id.verify_image_view2);
         aadharHelptip = (ImageButton) rootView.findViewById(R.id.aadhar_helptip);
         addressHelptip = (ImageButton) rootView.findViewById(R.id.address_helptip);
         incorrectFormat = (LinearLayout) rootView.findViewById(R.id.incorrect_format_layout);
@@ -503,6 +459,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 editAadhar.setVisibility(View.VISIBLE);
                 editAadharNumber.setVisibility(View.GONE);
                 saveAadhar.setVisibility(View.GONE);
+                UserModel user = AppUtils.getUserObject(getActivity());
                 if (currentSelected == 0) {
                     user.setAadharNumber(text);
                     user.setPanOrAadhar("Aadhar");
@@ -512,10 +469,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                     user.setUpdatePanNumber(true);
                     user.setPanOrAadhar("PAN");
                 }
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
-                Intent intent = new Intent(getContext(), CheckInternetAndUploadUserDetails.class);
-                getContext().sendBroadcast(intent);
+                AppUtils.saveUserObject(getActivity(), user);
             }
         } else {
             aadharNuber.setVisibility(View.VISIBLE);
@@ -529,32 +483,51 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         }
     }
 
-    private void checkIncomplete() {
+    public void checkIncomplete() {
         saveSelfieAndSignature();
         if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
             user.setInCompleteAgreement(true);
+            incompleteAgreement.setVisibility(View.VISIBLE);
+        } else {
+            user.setInCompleteAgreement(false);
+            incompleteAgreement.setVisibility(View.GONE);
+            completeAgreement.setVisibility(View.GONE);
         }
         if (aadharNuber.getVisibility() == View.GONE) {
             user.setIncompleteAadhar(true);
+            incompleteAadhar.setVisibility(View.VISIBLE);
+            completeAadhar.setVisibility(View.GONE);
         } else {
             user.setIncompleteAadhar(false);
+            incompleteAadhar.setVisibility(View.GONE);
+            completeAadhar.setVisibility(View.VISIBLE);
         }
         if (addressProofs.size() == 0) {
             incompleteAddress.setVisibility(View.VISIBLE);
             user.setIncompletePermanentAddress(true);
         } else if (addressProofs.size() == 1) {
             if ("add".equals(addressProofs.get(0))) {
-                user.setIncompleteBankStmt(true);
+                user.setIncompletePermanentAddress(true);
             } else {
-                user.setIncompleteBankStmt(false);
+                user.setIncompletePermanentAddress(false);
             }
         } else {
             if (!user.isAppliedFor1k()) {
-                addressProofs.remove(addressProofs.size() - 1);
                 user.setAddressProofs(addressProofs);
             }
             user.setIncompletePermanentAddress(false);
         }
+
+        if (user.isIncompletePermanentAddress()) {
+
+            incompleteAddress.setVisibility(View.VISIBLE);
+            completeAddress.setVisibility(View.GONE);
+        } else {
+            completeAddress.setVisibility(View.VISIBLE);
+            incompleteAddress.setVisibility(View.GONE);
+
+        }
+
     }
 
     public static boolean validateAadharNumber(String aadharNumber) {
@@ -577,42 +550,27 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         return false;
     }
 
-    public void replaceFragment1(boolean check) {
-        if (check)
-            checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep1Fragment1(), "Fragment1Tag");
-        ft.commit();
-    }
-
-    public void replaceFragment2(boolean check) {
-        if (check)
-            checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep1Fragment2(), "Fragment2Tag");
-        ft.commit();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resuleCode, Intent intent) {
         super.onActivityResult(requestCode, resuleCode, intent);
 
         if (requestCode == INTENT_REQUEST_GET_IMAGES && resuleCode == Activity.RESULT_OK) {
+            UserModel user = AppUtils.getUserObject(getActivity());
             if (user.getAddressProofs() == null)
                 user.setAddressProofs(new ArrayList<String>());
+            if (user.getNewAddressProofs() == null) {
+                user.setNewAddressProofs(new HashMap<String, String>());
+            }
             imageUris = intent.getParcelableArrayListExtra(ImageHelperActivity.EXTRA_IMAGE_URIS);
             for (Uri uri : imageUris) {
+                user.getAddressProofs().add(0, uri.getPath());
                 addressProofs.add(0, uri.getPath());
-                newaddressProofs.put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
+                user.getNewAddressProofs().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
                 //                user.addAddressProofs(0, uri.getPath(), user.getAddressProofs());
                 //                adapter.notifyItemInserted(0);
             }
             adapter.notifyDataSetChanged();
-            user.setNewAddressProofs(newaddressProofs);
             user.setUpdateNewAddressProofs(true);
             AppUtils.saveUserObject(getActivity(), user);
 

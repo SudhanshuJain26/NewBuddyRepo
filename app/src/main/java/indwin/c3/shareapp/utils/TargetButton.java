@@ -43,6 +43,6 @@ public class TargetButton extends Button implements Target {
 
     @Override
     public void onPrepareLoad(Drawable placeHolderDrawable) {
-        int a = 0;
+        setBackgroundDrawable(placeHolderDrawable);
     }
 }

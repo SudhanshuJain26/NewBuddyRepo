@@ -38,7 +38,9 @@ public class UserModel {
     boolean updatePanNumber;
     String panOrAadhar;
     String signature;
+    private String signatureStatus;
     String selfie;
+    private String selfieStatus;
     String dob;
     String accommodation;
     String currentAddress;
@@ -1259,5 +1261,21 @@ public class UserModel {
 
     public void setUpdatePreferredLanguageFamilyMemberType2(boolean updatePreferredLanguageFamilyMemberType2) {
         this.updatePreferredLanguageFamilyMemberType2 = updatePreferredLanguageFamilyMemberType2;
+    }
+
+    public String getSignatureStatus() {
+        return signatureStatus;
+    }
+
+    public void setSignatureStatus(String signatureStatus) {
+        this.signatureStatus = signatureStatus;
+    }
+
+    public String getSelfieStatus() {
+        return selfieStatus;
+    }
+
+    public void setSelfieStatus(String selfieStatus) {
+        this.selfieStatus = selfieStatus;
     }
 }

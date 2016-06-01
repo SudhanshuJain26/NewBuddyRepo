@@ -493,7 +493,13 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         }
         if (!selectedStudentLoan) {
             user.setIncompleteStudentLoan(true);
+            incompleteStudentLoan.setVisibility(View.VISIBLE);
+            completeStudentLoan.setVisibility(View.GONE);
 
+        } else {
+            user.setIncompleteStudentLoan(false);
+            completeStudentLoan.setVisibility(View.VISIBLE);
+            incompleteStudentLoan.setVisibility(View.GONE);
         }
         if (updateUserVerificationDate) {
             user.setIncompleteVerificationDate(false);

@@ -228,68 +228,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
     private void setOnClickListener() {
 
-        //saveAndProceed.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        user = AppUtils.getUserObject(getActivity());
-        //
-        //        saveSelfieAndSignature();
-        //        checkIncomplete();
-        //        if ((user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender() || user.isIncompleteRollNumber()
-        //                || user.isIncompleteAadhar() || user.isIncompleteCollegeDetails()
-        //                || user.isIncompleteCollegeId() || user.isIncompletePermanentAddress())
-        //                && !mPrefs.getBoolean("skipIncompleteMessage", false) || AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
-        //
-        //            final Dialog dialog1 = new Dialog(getActivity());
-        //            dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //            dialog1.setContentView(R.layout.incomplete_alert_box);
-        //
-        //            Button okay = (Button) dialog1.findViewById(R.id.okay_button);
-        //            okay.setTextColor(Color.parseColor("#44c2a6"));
-        //            okay.setOnClickListener(new View.OnClickListener() {
-        //                @Override
-        //                public void onClick(View v) {
-        //                    String json = gson.toJson(user);
-        //                    mPrefs.edit().putString("UserObject", json).apply();
-        //                    Context context = getActivity();
-        //                    Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
-        //                    getContext().sendBroadcast(intent);
-        //
-        //                    dialog1.dismiss();
-        //                    Intent intent2 = new Intent(getActivity(), ProfileActivity.class);
-        //                    intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        //                    startActivity(intent2);
-        //                    getActivity().finish();
-        //                }
-        //            });
-        //
-        //            CheckBox stopMessage = (CheckBox) dialog1.findViewById(R.id.check_message);
-        //            stopMessage.setOnClickListener(new View.OnClickListener() {
-        //                @Override
-        //                public void onClick(View v) {
-        //                    if (((CheckBox) v).isChecked()) {
-        //                        mPrefs.edit().putBoolean("skipIncompleteMessage", true).apply();
-        //                    } else {
-        //                        mPrefs.edit().putBoolean("skipIncompleteMessage", false).apply();
-        //                    }
-        //                }
-        //            });
-        //            dialog1.show();
-        //            return;
-        //        }
-        //        String json = gson.toJson(user);
-        //        mPrefs.edit().putBoolean("updatingDB", false).apply();
-        //        mPrefs.edit().putString("UserObject", json).apply();
-        //        Context context = getActivity();
-        //        Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
-        //        getContext().sendBroadcast(intent);
-        //
-        //        Intent intent1 = new Intent(getActivity(), PendingFlashApprovalActivity.class);
-        //        startActivity(intent1);
-        //
-        //        getActivity().finish();
-        //    }
-        //});
         aadharHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -346,12 +284,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 ((TextView) parent.getChildAt(0)).setText(arrayAaadharOrPan[0]);
             }
         });
-        //previous.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //
-        //    }
-        //});
         saveAadhar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -488,10 +420,11 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
             user.setInCompleteAgreement(true);
             incompleteAgreement.setVisibility(View.VISIBLE);
+            completeAgreement.setVisibility(View.GONE);
         } else {
             user.setInCompleteAgreement(false);
             incompleteAgreement.setVisibility(View.GONE);
-            completeAgreement.setVisibility(View.GONE);
+            completeAgreement.setVisibility(View.VISIBLE);
         }
         if (aadharNuber.getVisibility() == View.GONE) {
             user.setIncompleteAadhar(true);
@@ -567,8 +500,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 user.getAddressProofs().add(0, uri.getPath());
                 addressProofs.add(0, uri.getPath());
                 user.getNewAddressProofs().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
-                //                user.addAddressProofs(0, uri.getPath(), user.getAddressProofs());
-                //                adapter.notifyItemInserted(0);
             }
             adapter.notifyDataSetChanged();
             user.setUpdateNewAddressProofs(true);

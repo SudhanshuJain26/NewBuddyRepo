@@ -276,7 +276,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private void saveStep3Data() {
-        checkIncompleteStep3();
+        //checkIncompleteStep3();
     }
 
     private void setAllUpdateFalse() {

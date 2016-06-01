@@ -52,6 +52,11 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         getAllViews();
         setCLickListener();
         user = AppUtils.getUserObject(this);
+        if (user.isAppliedFor7k()) {
+            saveAndProceed.setVisibility(View.INVISIBLE);
+            previous.setVisibility(View.INVISIBLE);
+            findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
+        }
         setAllUpdateFalse();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
@@ -74,7 +79,6 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
             });
         } catch (Exception e) {
             e.printStackTrace();
-
         }
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setOnPageChangeListener(this);
@@ -136,14 +140,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
             @Override
             public void onClick(View v) {
                 int currentPage = mPager.getCurrentItem();
-                //if (currentPage == 0) {
-                //    saveStep1Data();
-                //} else if (currentPage == 1) {
-                //    saveStep2Data();
-                //}
-                //if (currentPage == 2) {
-                //    saveStep3Data();
-                //}
+
                 if (currentPage != (fragments.size() - 1)) {
                     Intent intent = new Intent(ProfileFormStep2.this, CheckInternetAndUploadUserDetails.class);
                     sendBroadcast(intent);
@@ -398,22 +395,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         userModel.setIncompleteClassmateDetails(user.isIncompleteClassmateDetails());
         userModel.setIncompleteVerificationDate(user.isIncompleteVerificationDate());
         userModel.setIncompleteStudentLoan(user.isIncompleteStudentLoan());
-
         AppUtils.saveUserObject(this, userModel);
-        //step2
-
-
-        //step3
-
-        userModel.setIncompleteAnnualFees(user.isIncompleteAnnualFees());
-        userModel.setIncompleteScholarship(user.isIncompleteScholarship());
-
-        userModel.setIncompleteMonthlyExpenditure(user.isIncompleteMonthlyExpenditure());
-        userModel.setIncompleteVehicleDetails(user.isIncompleteVehicleDetails());
-
-        userModel.setIncompleteBankStmt(user.isIncompleteBankStmt());
-
-
     }
 
     @Override

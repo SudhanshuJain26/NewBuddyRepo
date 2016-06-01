@@ -111,7 +111,7 @@ public class Splash extends AppCompatActivity {
         json = sh.getString("UserObject", "");
         boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
         if (isUpdatingDB) {
-            sh.edit().putBoolean("updatingDB", false);
+            sh.edit().putBoolean("updatingDB", false).commit();
             Intent intent = new Intent(this, CheckInternetAndUploadUserDetails.class);
             sendBroadcast(intent);
         }

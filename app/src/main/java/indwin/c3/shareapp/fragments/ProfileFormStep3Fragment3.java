@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,22 +15,18 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gun0912.tedpicker.ImagePickerActivity;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,12 +34,10 @@ import java.util.Map;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.activities.ImageHelperActivity;
-import indwin.c3.shareapp.activities.Pending60kApprovalActivity;
-import indwin.c3.shareapp.activities.ProfileActivity;
+import indwin.c3.shareapp.activities.ProfileFormStep3;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
-import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import io.intercom.com.google.gson.Gson;
@@ -81,9 +74,8 @@ public class ProfileFormStep3Fragment3 extends Fragment {
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep3Fragment3", true).apply();
-        gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
-        user = AppUtils.getUserObject(getActivity());
+        ProfileFormStep3 profileFormStep3 = (ProfileFormStep3) getActivity();
+        user = profileFormStep3.getUser();
 
         newBankStmts = new HashMap<>();
         getAllViews(rootView);
@@ -94,7 +86,6 @@ public class ProfileFormStep3Fragment3 extends Fragment {
             } else {
                 completeBankStmt.setVisibility(View.VISIBLE);
                 user.setIncompleteBankStmt(false);
-                mPrefs.edit().putString("UserObject", json).apply();
             }
         } catch (Exception e) {
             bankStmts = new ArrayList<>();
@@ -133,34 +124,16 @@ public class ProfileFormStep3Fragment3 extends Fragment {
         }
         setAllHelpTipsEnabled();
         if (mPrefs.getBoolean("visitedFormStep2Fragment2", false)) {
-            gotoFragment2.setAlpha(1);
-            gotoFragment2.setClickable(true);
+            //gotoFragment2.setAlpha(1);
+            //gotoFragment2.setClickable(true);
         }
         if (mPrefs.getBoolean("visitedFormStep2Fragment1", false)) {
-            gotoFragment3.setAlpha(1);
-            gotoFragment3.setClickable(true);
+            //gotoFragment3.setAlpha(1);
+            //gotoFragment3.setClickable(true);
         }
 
-        if (user.getGender() != null && "girl".equals(user.getGender())) {
-            Picasso.with(getActivity())
-                    .load(R.mipmap.step3fragment3girl)
-                    .into(topImage);
-        }
-        if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship()) {
-            incompleteStep1.setVisibility(View.VISIBLE);
-        }
-        if (user.isIncompleteMonthlyExpenditure() || user.isIncompleteVehicleDetails()) {
-            incompleteStep2.setVisibility(View.VISIBLE);
-        }
-        if (user.isIncompleteBankStmt()) {
-            incompleteStep3.setVisibility(View.VISIBLE);
-        }
+
         setOnClickListener();
-        if (user.isAppliedFor60k()) {
-            previous.setVisibility(View.INVISIBLE);
-            saveAndProceed.setVisibility(View.INVISIBLE);
-            rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
-        }
 
         return rootView;
     }
@@ -177,95 +150,68 @@ public class ProfileFormStep3Fragment3 extends Fragment {
                 dialog.show();
             }
         });
-        previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment2();
-            }
-        });
-        saveAndProceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkIncomplete();
-                if ((user.isIncompleteAnnualFees() || user.isIncompleteScholarship()
-                        || user.isIncompleteMonthlyExpenditure() ||
-                        user.isIncompleteVehicleDetails() || user.isIncompleteBankStmt())
-                        && !mPrefs.getBoolean("skipIncompleteMessage", false)) {
-                    final Dialog dialog1 = new Dialog(getActivity());
-                    dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog1.setContentView(R.layout.incomplete_alert_box);
+        //saveAndProceed.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        checkIncomplete();
+        //        if ((user.isIncompleteAnnualFees() || user.isIncompleteScholarship()
+        //                || user.isIncompleteMonthlyExpenditure() ||
+        //                user.isIncompleteVehicleDetails() || user.isIncompleteBankStmt())
+        //                && !mPrefs.getBoolean("skipIncompleteMessage", false)) {
+        //            final Dialog dialog1 = new Dialog(getActivity());
+        //            dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //            dialog1.setContentView(R.layout.incomplete_alert_box);
+        //
+        //            Button okay = (Button) dialog1.findViewById(R.id.okay_button);
+        //            okay.setTextColor(Color.parseColor("#f2954e"));
+        //            okay.setOnClickListener(new View.OnClickListener() {
+        //                @Override
+        //                public void onClick(View v) {
+        //                    String json = gson.toJson(user);
+        //                    mPrefs.edit().putString("UserObject", json).apply();
+        //                    Context context = getActivity();
+        //                    Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
+        //                    getContext().sendBroadcast(intent);
+        //                    dialog1.dismiss();
+        //                    Intent intent2 = new Intent(getActivity(), ProfileActivity.class);
+        //                    intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //                    startActivity(intent2);
+        //                    getActivity().finish();
+        //                }
+        //            });
+        //
+        //            CheckBox stopMessage = (CheckBox) dialog1.findViewById(R.id.check_message);
+        //            stopMessage.setOnClickListener(new View.OnClickListener() {
+        //                @Override
+        //                public void onClick(View v) {
+        //                    if (((CheckBox) v).isChecked()) {
+        //                        mPrefs.edit().putBoolean("skipIncompleteMessage", true).apply();
+        //                    } else {
+        //                        mPrefs.edit().putBoolean("skipIncompleteMessage", false).apply();
+        //                    }
+        //                }
+        //            });
+        //            dialog1.show();
+        //            return;
+        //        } else {
+        //            String json = gson.toJson(user);
+        //            mPrefs.edit().putBoolean("updatingDB", false).apply();
+        //            mPrefs.edit().putString("UserObject", json).apply();
+        //            Context context = getActivity();
+        //            Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
+        //            getContext().sendBroadcast(intent);
+        //            Intent intent2 = new Intent(context, Pending60kApprovalActivity.class);
+        //            startActivity(intent2);
+        //            getActivity().finish();
+        //        }
+        //    }
+        //});
 
-                    Button okay = (Button) dialog1.findViewById(R.id.okay_button);
-                    okay.setTextColor(Color.parseColor("#f2954e"));
-                    okay.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String json = gson.toJson(user);
-                            mPrefs.edit().putString("UserObject", json).apply();
-                            Context context = getActivity();
-                            Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
-                            getContext().sendBroadcast(intent);
-                            dialog1.dismiss();
-                            Intent intent2 = new Intent(getActivity(), ProfileActivity.class);
-                            intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent2);
-                            getActivity().finish();
-                        }
-                    });
-
-                    CheckBox stopMessage = (CheckBox) dialog1.findViewById(R.id.check_message);
-                    stopMessage.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (((CheckBox) v).isChecked()) {
-                                mPrefs.edit().putBoolean("skipIncompleteMessage", true).apply();
-                            } else {
-                                mPrefs.edit().putBoolean("skipIncompleteMessage", false).apply();
-                            }
-                        }
-                    });
-                    dialog1.show();
-                    return;
-                } else {
-                    String json = gson.toJson(user);
-                    mPrefs.edit().putBoolean("updatingDB", false).apply();
-                    mPrefs.edit().putString("UserObject", json).apply();
-                    Context context = getActivity();
-                    Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
-                    getContext().sendBroadcast(intent);
-                    Intent intent2 = new Intent(context, Pending60kApprovalActivity.class);
-                    startActivity(intent2);
-                    getActivity().finish();
-                }
-            }
-        });
-
-        gotoFragment1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment1();
-            }
-        });
-        gotoFragment2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment2();
-            }
-        });
     }
 
     private void getAllViews(View rootView) {
         completeBankStmt = (ImageView) rootView.findViewById(R.id.complete_bank_stmt);
         incompleteBankStmt = (ImageView) rootView.findViewById(R.id.incomplete_bank_stmt);
-        saveAndProceed = (Button) rootView.findViewById(R.id.unlock);
-        previous = (Button) rootView.findViewById(R.id.previous);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
         bankHelptip = (ImageButton) rootView.findViewById(R.id.bank_helptip);
     }
 
@@ -275,7 +221,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
 
     }
 
-    private void checkIncomplete() {
+    public void checkIncomplete() {
         if (bankStmts.size() == 0) {
             user.setIncompleteBankStmt(true);
         } else if (bankStmts.size() == 1) {
@@ -285,49 +231,36 @@ public class ProfileFormStep3Fragment3 extends Fragment {
                 user.setIncompleteBankStmt(false);
             }
         } else {
-            if (!user.isAppliedFor7k()) {
-                bankStmts.remove(bankStmts.size() - 1);
+            if (!user.isAppliedFor60k()) {
                 user.setBankStmts(bankStmts);
             }
             user.setIncompleteBankStmt(false);
         }
     }
 
-    private void replaceFragment1() {
-        checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep3Fragment1(), "Fragment1Tag");
-        ft.commit();
-    }
-
-    private void replaceFragment2() {
-        checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep3Fragment2(), "Fragment2Tag");
-        ft.commit();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resuleCode, Intent intent) {
         super.onActivityResult(requestCode, resuleCode, intent);
 
         if (requestCode == INTENT_REQUEST_GET_IMAGES && resuleCode == Activity.RESULT_OK) {
+            UserModel user = AppUtils.getUserObject(getActivity());
             if (user.getBankStmts() == null)
                 user.setBankStmts(new ArrayList<String>());
             imageUris = intent.getParcelableArrayListExtra(ImageHelperActivity.EXTRA_IMAGE_URIS);
+            if (user.getNewBankStmts() == null) {
+                user.setNewBankStmts(new HashMap<String, String>());
+            }
             for (Uri uri : imageUris) {
                 bankStmts.add(0, uri.getPath());
-                newBankStmts.put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
+                user.getBankStmts().add(0, uri.getPath());
+                user.getNewBankStmts().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
                 //                user.addBankStmts(0, uri.getPath(), user.getBankStmts());
                 //                adapter.notifyItemInserted(0);
             }
             adapter.notifyDataSetChanged();
-            user.setNewBankStmts(newBankStmts);
             user.setUpdateNewBankStmts(true);
+            AppUtils.saveUserObject(getActivity(),user);
         }
     }
 

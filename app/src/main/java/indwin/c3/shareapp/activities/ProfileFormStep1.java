@@ -52,6 +52,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     int previousPosition;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -82,7 +83,6 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
             headerTitle.setText("Verify your Identity");
             setSupportActionBar(toolbar);
-            //getSupportFragmentManager().addOnBackStackChangedListener(getListener());
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -140,55 +140,35 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         gotoFragment1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 mPager.setCurrentItem(0);
-
             }
         });
         gotoFragment2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mPager.setCurrentItem(1);
-
             }
         });
 
         gotoFragment3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mPager.setCurrentItem(2);
-
-
             }
         });
         saveAndProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int currentPage = mPager.getCurrentItem();
-                if (currentPage == 0) {
-
-                    saveStep1Data();
-                } else if (currentPage == 1) {
-
-                    saveStep2Data();
-                }
-                if (currentPage == 2) {
-
-                    saveStep3Data();
-                }
-
 
                 if (currentPage != (fragments.size() - 1)) {
                     Intent intent = new Intent(ProfileFormStep1.this, CheckInternetAndUploadUserDetails.class);
                     sendBroadcast(intent);
-
                     mPager.setCurrentItem(currentPage + 1);
                 } else {
-                    if (checkIncompleteStep1() || checkIncompleteStep2() || checkIncompleteStep3()) {
-
+                    boolean incompleteStep3 = checkIncompleteStep3();
+                    saveStep3Data();
+                    if (checkIncompleteStep1() || checkIncompleteStep2() || incompleteStep3) {
                         final Dialog dialog1 = new Dialog(ProfileFormStep1.this);
                         dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog1.setContentView(R.layout.incomplete_alert_box);
@@ -198,8 +178,6 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                         okay.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
-
                                 Intent intent = new Intent(ProfileFormStep1.this, CheckInternetAndUploadUserDetails.class);
                                 sendBroadcast(intent);
 
@@ -208,7 +186,6 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                                 intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent2);
                                 finish();
-                                //setIncomplete();
                             }
                         });
 
@@ -232,8 +209,6 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                         Intent intent1 = new Intent(ProfileFormStep1.this, PendingFlashApprovalActivity.class);
                         startActivity(intent1);
                         finish();
-                        //setIncomplete();
-
                     }
                 }
             }
@@ -242,11 +217,11 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
 
     private void saveStep1Data() {
         if (AppUtils.isNotEmpty(user.getGender()) && user.isUpdateGender()) {
-            UserModel user = AppUtils.getUserObject(this);
-            user.setGender(user.getGender());
-            user.setUpdateGender(true);
-            AppUtils.saveUserObject(this, user);
-            this.user.setUpdateGender(false);
+            UserModel userModel = AppUtils.getUserObject(this);
+            userModel.setGender(user.getGender());
+            userModel.setUpdateGender(true);
+            AppUtils.saveUserObject(this, userModel);
+            user.setUpdateGender(false);
         }
 
 
@@ -255,12 +230,10 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         setIncomplete();
     }
 
     private void saveStep2Data() {
-
         UserModel userModel = AppUtils.getUserObject(this);
 
 
@@ -313,15 +286,12 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         user.setUpdateRollNumber(false);
         user.setUpdateCollegeName(false);
         user.setUpdateCourseName(false);
-
-
     }
 
 
     private boolean checkIncompleteStep1() {
         ProfileFormStep1Fragment1 profileFormStep1Fragment1 = (ProfileFormStep1Fragment1) mPagerAdapter.getRegisteredFragment(0);
         profileFormStep1Fragment1.checkIncomplete();
-
         return showHideIncompleteStep1();
     }
 
@@ -337,10 +307,8 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     private boolean checkIncompleteStep2() {
         ProfileFormStep1Fragment2 profileFormStep1Fragment2 = (ProfileFormStep1Fragment2) mPagerAdapter.getRegisteredFragment(1);
         profileFormStep1Fragment2.checkIncomplete();
-
         return showHideIncompleteStep2();
     }
-
 
     private boolean showHideIncompleteStep2() {
         if (user.isIncompleteCollegeId() || user.isIncompleteRollNumber() || user.isIncompleteCollegeDetails()) {
@@ -374,21 +342,17 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         incompleteStep1 = (ImageView) findViewById(R.id.incomplete_step_1);
         incompleteStep2 = (ImageView) findViewById(R.id.incomplete_step_2);
         incompleteStep3 = (ImageView) findViewById(R.id.incomplete_step_3);
-
         saveAndProceed = (Button) findViewById(R.id.save_and_proceed);
         previous = (Button) findViewById(R.id.previous);
         genderImage = (ImageView) findViewById(R.id.verify_image_view2);
     }
 
-
     private void setIncomplete() {
-
         UserModel userModel = AppUtils.getUserObject(this);
 
         userModel.setIncompleteGender(user.isIncompleteGender());
         userModel.setIncompleteFb(user.isIncompleteFb());
         userModel.setIncompleteEmail(user.isIncompleteEmail());
-
 
         userModel.setIncompleteCollegeId(user.isIncompleteCollegeId());
         userModel.setIncompleteRollNumber(user.isIncompleteRollNumber());
@@ -399,49 +363,8 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         userModel.setInCompleteAgreement(user.isInCompleteAgreement());
 
         AppUtils.saveUserObject(this, userModel);
-        //step2
-
-        userModel.setIncompleteAddressDetails(user.isIncompleteAddressDetails());
-        userModel.setIncompleteDOB(user.isIncompleteDOB());
-
-        userModel.setIncompleteFamilyDetails(user.isIncompleteFamilyDetails());
-
-        userModel.setIncompleteRepaymentSetup(user.isIncompleteRepaymentSetup());
-        userModel.setIncompleteClassmateDetails(user.isIncompleteClassmateDetails());
-        userModel.setIncompleteClassmateDetails(user.isIncompleteClassmateDetails());
-        userModel.setIncompleteVerificationDate(user.isIncompleteVerificationDate());
-        userModel.setIncompleteStudentLoan(user.isIncompleteStudentLoan());
-
-        //step3
-
-        userModel.setIncompleteAnnualFees(user.isIncompleteAnnualFees());
-        userModel.setIncompleteScholarship(user.isIncompleteScholarship());
-
-        userModel.setIncompleteMonthlyExpenditure(user.isIncompleteMonthlyExpenditure());
-        userModel.setIncompleteVehicleDetails(user.isIncompleteVehicleDetails());
-
-        userModel.setIncompleteBankStmt(user.isIncompleteBankStmt());
-
 
     }
-
-    //private FragmentManager.OnBackStackChangedListener getListener() {
-    //    FragmentManager.OnBackStackChangedListener result = new FragmentManager.OnBackStackChangedListener() {
-    //        public void onBackStackChanged() {
-    //            FragmentManager manager = getSupportFragmentManager();
-    //            if (manager != null) {
-    //                int backStackEntryCount = manager.getBackStackEntryCount();
-    //                if (backStackEntryCount == 0) {
-    //                    finish();
-    //                }
-    //                Fragment fragment = manager.getFragments()
-    //                        .get(backStackEntryCount - 1);
-    //                fragment.onResume();
-    //            }
-    //        }
-    //    };
-    //    return result;
-    //}
 
     @Override
     protected void onResume() {
@@ -461,24 +384,10 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     @Override
     public void onBackPressed() {
         if (mPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
             super.onBackPressed();
         } else {
-            // Otherwise, select the previous step.
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
-        //List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-        //if (fragmentList != null) {
-        //    //TODO: Perform your logic to pass back press here
-        //    for (Fragment fragment : fragmentList) {
-        //        if (fragment instanceof OnBackPressedListener) {
-        //            ((OnBackPressedListener) fragment).onBackPressed();
-        //        }
-        //    }
-        //}
-        //if (!isBackInsideFrag)
-        //    finish();
     }
 
     private void hideShowUpArrow(int i) {
@@ -514,10 +423,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             }
             findViewById(R.id.up_arrow_3).setVisibility(View.VISIBLE);
         }
-        Picasso.with(this)
-                .load(image)
-                .into(genderImage);
-
+        Picasso.with(this).load(image).into(genderImage);
     }
 
     @Override
@@ -531,12 +437,15 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             if (previousPosition == 1) {
 
                 checkIncompleteStep2();
+                saveStep2Data();
             } else if (previousPosition == 2) {
 
                 checkIncompleteStep3();
+                saveStep3Data();
             } else if (previousPosition == 0) {
 
                 checkIncompleteStep1();
+                saveStep1Data();
             }
         }
         previousPosition = position;
@@ -547,7 +456,6 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     public void onPageScrollStateChanged(int state) {
 
     }
-
 
     public UserModel getUser() {
         return user;

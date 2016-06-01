@@ -2,11 +2,9 @@ package indwin.c3.shareapp.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +16,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.activities.ProfileFormStep3;
 import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
 import indwin.c3.shareapp.models.UserModel;
-import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import io.intercom.com.google.gson.Gson;
 
@@ -53,29 +49,27 @@ public class ProfileFormStep3Fragment2 extends Fragment {
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep3Fragment2", true).apply();
-        gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
-
+        ProfileFormStep3 profileFormStep3 = (ProfileFormStep3) getActivity();
+        user = profileFormStep3.getUser();
         getAllViews(rootView);
         if (!mPrefs.getBoolean("step3Editable", true)) {
-            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
+            //ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();
 
         if (mPrefs.getBoolean("visitedFormStep2Fragment2", false)) {
-            gotoFragment2.setAlpha(1);
-            gotoFragment2.setClickable(true);
+            //gotoFragment2.setAlpha(1);
+            //gotoFragment2.setClickable(true);
         }
         if (mPrefs.getBoolean("visitedFormStep2Fragment3", false)) {
-            gotoFragment3.setAlpha(1);
-            gotoFragment3.setClickable(true);
+            //gotoFragment3.setAlpha(1);
+            //gotoFragment3.setClickable(true);
         }
-        if (user.getGender() != null && "girl".equals(user.getGender())) {
-            Picasso.with(getActivity())
-                    .load(R.mipmap.step3fragment2girl)
-                    .into(topImage);
-        }
+        //if (user.getGender() != null && "girl".equals(user.getGender())) {
+        //    Picasso.with(getActivity())
+        //            .load(R.mipmap.step3fragment2girl)
+        //            .into(topImage);
+        //}
         expenditureHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,40 +184,19 @@ public class ProfileFormStep3Fragment2 extends Fragment {
                 }
             }
         }
-        setOnClickListener();
 
-        if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship()) {
-            incompleteStep1.setVisibility(View.VISIBLE);
-        }
         if (user.isIncompleteMonthlyExpenditure() || user.isIncompleteVehicleDetails()) {
-            incompleteStep2.setVisibility(View.VISIBLE);
             if (user.isIncompleteMonthlyExpenditure()) {
                 incompleteMonthlyExpenditure.setVisibility(View.VISIBLE);
             }
             if (user.isIncompleteVehicleDetails())
                 incompleteVehicleDetails.setVisibility(View.VISIBLE);
         }
-        if (user.isIncompleteBankStmt()) {
-            incompleteStep3.setVisibility(View.VISIBLE);
-        }
-        if (user.isAppliedFor60k()) {
-            previous.setVisibility(View.INVISIBLE);
-            saveAndProceed.setVisibility(View.INVISIBLE);
-            rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
-        }
 
         return rootView;
     }
 
     private void getAllViews(View rootView) {
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
-        previous = (Button) rootView.findViewById(R.id.previous);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
         completeMonthlyExpenditure = (ImageView) rootView.findViewById(R.id.complete_monthly_expenditure);
         incompleteMonthlyExpenditure = (ImageView) rootView.findViewById(R.id.incomplete_monthly_expenditure);
         completeVehicleDetails = (ImageView) rootView.findViewById(R.id.complete_vehicle_details);
@@ -235,47 +208,13 @@ public class ProfileFormStep3Fragment2 extends Fragment {
 
     }
 
-    private void setOnClickListener() {
-
-        saveAndProceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkIncomplete();
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
-                Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);
-                getContext().sendBroadcast(intent);
-                replaceFragment3(false);
-            }
-        });
-
-        previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment1(true);
-            }
-        });
-        gotoFragment1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment1(true);
-            }
-        });
-        gotoFragment3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment3(true);
-            }
-        });
-    }
-
 
     private void setAllHelpTipsEnabled() {
         expenditureHelptip.setEnabled(true);
 
     }
 
-    private void checkIncomplete() {
+    public void checkIncomplete() {
         if (!isMonthlyExpenditureSelected)
             user.setIncompleteMonthlyExpenditure(true);
         else
@@ -288,23 +227,5 @@ public class ProfileFormStep3Fragment2 extends Fragment {
             user.setIncompleteVehicleDetails(false);
     }
 
-    private void replaceFragment1(boolean check) {
-        if (check)
-            checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep3Fragment1(), "Fragment1Tag");
-        ft.commit();
-    }
 
-    private void replaceFragment3(boolean check) {
-        if (check)
-            checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep3Fragment3(), "Fragment3Tag");
-        ft.commit();
-    }
 }

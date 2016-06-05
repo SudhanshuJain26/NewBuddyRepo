@@ -1,24 +1,27 @@
 package indwin.c3.shareapp.fragments;
 
-import android.app.Dialog;
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
-import android.location.Address;
-import android.location.Geocoder;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -31,45 +34,39 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.gun0912.tedpicker.ImagePickerActivity;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import indwin.c3.shareapp.R;
-import indwin.c3.shareapp.Views.DatePicker;
+import indwin.c3.shareapp.activities.ImageHelperActivity;
 import indwin.c3.shareapp.activities.ProfileFormStep2;
+import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
 import indwin.c3.shareapp.adapters.PlaceAutocompleteAdapter;
 import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
-import indwin.c3.shareapp.utils.DaysDifferenceFinder;
-import indwin.c3.shareapp.utils.HelpTipDialog;
+import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import io.intercom.com.google.gson.Gson;
 
 public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+    public static final int PERMISSION_ALL = 0;
+    private static final int REQUEST_PERMISSION_SETTING = 99;
+    private static final int INTENT_REQUEST_GET_IMAGES = 13;
     SharedPreferences mPrefs;
+    ArrayList<Uri> imageUris;
     TextView gotoFragment1, gotoFragment2, gotoFragment3;
     UserModel user;
     Gson gson;
     Button saveAndProceed;
-    static EditText dobEditText;
     private TextView spinnerErrorTv;
     private final int top = 16, left = 16, right = 16, bottom = 16;
     ImageView incompleteStep1, incompleteStep2, incompleteStep3;
-    private static DatePicker datePicker;
-    static boolean updateUserDOB = false;
+    private ImageView incompleteAP, completeAP;
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutocompleteAdapter mGooglePlaceAdapter;
     private static final LatLngBounds BOUNDS_GREATER_BANGALORE = new LatLngBounds(
@@ -83,7 +80,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     private ImageButton closeCurrentAddressLayout;
     boolean selectedPlaceOfStay = false;
     boolean isUnderAge = false;
-    ImageView incompleteDOB, completeDOB, incompleteAddressDetails, completeAddressDetails;
+    ImageView incompleteAddressDetails, completeAddressDetails;
     ImageView topImage;
     private ImageButton addressHelptip;
     private TextView currentAddressHeading;
@@ -93,6 +90,15 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     private boolean gpaTypeEntered, gpaValueEntered;
     private boolean gpaTypeUpdate, gpaValueUpdate;
     private String[] gpaTypeArray;
+    private ImageView incompleteStudentLoan, completeStudentLoan;
+    boolean selectedStudentLoan = false;
+    private ArrayList<String> marksheets;
+    private Map<String, String> newMarksheets;
+    private RecyclerView rvImages;
+    String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+    private ImageUploaderRecyclerAdapter adapter;
+    boolean deniedPermissionForever = false;
+    private ImageView completeMarksheets, incompleteMarksheets;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -102,24 +108,118 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         View rootView = inflater.inflate(
                 R.layout.profile_form_step2_fragment1, container, false);
         String[] gpaArray = getResources().getStringArray(R.array.gpa_values);
-        final String placesToStay[] = getResources().getStringArray(R.array.places_of_stay);
-        final String placesToStayValues[] = getResources().getStringArray(R.array.places_of_stay_values);
+
 
         gpaTypeArray = getResources().getStringArray(R.array.gpa_type);
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         getAllViews(rootView);
 
+        setOnClickListerner();
+        ProfileFormStep2 profileFormStep2 = (ProfileFormStep2) getActivity();
+        user = profileFormStep2.getUser();
+        if (user.isIncompleteStudentLoan()) {
+            incompleteStudentLoan.setVisibility(View.VISIBLE);
+            completeStudentLoan.setVisibility(View.GONE);
+        } else {
 
-        BANGALORE_CENTER.setLatitude(12.97232);
-        BANGALORE_CENTER.setLongitude(77.59480);
-        if (mGoogleApiClient == null)
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .addApi(Places.GEO_DATA_API)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-        mGooglePlaceAdapter = new PlaceAutocompleteAdapter(getActivity(), mGoogleApiClient, BOUNDS_GREATER_BANGALORE,
-                null);
-        googleCurrentAddress.setAdapter(mGooglePlaceAdapter);
+            if (AppUtils.isNotEmpty(user.getStudentLoan())) {
+                completeStudentLoan.setVisibility(View.VISIBLE);
+                incompleteStudentLoan.setVisibility(View.GONE);
+
+            }
+        }
+        try {
+            marksheets = user.getMarksheets();
+            if (marksheets == null) {
+                marksheets = new ArrayList<>();
+            } else {
+                completeMarksheets.setVisibility(View.VISIBLE);
+                user.setIncompleteMarksheets(false);
+            }
+        } catch (Exception e) {
+            marksheets = new ArrayList<>();
+        }
+        if (user.isIncompleteMarksheets()) {
+            incompleteMarksheets.setVisibility(View.VISIBLE);
+        }
+        if (!marksheets.contains("add") && !user.isAppliedFor7k())
+            marksheets.add("add");
+
+        if (user.isIncompleteGpa()) {
+            incompleteAP.setVisibility(View.VISIBLE);
+            completeAP.setVisibility(View.GONE);
+        } else {
+
+            if (AppUtils.isNotEmpty(user.getGpaType()) && AppUtils.isNotEmpty(user.getGpa())) {
+                incompleteAP.setVisibility(View.GONE);
+                completeAP.setVisibility(View.VISIBLE);
+
+            }
+        }
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvImages.setLayoutManager(layoutManager);
+
+        rvImages.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        if (marksheets.get(position).equals("add")) {
+
+                            String[] temp = hasPermissions(getActivity(), PERMISSIONS);
+                            if (temp != null && temp.length != 0) {
+                                deniedPermissionForever = true;
+                                PERMISSIONS = temp;
+                                requestPermissions(PERMISSIONS, PERMISSION_ALL);
+                            } else {
+                                Intent intent = new Intent(getActivity(), ImageHelperActivity.class);
+                                startActivityForResult(intent, INTENT_REQUEST_GET_IMAGES);
+                            }
+                        }
+                    }
+                })
+        );
+        newMarksheets = new HashMap<>();
+        adapter = new ImageUploaderRecyclerAdapter(getActivity(), marksheets, "Marksheets", user.isAppliedFor7k());
+        rvImages.setAdapter(adapter);
+
+        final String scholarship[] = getResources().getStringArray(R.array.scholarship);
+        final String scholarshipValues[] = getResources().getStringArray(R.array.scholarship_values);
+
+        Spinner studentLoanSpinner = (Spinner) rootView.findViewById(R.id.student_loan);
+        SpinnerHintAdapter studentLoanAdapter = new SpinnerHintAdapter(getActivity(), scholarship, R.layout.spinner_item_underline);
+        studentLoanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        studentLoanSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position < scholarship.length - 1) {
+                    selectedStudentLoan = true;
+                    user.setStudentLoan(scholarshipValues[position]);
+                    user.setUpdateStudentLoan(true);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                user.setUpdateStudentLoan(false);
+            }
+        });
+        studentLoanSpinner.setAdapter(studentLoanAdapter);
+        studentLoanSpinner.setSelection(studentLoanAdapter.getCount());
+
+
+        if (user.getStudentLoan() != null || "".equals(user.getStudentLoan())) {
+            for (int i = 0; i < scholarship.length - 1; i++) {
+                if (user.getStudentLoan().equals(scholarshipValues[i])) {
+                    studentLoanSpinner.setSelection(i);
+                    completeStudentLoan.setVisibility(View.VISIBLE);
+                    user.setIncompleteStudentLoan(false);
+                    break;
+                }
+            }
+        }
+
         if (!mPrefs.getBoolean("step2Editable", true)) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
@@ -133,8 +233,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
             //gotoFragment3.setAlpha(1);
             //gotoFragment3.setClickable(true);
         }
-        ProfileFormStep2 profileFormStep2 = (ProfileFormStep2) getActivity();
-        user = profileFormStep2.getUser();
+
         if (AppUtils.isNotEmpty(user.getGpa())) {
             if (!user.isAppliedFor7k()) {
                 gpaValueEt.setEnabled(true);
@@ -162,27 +261,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
                 gpaTypeSp.setSelection(0);
             }
         }
-        if (user.getGender() != null && "girl".equals(user.getGender())) {
-            //Picasso.with(getActivity())
-            //        .load(R.mipmap.step2fragment1girl)
-            //        .into(topImage);
-        }
-        googleCurrentAddress.setOnItemClickListener(mAutocompleteClickListener);
 
-        addressHelptip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text1 = "Please enter the locality of both, your local address locality (the city where you study) " +
-                        "as well as your permanent address locality (as on your permanent address proof)";
-                String text2 = "";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#eeb85f");
-                dialog.show();
-            }
-        });
-
-        final Spinner spinner = (Spinner) rootView.findViewById(R.id.place_of_stay);
-        SpinnerHintAdapter adapter = new SpinnerHintAdapter(getActivity(), placesToStay, R.layout.spinner_item_underline);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         gpaValueEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -206,87 +285,20 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
             }
         });
 
-
-        spinner.setAdapter(adapter);
-        spinner.setSelection(adapter.getCount());
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position < placesToStay.length - 1) {
-                    selectedPlaceOfStay = true;
-                    user.setAccommodation(placesToStayValues[position]);
-                    user.setUpdateAccommodation(true);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                user.setUpdateAccommodation(false);
-            }
-        });
-        setOnClickListerner();
-
-        if (AppUtils.isNotEmpty(user.getDob())) {
-            dobEditText.setText(user.getDob());
-            completeDOB.setVisibility(View.VISIBLE);
-            user.setIncompleteDOB(false);
-        }
-        if (user.getAccommodation() != null && !"".equals(user.getAccommodation())) {
-            for (int i = 0; i < placesToStay.length - 1; i++) {
-                if (user.getAccommodation().equals(placesToStayValues[i])) {
-                    spinner.setSelection(i);
-                    break;
-                }
-            }
-        }
-        if (AppUtils.isNotEmpty(user.getCurrentAddress())) {
-            editCurrentAddress.setText(user.getCurrentAddress());
-        }
-        if (AppUtils.isNotEmpty(user.getPermanentAddress())) {
-            editPermanentAddress.setText(user.getPermanentAddress());
-        }
-        if (AppUtils.isNotEmpty(user.getAccommodation()) &&
-                AppUtils.isNotEmpty(user.getCurrentAddress()) &&
-                AppUtils.isNotEmpty(user.getPermanentAddress())
-                ) {
-            completeAddressDetails.setVisibility(View.VISIBLE);
-            user.setIncompleteAddressDetails(false);
+        if (user.getGender() != null && "girl".equals(user.getGender())) {
+            //Picasso.with(getActivity())
+            //        .load(R.mipmap.step2fragment1girl)
+            //        .into(topImage);
         }
 
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        Rect rectangle = new Rect();
-        Window window = getActivity().getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
-        int statusBarHeight = rectangle.top;
-        currentAddressLayout.getLayoutParams().height = displaymetrics.heightPixels - statusBarHeight;
 
-
-        datePicker = new
-
-                DatePicker(getActivity(),
-
-                "DOB");
-        datePicker.build(new DialogInterface.OnClickListener()
-
-                         {
-                             @Override
-                             public void onClick(DialogInterface dialog, int which) {
-                             }
-                         }
-
-                , null);
-
-
-        if (user.isIncompleteDOB() || user.isIncompleteAddressDetails() || !(gpaValueEntered && gpaTypeEntered))
+        if (user.isIncompleteAddressDetails() || !(gpaValueEntered && gpaTypeEntered))
 
         {
             //incompleteStep1.setVisibility(View.VISIBLE);
-            if (user.isIncompleteDOB()) {
-                incompleteDOB.setVisibility(View.VISIBLE);
-            }
+
             if (user.isIncompleteAddressDetails()) {
-                incompleteAddressDetails.setVisibility(View.VISIBLE);
+                //incompleteAddressDetails.setVisibility(View.VISIBLE);
             }
         }
 
@@ -306,17 +318,69 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         return rootView;
     }
 
+    public String[] hasPermissions(Context context, final String... permissions) {
+        ArrayList<String> askPermissions = new ArrayList<>();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    if (!shouldShowRequestPermissionRationale(permission) && deniedPermissionForever) {
+                        showMessageOKCancel("You need to allow access to Images",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                                        intent.setData(uri);
+                                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                                    }
+                                });
+                    }
+                    askPermissions.add(permission);
+                }
+            }
+        }
+        return askPermissions.toArray(new String[0]);
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(getActivity())
+                .setMessage(message)
+                .setPositiveButton("Settings", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resuleCode, Intent intent) {
+        super.onActivityResult(requestCode, resuleCode, intent);
+
+        if (requestCode == INTENT_REQUEST_GET_IMAGES && resuleCode == Activity.RESULT_OK) {
+            UserModel user = AppUtils.getUserObject(getActivity());
+            imageUris = intent.getParcelableArrayListExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
+            if (user.getMarksheets() == null)
+                user.setMarksheets(new ArrayList<String>());
+            if (user.getNewMarksheets() == null) {
+                user.setNewMarksheets(new HashMap<String, String>());
+            }
+            for (Uri uri : imageUris) {
+                marksheets.add(0, uri.getPath());
+                user.getMarksheets().add(0, uri.getPath());
+                user.getNewMarksheets().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
+            }
+
+            adapter.notifyDataSetChanged();
+            user.setUpdateNewCollegeIds(true);
+            AppUtils.saveUserObject(getActivity(), user);
+        } else if (requestCode == REQUEST_PERMISSION_SETTING && resuleCode == Activity.RESULT_OK) {
+            hasPermissions(getActivity(), PERMISSIONS);
+        }
+    }
+
+
     private void setOnClickListerner() {
-        closeCurrentAddressLayout.setOnClickListener(new View.OnClickListener()
 
-                                                     {
-                                                         @Override
-                                                         public void onClick(View v) {
-                                                             hideCurrentAddressLayout();
-                                                         }
-                                                     }
-
-        );
         gpaTypeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -336,151 +400,51 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
             }
 
         });
-        submitAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String place = googleCurrentAddress.getText().toString();
-                if (isEditingCurrentAddress) {
-                    user.setCurrentAddress(place);
-                    user.setUpdateCurrentAddress(true);
-                    editCurrentAddress.setText(place);
-                    editCurrentAddress.setFocusable(true);
-                    editCurrentAddress.setFocusableInTouchMode(true);
-                } else {
-                    editPermanentAddress.setText(place);
-                    editPermanentAddress.setFocusable(true);
-                    editPermanentAddress.setFocusableInTouchMode(true);
-                    user.setPermanentAddress(place);
-                    user.setUpdatePermanentAddress(true);
-                }
-                hideCurrentAddressLayout();
-            }
-        });
-        editCurrentAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentAddressLayout.setVisibility(View.VISIBLE);
-                isEditingCurrentAddress = true;
-                currentAddressHeading.setText("Enter your Current Address Locality");
-                googleCurrentAddress.setHint("Current Address Locality");
-                googleCurrentAddress.setText(editCurrentAddress.getText());
-                googleCurrentAddress.requestFocus();
-                ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(googleCurrentAddress, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
-
-        editPermanentAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentAddressLayout.setVisibility(View.VISIBLE);
-                isEditingCurrentAddress = false;
-                googleCurrentAddress.setHint("Permanent Address Locality");
-                googleCurrentAddress.setText(editPermanentAddress.getText());
-                currentAddressHeading.setText("Enter your Permanent Address Locality");
-                googleCurrentAddress.requestFocus();
-                ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(googleCurrentAddress, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
-
-
-        //saveAndProceed.setOnClickListener(new View.OnClickListener() {
-        //                                      @Override
-        //                                      public void onClick(View v) {
-        //                                          boolean readyToUpdate = true;
-        //                                          if (isUserRejected) {
-        //                                              readyToUpdate = false;
-        //                                          }
-        //                                          checkIncomplete();
-        //
-        //
-        //                                          if (gpaValueEntered && gpaValueUpdate) {
-        //                                              user.setGpaValueUpdate(true);
-        //                                              user.setGpa(gpaValueEt.getText().toString());
-        //                                          }
-        //                                          if (gpaTypeEntered && gpaTypeUpdate) {
-        //                                              user.setGpaType(gpaTypeArray[gpaTypeSp.getSelectedItemPosition()]);
-        //                                              user.setGpaTypeUpdate(true);
-        //                                          }
-        //                                          if (updateUserDOB) {
-        //                                              try {
-        //                                                  SimpleDateFormat spf = new SimpleDateFormat("dd MMM yyyy");
-        //                                                  Date newDate = spf.parse(dobEditText.getText().toString());
-        //                                                  spf = new SimpleDateFormat("yyyy-MM-dd");
-        //                                                  user.setDob(spf.format(newDate));
-        //                                                  user.setUpdateDOB(true);
-        //
-        //                                                  Calendar endCalendar = new GregorianCalendar();
-        //                                                  endCalendar.setTime(new Date());
-        //                                                  Calendar startCalendar = new GregorianCalendar();
-        //                                                  startCalendar.setTime(newDate);
-        //
-        //                                                  int age = DaysDifferenceFinder.getDifferenceBetweenDatesInYears(startCalendar, endCalendar);
-        //                                                  if (age < 18) {
-        //                                                      isUnderAge = true;
-        //                                                      readyToUpdate = false;
-        //                                                  }
-        //                                              } catch (Exception e) {
-        //                                                  e.printStackTrace();
-        //                                              }
-        //                                          }
-        //                                          Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);
-        //                                          getContext().sendBroadcast(intent);
-        //                                      }
-        //                                  }
-        //
-        //);
-
-        dobEditText.setOnClickListener(new View.OnClickListener()
-
-                                       {
-                                           @Override
-                                           public void onClick(View v) {
-                                               datePicker.show();
-                                           }
-                                       }
-
-        );
 
     }
 
     private void getAllViews(View rootView) {
+        rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
         gpaTypeSp = (Spinner) rootView.findViewById(R.id.gpa_spinner);
         spinnerErrorTv = (TextView) rootView.findViewById(R.id.spinner_error_msg_tv);
         gpaValueEt = (EditText) rootView.findViewById(R.id.gpa_value);
-        //gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        //gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        //gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        //saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
-        //incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        //incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        //incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        //topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
-
-        dobEditText = (EditText) rootView.findViewById(R.id.user_dob_edittext);
-        incompleteAddressDetails = (ImageView) rootView.findViewById(R.id.incomplete_address);
-        completeAddressDetails = (ImageView) rootView.findViewById(R.id.complete_address);
-        completeDOB = (ImageView) rootView.findViewById(R.id.complete_dob);
-        incompleteDOB = (ImageView) rootView.findViewById(R.id.incomplete_dob);
-        googleCurrentAddress = (AutoCompleteTextView) rootView.findViewById(R.id.google_current_address_autocomplete);
-
-        editCurrentAddress = (TextView) rootView.findViewById(R.id.edit_current_address);
-        editPermanentAddress = (TextView) rootView.findViewById(R.id.edit_permanent_address);
-        currentAddressLayout = (RelativeLayout) rootView.findViewById(R.id.current_address_layout);
-        addressHelptip = (ImageButton) rootView.findViewById(R.id.address_helptip);
-        currentAddressHeading = (TextView) rootView.findViewById(R.id.current_address_heading);
-        submitAddress = (Button) rootView.findViewById(R.id.submit_address);
-        closeCurrentAddressLayout = (ImageButton) rootView.findViewById(R.id.close_current_address_layout);
+        incompleteAP = (ImageView) rootView.findViewById(R.id.incomplete_ap);
+        completeAP = (ImageView) rootView.findViewById(R.id.complete_ap);
+        incompleteStudentLoan = (ImageView) rootView.findViewById(R.id.incomplete_student_loan);
+        completeStudentLoan = (ImageView) rootView.findViewById(R.id.complete_student_loan);
+        completeMarksheets = (ImageView) rootView.findViewById(R.id.complete_marksheet);
+        incompleteMarksheets = (ImageView) rootView.findViewById(R.id.incomplete_marksheet);
     }
 
     private void setAllHelpTipsEnabled() {
-        addressHelptip.setEnabled(true);
     }
 
     public void checkIncomplete() {
+
+        if (marksheets.size() == 0) {
+            incompleteMarksheets.setVisibility(View.VISIBLE);
+            user.setIncompleteMarksheets(true);
+        } else if (marksheets.size() == 1) {
+            if ("add".equals(marksheets.get(0))) {
+                user.setIncompleteMarksheets(true);
+            } else {
+                user.setIncompleteMarksheets(false);
+            }
+        } else {
+            if (!user.isAppliedFor7k()) {
+                user.setMarksheets(marksheets);
+            }
+            user.setIncompleteMarksheets(false);
+
+        }
+        if (user.isIncompleteMarksheets()) {
+            incompleteMarksheets.setVisibility(View.VISIBLE);
+            completeMarksheets.setVisibility(View.GONE);
+
+        } else {
+            completeMarksheets.setVisibility(View.VISIBLE);
+            incompleteMarksheets.setVisibility(View.GONE);
+        }
 
         if (gpaValueEntered && gpaValueUpdate) {
             user.setGpaValueUpdate(true);
@@ -490,36 +454,28 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
             user.setGpaType(gpaTypeArray[gpaTypeSp.getSelectedItemPosition()]);
             user.setGpaTypeUpdate(true);
         }
-        if (updateUserDOB) {
-            try {
-                SimpleDateFormat spf = new SimpleDateFormat("dd MMM yyyy");
-                Date newDate = spf.parse(dobEditText.getText().toString());
-                spf = new SimpleDateFormat("yyyy-MM-dd");
-                user.setDob(spf.format(newDate));
-                user.setUpdateDOB(true);
 
-                Calendar endCalendar = new GregorianCalendar();
-                endCalendar.setTime(new Date());
-                Calendar startCalendar = new GregorianCalendar();
-                startCalendar.setTime(newDate);
+        if (AppUtils.isEmpty(user.getGpa()) || AppUtils.isEmpty(user.getGpaType())) {
+            user.setIncompleteGpa(true);
+            completeAP.setVisibility(View.GONE);
+            incompleteAP.setVisibility(View.VISIBLE);
 
-                int age = DaysDifferenceFinder.getDifferenceBetweenDatesInYears(startCalendar, endCalendar);
-                if (age < 18) {
-                    isUnderAge = true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if ("".equals(editCurrentAddress.getText().toString()) || "".equals(editPermanentAddress.getText().toString()) || !selectedPlaceOfStay) {
-            user.setIncompleteAddressDetails(true);
         } else {
-            user.setIncompleteAddressDetails(false);
+            user.setIncompleteGpa(false);
+            incompleteAP.setVisibility(View.GONE);
+            completeAP.setVisibility(View.VISIBLE);
         }
-        if ("".equals(dobEditText.getText().toString())) {
-            user.setIncompleteDOB(true);
-        } else
-            user.setIncompleteDOB(false);
+
+        if (!selectedStudentLoan) {
+            user.setIncompleteStudentLoan(true);
+            incompleteStudentLoan.setVisibility(View.VISIBLE);
+            completeStudentLoan.setVisibility(View.GONE);
+
+        } else {
+            user.setIncompleteStudentLoan(false);
+            completeStudentLoan.setVisibility(View.VISIBLE);
+            incompleteStudentLoan.setVisibility(View.GONE);
+        }
     }
 
 
@@ -567,103 +523,6 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
 
     }
 
-    public static void confirmDOB() {
-        String date = datePicker.getSelectedDate() + " " + datePicker.getSelectedMonthName() + " " + datePicker.getSelectedYear();
-        dobEditText.setText(date);
-        updateUserDOB = true;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null)
-            mGoogleApiClient.connect();
-    }
-
-    @Override
-    public void onStop() {
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-        super.onStop();
-    }
-
-    private AdapterView.OnItemClickListener mAutocompleteClickListener
-            = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            final AutocompletePrediction item = mGooglePlaceAdapter.getItem(position);
-            final String placeId = item.getPlaceId();
-            final CharSequence primaryText = item.getPrimaryText(null);
-
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-        }
-    };
-
-    private void hideCurrentAddressLayout() {
-        try {
-            hideKeyboard();
-            googleCurrentAddress.setText("");
-            ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-            currentAddressLayout.setVisibility(View.GONE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
-            = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(PlaceBuffer places) {
-            if (!places.getStatus().isSuccess()) {
-                places.release();
-                return;
-            }
-            final Place place = places.get(0);
-
-            if (isEditingCurrentAddress) {
-                Location location = new Location("home");
-                location.setLatitude(place.getLatLng().latitude);
-                location.setLongitude(place.getLatLng().longitude);
-                float distance = location.distanceTo(BANGALORE_CENTER) / 1000;
-                if (distance > 100) {
-                    isUserRejected = true;
-                } else {
-                    isUserRejected = false;
-                    try {
-                        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-                        List<Address> addresses = geocoder.getFromLocation(place.getLatLng().latitude, place.getLatLng().longitude, 1);
-                        user.setCurrentAddressCity(addresses.get(0).getLocality());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                user.setCurrentAddress(place.getAddress().toString());
-                user.setUpdateCurrentAddress(true);
-                editCurrentAddress.setText(place.getAddress().toString());
-                editCurrentAddress.setFocusable(true);
-                editCurrentAddress.setFocusableInTouchMode(true);
-            } else {
-                editPermanentAddress.setText(place.getAddress().toString());
-                editPermanentAddress.setFocusable(true);
-                editPermanentAddress.setFocusableInTouchMode(true);
-                user.setPermanentAddress(place.getAddress().toString());
-                user.setUpdatePermanentAddress(true);
-            }
-            hideCurrentAddressLayout();
-            places.release();
-        }
-    };
-
-    private void hideKeyboard() {
-        if (getActivity().getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-        }
-    }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {

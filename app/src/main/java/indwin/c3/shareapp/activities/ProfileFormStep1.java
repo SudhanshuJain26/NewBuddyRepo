@@ -33,6 +33,7 @@ import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment1;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment2;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment3;
+import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment4;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
@@ -44,11 +45,11 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private ArrayList<Fragment> fragments;
-    private TextView gotoFragment1, gotoFragment2, gotoFragment3;
+    private TextView gotoFragment1, gotoFragment2, gotoFragment3, gotoFragment4;
     private Button saveAndProceed, previous;
     private UserModel user;
     private ImageView genderImage;
-    private ImageView incompleteStep1, incompleteStep2, incompleteStep3;
+    private ImageView incompleteStep1, incompleteStep2, incompleteStep3, incompleteStep4;
     int previousPosition;
 
     @Override
@@ -74,8 +75,8 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         }
         UserModel user = AppUtils.getUserObject(this);
         if (user.isAppliedFor1k()) {
-            saveAndProceed.setVisibility(View.INVISIBLE);
-            previous.setVisibility(View.INVISIBLE);
+            saveAndProceed.setVisibility(View.GONE);
+            previous.setVisibility(View.GONE);
             findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -110,6 +111,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             showHideIncompleteStep1();
             showHideIncompleteStep2();
             showHideIncompleteStep3();
+            showHideIncompleteStep4();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,6 +124,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         fragments.add(new ProfileFormStep1Fragment1());
         fragments.add(new ProfileFormStep1Fragment2());
         fragments.add(new ProfileFormStep1Fragment3());
+        fragments.add(new ProfileFormStep1Fragment4());
     }
 
     @Override
@@ -156,6 +159,12 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                 mPager.setCurrentItem(2);
             }
         });
+        gotoFragment4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPager.setCurrentItem(3);
+            }
+        });
         saveAndProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,9 +175,9 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                     sendBroadcast(intent);
                     mPager.setCurrentItem(currentPage + 1);
                 } else {
-                    boolean incompleteStep3 = checkIncompleteStep3();
+                    boolean incompleteStep4 = checkIncompleteStep4();
                     saveStep3Data();
-                    if (checkIncompleteStep1() || checkIncompleteStep2() || incompleteStep3) {
+                    if (checkIncompleteStep1() || checkIncompleteStep2() || checkIncompleteStep3() || incompleteStep4) {
                         final Dialog dialog1 = new Dialog(ProfileFormStep1.this);
                         dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog1.setContentView(R.layout.incomplete_alert_box);
@@ -216,14 +225,20 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private void saveStep1Data() {
+        UserModel userModel = AppUtils.getUserObject(this);
+        if (AppUtils.isNotEmpty(user.getDob()) && user.isUpdateDOB()) {
+            userModel.setDob(user.getDob());
+            userModel.setUpdateDOB(true);
+            user.setUpdateDOB(false);
+        }
         if (AppUtils.isNotEmpty(user.getGender()) && user.isUpdateGender()) {
-            UserModel userModel = AppUtils.getUserObject(this);
+
             userModel.setGender(user.getGender());
             userModel.setUpdateGender(true);
-            AppUtils.saveUserObject(this, userModel);
+
             user.setUpdateGender(false);
         }
-
+        AppUtils.saveUserObject(this, userModel);
 
     }
 
@@ -276,11 +291,42 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private void saveStep3Data() {
-        //checkIncompleteStep3();
     }
 
-    private void setAllUpdateFalse() {
+    private void saveStep4Data() {
 
+        UserModel userModel = AppUtils.getUserObject(this);
+
+
+        if (AppUtils.isNotEmpty(user.getAccommodation()) && user.isUpdateAccommodation()) {
+            userModel.setAccommodation(user.getAccommodation());
+            userModel.setUpdateAccommodation(true);
+            user.setUpdateAccommodation(false);
+        }
+        if (AppUtils.isNotEmpty(user.getCurrentAddress()) && user.isUpdateCurrentAddress()) {
+            userModel.setCurrentAddress(user.getCurrentAddress());
+            userModel.setUpdateCurrentAddress(true);
+            user.setUpdateCurrentAddress(false);
+        }
+        if (AppUtils.isNotEmpty(user.getPermanentAddress()) && user.isUpdatePermanentAddress()) {
+            userModel.setPermanentAddress(user.getPermanentAddress());
+            userModel.setUpdatePermanentAddress(true);
+            user.setUpdatePermanentAddress(false);
+        }
+
+        AppUtils.saveUserObject(this, userModel);
+
+    }
+
+    private boolean checkIncompleteStep4() {
+        ProfileFormStep1Fragment4 profileFormStep1Fragment4 = (ProfileFormStep1Fragment4) mPagerAdapter.getRegisteredFragment(3);
+        profileFormStep1Fragment4.checkIncomplete();
+        return showHideIncompleteStep4();
+    }
+
+
+    private void setAllUpdateFalse() {
+        user.setUpdateDOB(false);
         user.setUpdateGender(false);
 
         user.setUpdateRollNumber(false);
@@ -296,7 +342,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean showHideIncompleteStep1() {
-        if (user.isIncompleteGender() || user.isIncompleteFb() || user.isIncompleteEmail()) {
+        if (user.isIncompleteDOB() || user.isIncompleteGender() || user.isIncompleteFb() || user.isIncompleteEmail()) {
             incompleteStep1.setVisibility(View.VISIBLE);
             return true;
         }
@@ -326,11 +372,20 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean showHideIncompleteStep3() {
-        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress() || user.isInCompleteAgreement()) {
+        if (user.isIncompleteAadhar() || user.isIncompleteCollegeId()) {
             incompleteStep3.setVisibility(View.VISIBLE);
             return true;
         }
         incompleteStep3.setVisibility(View.GONE);
+        return false;
+    }
+
+    private boolean showHideIncompleteStep4() {
+        if (user.isIncompleteAddressDetails() || user.isInCompleteAgreement()) {
+            incompleteStep4.setVisibility(View.VISIBLE);
+            return true;
+        }
+        incompleteStep4.setVisibility(View.GONE);
         return false;
     }
 
@@ -339,9 +394,11 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         gotoFragment1 = (TextView) findViewById(R.id.goto_fragment1);
         gotoFragment2 = (TextView) findViewById(R.id.goto_fragment2);
         gotoFragment3 = (TextView) findViewById(R.id.goto_fragment3);
+        gotoFragment4 = (TextView) findViewById(R.id.goto_fragment4);
         incompleteStep1 = (ImageView) findViewById(R.id.incomplete_step_1);
         incompleteStep2 = (ImageView) findViewById(R.id.incomplete_step_2);
         incompleteStep3 = (ImageView) findViewById(R.id.incomplete_step_3);
+        incompleteStep4 = (ImageView) findViewById(R.id.incomplete_step_4);
         saveAndProceed = (Button) findViewById(R.id.save_and_proceed);
         previous = (Button) findViewById(R.id.previous);
         genderImage = (ImageView) findViewById(R.id.verify_image_view2);
@@ -349,7 +406,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
 
     private void setIncomplete() {
         UserModel userModel = AppUtils.getUserObject(this);
-
+        userModel.setIncompleteDOB(user.isIncompleteDOB());
         userModel.setIncompleteGender(user.isIncompleteGender());
         userModel.setIncompleteFb(user.isIncompleteFb());
         userModel.setIncompleteEmail(user.isIncompleteEmail());
@@ -396,6 +453,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         findViewById(R.id.up_arrow_1).setVisibility(View.GONE);
         findViewById(R.id.up_arrow_2).setVisibility(View.GONE);
         findViewById(R.id.up_arrow_3).setVisibility(View.GONE);
+        findViewById(R.id.up_arrow_4).setVisibility(View.GONE);
         int image = 0;
         boolean isGirl = user.getGender() != null && "girl".equals(user.getGender());
 
@@ -422,6 +480,13 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                 image = R.mipmap.step1fragment3;
             }
             findViewById(R.id.up_arrow_3).setVisibility(View.VISIBLE);
+        } else if (i == 3) {
+            if (isGirl) {
+                image = R.mipmap.step1fragment3girl;
+            } else {
+                image = R.mipmap.step1fragment3;
+            }
+            findViewById(R.id.up_arrow_4).setVisibility(View.VISIBLE);
         }
         Picasso.with(this).load(image).into(genderImage);
     }
@@ -446,6 +511,10 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
 
                 checkIncompleteStep1();
                 saveStep1Data();
+            } else if (previousPosition == 3) {
+
+                checkIncompleteStep4();
+                saveStep4Data();
             }
         }
         previousPosition = position;

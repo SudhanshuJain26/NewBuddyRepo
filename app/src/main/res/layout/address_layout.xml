@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/buddy_light_green"
+              android:orientation="vertical">
+    <include
+        android:id="@+id/toolbar"
+        style="@style/DrawerArrowStyle"
+        layout="@layout/toolbar_with_text_header_transparent"/>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+        <EditText android:id="@+id/house_no_et" android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:hint="House no./Flat,Building/Society"/>
+        <EditText android:id="@+id/street_et" android:layout_width="match_parent"
+                  android:layout_height="wrap_content" android:hint="Street,Area/Location"
+                  android:layout_below="@id/house_no_et"/>
+        <LinearLayout android:id="@+id/cityLL" android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@id/street_et"
+                      android:layout_weight="2" android:orientation="horizontal">
+            <EditText android:id="@+id/city_et" android:layout_width="match_parent"
+                      android:layout_height="wrap_content" android:hint="City"
+                      android:layout_weight="1"/>
+
+            <EditText android:id="@+id/pincode_et" android:layout_width="match_parent"
+                      android:layout_height="wrap_content" android:hint="Pincode"
+                      android:layout_weight="1"/>
+
+
+        </LinearLayout>
+        <Button android:id="@+id/submit_address"
+                android:layout_width="wrap_content" android:layout_height="30dp"
+                android:layout_below="@+id/cityLL"
+                android:textColor="@color/colorwhite"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp" android:background="@color/buddy_green"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" android:text="Submit"/>
+
+
+    </RelativeLayout>
+</LinearLayout>

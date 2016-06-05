@@ -88,51 +88,7 @@
                         android:layout_marginTop="8dp"/>
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:text="Enter your Roll Number"
-                            android:textColor="#44c2a6"
-                            android:textSize="14sp"
-                            android:textStyle="bold"/>
-
-
-                        <ImageView
-                            android:id="@+id/incomplete_roll_number"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginStart="8dp"
-                            android:src="@drawable/incomplete"
-                            android:visibility="gone"/>
-
-                        <ImageView
-                            android:id="@+id/complete_roll_number"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginStart="8dp"
-                            android:src="@drawable/complete"
-                            android:visibility="gone"/>
-                    </LinearLayout>
-
-                    <EditText
-                        android:id="@+id/roll_number_et"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="-4dp"
-                        android:layout_marginStart="-4dp"
-                        android:layout_marginTop="8dp"
-                        android:hint="(Must match the number on your ID)"
-                        android:textSize="16sp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

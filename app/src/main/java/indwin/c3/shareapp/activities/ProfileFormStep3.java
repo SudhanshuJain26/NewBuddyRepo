@@ -51,6 +51,8 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
         setContentView(R.layout.activity_profile_form_step3);
         getAllViews();
         setCLickListener();
+
+        findViewById(R.id.fragment4).setVisibility(View.GONE);
         user = AppUtils.getUserObject(this);
         if (user.isAppliedFor60k()) {
             saveAndProceed.setVisibility(View.INVISIBLE);

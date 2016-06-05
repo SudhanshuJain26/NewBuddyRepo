@@ -49,7 +49,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import indwin.c3.shareapp.R;
-import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment3;
+import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment4;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.PicassoTrustAll;
@@ -217,7 +217,7 @@ public class AgreementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isSelfieAdded && isSignatureAdded) {
-                    ProfileFormStep1Fragment3.completeAgreement.setVisibility(View.VISIBLE);
+                    ProfileFormStep1Fragment4.completeAgreement.setVisibility(View.VISIBLE);
                     finish();
                 } else {
                     if (!isSelfieAdded)
@@ -335,8 +335,8 @@ public class AgreementActivity extends AppCompatActivity {
 
         if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
             user.setInCompleteAgreement(true);
-            ProfileFormStep1Fragment3.incompleteAgreement.setVisibility(View.VISIBLE);
-            ProfileFormStep1Fragment3.completeAgreement.setVisibility(View.GONE);
+            ProfileFormStep1Fragment4.incompleteAgreement.setVisibility(View.VISIBLE);
+            ProfileFormStep1Fragment4.completeAgreement.setVisibility(View.GONE);
         }
         finish();
     }

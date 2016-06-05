@@ -244,7 +244,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 }
                 updateUser = true;
             }
-            if (user.isUpdateSignature()&&(user.getSignatureStatus()==null|| AppUtils.uploadStatus.OPEN.toString().equals(user.getSignatureStatus()))) {
+            if (user.isUpdateSignature() && (user.getSignatureStatus() == null || AppUtils.uploadStatus.OPEN.toString().equals(user.getSignatureStatus()))) {
                 try {
                     Long tsLong = System.currentTimeMillis() / 1000;
                     String ts = tsLong.toString();
@@ -489,6 +489,9 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     doApiCall = true;
                     JSONObject json = new JSONObject();
                     json.put("line1", user.getCurrentAddress());
+                    json.put("line2", user.getCurrentAddressLine2());
+                    json.put("city", user.getCurrentAddressCity());
+                    json.put("pincode", user.getCurrentAddressPinCode());
                     jsonobj.put("currentAddress", json);
                     jsonobj.put("currentAddressCity", user.getCurrentAddressCity());
                     userMap.put("currentAddress", user.getCurrentAddress());
@@ -506,6 +509,9 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     doApiCall = true;
                     JSONObject json = new JSONObject();
                     json.put("line1", user.getPermanentAddress());
+                    json.put("line2", user.getPermanentAddressLine2());
+                    json.put("city", user.getPermanentAddressCity());
+                    json.put("pincode", user.getPermanentAddressPinCode());
                     jsonobj.put("permanentAddress", json);
                     userMap.put("permanentAddress", user.getPermanentAddress());
                 }

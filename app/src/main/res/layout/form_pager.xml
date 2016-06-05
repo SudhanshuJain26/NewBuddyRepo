@@ -4,13 +4,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/fragment1_card_view"
-        android:layout_marginBottom="0dp"
+
+
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="-3dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -32,9 +34,11 @@
             <ImageView
                 android:id="@+id/up_arrow_1"
                 android:layout_width="20dp"
+
+
                 android:layout_height="20dp"
                 android:src="@drawable/up_arrow"
-                />
+            />
         </LinearLayout>
 
         <ImageView
@@ -48,6 +52,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="-3dp"
             android:gravity="center"
             android:orientation="vertical">
             <TextView
@@ -81,41 +86,88 @@
             android:layout_marginStart="-16dp"
             android:src="@drawable/incomplete"
             android:visibility="gone"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/goto_fragment3"
+        <LinearLayout android:id="@+id/fragment3"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content">
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:alpha="0.5"
-                android:clickable="false"
-                android:elevation="1dp"
-                android:focusable="false"
-                android:padding="4dp"
-                android:text="3"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#ffffff"/>
+                android:layout_marginBottom="-3dp"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/goto_fragment3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginStart="16dp"
+                    android:alpha="0.5"
+                    android:clickable="false"
+                    android:elevation="1dp"
+                    android:focusable="false"
+                    android:padding="4dp"
+                    android:text="3"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffffff"/>
+                <ImageView
+                    android:id="@+id/up_arrow_3"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/up_arrow"
+                    android:visibility="gone"/>
+            </LinearLayout>
             <ImageView
-                android:id="@+id/up_arrow_3"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/up_arrow"
+                android:id="@+id/incomplete_step_3"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="-16dp"
+                android:layout_marginStart="-16dp"
+                android:src="@drawable/incomplete"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+        <LinearLayout android:id="@+id/fragment4"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-3dp"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/goto_fragment4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginStart="16dp"
+                    android:alpha="0.5"
+                    android:clickable="false"
+                    android:elevation="1dp"
+                    android:focusable="false"
+                    android:padding="4dp"
+                    android:text="4"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffffff"/>
+                <ImageView
+                    android:id="@+id/up_arrow_4"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/up_arrow"
+                    android:visibility="gone"/>
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/incomplete_step_4"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="-16dp"
+                android:layout_marginStart="-16dp"
+                android:src="@drawable/incomplete"
                 android:visibility="gone"/>
         </LinearLayout>
-        <ImageView
-            android:id="@+id/incomplete_step_3"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="-16dp"
-            android:layout_marginStart="-16dp"
-            android:src="@drawable/incomplete"
-            android:visibility="gone"/>
     </LinearLayout>
 </merge>

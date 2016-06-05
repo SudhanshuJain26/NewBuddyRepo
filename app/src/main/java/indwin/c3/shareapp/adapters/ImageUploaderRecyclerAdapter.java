@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.activities.FullScreenActivity;
+import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
 
@@ -30,10 +31,19 @@ public class ImageUploaderRecyclerAdapter extends
     private Context mContext;
     private String title;
     boolean disableAddButton;
+    private Image image;
 
     public ImageUploaderRecyclerAdapter(Context context, ArrayList<String> images, String title, boolean disableAddButton) {
         mContext = context;
         this.images = images;
+        this.title = title;
+        this.disableAddButton = disableAddButton;
+    }
+
+
+    public ImageUploaderRecyclerAdapter(Context context, Image image, String title, boolean disableAddButton) {
+        mContext = context;
+        this.image = image;
         this.title = title;
         this.disableAddButton = disableAddButton;
     }
@@ -64,7 +74,7 @@ public class ImageUploaderRecyclerAdapter extends
 
                     Intent intent = new Intent(mContext, FullScreenActivity.class);
                     intent.putExtra(AppUtils.IMAGE, images);
-                    intent.putExtra(Constants.DISABLE_ADD,disableAddButton);
+                    intent.putExtra(Constants.DISABLE_ADD, disableAddButton);
                     intent.putExtra(AppUtils.POSITION, position);
                     intent.putExtra(AppUtils.HEADING, title);
                     mContext.startActivity(intent);

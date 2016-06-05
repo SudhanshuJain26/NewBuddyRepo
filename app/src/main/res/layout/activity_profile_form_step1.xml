@@ -44,7 +44,7 @@
                 android:paddingBottom="-8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:paddingTop="-16dp"/>
+                android:paddingTop="-18dp"/>
 
 
         </LinearLayout>
@@ -95,6 +95,219 @@
             android:textAllCaps="false"
             android:textColor="@color/colorwhite"
             android:textSize="16sp"/>
+        <LinearLayout
+            android:id="@+id/college_name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.95"
+            android:background="#ffffff"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/close_college_name_layout"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:background="@color/transparent"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/close_black"/>
+
+                <TextView
+                    android:id="@+id/college_name_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:text="Enter your College Name"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+            <AutoCompleteTextView
+                android:id="@+id/college_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="true"
+                android:dropDownVerticalOffset="64dp"
+                android:inputType="textAutoComplete"
+                android:popupBackground="@color/transparent"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/cant_find_college_button"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/border_radius_button_gray"
+                android:text="Can't find your College?"
+                android:textAllCaps="false"
+                android:textColor="@color/colorwhite"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/add_college_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.95"
+            android:background="#ecf7f4"
+            android:clickable="true"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/add_name_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/close_add_college_name_layout"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:background="@color/transparent"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/close_black"/>
+
+                <TextView
+                    android:id="@+id/add_college_name_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:text="Add your College"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/college_not_found_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/add_name_linear_layout"
+                android:layout_marginTop="32dp"
+                android:text="Looks like we can't find your college in our database, but don't worry...\nAdd your College to our database now!"
+                android:textSize="16sp"/>
+
+            <AutoCompleteTextView
+                android:id="@+id/google_college_autocomplete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/college_not_found_text"
+                android:layout_marginLeft="-4dp"
+                android:layout_marginStart="-4dp"
+                android:layout_marginTop="24dp"
+                android:cursorVisible="true"
+                android:dropDownHeight="100dp"
+                android:hint="Add your College"
+                android:inputType="textAutoComplete"
+                android:popupBackground="@color/transparent"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/add_college"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/border_button_green"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingStart="16dp"
+                android:text="Add this college"
+                android:textAllCaps="false"
+                android:textColor="@color/colorwhite"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/add_course_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.95"
+            android:background="#ecf7f4"
+            android:clickable="true"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/add_course_name_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/close_add_course_name_layout"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:background="@color/transparent"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/close_black"/>
+
+                <TextView
+                    android:id="@+id/add_course_name_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:text="Add your Course"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/course_not_found_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/add_course_name_linear_layout"
+                android:layout_marginTop="32dp"
+                android:text="Looks like we can't find your course in our database, but don't worry...\nAdd your Course to our database now!"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/course_name_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/course_not_found_text"
+                android:layout_marginLeft="-4dp"
+                android:layout_marginStart="-4dp"
+                android:layout_marginTop="24dp"
+                android:cursorVisible="true"
+                android:dropDownHeight="100dp"
+                android:hint="Add your Course"
+                android:inputType="textAutoComplete"
+                android:popupBackground="@color/transparent"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/add_course"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/border_button_green"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingStart="16dp"
+                android:text="Add this course"
+                android:textAllCaps="false"
+                android:textColor="@color/colorwhite"
+                android:textSize="16sp"/>
+        </RelativeLayout>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

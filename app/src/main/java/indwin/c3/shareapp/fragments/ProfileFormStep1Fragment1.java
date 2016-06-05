@@ -2,6 +2,7 @@ package indwin.c3.shareapp.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -48,15 +49,21 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Set;
 
 import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.Views.DatePicker;
 import indwin.c3.shareapp.activities.ProfileFormStep1;
 import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
 import indwin.c3.shareapp.models.FBUserModel;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.DaysDifferenceFinder;
 import indwin.c3.shareapp.utils.FetchLatestUserDetails;
 import indwin.c3.shareapp.utils.FetchNewToken;
 import indwin.c3.shareapp.utils.HelpTipDialog;
@@ -70,6 +77,8 @@ public class ProfileFormStep1Fragment1 extends Fragment {
     TextView userEmail;
     ImageButton editEmail;
     EditText userEmailEditText;
+    static EditText dobEditText;
+    private static DatePicker datePicker;
     Button saveEmail, connectSocialAccountFb, connectSocialAccountInsta;
     CallbackManager callbackManager;
     private String email, firstName, friends, gender, lastName, link, name, fbuserId;
@@ -88,10 +97,11 @@ public class ProfileFormStep1Fragment1 extends Fragment {
     boolean isGenderSelected = false;
     ImageView topImage;
     public static Button verifyEmail;
-    boolean runningAsync = false;
     private ImageButton socialHelptip;
     private TextView incorrectEmail;
     private Spinner genderSpinner;
+    private ImageView incompleteDOB, completeDOB;
+    static boolean updateUserDOB = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -109,22 +119,40 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         if (!mPrefs.getBoolean("step1Editable", true)) {
             setViewAndChildrenEnabled(rootView, false);
         }
-        setAllHelpTipsEnabled();
 
 
         gson = new Gson();
         ProfileFormStep1 profileFormStep1 = (ProfileFormStep1) getActivity();
         user = profileFormStep1.getUser();
-        if (!user.isAppliedFor1k()) {
+        if (user.isAppliedFor1k()) {
 
             rootView.setEnabled(false);
         }
+        setAllHelpTipsEnabled();
 
         callbackManager = CallbackManager.Factory.create();
         loginManager = LoginManager.getInstance();
         registerFbCallback();
         isFbLoggedIn();
+        if (AppUtils.isNotEmpty(user.getDob())) {
+            dobEditText.setText(user.getDob());
+            completeDOB.setVisibility(View.VISIBLE);
+            user.setIncompleteDOB(false);
+        }
+        datePicker = new
 
+                DatePicker(getActivity(),
+
+                "DOB");
+        datePicker.build(new DialogInterface.OnClickListener()
+
+                         {
+                             @Override
+                             public void onClick(DialogInterface dialog, int which) {
+                             }
+                         }
+
+                , null);
         if (AppUtils.isNotEmpty(user.getEmail())) {
             userEmail.setText(user.getEmail());
         }
@@ -300,7 +328,9 @@ public class ProfileFormStep1Fragment1 extends Fragment {
 
 
     private void getAllViews(View rootView) {
-
+        dobEditText = (EditText) rootView.findViewById(R.id.user_dob_edittext);
+        completeDOB = (ImageView) rootView.findViewById(R.id.complete_dob);
+        incompleteDOB = (ImageView) rootView.findViewById(R.id.incomplete_dob);
         userEmail = (TextView) rootView.findViewById(R.id.user_email);
         userEmailEditText = (EditText) rootView.findViewById(R.id.user_email_edittext);
         editEmail = (ImageButton) rootView.findViewById(R.id.edit_user_email);
@@ -327,6 +357,14 @@ public class ProfileFormStep1Fragment1 extends Fragment {
 
 
     private void setAllClickListener() {
+        dobEditText.setOnClickListener(new View.OnClickListener()
+
+        {
+            @Override
+            public void onClick(View v) {
+                datePicker.show();
+            }
+        });
         socialHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -471,7 +509,35 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         }
     }
 
+    public static void confirmDOB() {
+        String date = datePicker.getSelectedDate() + " " + datePicker.getSelectedMonthName() + " " + datePicker.getSelectedYear();
+        dobEditText.setText(date);
+        updateUserDOB = true;
+    }
+
     public void checkIncomplete() {
+
+        if (updateUserDOB) {
+            try {
+                SimpleDateFormat spf = new SimpleDateFormat("dd MMM yyyy");
+                Date newDate = spf.parse(dobEditText.getText().toString());
+                spf = new SimpleDateFormat("yyyy-MM-dd");
+                user.setDob(spf.format(newDate));
+                user.setUpdateDOB(true);
+
+                Calendar endCalendar = new GregorianCalendar();
+                endCalendar.setTime(new Date());
+                Calendar startCalendar = new GregorianCalendar();
+                startCalendar.setTime(newDate);
+
+                int age = DaysDifferenceFinder.getDifferenceBetweenDatesInYears(startCalendar, endCalendar);
+                if (age < 18) {
+                    //isUnderAge = true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         if (!user.isEmailVerified()) {
             incompleteEmail.setVisibility(View.VISIBLE);
             user.setIncompleteEmail(true);
@@ -486,8 +552,21 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         }
         if (!isGenderSelected) {
             user.setIncompleteGender(true);
+            completeGender.setVisibility(View.GONE);
+            incompleteGender.setVisibility(View.VISIBLE);
         } else {
             user.setIncompleteGender(false);
+            incompleteGender.setVisibility(View.GONE);
+            completeGender.setVisibility(View.VISIBLE);
+        }
+        if ("".equals(dobEditText.getText().toString())) {
+            user.setIncompleteDOB(true);
+            completeDOB.setVisibility(View.GONE);
+            incompleteDOB.setVisibility(View.VISIBLE);
+        } else {
+            user.setIncompleteDOB(false);
+            incompleteDOB.setVisibility(View.GONE);
+            completeDOB.setVisibility(View.VISIBLE);
         }
     }
 
@@ -540,6 +619,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             ViewGroup viewGroup = (ViewGroup) view;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
                 View child = viewGroup.getChildAt(i);
+                child.setEnabled(enabled);
                 setViewAndChildrenEnabled(child, enabled);
             }
         }

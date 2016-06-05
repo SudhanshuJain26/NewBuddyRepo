@@ -249,10 +249,15 @@ public class ProfileFormStep3Fragment1 extends Fragment {
 
     public void checkIncomplete() {
 
-        if (!selectedAnnualFees)
+        if (!selectedAnnualFees) {
             user.setIncompleteAnnualFees(true);
-        else
+            completeAnnualFees.setVisibility(View.GONE);
+            incompleteAnnualFees.setVisibility(View.VISIBLE);
+        } else {
             user.setIncompleteAnnualFees(false);
+            incompleteAnnualFees.setVisibility(View.GONE);
+            completeAnnualFees.setVisibility(View.VISIBLE);
+        }
         if ("".equals(scholarshipAmount.getText().toString().trim()) && scholarshipAmount.getVisibility() == View.VISIBLE)
             user.setIncompleteScholarship(true);
         else if (!"".equals(scholarshipAmount.getText().toString().trim())) {
@@ -268,6 +273,14 @@ public class ProfileFormStep3Fragment1 extends Fragment {
         if ("Yes".equalsIgnoreCase(user.getScholarship()) || "true".equalsIgnoreCase(user.getScholarship()) && (AppUtils.isEmpty(user.getScholarshipType()) || AppUtils.isEmpty(user.getScholarshipAmount()))) {
 
             user.setIncompleteScholarship(true);
+        }
+
+        if (user.isIncompleteScholarship()) {
+            completeScholarshipDetails.setVisibility(View.GONE);
+            incompleteScholarshipDetails.setVisibility(View.VISIBLE);
+        } else {
+            incompleteScholarshipDetails.setVisibility(View.GONE);
+            completeScholarshipDetails.setVisibility(View.VISIBLE);
         }
 
     }

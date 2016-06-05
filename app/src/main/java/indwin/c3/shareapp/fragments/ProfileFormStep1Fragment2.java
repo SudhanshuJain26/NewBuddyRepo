@@ -21,8 +21,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,9 +112,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     private ImageButton socialHelptip;
     private Button addCourse, addCollege;
     private EditText addCourseEt;
-    private EditText addRollNumberEt;
-    private ImageView incompleteRollNumber, completeRollNumber;
-    private boolean isRollNUmberUpdate;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -219,53 +215,16 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         collegeNameLayout.getLayoutParams().height = height;
         addCollegeLayout.getLayoutParams().height = height;
         //        collegeNameMapLayout.getLayoutParams().height = height;
-        addRollNumberEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (AppUtils.isNotEmpty(addRollNumberEt.getText().toString())) {
-
-                    user.setRollNumber(addRollNumberEt.getText().toString());
-                    user.setUpdateRollNumber(true);
-                }
-
-            }
-        });
-        if (AppUtils.isNotEmpty(user.getRollNumber())) {
-
-            addRollNumberEt.setText(user.getRollNumber());
-            completeRollNumber.setVisibility(View.VISIBLE);
-        }
         if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails() || user.isIncompleteRollNumber())
 
         {
-            incompleteStep2.setVisibility(View.VISIBLE);
             if (user.isIncompleteCollegeId())
                 incompleteCollegeId.setVisibility(View.VISIBLE);
             if (user.isIncompleteCollegeDetails())
                 incompleteCollegeDetails.setVisibility(View.VISIBLE);
-            if (user.isIncompleteRollNumber()) {
-                incompleteRollNumber.setVisibility(View.VISIBLE);
-            } else {
-                completeRollNumber.setVisibility(View.VISIBLE);
 
-            }
-        } else
-
-        {
-            incompleteStep2.setVisibility(View.GONE);
         }
-
         if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender())
 
         {
@@ -297,23 +256,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
 
 
     private void setOnCLickListener() {
-        addRollNumberEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                isRollNUmberUpdate = true;
-                user.setUpdateRollNumber(true);
-            }
-        });
         addCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -555,34 +498,31 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
 
     private void getAllViews(View rootView) {
         completeCollegeId = (ImageView) rootView.findViewById(R.id.complete_college_id);
-        addCourse = (Button) rootView.findViewById(R.id.add_course);
-        addRollNumberEt = (EditText) rootView.findViewById(R.id.roll_number_et);
+        addCourse = (Button) getActivity().findViewById(R.id.add_course);
 
-        completeRollNumber = (ImageView) rootView.findViewById(R.id.complete_roll_number);
-        incompleteRollNumber = (ImageView) rootView.findViewById(R.id.incomplete_roll_number);
-        addCollege = (Button) rootView.findViewById(R.id.add_college);
+        addCollege = (Button) getActivity().findViewById(R.id.add_college);
         editCollegeName = (TextView) rootView.findViewById(R.id.edit_college_name);
         editCourseName = (TextView) rootView.findViewById(R.id.edit_course_name);
         editCollegeEndDate = (TextView) rootView.findViewById(R.id.edit_college_end_date);
         editCollegeEndDate = (TextView) rootView.findViewById(R.id.edit_college_end_date);
-        collegeNameLayout = (LinearLayout) rootView.findViewById(R.id.college_name_layout);
-        collegeName = (AutoCompleteTextView) rootView.findViewById(R.id.college_name);
-        addCourseEt = (EditText) rootView.findViewById(R.id.course_name_et);
-        closeCollegeNameLayout = (ImageButton) rootView.findViewById(R.id.close_college_name_layout);
+        collegeNameLayout = (LinearLayout) getActivity().findViewById(R.id.college_name_layout);
+        collegeName = (AutoCompleteTextView) getActivity().findViewById(R.id.college_name);
+        addCourseEt = (EditText) getActivity().findViewById(R.id.course_name_et);
+        closeCollegeNameLayout = (ImageButton) getActivity().findViewById(R.id.close_college_name_layout);
         collegeArrayList = new ArrayList<>(Arrays.asList(getActivity().getResources().getStringArray(R.array.colleges)));
         courseArrayList = new ArrayList<>(Arrays.asList(getActivity().getResources().getStringArray(R.array.courses)));
-        collegeNameHeading = (TextView) rootView.findViewById(R.id.college_name_heading);
+        collegeNameHeading = (TextView) getActivity().findViewById(R.id.college_name_heading);
         //        collegeNameMapLayout = (RelativeLayout) rootView.findViewById(R.id.college_name_map_layout);
         //        collegeNameMap = (TextView) rootView.findViewById(R.id.college_name_map);
         //        closeCollegeNameMapLayout = (ImageButton) rootView.findViewById(R.id.close_college_name_map_layout);
         //        acceptCollege = (Button) rootView.findViewById(R.id.accept_college);
 
         //previous = (Button) getActivity().findViewById(R.id.previous);
-        addCollegeLayout = (RelativeLayout) rootView.findViewById(R.id.add_college_layout);
-        addCourseLayout = (RelativeLayout) rootView.findViewById(R.id.add_course_layout);
+        addCollegeLayout = (RelativeLayout) getActivity().findViewById(R.id.add_college_layout);
+        addCourseLayout = (RelativeLayout) getActivity().findViewById(R.id.add_course_layout);
 
-        cantFindCollege = (Button) rootView.findViewById(R.id.cant_find_college_button);
-        closeAddCollegeLayout = (ImageButton) rootView.findViewById(R.id.close_add_college_name_layout);
+        cantFindCollege = (Button) getActivity().findViewById(R.id.cant_find_college_button);
+        closeAddCollegeLayout = (ImageButton) getActivity().findViewById(R.id.close_add_college_name_layout);
         incompleteCollegeId = (ImageView) rootView.findViewById(R.id.incomplete_college_id);
         completeCollegeDetails = (ImageView) rootView.findViewById(R.id.complete_college_details);
         incompleteCollegeDetails = (ImageView) rootView.findViewById(R.id.incomplete_college_details);
@@ -593,7 +533,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         saveAndProceed = (Button) getActivity().findViewById(R.id.save_and_proceed);
         socialHelptip = (ImageButton) getActivity().findViewById(R.id.social_helptip);
 
-        googleCollegeName = (AutoCompleteTextView) rootView.findViewById(R.id.google_college_autocomplete);
+        googleCollegeName = (AutoCompleteTextView) getActivity().findViewById(R.id.google_college_autocomplete);
 
     }
 
@@ -621,7 +561,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
             user.setIncompleteCollegeId(true);
         } else if (collegeIds.size() == 1) {
             if ("add".equals(collegeIds.get(0))) {
-                user.setIncompleteBankStmt(true);
+                user.setIncompleteCollegeId(true);
             } else {
                 user.setIncompleteCollegeId(false);
             }
@@ -630,17 +570,18 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                 user.setCollegeIds(collegeIds);
             }
             user.setIncompleteCollegeId(false);
-        }
-        if (AppUtils.isEmpty(addRollNumberEt.getText().toString())) {
 
-            user.setIncompleteRollNumber(true);
+        }
+        if (user.isIncompleteCollegeId()) {
+            incompleteCollegeId.setVisibility(View.VISIBLE);
+            completeCollegeId.setVisibility(View.GONE);
+
         } else {
-            user.setIncompleteRollNumber(false);
-            incompleteRollNumber.setVisibility(View.GONE);
-            completeRollNumber.setVisibility(View.VISIBLE);
+            completeCollegeId.setVisibility(View.VISIBLE);
+            incompleteCollegeId.setVisibility(View.GONE);
         }
         if ("".equals(editCollegeName.getText().toString()) || "".equals(editCourseName.getText().toString())
-                || "".equals(editCollegeEndDate.getText().toString()) || AppUtils.isEmpty(addRollNumberEt.getText().toString())) {
+                || "".equals(editCollegeEndDate.getText().toString())) {
             incompleteCollegeDetails.setVisibility(View.VISIBLE);
             completeCollegeDetails.setVisibility(View.GONE);
             user.setIncompleteCollegeDetails(true);
@@ -667,7 +608,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
             }
             for (Uri uri : imageUris) {
                 collegeIds.add(0, uri.getPath());
-                user.getCollegeIds().add(0,uri.getPath());
+                user.getCollegeIds().add(0, uri.getPath());
                 user.getNewCollegeIds().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
             }
 

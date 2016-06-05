@@ -237,57 +237,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"/>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:id="@+id/agreement"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Agreement"
-                        android:textColor="#44c2a6"
-                        android:textSize="14sp"
-                        android:textStyle="bold"/>
-
-                    <ImageView
-                        android:id="@+id/incomplete_agreement"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_toEndOf="@id/agreement"
-                        android:layout_toRightOf="@id/agreement"
-                        android:src="@drawable/incomplete"
-                        android:visibility="gone"/>
-
-                    <ImageView
-                        android:id="@+id/complete_agreement"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_toEndOf="@id/agreement"
-                        android:layout_toRightOf="@id/agreement"
-                        android:src="@drawable/complete"
-                        android:visibility="gone"/>
 
 
-                </RelativeLayout>
-
-                <Button
-                    android:id="@+id/agreement_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#44c2a6"
-                    android:text="Agreement"
-                    android:textColor="@color/colorwhite"
-                    android:textSize="12sp"/>
 
             </LinearLayout>
 

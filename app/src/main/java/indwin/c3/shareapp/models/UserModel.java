@@ -44,7 +44,13 @@ public class UserModel {
     String dob;
     String accommodation;
     String currentAddress;
+    private String currentAddressLine2;
+    private String currentAddressPinCode;
+    private String currentAddressCity;
     String permanentAddress;
+    private String permanentAddressLine2;
+    private String permanentAddressPinCode;
+    private String permanentAddressCity;
     String familyMemberType1;
     String professionFamilyMemberType1;
     String prefferedLanguageFamilyMemberType1;
@@ -71,7 +77,7 @@ public class UserModel {
     Map<String, String> newBankStmts;
     ArrayList<String> bankProofs;
     Map<String, String> newBankProofs;
-    String currentAddressCity;
+
     String iv;
     int creditLimit = 0;
     int availableCredit = 0;
@@ -87,6 +93,10 @@ public class UserModel {
     String gpaType;
     String gpa;
 
+    private ArrayList<String> marksheets;
+    private Map<String, String> newMarksheets;
+    private boolean updateNewMarksheets;
+    private boolean incompleteMarksheets;
     private boolean updatePreferredLanguageFamilyMemberType1;
     private boolean updatePreferredLanguageFamilyMemberType2;
     boolean emailSent;
@@ -107,7 +117,7 @@ public class UserModel {
     boolean updateClassmatePhone;
     boolean updateVerificationDate;
     boolean updateBankAccNum;
-
+    private boolean incompleteGpa;
     boolean gpaTypeUpdate;
     boolean gpaValueUpdate;
     boolean updateBankIfsc;
@@ -1277,5 +1287,86 @@ public class UserModel {
 
     public void setSelfieStatus(String selfieStatus) {
         this.selfieStatus = selfieStatus;
+    }
+
+
+    public boolean isIncompleteGpa() {
+        return incompleteGpa;
+    }
+
+    public void setIncompleteGpa(boolean incompleteGpa) {
+        this.incompleteGpa = incompleteGpa;
+    }
+
+    public ArrayList<String> getMarksheets() {
+        return marksheets;
+    }
+
+    public void setMarksheets(ArrayList<String> marksheets) {
+        this.marksheets = marksheets;
+    }
+
+    public Map<String, String> getNewMarksheets() {
+        return newMarksheets;
+    }
+
+    public void setNewMarksheets(Map<String, String> newMarksheets) {
+        this.newMarksheets = newMarksheets;
+    }
+
+    public boolean isUpdateNewMarksheets() {
+        return updateNewMarksheets;
+    }
+
+    public void setUpdateNewMarksheets(boolean updateNewMarksheets) {
+        this.updateNewMarksheets = updateNewMarksheets;
+    }
+
+    public String getCurrentAddressLine2() {
+        return currentAddressLine2;
+    }
+
+    public void setCurrentAddressLine2(String currentAddressLine2) {
+        this.currentAddressLine2 = currentAddressLine2;
+    }
+
+    public String getCurrentAddressPinCode() {
+        return currentAddressPinCode;
+    }
+
+    public void setCurrentAddressPinCode(String currentAddressPinCode) {
+        this.currentAddressPinCode = currentAddressPinCode;
+    }
+
+    public String getPermanentAddressLine2() {
+        return permanentAddressLine2;
+    }
+
+    public void setPermanentAddressLine2(String permanentAddressLine2) {
+        this.permanentAddressLine2 = permanentAddressLine2;
+    }
+
+    public String getPermanentAddressPinCode() {
+        return permanentAddressPinCode;
+    }
+
+    public void setPermanentAddressPinCode(String permanentAddressPinCode) {
+        this.permanentAddressPinCode = permanentAddressPinCode;
+    }
+
+    public String getPermanentAddressCity() {
+        return permanentAddressCity;
+    }
+
+    public void setPermanentAddressCity(String permanentAddressCity) {
+        this.permanentAddressCity = permanentAddressCity;
+    }
+
+    public boolean isIncompleteMarksheets() {
+        return incompleteMarksheets;
+    }
+
+    public void setIncompleteMarksheets(boolean incompleteMarksheets) {
+        this.incompleteMarksheets = incompleteMarksheets;
     }
 }

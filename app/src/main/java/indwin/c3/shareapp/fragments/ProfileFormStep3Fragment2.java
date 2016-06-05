@@ -215,16 +215,30 @@ public class ProfileFormStep3Fragment2 extends Fragment {
     }
 
     public void checkIncomplete() {
-        if (!isMonthlyExpenditureSelected)
+        if (!isMonthlyExpenditureSelected) {
             user.setIncompleteMonthlyExpenditure(true);
-        else
+            incompleteMonthlyExpenditure.setVisibility(View.VISIBLE);
+            completeMonthlyExpenditure.setVisibility(View.GONE);
+        } else {
             user.setIncompleteMonthlyExpenditure(false);
+            completeMonthlyExpenditure.setVisibility(View.VISIBLE);
+            incompleteMonthlyExpenditure.setVisibility(View.GONE);
+        }
         if (!isVehicleTypeSelected && vehicleSpinnerType.getVisibility() == View.VISIBLE)
             user.setIncompleteVehicleDetails(true);
         if (!isVehicleSelected)
             user.setIncompleteVehicleDetails(true);
         else
             user.setIncompleteVehicleDetails(false);
+
+        if (user.isIncompleteVehicleDetails()) {
+
+            incompleteVehicleDetails.setVisibility(View.VISIBLE);
+            completeVehicleDetails.setVisibility(View.GONE);
+        } else {
+            completeVehicleDetails.setVisibility(View.VISIBLE);
+            incompleteVehicleDetails.setVisibility(View.GONE);
+        }
     }
 
 

@@ -43,7 +43,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import indwin.c3.shareapp.R;
-import indwin.c3.shareapp.activities.AgreementActivity;
 import indwin.c3.shareapp.activities.ImageHelperActivity;
 import indwin.c3.shareapp.activities.ProfileFormStep1;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
@@ -84,8 +83,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private LinearLayout incorrectFormat;
     private ImageButton editAadhar;
     private Button saveAadhar;
-    private Button agreementBtn;
-    public static ImageView incompleteAgreement, completeAgreement;
     private TextView uploadImageMsgTv;
 
     @Override
@@ -121,9 +118,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvImages.setLayoutManager(layoutManager);
-        if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature())) {
-            completeAgreement.setVisibility(View.VISIBLE);
-        }
         rvImages.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -150,15 +144,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         }
 
         setAllHelpTipsEnabled();
-        agreementBtn.setEnabled(true);
-        agreementBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(getActivity(), AgreementActivity.class);
-                startActivity(intent);
-            }
-        });
 
 
         arrayAaadharOrPan = getResources().getStringArray(R.array.aadhar_or_pan);
@@ -199,14 +184,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
         setOnClickListener();
         aadharOrPan.setAdapter(adapter);
-
-        if (user.isInCompleteAgreement()) {
-
-            incompleteAgreement.setVisibility(View.VISIBLE);
-        } else if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature())) {
-
-            completeAgreement.setVisibility(View.VISIBLE);
-        }
         if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()) {
             incompleteStep1.setVisibility(View.VISIBLE);
         }
@@ -214,9 +191,9 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             user.setIncompleteCollegeId(false);
         }
         if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails() || user.isIncompleteRollNumber()) {
-            incompleteStep2.setVisibility(View.VISIBLE);
+            //incompleteStep2.setVisibility(View.VISIBLE);
         }
-        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress() || user.isInCompleteAgreement()) {
+        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress()) {
             incompleteStep3.setVisibility(View.VISIBLE);
             if (user.isIncompleteAadhar())
                 incompleteAadhar.setVisibility(View.VISIBLE);
@@ -338,8 +315,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
     private void getAllViews(View rootView) {
         uploadImageMsgTv = (TextView) rootView.findViewById(R.id.address_proof_header);
-        completeAgreement = (ImageView) rootView.findViewById(R.id.complete_agreement);
-        incompleteAgreement = (ImageView) rootView.findViewById(R.id.incomplete_agreement);
         completeAddress = (ImageView) rootView.findViewById(R.id.complete_address_proof);
         aadharPanHeader = (TextView) rootView.findViewById(R.id.aadhar_pan_header);
         editTextHeader = (TextView) rootView.findViewById(R.id.editext_header);
@@ -349,7 +324,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         incompleteAadhar = (ImageView) rootView.findViewById(R.id.incomplete_aadhar);
         completeAadhar = (ImageView) rootView.findViewById(R.id.complete_aadhar);
         incompleteAddress = (ImageView) rootView.findViewById(R.id.incomplete_address_proof);
-        agreementBtn = (Button) rootView.findViewById(R.id.agreement_btn);
         currentSelected = 0;
         incompleteStep1 = (ImageView) getActivity().findViewById(R.id.incomplete_step_1);
         incompleteStep2 = (ImageView) getActivity().findViewById(R.id.incomplete_step_2);
@@ -416,16 +390,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     }
 
     public void checkIncomplete() {
-        saveSelfieAndSignature();
-        if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
-            user.setInCompleteAgreement(true);
-            incompleteAgreement.setVisibility(View.VISIBLE);
-            completeAgreement.setVisibility(View.GONE);
-        } else {
-            user.setInCompleteAgreement(false);
-            incompleteAgreement.setVisibility(View.GONE);
-            completeAgreement.setVisibility(View.VISIBLE);
-        }
+
         if (aadharNuber.getVisibility() == View.GONE) {
             user.setIncompleteAadhar(true);
             incompleteAadhar.setVisibility(View.VISIBLE);

@@ -456,8 +456,12 @@ public class ProfileFormStep2Fragment2 extends Fragment {
 
         if (!isFamilyMember1Selected || !isProfessionFamilyMember1Selected || AppUtils.isEmpty(user.getPrefferedLanguageFamilyMemberType1()) || AppUtils.isEmpty(user.getPhoneFamilyMemberType1())) {
             user.setIncompleteFamilyDetails(true);
+            completeFamilyDetails.setVisibility(View.GONE);
+            incompleteFamilyDetails.setVisibility(View.INVISIBLE);
         } else {
             user.setIncompleteFamilyDetails(false);
+            incompleteFamilyDetails.setVisibility(View.GONE);
+            completeFamilyDetails.setVisibility(View.INVISIBLE);
         }
     }
 

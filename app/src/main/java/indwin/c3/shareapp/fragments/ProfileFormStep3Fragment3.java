@@ -236,6 +236,14 @@ public class ProfileFormStep3Fragment3 extends Fragment {
             }
             user.setIncompleteBankStmt(false);
         }
+
+        if (user.isIncompleteBankStmt()) {
+            incompleteBankStmt.setVisibility(View.VISIBLE);
+            completeBankStmt.setVisibility(View.GONE);
+        } else {
+            completeBankStmt.setVisibility(View.VISIBLE);
+            incompleteBankStmt.setVisibility(View.GONE);
+        }
     }
 
 
@@ -260,7 +268,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
             }
             adapter.notifyDataSetChanged();
             user.setUpdateNewBankStmts(true);
-            AppUtils.saveUserObject(getActivity(),user);
+            AppUtils.saveUserObject(getActivity(), user);
         }
     }
 

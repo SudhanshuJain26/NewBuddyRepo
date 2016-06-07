@@ -424,7 +424,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         //    user.setIncompletePermanentAddress(false);
         //}
 
-        if (addressProof.getBack() == null && addressProof.getFront() == null) {
+        if (addressProof.getBack() == null || addressProof.getFront() == null) {
             user.setIncompleteCollegeId(true);
         } else {
             user.setIncompleteCollegeId(false);

@@ -573,7 +573,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     }
 
     public void checkIncomplete() {
-        if (collegeIDs.getBack() == null && collegeIDs.getFront() == null) {
+        if (collegeIDs.getBack() == null || collegeIDs.getFront() == null) {
             incompleteCollegeId.setVisibility(View.VISIBLE);
             user.setIncompleteCollegeId(true);
         } else {

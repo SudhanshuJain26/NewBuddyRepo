@@ -431,7 +431,8 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     }
 
     private void setAllHelpTipsEnabled() {
-        setAllHelpTipsEnabled();
+        gpaHelptip.setEnabled(true);
+
     }
 
     public void checkIncomplete() {

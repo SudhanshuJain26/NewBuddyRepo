@@ -144,16 +144,6 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
 
         googleCurrentAddress.setOnItemClickListener(mAutocompleteClickListener);
 
-        addressHelptip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text1 = "Please enter the locality of both, your local address locality (the city where you study) " +
-                        "as well as your permanent address locality (as on your permanent address proof)";
-                String text2 = "";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#eeb85f");
-                dialog.show();
-            }
-        });
 
         final Spinner spinner = (Spinner) rootView.findViewById(R.id.place_of_stay);
         SpinnerHintAdapter adapter = new SpinnerHintAdapter(getActivity(), placesToStay, R.layout.spinner_item_underline);
@@ -251,17 +241,10 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
         addressHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text1;
-
-                if (aadharOrPan.getSelectedItemPosition() == 0) {
-                    text1 = "Upload photos or scans of your Aadhar Card registered in your name and with the Aadhar number you have provided.";
-
-                } else {
-                    text1 = "Upload either your DL, Aadhar Card or Passports’ softcopy. Or, you could upload one of your parents' Permanent Address Proof.<br>You can upload either photos or scanned copies of these documents.";
-
-                }
-                String text2 = "Please remember to upload both front and back sides of the card.";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
+                String text1 = "Please enter the locality of both, your local address locality (the city where you study) " +
+                        "as well as your permanent address locality (as on your permanent address proof)";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#eeb85f");
                 dialog.show();
             }
         });

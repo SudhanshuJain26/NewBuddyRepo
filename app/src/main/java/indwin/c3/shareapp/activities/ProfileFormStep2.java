@@ -170,8 +170,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
                         okay.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(ProfileFormStep2.this, CheckInternetAndUploadUserDetails.class);
-                                sendBroadcast(intent);
+                                uploadDetailsToServer();
                                 dialog1.dismiss();
                                 Intent intent2 = new Intent(ProfileFormStep2.this, ProfileActivity.class);
                                 intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -195,8 +194,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
                         dialog1.show();
                         return;
                     } else {
-                        Intent intentDataUpload = new Intent(ProfileFormStep2.this, CheckInternetAndUploadUserDetails.class);
-                        sendBroadcast(intentDataUpload);
+                        uploadDetailsToServer();
                         Intent intent1 = new Intent(ProfileFormStep2.this, Pending7kApprovalActivity.class);
                         startActivity(intent1);
                         finish();
@@ -233,6 +231,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
             userModel.setUpdateStudentLoan(true);
         }
         AppUtils.saveUserObject(this, userModel);
+        uploadDetailsToServer();
     }
 
     private void saveStep2Data() {
@@ -254,6 +253,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
             userModel.setUpdatePreferredLanguageFamilyMemberType1(true);
         }
         AppUtils.saveUserObject(this, userModel);
+        uploadDetailsToServer();
 
     }
 
@@ -270,6 +270,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         }
 
         AppUtils.saveUserObject(this, userModel);
+        uploadDetailsToServer();
     }
 
 
@@ -295,6 +296,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
             userModel.setUpdateVerificationDate(true);
         }
         AppUtils.saveUserObject(this, userModel);
+        uploadDetailsToServer();
     }
 
     private void setAllUpdateFalse() {
@@ -429,11 +431,19 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
 
     @Override
     public void onBackPressed() {
-        if (mPager.getCurrentItem() == 0) {
-            super.onBackPressed();
-        } else {
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
+        onPageSelected(mPager.getCurrentItem());
+        super.onBackPressed();
+
+        //if (mPager.getCurrentItem() == 0) {
+        //    super.onBackPressed();
+        //} else {
+        //    mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        //}
+    }
+
+    private void uploadDetailsToServer() {
+        Intent intent = new Intent(ProfileFormStep2.this, CheckInternetAndUploadUserDetails.class);
+        sendBroadcast(intent);
     }
 
     private void hideShowUpArrow(int i) {

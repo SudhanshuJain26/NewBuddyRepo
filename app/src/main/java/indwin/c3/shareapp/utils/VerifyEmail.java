@@ -14,7 +14,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import indwin.c3.shareapp.R;
-import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment1;
+import indwin.c3.shareapp.activities.AccountSettingsActivity;
 
 /**
  * Created by shubhang on 18/04/16.
@@ -71,7 +71,7 @@ public class VerifyEmail extends
                 retryCount++;
                 if (result.equals("success")) {
                     Toast.makeText(context,context.getResources().getString(R.string.confirmation_email_link),Toast.LENGTH_SHORT).show();
-                    ProfileFormStep1Fragment1.verifyEmail.setText("Check");
+                    AccountSettingsActivity.verifyEmail.setText("Check");
                 } else if (result.equals("authFailed")) {
                     new FetchNewToken(context).execute();
                     new VerifyEmail(context, phone, email).execute();

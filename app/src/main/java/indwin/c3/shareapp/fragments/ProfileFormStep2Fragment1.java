@@ -2,6 +2,7 @@ package indwin.c3.shareapp.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,6 +53,7 @@ import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
+import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import io.intercom.com.google.gson.Gson;
 
@@ -102,6 +104,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     boolean deniedPermissionForever = false;
     private ImageView completeMarksheets, incompleteMarksheets;
     private Image marksheet;
+    private ImageButton gpaHelptip;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -168,7 +171,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if (marksheet.getImgUrls().get(position-marksheet.getInvalidImgUrls().size()-marksheet.getValidImgUrls().size()).equals("add")) {
+                        if (marksheet.getImgUrls().get(position - marksheet.getInvalidImgUrls().size() - marksheet.getValidImgUrls().size()).equals("add")) {
 
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {
@@ -321,6 +324,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         return rootView;
     }
 
+
     public String[] hasPermissions(Context context, final String... permissions) {
         ArrayList<String> askPermissions = new ArrayList<>();
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
@@ -381,7 +385,15 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
 
 
     private void setOnClickListerner() {
-
+        gpaHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "We want to encourage students who take their studies seriously. Giving us these details will help us better assess your credibility and may result in getting you more Credit Limit! We do not disclose these details to anybody (Not even your parents)";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(getActivity(), "%GPA", text1, text2, "#eeb85f");
+                dialog.show();
+            }
+        });
         gpaTypeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -405,6 +417,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     }
 
     private void getAllViews(View rootView) {
+        gpaHelptip = (ImageButton) rootView.findViewById(R.id.gpa_helptip);
         rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
         gpaTypeSp = (Spinner) rootView.findViewById(R.id.gpa_spinner);
         spinnerErrorTv = (TextView) rootView.findViewById(R.id.spinner_error_msg_tv);
@@ -418,6 +431,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     }
 
     private void setAllHelpTipsEnabled() {
+        setAllHelpTipsEnabled();
     }
 
     public void checkIncomplete() {

@@ -2,10 +2,8 @@ package indwin.c3.shareapp.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -16,6 +14,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.activities.AccountSettingsActivity;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment1;
 import indwin.c3.shareapp.models.UserModel;
 
@@ -30,7 +29,7 @@ public class FetchLatestUserDetails extends
     String phone;
     private UserModel userModel;
 
-    public FetchLatestUserDetails(Context context, String phone,UserModel userModel) {
+    public FetchLatestUserDetails(Context context, String phone, UserModel userModel) {
         this.context = context;
         this.phone = phone;
         this.userModel = userModel;
@@ -85,22 +84,20 @@ public class FetchLatestUserDetails extends
             if (retryCount < 3) {
                 retryCount++;
                 if (result.equals("success")) {
-                    ProfileFormStep1Fragment1.verifyEmail.setText("Verified!");
-                    ProfileFormStep1Fragment1.verifyEmail.setTextColor(Color.GRAY);
-                    ProfileFormStep1Fragment1.verifyEmail.setClickable(false);
-                    ProfileFormStep1Fragment1.verifyEmail.setEnabled(false);
-                    ProfileFormStep1Fragment1.completeEmail.setVisibility(View.VISIBLE);
-                    ProfileFormStep1Fragment1.incompleteEmail.setVisibility(View.GONE);
+                    UserModel userModel = AppUtils.getUserObject(context);
+                    AccountSettingsActivity.verifyEmail.setText("Verified!");
+                    AccountSettingsActivity.verifyEmail.setClickable(false);
+                    userModel.setEmailVerified(true);
                     AppUtils.saveUserObject(context, userModel);
 
                 } else if (result.equals("notVerified")) {
-                    ProfileFormStep1Fragment1.verifyEmail.setText("Check");
+                    AccountSettingsActivity.verifyEmail.setText("Check");
                     Toast.makeText(context, "Please try again", Toast.LENGTH_SHORT).show();
                 } else if (result.equals("authFailed")) {
                     new FetchNewToken(context).execute();
-                    new FetchLatestUserDetails(context, phone,userModel).execute();
+                    new FetchLatestUserDetails(context, phone, userModel).execute();
                 } else if (result.equals("fail"))
-                    new FetchLatestUserDetails(context, phone,userModel).execute();
+                    new FetchLatestUserDetails(context, phone, userModel).execute();
             } else
                 retryCount = 0;
         } catch (Exception e) {

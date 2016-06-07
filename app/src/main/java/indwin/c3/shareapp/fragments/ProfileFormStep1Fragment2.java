@@ -545,14 +545,17 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         incompleteStep3 = (ImageView) getActivity().findViewById(R.id.incomplete_step_3);
         topImage = (ImageView) getActivity().findViewById(R.id.verify_image_view2);
         saveAndProceed = (Button) getActivity().findViewById(R.id.save_and_proceed);
-        socialHelptip = (ImageButton) getActivity().findViewById(R.id.social_helptip);
+        socialHelptip = (ImageButton) rootView.findViewById(R.id.social_helptip);
 
         googleCollegeName = (AutoCompleteTextView) getActivity().findViewById(R.id.google_college_autocomplete);
 
     }
 
 
-    private void setAllHelpTipsEnabled() { socialHelptip.setEnabled(true);}
+    private void setAllHelpTipsEnabled() {
+        socialHelptip.setEnabled(true);
+        socialHelptip.setClickable(true);
+    }
 
     @Override
     public void onStart() {
@@ -609,25 +612,23 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                 user.setCollegeID(new Image());
             FrontBackImage frontBackImage = new FrontBackImage();
             if (imageUris != null && imageUris.size() > 0) {
+                Image collegeId = user.getCollegeID();
                 frontBackImage.setImgUrl(imageUris.get(0).getPath());
+                if (clickedPosition == 0) {
+                    collegeId.setFront(frontBackImage);
+                    collegeId.setUpdateFront(true);
+                    collegeIDs.setFront(frontBackImage);
+                } else if (clickedPosition == 1) {
+                    collegeId.setUpdateBack(true);
+                    collegeId.setBack(frontBackImage);
+                    collegeIDs.setBack(frontBackImage);
+                }
 
+                adapter.notifyDataSetChanged();
+                AppUtils.saveUserObject(getActivity(), user);
             }
 
-            Image collegeId = user.getCollegeID();
-            if (clickedPosition == 0) {
 
-                collegeId.setFront(frontBackImage);
-                collegeId.setUpdateFront(true);
-                collegeIDs.setFront(frontBackImage);
-            } else if (clickedPosition == 1) {
-                collegeId.setUpdateBack(true);
-                collegeId.setBack(frontBackImage);
-                collegeIDs.setBack(frontBackImage);
-            }
-
-
-            adapter.notifyDataSetChanged();
-            AppUtils.saveUserObject(getActivity(), user);
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resuleCode == Activity.RESULT_OK) {
             hasPermissions(getActivity(), PERMISSIONS);
         }

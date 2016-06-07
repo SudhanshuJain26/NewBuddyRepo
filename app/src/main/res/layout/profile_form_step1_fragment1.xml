@@ -27,7 +27,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -60,7 +61,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/user_email"
@@ -179,47 +181,47 @@
                 </LinearLayout>
 
                 <LinearLayout
-                                  android:layout_width="wrap_content"
-                                  android:layout_height="wrap_content"
-                                  android:layout_marginTop="32dp">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp">
 
-                                  <TextView
-                                      android:layout_width="wrap_content"
-                                      android:layout_height="wrap_content"
-                                      android:text="Tell us your Gender"
-                                      android:textColor="#44c2a6"
-                                      android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tell us your Gender"
+                        android:textColor="#44c2a6"
+                        android:textStyle="bold"/>
 
-                                  <ImageView
-                                      android:id="@+id/incomplete_gender"
-                                      android:layout_width="15dp"
-                                      android:layout_height="15dp"
-                                      android:layout_marginLeft="8dp"
-                                      android:layout_marginStart="8dp"
-                                      android:src="@drawable/incomplete"
-                                      android:visibility="gone"/>
+                    <ImageView
+                        android:id="@+id/incomplete_gender"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/incomplete"
+                        android:visibility="gone"/>
 
-                                  <ImageView
-                                      android:id="@+id/complete_gender"
-                                      android:layout_width="15dp"
-                                      android:layout_height="15dp"
-                                      android:layout_marginLeft="8dp"
-                                      android:layout_marginStart="8dp"
-                                      android:src="@drawable/complete"
-                                      android:visibility="gone"/>
-                              </LinearLayout>
+                    <ImageView
+                        android:id="@+id/complete_gender"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/complete"
+                        android:visibility="gone"/>
+                </LinearLayout>
 
-                              <Spinner
-                                  android:id="@+id/gender_spinner"
-                                  android:layout_width="160dp"
-                                  android:layout_height="wrap_content"
-                                  android:layout_marginTop="8dp"/>
+                <Spinner
+                    android:id="@+id/gender_spinner"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"/>
 
-                              <View
-                                  android:layout_width="160dp"
-                                  android:layout_height="1dp"
-                                  android:alpha="0.6"
-                                  android:background="#000000"/>
+                <View
+                    android:layout_width="160dp"
+                    android:layout_height="1dp"
+                    android:alpha="0.6"
+                    android:background="#000000"/>
 
                 <TextView
                     android:id="@+id/incorrect_email"
@@ -322,7 +324,6 @@
                 <!--android:text="Don't have a Facebook Account?"-->
                 <!--android:textAllCaps="false"-->
                 <!--android:textSize="12sp" />-->
-
 
 
             </LinearLayout>

@@ -57,9 +57,11 @@ public class ProfileFormStep3Fragment1 extends Fragment {
 
         ProfileFormStep3 profileFormStep3 = (ProfileFormStep3) getActivity();
         user = profileFormStep3.getUser();
-        //if (!mPrefs.getBoolean("step3Editable", true)) {
-        //    ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
-        //}
+        mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
+        mPrefs.edit().putBoolean("visitedFormStep3Fragment2", true).apply();
+        if (!mPrefs.getBoolean("step3Editable", true)) {
+            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
+        }
         //mPrefs.edit().putBoolean("visitedFormStep3Fragment1", true).apply();
         //if (mPrefs.getBoolean("visitedFormStep3Fragment2", false)) {
         //    gotoFragment2.setAlpha(1);
@@ -199,6 +201,7 @@ public class ProfileFormStep3Fragment1 extends Fragment {
                 incompleteScholarshipDetails.setVisibility(View.VISIBLE);
 
         }
+
 
         return rootView;
     }

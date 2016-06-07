@@ -139,9 +139,7 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
                 int currentPage = mPager.getCurrentItem();
 
                 if (currentPage != (fragments.size() - 1)) {
-                    Intent intent = new Intent(ProfileFormStep3.this, CheckInternetAndUploadUserDetails.class);
-                    sendBroadcast(intent);
-
+                    uploadDetailsToServer();
                     mPager.setCurrentItem(currentPage + 1);
                 } else {
                     boolean incompleteStep3 = checkIncompleteStep3();
@@ -156,8 +154,7 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
                         okay.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(ProfileFormStep3.this, CheckInternetAndUploadUserDetails.class);
-                                sendBroadcast(intent);
+                                uploadDetailsToServer();
                                 dialog1.dismiss();
                                 Intent intent2 = new Intent(ProfileFormStep3.this, ProfileActivity.class);
                                 intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -181,8 +178,7 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
                         dialog1.show();
                         return;
                     } else {
-                        Intent intentDataUpload = new Intent(ProfileFormStep3.this, CheckInternetAndUploadUserDetails.class);
-                        sendBroadcast(intentDataUpload);
+                        uploadDetailsToServer();
                         Intent intent1 = new Intent(ProfileFormStep3.this, Pending60kApprovalActivity.class);
                         startActivity(intent1);
                         finish();
@@ -192,6 +188,10 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
         });
     }
 
+    private void uploadDetailsToServer() {
+        Intent intent = new Intent(ProfileFormStep3.this, CheckInternetAndUploadUserDetails.class);
+        sendBroadcast(intent);
+    }
 
     @Override
     protected void onDestroy() {
@@ -200,7 +200,6 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private void saveStep1Data() {
-        checkIncompleteStep1();
         UserModel userModel = AppUtils.getUserObject(this);
         if (AppUtils.isNotEmpty(user.getAnnualFees()) && user.isUpdateAnnualFees()) {
             userModel.setAnnualFees(user.getAnnualFees());
@@ -228,6 +227,7 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
 
 
         AppUtils.saveUserObject(this, userModel);
+        uploadDetailsToServer();
     }
 
     private void saveStep2Data() {
@@ -250,10 +250,12 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
         }
 
         AppUtils.saveUserObject(this, userModel);
+        uploadDetailsToServer();
 
     }
 
     private void saveStep3Data() {
+        uploadDetailsToServer();
 
     }
 
@@ -355,11 +357,13 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
 
     @Override
     public void onBackPressed() {
-        if (mPager.getCurrentItem() == 0) {
-            super.onBackPressed();
-        } else {
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
+        onPageSelected(mPager.getCurrentItem());
+        super.onBackPressed();
+        //if (mPager.getCurrentItem() == 0) {
+        //    super.onBackPressed();
+        //} else {
+        //    mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        //}
     }
 
     private void hideShowUpArrow(int i) {

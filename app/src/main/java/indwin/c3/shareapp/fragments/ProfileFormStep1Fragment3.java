@@ -201,12 +201,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()) {
             incompleteStep1.setVisibility(View.VISIBLE);
         }
-        if (user.getCollegeIds() != null && user.getCollegeIds().size() > 0) {
-            user.setIncompleteCollegeId(false);
-        }
-        if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails() || user.isIncompleteRollNumber()) {
-            //incompleteStep2.setVisibility(View.VISIBLE);
-        }
         if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress()) {
             incompleteStep3.setVisibility(View.VISIBLE);
             if (user.isIncompleteAadhar())
@@ -482,23 +476,23 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             FrontBackImage frontBackImage = new FrontBackImage();
             if (imageUris != null && imageUris.size() > 0) {
                 frontBackImage.setImgUrl(imageUris.get(0).getPath());
+                Image addressProof = user.getAddressProof();
+                if (clickedPosition == 0) {
+
+                    addressProof.setFront(frontBackImage);
+                    addressProof.setUpdateFront(true);
+                    this.addressProof.setFront(frontBackImage);
+                } else if (clickedPosition == 1) {
+                    addressProof.setUpdateBack(true);
+                    addressProof.setBack(frontBackImage);
+                    this.addressProof.setBack(frontBackImage);
+                }
+                adapter.notifyDataSetChanged();
+                user.setUpdateNewAddressProofs(true);
+                AppUtils.saveUserObject(getActivity(), user);
 
             }
 
-            Image addressProof = user.getAddressProof();
-            if (clickedPosition == 0) {
-
-                addressProof.setFront(frontBackImage);
-                addressProof.setUpdateFront(true);
-                this.addressProof.setFront(frontBackImage);
-            } else if (clickedPosition == 1) {
-                addressProof.setUpdateBack(true);
-                addressProof.setBack(frontBackImage);
-                this.addressProof.setBack(frontBackImage);
-            }
-            adapter.notifyDataSetChanged();
-            user.setUpdateNewAddressProofs(true);
-            AppUtils.saveUserObject(getActivity(), user);
 
         }
     }

@@ -538,12 +538,12 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                 e.printStackTrace();
             }
         }
-        if (!user.isEmailVerified()) {
-            incompleteEmail.setVisibility(View.VISIBLE);
-            user.setIncompleteEmail(true);
-        } else {
-            user.setIncompleteEmail(false);
-        }
+        //if (!user.isEmailVerified()) {
+        //    incompleteEmail.setVisibility(View.VISIBLE);
+        //    user.setIncompleteEmail(true);
+        //} else {
+        //    user.setIncompleteEmail(false);
+        //}
         if (!user.isFbConnected()) {
             incompleteFb.setVisibility(View.VISIBLE);
             user.setIncompleteFb(true);

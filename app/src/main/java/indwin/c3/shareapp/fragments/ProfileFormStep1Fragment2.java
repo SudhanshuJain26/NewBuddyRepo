@@ -57,14 +57,18 @@ import java.util.Map;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Views.MonthYearPicker;
+import indwin.c3.shareapp.activities.FullScreenActivity;
 import indwin.c3.shareapp.activities.ImageHelperActivity;
 import indwin.c3.shareapp.activities.ProfileFormStep1;
 import indwin.c3.shareapp.adapters.AutoCompleteAdapter;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
 import indwin.c3.shareapp.adapters.PlaceAutocompleteAdapter;
+import indwin.c3.shareapp.models.FrontBackImage;
+import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.OnBackPressedListener;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import io.intercom.com.google.gson.Gson;
@@ -113,6 +117,8 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     private Button addCourse, addCollege;
     private EditText addCourseEt;
 
+    private Image collegeIDs;
+    private int clickedPosition;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -128,9 +134,8 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         ProfileFormStep1 profileFormStep1 = (ProfileFormStep1) getActivity();
         user = profileFormStep1.getUser();
         try {
-            collegeIds = user.getCollegeIds();
-            if (collegeIds == null) {
-                collegeIds = new ArrayList<>();
+            if (user.getCollegeID() == null) {
+                user.setCollegeID(new Image());
             } else {
                 completeCollegeId.setVisibility(View.VISIBLE);
                 user.setIncompleteCollegeId(false);
@@ -138,8 +143,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         } catch (Exception e) {
             collegeIds = new ArrayList<>();
         }
-        if (!collegeIds.contains("add") && !user.isAppliedFor1k())
-            collegeIds.add("add");
+        collegeIDs = user.getCollegeID();
         BANGALORE_CENTER.setLatitude(12.97232);
         BANGALORE_CENTER.setLongitude(77.59480);
         if (mGoogleApiClient == null)
@@ -155,7 +159,8 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if (collegeIds.get(position).equals("add")) {
+
+                        if ((position == 0 && (collegeIDs.getFront() == null || AppUtils.isEmpty(collegeIDs.getFront().getImgUrl()))) || (position == 1 && (collegeIDs.getBack() == null || AppUtils.isEmpty(collegeIDs.getBack().getImgUrl())))) {
 
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {
@@ -163,15 +168,24 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                                 PERMISSIONS = temp;
                                 requestPermissions(PERMISSIONS, PERMISSION_ALL);
                             } else {
+                                clickedPosition = position;
                                 Intent intent = new Intent(getActivity(), ImageHelperActivity.class);
                                 startActivityForResult(intent, INTENT_REQUEST_GET_IMAGES);
                             }
+                        } else {
+                            Intent intent = new Intent(getActivity(), FullScreenActivity.class);
+
+                            intent.putExtra(AppUtils.IMAGE_TYPE, Constants.IMAGE_TYPE.COLLEGE_ID.toString());
+                            intent.putExtra(Constants.DISABLE_ADD, true);
+                            intent.putExtra(AppUtils.POSITION, position);
+                            intent.putExtra(AppUtils.HEADING, "College Ids");
+                            getActivity().startActivity(intent);
                         }
                     }
                 })
         );
         newCollegeIds = new HashMap<>();
-        adapter = new ImageUploaderRecyclerAdapter(getActivity(), collegeIds, "College Ids", user.isAppliedFor1k());
+        adapter = new ImageUploaderRecyclerAdapter(getActivity(), collegeIDs, "College Ids", user.isAppliedFor1k(), Constants.IMAGE_TYPE.COLLEGE_ID.toString());
         rvImages.setAdapter(adapter);
 
         googleCollegeName.setOnItemClickListener(mAutocompleteClickListener);
@@ -556,21 +570,11 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     }
 
     public void checkIncomplete() {
-        if (collegeIds.size() == 0) {
+        if (collegeIDs.getBack() == null && collegeIDs.getFront() == null) {
             incompleteCollegeId.setVisibility(View.VISIBLE);
             user.setIncompleteCollegeId(true);
-        } else if (collegeIds.size() == 1) {
-            if ("add".equals(collegeIds.get(0))) {
-                user.setIncompleteCollegeId(true);
-            } else {
-                user.setIncompleteCollegeId(false);
-            }
         } else {
-            if (!user.isAppliedFor1k()) {
-                user.setCollegeIds(collegeIds);
-            }
             user.setIncompleteCollegeId(false);
-
         }
         if (user.isIncompleteCollegeId()) {
             incompleteCollegeId.setVisibility(View.VISIBLE);
@@ -601,19 +605,28 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         if (requestCode == INTENT_REQUEST_GET_IMAGES && resuleCode == Activity.RESULT_OK) {
             UserModel user = AppUtils.getUserObject(getActivity());
             imageUris = intent.getParcelableArrayListExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
-            if (user.getCollegeIds() == null)
-                user.setCollegeIds(new ArrayList<String>());
-            if (user.getNewCollegeIds() == null) {
-                user.setNewCollegeIds(new HashMap<String, String>());
-            }
-            for (Uri uri : imageUris) {
-                collegeIds.add(0, uri.getPath());
-                user.getCollegeIds().add(0, uri.getPath());
-                user.getNewCollegeIds().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
+            if (user.getCollegeID() == null)
+                user.setCollegeID(new Image());
+            FrontBackImage frontBackImage = new FrontBackImage();
+            if (imageUris != null && imageUris.size() > 0) {
+                frontBackImage.setImgUrl(imageUris.get(0).getPath());
+
             }
 
+            Image collegeId = user.getCollegeID();
+            if (clickedPosition == 0) {
+
+                collegeId.setFront(frontBackImage);
+                collegeId.setUpdateFront(true);
+                collegeIDs.setFront(frontBackImage);
+            } else if (clickedPosition == 1) {
+                collegeId.setUpdateBack(true);
+                collegeId.setBack(frontBackImage);
+                collegeIDs.setBack(frontBackImage);
+            }
+
+
             adapter.notifyDataSetChanged();
-            user.setUpdateNewCollegeIds(true);
             AppUtils.saveUserObject(getActivity(), user);
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resuleCode == Activity.RESULT_OK) {
             hasPermissions(getActivity(), PERMISSIONS);

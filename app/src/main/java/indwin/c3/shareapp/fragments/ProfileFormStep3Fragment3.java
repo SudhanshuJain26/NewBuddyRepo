@@ -29,15 +29,16 @@ import android.widget.TextView;
 import com.gun0912.tedpicker.ImagePickerActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.activities.ImageHelperActivity;
 import indwin.c3.shareapp.activities.ProfileFormStep3;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
+import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import io.intercom.com.google.gson.Gson;
@@ -65,6 +66,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
     ImageView topImage;
     private ImageButton bankHelptip;
     private ImageView incompleteStudentLoan, completeStudentLoan;
+    private Image bankStmnt;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -77,12 +79,11 @@ public class ProfileFormStep3Fragment3 extends Fragment {
         ProfileFormStep3 profileFormStep3 = (ProfileFormStep3) getActivity();
         user = profileFormStep3.getUser();
 
-        newBankStmts = new HashMap<>();
         getAllViews(rootView);
         try {
             bankStmts = user.getBankStmts();
-            if (bankStmts == null) {
-                bankStmts = new ArrayList<>();
+            if (user.getBankStatement() == null) {
+                user.setBankStatement(new Image());
             } else {
                 completeBankStmt.setVisibility(View.VISIBLE);
                 user.setIncompleteBankStmt(false);
@@ -90,8 +91,9 @@ public class ProfileFormStep3Fragment3 extends Fragment {
         } catch (Exception e) {
             bankStmts = new ArrayList<>();
         }
-        if (!bankStmts.contains("add") && !user.isAppliedFor60k())
-            bankStmts.add("add");
+        bankStmnt = user.getBankStatement();
+        if (!bankStmnt.getImgUrls().contains("add") && !user.isAppliedFor60k())
+            bankStmnt.getImgUrls().add("add");
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -101,7 +103,8 @@ public class ProfileFormStep3Fragment3 extends Fragment {
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if (bankStmts.get(position).equals("add")) {
+                        if (bankStmnt.getImgUrls().get(position-bankStmnt.getInvalidImgUrls().size()-bankStmnt.getValidImgUrls().size()).equals("add")) {
+
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {
                                 deniedPermissionForever = true;
@@ -115,7 +118,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
                     }
                 })
         );
-        adapter = new ImageUploaderRecyclerAdapter(getActivity(), bankStmts, "Bank Statements", user.isAppliedFor60k());
+        adapter = new ImageUploaderRecyclerAdapter(getActivity(), bankStmnt, "Bank Statements", user.isAppliedFor60k(), Constants.IMAGE_TYPE.BANK_STMNTS.toString());
         rvImages.setAdapter(adapter);
 
 
@@ -222,18 +225,17 @@ public class ProfileFormStep3Fragment3 extends Fragment {
     }
 
     public void checkIncomplete() {
-        if (bankStmts.size() == 0) {
+        Image image = user.getBankStatement();
+        int totalSize = image.getImgUrls().size() + image.getValidImgUrls().size() + image.getInvalidImgUrls().size();
+        if (totalSize == 0) {
             user.setIncompleteBankStmt(true);
-        } else if (bankStmts.size() == 1) {
-            if ("add".equals(bankStmts.get(0))) {
+        } else if (totalSize == 1) {
+            if ("add".equals(image.getImgUrls().get(0))) {
                 user.setIncompleteBankStmt(true);
             } else {
-                user.setIncompleteBankStmt(false);
+                user.setIncompleteMarksheets(false);
             }
         } else {
-            if (!user.isAppliedFor60k()) {
-                user.setBankStmts(bankStmts);
-            }
             user.setIncompleteBankStmt(false);
         }
 
@@ -256,18 +258,17 @@ public class ProfileFormStep3Fragment3 extends Fragment {
             if (user.getBankStmts() == null)
                 user.setBankStmts(new ArrayList<String>());
             imageUris = intent.getParcelableArrayListExtra(ImageHelperActivity.EXTRA_IMAGE_URIS);
-            if (user.getNewBankStmts() == null) {
-                user.setNewBankStmts(new HashMap<String, String>());
-            }
+            if (user.getBankStatement() == null)
+                user.setBankStatement(new Image());
+            Image image = user.getBankStatement();
             for (Uri uri : imageUris) {
-                bankStmts.add(0, uri.getPath());
-                user.getBankStmts().add(0, uri.getPath());
-                user.getNewBankStmts().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
-                //                user.addBankStmts(0, uri.getPath(), user.getBankStmts());
-                //                adapter.notifyItemInserted(0);
+                image.getImgUrls().add(0, uri.getPath());
+                image.getNewImgUrls().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
+                this.user.getBankStatement().getImgUrls().add(0, uri.getPath());
+
             }
             adapter.notifyDataSetChanged();
-            user.setUpdateNewBankStmts(true);
+            image.setUpdateNewImgUrls(true);
             AppUtils.saveUserObject(getActivity(), user);
         }
     }

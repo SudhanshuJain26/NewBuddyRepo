@@ -159,7 +159,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
                     mPager.setCurrentItem(currentPage + 1);
                 } else {
                     boolean incompleteStep4 = checkIncompleteStep4();
-                    saveStep3Data();
+                    saveStep4Data();
                     if (checkIncompleteStep1() || checkIncompleteStep2() || checkIncompleteStep3() || incompleteStep4) {
                         final Dialog dialog1 = new Dialog(ProfileFormStep2.this);
                         dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -529,6 +529,4 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         }
         return false;
     }
-
-
 }

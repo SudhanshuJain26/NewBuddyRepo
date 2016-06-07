@@ -1,5 +1,7 @@
 package indwin.c3.shareapp.models;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,10 +10,10 @@ import java.util.Map;
  */
 public class Image {
 
-    private List<String> validImgUrls;
-    private List<String> invalidImgUrls;
-    private List<String> imgUrls;
-    private Map<String, String> newImgUrls;
+    private List<String> validImgUrls = new ArrayList<>();
+    private List<String> invalidImgUrls = new ArrayList<>();
+    private List<String> imgUrls = new ArrayList<>();
+    private Map<String, String> newImgUrls = new HashMap<>();
     private boolean isUpdateNewImgUrls;
 
     private FrontBackImage back;
@@ -21,6 +23,8 @@ public class Image {
     private FrontBackImage front;
     private boolean isUpdateBack;
     private String backStatus;
+
+    private int totalImageSize;
 
     public List<String> getValidImgUrls() {
         return validImgUrls;
@@ -109,4 +113,10 @@ public class Image {
     public void setBackStatus(String backStatus) {
         this.backStatus = backStatus;
     }
+
+    public int getTotalImageSize() {
+        return imgUrls.size() + validImgUrls.size() + invalidImgUrls.size();
+    }
+
+
 }

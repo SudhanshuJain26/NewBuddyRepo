@@ -149,8 +149,6 @@ public class ProfileFormStep2Fragment3 extends Fragment {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData();
-                AppUtils.saveUserObject(getActivity(), user);
                 Intent intent = new Intent(getActivity(), SetupAutoRepayments.class);
                 startActivity(intent);
             }
@@ -161,23 +159,6 @@ public class ProfileFormStep2Fragment3 extends Fragment {
 
     }
 
-    private void saveData() {
-
-        UserModel userSaved = AppUtils.getUserObject(getActivity());
-
-        if (AppUtils.isNotEmpty(userSaved.getBankIfsc())) {
-            user.setUpdateBankIfsc(userSaved.isUpdateBankIfsc());
-            user.setBankIfsc(userSaved.getBankIfsc());
-        } else {
-            user.setIncompleteRepaymentSetup(true);
-        }
-        if (AppUtils.isNotEmpty(userSaved.getBankAccNum())) {
-            user.setUpdateBankAccNum(userSaved.isUpdateBankAccNum());
-            user.setBankAccNum(userSaved.getBankAccNum());
-        } else {
-            user.setIncompleteRepaymentSetup(true);
-        }
-    }
 
     private void getAllViews(View rootView) {
 
@@ -195,7 +176,6 @@ public class ProfileFormStep2Fragment3 extends Fragment {
     }
 
     public void checkIncomplete() {
-        saveData();
 
 
         if (bankAccNum.getText().length() <= 0) {

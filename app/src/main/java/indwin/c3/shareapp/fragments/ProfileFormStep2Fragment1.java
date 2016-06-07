@@ -48,8 +48,10 @@ import indwin.c3.shareapp.activities.ProfileFormStep2;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
 import indwin.c3.shareapp.adapters.PlaceAutocompleteAdapter;
 import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
+import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import io.intercom.com.google.gson.Gson;
 
@@ -99,6 +101,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     private ImageUploaderRecyclerAdapter adapter;
     boolean deniedPermissionForever = false;
     private ImageView completeMarksheets, incompleteMarksheets;
+    private Image marksheet;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -129,21 +132,21 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
             }
         }
         try {
-            marksheets = user.getMarksheets();
-            if (marksheets == null) {
-                marksheets = new ArrayList<>();
+            if (user.getGradeSheet() == null) {
+                user.setGradeSheet(new Image());
             } else {
                 completeMarksheets.setVisibility(View.VISIBLE);
                 user.setIncompleteMarksheets(false);
             }
         } catch (Exception e) {
-            marksheets = new ArrayList<>();
+            user.setGradeSheet(new Image());
         }
         if (user.isIncompleteMarksheets()) {
             incompleteMarksheets.setVisibility(View.VISIBLE);
         }
-        if (!marksheets.contains("add") && !user.isAppliedFor7k())
-            marksheets.add("add");
+        marksheet = user.getGradeSheet();
+        if (!marksheet.getImgUrls().contains("add") && !user.isAppliedFor7k())
+            marksheet.getImgUrls().add("add");
 
         if (user.isIncompleteGpa()) {
             incompleteAP.setVisibility(View.VISIBLE);
@@ -165,7 +168,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if (marksheets.get(position).equals("add")) {
+                        if (marksheet.getImgUrls().get(position-marksheet.getInvalidImgUrls().size()-marksheet.getValidImgUrls().size()).equals("add")) {
 
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {
@@ -181,7 +184,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
                 })
         );
         newMarksheets = new HashMap<>();
-        adapter = new ImageUploaderRecyclerAdapter(getActivity(), marksheets, "Marksheets", user.isAppliedFor7k());
+        adapter = new ImageUploaderRecyclerAdapter(getActivity(), user.getGradeSheet(), "Marksheets", user.isAppliedFor7k(), Constants.IMAGE_TYPE.MARKSHEETS.toString());
         rvImages.setAdapter(adapter);
 
         final String scholarship[] = getResources().getStringArray(R.array.scholarship);
@@ -359,19 +362,17 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         if (requestCode == INTENT_REQUEST_GET_IMAGES && resuleCode == Activity.RESULT_OK) {
             UserModel user = AppUtils.getUserObject(getActivity());
             imageUris = intent.getParcelableArrayListExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
-            if (user.getMarksheets() == null)
-                user.setMarksheets(new ArrayList<String>());
-            if (user.getNewMarksheets() == null) {
-                user.setNewMarksheets(new HashMap<String, String>());
-            }
+            if (user.getGradeSheet() == null)
+                user.setGradeSheet(new Image());
+            Image image = user.getGradeSheet();
             for (Uri uri : imageUris) {
-                marksheets.add(0, uri.getPath());
-                user.getMarksheets().add(0, uri.getPath());
-                user.getNewMarksheets().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
-            }
+                image.getImgUrls().add(0, uri.getPath());
+                image.getNewImgUrls().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
+                this.user.getGradeSheet().getImgUrls().add(0, uri.getPath());
 
+            }
             adapter.notifyDataSetChanged();
-            user.setUpdateNewCollegeIds(true);
+            image.setUpdateNewImgUrls(true);
             AppUtils.saveUserObject(getActivity(), user);
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resuleCode == Activity.RESULT_OK) {
             hasPermissions(getActivity(), PERMISSIONS);
@@ -420,22 +421,18 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     }
 
     public void checkIncomplete() {
-
-        if (marksheets.size() == 0) {
-            incompleteMarksheets.setVisibility(View.VISIBLE);
+        Image image = user.getGradeSheet();
+        int totalSize = image.getImgUrls().size() + image.getValidImgUrls().size() + image.getInvalidImgUrls().size();
+        if (totalSize == 0) {
             user.setIncompleteMarksheets(true);
-        } else if (marksheets.size() == 1) {
-            if ("add".equals(marksheets.get(0))) {
+        } else if (totalSize == 1) {
+            if ("add".equals(image.getImgUrls().get(0))) {
                 user.setIncompleteMarksheets(true);
             } else {
                 user.setIncompleteMarksheets(false);
             }
         } else {
-            if (!user.isAppliedFor7k()) {
-                user.setMarksheets(marksheets);
-            }
             user.setIncompleteMarksheets(false);
-
         }
         if (user.isIncompleteMarksheets()) {
             incompleteMarksheets.setVisibility(View.VISIBLE);

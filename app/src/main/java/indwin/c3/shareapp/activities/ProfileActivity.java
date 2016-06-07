@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpEntity;
@@ -41,7 +42,6 @@ import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
-import io.intercom.com.google.gson.Gson;
 
 /**
  * Created by shubhang on 17/03/16.

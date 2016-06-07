@@ -6,7 +6,7 @@ package indwin.c3.shareapp.models;
 public class FrontBackImage {
 
     private String imgUrl;
-    private boolean isVerified;
+    private Boolean isVerified;
 
     public String getImgUrl() {
         return imgUrl;
@@ -16,11 +16,11 @@ public class FrontBackImage {
         this.imgUrl = imgUrl;
     }
 
-    public boolean isVerified() {
+    public Boolean isVerified() {
         return isVerified;
     }
 
-    public void setVerified(boolean verified) {
+    public void setVerified(Boolean verified) {
         isVerified = verified;
     }
 }

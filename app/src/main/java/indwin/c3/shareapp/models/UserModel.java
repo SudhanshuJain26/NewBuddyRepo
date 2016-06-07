@@ -158,6 +158,15 @@ public class UserModel {
     boolean appliedFor7k = false;
     boolean appliedFor60k = false;
 
+    private Image gradeSheet;
+
+    private Image collegeID;
+
+    private Image  bankProof;
+
+    private Image  addressProof;
+    private Image bankStatement;
+
     public boolean isEmailSent() {
         return emailSent;
     }
@@ -1368,5 +1377,45 @@ public class UserModel {
 
     public void setIncompleteMarksheets(boolean incompleteMarksheets) {
         this.incompleteMarksheets = incompleteMarksheets;
+    }
+
+    public Image getGradeSheet() {
+        return gradeSheet;
+    }
+
+    public void setGradeSheet(Image gradeSheet) {
+        this.gradeSheet = gradeSheet;
+    }
+
+    public Image getCollegeID() {
+        return collegeID;
+    }
+
+    public void setCollegeID(Image collegeID) {
+        this.collegeID = collegeID;
+    }
+
+    public Image getBankProof() {
+        return bankProof;
+    }
+
+    public void setBankProof(Image bankProof) {
+        this.bankProof = bankProof;
+    }
+
+    public Image getAddressProof() {
+        return addressProof;
+    }
+
+    public void setAddressProof(Image addressProof) {
+        this.addressProof = addressProof;
+    }
+
+    public Image getBankStatement() {
+        return bankStatement;
+    }
+
+    public void setBankStatement(Image bankStatement) {
+        this.bankStatement = bankStatement;
     }
 }

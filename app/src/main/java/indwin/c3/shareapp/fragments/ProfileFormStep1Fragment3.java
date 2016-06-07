@@ -43,11 +43,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.activities.FullScreenActivity;
 import indwin.c3.shareapp.activities.ImageHelperActivity;
 import indwin.c3.shareapp.activities.ProfileFormStep1;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
+import indwin.c3.shareapp.models.FrontBackImage;
+import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import indwin.c3.shareapp.utils.VerhoeffAlgorithm;
@@ -84,6 +88,8 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private ImageButton editAadhar;
     private Button saveAadhar;
     private TextView uploadImageMsgTv;
+    private Image addressProof;
+    private int clickedPosition;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -104,8 +110,8 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
         try {
             addressProofs = user.getAddressProofs();
-            if (addressProofs == null || addressProofs.size() == 0) {
-                addressProofs = new ArrayList<>();
+            if (user.getAddressProof() == null) {
+                user.setAddressProof(new Image());
             } else {
                 completeAddress.setVisibility(View.VISIBLE);
                 user.setIncompletePermanentAddress(false);
@@ -113,8 +119,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         } catch (Exception e) {
             addressProofs = new ArrayList<>();
         }
-        if (!addressProofs.contains("add") && !user.isAppliedFor1k())
-            addressProofs.add("add");
+        addressProof = user.getAddressProof();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvImages.setLayoutManager(layoutManager);
@@ -122,7 +127,8 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if (addressProofs.get(position).equals("add")) {
+                        if ((position == 0 && (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl()))) || (position == 1 && (addressProof.getBack() == null || AppUtils.isEmpty(addressProof.getBack().getImgUrl())))) {
+                            clickedPosition = position;
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {
                                 deniedPermissionForever = true;
@@ -132,11 +138,19 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                                 Intent intent = new Intent(getActivity(), ImageHelperActivity.class);
                                 startActivityForResult(intent, INTENT_REQUEST_GET_IMAGES);
                             }
+                        } else {
+                            Intent intent = new Intent(getActivity(), FullScreenActivity.class);
+
+                            intent.putExtra(AppUtils.IMAGE_TYPE, Constants.IMAGE_TYPE.COLLEGE_ID.toString());
+                            intent.putExtra(Constants.DISABLE_ADD, true);
+                            intent.putExtra(AppUtils.POSITION, position);
+                            intent.putExtra(AppUtils.HEADING, "Address Proof");
+                            getActivity().startActivity(intent);
                         }
                     }
                 })
         );
-        adapter = new ImageUploaderRecyclerAdapter(getActivity(), addressProofs, "Address Proofs", user.isAppliedFor1k());
+        adapter = new ImageUploaderRecyclerAdapter(getActivity(), addressProof, "Address Proofs", user.isAppliedFor1k(), Constants.IMAGE_TYPE.ADDRESS_PROOF.toString());
         rvImages.setAdapter(adapter);
 
         if (!mPrefs.getBoolean("step1Editable", true)) {
@@ -400,20 +414,26 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             incompleteAadhar.setVisibility(View.GONE);
             completeAadhar.setVisibility(View.VISIBLE);
         }
-        if (addressProofs.size() == 0) {
-            incompleteAddress.setVisibility(View.VISIBLE);
-            user.setIncompletePermanentAddress(true);
-        } else if (addressProofs.size() == 1) {
-            if ("add".equals(addressProofs.get(0))) {
-                user.setIncompletePermanentAddress(true);
-            } else {
-                user.setIncompletePermanentAddress(false);
-            }
+        //if (addressProofs.size() == 0) {
+        //    incompleteAddress.setVisibility(View.VISIBLE);
+        //    user.setIncompletePermanentAddress(true);
+        //} else if (addressProofs.size() == 1) {
+        //    if ("add".equals(addressProofs.get(0))) {
+        //        user.setIncompletePermanentAddress(true);
+        //    } else {
+        //        user.setIncompletePermanentAddress(false);
+        //    }
+        //} else {
+        //    if (!user.isAppliedFor1k()) {
+        //        user.setAddressProofs(addressProofs);
+        //    }
+        //    user.setIncompletePermanentAddress(false);
+        //}
+
+        if (addressProof.getBack() == null && addressProof.getFront() == null) {
+            user.setIncompleteCollegeId(true);
         } else {
-            if (!user.isAppliedFor1k()) {
-                user.setAddressProofs(addressProofs);
-            }
-            user.setIncompletePermanentAddress(false);
+            user.setIncompleteCollegeId(false);
         }
 
         if (user.isIncompletePermanentAddress()) {
@@ -455,16 +475,26 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
         if (requestCode == INTENT_REQUEST_GET_IMAGES && resuleCode == Activity.RESULT_OK) {
             UserModel user = AppUtils.getUserObject(getActivity());
-            if (user.getAddressProofs() == null)
-                user.setAddressProofs(new ArrayList<String>());
-            if (user.getNewAddressProofs() == null) {
-                user.setNewAddressProofs(new HashMap<String, String>());
-            }
+
             imageUris = intent.getParcelableArrayListExtra(ImageHelperActivity.EXTRA_IMAGE_URIS);
-            for (Uri uri : imageUris) {
-                user.getAddressProofs().add(0, uri.getPath());
-                addressProofs.add(0, uri.getPath());
-                user.getNewAddressProofs().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
+            if (user.getAddressProof() == null)
+                user.setAddressProof(new Image());
+            FrontBackImage frontBackImage = new FrontBackImage();
+            if (imageUris != null && imageUris.size() > 0) {
+                frontBackImage.setImgUrl(imageUris.get(0).getPath());
+
+            }
+
+            Image addressProof = user.getAddressProof();
+            if (clickedPosition == 0) {
+
+                addressProof.setFront(frontBackImage);
+                addressProof.setUpdateFront(true);
+                this.addressProof.setFront(frontBackImage);
+            } else if (clickedPosition == 1) {
+                addressProof.setUpdateBack(true);
+                addressProof.setBack(frontBackImage);
+                this.addressProof.setBack(frontBackImage);
             }
             adapter.notifyDataSetChanged();
             user.setUpdateNewAddressProofs(true);

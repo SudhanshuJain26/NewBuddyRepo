@@ -247,7 +247,7 @@ if(isActive)
             }}}
     public void backpress()
     {
-        ImageView back=(ImageView)findViewById(R.id.backo);
+       LinearLayout back=(LinearLayout) findViewById(R.id.arrowlay);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -92,8 +92,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
-                        android:layout_toEndOf="@id/aadhar_pan_header"
-                        android:layout_toRightOf="@id/aadhar_pan_header"
+                        android:layout_toEndOf="@id/edittext_carview"
+                        android:layout_toRightOf="@id/edittext_carview"
                         android:src="@drawable/complete"
                         android:visibility="gone"/>
 

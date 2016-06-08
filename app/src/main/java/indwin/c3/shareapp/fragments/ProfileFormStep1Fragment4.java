@@ -437,6 +437,11 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
             else submitEnabled = false;
         }
         final Button submit = (Button) dialogView.findViewById(R.id.submit_address);
+        if (submitEnabled) {
+            submit.setAlpha(1);
+        } else {
+            submit.setAlpha(0.5f);
+        }
         submit.setEnabled(submitEnabled);
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -454,9 +459,11 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
             public void afterTextChanged(Editable s) {
                 if (houseNoEt.getText().toString().isEmpty() || streetEt.getText().toString().isEmpty() || cityEt.getText().toString().isEmpty() || pinCodeEt.getText().toString().isEmpty()) {
                     submit.setEnabled(false);
+                    submit.setAlpha(0.5f);
 
                 } else {
                     submit.setEnabled(true);
+                    submit.setAlpha(1);
                 }
 
             }

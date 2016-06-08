@@ -40,9 +40,7 @@
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:visibility="gone"/>
-<RelativeLayout
-   android:id="@+id/rl_aadhar" android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+
                     <TextView
                         android:id="@+id/editext_header"
                         android:layout_width="wrap_content"
@@ -75,54 +73,6 @@
                             android:gravity="center"/>
                     </android.support.v7.widget.CardView>
 
-    <LinearLayout
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content">
-
-                       <TextView
-                           android:id="@+id/aadhar_number"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:layout_marginTop="8dp"
-                           android:visibility="gone"/>
-
-                       <EditText
-                           android:id="@+id/edit_aadhar_number"
-                           android:layout_width="200dp"
-                           android:layout_height="wrap_content"
-                           android:layout_marginLeft="-4dp"
-                           android:layout_marginStart="-4dp"
-                           android:layout_marginTop="15dp"
-                           android:hint="Aadhar Number"
-                           android:imeOptions="actionDone"
-                           android:inputType="textCapCharacters"
-                           android:singleLine="true"
-                           android:textSize="16sp"/>
-
-                       <ImageButton
-                           android:id="@+id/edit_user_aadhar"
-                           android:layout_width="15dp"
-                           android:layout_height="15dp"
-                           android:layout_marginLeft="4dp"
-                           android:layout_marginStart="4dp"
-                           android:layout_marginTop="8dp"
-                           android:background="?android:attr/selectableItemBackground"
-                           android:scaleType="fitCenter"
-                           android:src="@drawable/edit"
-                           android:tint="#44c2a6"
-                           android:visibility="gone"/>
-
-                       <Button
-                           android:id="@+id/save_user_aadhar"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:background="?android:attr/selectableItemBackground"
-                           android:text="Save"
-                           android:textAllCaps="false"
-                           android:textColor="#44c2a6"/>
-                   </LinearLayout>
-</RelativeLayout>
-
                     <ImageView
                         android:id="@+id/incomplete_aadhar"
                         android:layout_width="15dp"
@@ -130,8 +80,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
-                        android:layout_toEndOf="@id/rl_aadhar"
-                        android:layout_toRightOf="@id/rl_aadhar"
+                        android:layout_toEndOf="@id/edittext_carview"
+                        android:layout_toRightOf="@id/edittext_carview"
                         android:src="@drawable/incomplete"
                         android:visibility="gone"/>
 
@@ -142,8 +92,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
-                        android:layout_toEndOf="@id/rl_aadhar"
-                        android:layout_toRightOf="@id/rl_aadhar"
+                        android:layout_toEndOf="@id/aadhar_pan_header"
+                        android:layout_toRightOf="@id/aadhar_pan_header"
                         android:src="@drawable/complete"
                         android:visibility="gone"/>
 
@@ -159,7 +109,51 @@
                         android:src="@drawable/helptip"/>
                 </RelativeLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
+                    <TextView
+                        android:id="@+id/aadhar_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone"/>
+
+                    <EditText
+                        android:id="@+id/edit_aadhar_number"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginStart="-4dp"
+                        android:hint="Aadhar Number"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapCharacters"
+                        android:singleLine="true"
+                        android:textSize="16sp"/>
+
+                    <ImageButton
+                        android:id="@+id/edit_user_aadhar"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="8dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/edit"
+                        android:tint="#44c2a6"
+                        android:visibility="gone"/>
+
+                    <Button
+                        android:id="@+id/save_user_aadhar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:text="Save"
+                        android:textAllCaps="false"
+                        android:textColor="#44c2a6"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/incorrect_format_layout"

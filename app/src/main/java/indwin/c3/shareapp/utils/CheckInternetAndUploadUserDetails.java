@@ -217,8 +217,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getBankStatement().getNewImgUrls().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
-                        if (user.getBankStatement().getNewImgUrls() != null)
-                            user.getBankStatement().getNewImgUrls().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
+                        //if (user.getBankStatement().getNewImgUrls() != null)
+                        //    user.getBankStatement().getNewImgUrls().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
 
                         i++;
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
@@ -244,8 +244,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getBankProof().getNewImgUrls().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
-                        if (user.getBankProof().getNewImgUrls() != null)
-                            user.getBankProof().getNewImgUrls().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
+                        //if (user.getBankProof().getNewImgUrls() != null)
+                        //    user.getBankProof().getNewImgUrls().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
 
                         i++;
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
@@ -272,8 +272,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getGradeSheet().getNewImgUrls().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
-                        if (user.getGradeSheet().getNewImgUrls() != null)
-                            user.getGradeSheet().getNewImgUrls().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
+                        //if (user.getGradeSheet().getNewImgUrls() != null)
+                        //    user.getGradeSheet().getNewImgUrls().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
 
                         i++;
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());

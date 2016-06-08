@@ -164,7 +164,7 @@ public class AppUtils {
                 user.setCurrentAddress(currentAddress.getString("line1"));
 
                 if (currentAddress.opt("line2") != null) {
-                    user.setCurrentAddressLine2(currentAddress.getString("line1"));
+                    user.setCurrentAddressLine2(currentAddress.getString("line2"));
                 }
                 if (currentAddress.opt("city") != null) {
                     user.setCurrentAddressCity(currentAddress.getString("city"));
@@ -262,14 +262,10 @@ public class AppUtils {
             if (data1.opt("selfie") != null) {
                 JSONArray array = data1.getJSONArray("selfie");
                 user.setSelfie((String) array.get(0));
-            } else {
-                user.setSelfie("");
             }
             if (data1.opt("signature") != null) {
                 JSONArray array = data1.getJSONArray("signature");
                 user.setSignature((String) array.get(0));
-            } else {
-                user.setSignature("");
             }
         } catch (Exception e) {
             e.printStackTrace();

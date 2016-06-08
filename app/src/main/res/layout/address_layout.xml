@@ -29,7 +29,7 @@
                       android:layout_height="wrap_content" android:hint="City"
                       android:layout_weight="1"/>
 
-            <EditText android:id="@+id/pincode_et" android:layout_width="match_parent"
+            <EditText android:id="@+id/pincode_et" android:inputType="number" android:digits="0123456789" android:layout_width="match_parent"
                       android:layout_height="wrap_content" android:hint="Pincode"
                       android:layout_weight="1"/>
 

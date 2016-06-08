@@ -44,6 +44,7 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
     private ImageView genderImage;
     private ImageView incompleteStep1, incompleteStep2, incompleteStep3;
     int previousPosition;
+    boolean takenStudentLoan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,15 +96,16 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
         fragments = new ArrayList<>();
         fragments.add(new ProfileFormStep3Fragment1());
         fragments.add(new ProfileFormStep3Fragment2());
-        boolean takenStudentLoan = false;
+        takenStudentLoan = false;
 
         try {
             takenStudentLoan = Boolean.parseBoolean(user.getStudentLoan());
-            gotoFragment3.setVisibility(View.GONE);
         } catch (Exception e) {
         }
         if (!takenStudentLoan) {
             fragments.add(new ProfileFormStep3Fragment3());
+        } else {
+            gotoFragment3.setVisibility(View.GONE);
         }
     }
 
@@ -151,9 +153,17 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
                     uploadDetailsToServer();
                     mPager.setCurrentItem(currentPage + 1);
                 } else {
-                    boolean incompleteStep3 = checkIncompleteStep3();
-                    saveStep3Data();
-                    if (checkIncompleteStep1() || checkIncompleteStep2() || incompleteStep3) {
+                    boolean incompleteStep3 = false;
+                    boolean incompleteStep2 = false;
+                    if (!takenStudentLoan) {
+                        incompleteStep2 = checkIncompleteStep2();
+                        incompleteStep3 = checkIncompleteStep3();
+                        saveStep3Data();
+                    } else {
+                        incompleteStep2 = checkIncompleteStep2();
+                        saveStep2Data();
+                    }
+                    if (checkIncompleteStep1() || incompleteStep2 || incompleteStep3) {
                         final Dialog dialog1 = new Dialog(ProfileFormStep3.this);
                         dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog1.setContentView(R.layout.incomplete_alert_box);

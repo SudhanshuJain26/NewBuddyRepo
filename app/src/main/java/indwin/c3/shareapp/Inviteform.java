@@ -1062,7 +1062,7 @@ else{
                 mPrefs.edit().putString("UserObject", json).apply();
                 if (truth.equals("success")) {
                     Intent inotp = new Intent(Inviteform.this, Otp.class);
-                    finish();
+//                    finish();
 
 //                    inotp.putExtra("Name", mName);
 //                    inotp.putExtra("Email",email.getText().toString());

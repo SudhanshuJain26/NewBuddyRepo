@@ -632,6 +632,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Map userMap = new HashMap<>();
 
+
                     userMap.put("user_id", userId);
                     userMap.put("logged_in", true);
                     userMap.put("phoneVerified", true);

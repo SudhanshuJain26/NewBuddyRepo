@@ -128,10 +128,13 @@ if(position!=0){
 
 
 
+
                     RelativeLayout r = (RelativeLayout) vi.findViewById(R.id.cardeditAdd1);
                     r.setVisibility(View.VISIBLE);
                     ListView l = (ListView) vi.findViewById(R.id.list1);
                     l.setVisibility(View.GONE);
+                    TextView paydo=(TextView)vi.findViewById(R.id.paydo);
+                    paydo.setVisibility(View.GONE);
                     edt1=(EditText)vi.findViewById(R.id.edtAdd11);
                     edt2=(EditText)vi.findViewById(R.id.edtAdd22);
                     edt3=(EditText)vi.findViewById(R.id.edtAdd33);
@@ -259,6 +262,9 @@ Deladd d=new Deladd();
                     r.setVisibility(View.VISIBLE);
                     ListView l = (ListView) vi.findViewById(R.id.list1);
                     l.setVisibility(View.GONE);
+
+                    TextView paydo=(TextView)vi.findViewById(R.id.paydo);
+                    paydo.setVisibility(View.GONE);
                 edt1=(EditText)vi.findViewById(R.id.edtAdd11);
                 edt2=(EditText)vi.findViewById(R.id.edtAdd22);
                 edt3=(EditText)vi.findViewById(R.id.edtAdd33);
@@ -604,6 +610,8 @@ if((!del1.equals("delete"))&&!(getli.contains("address")))
                 RelativeLayout r = (RelativeLayout) vi.findViewById(R.id.cardeditAdd1);
                 r.setVisibility(View.GONE);
 
+                TextView paydo=(TextView)vi.findViewById(R.id.paydo);
+                paydo.setVisibility(View.VISIBLE);
                 l.setVisibility(View.VISIBLE);
                 textAdd1.setVisibility(View.VISIBLE);
                 textAdd2.setVisibility(View.VISIBLE);

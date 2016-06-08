@@ -941,7 +941,9 @@ public class HomePage extends AppCompatActivity {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (checkedit == 1) {
-                        //       Toast.makeText(HomePage.this,"check",Toast.LENGTH_LONG).show();
+                        int ll=4;
+                        System.out.print("qe");
+//                               Toast.makeText(HomePage.this,"check",Toast.LENGTH_LONG).show();
                         paste.setVisibility(View.VISIBLE);
                         ImageView home = (ImageView) findViewById(R.id.ho);
 
@@ -1658,7 +1660,6 @@ public class HomePage extends AppCompatActivity {
 
             princ1 = princ1 * 0.8;
             Double rate = 0.21 / 12;
-
             Double emi1 = Math.floor((princ1 * rate * Math.pow(1 + rate, monthscam)) / ((Math.pow(1 + rate, monthscam)) - 1));
             if ((princ1 * 10 / 8) < 5000.0)
                 emi1 = princ1 / monthscam;
@@ -1684,6 +1685,7 @@ public class HomePage extends AppCompatActivity {
             Double emi3 = Math.floor((princ3 * rate * Math.pow(1 + rate, monthscam3)) / ((Math.pow(1 + rate, monthscam3)) - 1));
             if ((princ3 * 10 / 8) < 5000.0)
                 emi3 = princ3 / monthscam3;
+
             price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi3.intValue()) + " per month");
 
             //emi4
@@ -1893,6 +1895,58 @@ public class HomePage extends AppCompatActivity {
 
 
                     query.setText("   " + text);
+
+
+                    //                        Intent in = new Intent(HomePage.this, ViewForm.class);
+                    Splash.checkNot = 1;
+                    paste = (ImageView) findViewById(R.id.pasteAg);
+                    query.requestFocus();
+                    clickpaste();
+                    parse(text);
+
+                    if ((checkValidUrl == 0) && (checkValidFromApis == 0)) {
+                        Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                        Intent in = new Intent(HomePage.this, ProductsPage.class);
+                        in.putExtra("seller", sellerNme);
+                        in.putExtra("product", productId);
+                        in.putExtra("query", query.getText().toString());
+//                        query.setText("");
+                        in.putExtra("page", "api");
+                        checkValidFromApis = 0;
+                        checkValidUrl = 0;
+                        startActivity(in);
+                        //                            if (time + 5 < userP.getLong("expires", 0))
+                        ////                                new checkAuth().execute(url);//
+                        //                            {
+                        //                                new linkSearch().execute();
+                        //                            } else
+                        //                                //   new checkAuth().execute(url);
+                        //                                new AuthTokc().execute("cc");
+
+                    } else if (checkValidUrl == 1) {
+                        //monkey page
+                        Intent in = new Intent(HomePage.this, ProductsPage.class);
+//                        query.setText("");
+                        in.putExtra("query", query.getText().toString());
+                        in.putExtra("page", "monkey");
+                        startActivity(in);
+                        checkValidFromApis = 0;
+                        checkValidUrl = 0;
+                        //                            finish();
+                        page = "monkey";
+                    } else if ((checkValidFromApis == 1)) {
+                        //not monley page
+//                        query.setText("");
+                        Intent in = new Intent(HomePage.this, ProductsPage.class);
+                        in.putExtra("query", query.getText().toString());
+                        in.putExtra("seller", sellerNme);
+                        in.putExtra("page", "pay");
+                        startActivity(in);
+                        checkValidFromApis = 0;
+                        checkValidUrl = 0;
+                        //                            finish();
+                        page = "pay";
+                    }
 
                     paste.setVisibility(View.GONE);
 

@@ -8,12 +8,14 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -128,8 +130,9 @@ public class ConfirmOrder extends AppCompatActivity {
 //            downPayment = serviceCharge;
 //        }
         downPayment+=serviceCharge;
+        downPayment=(int) (Double.parseDouble(getIntent().getExtras().getString("down")));
         //   sellerMrpValue.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(getIntent().getExtras().getInt("sellingprice")));
-        servicepr.setText(getApplicationContext().getString(R.string.Rs) + " " + downPayment);
+        servicepr.setText(getApplicationContext().getString(R.string.Rs) + " " + (int) (Double.parseDouble(getIntent().getExtras().getString("down"))));
         final int dis = getIntent().getExtras().getInt("discount");
 //        newemi = emiWithservice(getIntent().getExtras().getInt("sellingprice") - dis - downPayment + serviceCharge, getIntent().getExtras().getInt("sellingprice"), (getIntent().getExtras().getInt("monthforemi")));
 //        Toast.makeText(ConfirmOrder.this, newemi, Toast.LENGTH_SHORT).show();
@@ -168,12 +171,13 @@ public class ConfirmOrder extends AppCompatActivity {
         checkOutnow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent in = new Intent(ConfirmOrder.this, Editaddress.class);
                 SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
                 SharedPreferences.Editor et = cred.edit();
-                et.putInt("service", serviceCharge);
+
                 et.putInt("emi", (int)newemi);
-                et.putInt("downpayment", downPayment-serviceCharge);
+                et.putInt("downpayment", downPayment);
                 et.putInt("tot", w);
 
                 et.putString("usercom", e.getText().toString());
@@ -222,12 +226,14 @@ public class ConfirmOrder extends AppCompatActivity {
                     }
                 });
                 sp.setText(getApplicationContext().getString(R.string.Rs) + getIntent().getExtras().getInt("sellingprice"));
-                svc.setText(getApplicationContext().getString(R.string.Rs) + serviceCharge);
+                //servicennnnnn
+                svc.setText(getApplicationContext().getString(R.string.Rs) + getIntent().getExtras().getInt("servicecharge"));
+
                 int interest = 0;
                 if (interest < 0)
                     interest = 0;
                 int ll=(int)(newemi*getIntent().getExtras().getInt("monthforemi"));
-                interest=ll-getIntent().getExtras().getInt("sellingprice")+downPayment-serviceCharge+dis;
+                interest=ll-getIntent().getExtras().getInt("sellingprice")-dis+downPayment-getIntent().getExtras().getInt("servicecharge");
                 if(getIntent().getExtras().getInt("sellingprice")<5000)
                 {RelativeLayout buddydis=(RelativeLayout)popUpView.findViewById(R.id.buddydiscount);
                     buddydis.setVisibility(View.VISIBLE);
@@ -252,7 +258,7 @@ public class ConfirmOrder extends AppCompatActivity {
 
                 TextView sc = (TextView) popUpView.findViewById(R.id.textPop);
                 RelativeLayout pop = (RelativeLayout) popUpView.findViewById(R.id.pop);
-                pop.setOnClickListener(new View.OnClickListener() {
+                cover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (popup.isShowing()) {
@@ -320,7 +326,7 @@ public class ConfirmOrder extends AppCompatActivity {
     }
 
     public void backpress() {
-        ImageView back = (ImageView) findViewById(R.id.backo);
+        LinearLayout back = (LinearLayout) findViewById(R.id.arrowlay);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -356,7 +362,7 @@ public class ConfirmOrder extends AppCompatActivity {
             tot = "OCT";
         else if (months == 11)
             tot = "NOV";
-        else if (months == 13)
+        else if (months == 12)
             tot = "DEC";
 
 
@@ -390,5 +396,6 @@ public class ConfirmOrder extends AppCompatActivity {
         catch (Exception e)
         {finish();}
 //        super.onBackPressed();
+
     }
 }

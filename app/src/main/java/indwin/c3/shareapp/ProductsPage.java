@@ -83,6 +83,7 @@ public class ProductsPage extends AppCompatActivity {
     String sellerNme1 = "", productId1 = "";
     private String s = "";
     private String whichCoupon = "";
+    private TextView checkout;
     private int checkCorrectdis = 1, dopay2 = 0,dummyCl=0,globalMindown=0;
     private String formstatus, name, fbid, rejectionReason, urlImg, email, uniqueCode, verificationdate, searchTitle, searchBrand, searchCategory, searchSubcategory, description, specification, review, infor;
     private String crcode = "", creduserid = "", truth = "", page = "";
@@ -478,7 +479,7 @@ if(dummyCl==1000)
         } catch (Exception e) {
             String t = e.toString();
         }
-        final TextView checkout = (TextView) findViewById(R.id.checkout);
+        checkout = (TextView) findViewById(R.id.checkout);
         try {
             Picasso.with(this)
                     .load(urlforImage)
@@ -1137,6 +1138,7 @@ mValue=minDownpayment;
         @Override
         protected void onPreExecute() {
             spinner.setVisibility(View.VISIBLE);
+            checkout.setEnabled(false);
         }
 
         @Override
@@ -1250,6 +1252,7 @@ mValue=minDownpayment;
         }
 
         protected void onPostExecute(String result) {
+            checkout.setEnabled(true);
             if (result.equals("win")) {
                 int dis = 0;
                 if (type.equals("flat"))
@@ -1425,6 +1428,7 @@ mValue=minDownpayment;
         mValue = v.intValue();
         mValue2 = v.intValue();
         if(t.contains("No"))
+
             t="0";
         if(fcbv==0)
         {
@@ -1461,16 +1465,18 @@ int w=0;
 
             mValue=sellingPrice-fcbv;
             }
+            if(t.contains("0"))
+                mValue=sellingPrice;
             dValue.setText(String.valueOf(mValue));
 //            EMIcheck=(Math.round(calculateEmi(sellingPrice, Double.valueOf(searchPrice), monthsnow)));
             EMIcheck=Math.round(calculateEmi(sellingPrice-mValue*1.0, Double.valueOf(searchPrice), monthsnow));
             emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice-mValue*1.0, Double.valueOf(searchPrice), monthsnow)))+" per month");
             Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
             totalLoan.setText(String.valueOf(Math.round(tot)));
-        }
-        //        Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
 
-    }
+                //        Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
+
+    }}
 
     public void backpress() {
         LinearLayout back = (LinearLayout) findViewById(R.id.arrowlay);

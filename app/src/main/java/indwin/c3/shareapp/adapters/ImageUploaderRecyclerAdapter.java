@@ -124,14 +124,16 @@ public class ImageUploaderRecyclerAdapter extends
                 }
             });
         }
-        if (imgUrl.contains("http"))
-            Picasso.with(mContext).load(imgUrl).fit().placeholder(R.drawable.downloading).into(viewHolder.image);
-        else {
-            final File imgFile = new File(imgUrl);
-            if (imgFile.exists()) {
-                Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                viewHolder.image.setImageBitmap(bitmap);
+        if (imgUrl != null) {
+            if (imgUrl.contains("http"))
+                Picasso.with(mContext).load(imgUrl).fit().placeholder(R.drawable.downloading).into(viewHolder.image);
+            else {
+                final File imgFile = new File(imgUrl);
+                if (imgFile.exists()) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    viewHolder.image.setImageBitmap(bitmap);
 
+                }
             }
         }
 

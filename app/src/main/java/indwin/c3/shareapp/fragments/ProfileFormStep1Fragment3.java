@@ -141,7 +141,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                         } else {
                             Intent intent = new Intent(getActivity(), FullScreenActivity.class);
 
-                            intent.putExtra(AppUtils.IMAGE_TYPE, Constants.IMAGE_TYPE.COLLEGE_ID.toString());
+                            intent.putExtra(AppUtils.IMAGE_TYPE, Constants.IMAGE_TYPE.ADDRESS_PROOF.toString());
                             intent.putExtra(Constants.DISABLE_ADD, true);
                             intent.putExtra(AppUtils.POSITION, position);
                             intent.putExtra(AppUtils.HEADING, "Address Proof");
@@ -425,9 +425,9 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         //}
 
         if (addressProof.getBack() == null || addressProof.getFront() == null) {
-            user.setIncompleteCollegeId(true);
+            user.setIncompletePermanentAddress(true);
         } else {
-            user.setIncompleteCollegeId(false);
+            user.setIncompletePermanentAddress(false);
         }
 
         if (user.isIncompletePermanentAddress()) {

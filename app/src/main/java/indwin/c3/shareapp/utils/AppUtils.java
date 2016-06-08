@@ -159,10 +159,34 @@ public class AppUtils {
                 user.setDob(data1.getString("dob"));
             if (data1.opt("accomodation") != null)
                 user.setAccommodation(data1.getString("accomodation"));
-            if (data1.opt("currentAddress") != null)
-                user.setCurrentAddress(data1.getJSONObject("currentAddress").getString("line1"));
-            if (data1.opt("permanentAddress") != null)
-                user.setPermanentAddress(data1.getJSONObject("permanentAddress").getString("line1"));
+            if (data1.opt("currentAddress") != null) {
+                JSONObject currentAddress = data1.getJSONObject("currentAddress");
+                user.setCurrentAddress(currentAddress.getString("line1"));
+
+                if (currentAddress.opt("line2") != null) {
+                    user.setCurrentAddressLine2(currentAddress.getString("line1"));
+                }
+                if (currentAddress.opt("city") != null) {
+                    user.setCurrentAddressCity(currentAddress.getString("city"));
+                }
+                if (currentAddress.opt("pincode") != null) {
+                    user.setCurrentAddressPinCode(currentAddress.getString("pincode"));
+                }
+            }
+            if (data1.opt("permanentAddress") != null) {
+                JSONObject permanentAddress = data1.getJSONObject("permanentAddress");
+                user.setPermanentAddress(permanentAddress.getString("line1"));
+
+                if (permanentAddress.opt("line2") != null) {
+                    user.setPermanentAddressLine2(permanentAddress.getString("line2"));
+                }
+                if (permanentAddress.opt("city") != null) {
+                    user.setPermanentAddressCity(permanentAddress.getString("city"));
+                }
+                if (permanentAddress.opt("pincode") != null) {
+                    user.setPermanentAddressPinCode(permanentAddress.getString("pincode"));
+                }
+            }
             if (data1.opt("rollNumber") != null)
                 user.setRollNumber(data1.getString("rollNumber"));
 

@@ -103,7 +103,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if (bankStmnt.getImgUrls().get(position-bankStmnt.getInvalidImgUrls().size()-bankStmnt.getValidImgUrls().size()).equals("add")) {
+                        if (bankStmnt.getImgUrls().get(position - bankStmnt.getInvalidImgUrls().size() - bankStmnt.getValidImgUrls().size()).equals("add")) {
 
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {
@@ -153,62 +153,6 @@ public class ProfileFormStep3Fragment3 extends Fragment {
                 dialog.show();
             }
         });
-        //saveAndProceed.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        checkIncomplete();
-        //        if ((user.isIncompleteAnnualFees() || user.isIncompleteScholarship()
-        //                || user.isIncompleteMonthlyExpenditure() ||
-        //                user.isIncompleteVehicleDetails() || user.isIncompleteBankStmt())
-        //                && !mPrefs.getBoolean("skipIncompleteMessage", false)) {
-        //            final Dialog dialog1 = new Dialog(getActivity());
-        //            dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //            dialog1.setContentView(R.layout.incomplete_alert_box);
-        //
-        //            Button okay = (Button) dialog1.findViewById(R.id.okay_button);
-        //            okay.setTextColor(Color.parseColor("#f2954e"));
-        //            okay.setOnClickListener(new View.OnClickListener() {
-        //                @Override
-        //                public void onClick(View v) {
-        //                    String json = gson.toJson(user);
-        //                    mPrefs.edit().putString("UserObject", json).apply();
-        //                    Context context = getActivity();
-        //                    Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
-        //                    getContext().sendBroadcast(intent);
-        //                    dialog1.dismiss();
-        //                    Intent intent2 = new Intent(getActivity(), ProfileActivity.class);
-        //                    intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        //                    startActivity(intent2);
-        //                    getActivity().finish();
-        //                }
-        //            });
-        //
-        //            CheckBox stopMessage = (CheckBox) dialog1.findViewById(R.id.check_message);
-        //            stopMessage.setOnClickListener(new View.OnClickListener() {
-        //                @Override
-        //                public void onClick(View v) {
-        //                    if (((CheckBox) v).isChecked()) {
-        //                        mPrefs.edit().putBoolean("skipIncompleteMessage", true).apply();
-        //                    } else {
-        //                        mPrefs.edit().putBoolean("skipIncompleteMessage", false).apply();
-        //                    }
-        //                }
-        //            });
-        //            dialog1.show();
-        //            return;
-        //        } else {
-        //            String json = gson.toJson(user);
-        //            mPrefs.edit().putBoolean("updatingDB", false).apply();
-        //            mPrefs.edit().putString("UserObject", json).apply();
-        //            Context context = getActivity();
-        //            Intent intent = new Intent(context, CheckInternetAndUploadUserDetails.class);
-        //            getContext().sendBroadcast(intent);
-        //            Intent intent2 = new Intent(context, Pending60kApprovalActivity.class);
-        //            startActivity(intent2);
-        //            getActivity().finish();
-        //        }
-        //    }
-        //});
 
     }
 
@@ -233,7 +177,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
             if ("add".equals(image.getImgUrls().get(0))) {
                 user.setIncompleteBankStmt(true);
             } else {
-                user.setIncompleteMarksheets(false);
+                user.setIncompleteBankStmt(false);
             }
         } else {
             user.setIncompleteBankStmt(false);

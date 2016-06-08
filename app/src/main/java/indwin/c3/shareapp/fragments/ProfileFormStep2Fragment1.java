@@ -105,6 +105,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     private ImageView completeMarksheets, incompleteMarksheets;
     private Image marksheet;
     private ImageButton gpaHelptip;
+    private ProfileFormStep2 profileFormStep2;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -121,8 +122,9 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         getAllViews(rootView);
 
         setOnClickListerner();
-        ProfileFormStep2 profileFormStep2 = (ProfileFormStep2) getActivity();
+        profileFormStep2 = (ProfileFormStep2) getActivity();
         user = profileFormStep2.getUser();
+
         if (user.isIncompleteStudentLoan()) {
             incompleteStudentLoan.setVisibility(View.VISIBLE);
             completeStudentLoan.setVisibility(View.GONE);
@@ -202,6 +204,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
                 if (position < scholarship.length - 1) {
                     selectedStudentLoan = true;
                     user.setStudentLoan(scholarshipValues[position]);
+                    showHideBankStatements();
                     user.setUpdateStudentLoan(true);
                 }
             }
@@ -324,6 +327,16 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         return rootView;
     }
 
+    private void showHideBankStatements() {
+
+        boolean b = false;
+        try {
+            b = Boolean.parseBoolean(user.getStudentLoan());
+
+        } catch (Exception e) {
+        }
+        profileFormStep2.showHideBankStatements(b);
+    }
 
     public String[] hasPermissions(Context context, final String... permissions) {
         ArrayList<String> askPermissions = new ArrayList<>();

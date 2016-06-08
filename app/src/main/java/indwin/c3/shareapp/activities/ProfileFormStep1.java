@@ -374,7 +374,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean showHideIncompleteStep3() {
-        if (user.isIncompleteAadhar() || user.isIncompleteCollegeId()) {
+        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress()) {
             incompleteStep3.setVisibility(View.VISIBLE);
             return true;
         }

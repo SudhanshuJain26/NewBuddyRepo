@@ -119,9 +119,72 @@
                 </LinearLayout>
 
 
+                <LinearLayout android:id="@+id/bank_statement_layout"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="vertical" android:visibility="gone">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/bank_stmt_id_header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:width="200dp"
+                            android:lines="2"
+                            android:text="Upload last 3 month' Personal Bank Account Statement"
+                            android:textColor="#eeb85f"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+
+                        <ImageView
+                            android:id="@+id/incomplete_bank_stmt"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_toEndOf="@id/bank_stmt_id_header"
+                            android:layout_toRightOf="@id/bank_stmt_id_header"
+                            android:src="@drawable/incomplete"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/complete_bank_stmt"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_toEndOf="@id/bank_stmt_id_header"
+                            android:layout_toRightOf="@id/bank_stmt_id_header"
+                            android:src="@drawable/complete"
+                            android:visibility="gone"/>
+
+                        <ImageButton
+                            android:id="@+id/bank_helptip"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="2dp"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/helptip"/>
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rvImages"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"/>
 
 
-
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>

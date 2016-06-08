@@ -167,13 +167,8 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
                 user.setUpdateAccommodation(false);
             }
         });
-
-        if (AppUtils.isNotEmpty(user.getCurrentAddress())) {
-            editCurrentAddress.setText(user.getCurrentAddress());
-        }
-        if (AppUtils.isNotEmpty(user.getPermanentAddress())) {
-            editPermanentAddress.setText(user.getPermanentAddress());
-        }
+        editPermanentAddress.setText(user.getFullPermanentAddress());
+        editCurrentAddress.setText(user.getFullCurrentAddress());
         if (AppUtils.isNotEmpty(user.getAccommodation()) &&
                 AppUtils.isNotEmpty(user.getCurrentAddress()) &&
                 AppUtils.isNotEmpty(user.getPermanentAddress())
@@ -388,7 +383,7 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
 
 
     private void openAddressLayout(int i) {
-
+        UserModel userModel = AppUtils.getUserObject(getActivity());
         final Dialog dialogView = new Dialog(getActivity(), android.R.style.Theme_Light);
         dialogView.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogView.setContentView(R.layout.address_layout);
@@ -404,16 +399,45 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
             }
 
         });
-        TextView headerTitle = (TextView) dialogView.findViewById(R.id.activity_header);
-        if (i == 0) {
-            headerTitle.setText("Current Address");
-        } else {
-            headerTitle.setText("Permanent Address");
-        }
         houseNoEt = (EditText) dialogView.findViewById(R.id.house_no_et);
         streetEt = (EditText) dialogView.findViewById(R.id.street_et);
         cityEt = (EditText) dialogView.findViewById(R.id.city_et);
         pinCodeEt = (EditText) dialogView.findViewById(R.id.pincode_et);
+        TextView headerTitle = (TextView) dialogView.findViewById(R.id.activity_header);
+        boolean submitEnabled = true;
+        if (i == 0) {
+
+            headerTitle.setText("Current Address");
+            if (AppUtils.isNotEmpty(userModel.getCurrentAddress()))
+                houseNoEt.setText(userModel.getCurrentAddress());
+            else submitEnabled = false;
+            if (AppUtils.isNotEmpty(userModel.getCurrentAddressLine2()))
+                streetEt.setText(userModel.getCurrentAddressLine2());
+            else submitEnabled = false;
+            if (AppUtils.isNotEmpty(userModel.getCurrentAddressCity()))
+                cityEt.setText(userModel.getCurrentAddressCity());
+            else submitEnabled = false;
+            if (AppUtils.isNotEmpty(userModel.getCurrentAddressPinCode()))
+                pinCodeEt.setText(userModel.getCurrentAddressPinCode());
+            else submitEnabled = false;
+
+        } else {
+            headerTitle.setText("Permanent Address");
+            if (AppUtils.isNotEmpty(userModel.getPermanentAddress()))
+                houseNoEt.setText(userModel.getPermanentAddress());
+            else submitEnabled = false;
+            if (AppUtils.isNotEmpty(userModel.getPermanentAddressLine2()))
+                streetEt.setText(userModel.getPermanentAddressLine2());
+            else submitEnabled = false;
+            if (AppUtils.isNotEmpty(userModel.getPermanentAddressCity()))
+                cityEt.setText(userModel.getPermanentAddressCity());
+            else submitEnabled = false;
+            if (AppUtils.isNotEmpty(userModel.getPermanentAddressPinCode()))
+                pinCodeEt.setText(userModel.getPermanentAddressPinCode());
+            else submitEnabled = false;
+        }
+        final Button submit = (Button) dialogView.findViewById(R.id.submit_address);
+        submit.setEnabled(submitEnabled);
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -422,17 +446,18 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (houseNoEt.getText().toString().isEmpty() || streetEt.getText().toString().isEmpty() || cityEt.getText().toString().isEmpty() || pinCodeEt.getText().toString().isEmpty()) {
-                    submitAddress.setEnabled(true);
 
-                } else {
-                    submitAddress.setEnabled(true);
-                }
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (houseNoEt.getText().toString().isEmpty() || streetEt.getText().toString().isEmpty() || cityEt.getText().toString().isEmpty() || pinCodeEt.getText().toString().isEmpty()) {
+                    submit.setEnabled(false);
+
+                } else {
+                    submit.setEnabled(true);
+                }
 
             }
         };
@@ -443,7 +468,6 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
 
         dialogView.show();
 
-        Button submit = (Button) dialogView.findViewById(R.id.submit_address);
 
         submit.setTag(i);
         submit.setOnClickListener(new View.OnClickListener() {

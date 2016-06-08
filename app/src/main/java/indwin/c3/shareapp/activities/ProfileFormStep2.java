@@ -97,6 +97,13 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         showHideIncompleteStep4();
     }
 
+    public void showHideBankStatements(boolean isBankLayoutVisible) {
+
+        ProfileFormStep2Fragment3 profileFormStep2Fragment3 = (ProfileFormStep2Fragment3) mPagerAdapter.getRegisteredFragment(2);
+        profileFormStep2Fragment3.showHideBankStatement(isBankLayoutVisible);
+
+
+    }
 
     private void populateFragments() {
         fragments = new ArrayList<>();
@@ -330,7 +337,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean showHideIncompleteStep1() {
-        if (user.isIncompleteStudentLoan() || user.isIncompleteGpa()) {
+        if (user.isIncompleteStudentLoan() || user.isIncompleteGpa() || user.isIncompleteMarksheets()) {
 
             incompleteStep1.setVisibility(View.VISIBLE);
             return true;
@@ -362,8 +369,16 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean showHideIncompleteStep3() {
-        if (user.isIncompleteRepaymentSetup()
-                ) {
+
+        boolean isIncompleteBankStmnt = false;
+        try {
+            boolean isTakenStudentLoan = Boolean.parseBoolean(user.getStudentLoan());
+            if (isTakenStudentLoan) {
+                isIncompleteBankStmnt = user.isIncompleteBankStmt();
+            }
+        } catch (Exception e) {
+        }
+        if (user.isIncompleteRepaymentSetup() || isIncompleteBankStmnt) {
             incompleteStep3.setVisibility(View.VISIBLE);
             return true;
         }

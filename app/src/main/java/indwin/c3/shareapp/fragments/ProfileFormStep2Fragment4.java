@@ -355,4 +355,10 @@ public class ProfileFormStep2Fragment4 extends Fragment implements View.OnFocusC
     public void onResume() {
         super.onResume();
     }
+
+    public void showHideBankStatement(boolean isBankLayoutVisible) {
+
+
+
+    }
 }

@@ -95,7 +95,16 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
         fragments = new ArrayList<>();
         fragments.add(new ProfileFormStep3Fragment1());
         fragments.add(new ProfileFormStep3Fragment2());
-        fragments.add(new ProfileFormStep3Fragment3());
+        boolean takenStudentLoan = false;
+
+        try {
+            takenStudentLoan = Boolean.parseBoolean(user.getStudentLoan());
+            gotoFragment3.setVisibility(View.GONE);
+        } catch (Exception e) {
+        }
+        if (!takenStudentLoan) {
+            fragments.add(new ProfileFormStep3Fragment3());
+        }
     }
 
     @Override

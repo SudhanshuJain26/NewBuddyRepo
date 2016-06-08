@@ -689,9 +689,31 @@ public class MainActivity extends AppCompatActivity {
                 //                }).start();
 
                 //   getALlContacts();
+                SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+                boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+                if (!isUpdatingDB) {
+
+                    new checkuser().execute(url);
+                } else {
+                    Runnable myRunnable = new Runnable() {
+
+                        public void run() {
+                            try {
+                                Thread.sleep(10000);
+
+                            } catch (Exception e) {
+
+                            }
+                            new checkuser().execute(url);
+                        }
 
 
-                new checkuser().execute(url);
+                    };
+                    Thread thread = new Thread(myRunnable);
+                    thread.start();
+
+                }
+
 
             }
 
@@ -881,14 +903,14 @@ public class MainActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         profileStatus = "";
                     }
-                    String  courseend="";
+                    String courseend = "";
 
                     try {
                         courseend = data.getString("courseCompletionDate");
                     } catch (Exception e) {
-                        courseend="";
+                        courseend = "";
                     }
-                    String nameadd="";
+                    String nameadd = "";
                     try {
                         nameadd = data.getString("college");
                     } catch (Exception e) {
@@ -980,7 +1002,7 @@ public class MainActivity extends AppCompatActivity {
                 Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
                 Intercom.client().registerIdentifiedUser(
                         new Registration().withUserId(user.getUserId()));
-              AppUtils.checkDataForNormalUser(user,gson,data1);
+                AppUtils.checkDataForNormalUser(user, gson, data1);
                 //user.setEmailSent(false);
                 //if (data1.opt("gender") != null)
                 //    user.setGender(data1.getString("gender"));

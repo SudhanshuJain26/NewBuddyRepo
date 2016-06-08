@@ -3,6 +3,8 @@ package indwin.c3.shareapp.models;
 import java.util.ArrayList;
 import java.util.Map;
 
+import indwin.c3.shareapp.utils.AppUtils;
+
 /**
  * Created by shubhang on 18/03/16.
  */
@@ -162,9 +164,9 @@ public class UserModel {
 
     private Image collegeID;
 
-    private Image  bankProof;
+    private Image bankProof;
 
-    private Image  addressProof;
+    private Image addressProof;
     private Image bankStatement;
 
     public boolean isEmailSent() {
@@ -1417,5 +1419,41 @@ public class UserModel {
 
     public void setBankStatement(Image bankStatement) {
         this.bankStatement = bankStatement;
+    }
+
+    public String getFullCurrentAddress() {
+        StringBuffer currentAddressStr = new StringBuffer("");
+        if (AppUtils.isNotEmpty(currentAddress)) {
+            currentAddressStr.append(currentAddress);
+        }
+        if (AppUtils.isNotEmpty(currentAddressLine2)) {
+            currentAddressStr.append("," + currentAddressLine2);
+        }
+        if (AppUtils.isNotEmpty(currentAddressCity)) {
+            currentAddressStr.append("," + currentAddressCity);
+        }
+        if (AppUtils.isNotEmpty(currentAddressPinCode)) {
+            currentAddressStr.append("," + currentAddressPinCode);
+        }
+        return currentAddressStr.toString();
+
+    }
+
+    public String getFullPermanentAddress() {
+        StringBuffer permanentAddressStr = new StringBuffer("");
+        if (AppUtils.isNotEmpty(permanentAddress)) {
+            permanentAddressStr.append(permanentAddress);
+        }
+        if (AppUtils.isNotEmpty(permanentAddressLine2)) {
+            permanentAddressStr.append("," + permanentAddressLine2);
+        }
+        if (AppUtils.isNotEmpty(permanentAddressCity)) {
+            permanentAddressStr.append("," + permanentAddressCity);
+        }
+        if (AppUtils.isNotEmpty(permanentAddressPinCode)) {
+            permanentAddressStr.append("," + permanentAddressPinCode);
+        }
+        return permanentAddressStr.toString();
+
     }
 }

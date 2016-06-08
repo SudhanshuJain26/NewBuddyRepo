@@ -187,30 +187,30 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     updateUser = true;
                 }
                 AppUtils.saveUserObject(mContext, userImages);
-                int i = 0;
-                for (Map.Entry<String, String> entry : userImages.getAddressProof().getNewImgUrls().entrySet()) {
-
-                    if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
-                        if (userImages.getAddressProof().getNewImgUrls() != null)
-                            userImages.getAddressProof().getNewImgUrls().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
-                        entry.setValue(AppUtils.uploadStatus.PICKED.toString());
-                        AppUtils.saveUserObject(mContext, userImages);
-                        i++;
-
-                        try {
-
-
-                            cloudinary.uploader().upload(entry.getKey(),
-                                    ObjectUtils.asMap("public_id", userImages.getUserId() + "addressProof" + ts + i));
-                            String cloudinaryUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "addressProof" + ts + i);
-                            uploadAddressProofs.add(cloudinaryUrl);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        updateUser = true;
-                    }
-                }
+                //int i = 0;
+                //for (Map.Entry<String, String> entry : userImages.getAddressProof().getNewImgUrls().entrySet()) {
+                //
+                //    if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
+                //        if (userImages.getAddressProof().getNewImgUrls() != null)
+                //            userImages.getAddressProof().getNewImgUrls().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
+                //        entry.setValue(AppUtils.uploadStatus.PICKED.toString());
+                //        AppUtils.saveUserObject(mContext, userImages);
+                //        i++;
+                //
+                //        try {
+                //
+                //
+                //            cloudinary.uploader().upload(entry.getKey(),
+                //                    ObjectUtils.asMap("public_id", userImages.getUserId() + "addressProof" + ts + i));
+                //            String cloudinaryUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "addressProof" + ts + i);
+                //            uploadAddressProofs.add(cloudinaryUrl);
+                //
+                //        } catch (Exception e) {
+                //            e.printStackTrace();
+                //        }
+                //        updateUser = true;
+                //    }
+                //}
             }
             userImages = AppUtils.getUserObject(mContext);
             if (userImages.getBankStatement() != null && userImages.getBankStatement().getNewImgUrls().size() > 0) {
@@ -352,8 +352,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 if (frontCollegeId != null || backCollegeId != null) {
                     JSONObject collegeID = new JSONObject();
                     doApiCall = true;
-                    if (uploadAddressProofs.size() > 0)
-                        collegeID.put("imgUrls", new JSONArray(uploadAddressProofs));
+                    //if (uploadAddressProofs.size() > 0)
+                    //    collegeID.put("imgUrls", new JSONArray(uploadAddressProofs));
                     if (frontCollegeId != null) {
                         JSONObject front = new JSONObject();
                         front.put("imgUrl", frontCollegeId);

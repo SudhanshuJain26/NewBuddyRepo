@@ -774,6 +774,8 @@ public class PaymentLive  extends Activity {
 //                new ValidateForm().execute();
                 configureWebView();
             }
+            else
+                finish();
 
         }}
 

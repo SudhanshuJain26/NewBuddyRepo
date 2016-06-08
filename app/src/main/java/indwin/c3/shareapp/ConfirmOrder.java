@@ -233,7 +233,9 @@ public class ConfirmOrder extends AppCompatActivity {
                 if (interest < 0)
                     interest = 0;
                 int ll=(int)(newemi*getIntent().getExtras().getInt("monthforemi"));
-                interest=ll-getIntent().getExtras().getInt("sellingprice")-dis+downPayment-getIntent().getExtras().getInt("servicecharge");
+                interest=ll-(getIntent().getExtras().getInt("sellingprice")-dis)+downPayment-getIntent().getExtras().getInt("servicecharge");
+                if(interest<=0)
+                    interest=0;
                 if(getIntent().getExtras().getInt("sellingprice")<5000)
                 {RelativeLayout buddydis=(RelativeLayout)popUpView.findViewById(R.id.buddydiscount);
                     buddydis.setVisibility(View.VISIBLE);

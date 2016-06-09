@@ -2,6 +2,7 @@ package indwin.c3.shareapp.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,6 +32,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +56,7 @@ import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.PicassoTrustAll;
 import indwin.c3.shareapp.utils.TargetButton;
+import io.intercom.android.sdk.Intercom;
 
 public class AgreementActivity extends AppCompatActivity {
 
@@ -165,6 +168,20 @@ public class AgreementActivity extends AppCompatActivity {
                     }
                 }
             }
+
+            ImageView inter = (ImageView) findViewById(R.id.interCom);
+            inter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
+                        Intercom.client().displayMessageComposer();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
             parentScrollView = (ScrollView) findViewById(R.id.parent_scrollview);
             parentScrollView.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
@@ -210,23 +227,32 @@ public class AgreementActivity extends AppCompatActivity {
                 addSignature.setText("");
                 acceptTerms.setVisibility(View.GONE);
             }
-        } catch (Exception e) {
+        } catch (
+                Exception e
+                )
+
+        {
             e.printStackTrace();
         }
-        acceptTerms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isSelfieAdded && isSignatureAdded) {
-                    ProfileFormStep1Fragment4.completeAgreement.setVisibility(View.VISIBLE);
-                    finish();
-                } else {
-                    if (!isSelfieAdded)
-                        Toast.makeText(AgreementActivity.this, "Please add a selfie", Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(AgreementActivity.this, "Please add a signature", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
+        acceptTerms.setOnClickListener(new View.OnClickListener()
+
+                                       {
+                                           @Override
+                                           public void onClick(View v) {
+                                               if (isSelfieAdded && isSignatureAdded) {
+                                                   ProfileFormStep1Fragment4.completeAgreement.setVisibility(View.VISIBLE);
+                                                   finish();
+                                               } else {
+                                                   if (!isSelfieAdded)
+                                                       Toast.makeText(AgreementActivity.this, "Please add a selfie", Toast.LENGTH_SHORT).show();
+                                                   else
+                                                       Toast.makeText(AgreementActivity.this, "Please add a signature", Toast.LENGTH_SHORT).show();
+                                               }
+                                           }
+                                       }
+
+        );
 
 
     }

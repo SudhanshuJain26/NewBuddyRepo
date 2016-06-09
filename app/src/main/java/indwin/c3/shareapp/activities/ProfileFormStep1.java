@@ -292,7 +292,9 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                 e.printStackTrace();
             }
         }
+
         AppUtils.saveUserObject(this, userModel);
+        user.setUpdateCourseEndDate(false);
         user.setUpdateRollNumber(false);
         user.setUpdateCollegeName(false);
         user.setUpdateCourseName(false);
@@ -503,9 +505,9 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             findViewById(R.id.up_arrow_3).setVisibility(View.VISIBLE);
         } else if (i == 3) {
             if (isGirl) {
-                image = R.mipmap.step1fragment3girl;
+                image = R.mipmap.step1fragment4girl;
             } else {
-                image = R.mipmap.step1fragment3;
+                image = R.mipmap.step1fragment4;
             }
             findViewById(R.id.up_arrow_4).setVisibility(View.VISIBLE);
         }

@@ -37,6 +37,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -92,6 +95,8 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private Image addressProof;
     private int clickedPosition;
     private Spinner addressTypeSp;
+    private ImageView addPanImage;
+    private String typeImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -100,6 +105,8 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         final View rootView = inflater.inflate(
                 R.layout.profile_form_step1_fragment3, container, false);
         getAllViews(rootView);
+        arrayAaadharOrPan = getResources().getStringArray(R.array.aadhar_or_pan);
+        addressTypeArray = getResources().getStringArray(R.array.address_proof_type);
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
@@ -109,12 +116,16 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         user = profileFormStep1.getUser();
         newaddressProofs = new HashMap<>();
 
+        if (user.getPanProof() != null && user.getPanProof().getImgUrl() != null) {
+            File file = new File(user.getPanProof().getImgUrl());
+            Picasso.with(getActivity()).load(file).fit().placeholder(R.drawable.downloading).into(addPanImage);
 
+        }
         try {
             addressProofs = user.getAddressProofs();
             if (user.getAddressProof() == null) {
                 user.setAddressProof(new Image());
-            } else {
+            } else if (user.getAddressProof().getFront() != null && AppUtils.isNotEmpty(user.getAddressProof().getFront().getImgUrl())) {
                 completeAddress.setVisibility(View.VISIBLE);
                 user.setIncompletePermanentAddress(false);
             }
@@ -129,6 +140,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        typeImage = Constants.IMAGE_TYPE.ADDRESS_PROOF.toString();
                         if ((position == 0 && (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl()))) || (position == 1 && (addressProof.getBack() == null || AppUtils.isEmpty(addressProof.getBack().getImgUrl())))) {
                             clickedPosition = position;
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
@@ -162,11 +174,20 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
 
+
+        if (user.getAddressProof() != null && AppUtils.isNotEmpty(user.getAddressProof().getType())) {
+            for (int i = 0; i < addressTypeArray.length; i++) {
+                if (user.getAddressProof().getType().equals(addressTypeArray[i])) {
+                    addressTypeSp.setSelection(i);
+                    break;
+                }
+
+            }
+
+        }
         setAllHelpTipsEnabled();
 
 
-        arrayAaadharOrPan = getResources().getStringArray(R.array.aadhar_or_pan);
-        addressTypeArray = getResources().getStringArray(R.array.address_proof_type);
         if (user.getPanOrAadhar() != null && !"".equals(user.getPanOrAadhar())) {
             if ("Aadhar".equals(user.getPanOrAadhar()) && user.getAadharNumber() != null && !"".equals(user.getAadharNumber())) {
                 editAadharNumber.setVisibility(View.GONE);
@@ -219,7 +240,21 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     }
 
     private void setOnClickListener() {
-
+        addPanImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                typeImage = Constants.IMAGE_TYPE.PAN.toString();
+                String[] temp = hasPermissions(getActivity(), PERMISSIONS);
+                if (temp != null && temp.length != 0) {
+                    deniedPermissionForever = true;
+                    PERMISSIONS = temp;
+                    requestPermissions(PERMISSIONS, ProfileFormStep1Fragment2.PERMISSION_ALL);
+                } else {
+                    Intent intent = new Intent(getActivity(), ImageHelperActivity.class);
+                    startActivityForResult(intent, INTENT_REQUEST_GET_IMAGES);
+                }
+            }
+        });
         aadharHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -352,6 +387,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     }
 
     private void getAllViews(View rootView) {
+        addPanImage = (ImageView) rootView.findViewById(R.id.addPanImage);
         uploadImageMsgTv = (TextView) rootView.findViewById(R.id.address_proof_header);
         completeAddress = (ImageView) rootView.findViewById(R.id.complete_address_proof);
         aadharPanHeader = (TextView) rootView.findViewById(R.id.aadhar_pan_header);
@@ -439,23 +475,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             incompleteAadhar.setVisibility(View.GONE);
             completeAadhar.setVisibility(View.VISIBLE);
         }
-        //if (addressProofs.size() == 0) {
-        //    incompleteAddress.setVisibility(View.VISIBLE);
-        //    user.setIncompletePermanentAddress(true);
-        //} else if (addressProofs.size() == 1) {
-        //    if ("add".equals(addressProofs.get(0))) {
-        //        user.setIncompletePermanentAddress(true);
-        //    } else {
-        //        user.setIncompletePermanentAddress(false);
-        //    }
-        //} else {
-        //    if (!user.isAppliedFor1k()) {
-        //        user.setAddressProofs(addressProofs);
-        //    }
-        //    user.setIncompletePermanentAddress(false);
-        //}
-
-        if (addressProof.getBack() == null || addressProof.getFront() == null) {
+        if (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl())) {
             user.setIncompletePermanentAddress(true);
         } else {
             user.setIncompletePermanentAddress(false);
@@ -502,28 +522,36 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             UserModel user = AppUtils.getUserObject(getActivity());
 
             imageUris = intent.getParcelableArrayListExtra(ImageHelperActivity.EXTRA_IMAGE_URIS);
-            if (user.getAddressProof() == null)
-                user.setAddressProof(new Image());
-            FrontBackImage frontBackImage = new FrontBackImage();
-            if (imageUris != null && imageUris.size() > 0) {
-                frontBackImage.setImgUrl(imageUris.get(0).getPath());
-                Image addressProof = user.getAddressProof();
-                if (clickedPosition == 0) {
+            if (Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(typeImage)) {
+                if (user.getAddressProof() == null)
+                    user.setAddressProof(new Image());
+                FrontBackImage frontBackImage = new FrontBackImage();
+                if (imageUris != null && imageUris.size() > 0) {
+                    frontBackImage.setImgUrl(imageUris.get(0).getPath());
+                    Image addressProof = user.getAddressProof();
+                    if (clickedPosition == 0) {
 
-                    addressProof.setFront(frontBackImage);
-                    addressProof.setUpdateFront(true);
-                    this.addressProof.setFront(frontBackImage);
-                } else if (clickedPosition == 1) {
-                    addressProof.setUpdateBack(true);
-                    addressProof.setBack(frontBackImage);
-                    this.addressProof.setBack(frontBackImage);
+                        addressProof.setFront(frontBackImage);
+                        addressProof.setUpdateFront(true);
+                        this.addressProof.setFront(frontBackImage);
+                    } else if (clickedPosition == 1) {
+                        addressProof.setUpdateBack(true);
+                        addressProof.setBack(frontBackImage);
+                        this.addressProof.setBack(frontBackImage);
+                    }
+                    adapter.notifyDataSetChanged();
+                    user.setUpdateNewAddressProofs(true);
                 }
-                adapter.notifyDataSetChanged();
-                user.setUpdateNewAddressProofs(true);
-                AppUtils.saveUserObject(getActivity(), user);
-
+            } else {
+                if (imageUris != null && imageUris.size() > 0) {
+                    user.setUpdatePanProof(true);
+                    user.setPanProof(new FrontBackImage());
+                    user.getPanProof().setImgUrl(imageUris.get(0).getPath());
+                    File file = new File(imageUris.get(0).getPath());
+                    Picasso.with(getActivity()).load(file).fit().placeholder(R.drawable.downloading).into(addPanImage);
+                }
             }
-
+            AppUtils.saveUserObject(getActivity(), user);
 
         }
     }

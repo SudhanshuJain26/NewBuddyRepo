@@ -125,7 +125,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         familyMember1spinner.setSelection(adapter.getCount());
 
         languageAdapter = new SpinnerHintAdapter(getActivity(), languageOptions, R.layout.spinner_item_underline);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
         prefLangFamilyMember1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

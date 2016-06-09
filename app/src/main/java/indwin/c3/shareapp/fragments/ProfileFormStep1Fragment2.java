@@ -136,7 +136,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         try {
             if (user.getCollegeID() == null) {
                 user.setCollegeID(new Image());
-            } else {
+            } else if (user.getCollegeID().getFront() != null && AppUtils.isNotEmpty(user.getCollegeID().getFront().getImgUrl())) {
                 completeCollegeId.setVisibility(View.VISIBLE);
                 user.setIncompleteCollegeId(false);
             }
@@ -573,11 +573,12 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     }
 
     public void checkIncomplete() {
-        if (collegeIDs.getBack() == null || collegeIDs.getFront() == null) {
+        if ( collegeIDs.getFront() == null|| AppUtils.isEmpty(collegeIDs.getFront().getImgUrl())) {
             incompleteCollegeId.setVisibility(View.VISIBLE);
             user.setIncompleteCollegeId(true);
         } else {
             user.setIncompleteCollegeId(false);
+
         }
         if (user.isIncompleteCollegeId()) {
             incompleteCollegeId.setVisibility(View.VISIBLE);

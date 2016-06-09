@@ -226,7 +226,6 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private void saveStep1Data() {
-        checkIncompleteStep1();
         UserModel userModel = AppUtils.getUserObject(this);
 
         if (AppUtils.isNotEmpty(user.getGpaType()) && user.isGpaTypeUpdate()) {
@@ -253,19 +252,24 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         if (AppUtils.isNotEmpty(user.getFamilyMemberType1()) && user.isUpdateFamilyMemberType1()) {
             userModel.setFamilyMemberType1(user.getFamilyMemberType1());
             userModel.setUpdateFamilyMemberType1(true);
+            user.setUpdateFamilyMemberType1(false);
         }
         if (AppUtils.isNotEmpty(user.getProfessionFamilyMemberType1()) && user.isUpdateProfessionFamilyMemberType1()) {
             userModel.setProfessionFamilyMemberType1(user.getProfessionFamilyMemberType1());
             userModel.setUpdateProfessionFamilyMemberType1(true);
+            user.setUpdateProfessionFamilyMemberType1(false);
         }
         if (AppUtils.isNotEmpty(user.getPhoneFamilyMemberType1()) && user.isUpdatePhoneFamilyMemberType1()) {
             userModel.setPhoneFamilyMemberType1(user.getPhoneFamilyMemberType1());
             userModel.setUpdatePhoneFamilyMemberType1(true);
+            user.setUpdatePhoneFamilyMemberType1(false);
         }
         if (AppUtils.isNotEmpty(user.getPrefferedLanguageFamilyMemberType1()) && user.isUpdatePreferredLanguageFamilyMemberType1()) {
             userModel.setPrefferedLanguageFamilyMemberType1(user.getPrefferedLanguageFamilyMemberType1());
             userModel.setUpdatePreferredLanguageFamilyMemberType1(true);
+            user.setUpdatePreferredLanguageFamilyMemberType1(false);
         }
+
         AppUtils.saveUserObject(this, userModel);
         uploadDetailsToServer();
 
@@ -284,6 +288,9 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         }
 
         AppUtils.saveUserObject(this, userModel);
+        user.setUpdateBankIfsc(false);
+        user.setUpdateBankAccNum(true);
+
         uploadDetailsToServer();
     }
 
@@ -294,20 +301,27 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         if (AppUtils.isNotEmpty(user.getRollNumber()) && user.isUpdateRollNumber()) {
             userModel.setRollNumber(user.getRollNumber());
             userModel.setUpdateRollNumber(true);
+            user.setUpdateRollNumber(false);
+
         }
 
         if (AppUtils.isNotEmpty(user.getClassmateName()) && user.isUpdateClassmateName()) {
             userModel.setClassmateName(user.getClassmateName());
             userModel.setUpdateClassmateName(true);
+            user.setUpdateClassmateName(false);
+
         }
         if (AppUtils.isNotEmpty(user.getClassmatePhone()) && user.isUpdateClassmatePhone()) {
             userModel.setClassmatePhone(user.getClassmatePhone());
             userModel.setUpdateClassmatePhone(true);
+            user.setUpdateClassmatePhone(false);
+
         }
 
         if (AppUtils.isNotEmpty(user.getVerificationDate()) && user.isUpdateVerificationDate()) {
             userModel.setVerificationDate(user.getVerificationDate());
             userModel.setUpdateVerificationDate(true);
+            user.setUpdateVerificationDate(false);
         }
         AppUtils.saveUserObject(this, userModel);
         uploadDetailsToServer();
@@ -502,9 +516,9 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
             findViewById(R.id.up_arrow_3).setVisibility(View.VISIBLE);
         } else if (i == 3) {
             if (isGirl) {
-                image = R.mipmap.step2fragment3girl;
+                image = R.mipmap.step2fragment4girl;
             } else {
-                image = R.mipmap.step2fragment3;
+                image = R.mipmap.step2fragment4;
             }
             findViewById(R.id.up_arrow_4).setVisibility(View.VISIBLE);
         }

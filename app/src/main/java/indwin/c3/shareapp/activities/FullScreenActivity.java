@@ -89,21 +89,22 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
     }
 
     private void setHeaderTitle(int position) {
+        boolean showStatusImage = true;
         Boolean status = null;
         if (Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type) || Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type)) {
             if (position == 0) {
                 headerTitle.setText("Front Side " + title);
                 if (image.getFront() != null) {
                     status = image.getFront().isVerified();
-                }
+                } else showStatusImage = false;
             } else if (position == 1) {
                 headerTitle.setText("Back Side " + title);
-                status = image.getBack().isVerified();
+                if (image.getBack() != null)
+                    status = image.getBack().isVerified();
+                else showStatusImage = false;
             } else {
                 headerTitle.setText(title);
             }
-
-
         } else {
             if (position + 1 <= image.getValidImgUrls().size()) {
                 status = true;
@@ -112,19 +113,22 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
             } else {
                 status = null;
             }
-
         }
-
-
-        if (status == null) {
-            imageStatus.setImageDrawable(getResources().getDrawable(R.drawable.loader));
-            verificationStatusTv.setText(Constants.VERIFICATION_STATUS.UNDER_VEIFICATION.toString());
-        } else if (status) {
-            imageStatus.setImageDrawable(getResources().getDrawable(R.drawable.complete));
-            verificationStatusTv.setText(Constants.VERIFICATION_STATUS.VERIFIED.toString());
-        } else if (!status) {
-            imageStatus.setImageDrawable(getResources().getDrawable(R.drawable.incomplete));
-            verificationStatusTv.setText(Constants.VERIFICATION_STATUS.REJECTED.toString());
+        if (showStatusImage) {
+            imageStatus.setVisibility(View.VISIBLE);
+            if (status == null) {
+                imageStatus.setImageDrawable(getResources().getDrawable(R.drawable.loader));
+                verificationStatusTv.setText(Constants.VERIFICATION_STATUS.UNDER_VEIFICATION.toString());
+            } else if (status) {
+                imageStatus.setImageDrawable(getResources().getDrawable(R.drawable.complete));
+                verificationStatusTv.setText(Constants.VERIFICATION_STATUS.VERIFIED.toString());
+            } else if (!status) {
+                imageStatus.setImageDrawable(getResources().getDrawable(R.drawable.incomplete));
+                verificationStatusTv.setText(Constants.VERIFICATION_STATUS.REJECTED.toString());
+            }
+        } else {
+            imageStatus.setVisibility(View.GONE);
+            verificationStatusTv.setText("");
         }
     }
 
@@ -179,12 +183,18 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
             if (Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type) || Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type)) {
                 if (position == 0) {
                     {
-                        if (image.getFront() != null)
+                        if (image.getFront() != null && AppUtils.isNotEmpty(image.getFront().getImgUrl()))
                             imgUrl = image.getFront().getImgUrl();
+                        else
+                            Picasso.with(mContext).load(R.mipmap.frontside_noimage).fit().placeholder(R.drawable.downloading).into(imageView);
+
                     }
                 } else if (position == 1) {
                     if (image.getBack() != null)
                         imgUrl = image.getBack().getImgUrl();
+                    else
+                        Picasso.with(mContext).load(R.mipmap.backside_noimage).fit().placeholder(R.drawable.downloading).into(imageView);
+
                 } else {
                     if ((position - 1) <= validUrlSize && validUrlSize > 0) {
                         imgUrl = image.getValidImgUrls().get(position - 2);
@@ -204,20 +214,15 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
                     imgUrl = image.getImgUrls().get(position - validUrlSize - invalidUrlSize);
                 }
             }
-            if (imgUrl.contains("http"))
-                Picasso.with(FullScreenActivity.this).load(imgUrl).fit().placeholder(R.drawable.downloading).into(imageView);
-            else {
-                final File imgFile = new File(imgUrl);
-                if (imgFile.exists()) {
-                    Picasso.with(mContext).load(imgFile).fit().placeholder(R.drawable.downloading).into(imageView);
-                }
-            }
-            if (imgUrl.contains("http"))
-                Picasso.with(FullScreenActivity.this).load(imgUrl).fit().placeholder(R.drawable.downloading).into(imageView);
-            else {
-                final File imgFile = new File(imgUrl);
-                if (imgFile.exists()) {
-                    Picasso.with(mContext).load(imgFile).fit().placeholder(R.drawable.downloading).into(imageView);
+
+            if (AppUtils.isNotEmpty(imgUrl)) {
+                if (imgUrl.contains("http"))
+                    Picasso.with(FullScreenActivity.this).load(imgUrl).fit().placeholder(R.drawable.downloading).into(imageView);
+                else {
+                    final File imgFile = new File(imgUrl);
+                    if (imgFile.exists()) {
+                        Picasso.with(mContext).load(imgFile).fit().placeholder(R.drawable.downloading).into(imageView);
+                    }
                 }
             }
             container.addView(itemView);

@@ -161,9 +161,9 @@ public class UserModel {
     boolean appliedFor60k = false;
 
     private Image gradeSheet;
-
+    private FrontBackImage panProof;
     private Image collegeID;
-
+    private boolean updatePanProof;
     private Image bankProof;
 
     private Image addressProof;
@@ -1455,5 +1455,22 @@ public class UserModel {
         }
         return permanentAddressStr.toString();
 
+    }
+
+    public FrontBackImage getPanProof() {
+        return panProof;
+    }
+
+    public void setPanProof(FrontBackImage panProof) {
+        this.panProof = panProof;
+    }
+
+
+    public boolean isUpdatePanProof() {
+        return updatePanProof;
+    }
+
+    public void setUpdatePanProof(boolean updatePanProof) {
+        this.updatePanProof = updatePanProof;
     }
 }

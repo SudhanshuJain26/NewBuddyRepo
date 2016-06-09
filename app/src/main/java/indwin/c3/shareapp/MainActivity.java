@@ -408,10 +408,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
-        Intercom.client().registerIdentifiedUser(
-                new Registration().withUserId(userId));
+        try {
+            Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
+            Intercom.client().registerIdentifiedUser(
+                    new Registration().withUserId(userId));
+        } catch (Exception e) {
+        }
         try {
             Intercom.client().openGCMMessage(getIntent());
         } catch (Exception e) {
@@ -999,11 +1001,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void checkDataForNormalUser(UserModel user, Gson gson, JSONObject data1) {
+            AppUtils.checkDataForNormalUser(user, gson, data1);
             try {
                 Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
                 Intercom.client().registerIdentifiedUser(
                         new Registration().withUserId(user.getUserId()));
-                AppUtils.checkDataForNormalUser(user, gson, data1);
+
                 //user.setEmailSent(false);
                 //if (data1.opt("gender") != null)
                 //    user.setGender(data1.getString("gender"));

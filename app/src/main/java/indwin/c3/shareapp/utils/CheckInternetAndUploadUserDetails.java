@@ -712,7 +712,11 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 }
                 if (!doApiCall)
                     return "";
-                Intercom.client().updateUser(userMap);
+                try {
+                    Intercom.client().updateUser(userMap);
+                } catch (Exception e) {
+                    System.out.println("Intercom four" + e.toString());
+                }
                 StringEntity se = new StringEntity(jsonobj.toString());
                 putReq.setHeader("Accept", "application/json");
                 putReq.setHeader("Content-type", "application/json");

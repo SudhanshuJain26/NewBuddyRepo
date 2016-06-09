@@ -123,8 +123,11 @@ public class AppUtils {
                     user.setAppliedFor60k(true);
                 else user.setAppliedFor60k(false);
             }
-            Intercom.client().updateUser(userMap);
-
+            try {
+                Intercom.client().updateUser(userMap);
+            } catch (Exception e) {
+                System.out.println("Intercom four" + e.toString());
+            }
 
             if (data1.opt("gpa") != null) {
 

@@ -2,8 +2,6 @@ package indwin.c3.shareapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -211,8 +209,7 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
             else {
                 final File imgFile = new File(imgUrl);
                 if (imgFile.exists()) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    imageView.setImageBitmap(bitmap);
+                    Picasso.with(mContext).load(imgFile).fit().placeholder(R.drawable.downloading).into(imageView);
                 }
             }
             if (imgUrl.contains("http"))
@@ -220,8 +217,7 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
             else {
                 final File imgFile = new File(imgUrl);
                 if (imgFile.exists()) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    imageView.setImageBitmap(bitmap);
+                    Picasso.with(mContext).load(imgFile).fit().placeholder(R.drawable.downloading).into(imageView);
                 }
             }
             container.addView(itemView);

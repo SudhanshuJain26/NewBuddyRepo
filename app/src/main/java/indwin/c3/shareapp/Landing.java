@@ -161,7 +161,7 @@ public class Landing extends AppCompatActivity {
                 if (!isNetworkAvailable()) {
                     Gson gson = new Gson();
                     String json = sh.getString("UserObject", "");
-                    UserModel user = gson.fromJson(json, UserModel.class);
+                    UserModel user = AppUtils.getUserObject(this);
                     Intent in = new Intent(Landing.this, HomePage.class);
                     finish();
                     // Intent in = new Intent(MainActivity.this, Inviteform.class);

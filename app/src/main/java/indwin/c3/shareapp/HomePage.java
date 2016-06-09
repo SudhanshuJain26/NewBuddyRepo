@@ -133,7 +133,7 @@ public class HomePage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        user = AppUtils.getUserObject(this);
         BuddyApplication application = (BuddyApplication) getApplication();
         mTracker = application.getDefaultTracker();
         sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
@@ -425,10 +425,6 @@ public class HomePage extends AppCompatActivity {
             mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
             mPrefs.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
             gson = new Gson();
-            String json = mPrefs.getString("UserObject", "");
-            setNewIdsNull(json);
-            json = mPrefs.getString("UserObject", "");
-            user = gson.fromJson(json, UserModel.class);
 
             try {
                 TextView name1, line1, line2, but;
@@ -941,9 +937,9 @@ public class HomePage extends AppCompatActivity {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (checkedit == 1) {
-                        int ll=4;
+                        int ll = 4;
                         System.out.print("qe");
-//                               Toast.makeText(HomePage.this,"check",Toast.LENGTH_LONG).show();
+                        //                               Toast.makeText(HomePage.this,"check",Toast.LENGTH_LONG).show();
                         paste.setVisibility(View.VISIBLE);
                         ImageView home = (ImageView) findViewById(R.id.ho);
 
@@ -1094,8 +1090,6 @@ public class HomePage extends AppCompatActivity {
             if (jsonObject.optJSONArray("newCollegeIds") != null) {
                 jsonObject.put("newCollegeIds", null);
             }
-
-            AppUtils.saveInSharedPrefs(this, AppUtils.USER_OBJECT, jsonObject.toString());
 
 
         } catch (Exception e) {
@@ -1749,7 +1743,7 @@ public class HomePage extends AppCompatActivity {
     public void parse(String parseString) {
         SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
         SharedPreferences.Editor et = cred.edit();
-        et.putString("urlprod",parseString);
+        et.putString("urlprod", parseString);
         et.commit();
         productId = "";
         int pos = -1;
@@ -1910,7 +1904,7 @@ public class HomePage extends AppCompatActivity {
                         in.putExtra("seller", sellerNme);
                         in.putExtra("product", productId);
                         in.putExtra("query", query.getText().toString());
-//                        query.setText("");
+                        //                        query.setText("");
                         in.putExtra("page", "api");
                         checkValidFromApis = 0;
                         checkValidUrl = 0;
@@ -1926,7 +1920,7 @@ public class HomePage extends AppCompatActivity {
                     } else if (checkValidUrl == 1) {
                         //monkey page
                         Intent in = new Intent(HomePage.this, ProductsPage.class);
-//                        query.setText("");
+                        //                        query.setText("");
                         in.putExtra("query", query.getText().toString());
                         in.putExtra("page", "monkey");
                         startActivity(in);
@@ -1936,7 +1930,7 @@ public class HomePage extends AppCompatActivity {
                         page = "monkey";
                     } else if ((checkValidFromApis == 1)) {
                         //not monley page
-//                        query.setText("");
+                        //                        query.setText("");
                         Intent in = new Intent(HomePage.this, ProductsPage.class);
                         in.putExtra("query", query.getText().toString());
                         in.putExtra("seller", sellerNme);

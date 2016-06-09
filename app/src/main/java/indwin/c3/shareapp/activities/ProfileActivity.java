@@ -70,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        user = AppUtils.getUserObject(this);
         try {
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
@@ -257,9 +258,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         actionBarDrawerToggle.syncState();
 
         mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
 
         profilePic = (MLRoundedImageView) findViewById(R.id.profile_pic);
         SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
@@ -409,8 +407,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             incomplete60k();
         }
 
-        json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
+        AppUtils.saveUserObject(this, user);
     }
 
     private void declinedUser() {

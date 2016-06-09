@@ -768,8 +768,7 @@ public class Splash extends AppCompatActivity {
                                 checkDataForNormalUser(user, gson, data1);
                             else
                                 checkDataForOfflineUser(user, gson, data1);
-                            json = gson.toJson(user);
-                            sh.edit().putString("UserObject", json).apply();
+                            AppUtils.saveUserObject(Splash.this, user);
                             name = data1.getString("name");
                             email = data1.getString("email");
                             SharedPreferences sharedpreferences11 = getSharedPreferences("cred", Context.MODE_PRIVATE);

@@ -259,12 +259,12 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                                     GraphResponse response) {
                                 try {
                                     FBUserModel fbUserModel = new Gson().fromJson(object.toString(), FBUserModel.class);
-                                    email = fbUserModel.getEmail();
                                     firstName = fbUserModel.getFirst_name();
                                     gender = fbUserModel.getGender();
                                     lastName = fbUserModel.getLast_name();
                                     link = fbUserModel.getLink();
                                     fbuserId = fbUserModel.getId();
+                                    email = fbUserModel.getEmail();
                                     UserModel user = AppUtils.getUserObject(getActivity());
                                     user.setFbUserId(fbuserId);
                                     AppUtils.saveUserObject(getActivity(), user);
@@ -299,11 +299,11 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                                     friends = summ.getString("total_count");
                                 } catch (Exception ex) {
                                 }
-                                if (AppUtils.isEmpty(name) || AppUtils.isEmpty(email) || AppUtils.isEmpty(friends)) {
+                                if (AppUtils.isEmpty(name) || AppUtils.isEmpty(friends)) {
                                     Set<String> denied = loginResult.getRecentlyDeniedPermissions();
-                                    if (denied.size() > 0) {
+                                    if (denied.size() > 0 && !denied.contains("email")) {
                                         Toast.makeText(getActivity(), "Please grant all permissions to complete your profile!", Toast.LENGTH_SHORT).show();
-                                        LoginManager.getInstance().logInWithReadPermissions(ProfileFormStep1Fragment1.this, Arrays.asList("user_friends", "email", "user_birthday"));
+                                        LoginManager.getInstance().logInWithReadPermissions(ProfileFormStep1Fragment1.this, Arrays.asList("user_friends", "user_birthday"));
                                     }
                                     Toast.makeText(getActivity(), "Please try again!", Toast.LENGTH_SHORT).show();
                                 } else {

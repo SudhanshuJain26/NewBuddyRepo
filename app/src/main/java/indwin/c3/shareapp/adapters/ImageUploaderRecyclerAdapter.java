@@ -2,8 +2,6 @@ package indwin.c3.shareapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -130,9 +128,7 @@ public class ImageUploaderRecyclerAdapter extends
             else {
                 final File imgFile = new File(imgUrl);
                 if (imgFile.exists()) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    viewHolder.image.setImageBitmap(bitmap);
-
+                    Picasso.with(mContext).load(imgFile).fit().placeholder(R.drawable.downloading).into(viewHolder.image);
                 }
             }
         }

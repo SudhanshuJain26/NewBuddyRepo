@@ -43,16 +43,18 @@ public class ProfileFormStep2Fragment2 extends Fragment {
     private final int top = 16, left = 16, right = 16, bottom = 16;
     ImageView incompleteStep1, incompleteStep2, incompleteStep3, incompleteFamilyDetails, completeFamilyDetails;
     boolean isFamilyMemberAdded = false;
-    private EditText prefLangFamilyMember1, prefLangFamilyMember2, phoneFamilyMember1, phoneFamilyMember2;
+    private EditText phoneFamilyMember1, phoneFamilyMember2;
+    private Spinner prefLangFamilyMember1, prefLangFamilyMember2;
     boolean isFamilyMember1Selected = false, isProfessionFamilyMember1Selected = false, isFamilyMember2Selected = false, isProfessionFamilyMember2Selected = false;
     ImageView topImage;
     View view1, view2;
     private ImageButton familyHelptip;
     private Spinner familyMember2spinner, professionFamilyMember2spinner, familyMember1spinner;
-    private SpinnerHintAdapter adapter, adapter2;
+    private SpinnerHintAdapter adapter, adapter2, languageAdapter;
     private LinearLayout parentLL1, parentLL2;
     private TextView incorrectPhoneFamily1, incorrectPhoneFamily2;
     private String mobile;
+    private String languageOptions[];
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -98,6 +100,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
 
 
         final String familyMemberOptions[] = getResources().getStringArray(R.array.family_member);
+        languageOptions = getResources().getStringArray(R.array.language_array);
         adapter = new SpinnerHintAdapter(getActivity(), familyMemberOptions, R.layout.spinner_item_underline);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -121,7 +124,36 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         familyMember1spinner.setAdapter(adapter);
         familyMember1spinner.setSelection(adapter.getCount());
 
+        languageAdapter = new SpinnerHintAdapter(getActivity(), languageOptions, R.layout.spinner_item_underline);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+
+        prefLangFamilyMember1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                user.setPrefferedLanguageFamilyMemberType1(languageOptions[position]);
+                user.setUpdatePreferredLanguageFamilyMemberType1(true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                user.setUpdatePreferredLanguageFamilyMemberType1(false);
+            }
+        });
+
+        prefLangFamilyMember2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                user.setPrefferedLanguageFamilyMemberType2(languageOptions[position]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                user.setUpdatePreferredLanguageFamilyMemberType2(false);
+            }
+        });
+        prefLangFamilyMember1.setAdapter(languageAdapter);
+        prefLangFamilyMember2.setAdapter(languageAdapter);
         familyMember2spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -197,9 +229,13 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             }
         }
 
-
         if (AppUtils.isNotEmpty(user.getPrefferedLanguageFamilyMemberType1())) {
-            prefLangFamilyMember1.setText(user.getPrefferedLanguageFamilyMemberType1());
+            for (int i = 0; i < languageOptions.length - 1; i++) {
+                if (languageOptions[i].equalsIgnoreCase(user.getPrefferedLanguageFamilyMemberType1())) {
+                    prefLangFamilyMember1.setSelection(i);
+                    break;
+                }
+            }
         }
         if (AppUtils.isNotEmpty(user.getPhoneFamilyMemberType1())) {
             phoneFamilyMember1.setText(user.getPhoneFamilyMemberType1());
@@ -230,7 +266,12 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                 }
             }
             if (AppUtils.isNotEmpty(user.getPrefferedLanguageFamilyMemberType2())) {
-                prefLangFamilyMember2.setText(user.getPrefferedLanguageFamilyMemberType2());
+                for (int i = 0; i < languageOptions.length - 1; i++) {
+                    if (languageOptions[i].equalsIgnoreCase(user.getPrefferedLanguageFamilyMemberType2())) {
+                        prefLangFamilyMember2.setSelection(i);
+                        break;
+                    }
+                }
             }
             if (AppUtils.isNotEmpty(user.getPhoneFamilyMemberType2())) {
                 phoneFamilyMember2.setText(user.getPhoneFamilyMemberType2());
@@ -263,7 +304,15 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                 int spinnerPosition = adapter2.getPosition(user.getProfessionFamilyMemberType2());
                 professionFamilyMember2spinner.setSelection(spinnerPosition);
             }
-            prefLangFamilyMember2.setText(user.getPrefferedLanguageFamilyMemberType2());
+
+            if (AppUtils.isNotEmpty(user.getPrefferedLanguageFamilyMemberType2())) {
+                for (int i = 0; i < languageOptions.length - 1; i++) {
+                    if (languageOptions[i].equalsIgnoreCase(user.getPrefferedLanguageFamilyMemberType2())) {
+                        prefLangFamilyMember2.setSelection(i);
+                        break;
+                    }
+                }
+            }
             phoneFamilyMember2.setText(user.getPhoneFamilyMemberType2());
             isFamilyMemberAdded = true;
             addFamilyMember.setText("Remove this family member");
@@ -291,8 +340,8 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         //incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
         //incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
         addFamilyMember = (TextView) rootView.findViewById(R.id.add_family_member);
-        prefLangFamilyMember1 = (EditText) rootView.findViewById(R.id.pref_lang_family_member1);
-        prefLangFamilyMember2 = (EditText) rootView.findViewById(R.id.pref_lang_family_member2);
+        prefLangFamilyMember1 = (Spinner) rootView.findViewById(R.id.pref_lang_family_member1);
+        prefLangFamilyMember2 = (Spinner) rootView.findViewById(R.id.pref_lang_family_member2);
         phoneFamilyMember1 = (EditText) rootView.findViewById(R.id.phone_number_family_member_1);
         phoneFamilyMember2 = (EditText) rootView.findViewById(R.id.phone_number_family_member_2);
         incompleteFamilyDetails = (ImageView) rootView.findViewById(R.id.incomplete_family_details);
@@ -435,19 +484,19 @@ public class ProfileFormStep2Fragment2 extends Fragment {
     }
 
     public void checkIncomplete() {
-        if (AppUtils.isNotEmpty(prefLangFamilyMember1.getText().toString())) {
-            user.setPrefferedLanguageFamilyMemberType1(prefLangFamilyMember1.getText().toString());
-            user.setUpdatePreferredLanguageFamilyMemberType1(true);
-        }
+        //if (AppUtils.isNotEmpty(prefLangFamilyMember1.getText().toString())) {
+        //    user.setPrefferedLanguageFamilyMemberType1(prefLangFamilyMember1.getText().toString());
+        //    user.setUpdatePreferredLanguageFamilyMemberType1(true);
+        //}
         if (AppUtils.isNotEmpty(phoneFamilyMember1.getText().toString()) && ValidationUtils.isValidPhoneNumber(phoneFamilyMember1.getText().toString()) && !phoneFamilyMember1.getText().toString().equals(mobile)) {
             user.setPhoneFamilyMemberType1(phoneFamilyMember1.getText().toString());
             user.setUpdatePhoneFamilyMemberType1(true);
         }
         if (isFamilyMemberAdded) {
-            if (AppUtils.isNotEmpty(prefLangFamilyMember2.getText().toString())) {
-                user.setPrefferedLanguageFamilyMemberType2(prefLangFamilyMember2.getText().toString());
-                user.setUpdatePreferredLanguageFamilyMemberType2(true);
-            }
+            //if (AppUtils.isNotEmpty(prefLangFamilyMember2.getText().toString())) {
+            //    user.setPrefferedLanguageFamilyMemberType2(prefLangFamilyMember2.getText().toString());
+            //    user.setUpdatePreferredLanguageFamilyMemberType2(true);
+            //}
             if (AppUtils.isNotEmpty(phoneFamilyMember2.getText().toString()) && ValidationUtils.isValidPhoneNumber(phoneFamilyMember2.getText().toString()) && !phoneFamilyMember2.getText().toString().equals(mobile)) {
                 user.setPhoneFamilyMemberType2(phoneFamilyMember2.getText().toString());
                 user.setUpdatePhoneFamilyMemberType2(true);

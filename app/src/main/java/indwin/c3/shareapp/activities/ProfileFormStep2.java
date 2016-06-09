@@ -118,14 +118,21 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         super.onPostResume();
     }
 
+    private void previousPage() {
+        if (mPager.getCurrentItem() == 0) {
+            super.onBackPressed();
+        } else {
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }
     private void setCLickListener() {
         previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
+                    @Override
+                    public void onClick(View v) {
+                        previousPage();
 
-            }
-        });
+                    }
+                });
         gotoFragment1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,10 +167,10 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
                 int currentPage = mPager.getCurrentItem();
 
                 if (currentPage != (fragments.size() - 1)) {
+                    mPager.setCurrentItem(currentPage + 1);
                     Intent intent = new Intent(ProfileFormStep2.this, CheckInternetAndUploadUserDetails.class);
                     sendBroadcast(intent);
 
-                    mPager.setCurrentItem(currentPage + 1);
                 } else {
                     boolean incompleteStep4 = checkIncompleteStep4();
                     saveStep4Data();

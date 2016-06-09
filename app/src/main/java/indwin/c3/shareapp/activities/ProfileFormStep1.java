@@ -34,6 +34,7 @@ import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment1;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment2;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment3;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment4;
+import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
@@ -127,6 +128,14 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         fragments.add(new ProfileFormStep1Fragment4());
     }
 
+    private void previousPage() {
+        if (mPager.getCurrentItem() == 0) {
+            super.onBackPressed();
+        } else {
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -136,7 +145,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                previousPage();
 
             }
         });
@@ -171,9 +180,10 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                 int currentPage = mPager.getCurrentItem();
 
                 if (currentPage != (fragments.size() - 1)) {
+                    mPager.setCurrentItem(currentPage + 1);
                     Intent intent = new Intent(ProfileFormStep1.this, CheckInternetAndUploadUserDetails.class);
                     sendBroadcast(intent);
-                    mPager.setCurrentItem(currentPage + 1);
+
                 } else {
                     boolean incompleteStep4 = checkIncompleteStep4();
                     saveStep4Data();
@@ -291,6 +301,14 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private void saveStep3Data() {
+        if (user.getAddressProof() != null) {
+            UserModel userModel = AppUtils.getUserObject(this);
+            if (userModel.getAddressProof() == null) {
+                userModel.setAddressProof(new Image());
+            }
+            userModel.getAddressProof().setType(this.user.getAddressProof().getType());
+            AppUtils.saveUserObject(this, userModel);
+        }
         uploadDetailsToServer();
     }
 

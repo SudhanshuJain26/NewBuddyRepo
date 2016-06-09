@@ -106,6 +106,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     private Image marksheet;
     private ImageButton gpaHelptip;
     private ProfileFormStep2 profileFormStep2;
+    private ImageButton marksheetHelptip;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -407,6 +408,17 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
                 dialog.show();
             }
         });
+        marksheetHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = " Upload photos or scans of your Marksheets that you have received in college.\n" +
+                        "Make sure you include all Marksheets upto your current semester.";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(getActivity(), "%GPA", text1, text2, "#eeb85f");
+                dialog.show();
+            }
+        });
+
         gpaTypeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -430,6 +442,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     }
 
     private void getAllViews(View rootView) {
+        marksheetHelptip = (ImageButton) rootView.findViewById(R.id.marksheet_helptip);
         gpaHelptip = (ImageButton) rootView.findViewById(R.id.gpa_helptip);
         rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
         gpaTypeSp = (Spinner) rootView.findViewById(R.id.gpa_spinner);

@@ -457,7 +457,7 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (houseNoEt.getText().toString().isEmpty() || streetEt.getText().toString().isEmpty() || cityEt.getText().toString().isEmpty() || pinCodeEt.getText().toString().isEmpty()) {
+                if (AppUtils.isEmpty(houseNoEt.getText().toString()) || AppUtils.isEmpty(streetEt.getText().toString()) || AppUtils.isEmpty(cityEt.getText().toString()) || AppUtils.isEmpty(pinCodeEt.getText().toString())) {
                     submit.setEnabled(false);
                     submit.setAlpha(0.5f);
 

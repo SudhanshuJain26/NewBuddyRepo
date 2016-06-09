@@ -371,7 +371,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     doApiCall = true;
                     //if (uploadAddressProofs.size() > 0)
                     //    addressProof.put("imgUrls", new JSONArray(uploadAddressProofs));
-                    addressProof.put("type", "aadhar");
+                    if (user.getAddressProof() != null)
+                        addressProof.put("type", user.getAddressProof().getType());
                     if (frontAadharId != null) {
                         JSONObject front = new JSONObject();
                         front.put("imgUrl", frontAadharId);

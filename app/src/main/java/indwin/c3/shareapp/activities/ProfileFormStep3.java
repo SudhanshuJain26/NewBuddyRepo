@@ -118,7 +118,7 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                previousPage();
 
             }
         });
@@ -150,8 +150,8 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
                 int currentPage = mPager.getCurrentItem();
 
                 if (currentPage != (fragments.size() - 1)) {
-                    uploadDetailsToServer();
                     mPager.setCurrentItem(currentPage + 1);
+                    uploadDetailsToServer();
                 } else {
                     boolean incompleteStep3 = false;
                     boolean incompleteStep2 = false;
@@ -372,6 +372,15 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
     protected void onResume() {
         super.onResume();
         AppUtils.sendGoogleAnalytics((BuddyApplication) getApplication());
+    }
+
+
+    private void previousPage() {
+        if (mPager.getCurrentItem() == 0) {
+            super.onBackPressed();
+        } else {
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
     }
 
     @Override

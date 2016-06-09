@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,7 +73,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private EditText editAadharNumber;
     private TextView aadharNuber, aadharPanHeader, editTextHeader, gotoFragment1, gotoFragment2, gotoFragment3;
     private Spinner aadharOrPan;
-    String[] arrayAaadharOrPan;
+    String[] arrayAaadharOrPan, addressTypeArray;
     private CardView editTextCardView;
     private Button saveAndProceed, previous;
     private ImageView incompleteAadhar, completeAadhar, incompleteAddress, completeAddress, incompleteStep1, incompleteStep2, incompleteStep3;
@@ -90,6 +91,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private TextView uploadImageMsgTv;
     private Image addressProof;
     private int clickedPosition;
+    private Spinner addressTypeSp;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -152,7 +154,10 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         );
         adapter = new ImageUploaderRecyclerAdapter(getActivity(), addressProof, "Address Proofs", user.isAppliedFor1k(), Constants.IMAGE_TYPE.ADDRESS_PROOF.toString());
         rvImages.setAdapter(adapter);
-
+        ArrayAdapter<CharSequence> adapterAddressType = ArrayAdapter.createFromResource(getActivity(),
+                R.array.address_proof_type, R.layout.spinner_item_green);
+        adapterAddressType.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        addressTypeSp.setAdapter(adapterAddressType);
         if (!mPrefs.getBoolean("step1Editable", true)) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
@@ -161,6 +166,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
 
         arrayAaadharOrPan = getResources().getStringArray(R.array.aadhar_or_pan);
+        addressTypeArray = getResources().getStringArray(R.array.address_proof_type);
         if (user.getPanOrAadhar() != null && !"".equals(user.getPanOrAadhar())) {
             if ("Aadhar".equals(user.getPanOrAadhar()) && user.getAadharNumber() != null && !"".equals(user.getAadharNumber())) {
                 editAadharNumber.setVisibility(View.GONE);
@@ -195,6 +201,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.aadhar_or_pan, R.layout.spinner_item);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+
 
         setOnClickListener();
         aadharOrPan.setAdapter(adapter);
@@ -250,8 +257,11 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
                     uploadImageMsgTv.setText("Upload your Aadhar Proof");
+                    addressTypeSp.setSelection(0);
+                    addressTypeSp.setEnabled(false);
                 } else {
                     uploadImageMsgTv.setText("Upload your Permanent Address Proof");
+                    addressTypeSp.setEnabled(true);
                 }
                 try {
                     ((TextView) parent.getChildAt(0)).setText(arrayAaadharOrPan[position]);
@@ -269,6 +279,26 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 ((TextView) parent.getChildAt(0)).setText(arrayAaadharOrPan[0]);
             }
         });
+        addressTypeSp.getBackground().setColorFilter(getResources().getColor(R.color.buddy_green), PorterDuff.Mode.SRC_ATOP);
+
+        addressTypeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buddy_green));
+                if (user.getAddressProof() == null) {
+                    user.setAddressProof(new Image());
+
+                }
+
+                user.getAddressProof().setType(addressTypeSp.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
         saveAadhar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -347,6 +377,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         editAadhar = (ImageButton) rootView.findViewById(R.id.edit_user_aadhar);
         aadharNuber = (TextView) rootView.findViewById(R.id.aadhar_number);
         aadharOrPan = (Spinner) rootView.findViewById(R.id.aadhar_or_pan_spinner);
+        addressTypeSp = (Spinner) rootView.findViewById(R.id.address_proof_type_spinner);
     }
 
     private void setAllHelpTipsEnabled() {

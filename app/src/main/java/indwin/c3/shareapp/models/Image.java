@@ -23,7 +23,7 @@ public class Image {
     private FrontBackImage front;
     private boolean isUpdateBack;
     private String backStatus;
-
+    private String type;
     private int totalImageSize;
 
     public List<String> getValidImgUrls() {
@@ -118,5 +118,11 @@ public class Image {
         return imgUrls.size() + validImgUrls.size() + invalidImgUrls.size();
     }
 
+    public String getType() {
+        return type;
+    }
 
+    public void setType(String type) {
+        this.type = type;
+    }
 }

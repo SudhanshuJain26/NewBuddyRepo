@@ -230,7 +230,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
             }
         }
 
-        if (!mPrefs.getBoolean("step2Editable", true)) {
+        if (user.isAppliedFor7k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();

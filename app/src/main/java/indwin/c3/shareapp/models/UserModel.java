@@ -94,7 +94,8 @@ public class UserModel {
     String scholarshipAmount;
     String gpaType;
     String gpa;
-
+    private boolean tncAccepted;
+    private boolean tncUpdate;
     private ArrayList<String> marksheets;
     private Map<String, String> newMarksheets;
     private boolean updateNewMarksheets;
@@ -164,6 +165,8 @@ public class UserModel {
     private FrontBackImage panProof;
     private Image collegeID;
     private boolean updatePanProof;
+    private String panStatus;
+
     private Image bankProof;
 
     private Image addressProof;
@@ -1472,5 +1475,30 @@ public class UserModel {
 
     public void setUpdatePanProof(boolean updatePanProof) {
         this.updatePanProof = updatePanProof;
+    }
+
+
+    public String getPanStatus() {
+        return panStatus;
+    }
+
+    public void setPanStatus(String panStatus) {
+        this.panStatus = panStatus;
+    }
+
+    public boolean isTncAccepted() {
+        return tncAccepted;
+    }
+
+    public void setTncAccepted(boolean tncAccepted) {
+        this.tncAccepted = tncAccepted;
+    }
+
+    public boolean isTncUpdate() {
+        return tncUpdate;
+    }
+
+    public void setTncUpdate(boolean tncUpdate) {
+        this.tncUpdate = tncUpdate;
     }
 }

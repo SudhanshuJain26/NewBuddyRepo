@@ -19,8 +19,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
 import indwin.c3.shareapp.R;
@@ -93,14 +91,14 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
 
         showHideIncompleteStep1();
         showHideIncompleteStep2();
-        showHideIncompleteStep3();
         showHideIncompleteStep4();
+        showHideIncompleteStep3();
     }
 
     public void showHideBankStatements(boolean isBankLayoutVisible) {
 
-        ProfileFormStep2Fragment3 profileFormStep2Fragment3 = (ProfileFormStep2Fragment3) mPagerAdapter.getRegisteredFragment(2);
-        profileFormStep2Fragment3.showHideBankStatement(isBankLayoutVisible);
+        ProfileFormStep2Fragment4 profileFormStep2Fragment4 = (ProfileFormStep2Fragment4) mPagerAdapter.getRegisteredFragment(3);
+        profileFormStep2Fragment4.showHideBankStatement(isBankLayoutVisible);
 
 
     }
@@ -125,14 +123,15 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
     }
+
     private void setCLickListener() {
         previous.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        previousPage();
+            @Override
+            public void onClick(View v) {
+                previousPage();
 
-                    }
-                });
+            }
+        });
         gotoFragment1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -275,7 +274,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
 
     }
 
-    private void saveStep3Data() {
+    private void saveStep4Data() {
         UserModel userModel = AppUtils.getUserObject(this);
 
         if (AppUtils.isNotEmpty(user.getBankAccNum()) && user.isUpdateBankAccNum()) {
@@ -295,7 +294,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
     }
 
 
-    private void saveStep4Data() {
+    private void saveStep3Data() {
         UserModel userModel = AppUtils.getUserObject(this);
 
         if (AppUtils.isNotEmpty(user.getRollNumber()) && user.isUpdateRollNumber()) {
@@ -383,13 +382,13 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         return false;
     }
 
-    private boolean checkIncompleteStep3() {
-        ProfileFormStep2Fragment3 profileFormStep2Fragment3 = (ProfileFormStep2Fragment3) mPagerAdapter.getRegisteredFragment(2);
-        profileFormStep2Fragment3.checkIncomplete();
-        return showHideIncompleteStep3();
+    private boolean checkIncompleteStep4() {
+        ProfileFormStep2Fragment4 profileFormStep2Fragment4 = (ProfileFormStep2Fragment4) mPagerAdapter.getRegisteredFragment(3);
+        profileFormStep2Fragment4.checkIncomplete();
+        return showHideIncompleteStep4();
     }
 
-    private boolean showHideIncompleteStep3() {
+    private boolean showHideIncompleteStep4() {
 
         boolean isIncompleteBankStmnt = false;
         try {
@@ -400,27 +399,27 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         } catch (Exception e) {
         }
         if (user.isIncompleteRepaymentSetup() || isIncompleteBankStmnt) {
-            incompleteStep3.setVisibility(View.VISIBLE);
-            return true;
-        }
-        incompleteStep3.setVisibility(View.GONE);
-        return false;
-    }
-
-
-    private boolean checkIncompleteStep4() {
-        ProfileFormStep2Fragment4 profileFormStep2Fragment4 = (ProfileFormStep2Fragment4) mPagerAdapter.getRegisteredFragment(3);
-        profileFormStep2Fragment4.checkIncomplete();
-        return showHideIncompleteStep4();
-    }
-
-    private boolean showHideIncompleteStep4() {
-        if (user.isIncompleteRollNumber() || user.isIncompleteVerificationDate() || user.isIncompleteRollNumber()
-                ) {
             incompleteStep4.setVisibility(View.VISIBLE);
             return true;
         }
         incompleteStep4.setVisibility(View.GONE);
+        return false;
+    }
+
+
+    private boolean checkIncompleteStep3() {
+        ProfileFormStep2Fragment3 profileFormStep2Fragment3 = (ProfileFormStep2Fragment3) mPagerAdapter.getRegisteredFragment(2);
+        profileFormStep2Fragment3.checkIncomplete();
+        return showHideIncompleteStep3();
+    }
+
+    private boolean showHideIncompleteStep3() {
+        if (user.isIncompleteRollNumber() || user.isIncompleteVerificationDate() || user.isIncompleteRollNumber()
+                ) {
+            incompleteStep3.setVisibility(View.VISIBLE);
+            return true;
+        }
+        incompleteStep3.setVisibility(View.GONE);
         return false;
     }
 
@@ -522,7 +521,8 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
             }
             findViewById(R.id.up_arrow_4).setVisibility(View.VISIBLE);
         }
-        Picasso.with(this).load(image).into(genderImage);
+        genderImage.setImageDrawable(getResources().getDrawable(image));
+
     }
 
     @Override

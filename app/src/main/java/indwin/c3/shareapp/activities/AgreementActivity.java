@@ -241,6 +241,10 @@ public class AgreementActivity extends AppCompatActivity {
                                            @Override
                                            public void onClick(View v) {
                                                if (isSelfieAdded && isSignatureAdded) {
+                                                   UserModel userModel = AppUtils.getUserObject(AgreementActivity.this);
+                                                   userModel.setTncUpdate(true);
+                                                   userModel.setTncAccepted(true);
+                                                   AppUtils.saveUserObject(AgreementActivity.this, userModel);
                                                    ProfileFormStep1Fragment4.completeAgreement.setVisibility(View.VISIBLE);
                                                    finish();
                                                } else {
@@ -339,6 +343,8 @@ public class AgreementActivity extends AppCompatActivity {
             populateSelfie(mCurrentPhotoPath, new File(mCurrentPhotoPath));
             user.setUpdateSelfie(true);
             user.setSelfie(mCurrentPhotoPath);
+            user.setTncAccepted(false);
+            user.setTncUpdate(true);
 
             AppUtils.saveUserObject(this, user);
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resultCode == Activity.RESULT_OK) {

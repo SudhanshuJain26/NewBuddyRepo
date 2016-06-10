@@ -3,6 +3,7 @@ package indwin.c3.shareapp.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,12 +36,13 @@ import java.util.ArrayList;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
-import indwin.c3.shareapp.fragments.ProfileFormStep2Fragment3;
+import indwin.c3.shareapp.fragments.ProfileFormStep2Fragment4;
 import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.Constants;
+import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import indwin.c3.shareapp.utils.ValidationUtils;
 import io.intercom.android.sdk.Intercom;
@@ -60,11 +63,14 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
     private static final int REQUEST_PERMISSION_SETTING = 99;
     RecyclerView rvImages;
     private Image bankProof;
+    private ImageButton bankIfscHelptip, bankProofHelptip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_auto_repayments);
+        getAllViews();
+        setClickListener();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
@@ -192,11 +198,11 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
                 AppUtils.saveUserObject(SetupAutoRepayments.this, user);
                 Intent intent = new Intent(SetupAutoRepayments.this, CheckInternetAndUploadUserDetails.class);
                 sendBroadcast(intent);
-                ProfileFormStep2Fragment3.bankAccNum.setText(mask);
-                ProfileFormStep2Fragment3.setupAutoRepayments.setVisibility(View.GONE);
-                ProfileFormStep2Fragment3.bankAccNum.setVisibility(View.VISIBLE);
-                ProfileFormStep2Fragment3.incompleteSetupRepayments.setVisibility(View.GONE);
-                ProfileFormStep2Fragment3.changeAccNum.setVisibility(View.VISIBLE);
+                ProfileFormStep2Fragment4.bankAccNum.setText(mask);
+                ProfileFormStep2Fragment4.setupAutoRepayments.setVisibility(View.GONE);
+                ProfileFormStep2Fragment4.bankAccNum.setVisibility(View.VISIBLE);
+                ProfileFormStep2Fragment4.incompleteSetupRepayments.setVisibility(View.GONE);
+                ProfileFormStep2Fragment4.changeAccNum.setVisibility(View.VISIBLE);
                 //                ProfileFormStep2Fragment3.completeSetupRepayments.setVisibility(View.GONE);
                 //                ProfileFormStep2Fragment3.changeAccNum.setVisibility(View.VISIBLE);
                 finish();
@@ -225,6 +231,36 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
         });
     }
 
+    private void getAllViews() {
+        bankIfscHelptip = (ImageButton) findViewById(R.id.bank_ifsc_helptip);
+        bankProofHelptip = (ImageButton) findViewById(R.id.bank_proof_helptip);
+    }
+
+    private void setClickListener() {
+
+        bankIfscHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String text1 = "To enable automatic repayments, we require that the bank account is registered in your own name. Please ensure that the IFSC code provided by you corresponds to the same branch in which your account has been opened.";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(SetupAutoRepayments.this, "Upload your College ID", text1, text2, "#44c2a6");
+                dialog.show();
+
+            }
+        });
+        bankProofHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "We require proof of your Bank Account which clearly shows your Name, Account Number and the bank’s IFSC code. You can upload a photo or scan of any of of the following:<br> • First page of Passbook<br>" +
+                        "• Blank/Cancelled Cheque Leaf<br>" +
+                        "• Screenshot of your NetBanking account page\n";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(SetupAutoRepayments.this, "Upload your College ID", text1, text2, "#44c2a6");
+                dialog.show();
+            }
+        });
+    }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {

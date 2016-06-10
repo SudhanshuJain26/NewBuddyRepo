@@ -59,7 +59,7 @@ public class ProfileFormStep3Fragment1 extends Fragment {
         user = profileFormStep3.getUser();
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep3Fragment2", true).apply();
-        if (!mPrefs.getBoolean("step3Editable", true)) {
+        if (user.isAppliedFor60k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         //mPrefs.edit().putBoolean("visitedFormStep3Fragment1", true).apply();
@@ -83,7 +83,6 @@ public class ProfileFormStep3Fragment1 extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position < annualFeesOptions.length - 1) {
-                    selectedAnnualFees = true;
                     user.setAnnualFees(annualFeesValues[position]);
                     user.setUpdateAnnualFees(true);
                 }
@@ -252,7 +251,7 @@ public class ProfileFormStep3Fragment1 extends Fragment {
 
     public void checkIncomplete() {
 
-        if (!selectedAnnualFees) {
+        if (AppUtils.isEmpty(user.getAnnualFees())) {
             user.setIncompleteAnnualFees(true);
             completeAnnualFees.setVisibility(View.GONE);
             incompleteAnnualFees.setVisibility(View.VISIBLE);

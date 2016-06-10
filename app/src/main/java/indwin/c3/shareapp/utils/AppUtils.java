@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import indwin.c3.shareapp.application.BuddyApplication;
+import indwin.c3.shareapp.models.FrontBackImage;
 import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import io.intercom.android.sdk.Intercom;
@@ -260,7 +261,9 @@ public class AppUtils {
                 user.setGradeSheet(gson.fromJson(data1.getString("gradeSheet"), Image.class));
             if (data1.opt("addressProof") != null)
                 user.setAddressProof(gson.fromJson(data1.getString("addressProof"), Image.class));
-
+            if (data1.opt("panProof") != null) {
+                user.setPanProof(gson.fromJson(data1.getString("panProof"), FrontBackImage.class));
+            }
 
             if (data1.opt("selfie") != null) {
                 JSONArray array = data1.getJSONArray("selfie");

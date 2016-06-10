@@ -136,6 +136,7 @@
                     </LinearLayout>
 
                     <ImageButton
+                        android:id="@+id/bank_ifsc_helptip"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_alignParentEnd="true"

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.models.FrontBackImage;
 import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import io.intercom.android.sdk.Intercom;
@@ -45,7 +46,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
     ArrayList<String> uploadCollegeIds, uploadAddressProofs, uploadBankStmts, uploadBankProofs, uploadGradeSheets;
     int retryCount = 0;
     String selfieUrl = "", signatureUrl = "";
-    String frontCollegeId, backCollegeId, frontAadharId, backAadharId;
+    String frontCollegeId, backCollegeId, frontAadharId, backAadharId, panImage;
 
     @Override
     public synchronized void onReceive(final Context context, final Intent arg1) {
@@ -53,27 +54,32 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
         mPrefs = mContext.getSharedPreferences("buddy", Context.MODE_PRIVATE);
         boolean isUpdatingDB = mPrefs.getBoolean("updatingDB", false);
 
-        if (!isUpdatingDB) {
-
-            new AsyncTaskRunner().execute();
+        if (AppUtils.getUserObject(mContext) == null) {
+            mPrefs.edit().putBoolean("updatingDB", false).apply();
         } else {
-            Runnable myRunnable = new Runnable() {
 
-                public void run() {
-                    try {
-                        Thread.sleep(10000);
+            if (!isUpdatingDB) {
 
-                    } catch (Exception e) {
+                new AsyncTaskRunner().execute();
+            } else {
+                Runnable myRunnable = new Runnable() {
 
+                    public void run() {
+                        try {
+                            Thread.sleep(10000);
+
+                        } catch (Exception e) {
+
+                        }
+                        onReceive(context, arg1);
                     }
-                    onReceive(context, arg1);
-                }
 
 
-            };
-            Thread thread = new Thread(myRunnable);
-            thread.start();
+                };
+                Thread thread = new Thread(myRunnable);
+                thread.start();
 
+            }
         }
     }
 
@@ -125,6 +131,30 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
         @Override
         protected synchronized String doInBackground(String... params) {
             UserModel userImages = AppUtils.getUserObject(mContext);
+
+            if (userImages.getPanProof() != null) {
+
+
+                try {
+                    Long tsLong = System.currentTimeMillis() / 1000;
+                    String ts = tsLong.toString();
+                    FrontBackImage panProof = userImages.getPanProof();
+                    if (AppUtils.isNotEmpty(panProof.getImgUrl()) && (AppUtils.uploadStatus.OPEN.toString().equals(userImages.getPanStatus()) || AppUtils.isEmpty(userImages.getPanStatus()))) {
+                        userImages.setPanStatus(AppUtils.uploadStatus.PICKED.toString());
+                        AppUtils.saveUserObject(mContext, userImages);
+                        updateUser = true;
+                        cloudinary.uploader().upload(userImages.getPanProof().getImgUrl(),
+                                ObjectUtils.asMap("public_id", userImages.getUserId() + "pan" + ts));
+                        panImage = cloudinary.url().secure(true).generate(userImages.getUserId() + "pan" + ts);
+
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
             if (userImages.getCollegeID() != null) {
 
 
@@ -390,6 +420,13 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     array.put(signatureUrl);
                     jsonobj.put("signature", array);
                 }
+
+                if (panImage != null) {
+                    doApiCall = true;
+                    JSONObject panProof = new JSONObject();
+                    panProof.put("imgUrl", panImage);
+                    jsonobj.put("panProof", panProof);
+                }
                 if (!doApiCall)
                     return "";
                 StringEntity se = new StringEntity(jsonobj.toString());
@@ -449,6 +486,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         user.setSignature(signatureUrl);
                         user.setUpdateSignature(false);
                     }
+
+
                     setImagesFromSP();
                     AppUtils.saveUserObject(mContext, user);
                     return "success";
@@ -507,6 +546,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     jsonobj.put("name", user.getName());
                     userMap.put("name", user.getName());
                 }
+
                 if (user.isUpdateGender()) {
                     doApiCall = true;
                     jsonobj.put("gender", user.getGender());
@@ -660,6 +700,10 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     doApiCall = true;
                     jsonobj.put("scholarshipProgram", user.getScholarshipType());
                 }
+                if (user.isTncUpdate()) {
+                    doApiCall = true;
+                    jsonobj.put("tncAccepted", user.isTncAccepted());
+                }
                 if (user.isUpdateScholarshipAmount()) {
                     doApiCall = true;
                     jsonobj.put("scholarshipAmount", user.getScholarshipAmount());
@@ -722,6 +766,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         user.setUpdateCourseEndDate(false);
                     if (jsonobj.opt("pan") != null && !"".equals(jsonobj.get("pan")))
                         user.setUpdatePanNumber(false);
+                    if (jsonobj.opt("tncAccepted") != null)
+                        user.setTncUpdate(false);
                     if (jsonobj.opt("aadhar") != null && !"".equals(jsonobj.get("aadhar")))
                         user.setUpdateAadharNumber(false);
                     if (jsonobj.opt("dob") != null && !"".equals(jsonobj.get("dob")))

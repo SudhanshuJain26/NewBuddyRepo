@@ -19,8 +19,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -511,7 +509,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             }
             findViewById(R.id.up_arrow_4).setVisibility(View.VISIBLE);
         }
-        Picasso.with(this).load(image).into(genderImage);
+        genderImage.setImageDrawable(getResources().getDrawable(image));
     }
 
     @Override

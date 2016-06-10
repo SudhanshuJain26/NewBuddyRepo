@@ -79,7 +79,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     String[] arrayAaadharOrPan, addressTypeArray;
     private CardView editTextCardView;
     private Button saveAndProceed, previous;
-    private ImageView incompleteAadhar, completeAadhar, incompleteAddress, completeAddress, incompleteStep1, incompleteStep2, incompleteStep3;
+    private ImageView incompleteAadhar, completeAadhar, completeAadhar1, incompleteAddress, completeAddress, incompleteStep1, incompleteStep2, incompleteStep3;
     int currentSelected;
     private final int top = 16, left = 16, right = 16, bottom = 16;
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
@@ -141,7 +141,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         typeImage = Constants.IMAGE_TYPE.ADDRESS_PROOF.toString();
-                        if ((position == 0 && (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl()))) || (position == 1 && (addressProof.getBack() == null || AppUtils.isEmpty(addressProof.getBack().getImgUrl())))) {
+                        if ((position == 0 && (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl()))) || (position == 1 && (addressProof.getBack() == null || AppUtils.isEmpty(addressProof.getBack().getImgUrl()))) && !user.isAppliedFor1k()) {
                             clickedPosition = position;
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {
@@ -170,7 +170,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 R.array.address_proof_type, R.layout.spinner_item_green);
         adapterAddressType.setDropDownViewResource(R.layout.spinner_dropdown_item);
         addressTypeSp.setAdapter(adapterAddressType);
-        if (!mPrefs.getBoolean("step1Editable", true)) {
+        if (user.isAppliedFor1k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
 
@@ -193,7 +193,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 editAadharNumber.setVisibility(View.GONE);
                 aadharPanHeader.setText(arrayAaadharOrPan[0]);
                 aadharNuber.setText(user.getAadharNumber());
-                completeAadhar.setVisibility(View.VISIBLE);
+                completeAadhar1.setVisibility(View.VISIBLE);
                 user.setIncompleteAadhar(false);
                 aadharNuber.setVisibility(View.VISIBLE);
                 editTextHeader.setVisibility(View.GONE);
@@ -206,7 +206,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 editAadharNumber.setVisibility(View.GONE);
                 aadharPanHeader.setText(arrayAaadharOrPan[1]);
                 aadharNuber.setText(user.getPanNumber());
-                completeAadhar.setVisibility(View.VISIBLE);
+                completeAadhar1.setVisibility(View.VISIBLE);
                 user.setIncompleteAadhar(false);
                 aadharNuber.setVisibility(View.VISIBLE);
                 editTextHeader.setVisibility(View.GONE);
@@ -387,6 +387,8 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     }
 
     private void getAllViews(View rootView) {
+
+
         addPanImage = (ImageView) rootView.findViewById(R.id.addPanImage);
         uploadImageMsgTv = (TextView) rootView.findViewById(R.id.address_proof_header);
         completeAddress = (ImageView) rootView.findViewById(R.id.complete_address_proof);
@@ -397,6 +399,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         editAadharNumber = (EditText) rootView.findViewById(R.id.edit_aadhar_number);
         incompleteAadhar = (ImageView) rootView.findViewById(R.id.incomplete_aadhar);
         completeAadhar = (ImageView) rootView.findViewById(R.id.complete_aadhar);
+        completeAadhar1 = (ImageView) rootView.findViewById(R.id.complete_aadhar_1);
         incompleteAddress = (ImageView) rootView.findViewById(R.id.incomplete_address_proof);
         currentSelected = 0;
         incompleteStep1 = (ImageView) getActivity().findViewById(R.id.incomplete_step_1);
@@ -473,7 +476,8 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         } else {
             user.setIncompleteAadhar(false);
             incompleteAadhar.setVisibility(View.GONE);
-            completeAadhar.setVisibility(View.VISIBLE);
+            if (aadharPanHeader.getVisibility() == View.GONE)
+                completeAadhar.setVisibility(View.VISIBLE);
         }
         if (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl())) {
             user.setIncompletePermanentAddress(true);
@@ -530,11 +534,12 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                     frontBackImage.setImgUrl(imageUris.get(0).getPath());
                     Image addressProof = user.getAddressProof();
                     if (clickedPosition == 0) {
-
+                        addressProof.setFrontStatus(AppUtils.uploadStatus.OPEN.toString());
                         addressProof.setFront(frontBackImage);
                         addressProof.setUpdateFront(true);
                         this.addressProof.setFront(frontBackImage);
                     } else if (clickedPosition == 1) {
+                        addressProof.setBackStatus(AppUtils.uploadStatus.OPEN.toString());
                         addressProof.setUpdateBack(true);
                         addressProof.setBack(frontBackImage);
                         this.addressProof.setBack(frontBackImage);
@@ -546,6 +551,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 if (imageUris != null && imageUris.size() > 0) {
                     user.setUpdatePanProof(true);
                     user.setPanProof(new FrontBackImage());
+                    user.setPanStatus(AppUtils.uploadStatus.OPEN.toString());
                     user.getPanProof().setImgUrl(imageUris.get(0).getPath());
                     File file = new File(imageUris.get(0).getPath());
                     Picasso.with(getActivity()).load(file).fit().placeholder(R.drawable.downloading).into(addPanImage);

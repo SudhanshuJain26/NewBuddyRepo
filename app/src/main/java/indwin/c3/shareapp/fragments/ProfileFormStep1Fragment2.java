@@ -160,7 +160,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                     @Override
                     public void onItemClick(View view, int position) {
 
-                        if ((position == 0 && (collegeIDs.getFront() == null || AppUtils.isEmpty(collegeIDs.getFront().getImgUrl()))) || (position == 1 && (collegeIDs.getBack() == null || AppUtils.isEmpty(collegeIDs.getBack().getImgUrl())))) {
+                        if ((position == 0 && (collegeIDs.getFront() == null || AppUtils.isEmpty(collegeIDs.getFront().getImgUrl()))) || (position == 1 && (collegeIDs.getBack() == null || AppUtils.isEmpty(collegeIDs.getBack().getImgUrl()))) && !user.isAppliedFor1k()) {
 
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {
@@ -192,7 +192,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         mGooglePlaceAdapter = new PlaceAutocompleteAdapter(getActivity(), mGoogleApiClient, BOUNDS_GREATER_BANGALORE, null);
         googleCollegeName.setAdapter(mGooglePlaceAdapter);
 
-        if (!mPrefs.getBoolean("step1Editable", true)) {
+        if (user.isAppliedFor1k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();
@@ -573,7 +573,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     }
 
     public void checkIncomplete() {
-        if ( collegeIDs.getFront() == null|| AppUtils.isEmpty(collegeIDs.getFront().getImgUrl())) {
+        if (collegeIDs.getFront() == null || AppUtils.isEmpty(collegeIDs.getFront().getImgUrl())) {
             incompleteCollegeId.setVisibility(View.VISIBLE);
             user.setIncompleteCollegeId(true);
         } else {
@@ -616,6 +616,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                 Image collegeId = user.getCollegeID();
                 frontBackImage.setImgUrl(imageUris.get(0).getPath());
                 if (clickedPosition == 0) {
+                    collegeId.setFrontStatus(AppUtils.uploadStatus.OPEN.toString());
                     collegeId.setFront(frontBackImage);
                     collegeId.setUpdateFront(true);
                     collegeIDs.setFront(frontBackImage);
@@ -623,6 +624,8 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                     collegeId.setUpdateBack(true);
                     collegeId.setBack(frontBackImage);
                     collegeIDs.setBack(frontBackImage);
+                    collegeId.setBackStatus(AppUtils.uploadStatus.OPEN.toString());
+
                 }
 
                 adapter.notifyDataSetChanged();

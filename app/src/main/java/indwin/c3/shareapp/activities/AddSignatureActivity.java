@@ -115,6 +115,8 @@ public class AddSignatureActivity extends AppCompatActivity {
                     UserModel user = AppUtils.getUserObject(AddSignatureActivity.this);
                     user.setSignature(mCurrentSignPath);
                     user.setUpdateSignature(true);
+                    user.setTncAccepted(false);
+                    user.setTncUpdate(true);
                     AppUtils.saveUserObject(AddSignatureActivity.this, user);
                     finish();
                 } catch (Exception e) {

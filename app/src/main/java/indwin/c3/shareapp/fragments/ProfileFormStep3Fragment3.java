@@ -122,7 +122,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
         rvImages.setAdapter(adapter);
 
 
-        if (!mPrefs.getBoolean("step3Editable", true)) {
+        if (user.isAppliedFor60k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();

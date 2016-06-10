@@ -19,7 +19,7 @@ import java.util.Date;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment1;
-import indwin.c3.shareapp.fragments.ProfileFormStep2Fragment4;
+import indwin.c3.shareapp.fragments.ProfileFormStep2Fragment3;
 
 /**
  * Created by shubhang on 04/04/16.
@@ -163,7 +163,7 @@ public class DatePicker {
                     //    }
                     //}
                     pickerDialog.dismiss();
-                    ProfileFormStep2Fragment4.confirmVerificationDate();
+                    ProfileFormStep2Fragment3.confirmVerificationDate();
                 } else {
                     ProfileFormStep1Fragment1.confirmDOB();
                     pickerDialog.dismiss();

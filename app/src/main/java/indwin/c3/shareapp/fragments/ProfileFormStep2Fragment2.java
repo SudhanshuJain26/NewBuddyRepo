@@ -69,7 +69,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         user = profileFormStep2.getUser();
         mobile = AppUtils.getFromSelectedSharedPrefs(getActivity(), "phone_number", "cred");
         getAllViews(rootView);
-        if (!mPrefs.getBoolean("step2Editable", true)) {
+        if (user.isAppliedFor7k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();

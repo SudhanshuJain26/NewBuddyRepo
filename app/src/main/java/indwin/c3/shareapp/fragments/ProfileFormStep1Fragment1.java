@@ -116,17 +116,13 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         setAllClickListener();
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep1Fragment1", true).apply();
-        if (!mPrefs.getBoolean("step1Editable", true)) {
-            setViewAndChildrenEnabled(rootView, false);
-        }
 
 
         gson = new Gson();
         ProfileFormStep1 profileFormStep1 = (ProfileFormStep1) getActivity();
         user = profileFormStep1.getUser();
         if (user.isAppliedFor1k()) {
-
-            rootView.setEnabled(false);
+            setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();
 
@@ -184,13 +180,11 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                     saveGender();
                 }
                 if (position == 1) {
-                    Picasso.with(getActivity())
-                            .load(R.mipmap.step1fragment1girl)
-                            .into(topImage);
+                    topImage.setImageDrawable(getResources().getDrawable(R.mipmap.step1fragment1girl));
+
                 } else {
-                    Picasso.with(getActivity())
-                            .load(R.mipmap.step1fragment1)
-                            .into(topImage);
+                    topImage.setImageDrawable(getResources().getDrawable(R.mipmap.step1fragment1));
+
                 }
             }
 

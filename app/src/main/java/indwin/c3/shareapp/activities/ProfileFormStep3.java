@@ -19,8 +19,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
 import indwin.c3.shareapp.R;
@@ -426,7 +424,7 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
             }
             findViewById(R.id.up_arrow_3).setVisibility(View.VISIBLE);
         }
-        Picasso.with(this).load(image).into(genderImage);
+        genderImage.setImageDrawable(getResources().getDrawable(image));
     }
 
     @Override

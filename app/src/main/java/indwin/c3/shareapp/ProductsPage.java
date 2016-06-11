@@ -2417,7 +2417,7 @@ int serviceCharge(int sellingCost,int loanAmt,String seller)
 {
     int serv = 0;
 
-    if (seller.equals("flipkart") || (seller.equals("amazon")) || seller.equals("snapdeal")) {
+    if (seller.equals("flipkart") || seller.equals("snapdeal")) {
 
         if (loanAmt < 1000)
             serv = 29;
@@ -2439,7 +2439,7 @@ int serviceCharge(int sellingCost,int loanAmt,String seller)
         else if (sellingCost < 5000)
             serv = 99;
         else if (sellingCost < 10000)
-            serv = 99;
+            serv = 199;
         else if (sellingCost < 15000)
             serv = 299;
         else if (sellingCost < 25000)

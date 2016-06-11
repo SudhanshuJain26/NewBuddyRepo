@@ -17,6 +17,8 @@
             <flag name="responsiveWeight" value="2"/>
         </attr>
     </declare-styleable>
+    
+
 </resources>
 
 

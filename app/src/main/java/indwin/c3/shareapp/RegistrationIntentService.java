@@ -1,4 +1,5 @@
 package indwin.c3.shareapp;
+
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,11 +7,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-
-import java.io.IOException;
 
 import io.intercom.android.sdk.Intercom;
 
@@ -46,7 +44,11 @@ public class RegistrationIntentService extends IntentService {
     }
 
     private void sendRegistrationToServer(String token) {
-        Intercom.client().setupGCM(token, R.drawable.pushbuddy);
+        try {
+            Intercom.client().setupGCM(token, R.drawable.pushbuddy);
+        } catch (Exception e) {
+            System.out.println("Intercom four" + e.toString());
+        }
     }
 }
 

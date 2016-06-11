@@ -57,6 +57,14 @@
         <item>Aadhar Number</item>
         <item>PAN</item>
     </string-array>
+    <string-array name="address_proof_type">
+        <item>Aadhar Card</item>
+        <item>Driving Licence</item>
+        <item>Driving Licence</item>
+        <item>Passport</item>
+        <item>Ration Card</item>
+    </string-array>
+
 
     <string-array name="places_of_stay">
         <item>Rented/PG Accommodation</item>
@@ -125,6 +133,9 @@
         <item>English</item>
         <item>Hindi</item>
         <item>Kannada</item>
+        <item>Telugu</item>
+        <item>Tamil</item>
+        <item>Malayalam</item>
     </string-array>
     <string-array name="gender">
         <item>guy</item>

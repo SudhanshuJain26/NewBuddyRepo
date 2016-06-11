@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import indwin.c3.shareapp.R;
-import indwin.c3.shareapp.fragments.ProfileFormStep2Fragment1;
+import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment1;
 import indwin.c3.shareapp.fragments.ProfileFormStep2Fragment3;
 
 /**
@@ -165,7 +165,7 @@ public class DatePicker {
                     pickerDialog.dismiss();
                     ProfileFormStep2Fragment3.confirmVerificationDate();
                 } else {
-                    ProfileFormStep2Fragment1.confirmDOB();
+                    ProfileFormStep1Fragment1.confirmDOB();
                     pickerDialog.dismiss();
                 }
             }

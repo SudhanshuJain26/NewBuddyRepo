@@ -707,6 +707,8 @@ public class PaymentLive  extends Activity {
                 payload.put("deliveryAddress",cred.getString("address",""));
                 payload.put("userComments",cred.getString("usercom", ""));
                 payload.put("serviceCharges",cred.getInt("service",0));
+                payload.put("productFrom","android");
+                payload.put("interestRate",21);
                 payload.put("totalPayable" ,cred.getInt("emi",0)*cred.getInt("monthtenure",0)+cred.getInt("downpayment",0)+cred.getInt("service",0));
 //
                 if(cred.getInt("checkCashback",0)==1)
@@ -772,6 +774,8 @@ public class PaymentLive  extends Activity {
 //                new ValidateForm().execute();
                 configureWebView();
             }
+            else
+                finish();
 
         }}
 

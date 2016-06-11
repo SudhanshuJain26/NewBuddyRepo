@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Views.RoundedTransformation;
 import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
 import io.intercom.com.google.gson.Gson;
 
 public class Pending7kApprovalActivity extends AppCompatActivity {
@@ -31,19 +32,17 @@ public class Pending7kApprovalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending7k_approval);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
-//            setSupportActionBar(toolbar);
-//            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.helptip);
-//            upArrow.setColorFilter(getResources().getColor(R.color.colorwhite), PorterDuff.Mode.SRC_ATOP);
-//            getSupportActionBar().setHomeAsUpIndicator(upArrow);
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            //            setSupportActionBar(toolbar);
+            //            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.helptip);
+            //            upArrow.setColorFilter(getResources().getColor(R.color.colorwhite), PorterDuff.Mode.SRC_ATOP);
+            //            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+            //            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
             mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-            gson = new Gson();
-            String json = mPrefs.getString("UserObject", "");
-            user = gson.fromJson(json, UserModel.class);
+            user = AppUtils.getUserObject(this);
 
             userPic = (ImageView) findViewById(R.id.user_image);
             SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
@@ -53,8 +52,7 @@ public class Pending7kApprovalActivity extends AppCompatActivity {
             userName.setText(userText);
 
             user.setAppliedFor7k(true);
-            json = gson.toJson(user);
-            mPrefs.edit().putString("UserObject", json).apply();
+            AppUtils.saveUserObject(this, user);
         } catch (Exception e) {
             e.printStackTrace();
         }

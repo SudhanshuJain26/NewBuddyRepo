@@ -165,7 +165,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        user = AppUtils.getUserObject(this);
         BuddyApplication application = (BuddyApplication) getApplication();
         mTracker = application.getDefaultTracker();
         sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
@@ -726,10 +726,6 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
             mPrefs.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
             gson = new Gson();
-            String json = mPrefs.getString("UserObject", "");
-            setNewIdsNull(json);
-            json = mPrefs.getString("UserObject", "");
-            user = gson.fromJson(json, UserModel.class);
 
             try {
                 TextView name1, line1, line2, but;
@@ -1257,6 +1253,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             query.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+
                     int action =0;
                    // if (checkedit == 1) {
                     //       Toast.makeText(HomePage.this,"check",Toast.LENGTH_LONG).show();
@@ -1271,6 +1268,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                        // new FindRecentProductLinks(HomePage.this).execute("https://ssl.hellobuddy.in/api/user/product/recent?userid="+userId +"&count=5");
                         checkedit=1;
                        // ImageView home = (ImageView) findViewById(R.id.ho);
+
                     }
 //                    }
 //                    checkedit = 1;
@@ -1500,8 +1498,6 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             if (jsonObject.optJSONArray("newCollegeIds") != null) {
                 jsonObject.put("newCollegeIds", null);
             }
-
-            AppUtils.saveInSharedPrefs(this, AppUtils.USER_OBJECT, jsonObject.toString());
 
 
         } catch (Exception e) {
@@ -2852,7 +2848,6 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
             princ1 = princ1 * 0.8;
             Double rate = 0.21 / 12;
-
             Double emi1 = Math.floor((princ1 * rate * Math.pow(1 + rate, monthscam)) / ((Math.pow(1 + rate, monthscam)) - 1));
             if ((princ1 * 10 / 8) < 5000.0)
                 emi1 = princ1 / monthscam;
@@ -2878,6 +2873,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             Double emi3 = Math.floor((princ3 * rate * Math.pow(1 + rate, monthscam3)) / ((Math.pow(1 + rate, monthscam3)) - 1));
             if ((princ3 * 10 / 8) < 5000.0)
                 emi3 = princ3 / monthscam3;
+
             price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi3.intValue()) + " per month");
 
             //emi4
@@ -3600,7 +3596,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     public void parse(String parseString) {
         SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
         SharedPreferences.Editor et = cred.edit();
-        et.putString("urlprod",parseString);
+        et.putString("urlprod", parseString);
         et.commit();
         productId = "";
         int pos = -1;
@@ -3733,6 +3729,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
+
 //    public void clickpaste() {
 //        paste.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -3835,6 +3832,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 //        }
 //    }
 
+
     public class AuthTokc extends
 
                           AsyncTask<String, Void, String> {
@@ -3903,6 +3901,8 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                     Log.e("MeshCommunication", "Server returned code "
                             + response.getStatusLine().getStatusCode());
                     return "fail";
+
+
                 } else {
                     JSONObject resp = new JSONObject(responseString);
 

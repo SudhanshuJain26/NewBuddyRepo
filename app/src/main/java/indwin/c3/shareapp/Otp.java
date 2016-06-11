@@ -3,17 +3,15 @@ package indwin.c3.shareapp;
 import android.Manifest;
 import android.app.Application;
 import android.content.BroadcastReceiver;
-import android.graphics.Color;
-import android.os.CountDownTimer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -41,7 +39,6 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -78,10 +75,9 @@ public class Otp extends AppCompatActivity {
         } catch (Exception e) {
         }
         ot_check = in.getIntExtra("send", 0);
-        if(ot_check==3)
-        {
+        if (ot_check == 3) {
             setContentView(R.layout.verifyotp);
-            ImageView back=(ImageView)findViewById(R.id.backo11);
+            ImageView back = (ImageView) findViewById(R.id.backo11);
             back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -89,10 +85,10 @@ public class Otp extends AppCompatActivity {
                     onBackPressed();
                 }
             });
-            TextView t=(TextView)findViewById(R.id.buddyLogo);
+            TextView t = (TextView) findViewById(R.id.buddyLogo);
             SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
-            t.setText("To change your password, please verify with OTP first.Your OTP will be sent to +91-"+get.getString("phone_number",""));}
-        else
+            t.setText("To change your password, please verify with OTP first.Your OTP will be sent to +91-" + get.getString("phone_number", ""));
+        } else
 
             setContentView(R.layout.otp);
         timer = (TextView) findViewById(R.id.textLook);
@@ -145,7 +141,7 @@ public class Otp extends AppCompatActivity {
         otp2 = (EditText) findViewById(R.id.otp2);
         otp3 = (EditText) findViewById(R.id.otp3);
         otp4 = (EditText) findViewById(R.id.otp4);
-//        otp1.addTextChangedListener;'
+        //        otp1.addTextChangedListener;'
         rwarn = (RelativeLayout) findViewById(R.id.error);
         otp1.addTextChangedListener(new TextWatcher() {
             @Override
@@ -206,13 +202,11 @@ public class Otp extends AppCompatActivity {
 
             phone = in.getStringExtra("Phone");
             message.setText("We've sent an SMS containing an OTP to your Phone Number +91-" + phone);
-        } else
-        if (ot_check == 3) {
+        } else if (ot_check == 3) {
 
             phone = in.getStringExtra("phone_number");
             message.setText("We've sent an SMS containing an OTP to your Phone Number +91-" + phone);
-        }
-        else {
+        } else {
             phone = in.getStringExtra("Phone_otp");
             message.setText("We've sent an SMS containing an OTP to your Phone Number +91-" + phone);
         }
@@ -237,10 +231,10 @@ public class Otp extends AppCompatActivity {
                         SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
                         w = sharedpreferences.getInt("shareflow", 1);
 
-                        if (((w == 0) && (d == 1))||(ot_check==3)) {
+                        if (((w == 0) && (d == 1)) || (ot_check == 3)) {
                             Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                             Long oldtime = toks.getLong("expires", 0);
-//        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
+                            //        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
                             if (time + 5 < toks.getLong("expires", 0))
                                 new verifyOtp().execute("");
                             else
@@ -270,17 +264,18 @@ public class Otp extends AppCompatActivity {
                 //  textview.setText(String.valueOf(s.length());
                 if (s.length() == 4) {
                     verify.setEnabled(true);
-                    if(ot_check==3)
+                    if (ot_check == 3)
                         verify.setTextColor(Color.parseColor("#664A4A4A"));
                     else
-                    verify.setTextColor(Color.parseColor("#ffffff"));
+                        verify.setTextColor(Color.parseColor("#ffffff"));
                 } else
 
                 {
-                    if(ot_check==3)
+                    if (ot_check == 3)
                         verify.setTextColor(Color.parseColor("#664A4A4A"));
                     else
-                    verify.setTextColor(Color.parseColor("#66ffffff"));}
+                        verify.setTextColor(Color.parseColor("#66ffffff"));
+                }
 
             }
 
@@ -298,7 +293,7 @@ public class Otp extends AppCompatActivity {
                 if ((otp1.getText().toString().length() == 4))// && (otp2.getText().toString().length() == 1) && (otp3.getText().toString().length() == 1) && (otp4.getText().toString().length() == 1)) {
                 {
                     {
-//                        code = otp1.getText().toString() + otp2.getText().toString() + otp3.getText().toString() + otp4.getText().toString();
+                        //                        code = otp1.getText().toString() + otp2.getText().toString() + otp3.getText().toString() + otp4.getText().toString();
                         code = otp1.getText().toString();
                         rwarn.setVisibility(View.GONE);
                     }
@@ -310,7 +305,7 @@ public class Otp extends AppCompatActivity {
 
                         Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                         Long oldtime = toks.getLong("expires", 0);
-//        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
+                        //        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
                         if (time + 5 < toks.getLong("expires", 0))
                             new verifyOtp().execute("");
                         else
@@ -319,10 +314,10 @@ public class Otp extends AppCompatActivity {
                     }
                 } else {
                     verify.setEnabled(true);
-                    if(ot_check==3)
+                    if (ot_check == 3)
                         verify.setTextColor(Color.parseColor("#664A4A4A"));
                     else
-                    verify.setTextColor(Color.parseColor("#66ffffff"));
+                        verify.setTextColor(Color.parseColor("#66ffffff"));
                     rwarn.setVisibility(View.VISIBLE);
                     otp1.setBackgroundResource(R.drawable.texted2);
                     otp1.setPadding(pL, pT, pR, pB);
@@ -333,8 +328,11 @@ public class Otp extends AppCompatActivity {
 
             }
         });
-        Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
-        Intercom.client().openGCMMessage(getIntent());
+        try {
+            Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
+            Intercom.client().openGCMMessage(getIntent());
+        } catch (Exception e) {
+        }
     }
 
     @Override
@@ -367,12 +365,11 @@ public class Otp extends AppCompatActivity {
             overridePendingTransition(0, 0);
         }
         if (ot_check == 3) {
-//            Intent in = new Intent(Otp.this, Login_with_otp.class);
+            //            Intent in = new Intent(Otp.this, Login_with_otp.class);
             finish();
-//            startActivity(in);
-//            overridePendingTransition(0, 0);
-        }
-        else {
+            //            startActivity(in);
+            //            overridePendingTransition(0, 0);
+        } else {
             Intent in = new Intent(Otp.this, Inviteform.class);
             finish();
             startActivity(in);
@@ -381,7 +378,7 @@ public class Otp extends AppCompatActivity {
     }
 
     private class verifyOtp extends
-            AsyncTask<String, Void, String> {
+                            AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             spinner.setVisibility(View.VISIBLE);
@@ -515,15 +512,15 @@ public class Otp extends AppCompatActivity {
                             }
                             if (collegeid.equals(""))
                                 collegeid = "NA";
-                            try{
+                            try {
                                 SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editorP = userP.edit();
 
 
                                 editorP.putString("profileStatus", profileStatus);
                                 editorP.commit();
+                            } catch (Exception e) {
                             }
-                            catch (Exception e){}
                             try {
                                 String dpid = data1.getString("fbUserId");
                                 SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
@@ -549,11 +546,11 @@ public class Otp extends AppCompatActivity {
                             return "win";
 
                         }
-                    } else if ((ot_check == 1)||(ot_check==3))
+                    } else if ((ot_check == 1) || (ot_check == 3))
 
                     {
                         JSONObject forget = new JSONObject(responseString);
-//                            if(forget.getString("status"))
+                        //                            if(forget.getString("status"))
                         String status = "";
                         try {
                             status = forget.getString("status");
@@ -578,23 +575,24 @@ public class Otp extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            if(ot_check!=3){
+            if (ot_check != 3) {
                 verify.setEnabled(true);
 
                 verify.setTextColor(Color.parseColor("#ffffff"));
                 d = 0;
-                spinner.setVisibility(View.GONE);}
-            if(ot_check==3){
+                spinner.setVisibility(View.GONE);
+            }
+            if (ot_check == 3) {
                 verify.setEnabled(true);
 
                 verify.setTextColor(Color.parseColor("#664A4A4A"));
                 d = 0;
-//                spinner.setVisibility(View.GONE);
+                //                spinner.setVisibility(View.GONE);
             }
-//                    inotp.putExtra("Name", mName);
-//                    inotp.putExtra("Email",email.getText().toString());
-//                    inotp.putExtra("College",college.getText().toString());
-//                    inotp.putExtra("Phone",phone.getText().toot_String());
+            //                    inotp.putExtra("Name", mName);
+            //                    inotp.putExtra("Email",email.getText().toString());
+            //                    inotp.putExtra("College",college.getText().toString());
+            //                    inotp.putExtra("Phone",phone.getText().toot_String());
 
             if (result.equals("win")) {
                 SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
@@ -606,26 +604,24 @@ public class Otp extends AppCompatActivity {
                         finish();
                         startActivity(in);
                         overridePendingTransition(0, 0);
-//            String re=result;
-//            Toast.makeText(Otp.this,"re",Toast.LENGTH_LONG).show();
+                        //            String re=result;
+                        //            Toast.makeText(Otp.this,"re",Toast.LENGTH_LONG).show();
                     }
 
-                }
-
-                else if (ot_check == 3) {
+                } else if (ot_check == 3) {
                     if (result.equals("win")) {
-                        SharedPreferences tt=getSharedPreferences("cred", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor s=tt.edit();
-                        s.putInt("add",1);
+                        SharedPreferences tt = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor s = tt.edit();
+                        s.putInt("add", 1);
                         s.commit();
                         Intent in = new Intent(Otp.this, Editaddress.class);
                         finish();
                         startActivity(in);
                         //overridePendingTransition(0, 0);
-//            String re=result;
-//            Toast.makeText(Otp.this,"re",Toast.LENGTH_LONG).show();
-                    }}
-                else if (ot_check == 0) {
+                        //            String re=result;
+                        //            Toast.makeText(Otp.this,"re",Toast.LENGTH_LONG).show();
+                    }
+                } else if (ot_check == 0) {
 
                     editor.putString("tok", Inviteform.token);
                     editor.putString("number", phone);
@@ -640,11 +636,12 @@ public class Otp extends AppCompatActivity {
                     finish();
                     startActivity(in2);
                     try {
-//            Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
+                        setUpPush();
+                        //            Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
                         Intercom.client().registerIdentifiedUser(
                                 new Registration().withUserId(phone));
-                        setUpPush();
-//            Intercom.client().openGCMMessage(getIntent());
+
+                        //            Intercom.client().openGCMMessage(getIntent());
                     } catch (Exception e) {
                         System.out.println("Intercom four" + e.toString());
                     }
@@ -658,10 +655,15 @@ public class Otp extends AppCompatActivity {
                     userMap.put("phone", phone);
                     userMap.put("logged_in", true);
                     userMap.put("phoneVerified", true);
-                    Intercom.client().updateUser(userMap);
-                    Toast.makeText(getApplicationContext(),
-                            "Successfully Signed Up",
-                            Toast.LENGTH_LONG).show();
+                    try {
+                        Intercom.client().updateUser(userMap);
+                        Toast.makeText(getApplicationContext(),
+                                "Successfully Signed Up",
+                                Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        System.out.println("Intercom four" + e.toString());
+                    }
+
                 }
 
             } else {
@@ -670,15 +672,15 @@ public class Otp extends AppCompatActivity {
                 otp1.setBackgroundResource(R.drawable.texted2);
                 otp1.setPadding(pL, pT, pR, pB);
                 SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
-//    editor.putString("rcode", referral_code);
+                //    editor.putString("rcode", referral_code);
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString("number", "");
                 editor.putString("code", "");
 
                 editor.commit();
-//    Toast.makeText(getApplicationContext(),"Please try again!"
-//        ,
-//        Toast.LENGTH_LONG).show();
+                //    Toast.makeText(getApplicationContext(),"Please try again!"
+                //        ,
+                //        Toast.LENGTH_LONG).show();
             }
 
 
@@ -701,7 +703,7 @@ public class Otp extends AppCompatActivity {
     }
 
     private class resendotp extends
-            AsyncTask<String, Void, String> {
+                            AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             spinner.setVisibility(View.VISIBLE);
@@ -718,7 +720,7 @@ public class Otp extends AppCompatActivity {
                 // TYPE: POST
 
                 payload.put("phone", phone);
-//                payload.put("password", pass);
+                //                payload.put("password", pass);
                 // payload.put("action", details.get("action"));
 
                 HttpParams httpParameters = new BasicHttpParams();
@@ -808,20 +810,20 @@ public class Otp extends AppCompatActivity {
 
 
     public class AuthTokc extends
-            AsyncTask<String, Void, String> {
+                          AsyncTask<String, Void, String> {
 
         private String apiN = "";
 
         //        Context context;
-//        AuthTok(Context context) {
-//            this.context = context;
-//        }
+        //        AuthTok(Context context) {
+        //            this.context = context;
+        //        }
         //    Splash obj=new Splash();
         @Override
         protected String doInBackground(String... params) {
             JSONObject payload = new JSONObject();
-//            String urldisplay = params[0];
-//            apiN=urldisplay;
+            //            String urldisplay = params[0];
+            //            apiN=urldisplay;
             try {
 
                 // userid=12&productid=23&action=add
@@ -883,10 +885,10 @@ public class Otp extends AppCompatActivity {
             if (result.equals("win")) {
 
                 //   Toast.makeText(Otp.this, "yey", Toast.LENGTH_SHORT).show();
-//            next.new FacebookAuth.fblogin().execute();
+                //            next.new FacebookAuth.fblogin().execute();
                 new verifyOtp().execute("");
                 // new fblogin().execute();
-//            next.fblogin().execute();
+                //            next.fblogin().execute();
                 //   new forgotpass().execute();
 
 

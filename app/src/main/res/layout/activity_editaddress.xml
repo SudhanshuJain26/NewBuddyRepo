@@ -11,6 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/abc_action_bar_default_height_material"
         android:background="#F28E52">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/arrowlay"
+            android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/backo"
@@ -22,6 +26,7 @@
             android:layout_marginTop="18dp"
             android:src="@drawable/back11"
             android:tint="#ffffff" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,7 +35,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
-            android:layout_toRightOf="@id/backo"
+            android:layout_toRightOf="@id/arrowlay"
             android:text="Choose Delivery Address"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffff" />

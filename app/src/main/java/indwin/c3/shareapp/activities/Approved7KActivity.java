@@ -16,7 +16,7 @@ import android.widget.TextView;
 import indwin.c3.shareapp.HomePage;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.models.UserModel;
-import io.intercom.com.google.gson.Gson;
+import indwin.c3.shareapp.utils.AppUtils;
 
 /**
  * Created by shubhang on 15/04/16.
@@ -25,7 +25,6 @@ public class Approved7KActivity extends AppCompatActivity {
 
     ImageView userPic;
     SharedPreferences mPrefs;
-    Gson gson;
     UserModel user;
     TextView userName, flashRejectedText, flashRejectedText1, meanwhileText;
     Button unlockMoreCredit, searchProduct;
@@ -37,9 +36,7 @@ public class Approved7KActivity extends AppCompatActivity {
         setContentView(R.layout.activity_flash_approved);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
+        user = AppUtils.getUserObject(this);
 
         layout = (RelativeLayout) findViewById(R.id.approved_layout);
         layout.setBackgroundColor(Color.parseColor("#eeb85f"));

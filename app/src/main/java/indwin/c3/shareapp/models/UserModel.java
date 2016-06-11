@@ -3,6 +3,8 @@ package indwin.c3.shareapp.models;
 import java.util.ArrayList;
 import java.util.Map;
 
+import indwin.c3.shareapp.utils.AppUtils;
+
 /**
  * Created by shubhang on 18/03/16.
  */
@@ -38,11 +40,19 @@ public class UserModel {
     boolean updatePanNumber;
     String panOrAadhar;
     String signature;
+    private String signatureStatus;
     String selfie;
+    private String selfieStatus;
     String dob;
     String accommodation;
     String currentAddress;
+    private String currentAddressLine2;
+    private String currentAddressPinCode;
+    private String currentAddressCity;
     String permanentAddress;
+    private String permanentAddressLine2;
+    private String permanentAddressPinCode;
+    private String permanentAddressCity;
     String familyMemberType1;
     String professionFamilyMemberType1;
     String prefferedLanguageFamilyMemberType1;
@@ -69,7 +79,7 @@ public class UserModel {
     Map<String, String> newBankStmts;
     ArrayList<String> bankProofs;
     Map<String, String> newBankProofs;
-    String currentAddressCity;
+
     String iv;
     int creditLimit = 0;
     int availableCredit = 0;
@@ -84,7 +94,12 @@ public class UserModel {
     String scholarshipAmount;
     String gpaType;
     String gpa;
-
+    private boolean tncAccepted;
+    private boolean tncUpdate;
+    private ArrayList<String> marksheets;
+    private Map<String, String> newMarksheets;
+    private boolean updateNewMarksheets;
+    private boolean incompleteMarksheets;
     private boolean updatePreferredLanguageFamilyMemberType1;
     private boolean updatePreferredLanguageFamilyMemberType2;
     boolean emailSent;
@@ -105,7 +120,7 @@ public class UserModel {
     boolean updateClassmatePhone;
     boolean updateVerificationDate;
     boolean updateBankAccNum;
-
+    private boolean incompleteGpa;
     boolean gpaTypeUpdate;
     boolean gpaValueUpdate;
     boolean updateBankIfsc;
@@ -145,6 +160,17 @@ public class UserModel {
     boolean appliedFor1k = false;
     boolean appliedFor7k = false;
     boolean appliedFor60k = false;
+
+    private Image gradeSheet;
+    private FrontBackImage panProof;
+    private Image collegeID;
+    private boolean updatePanProof;
+    private String panStatus;
+
+    private Image bankProof;
+
+    private Image addressProof;
+    private Image bankStatement;
 
     public boolean isEmailSent() {
         return emailSent;
@@ -1259,5 +1285,220 @@ public class UserModel {
 
     public void setUpdatePreferredLanguageFamilyMemberType2(boolean updatePreferredLanguageFamilyMemberType2) {
         this.updatePreferredLanguageFamilyMemberType2 = updatePreferredLanguageFamilyMemberType2;
+    }
+
+    public String getSignatureStatus() {
+        return signatureStatus;
+    }
+
+    public void setSignatureStatus(String signatureStatus) {
+        this.signatureStatus = signatureStatus;
+    }
+
+    public String getSelfieStatus() {
+        return selfieStatus;
+    }
+
+    public void setSelfieStatus(String selfieStatus) {
+        this.selfieStatus = selfieStatus;
+    }
+
+
+    public boolean isIncompleteGpa() {
+        return incompleteGpa;
+    }
+
+    public void setIncompleteGpa(boolean incompleteGpa) {
+        this.incompleteGpa = incompleteGpa;
+    }
+
+    public ArrayList<String> getMarksheets() {
+        return marksheets;
+    }
+
+    public void setMarksheets(ArrayList<String> marksheets) {
+        this.marksheets = marksheets;
+    }
+
+    public Map<String, String> getNewMarksheets() {
+        return newMarksheets;
+    }
+
+    public void setNewMarksheets(Map<String, String> newMarksheets) {
+        this.newMarksheets = newMarksheets;
+    }
+
+    public boolean isUpdateNewMarksheets() {
+        return updateNewMarksheets;
+    }
+
+    public void setUpdateNewMarksheets(boolean updateNewMarksheets) {
+        this.updateNewMarksheets = updateNewMarksheets;
+    }
+
+    public String getCurrentAddressLine2() {
+        return currentAddressLine2;
+    }
+
+    public void setCurrentAddressLine2(String currentAddressLine2) {
+        this.currentAddressLine2 = currentAddressLine2;
+    }
+
+    public String getCurrentAddressPinCode() {
+        return currentAddressPinCode;
+    }
+
+    public void setCurrentAddressPinCode(String currentAddressPinCode) {
+        this.currentAddressPinCode = currentAddressPinCode;
+    }
+
+    public String getPermanentAddressLine2() {
+        return permanentAddressLine2;
+    }
+
+    public void setPermanentAddressLine2(String permanentAddressLine2) {
+        this.permanentAddressLine2 = permanentAddressLine2;
+    }
+
+    public String getPermanentAddressPinCode() {
+        return permanentAddressPinCode;
+    }
+
+    public void setPermanentAddressPinCode(String permanentAddressPinCode) {
+        this.permanentAddressPinCode = permanentAddressPinCode;
+    }
+
+    public String getPermanentAddressCity() {
+        return permanentAddressCity;
+    }
+
+    public void setPermanentAddressCity(String permanentAddressCity) {
+        this.permanentAddressCity = permanentAddressCity;
+    }
+
+    public boolean isIncompleteMarksheets() {
+        return incompleteMarksheets;
+    }
+
+    public void setIncompleteMarksheets(boolean incompleteMarksheets) {
+        this.incompleteMarksheets = incompleteMarksheets;
+    }
+
+    public Image getGradeSheet() {
+        return gradeSheet;
+    }
+
+    public void setGradeSheet(Image gradeSheet) {
+        this.gradeSheet = gradeSheet;
+    }
+
+    public Image getCollegeID() {
+        return collegeID;
+    }
+
+    public void setCollegeID(Image collegeID) {
+        this.collegeID = collegeID;
+    }
+
+    public Image getBankProof() {
+        return bankProof;
+    }
+
+    public void setBankProof(Image bankProof) {
+        this.bankProof = bankProof;
+    }
+
+    public Image getAddressProof() {
+        return addressProof;
+    }
+
+    public void setAddressProof(Image addressProof) {
+        this.addressProof = addressProof;
+    }
+
+    public Image getBankStatement() {
+        return bankStatement;
+    }
+
+    public void setBankStatement(Image bankStatement) {
+        this.bankStatement = bankStatement;
+    }
+
+    public String getFullCurrentAddress() {
+        StringBuffer currentAddressStr = new StringBuffer("");
+        if (AppUtils.isNotEmpty(currentAddress)) {
+            currentAddressStr.append(currentAddress);
+        }
+        if (AppUtils.isNotEmpty(currentAddressLine2)) {
+            currentAddressStr.append("," + currentAddressLine2);
+        }
+        if (AppUtils.isNotEmpty(currentAddressCity)) {
+            currentAddressStr.append("," + currentAddressCity);
+        }
+        if (AppUtils.isNotEmpty(currentAddressPinCode)) {
+            currentAddressStr.append("," + currentAddressPinCode);
+        }
+        return currentAddressStr.toString();
+
+    }
+
+    public String getFullPermanentAddress() {
+        StringBuffer permanentAddressStr = new StringBuffer("");
+        if (AppUtils.isNotEmpty(permanentAddress)) {
+            permanentAddressStr.append(permanentAddress);
+        }
+        if (AppUtils.isNotEmpty(permanentAddressLine2)) {
+            permanentAddressStr.append("," + permanentAddressLine2);
+        }
+        if (AppUtils.isNotEmpty(permanentAddressCity)) {
+            permanentAddressStr.append("," + permanentAddressCity);
+        }
+        if (AppUtils.isNotEmpty(permanentAddressPinCode)) {
+            permanentAddressStr.append("," + permanentAddressPinCode);
+        }
+        return permanentAddressStr.toString();
+
+    }
+
+    public FrontBackImage getPanProof() {
+        return panProof;
+    }
+
+    public void setPanProof(FrontBackImage panProof) {
+        this.panProof = panProof;
+    }
+
+
+    public boolean isUpdatePanProof() {
+        return updatePanProof;
+    }
+
+    public void setUpdatePanProof(boolean updatePanProof) {
+        this.updatePanProof = updatePanProof;
+    }
+
+
+    public String getPanStatus() {
+        return panStatus;
+    }
+
+    public void setPanStatus(String panStatus) {
+        this.panStatus = panStatus;
+    }
+
+    public boolean isTncAccepted() {
+        return tncAccepted;
+    }
+
+    public void setTncAccepted(boolean tncAccepted) {
+        this.tncAccepted = tncAccepted;
+    }
+
+    public boolean isTncUpdate() {
+        return tncUpdate;
+    }
+
+    public void setTncUpdate(boolean tncUpdate) {
+        this.tncUpdate = tncUpdate;
     }
 }

@@ -66,157 +66,146 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
 
-    private String reviewUrl="";
-    private String seller,prodid;
-    int which_page=0;
+    private String reviewUrl = "";
+    private String seller, prodid;
+    int which_page = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userP = getSharedPreferences("token", Context.MODE_PRIVATE);
 
-        try{
-            which_page=getIntent().getExtras().getInt("which_page");}
-        catch (Exception e)
-        {}
-        try{
-            reviewUrl=getIntent().getExtras().getString("reviewUrl");
+        try {
+            which_page = getIntent().getExtras().getInt("which_page");
+        } catch (Exception e) {
         }
-        catch (Exception e)
-        {}
+        try {
+            reviewUrl = getIntent().getExtras().getString("reviewUrl");
+        } catch (Exception e) {
+        }
         setContentView(R.layout.activity_view_form);
-        setTheme(R.style.DrawerArrowStyle2);https://github.com/aniket29081992/buddyapp
+        setTheme(R.style.DrawerArrowStyle2);
+        https:
+        //github.com/aniket29081992/buddyapp
         try {
             toolbar = (Toolbar) findViewById(R.id.toolbar);
 
 
-
             setSupportActionBar(toolbar);
-//getSupportActionBar().setBackgroundDrawable(R.id);
+            //getSupportActionBar().setBackgroundDrawable(R.id);
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        } catch (Exception e) {
+            System.out.println(e.toString() + "digo");
         }
-        catch(Exception e){System.out.println(e.toString()+"digo");}
-        TextView test=(TextView)findViewById(R.id.texthead);
-        ImageView inter=(ImageView)findViewById(R.id.interCom);
-        inter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intercom.client().displayMessageComposer();
-            }
-        });
-        if((which_page==3))
+        TextView test = (TextView) findViewById(R.id.texthead);
+        ImageView inter = (ImageView) findViewById(R.id.interCom);
+        try {
+            inter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intercom.client().displayMessageComposer();
+                }
+            });
+        } catch (Exception e) {
+        }
+        if ((which_page == 3))
             test.setText("About Us");
-        else
-        if((which_page==3))
+        else if ((which_page == 3))
             test.setText("About Us");
-else
-        if((which_page==5))
+        else if ((which_page == 5))
             test.setText("FAQs");
-        else
-        if((which_page==4)||(which_page==6)||(which_page==7)||(which_page==8))
+        else if ((which_page == 4) || (which_page == 6) || (which_page == 7) || (which_page == 8))
             test.setText("Profile Details");
-        else
-        if(which_page==9)
+        else if (which_page == 9)
             test.setText("Products");
-        else
-        if(which_page==119)
+        else if (which_page == 119)
             test.setText("Products");
-        else
-        if(which_page==10)
+        else if (which_page == 10)
             test.setText("Products");
-        else
-        if(which_page==11)
+        else if (which_page == 11)
             test.setText("How it works");
-        else
-        if(which_page==16)
+        else if (which_page == 16)
             test.setText("Orders");
-        else
-        if(which_page==17)
+        else if (which_page == 17)
             test.setText("Repayments");
-        else
-        if(which_page==14)
-        test.setText("Why use Buddy");
-        else
-        if(which_page==15)
+        else if (which_page == 14)
+            test.setText("Why use Buddy");
+        else if (which_page == 15)
             test.setText("Safety and Security");
 
-        else
-        if(which_page==999)
+        else if (which_page == 999)
             test.setText("Recharge Paytm Wallet");
 
-        spinner=(ProgressBar)findViewById(R.id.progressBar1);
+        spinner = (ProgressBar) findViewById(R.id.progressBar1);
 
         SharedPreferences ss = getSharedPreferences("cred", Context.MODE_PRIVATE);
-        userid=ss.getString("phone_number", "");
-        token=userP.getString("tok", null);
+        userid = ss.getString("phone_number", "");
+        token = userP.getString("tok", null);
         SharedPreferences.Editor editornew = userP.edit();
         editornew.putInt("back", 1);
         editornew.commit();
-//         url=getIntent().getExtras().getString("url");
+        //         url=getIntent().getExtras().getString("url");
 
-        try
-        {res=getIntent().getExtras().getString("url");}
-        catch (Exception e){}
-        try
-        {seller=getIntent().getExtras().getString("ecom");}
-        catch (Exception e){}
-        try
-        {prodid=getIntent().getExtras().getString("prodid");}
-        catch (Exception e){}
-        form=(AdvancedWebView)findViewById(R.id.webView);
+        try {
+            res = getIntent().getExtras().getString("url");
+        } catch (Exception e) {
+        }
+        try {
+            seller = getIntent().getExtras().getString("ecom");
+        } catch (Exception e) {
+        }
+        try {
+            prodid = getIntent().getExtras().getString("prodid");
+        } catch (Exception e) {
+        }
+        form = (AdvancedWebView) findViewById(R.id.webView);
         form.setListener(this, this);
         this.form.getSettings().setUserAgentString(this.form.getSettings().getUserAgentString()
 
-                      +" "+R.string.buddyagent);
-        int t=R.string.buddyagent;
+                + " " + getResources().getString(R.string.buddyagent));
+        int t = R.string.buddyagent;
 
-//String userA=R.string.buddyagent;
-//        form.addJavascriptInterface(new WebAppInterface(this),Andr);
-//        settings.setDomStorageEnabled(true);
+        //String userA=R.string.buddyagent;
+        //        form.addJavascriptInterface(new WebAppInterface(this),Andr);
+        //        settings.setDomStorageEnabled(true);
 
 
-//        settings.s
-// TODO: 3/21/2016 check this and then remove comment
-        Long time= Calendar.getInstance().getTimeInMillis()/1000;
-        Long oldtime=userP.getLong("expires",0);
-//        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
-        if(time+5<userP.getLong("expires",0))
+        //        settings.s
+        // TODO: 3/21/2016 check this and then remove comment
+        Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+        Long oldtime = userP.getLong("expires", 0);
+        //        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
+        if (time + 5 < userP.getLong("expires", 0))
             new checkAuth().execute(url);
         else
-     //   new checkAuth().execute(url);
-new AuthTokc().execute("cc");
-      //  new indwin.c3.shareapp.AuthTok(getApplicationContext()).execute();
+            //   new checkAuth().execute(url);
+            new AuthTokc().execute("cc");
+        //  new indwin.c3.shareapp.AuthTok(getApplicationContext()).execute();
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        if((which_page==4)||(which_page==6)||(which_page==7))
+        if ((which_page == 4) || (which_page == 6) || (which_page == 7))
             navigationView.getMenu().getItem(1).setChecked(true);
-        else
-        if(which_page==3)
+        else if (which_page == 3)
             navigationView.getMenu().getItem(4).setChecked(true);
-        else
-        if(which_page==5)
+        else if (which_page == 5)
             navigationView.getMenu().getItem(6).setChecked(true);
-else
-        if(which_page==11)
+        else if (which_page == 11)
             navigationView.getMenu().getItem(5).setChecked(true);
-else
-        if(which_page==14)
+        else if (which_page == 14)
             navigationView.getMenu().getItem(7).setChecked(true);
-        else
-        if(which_page==15)
+        else if (which_page == 15)
             navigationView.getMenu().getItem(7).setChecked(true);
-        else
-        if(which_page==999)
+        else if (which_page == 999)
             navigationView.getMenu().getItem(8).setChecked(true);
-        else if(which_page==16)
+        else if (which_page == 16)
             navigationView.getMenu().getItem(2).setChecked(true);
-       else if(which_page==17)
+        else if (which_page == 17)
             navigationView.getMenu().getItem(3).setChecked(true);
 
 
-//        GridView gridviewshow=(GridView)findViewById(R.id.grid1a);
-//       gridviewshow.setAdapter(new ImageAdapter(this));
+        //        GridView gridviewshow=(GridView)findViewById(R.id.grid1a);
+        //       gridviewshow.setAdapter(new ImageAdapter(this));
 
 
         //Setting Navigation View Item Selected Listener
@@ -237,15 +226,15 @@ else
                 switch (menuItem.getItemId()) {
 
                     case R.id.MyAccount:
-                        Intent home=new Intent(ViewForm.this,Landing.class);
+                        Intent home = new Intent(ViewForm.this, Landing.class);
                         finish();
                         startActivity(home);
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.work:
 
 
-                        intform=new Intent(ViewForm.this, ViewForm.class);
+                        intform = new Intent(ViewForm.this, ViewForm.class);
 
                         finish();
                         intform.putExtra("which_page", 11);
@@ -307,14 +296,14 @@ else
                     case R.id.Share:
 
 
-                        SharedPreferences sh_otp=getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
+                        SharedPreferences sh_otp = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editornew = sh_otp.edit();
-//                        editor.putInt("checklog",a);
+                        //                        editor.putInt("checklog",a);
                         editornew.putInt("chshare", 1);
                         //editornew.putString("rcode", getIntent().getExtras().getString("UniC"));
                         editornew.commit();
-                        Intent in=new Intent(ViewForm.this,Share.class);
-in.putExtra("checksharefromweb",1);
+                        Intent in = new Intent(ViewForm.this, Share.class);
+                        in.putExtra("checksharefromweb", 1);
 
                         startActivity(in);
                         overridePendingTransition(0, 0);
@@ -325,7 +314,7 @@ in.putExtra("checksharefromweb",1);
                         intform = new Intent(ViewForm.this, ViewForm.class);
                         Splash.checkNot = 1;
 
-//                        clickpaste();
+                        //                        clickpaste();
 
                         intform.putExtra("which_page", 999);
                         intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
@@ -394,9 +383,9 @@ in.putExtra("checksharefromweb",1);
         //   ImageView arrowclose=(ImageView)findViewById(R.id.arrow);
 
 
-        NavigationView nview=(NavigationView) drawerLayout.findViewById(R.id.navigation_view);
-        View headerView=nview.getHeaderView(0);
-        ImageView arr=(ImageView)headerView.findViewById(R.id.arrow);
+        NavigationView nview = (NavigationView) drawerLayout.findViewById(R.id.navigation_view);
+        View headerView = nview.getHeaderView(0);
+        ImageView arr = (ImageView) headerView.findViewById(R.id.arrow);
 
         RelativeLayout header = (RelativeLayout) headerView.findViewById(R.id.head);
         //RelativeLayout header = (RelativeLayout) headerView.findViewById(R.id.head);
@@ -409,7 +398,7 @@ in.putExtra("checksharefromweb",1);
         });
         //dddddd
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.openDrawer, R.string.closeDrawer){
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
 
             @Override
@@ -532,112 +521,109 @@ in.putExtra("checksharefromweb",1);
         protected void onPostExecute(String result) {
 
 
-            if(!result.equals("fail"))
-            {//url="http://www.convert-jpg-to-pdf.net/";
-                switch (which_page)
-                {
+            if (!result.equals("fail")) {//url="http://www.convert-jpg-to-pdf.net/";
+                switch (which_page) {
                     case 1:
-                        url=getApplicationContext().getString(R.string.web)+"/?m=no&userid="+userid+"&key="+result;
+                        url = getApplicationContext().getString(R.string.web) + "/?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 2:
-                        url=getApplicationContext().getString(R.string.web)+"/?m=no&userid="+userid+"&key="+result;
+                        url = getApplicationContext().getString(R.string.web) + "/?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 3:
-                        url=getApplicationContext().getString(R.string.web)+"/about-us?m=no&userid="+userid+"&key="+result;
+                        url = getApplicationContext().getString(R.string.web) + "/about-us?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 4:
-//                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
-                        url=getApplicationContext().getString(R.string.web)+"/profile?m=no&userid="+userid+"&key="+result;
-//                        url="http://hellobuddy.in/#/profile";
+                        //                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
+                        url = getApplicationContext().getString(R.string.web) + "/profile?m=no&userid=" + userid + "&key=" + result;
+                        //                        url="http://hellobuddy.in/#/profile";
                         break;
                     case 5:
-                        url=getApplicationContext().getString(R.string.web)+"/faqs?m=no&userid="+userid+"&key="+result;
+                        url = getApplicationContext().getString(R.string.web) + "/faqs?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 6:
-//                        url="http://hellobuddy.in/#/profile";
-                        url=getApplicationContext().getString(R.string.web)+"/profile?m=no&userid="+userid+"&key="+result;;
-//                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
+                        //                        url="http://hellobuddy.in/#/profile";
+                        url = getApplicationContext().getString(R.string.web) + "/profile?m=no&userid=" + userid + "&key=" + result;
+                        ;
+                        //                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
                         break;
 
                     case 7:
-//                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
-                        url=getApplicationContext().getString(R.string.web)+"/profile?m=no&userid="+userid+"&key="+result;
-//                        url="http://hellobuddy.in/#/profile";
+                        //                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
+                        url = getApplicationContext().getString(R.string.web) + "/profile?m=no&userid=" + userid + "&key=" + result;
+                        //                        url="http://hellobuddy.in/#/profile";
                         break;
 
                     case 8:
-//                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
-                        url=getApplicationContext().getString(R.string.web)+"/profile?m=no&userid="+userid+"&key="+result;
-//                        url="http://hellobuddy.in/#/profile";
+                        //                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
+                        url = getApplicationContext().getString(R.string.web) + "/profile?m=no&userid=" + userid + "&key=" + result;
+                        //                        url="http://hellobuddy.in/#/profile";
                         break;
                     case 9:
                         try {
-                            url = getApplicationContext().getString(R.string.web)+"/search/products/?flipkartURL=" + URLEncoder.encode(res, "UTF-8") + "&m=no&userid=" + userid + "&key=" + result;
+                            url = getApplicationContext().getString(R.string.web) + "/search/products/?flipkartURL=" + URLEncoder.encode(res, "UTF-8") + "&m=no&userid=" + userid + "&key=" + result;
+                        } catch (Exception e) {
                         }
-                        catch (Exception e){}
-                            break;
+                        break;
                     case 10:
-                        url=getApplicationContext().getString(R.string.web)+"/search/products/"+prodid+"?seller="+seller+"&m=no&userid=" + userid + "&key=" + result;
-                                                        break;
-                    case 11: url=getApplicationContext().getString(R.string.web)+"/how-it-works?m=no&userid="+userid+"&key="+result;
+                        url = getApplicationContext().getString(R.string.web) + "/search/products/" + prodid + "?seller=" + seller + "&m=no&userid=" + userid + "&key=" + result;
+                        break;
+                    case 11:
+                        url = getApplicationContext().getString(R.string.web) + "/how-it-works?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 14:
-                        url=getApplicationContext().getString(R.string.web)+"/whyBuddy?m=no&userid="+userid+"&key="+result;
+                        url = getApplicationContext().getString(R.string.web) + "/whyBuddy?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 15:
-                        url=getApplicationContext().getString(R.string.web)+"/security" +
-                                "?m=no&userid="+userid+"&key="+result;
+                        url = getApplicationContext().getString(R.string.web) + "/security" +
+                                "?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 99:
-                        url=getApplicationContext().getString(R.string.web)+"/security" +
-                                "?m=no&userid="+userid+"&key="+result;
+                        url = getApplicationContext().getString(R.string.web) + "/security" +
+                                "?m=no&userid=" + userid + "&key=" + result;
                         break;
 
                     case 16:
-                        url=getApplicationContext().getString(R.string.web)+"/orders" +
-                                "?m=no&userid="+userid+"&key="+result;
+                        url = getApplicationContext().getString(R.string.web) + "/orders" +
+                                "?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 999:
-                        url=getApplicationContext().getString(R.string.web)+"/recharge" +
-                                "?m=no&userid="+userid+"&key="+result;
+                        url = getApplicationContext().getString(R.string.web) + "/recharge" +
+                                "?m=no&userid=" + userid + "&key=" + result;
                         break;
 
                     case 17:
-                        url=getApplicationContext().getString(R.string.web)+"/repayments" +
-                                "?m=no&userid="+userid+"&key="+result;
+                        url = getApplicationContext().getString(R.string.web) + "/repayments" +
+                                "?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 119:
                         try {
                             url = reviewUrl;
+                        } catch (Exception e) {
                         }
-                        catch (Exception e){}
                         break;
 
                 }
-                int apiversion= Build.VERSION.SDK_INT;
+                int apiversion = Build.VERSION.SDK_INT;
                 System.out.print("aT123" + result);
-                if((((apiversion==19)||(apiversion==20))&&((which_page==8)))||((which_page==40)))
-                {
+                if ((((apiversion == 19) || (apiversion == 20)) && ((which_page == 8))) || ((which_page == 40))) {
 
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     finish();
                     startActivity(i);
 
-                }
-                else
-                {
+                } else {
                     form.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 
                     form.getSettings().setLoadsImagesAutomatically(true);
-                   form.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+                    form.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
                     form.getSettings().setAppCacheEnabled(false);
-                  form.clearCache(true);
+                    form.clearCache(true);
 
 
-//
+                    //
 
-form.setWebViewClient(new myWebClient());
+                    form.setWebViewClient(new myWebClient());
 
 
                     form.loadUrl(url);
@@ -703,12 +689,12 @@ form.setWebViewClient(new myWebClient());
                         return "fail";
                     } else {
 
-                        String token1="";
+                        String token1 = "";
 
                         SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editorP = userP.edit();
                         token1 = resp.getString("token");
-                        editorP.putString("token_value",token1);
+                        editorP.putString("token_value", token1);
                         editorP.putLong("expires", resp.getLong("expiresAt"));
                         editorP.commit();
                         return "win";
@@ -723,17 +709,20 @@ form.setWebViewClient(new myWebClient());
 
             }
         }
-        protected void onPostExecute(String result) {
-            if(result.equals("win")){
 
-              //  Toast.makeText(ViewForm.this, "yey", Toast.LENGTH_SHORT).show();
-//            next.new FacebookAuth.fblogin().execute();
-               // new fblogin().execute();
-//            next.fblogin().execute();
+        protected void onPostExecute(String result) {
+            if (result.equals("win")) {
+
+                //  Toast.makeText(ViewForm.this, "yey", Toast.LENGTH_SHORT).show();
+                //            next.new FacebookAuth.fblogin().execute();
+                // new fblogin().execute();
+                //            next.fblogin().execute();
                 new checkAuth().execute(url);
 
 
-            }}}
+            }
+        }
+    }
 
 
     @SuppressLint("NewApi")
@@ -767,7 +756,6 @@ form.setWebViewClient(new myWebClient());
     }
 
 
-
     public class myWebClient extends WebViewClient {
 
         @Override
@@ -780,13 +768,11 @@ form.setWebViewClient(new myWebClient());
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             // TODO Auto-generated method stub
 
-            if(url.equals("buddy://profile"))
-            {
+            if (url.equals("buddy://profile")) {
                 Toast.makeText(ViewForm.this, "gopi", Toast.LENGTH_SHORT).show();
-            }
-            else
+            } else
 
-            view.loadUrl(url);
+                view.loadUrl(url);
             return true;
 
         }
@@ -794,7 +780,7 @@ form.setWebViewClient(new myWebClient());
 
 
     @Override
-    public void onPageStarted(String url, Bitmap favicon) {  spinner.setVisibility(View.INVISIBLE);}
+    public void onPageStarted(String url, Bitmap favicon) { spinner.setVisibility(View.INVISIBLE);}
 
 
     @Override

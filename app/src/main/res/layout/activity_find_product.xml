@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="indwin.c3.shareapp.activities.FindProduct"
-    android:background="#3380B6">
+    android:background="@color/background">
 
     <RelativeLayout
         android:id="@+id/toolBar"
@@ -58,7 +58,8 @@
         android:background="@drawable/layout_bg"
         android:paddingBottom="5dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp">
+        android:layout_marginRight="15dp"
+        android:elevation="8dp">
 
 
         <EditText
@@ -122,6 +123,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/product_box"
         android:layout_marginTop="350dp"
+        android:background="@color/background"
         >
 
 
@@ -135,7 +137,6 @@
             android:padding="10dp"
             android:alpha = "0.4"
             android:layout_gravity="center_vertical"
-            android:background="#3380B6"
             android:id="@+id/txtheader"
             />
     
@@ -145,7 +146,6 @@
         android:id="@+id/products_list"
         android:layout_below="@+id/txtheader"
         android:divider="@null"
-        android:background="#3380B6"
         android:padding="5dp"
         ></ListView>
 

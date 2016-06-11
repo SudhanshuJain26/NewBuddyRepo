@@ -32,6 +32,7 @@
             android:paddingBottom="5dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+            android:elevation="4dp"
             >
 
             <ImageView
@@ -123,7 +124,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:paddingBottom="8dp"
-                            android:text="Hi Deepak,"
+                            android:text="Hi buddy,"
                             android:textAppearance="?android:textAppearanceMedium"
                             android:textColor="#ffffff"/>
 
@@ -214,7 +215,7 @@
                         android:alpha = "0.8"
                         android:padding="3dp"
 
-                        android:textSize="10sp"
+                        android:textSize="14sp"
 
                         android:id="@+id/supported"
                         android:gravity = "center"
@@ -337,12 +338,13 @@
                         android:layout_width="88dp"
                         android:layout_height="88dp"
                         android:layout_centerHorizontal="true"
+
                         android:layout_marginTop="36dp"
                         android:visibility="gone"
                         android:src="@drawable/pasteiconnew"
-                        android:padding="4dp"
 
-                        />
+
+                    />
 
                     <TextView
                         android:id="@+id/ecom"

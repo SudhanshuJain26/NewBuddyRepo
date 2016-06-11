@@ -1865,7 +1865,7 @@ finish();
             public void onClick(View v) {
                 String minP = editQ.getText().toString();
                 if ((editQ.getText().toString().length() != 0) && (Integer.parseInt(minP) >= 50)) {
-                    ScrollView removescrol = (ScrollView) findViewById(R.id.removescroll);
+                   final ScrollView removescrol = (ScrollView) findViewById(R.id.removescroll);
                     removescrol.setVisibility(View.GONE);
                     searchTitle = "";
                     searchBrand = "";
@@ -1913,7 +1913,18 @@ try{
                     loader=(GIFView)findViewById(R.id.loading);
                     viewDetail=(ScrollView)findViewById(R.id.viewDetail);
                     loader.setVisibility(View.GONE);
-viewDetail.setVisibility(View.VISIBLE);}
+viewDetail.setVisibility(View.VISIBLE);
+ImageView arrow=(ImageView)findViewById(R.id.editprice);
+arrow.setVisibility(View.VISIBLE);
+arrow.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        viewDetail.setVisibility(View.GONE);
+        removescrol.setVisibility(View.VISIBLE);
+
+
+    }
+});}
 catch ( Exception e)
 {}
                     show();

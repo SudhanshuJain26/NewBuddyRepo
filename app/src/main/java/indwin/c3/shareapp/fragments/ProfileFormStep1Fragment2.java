@@ -119,6 +119,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
 
     private Image collegeIDs;
     private int clickedPosition;
+    private ImageButton closeAddCourseLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -270,7 +271,12 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
 
 
     private void setOnCLickListener() {
-
+        closeAddCourseLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideAddCourseLayout();
+            }
+        });
         addCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -521,6 +527,8 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         editCollegeEndDate = (TextView) rootView.findViewById(R.id.edit_college_end_date);
         collegeNameLayout = (LinearLayout) getActivity().findViewById(R.id.college_name_layout);
         collegeName = (AutoCompleteTextView) getActivity().findViewById(R.id.college_name);
+
+
         addCourseEt = (EditText) getActivity().findViewById(R.id.course_name_et);
         closeCollegeNameLayout = (ImageButton) getActivity().findViewById(R.id.close_college_name_layout);
         collegeArrayList = new ArrayList<>(Arrays.asList(getActivity().getResources().getStringArray(R.array.colleges)));
@@ -548,7 +556,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         socialHelptip = (ImageButton) rootView.findViewById(R.id.social_helptip);
 
         googleCollegeName = (AutoCompleteTextView) getActivity().findViewById(R.id.google_college_autocomplete);
-
+        closeAddCourseLayout = (ImageButton) getActivity().findViewById(R.id.close_add_course_name_layout);
     }
 
 
@@ -662,6 +670,18 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                 InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void hideAddCourseLayout() {
+        try {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+            addCourseLayout.setVisibility(View.GONE);
+            collegeName.setText("");
+            googleCollegeName.setText("");
+            AppUtils.hideKeyboard(getActivity());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -23,7 +22,6 @@ import org.json.JSONObject;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import indwin.c3.shareapp.R;
@@ -439,57 +437,57 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 HttpResponse httpresponse = client.execute(postReq);
                 String responseText = EntityUtils.toString(httpresponse.getEntity());
                 JSONObject json = new JSONObject(responseText);
-                UserModel user = AppUtils.getUserObject(mContext);
-                if (json.get("msg").toString().contains("Details updated")) {
-                    JSONObject data = json.getJSONObject("data");
-                    if (jsonobj.opt("collegeIDs") != null && !"".equals(jsonobj.get("collegeIDs"))) {
-                        uploadCollegeIds.clear();
-                        user.setNewCollegeIds(new HashMap<String, String>());
-                        user.setUpdateNewCollegeIds(false);
-                        JSONArray stmts = data.getJSONArray("collegeIDs");
-                        ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
-                        }.getType());
-                        user.setCollegeIds(yourArray);
-                    }
-                    if (jsonobj.opt("addressProofs") != null && !"".equals(jsonobj.get("addressProofs"))) {
-                        uploadAddressProofs.clear();
-                        user.setNewAddressProofs(new HashMap<String, String>());
-                        user.setUpdateNewAddressProofs(false);
-                        JSONArray stmts = data.getJSONArray("addressProofs");
-                        ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
-                        }.getType());
-                        user.setAddressProofs(yourArray);
-                    }
-                    if (jsonobj.opt("bankStatements") != null && !"".equals(jsonobj.get("bankStatements"))) {
-                        uploadBankStmts.clear();
-                        user.setNewBankStmts(new HashMap<String, String>());
-                        user.setUpdateNewBankStmts(false);
-                        JSONArray stmts = data.getJSONArray("bankStatements");
-                        ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
-                        }.getType());
-                        user.setBankStmts(yourArray);
-                    }
-                    if (jsonobj.opt("bankProofs") != null && !"".equals(jsonobj.get("bankProofs"))) {
-                        uploadBankProofs.clear();
-                        user.setNewBankProofs(new HashMap<String, String>());
-                        user.setUpdateNewBankProofs(false);
-                        JSONArray stmts = data.getJSONArray("bankProofs");
-                        ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
-                        }.getType());
-                        user.setBankProofs(yourArray);
-                    }
-                    if (jsonobj.opt("selfie") != null && !"".equals(jsonobj.get("selfie"))) {
-                        user.setSelfie(selfieUrl);
-                        user.setUpdateSelfie(false);
-                    }
-                    if (jsonobj.opt("signature") != null && !"".equals(jsonobj.get("signature"))) {
-                        user.setSignature(signatureUrl);
-                        user.setUpdateSignature(false);
-                    }
+                //UserModel user = AppUtils.getUserObject(mContext);
+                if (json.get("status").equals("success")) {
+                    //JSONObject data = json.getJSONObject("data");
+                    //if (jsonobj.opt("collegeID") != null && !"".equals(jsonobj.get("collegeIDs"))) {
+                    //    uploadCollegeIds.clear();
+                    //    user.setNewCollegeIds(new HashMap<String, String>());
+                    //    user.setUpdateNewCollegeIds(false);
+                    //    JSONArray stmts = data.getJSONArray("collegeIDs");
+                    //    ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
+                    //    }.getType());
+                    //    user.setCollegeIds(yourArray);
+                    //}
+                    //if (jsonobj.opt("addressProof") != null && !"".equals(jsonobj.get("addressProofs"))) {
+                    //    uploadAddressProofs.clear();
+                    //    user.setNewAddressProofs(new HashMap<String, String>());
+                    //    user.setUpdateNewAddressProofs(false);
+                    //    JSONArray stmts = data.getJSONArray("addressProofs");
+                    //    ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
+                    //    }.getType());
+                    //    user.setAddressProofs(yourArray);
+                    //}
+                    //if (jsonobj.opt("bankStatement") != null && !"".equals(jsonobj.get("bankStatements"))) {
+                    //    uploadBankStmts.clear();
+                    //    user.setNewBankStmts(new HashMap<String, String>());
+                    //    user.setUpdateNewBankStmts(false);
+                    //    JSONArray stmts = data.getJSONArray("bankStatements");
+                    //    ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
+                    //    }.getType());
+                    //    user.setBankStmts(yourArray);
+                    //}
+                    //if (jsonobj.opt("bankProof") != null && !"".equals(jsonobj.get("bankProofs"))) {
+                    //    uploadBankProofs.clear();
+                    //    user.setNewBankProofs(new HashMap<String, String>());
+                    //    user.setUpdateNewBankProofs(false);
+                    //    JSONArray stmts = data.getJSONArray("bankProofs");
+                    //    ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
+                    //    }.getType());
+                    //    user.setBankProofs(yourArray);
+                    //}
+                    //if (jsonobj.opt("selfie") != null && !"".equals(jsonobj.get("selfie"))) {
+                    //    user.setSelfie(selfieUrl);
+                    //    user.setUpdateSelfie(false);
+                    //}
+                    //if (jsonobj.opt("signature") != null && !"".equals(jsonobj.get("signature"))) {
+                    //    user.setSignature(signatureUrl);
+                    //    user.setUpdateSignature(false);
+                    //}
 
 
-                    setImagesFromSP();
-                    AppUtils.saveUserObject(mContext, user);
+                    //setImagesFromSP();
+                    //AppUtils.saveUserObject(mContext, user);
                     return "success";
                 } else if (json.get("msg").toString().contains("Invalid Token")) {
                     return "authFailed";
@@ -746,7 +744,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 String responseText = EntityUtils.toString(httpresponse.getEntity());
                 JSONObject json = new JSONObject(responseText);
                 UserModel user = AppUtils.getUserObject(mContext);
-                if (json.get("msg").toString().contains("details updated")) {
+                if (json.get("status").equals("success")) {
                     // Need to get fields which are updated from DB so as to set what is updated.
                     if (jsonobj.opt("gpa") != null && !"".equals(jsonobj.get("gpa")))
                         user.setGpaValueUpdate(false);
@@ -815,7 +813,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         user.setUpdateVehicle(false);
                     if (jsonobj.opt("vehicleType") != null && !"".equals(jsonobj.get("vehicleType")))
                         user.setUpdateVehicleType(false);
-                    setImagesFromSP();
+                    //setImagesFromSP();
                     AppUtils.saveUserObject(mContext, user);
                     return "success";
                 } else if (json.get("msg").toString().contains("Invalid Token")) {

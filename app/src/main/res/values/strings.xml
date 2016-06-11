@@ -58,9 +58,9 @@
         <item>PAN</item>
     </string-array>
     <string-array name="address_proof_type">
-        <item>Aadhar Card</item>
-        <item>Driving Licence</item>
-        <item>Driving Licence</item>
+        <item>Aadhaar Card</item>
+        <item>Driving License</item>
+        <item>Voter ID</item>
         <item>Passport</item>
         <item>Ration Card</item>
     </string-array>

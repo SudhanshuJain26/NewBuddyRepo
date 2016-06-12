@@ -65,11 +65,6 @@ public class ProfileFormStep3Fragment2 extends Fragment {
             //gotoFragment3.setAlpha(1);
             //gotoFragment3.setClickable(true);
         }
-        //if (user.getGender() != null && "girl".equals(user.getGender())) {
-        //    Picasso.with(getActivity())
-        //            .load(R.mipmap.step3fragment2girl)
-        //            .into(topImage);
-        //}
         expenditureHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

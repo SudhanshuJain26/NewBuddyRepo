@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -86,7 +87,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     boolean deniedPermissionForever = false;
     private static final int REQUEST_PERMISSION_SETTING = 99;
     ImageView topImage;
-    private ImageButton aadharHelptip, addressHelptip;
+    private ImageButton aadharHelptip, addressHelptip, addPanHelptip;
     boolean validAadhar = false;
     private LinearLayout incorrectFormat;
     private ImageButton editAadhar;
@@ -97,6 +98,9 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private Spinner addressTypeSp;
     private ImageView addPanImage;
     private String typeImage;
+    private RelativeLayout panRL;
+    private LinearLayout panImageLL;
+    private CardView addressProofCv;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -116,11 +120,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         user = profileFormStep1.getUser();
         newaddressProofs = new HashMap<>();
 
-        if (user.getPanProof() != null && user.getPanProof().getImgUrl() != null) {
-            File file = new File(user.getPanProof().getImgUrl());
-            Picasso.with(getActivity()).load(file).fit().placeholder(R.drawable.downloading).into(addPanImage);
-
-        }
         try {
             addressProofs = user.getAddressProofs();
             if (user.getAddressProof() == null) {
@@ -141,7 +140,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         typeImage = Constants.IMAGE_TYPE.ADDRESS_PROOF.toString();
-                        if ((position == 0 && (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl()))) || (position == 1 && (addressProof.getBack() == null || AppUtils.isEmpty(addressProof.getBack().getImgUrl()))) && !user.isAppliedFor1k()) {
+                        if (((position == 0 && (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl()))) && !user.isAppliedFor1k()) || (position == 1 && (addressProof.getBack() == null || AppUtils.isEmpty(addressProof.getBack().getImgUrl()))) && !user.isAppliedFor1k()) {
                             clickedPosition = position;
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {
@@ -191,6 +190,9 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         if (user.getPanOrAadhar() != null && !"".equals(user.getPanOrAadhar())) {
             if ("Aadhar".equals(user.getPanOrAadhar()) && user.getAadharNumber() != null && !"".equals(user.getAadharNumber())) {
                 editAadharNumber.setVisibility(View.GONE);
+                addressProofCv.setVisibility(View.GONE);
+                aadharOrPan.setTag(0);
+                uploadImageMsgTv.setText("Upload your Aadhar Proof");
                 aadharPanHeader.setText(arrayAaadharOrPan[0]);
                 aadharNuber.setText(user.getAadharNumber());
                 completeAadhar1.setVisibility(View.VISIBLE);
@@ -202,12 +204,16 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 editAadhar.setVisibility(View.VISIBLE);
                 saveAadhar.setVisibility(View.GONE);
                 editAadhar.setVisibility(View.GONE);
+                panImageLL.setVisibility(View.GONE);
             } else if ("PAN".equals(user.getPanOrAadhar()) && user.getPanNumber() != null && !"".equals(user.getPanNumber())) {
                 editAadharNumber.setVisibility(View.GONE);
+                addressProofCv.setVisibility(View.VISIBLE);
+                aadharOrPan.setTag(1);
                 aadharPanHeader.setText(arrayAaadharOrPan[1]);
                 aadharNuber.setText(user.getPanNumber());
                 completeAadhar1.setVisibility(View.VISIBLE);
                 user.setIncompleteAadhar(false);
+                uploadImageMsgTv.setText("Upload your Permanent Address Proof");
                 aadharNuber.setVisibility(View.VISIBLE);
                 editTextHeader.setVisibility(View.GONE);
                 editTextCardView.setVisibility(View.GONE);
@@ -215,9 +221,19 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 editAadhar.setVisibility(View.VISIBLE);
                 saveAadhar.setVisibility(View.GONE);
                 editAadhar.setVisibility(View.GONE);
+                panImageLL.setVisibility(View.VISIBLE);
             }
         }
 
+        if (user.getPanProof() != null && user.getPanProof().getImgUrl() != null) {
+            File file = new File(user.getPanProof().getImgUrl());
+            Picasso.with(getActivity()).load(file).fit().placeholder(R.drawable.downloading).into(addPanImage);
+
+        } else {
+            if (user.isAppliedFor1k()) {
+                panImageLL.setVisibility(View.GONE);
+            }
+        }
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.aadhar_or_pan, R.layout.spinner_item);
@@ -226,14 +242,10 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
         setOnClickListener();
         aadharOrPan.setAdapter(adapter);
-        if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()) {
-            incompleteStep1.setVisibility(View.VISIBLE);
-        }
         if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress()) {
-            incompleteStep3.setVisibility(View.VISIBLE);
-            if (user.isIncompleteAadhar())
+            if (user.isIncompleteAadhar() && !user.isAppliedFor1k())
                 incompleteAadhar.setVisibility(View.VISIBLE);
-            if (user.isIncompletePermanentAddress())
+            if (user.isIncompletePermanentAddress() && !user.isAppliedFor1k())
                 incompleteAddress.setVisibility(View.VISIBLE);
         }
         return rootView;
@@ -255,6 +267,16 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 }
             }
         });
+
+        addPanHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "Upload photos or scans of your PAN Card registered in your name and with the PAN number you have provided.";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your Pan Card", text1, text2, "#44c2a6");
+                dialog.show();
+            }
+        });
         aadharHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,7 +286,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                         + "<a href=\"https://tin.tin.nsdl.com/pan/\">get one here</a>" + "<br><br>If you don’t have your Aadhar card, " +
                         "<a href=\"https://aadharcarduid.com/aadhaar-card-apply-online\">get one here</a>";
                 String text2 = "";
-                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
+                Dialog dialog = new HelpTipDialog(getActivity(), "Upload your Aadhar Proof", text1, text2, "#44c2a6");
                 dialog.show();
             }
         });
@@ -274,12 +296,11 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             public void onClick(View v) {
                 String text1;
 
-                if (aadharOrPan.getSelectedItemPosition() == 0) {
+                if ((Integer) aadharOrPan.getTag() == 0) {
                     text1 = "Upload photos or scans of your Aadhar Card registered in your name and with the Aadhar number you have provided.";
 
                 } else {
-                    text1 = "Upload either your DL, Aadhar Card or Passports’ softcopy. Or, you could upload one of your parents' Permanent Address Proof.<br>You can upload either photos or scanned copies of these documents.";
-
+                    text1 = "Upload either your Driving Licence, Aadhar Card, Ration Card, Voter ID or Passports’ softcopy. Or, you could upload one of your parents' Permanent Address Proof. You can upload either photos or scanned copies of these documents. Remember to upload both (front and back) sides of the documents.";
                 }
                 String text2 = "Please remember to upload both front and back sides of the card.";
                 Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#44c2a6");
@@ -291,12 +312,18 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
+                    addressProofCv.setVisibility(View.GONE);
                     uploadImageMsgTv.setText("Upload your Aadhar Proof");
                     addressTypeSp.setSelection(0);
+                    panImageLL.setVisibility(View.GONE);
                     addressTypeSp.setEnabled(false);
+                    aadharOrPan.setTag(0);
                 } else {
+                    addressProofCv.setVisibility(View.VISIBLE);
                     uploadImageMsgTv.setText("Upload your Permanent Address Proof");
                     addressTypeSp.setEnabled(true);
+                    panImageLL.setVisibility(View.VISIBLE);
+                    aadharOrPan.setTag(1);
                 }
                 try {
                     ((TextView) parent.getChildAt(0)).setText(arrayAaadharOrPan[position]);
@@ -322,7 +349,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buddy_green));
                 if (user.getAddressProof() == null) {
                     user.setAddressProof(new Image());
-
                 }
 
                 user.getAddressProof().setType(addressTypeSp.getSelectedItem().toString());
@@ -387,8 +413,8 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     }
 
     private void getAllViews(View rootView) {
-
-
+        addressProofCv = (CardView) rootView.findViewById(R.id.address_proof_cv);
+        panImageLL = (LinearLayout) rootView.findViewById(R.id.pan_image_ll);
         addPanImage = (ImageView) rootView.findViewById(R.id.addPanImage);
         uploadImageMsgTv = (TextView) rootView.findViewById(R.id.address_proof_header);
         completeAddress = (ImageView) rootView.findViewById(R.id.complete_address_proof);
@@ -407,7 +433,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         incompleteStep3 = (ImageView) getActivity().findViewById(R.id.incomplete_step_3);
         topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
         saveAndProceed = (Button) getActivity().findViewById(R.id.save_and_proceed);
-
+        panRL = (RelativeLayout) rootView.findViewById(R.id.panRL);
         topImage = (ImageView) getActivity().findViewById(R.id.verify_image_view2);
         aadharHelptip = (ImageButton) rootView.findViewById(R.id.aadhar_helptip);
         addressHelptip = (ImageButton) rootView.findViewById(R.id.address_helptip);
@@ -416,6 +442,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         editAadhar = (ImageButton) rootView.findViewById(R.id.edit_user_aadhar);
         aadharNuber = (TextView) rootView.findViewById(R.id.aadhar_number);
         aadharOrPan = (Spinner) rootView.findViewById(R.id.aadhar_or_pan_spinner);
+        addPanHelptip = (ImageButton) rootView.findViewById(R.id.addPanHelptip);
         addressTypeSp = (Spinner) rootView.findViewById(R.id.address_proof_type_spinner);
     }
 

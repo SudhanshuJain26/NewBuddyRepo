@@ -174,7 +174,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         collegeId.setBackStatus(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
                         updateUser = true;
-                        cloudinary.uploader().upload(userImages.getCollegeID().getFront().getImgUrl(),
+                        cloudinary.uploader().upload(userImages.getCollegeID().getBack().getImgUrl(),
                                 ObjectUtils.asMap("public_id", userImages.getUserId() + "collegeId_back" + ts));
                         backCollegeId = cloudinary.url().secure(true).generate(userImages.getUserId() + "collegeId_back" + ts);
                     }
@@ -204,7 +204,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 if ((addressProof.getBack() != null && addressProof.isUpdateBack()) && (AppUtils.uploadStatus.OPEN.toString().equals(addressProof.getBackStatus()) || AppUtils.isEmpty(addressProof.getBackStatus()))) {
                     addressProof.setBackStatus(AppUtils.uploadStatus.PICKED.toString());
                     try {
-                        cloudinary.uploader().upload(userImages.getAddressProof().getFront().getImgUrl(),
+                        cloudinary.uploader().upload(userImages.getAddressProof().getBack().getImgUrl(),
                                 ObjectUtils.asMap("public_id", userImages.getUserId() + "aadhar_back" + ts));
                         backAadharId = cloudinary.url().secure(true).generate(userImages.getUserId() + "aadhar_back" + ts);
                     } catch (Exception e) {

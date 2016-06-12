@@ -74,15 +74,25 @@ public class ImageUploaderRecyclerAdapter extends
         if (Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type) || Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type)) {
             if (position == 0) {
                 {
-                    if (image.getFront() != null)
+                    if (image.getFront() != null) {
                         imgUrl = image.getFront().getImgUrl();
+                    } else {
+                        if (disableAddButton) {
+                            Picasso.with(mContext).load(R.mipmap.frontside_noimage).fit().placeholder(R.drawable.downloading).into(viewHolder.image);
+                        }
+                    }
                     viewHolder.textView.setText("Front");
                     viewHolder.textView.setVisibility(View.VISIBLE);
                 }
             } else if (position == 1) {
                 viewHolder.textView.setText("Back");
-                if (image.getBack() != null)
+                if (image.getBack() != null) {
                     imgUrl = image.getBack().getImgUrl();
+                } else {
+                    if (disableAddButton) {
+                        Picasso.with(mContext).load(R.mipmap.backside_noimage).fit().placeholder(R.drawable.downloading).into(viewHolder.image);
+                    }
+                }
                 viewHolder.textView.setVisibility(View.VISIBLE);
             } else {
                 viewHolder.textView.setVisibility(View.GONE);

@@ -53,6 +53,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
 
 
         user = AppUtils.getUserObject(this);
+        setImage(0);
         if (user.isAppliedFor7k()) {
             saveAndProceed.setVisibility(View.INVISIBLE);
             previous.setVisibility(View.INVISIBLE);
@@ -88,11 +89,12 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         mPager.setAdapter(mPagerAdapter);
         mPager.setOffscreenPageLimit(4);
         mPager.setAdapter(mPagerAdapter);
-
-        showHideIncompleteStep1();
-        showHideIncompleteStep2();
-        showHideIncompleteStep4();
-        showHideIncompleteStep3();
+        if (!user.isAppliedFor7k()) {
+            showHideIncompleteStep1();
+            showHideIncompleteStep2();
+            showHideIncompleteStep4();
+            showHideIncompleteStep3();
+        }
     }
 
     public void showHideBankStatements(boolean isBankLayoutVisible) {
@@ -488,6 +490,10 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
         findViewById(R.id.up_arrow_2).setVisibility(View.GONE);
         findViewById(R.id.up_arrow_3).setVisibility(View.GONE);
         findViewById(R.id.up_arrow_4).setVisibility(View.GONE);
+        setImage(i);
+    }
+
+    private void setImage(int i) {
         int image = 0;
         boolean isGirl = user.getGender() != null && "girl".equals(user.getGender());
 

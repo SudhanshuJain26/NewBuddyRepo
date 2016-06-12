@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -107,6 +108,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     private ImageButton gpaHelptip;
     private ProfileFormStep2 profileFormStep2;
     private ImageButton marksheetHelptip;
+    private LinearLayout gradesheetLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -126,17 +128,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         profileFormStep2 = (ProfileFormStep2) getActivity();
         user = profileFormStep2.getUser();
 
-        if (user.isIncompleteStudentLoan()) {
-            incompleteStudentLoan.setVisibility(View.VISIBLE);
-            completeStudentLoan.setVisibility(View.GONE);
-        } else {
 
-            if (AppUtils.isNotEmpty(user.getStudentLoan())) {
-                completeStudentLoan.setVisibility(View.VISIBLE);
-                incompleteStudentLoan.setVisibility(View.GONE);
-
-            }
-        }
         try {
             if (user.getGradeSheet() == null) {
                 user.setGradeSheet(new Image());
@@ -148,24 +140,29 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
             user.setGradeSheet(new Image());
         }
         if (user.isIncompleteMarksheets()) {
-            incompleteMarksheets.setVisibility(View.VISIBLE);
+            if (user.isAppliedFor7k()) {
+                gradesheetLayout.setVisibility(View.GONE);
+            } else
+                incompleteMarksheets.setVisibility(View.VISIBLE);
         }
         marksheet = user.getGradeSheet();
         if (!marksheet.getImgUrls().contains("add") && !user.isAppliedFor7k())
             marksheet.getImgUrls().add("add");
 
-        if (user.isIncompleteGpa()) {
-            incompleteAP.setVisibility(View.VISIBLE);
-            completeAP.setVisibility(View.GONE);
-        } else {
 
-            if (AppUtils.isNotEmpty(user.getGpaType()) && AppUtils.isNotEmpty(user.getGpa())) {
-                incompleteAP.setVisibility(View.GONE);
-                completeAP.setVisibility(View.VISIBLE);
+        if (!user.isAppliedFor7k()) {
+            if (user.isIncompleteGpa()) {
+                incompleteAP.setVisibility(View.VISIBLE);
+                completeAP.setVisibility(View.GONE);
+            } else {
 
+                if (AppUtils.isNotEmpty(user.getGpaType()) && AppUtils.isNotEmpty(user.getGpa())) {
+                    incompleteAP.setVisibility(View.GONE);
+                    completeAP.setVisibility(View.VISIBLE);
+
+                }
             }
         }
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvImages.setLayoutManager(layoutManager);
@@ -230,6 +227,19 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
             }
         }
 
+        if (!user.isAppliedFor7k()) {
+            if (user.isIncompleteStudentLoan()) {
+                incompleteStudentLoan.setVisibility(View.VISIBLE);
+                completeStudentLoan.setVisibility(View.GONE);
+            } else {
+
+                if (AppUtils.isNotEmpty(user.getStudentLoan())) {
+                    completeStudentLoan.setVisibility(View.VISIBLE);
+                    incompleteStudentLoan.setVisibility(View.GONE);
+
+                }
+            }
+        }
         if (user.isAppliedFor7k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
@@ -411,7 +421,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         marksheetHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text1 = " Upload photos or scans of your Marksheets that you have received in college.\n" +
+                String text1 = " Upload photos or scans of your Marksheets that you have received in college.<br>" +
                         "Make sure you include all Marksheets upto your current semester.";
                 String text2 = "";
                 Dialog dialog = new HelpTipDialog(getActivity(), "%GPA", text1, text2, "#eeb85f");
@@ -434,7 +444,6 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
             }
 
         });
@@ -442,6 +451,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
     }
 
     private void getAllViews(View rootView) {
+        gradesheetLayout = (LinearLayout) rootView.findViewById(R.id.gradesheet_ll);
         marksheetHelptip = (ImageButton) rootView.findViewById(R.id.marksheet_helptip);
         gpaHelptip = (ImageButton) rootView.findViewById(R.id.gpa_helptip);
         rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);

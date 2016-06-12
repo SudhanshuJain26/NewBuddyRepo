@@ -106,12 +106,12 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             mPager.setAdapter(mPagerAdapter);
             mPager.setOffscreenPageLimit(4);
             mPager.setAdapter(mPagerAdapter);
-
-            showHideIncompleteStep1();
-            showHideIncompleteStep2();
-            showHideIncompleteStep3();
-            showHideIncompleteStep4();
-
+            if (!user.isAppliedFor1k()) {
+                showHideIncompleteStep1();
+                showHideIncompleteStep2();
+                showHideIncompleteStep3();
+                showHideIncompleteStep4();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

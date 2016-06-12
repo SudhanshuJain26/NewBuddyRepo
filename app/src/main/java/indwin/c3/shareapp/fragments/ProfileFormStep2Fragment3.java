@@ -90,6 +90,23 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
                 classmatePhone.setText(user.getClassmatePhone());
             }
         }
+
+        classmatePhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                incompleteClassmate.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         if (AppUtils.isNotEmpty(user.getVerificationDate())) {
 
 
@@ -167,7 +184,8 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
 
 
         if (user.isIncompleteRollNumber()) {
-            incompleteRollNumber.setVisibility(View.VISIBLE);
+            if (!user.isAppliedFor7k())
+                incompleteRollNumber.setVisibility(View.VISIBLE);
             completeRollNumber.setVisibility(View.GONE);
         } else {
             if (AppUtils.isNotEmpty(user.getRollNumber())) {
@@ -191,10 +209,10 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         if (user.isIncompleteClassmateDetails()
                 || user.isIncompleteVerificationDate() || user.isIncompleteStudentLoan()) {
             //incompleteStep3.setVisibility(View.VISIBLE);
-            if (user.isIncompleteClassmateDetails()) {
+            if (user.isIncompleteClassmateDetails() && !user.isAppliedFor7k()) {
                 incompleteClassmate.setVisibility(View.VISIBLE);
             }
-            if (user.isIncompleteVerificationDate()) {
+            if (user.isIncompleteVerificationDate() && !user.isAppliedFor7k()) {
                 incompleteVerificationDate.setVisibility(View.VISIBLE);
             }
 
@@ -268,7 +286,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
     }
 
     public void checkIncomplete() {
-        if (!ValidationUtils.isValidPhoneNumber(classmatePhone.getText().toString())) {
+        if (!ValidationUtils.isValidPhoneNumber(classmatePhone.getText().toString()) && !classmatePhone.getText().toString().isEmpty()) {
             incorrectPhone.setVisibility(View.VISIBLE);
         }
 
@@ -337,7 +355,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (v == classmatePhone) {
-            if (!hasFocus) {
+            if (!hasFocus && !classmatePhone.getText().toString().isEmpty()) {
                 if (!ValidationUtils.isValidPhoneNumber(classmatePhone.getText().toString())) {
                     incorrectPhone.setVisibility(View.VISIBLE);
                     return;
@@ -357,7 +375,6 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
     }
 
     public void showHideBankStatement(boolean isBankLayoutVisible) {
-
 
 
     }

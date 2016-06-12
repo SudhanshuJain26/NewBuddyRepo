@@ -194,24 +194,11 @@ public class ProfileFormStep2Fragment4 extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
             }
         }, null);
-
-
-        //        changeAccNum.setOnClickListener(listener);
         setOnClickListener();
 
-        if (user.isIncompleteFamilyDetails()) {
-            //incompleteStep2.setVisibility(View.VISIBLE);
-        }
-        if (user.isIncompleteDOB() || user.isIncompleteAddressDetails()) {
-            //incompleteStep1.setVisibility(View.VISIBLE);
-        }
-        if (user.isIncompleteRepaymentSetup() || user.isIncompleteClassmateDetails()
-                || user.isIncompleteVerificationDate() || user.isIncompleteStudentLoan()) {
-            //incompleteStep3.setVisibility(View.VISIBLE);
-            if (user.isIncompleteRepaymentSetup()) {
+            if (user.isIncompleteRepaymentSetup() && !user.isAppliedFor7k()) {
                 incompleteSetupRepayments.setVisibility(View.VISIBLE);
             }
-        }
         return rootView;
     }
 

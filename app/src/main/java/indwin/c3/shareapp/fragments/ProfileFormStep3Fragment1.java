@@ -62,17 +62,6 @@ public class ProfileFormStep3Fragment1 extends Fragment {
         if (user.isAppliedFor60k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
-        //mPrefs.edit().putBoolean("visitedFormStep3Fragment1", true).apply();
-        //if (mPrefs.getBoolean("visitedFormStep3Fragment2", false)) {
-        //    gotoFragment2.setAlpha(1);
-        //    gotoFragment2.setClickable(true);
-        //}
-        //if (mPrefs.getBoolean("visitedFormStep3Fragment3", false)) {
-        //    gotoFragment3.setAlpha(1);
-        //    gotoFragment3.setClickable(true);
-        //}
-
-
         setOnclickListener();
         final String annualFeesOptions[] = getResources().getStringArray(R.array.annual_fees);
         final String annualFeesValues[] = getResources().getStringArray(R.array.annual_fees_values);

@@ -53,6 +53,7 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
 
         findViewById(R.id.fragment4).setVisibility(View.GONE);
         user = AppUtils.getUserObject(this);
+        setImage(0);
         if (user.isAppliedFor60k()) {
             saveAndProceed.setVisibility(View.INVISIBLE);
             previous.setVisibility(View.INVISIBLE);
@@ -84,10 +85,11 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
         mPager.setAdapter(mPagerAdapter);
         mPager.setOffscreenPageLimit(4);
         mPager.setAdapter(mPagerAdapter);
-
-        showHideIncompleteStep1();
-        showHideIncompleteStep2();
-        showHideIncompleteStep3();
+        if (!user.isAppliedFor60k()) {
+            showHideIncompleteStep1();
+            showHideIncompleteStep2();
+            showHideIncompleteStep3();
+        }
     }
 
     private void populateFragments() {
@@ -398,6 +400,11 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
         findViewById(R.id.up_arrow_1).setVisibility(View.GONE);
         findViewById(R.id.up_arrow_2).setVisibility(View.GONE);
         findViewById(R.id.up_arrow_3).setVisibility(View.GONE);
+        setImage(i);
+    }
+
+    private void setImage(int i) {
+
         int image = 0;
         boolean isGirl = user.getGender() != null && "girl".equals(user.getGender());
 

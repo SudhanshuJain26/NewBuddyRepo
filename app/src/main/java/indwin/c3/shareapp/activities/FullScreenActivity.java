@@ -70,6 +70,9 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
         } else if (Constants.IMAGE_TYPE.MARKSHEETS.toString().equals(type)) {
             image = user.getGradeSheet();
         }
+        if (image == null) {
+            image = new Image();
+        }
         if (Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type) || Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type)) {
             size = image.getTotalImageSize() + 2;
         } else {

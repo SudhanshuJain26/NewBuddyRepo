@@ -25,6 +25,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -235,7 +237,7 @@ private ImageView pasteiconnew;
             int dp = Integer.parseInt(s);
             Double m = sellingPrice * .2;
 
-            if ((dp <= minDownpayment) && (dp >= dopay2))//&& w>=mindownn
+            if ((dp >= minDownpayment))//&& w>=mindownn
             {
                 // TODO: 5/14/2016
                 mValue = dp;
@@ -283,6 +285,7 @@ private ImageView pasteiconnew;
             mValue = downValue.intValue();
             dValue.setText(String.valueOf(mValue));
             s = "";
+            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
         }
         dValue.setText(String.valueOf(mValue));
         Double emi = calculateEmi(Double.valueOf(sellingPrice -mValue-firstServicecharge+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
@@ -747,8 +750,13 @@ if(dummyCl==1000)
         overview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Animation ani1= AnimationUtils.loadAnimation(ProductsPage.this, R.anim.fadeout);
+
                 overview.setVisibility(View.GONE);
+                overview.startAnimation(ani1);
+                Animation ani= AnimationUtils.loadAnimation(ProductsPage.this, R.anim.show);
                 det.setVisibility(View.VISIBLE);
+                det.startAnimation(ani);
                 vow.setVisibility(View.GONE);
                 vde.setVisibility(View.VISIBLE);
             }
@@ -1336,6 +1344,7 @@ mValue=minDownpayment;
                 checkCorrectdis = 1;
 
                 dValue.setText(String.valueOf(Math.round(mind+w)));
+                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
                 minDownpayment=Integer.parseInt(dValue.getText().toString());
 
                 checkImg = 2;
@@ -1446,6 +1455,7 @@ mValue=minDownpayment;
 //            Double r = (mValue - mDis);
             mValue = mValue-mDis;
             dValue.setText(String.valueOf(Math.round(mValue)));
+            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
             totalLoan.setText(String.valueOf(tot));
         } else {
 
@@ -1468,6 +1478,7 @@ int w=0;
             if(t.contains("0"))
                 mValue=sellingPrice;
             dValue.setText(String.valueOf(mValue));
+            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
 //            EMIcheck=(Math.round(calculateEmi(sellingPrice, Double.valueOf(searchPrice), monthsnow)));
             EMIcheck=Math.round(calculateEmi(sellingPrice-mValue*1.0, Double.valueOf(searchPrice), monthsnow));
             emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice-mValue*1.0, Double.valueOf(searchPrice), monthsnow)))+" per month");
@@ -2026,6 +2037,7 @@ if(dummyCl==1000)
                     mValue=sellingPrice;
                 int service=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
                 dValue.setText(String.valueOf(mValue+service));
+                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
                 EMIcheck=(Math.round(calculateEmi(sellingPrice -mValue*1.0, Double.valueOf(searchPrice), monthsnow)));
                 emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0, Double.valueOf(searchPrice), monthsnow)))+" per month");
 

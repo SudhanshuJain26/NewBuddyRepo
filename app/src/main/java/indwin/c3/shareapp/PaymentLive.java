@@ -137,8 +137,8 @@ public class PaymentLive  extends Activity {
                 e=String.valueOf(d);
             System.out.println(e);
             long t=System.currentTimeMillis();
-            t=t/1000;
-            randomStr = String.valueOf(t);
+                
+            randomStr = String.valueOf(t)+e;
 
             transactionId = hashCal("SHA-256", randomStr).substring(0,
                     20);
@@ -691,14 +691,14 @@ public class PaymentLive  extends Activity {
                 payload.put("seller",cred.getString("seller", ""));
                 payload.put("sellingPrice",cred.getInt("sp", 0));
                 payload.put("downPayment",payamt);
-                int loanamt=cred.getInt("sp", 0)-cred.getInt("downpayment",0)-cred.getInt("discount",0);
+                int loanamt=cred.getInt("emi",0)*cred.getInt("monthtenure",0);
                 payload.put("loanAmount",loanamt);
                 if(cred.getInt("emi",0)==0)
                     payload.put("emiTenure",0);
                 else
                 payload.put("emiTenure",cred.getInt("monthtenure",0));
                 payload.put("emi",cred.getInt("emi",0));
-                payload.put("interestPayable",cred.getInt("emi",0)*cred.getInt("monthtenure",0)-loanamt);
+                payload.put("interestPayable",cred.getInt("interEst",0));
                 payload.put("discount",cred.getInt("discount",0));
                 payload.put("creditsUsed",0);
                 payload.put("deliveryFee",0);

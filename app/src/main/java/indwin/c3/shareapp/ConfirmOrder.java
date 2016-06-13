@@ -36,7 +36,7 @@ public class ConfirmOrder extends AppCompatActivity {
     View parent;
     private  PopupWindow popup;
     private  int serviceCharge;
-    private int downPayment = 0, loanAmt = 0, datToday = 0, w = 0;
+    private int downPayment = 0, loanAmt = 0, datToday = 0, w = 0,interest=0;
     private long newemi=0;
     String sellerName = "";
 //    BroadcastReceiver broadcastReceiver;
@@ -177,7 +177,9 @@ public class ConfirmOrder extends AppCompatActivity {
                 SharedPreferences.Editor et = cred.edit();
 
                 et.putInt("emi", (int)newemi);
+
                 et.putInt("downpayment", downPayment);
+                et.putInt("interEst",interest);
                 et.putInt("tot", w);
 
                 et.putString("usercom", e.getText().toString());
@@ -229,7 +231,7 @@ public class ConfirmOrder extends AppCompatActivity {
                 //servicennnnnn
                 svc.setText(getApplicationContext().getString(R.string.Rs) + getIntent().getExtras().getInt("servicecharge"));
 
-                int interest = 0;
+
                 if (interest < 0)
                     interest = 0;
                 int ll=(int)(newemi*getIntent().getExtras().getInt("monthforemi"));

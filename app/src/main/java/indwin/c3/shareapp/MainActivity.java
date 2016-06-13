@@ -1,5 +1,6 @@
 package indwin.c3.shareapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Application;
@@ -29,8 +30,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
@@ -85,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
     private int pL, pT, pR, pB;
     private int checkpass = 0, checkuserid = 0;
     List<SMS> lstSms = new ArrayList<SMS>();
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,11 +302,10 @@ public class MainActivity extends AppCompatActivity {
                 edc.putString("phone_number", userId);
                 edc.commit();
                 SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-                com.google.gson.Gson gson = new com.google.gson.Gson();
+                Gson gson = new Gson();
                 UserModel user = new UserModel();
                 user.setUserId(userId);
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
+                AppUtils.saveUserObject(MainActivity.this, user);
                 //                    String tok_sp=toks.getString("token_value","");
 
                 if ((userId.length() != 0) && (pass.length() != 0)) {
@@ -418,6 +426,9 @@ public class MainActivity extends AppCompatActivity {
             Intercom.client().openGCMMessage(getIntent());
         } catch (Exception e) {
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void showAccountDeletedPopup() {
@@ -440,6 +451,46 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
 
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://indwin.c3.shareapp/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://indwin.c3.shareapp/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 
     private class ItemsByKeyword extends
@@ -648,9 +699,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent alarmIntent = new Intent(MainActivity.this, AndroidReceiver.class);
                 pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
                 setAlarm();
-                int results = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.READ_SMS);
+                int results = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS);
                 int w = 0;
-                int resultscon = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.READ_CONTACTS);
+                int resultscon = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS);
                 if (resultscon == PackageManager.PERMISSION_GRANTED) {
                     w = 1;
 
@@ -663,7 +714,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
 
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_CODEC);
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_CODEC);
 
                 }
 
@@ -680,7 +731,7 @@ public class MainActivity extends AppCompatActivity {
                     }).start();
 
                 } else {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.READ_SMS}, PERMISSION_REQUEST_CODE);
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_SMS}, PERMISSION_REQUEST_CODE);
 
                 }
 
@@ -701,13 +752,7 @@ public class MainActivity extends AppCompatActivity {
                     Runnable myRunnable = new Runnable() {
 
                         public void run() {
-                            try {
-                                Thread.sleep(10000);
-
-                            } catch (Exception e) {
-
-                            }
-                            new checkuser().execute(url);
+                            checkForDBUpdate();
                         }
 
 
@@ -722,6 +767,22 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    private void checkForDBUpdate() {
+        try {
+            Thread.sleep(10000);
+
+        } catch (Exception e) {
+
+        }
+        SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+        boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+        if (isUpdatingDB)
+            checkForDBUpdate();
+        else
+            new checkuser().execute(url);
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -831,7 +892,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Gson gson = new Gson();
                     String json = sharedpreferences.getString("UserObject", "");
-                    UserModel user = gson.fromJson(json, UserModel.class);
+                    UserModel user = AppUtils.getUserObject(MainActivity.this);
                     if (user == null)
                         user = new UserModel();
                     user.setName(Name);
@@ -1001,7 +1062,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void checkDataForNormalUser(UserModel user, Gson gson, JSONObject data1) {
-            AppUtils.checkDataForNormalUser(user, gson, data1);
+            AppUtils.checkDataForNormalUser(user, gson, data1, MainActivity.this);
             try {
                 Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
                 Intercom.client().registerIdentifiedUser(

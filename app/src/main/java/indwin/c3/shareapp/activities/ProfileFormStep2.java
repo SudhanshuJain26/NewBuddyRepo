@@ -416,7 +416,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean showHideIncompleteStep3() {
-        if (user.isIncompleteRollNumber() || user.isIncompleteVerificationDate() || user.isIncompleteRollNumber()
+        if (user.isIncompleteRollNumber() || user.isIncompleteVerificationDate() || user.isIncompleteClassmateDetails()
                 ) {
             incompleteStep3.setVisibility(View.VISIBLE);
             return true;

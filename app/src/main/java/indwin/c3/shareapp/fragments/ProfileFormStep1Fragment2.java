@@ -239,13 +239,6 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                 incompleteCollegeDetails.setVisibility(View.VISIBLE);
 
         }
-        if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender())
-
-        {
-            incompleteStep1.setVisibility(View.VISIBLE);
-        } else
-            incompleteStep1.setVisibility(View.GONE);
-
 
         return rootView;
     }

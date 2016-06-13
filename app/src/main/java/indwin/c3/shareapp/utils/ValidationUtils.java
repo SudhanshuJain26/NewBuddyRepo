@@ -20,7 +20,7 @@ public final class ValidationUtils {
     }
 
     public static boolean isNotValidIFSCCode(CharSequence charSequence) {
-        String pattern = "[A-Z|a-z]{4}[0][\\d]{6}$";
+        String pattern = "[A-Z|a-z]{4}[0][a-zA-Z0-9]{6}$";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(charSequence);
         if (charSequence.length() == 11 && m.matches()) {

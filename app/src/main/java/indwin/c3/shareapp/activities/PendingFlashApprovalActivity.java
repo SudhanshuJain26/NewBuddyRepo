@@ -16,6 +16,7 @@ import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Views.RoundedTransformation;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
 import io.intercom.com.google.gson.Gson;
 
 public class PendingFlashApprovalActivity extends AppCompatActivity {
@@ -41,7 +42,7 @@ public class PendingFlashApprovalActivity extends AppCompatActivity {
         userName = (TextView) findViewById(R.id.name);
         String userText = "Hi " + user.getName() + ",";
         userName.setText(userText);
-
+        user.setStatus1K(Constants.STATUS.APPLIED.toString());
         user.setAppliedFor1k(true);
         AppUtils.saveUserObject(this, user);
 

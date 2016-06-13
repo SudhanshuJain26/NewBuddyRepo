@@ -422,7 +422,7 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
             @Override
             public void onClick(View v) {
                 String text1 = " Upload photos or scans of your Marksheets that you have received in college.<br>" +
-                        "Make sure you include all Marksheets upto your current semester.";
+                        "Make sure you include all Marksheets upto your current semester.<br>" + " If you are in 1st year and don't have any marksheets issued from college yet, please upload class 12th marksheet in that case.";
                 String text2 = "";
                 Dialog dialog = new HelpTipDialog(getActivity(), "%GPA", text1, text2, "#eeb85f");
                 dialog.show();

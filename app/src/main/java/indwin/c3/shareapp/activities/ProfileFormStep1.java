@@ -322,16 +322,6 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             userModel.setUpdateAccommodation(true);
             user.setUpdateAccommodation(false);
         }
-        if (AppUtils.isNotEmpty(user.getCurrentAddress()) && user.isUpdateCurrentAddress()) {
-            userModel.setCurrentAddress(user.getCurrentAddress());
-            userModel.setUpdateCurrentAddress(true);
-            user.setUpdateCurrentAddress(false);
-        }
-        if (AppUtils.isNotEmpty(user.getPermanentAddress()) && user.isUpdatePermanentAddress()) {
-            userModel.setPermanentAddress(user.getPermanentAddress());
-            userModel.setUpdatePermanentAddress(true);
-            user.setUpdatePermanentAddress(false);
-        }
 
         AppUtils.saveUserObject(this, userModel);
         uploadDetailsToServer();

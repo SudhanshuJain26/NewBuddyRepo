@@ -194,22 +194,23 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                          @Override
                                          public void onClick(View v) {
                                              if (ValidationUtils.isValidEmail(editTextEmail.getText().toString())) {
-
-                                                 user.setEmail(userEmail.getText().toString());
-                                                 user.setUpdateEmail(true);
-                                                 user.setEmailVerified(false);
-                                                 UserModel user = AppUtils.getUserObject(AccountSettingsActivity.this);
-                                                 userEmail.setText(editTextEmail.getText().toString());
-                                                 user.setEmail(userEmail.getText().toString());
-                                                 user.setUpdateEmail(true);
-                                                 user.setEmailVerified(false);
-                                                 editEmail.setVisibility(View.VISIBLE);
-                                                 verifyEmail.setVisibility(View.VISIBLE);
-                                                 saveEmail.setVisibility(View.GONE);
+                                                 if (!editTextEmail.getText().toString().equals(user.getEmail())) {
+                                                     user.setEmail(userEmail.getText().toString());
+                                                     user.setUpdateEmail(true);
+                                                     user.setEmailVerified(false);
+                                                     UserModel user = AppUtils.getUserObject(AccountSettingsActivity.this);
+                                                     userEmail.setText(editTextEmail.getText().toString());
+                                                     user.setEmail(userEmail.getText().toString());
+                                                     user.setUpdateEmail(true);
+                                                     user.setEmailVerified(false);
+                                                     verifyEmail.setText("Verify");
+                                                     AppUtils.saveUserObject(AccountSettingsActivity.this, user);
+                                                 }
                                                  editTextEmail.setVisibility(View.GONE);
                                                  userEmail.setVisibility(View.VISIBLE);
-                                                 user.setEmailVerified(false);
-                                                 AppUtils.saveUserObject(AccountSettingsActivity.this, user);
+                                                 verifyEmail.setVisibility(View.VISIBLE);
+                                                 editEmail.setVisibility(View.VISIBLE);
+                                                 saveEmail.setVisibility(View.GONE);
                                                  LayoutParams params = (LinearLayout.LayoutParams) emailUnderline.getLayoutParams();
                                                  params.setMargins(2, 32, 2, 0);
                                                  emailUnderline.setLayoutParams(params);
@@ -234,7 +235,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                              editEmail.setVisibility(View.GONE);
                                              saveEmail.setVisibility(View.VISIBLE);
                                              verifyEmail.setTextColor(Color.parseColor("#7c6a94"));
-                                             verifyEmail.setText("Verify");
+
+
                                              verifyEmail.setClickable(true);
                                              verifyEmail.setEnabled(true);
                                              verifyEmail.setVisibility(View.GONE);

@@ -72,51 +72,33 @@ public class ImageUploaderRecyclerAdapter extends
         int imgUrlSize = image.getImgUrls().size();
         String imgUrl = "";
         if (Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type) || Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type)) {
-            if (position == 0) {
-                {
-                    if (image.getFront() != null) {
-                        imgUrl = image.getFront().getImgUrl();
+            if (image.getFrontBankSize(disableAddButton) > 0 && (position + 1) <= image.getFrontBankSize(disableAddButton)) {
+                if (position == 0 && (!disableAddButton || (image.getFront() != null && AppUtils.isNotEmpty(image.getFront().getImgUrl())))) {
+                    {
+                        if (image.getFront() != null && AppUtils.isNotEmpty(image.getFront().getImgUrl())) {
+                            imgUrl = image.getFront().getImgUrl();
+                            viewHolder.textView.setText("Front");
+                            viewHolder.textView.setVisibility(View.VISIBLE);
+                        }
+                        viewHolder.textView.setText("Front");
+                        viewHolder.textView.setVisibility(View.VISIBLE);
+                    }
+                } else if ((position == 0 || (position == 1 && image.getFrontBankSize(disableAddButton) == 2)) && ((image.getBack() != null && AppUtils.isNotEmpty(image.getBack().getImgUrl()) || !disableAddButton))) {
+                    viewHolder.textView.setText("Back");
+                    if (image.getBack() != null) {
+                        imgUrl = image.getBack().getImgUrl();
                     } else {
                         if (disableAddButton) {
-                            Picasso.with(mContext).load(R.mipmap.frontside_noimage).fit().placeholder(R.drawable.downloading).into(viewHolder.image);
+                            Picasso.with(mContext).load(R.mipmap.backside_noimage).fit().placeholder(R.drawable.downloading).into(viewHolder.image);
                         }
                     }
-                    viewHolder.textView.setText("Front");
                     viewHolder.textView.setVisibility(View.VISIBLE);
                 }
-            } else if (position == 1) {
-                viewHolder.textView.setText("Back");
-                if (image.getBack() != null) {
-                    imgUrl = image.getBack().getImgUrl();
-                } else {
-                    if (disableAddButton) {
-                        Picasso.with(mContext).load(R.mipmap.backside_noimage).fit().placeholder(R.drawable.downloading).into(viewHolder.image);
-                    }
-                }
-                viewHolder.textView.setVisibility(View.VISIBLE);
             } else {
-                viewHolder.textView.setVisibility(View.GONE);
-                if ((position - 1) <= validUrlSize && validUrlSize > 0) {
-                    imgUrl = image.getValidImgUrls().get(position - 2);
-                } else if ((position - 1) <= (validUrlSize + invalidUrlSize) && invalidUrlSize > 0) {
-                    imgUrl = image.getInvalidImgUrls().get(position - 2 - validUrlSize);
-                } else if ((position - 1) <= (validUrlSize + invalidUrlSize + imgUrlSize) && imgUrlSize > 0) {
-                    imgUrl = image.getImgUrls().get(position - 2 - validUrlSize - invalidUrlSize);
-                }
+                imgUrl = setNormalImages(viewHolder, position, validUrlSize, invalidUrlSize, imgUrlSize);
             }
         } else {
-            viewHolder.textView.setVisibility(View.GONE);
-            if ((position + 1) <= validUrlSize && validUrlSize > 0) {
-                imgUrl = image.getValidImgUrls().get(position);
-            } else if ((position + 1) <= (validUrlSize + invalidUrlSize) && invalidUrlSize > 0) {
-                imgUrl = image.getInvalidImgUrls().get(position - validUrlSize);
-            } else if ((position + 1) <= (validUrlSize + invalidUrlSize + imgUrlSize) && imgUrlSize > 0) {
-                imgUrl = image.getImgUrls().get(position - validUrlSize - invalidUrlSize);
-
-                if (image.getImgUrls().get(position - validUrlSize - invalidUrlSize).equals("add")) {
-                    Picasso.with(mContext).load("add").placeholder(R.drawable.plus_transparent).into(viewHolder.image);
-                }
-            }
+            imgUrl = setNormalImages(viewHolder, position, validUrlSize, invalidUrlSize, imgUrlSize);
         }
         if (AppUtils.isNotEmpty(imgUrl) && !imgUrl.equals("add")) {
             viewHolder.image.setOnClickListener(new View.OnClickListener() {
@@ -147,17 +129,32 @@ public class ImageUploaderRecyclerAdapter extends
 
     }
 
+
+    private String setNormalImages(ViewHolder viewHolder, int position, int validUrlSize, int invalidUrlSize, int imgUrlSize) {
+        String imgUrl = null;
+        viewHolder.textView.setVisibility(View.GONE);
+        if ((position + 1 - image.getFrontBankSize(disableAddButton)) <= validUrlSize && validUrlSize > 0) {
+            imgUrl = image.getValidImgUrls().get(position - image.getFrontBankSize(disableAddButton));
+        } else if ((position + 1 - image.getFrontBankSize(disableAddButton)) <= (validUrlSize + invalidUrlSize) && invalidUrlSize > 0) {
+            imgUrl = image.getInvalidImgUrls().get(position - image.getFrontBankSize(disableAddButton) - validUrlSize);
+        } else if ((position + 1 - image.getFrontBankSize(disableAddButton)) <= (validUrlSize + invalidUrlSize + imgUrlSize) && imgUrlSize > 0) {
+            int frontBackSize = 0;
+            if (Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type) || Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type)) {
+                frontBackSize = image.getFrontBankSize(disableAddButton);
+            }
+            imgUrl = image.getImgUrls().get(position - frontBackSize - validUrlSize - invalidUrlSize);
+        }
+        return imgUrl;
+    }
+
     @Override
     public int getItemCount() {
         int imgUrlSize = 0;
-        imgUrlSize = image.getImgUrls().size() + image.getValidImgUrls().size() + image.getInvalidImgUrls().size();
+        imgUrlSize = image.getTotalImageSize();
 
         if (Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type) || Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type)) {
-            return 2 + imgUrlSize;
+            return image.getFrontBankSize(disableAddButton) + imgUrlSize;
         } else {
-            if (disableAddButton) {
-                return imgUrlSize;
-            }
             return imgUrlSize;
         }
     }

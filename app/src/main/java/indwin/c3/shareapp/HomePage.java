@@ -1591,7 +1591,7 @@ public class HomePage extends AppCompatActivity {
             if (Splash.sellers.get(spin).get("0").equals("paytm"))
                 brand1.setImageResource(R.drawable.paytm);
             if (Splash.sellers.get(spin).get("0").equals("snapdeal"))
-                brand1.setImageResource(R.drawable.snapdeal);
+                brand1.setImageResource(R.mipmap.snapdeal);
             if (Splash.sellers.get(spin).get("1").equals("flipkart"))
                 brand2.setImageResource(R.drawable.flipart);
             if (Splash.sellers.get(spin).get("1").equals("amazon"))
@@ -1599,7 +1599,7 @@ public class HomePage extends AppCompatActivity {
             if (Splash.sellers.get(spin).get("1").equals("paytm"))
                 brand2.setImageResource(R.drawable.paytm);
             if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
-                brand2.setImageResource(R.drawable.snapdeal);
+                brand2.setImageResource(R.mipmap.snapdeal);
             if (Splash.sellers.get(spin).get("2").equals("flipkart"))
                 brand3.setImageResource(R.drawable.flipart);
             if (Splash.sellers.get(spin).get("2").equals("amazon"))
@@ -1607,7 +1607,7 @@ public class HomePage extends AppCompatActivity {
             if (Splash.sellers.get(spin).get("2").equals("paytm"))
                 brand3.setImageResource(R.drawable.paytm);
             if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
-                brand3.setImageResource(R.drawable.snapdeal);
+                brand3.setImageResource(R.mipmap.snapdeal);
             if (Splash.sellers.get(spin).get("3").equals("flipkart"))
                 brand4.setImageResource(R.drawable.flipart);
             if (Splash.sellers.get(spin).get("3").equals("amazon"))
@@ -1615,7 +1615,7 @@ public class HomePage extends AppCompatActivity {
             if (Splash.sellers.get(spin).get("3").equals("paytm"))
                 brand4.setImageResource(R.drawable.paytm);
             if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
-                brand4.setImageResource(R.drawable.snapdeal);
+                brand4.setImageResource(R.mipmap.snapdeal);
 
 
             card1 = (ImageView) findViewById(R.id.img1);

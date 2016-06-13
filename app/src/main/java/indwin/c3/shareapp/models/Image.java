@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
+
 /**
  * Created by rock on 6/4/16.
  */
@@ -124,5 +127,37 @@ public class Image {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getFrontBankSize(boolean isApplied) {
+        int frontBackSize = 0;
+        if (isApplied) {
+            if (back != null && AppUtils.isNotEmpty(back.getImgUrl())) {
+                frontBackSize = frontBackSize + 1;
+            }
+            if (front != null && AppUtils.isNotEmpty(front.getImgUrl())) {
+                frontBackSize = frontBackSize + 1;
+            }
+        } else {
+            frontBackSize = frontBackSize + Constants.FRONT_BACK_SIZE;
+        }
+
+        return frontBackSize;
+    }
+
+    public boolean isFrontEmpty() {
+
+        if (front != null && AppUtils.isNotEmpty(front.getImgUrl())) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isBackEmpty() {
+
+        if (back != null && AppUtils.isNotEmpty(back.getImgUrl())) {
+            return false;
+        }
+        return true;
     }
 }

@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -280,9 +279,8 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         aadharHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text1 = "We require a photo or scan of a Govt. approved identity proof, either PAN card or Aadhar card to approve a Credit Limit for you.<br><br>" +
-                        "Remember to upload both (front and back) sides of the document.<br>"
-                        + "If you don’t have your PAN card, "
+                String text1 = "Ensure that the PAN/Aadhar number you are submitting belongs to you and is registered in your name. <br><br>" +
+                        "If you don’t have your PAN card, "
                         + "<a href=\"https://tin.tin.nsdl.com/pan/\">get one here</a>" + "<br><br>If you don’t have your Aadhar card, " +
                         "<a href=\"https://aadharcarduid.com/aadhaar-card-apply-online\">get one here</a>";
                 String text2 = "";
@@ -341,7 +339,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 ((TextView) parent.getChildAt(0)).setText(arrayAaadharOrPan[0]);
             }
         });
-        addressTypeSp.getBackground().setColorFilter(getResources().getColor(R.color.buddy_green), PorterDuff.Mode.SRC_ATOP);
 
         addressTypeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

@@ -17,6 +17,7 @@ import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Views.RoundedTransformation;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
 import io.intercom.com.google.gson.Gson;
 
 public class Pending7kApprovalActivity extends AppCompatActivity {
@@ -43,7 +44,7 @@ public class Pending7kApprovalActivity extends AppCompatActivity {
 
             mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
             user = AppUtils.getUserObject(this);
-
+            user.setStatus7K(Constants.STATUS.APPLIED.toString());
             userPic = (ImageView) findViewById(R.id.user_image);
             SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
             Picasso.with(this).load("https://graph.facebook.com/" + sf.getString("dpid", "") + "/picture?type=large").transform(new RoundedTransformation(5, 0)).into(userPic);

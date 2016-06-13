@@ -214,14 +214,13 @@ public class ProfileFormStep1Fragment1 extends Fragment {
 
 
         if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()) {
-            incompleteStep1.setVisibility(View.VISIBLE);
-            if (user.isIncompleteFb()&&!user.isAppliedFor1k()) {
+            if (user.isIncompleteFb() && !user.isAppliedFor1k()) {
                 incompleteFb.setVisibility(View.VISIBLE);
             }
-            if (user.isIncompleteEmail()&&!user.isAppliedFor1k()) {
+            if (user.isIncompleteEmail() && !user.isAppliedFor1k()) {
                 incompleteEmail.setVisibility(View.VISIBLE);
             }
-            if (user.isIncompleteGender()&&!user.isAppliedFor1k()) {
+            if (user.isIncompleteGender() && !user.isAppliedFor1k()) {
                 incompleteGender.setVisibility(View.VISIBLE);
             }
         }

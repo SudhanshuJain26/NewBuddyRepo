@@ -115,7 +115,7 @@ public class DatePicker {
         yearNumberPicker = (NumberPicker) view.findViewById(R.id.yearNumberPicker);
         if ("VerificationDate".equals(dateType)) {
             yearNumberPicker.setMinValue(currentYear);
-            yearNumberPicker.setMaxValue(MAX_YEAR);
+            yearNumberPicker.setMaxValue(currentYear + 1);
         } else {
             yearNumberPicker.setMinValue(MIN_YEAR);
             //change to currentYear - 18 for only above 18
@@ -153,15 +153,6 @@ public class DatePicker {
 
 
                     }
-                    //if (getSelectedYear() == getCurrentYear()) {
-                    //    if ((getSelectedMonth() == getCurrentMonth() && getSelectedDate() <= (currentDate + 2)) || ((getSelectedMonth() == (getCurrentMonth() + 1) && getSelectedDate() > currentDate)) || (getSelectedMonth() >= (getCurrentMonth() + 2))) {
-                    //        Toast.makeText(activity, "Sorry, can't do it then!", Toast.LENGTH_SHORT).show();
-                    //        return;
-                    //    } else if (getSelectedMonth() < getCurrentMonth()) {
-                    //        Toast.makeText(activity, "Sorry, can't do it then!", Toast.LENGTH_SHORT).show();
-                    //        return;
-                    //    }
-                    //}
                     pickerDialog.dismiss();
                     ProfileFormStep2Fragment3.confirmVerificationDate();
                 } else {

@@ -344,6 +344,8 @@ public class ProfileFormStep2Fragment2 extends Fragment {
 
                     } else {
                         incorrectPhoneFamily1.setVisibility(View.GONE);
+                        user.setPhoneFamilyMemberType1(phoneFamilyMember1.getText().toString());
+                        user.setUpdatePhoneFamilyMemberType1(true);
                     }
                 }
             }
@@ -364,8 +366,8 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                         incorrectPhoneFamily2.setVisibility(View.VISIBLE);
 
                     } else {
-                        user.setPhoneFamilyMemberType1(phoneFamilyMember1.getText().toString());
-                        user.setUpdatePhoneFamilyMemberType1(true);
+                        user.setPhoneFamilyMemberType2(phoneFamilyMember2.getText().toString());
+                        user.setUpdatePhoneFamilyMemberType2(true);
                         incorrectPhoneFamily2.setVisibility(View.GONE);
                     }
                 }

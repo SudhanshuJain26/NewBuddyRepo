@@ -63,13 +63,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 Runnable myRunnable = new Runnable() {
 
                     public void run() {
-                        try {
-                            Thread.sleep(10000);
 
-                        } catch (Exception e) {
-
-                        }
-                        onReceive(context, arg1);
+                        checkForDBUpdate();
                     }
 
 
@@ -79,6 +74,21 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
 
             }
         }
+    }
+
+    private void checkForDBUpdate() {
+        try {
+            Thread.sleep(1000);
+
+        } catch (Exception e) {
+
+        }
+        SharedPreferences sh = mContext.getSharedPreferences("buddy", Context.MODE_PRIVATE);
+        boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+        if (isUpdatingDB)
+            checkForDBUpdate();
+        else
+            new AsyncTaskRunner().execute();
     }
 
     private class AsyncTaskRunner extends AsyncTask<String, String, String> {
@@ -354,8 +364,6 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 if (frontCollegeId != null || backCollegeId != null) {
                     JSONObject collegeID = new JSONObject();
                     doApiCall = true;
-                    //if (uploadAddressProofs.size() > 0)
-                    //    collegeID.put("imgUrls", new JSONArray(uploadAddressProofs));
                     if (frontCollegeId != null) {
                         JSONObject front = new JSONObject();
                         front.put("imgUrl", frontCollegeId);
@@ -371,8 +379,6 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 if (frontAadharId != null || backAadharId != null) {
                     JSONObject addressProof = new JSONObject();
                     doApiCall = true;
-                    //if (uploadAddressProofs.size() > 0)
-                    //    addressProof.put("imgUrls", new JSONArray(uploadAddressProofs));
                     if (user.getAddressProof() != null)
                         addressProof.put("type", user.getAddressProof().getType());
                     if (frontAadharId != null) {
@@ -518,15 +524,6 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
         }
     }
 
-    private void setImagesFromSP() {
-        UserModel existingUserModel = AppUtils.getUserObject(mContext);
-        user.setNewCollegeIds(existingUserModel.getNewCollegeIds());
-        user.setNewAddressProofs(existingUserModel.getNewAddressProofs());
-        user.setNewBankProofs(existingUserModel.getNewBankProofs());
-        user.setNewBankProofs(existingUserModel.getNewBankProofs());
-
-
-    }
 
     private class UploadDetailsToServer extends AsyncTask<String, String, String> {
         @Override

@@ -1037,7 +1037,7 @@ public class Splash extends AppCompatActivity {
 
         } catch (Exception e) {
         }
-        AppUtils.checkDataForNormalUser(user, gson, data1);
+        AppUtils.checkDataForNormalUser(user, gson, data1, this);
         //    user.setEmailSent(false);
         //    if (data1.opt("gender") != null)
         //        user.setGender(data1.getString("gender"));

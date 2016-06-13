@@ -2,25 +2,19 @@ package indwin.c3.shareapp;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
+
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -39,8 +33,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
@@ -86,6 +79,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import indwin.c3.shareapp.activities.AccountSettingsActivity;
 import indwin.c3.shareapp.activities.FindProduct;
 import indwin.c3.shareapp.activities.ProfileActivity;
 import indwin.c3.shareapp.activities.SupportedWebsites;
@@ -158,6 +152,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     SharedPreferences sharedpreferences, sharedpreferences2;
     public static final String MyPREFERENCES = "buddy";
     TextView supported;
+    public boolean emailverified =true;
 //    final Handler handler = new Handler();
 //    Timer t = new Timer();
 
@@ -273,8 +268,42 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             ImageView image31 = (ImageView)findViewById(R.id.img07);
             ImageView image32 = (ImageView)findViewById(R.id.img08);
             ImageView image33 = (ImageView)findViewById(R.id.img09);
-            ImageView image34 = (ImageView)findViewById(R.id.img10);
-
+   //         ImageView image34 = (ImageView)findViewById(R.id.img15);
+            ImageView image35 = (ImageView)findViewById(R.id.img16);
+            ImageView image36 = (ImageView)findViewById(R.id.img17);
+            ImageView image37 = (ImageView)findViewById(R.id.img18);
+            ImageView image38 = (ImageView)findViewById(R.id.img19);
+            ImageView image39 = (ImageView)findViewById(R.id.img20);
+            ImageView image40 = (ImageView)findViewById(R.id.img25);
+            ImageView image41 = (ImageView)findViewById(R.id.img26);
+            ImageView image42 = (ImageView)findViewById(R.id.img27);
+            ImageView image43 = (ImageView)findViewById(R.id.img28);
+            ImageView image44 = (ImageView)findViewById(R.id.img29);
+            ImageView image45 = (ImageView)findViewById(R.id.img30);
+            ImageView image46 = (ImageView)findViewById(R.id.img35);
+            ImageView image47 = (ImageView)findViewById(R.id.img36);
+            ImageView image48 = (ImageView)findViewById(R.id.img37);
+            ImageView image49 = (ImageView)findViewById(R.id.img38);
+            ImageView image50 = (ImageView)findViewById(R.id.img39);
+            ImageView image51 = (ImageView)findViewById(R.id.img40);
+            ImageView image52 = (ImageView)findViewById(R.id.img45);
+            ImageView image53 = (ImageView)findViewById(R.id.img46);
+            ImageView image54 = (ImageView)findViewById(R.id.img47);
+            ImageView image55 = (ImageView)findViewById(R.id.img48);
+            ImageView image56 = (ImageView)findViewById(R.id.img49);
+            ImageView image57 = (ImageView)findViewById(R.id.img50);
+            ImageView image58 = (ImageView)findViewById(R.id.img55);
+            ImageView image59 = (ImageView)findViewById(R.id.img56);
+            ImageView image60 = (ImageView)findViewById(R.id.img57);
+            ImageView image61 = (ImageView)findViewById(R.id.img58);
+            ImageView image62 = (ImageView)findViewById(R.id.img59);
+            ImageView image63 = (ImageView)findViewById(R.id.img60);
+            ImageView image64 = (ImageView)findViewById(R.id.img65);
+            ImageView image65 = (ImageView)findViewById(R.id.img66);
+            ImageView image66 = (ImageView)findViewById(R.id.img67);
+            ImageView image67 = (ImageView)findViewById(R.id.img68);
+            ImageView image68 = (ImageView)findViewById(R.id.img69);
+            ImageView image69 = (ImageView)findViewById(R.id.img70);
 
 
 
@@ -313,7 +342,45 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             image31.setOnClickListener(this);
             image32.setOnClickListener(this);
             image33.setOnClickListener(this);
-            image34.setOnClickListener(this);
+//            image34.setOnClickListener(this);
+            image35.setOnClickListener(this);
+            image36.setOnClickListener(this);
+            image37.setOnClickListener(this);
+            image38.setOnClickListener(this);
+            image39.setOnClickListener(this);
+            image40.setOnClickListener(this);
+            image41.setOnClickListener(this);
+            image42.setOnClickListener(this);
+            image43.setOnClickListener(this);
+            image44.setOnClickListener(this);
+            image45.setOnClickListener(this);
+            image46.setOnClickListener(this);
+            image47.setOnClickListener(this);
+            image48.setOnClickListener(this);
+            image49.setOnClickListener(this);
+            image50.setOnClickListener(this);
+            image51.setOnClickListener(this);
+            image52.setOnClickListener(this);
+            image53.setOnClickListener(this);
+            image54.setOnClickListener(this);
+            image55.setOnClickListener(this);
+            image56.setOnClickListener(this);
+            image57.setOnClickListener(this);
+            image58.setOnClickListener(this);
+            image59.setOnClickListener(this);
+            image60.setOnClickListener(this);
+            image61.setOnClickListener(this);
+            image61.setOnClickListener(this);
+            image62.setOnClickListener(this);
+            image63.setOnClickListener(this);
+            image64.setOnClickListener(this);
+            image65.setOnClickListener(this);
+            image66.setOnClickListener(this);
+            image67.setOnClickListener(this);
+            image68.setOnClickListener(this);
+            image69.setOnClickListener(this);
+
+
 
 
 
@@ -466,11 +533,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 //            beau = (TextView) findViewById(R.id.beau);
 //            ent = (TextView) findViewById(R.id.ent);
 //            foot = (TextView) findViewById(R.id.foot);
-            spin = "Mobiles";
-            try {
-                populate();
-            } catch (Exception e) {
-            }
+
             spin ="trending";
 
             try {
@@ -482,6 +545,8 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             }
 
             try {
+                spin = "Mobiles";
+                populateFirstRow();
               //  cardclick();
             } catch (Exception e) {
             }
@@ -735,6 +800,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 TextView line3 = (TextView) findViewById(R.id.line3);
                 but = (TextView) findViewById(R.id.but);
                 name1.setText("Hi " + user.getName() + ",");
+
                 String status60K = "";
                 if (user.getStatus60K() != null) {
                     status60K = user.getStatus60K();
@@ -777,10 +843,15 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                         line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
                     } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
                         line1.setText("You have applied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
-                    } else {
-                        line1.setText("Your email ID needs to be verified. Do it quickly to get your profile approved");
-                        but.setText("Verify your email ID now");
+                    } else if("Check".equals(AccountSettingsActivity.verifyEmail.getText().toString())){
+                        line1.setText("Ready to get started? Complete your profile now to get a Borrowing Limit and start shopping");
+                        but.setText("Complete it now!");
                         but.setVisibility(View.VISIBLE);
+                    }else{
+                        line1.setText("Your email Id needs to be verified. Do it quickly to get your profile approved.");
+                        but.setText("verify your email Id now");
+                        but.setVisibility(View.VISIBLE);
+                        emailverified = false;
                     }
                 }
             } catch (Exception e) {
@@ -841,19 +912,27 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
 
             but = (TextView) findViewById(R.id.but);
-            but.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    query.clearFocus();
 
-                    //                    send();
-                    Intent intent = new Intent(HomePage.this, ProfileActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    Splash.notify = 1;
+                but.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        query.clearFocus();
 
-                }
-            });
+                        //                    send();
+                        if(emailverified) {
+                            Intent intent = new Intent(HomePage.this, ProfileActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(0, 0);
+                            Splash.notify = 1;
+                        }else{
+                            Intent intent = new Intent(HomePage.this, AccountSettingsActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(0, 0);
+                            Splash.notify = 1;
+                        }
+
+                    }
+                });
 
             navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
@@ -1632,6 +1711,60 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
                 break;
 
+//            case R.id.img15:
+//                spin = "Mobiles";
+//
+//                productId = Splash.fkid1.get(spin).get("4");
+//                sellerNme = Splash.sellers.get(spin).get("4");
+//                switchtoProductPage();
+//
+//                break;
+
+            case R.id.img16:
+                spin = "Mobiles";
+
+                productId = Splash.fkid1.get(spin).get("5");
+                sellerNme = Splash.sellers.get(spin).get("5");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img17:
+                spin = "Mobiles";
+
+                productId = Splash.fkid1.get(spin).get("6");
+                sellerNme = Splash.sellers.get(spin).get("6");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img18:
+                spin = "Mobiles";
+
+                productId = Splash.fkid1.get(spin).get("7");
+                sellerNme = Splash.sellers.get(spin).get("7");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img19:
+                spin = "Mobiles";
+
+                productId = Splash.fkid1.get(spin).get("8");
+                sellerNme = Splash.sellers.get(spin).get("8");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img20:
+                spin = "Mobiles";
+
+                productId = Splash.fkid1.get(spin).get("9");
+                sellerNme = Splash.sellers.get(spin).get("9");
+                switchtoProductPage();
+
+                break;
+
             case R.id.img21:
                 spin = "Electronics";
 
@@ -1669,6 +1802,64 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
                 break;
 
+            case R.id.img25:
+                spin = "Electronics";
+
+                productId = Splash.fkid1.get(spin).get("4");
+                sellerNme = Splash.sellers.get(spin).get("4");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img26:
+                spin = "Electronics";
+
+                productId = Splash.fkid1.get(spin).get("5");
+                sellerNme = Splash.sellers.get(spin).get("5");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img27:
+                spin = "Electronics";
+
+                productId = Splash.fkid1.get(spin).get("6");
+                sellerNme = Splash.sellers.get(spin).get("6");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img28:
+                spin = "Electronics";
+
+                productId = Splash.fkid1.get(spin).get("7");
+                sellerNme = Splash.sellers.get(spin).get("7");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img29:
+                spin = "Electronics";
+
+                productId = Splash.fkid1.get(spin).get("8");
+                sellerNme = Splash.sellers.get(spin).get("8");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img30:
+                spin = "Electronics";
+
+                productId = Splash.fkid1.get(spin).get("9");
+                sellerNme = Splash.sellers.get(spin).get("9");
+                switchtoProductPage();
+
+                break;
+
+
+
+
+
             case R.id.img31:
                 spin = "Computers&subCategory=Laptops";
 
@@ -1698,6 +1889,60 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
                 productId = Splash.fkid1.get(spin).get("3");
                 sellerNme = Splash.sellers.get(spin).get("3");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img35:
+                spin = "Computers&subCategory=Laptops";
+
+                productId = Splash.fkid1.get(spin).get("4");
+                sellerNme = Splash.sellers.get(spin).get("4");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img36:
+                spin = "Computers&subCategory=Laptops";
+
+                productId = Splash.fkid1.get(spin).get("5");
+                sellerNme = Splash.sellers.get(spin).get("5");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img37:
+                spin = "Computers&subCategory=Laptops";
+
+                productId = Splash.fkid1.get(spin).get("6");
+                sellerNme = Splash.sellers.get(spin).get("6");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img38:
+                spin = "Computers&subCategory=Laptops";
+
+                productId = Splash.fkid1.get(spin).get("7");
+                sellerNme = Splash.sellers.get(spin).get("7");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img39:
+                spin = "Computers&subCategory=Laptops";
+
+                productId = Splash.fkid1.get(spin).get("8");
+                sellerNme = Splash.sellers.get(spin).get("8");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img40:
+                spin = "Computers&subCategory=Laptops";
+
+                productId = Splash.fkid1.get(spin).get("9");
+                sellerNme = Splash.sellers.get(spin).get("9");
                 switchtoProductPage();
 
                 break;
@@ -1734,6 +1979,61 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 switchtoProductPage();
 
                 break;
+
+
+            case R.id.img45:
+                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
+
+                productId = Splash.fkid1.get(spin).get("4");
+                sellerNme = Splash.sellers.get(spin).get("4");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img46:
+                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
+
+                productId = Splash.fkid1.get(spin).get("5");
+                sellerNme = Splash.sellers.get(spin).get("5");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img47:
+                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
+
+                productId = Splash.fkid1.get(spin).get("6");
+                sellerNme = Splash.sellers.get(spin).get("6");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img48:
+                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
+
+                productId = Splash.fkid1.get(spin).get("7");
+                sellerNme = Splash.sellers.get(spin).get("7");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img49:
+                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
+
+                productId = Splash.fkid1.get(spin).get("8");
+                sellerNme = Splash.sellers.get(spin).get("8");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img50:
+                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
+
+                productId = Splash.fkid1.get(spin).get("9");
+                sellerNme = Splash.sellers.get(spin).get("9");
+                switchtoProductPage();
+
+                break;
             case R.id.img51:
                 spin = "Health%20and%20Beauty";
 
@@ -1767,6 +2067,60 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
                 break;
 
+            case R.id.img55:
+                spin = "Health%20and%20Beauty";
+
+                productId = Splash.fkid1.get(spin).get("4");
+                sellerNme = Splash.sellers.get(spin).get("4");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img56:
+                spin = "Health%20and%20Beauty";
+
+                productId = Splash.fkid1.get(spin).get("5");
+                sellerNme = Splash.sellers.get(spin).get("5");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img57:
+                spin = "Health%20and%20Beauty";
+
+                productId = Splash.fkid1.get(spin).get("6");
+                sellerNme = Splash.sellers.get(spin).get("6");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img58:
+                spin = "Health%20and%20Beauty";
+
+                productId = Splash.fkid1.get(spin).get("7");
+                sellerNme = Splash.sellers.get(spin).get("7");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img59:
+                spin = "Health%20and%20Beauty";
+
+                productId = Splash.fkid1.get(spin).get("8");
+                sellerNme = Splash.sellers.get(spin).get("8");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img60:
+                spin = "Health%20and%20Beauty";
+
+                productId = Splash.fkid1.get(spin).get("9");
+                sellerNme = Splash.sellers.get(spin).get("9");
+                switchtoProductPage();
+
+                break;
+
             case R.id.img61:
                 spin = "Footwear";
 
@@ -1796,6 +2150,60 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
                 productId = Splash.fkid1.get(spin).get("3");
                 sellerNme = Splash.sellers.get(spin).get("3");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img65:
+                spin = "Footwear";
+
+                productId = Splash.fkid1.get(spin).get("4");
+                sellerNme = Splash.sellers.get(spin).get("4");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img66:
+                spin = "Footwear";
+
+                productId = Splash.fkid1.get(spin).get("5");
+                sellerNme = Splash.sellers.get(spin).get("5");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img67:
+                spin = "Footwear";
+
+                productId = Splash.fkid1.get(spin).get("6");
+                sellerNme = Splash.sellers.get(spin).get("6");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img68:
+                spin = "Footwear";
+
+                productId = Splash.fkid1.get(spin).get("7");
+                sellerNme = Splash.sellers.get(spin).get("7");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img69:
+                spin = "Footwear";
+
+                productId = Splash.fkid1.get(spin).get("8");
+                sellerNme = Splash.sellers.get(spin).get("8");
+                switchtoProductPage();
+
+                break;
+
+            case R.id.img70:
+                spin = "Footwear";
+
+                productId = Splash.fkid1.get(spin).get("9");
+                sellerNme = Splash.sellers.get(spin).get("9");
                 switchtoProductPage();
 
                 break;
@@ -2756,60 +3164,137 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
     }
 
-    private void populate() {
-        {
 
-            TextView price1 = (TextView) findViewById(R.id.title11);
-            TextView price2 = (TextView) findViewById(R.id.title12);
-            TextView price3 = (TextView) findViewById(R.id.title13);
-            TextView price4 = (TextView) findViewById(R.id.title14);
-            TextView title1 = (TextView) findViewById(R.id.titlexxx11);
-            TextView title2 = (TextView) findViewById(R.id.titlexxx12);
-            TextView title3 = (TextView) findViewById(R.id.titlexxx13);
-            TextView title4 = (TextView) findViewById(R.id.titlexxx14);
-            ImageView img1 = (ImageView) findViewById(R.id.img11);
-            ImageView img2 = (ImageView) findViewById(R.id.img12);
-            ImageView img3 = (ImageView) findViewById(R.id.img13);
-            ImageView img4 = (ImageView) findViewById(R.id.img14);
-            ImageView brand1 = (ImageView) findViewById(R.id.brand11);
-            ImageView brand2 = (ImageView) findViewById(R.id.brand12);
-            ImageView brand3 = (ImageView) findViewById(R.id.brand13);
-            ImageView brand4 = (ImageView) findViewById(R.id.brand14);
+    private void populateFirstRow(){
 
 
+        TextView price1 = (TextView) findViewById(R.id.title11);
+        TextView price2 = (TextView) findViewById(R.id.title12);
+        TextView price3 = (TextView) findViewById(R.id.title13);
+        TextView price4 = (TextView) findViewById(R.id.title14);
+//        TextView price5 = (TextView) findViewById(R.id.title15);
+        TextView price6 = (TextView) findViewById(R.id.title16);
+        TextView price7 = (TextView) findViewById(R.id.title17);
+        TextView price8 = (TextView) findViewById(R.id.title18);
+        TextView price9 = (TextView) findViewById(R.id.title19);
+        TextView price10 = (TextView) findViewById(R.id.title20);
 
-            if (Splash.sellers.get(spin).get("0").equals("flipkart"))
-                brand1.setImageResource(R.drawable.fk_fav1x);
-            if (Splash.sellers.get(spin).get("0").equals("amazon"))
-                brand1.setImageResource(R.drawable.amazon_fav1x);
-            if (Splash.sellers.get(spin).get("0").equals("paytm"))
-                brand1.setImageResource(R.drawable.paytm_fav1x);
-            if (Splash.sellers.get(spin).get("0").equals("snapdeal"))
-                brand1.setImageResource(R.drawable.sdeal_fav1x);
-            if (Splash.sellers.get(spin).get("1").equals("flipkart"))
-                brand2.setImageResource(R.drawable.fk_fav1x);
-            if (Splash.sellers.get(spin).get("1").equals("amazon"))
-                brand2.setImageResource(R.drawable.amazon_fav1x);
-            if (Splash.sellers.get(spin).get("1").equals("paytm"))
-                brand2.setImageResource(R.drawable.paytm_fav1x);
-            if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
-                brand2.setImageResource(R.drawable.sdeal_fav1x);
-            if (Splash.sellers.get(spin).get("2").equals("flipkart"))
-                brand3.setImageResource(R.drawable.fk_fav1x);
-            if (Splash.sellers.get(spin).get("2").equals("amazon"))
-                brand3.setImageResource(R.drawable.amazon_fav1x);
-            if (Splash.sellers.get(spin).get("2").equals("paytm"))
-                brand3.setImageResource(R.drawable.paytm_fav1x);
-            if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
-                brand3.setImageResource(R.drawable.sdeal_fav1x);
-            if (Splash.sellers.get(spin).get("3").equals("flipkart"))
-                brand4.setImageResource(R.drawable.fk_fav1x);
-            if (Splash.sellers.get(spin).get("3").equals("amazon"))
-                brand4.setImageResource(R.drawable.amazon_fav1x);
-            if (Splash.sellers.get(spin).get("3").equals("paytm"))
-                brand4.setImageResource(R.drawable.paytm_fav1x);
-            if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
-                brand4.setImageResource(R.drawable.sdeal_fav1x);
+        TextView title1 = (TextView) findViewById(R.id.titlexxx11);
+        TextView title2 = (TextView) findViewById(R.id.titlexxx12);
+        TextView title3 = (TextView) findViewById(R.id.titlexxx13);
+        TextView title4 = (TextView) findViewById(R.id.titlexxx14);
+//        TextView title5 = (TextView) findViewById(R.id.titlexxx15);
+        TextView title6 = (TextView) findViewById(R.id.titlexxx16);
+        TextView title7 = (TextView) findViewById(R.id.titlexxx17);
+        TextView title8 = (TextView) findViewById(R.id.titlexxx18);
+        TextView title9 = (TextView) findViewById(R.id.titlexxx19);
+        TextView title10 = (TextView) findViewById(R.id.titlexxx20);
+
+
+
+        ImageView img1 = (ImageView) findViewById(R.id.img11);
+        ImageView img2 = (ImageView) findViewById(R.id.img12);
+        ImageView img3 = (ImageView) findViewById(R.id.img13);
+        ImageView img4 = (ImageView) findViewById(R.id.img14);
+//        ImageView img5 = (ImageView) findViewById(R.id.img15);
+        ImageView img6 = (ImageView) findViewById(R.id.img16);
+        ImageView img7 = (ImageView) findViewById(R.id.img17);
+        ImageView img8 = (ImageView) findViewById(R.id.img18);
+        ImageView img9 = (ImageView) findViewById(R.id.img19);
+        ImageView img10 = (ImageView) findViewById(R.id.img20);
+
+        ImageView brand1 = (ImageView) findViewById(R.id.brand11);
+        ImageView brand2 = (ImageView) findViewById(R.id.brand12);
+        ImageView brand3 = (ImageView) findViewById(R.id.brand13);
+        ImageView brand4 = (ImageView) findViewById(R.id.brand14);
+//        ImageView brand5 = (ImageView) findViewById(R.id.brand15);
+        ImageView brand6 = (ImageView) findViewById(R.id.brand16);
+        ImageView brand7 = (ImageView) findViewById(R.id.brand17);
+        ImageView brand8 = (ImageView) findViewById(R.id.brand18);
+        ImageView brand9 = (ImageView) findViewById(R.id.brand19);
+        ImageView brand10 = (ImageView) findViewById(R.id.brand20);
+        if (Splash.sellers.get(spin).get("0").equals("flipkart"))
+            brand1.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("0").equals("amazon"))
+            brand1.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("0").equals("paytm"))
+            brand1.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("0").equals("snapdeal"))
+            brand1.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("1").equals("flipkart"))
+            brand2.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("1").equals("amazon"))
+            brand2.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("1").equals("paytm"))
+            brand2.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
+            brand2.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
+            brand3.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("2").equals("amazon"))
+            brand3.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("2").equals("paytm"))
+            brand3.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
+            brand3.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("3").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("3").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("3").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+//        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
+//            brand5.setImageResource(R.drawable.fk_fav1x);
+//        if (Splash.sellers.get(spin).get("4").equals("amazon"))
+//            brand5.setImageResource(R.drawable.amazon_fav1x);
+//        if (Splash.sellers.get(spin).get("4").equals("paytm"))
+//            brand5.setImageResource(R.drawable.paytm_fav1x);
+//        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
+//            brand5.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
+            brand6.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("amazon"))
+            brand6.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("paytm"))
+            brand6.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
+            brand6.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
+            brand7.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("amazon"))
+            brand7.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("paytm"))
+            brand7.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
+            brand7.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
+            brand8.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("amazon"))
+            brand8.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("paytm"))
+            brand8.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
+            brand8.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
+            brand9.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("amazon"))
+            brand9.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("paytm"))
+            brand9.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
+            brand9.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
+            brand10.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("amazon"))
+            brand10.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("paytm"))
+            brand10.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
+            brand10.setImageResource(R.drawable.sdeal_fav1x);
+
+
 
 
 //            card1 = (ImageView) findViewById(R.id.img1);
@@ -2817,81 +3302,194 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 //            card3 = (ImageView) findViewById(R.id.img2);
 //            card4 = (ImageView) findViewById(R.id.img2x);
 
-            title1.setText(Splash.title.get(spin).get("0"));
-            title2.setText(Splash.title.get(spin).get("1"));
-            title3.setText(Splash.title.get(spin).get("2"));
-            title4.setText(Splash.title.get(spin).get("3"));
+        title1.setText(Splash.title.get(spin).get("0"));
+        title2.setText(Splash.title.get(spin).get("1"));
+        title3.setText(Splash.title.get(spin).get("2"));
+        title4.setText(Splash.title.get(spin).get("3"));
+        //title5.setText(Splash.title.get(spin).get("4"));
+        title6.setText(Splash.title.get(spin).get("5"));
+        title7.setText(Splash.title.get(spin).get("6"));
+        title8.setText(Splash.title.get(spin).get("7"));
+        title9.setText(Splash.title.get(spin).get("8"));
+        title10.setText(Splash.title.get(spin).get("9"));
 
-            Picasso.with(this)
-                    .load(Splash.image.get(spin).get("0"))
-                    .placeholder(R.drawable.emptyimageproducts)
-                    .into(img1);
-            Picasso.with(this)
-                    .load(Splash.image.get(spin).get("1"))
-                    .placeholder(R.drawable.emptyimageproducts)
-                    .into(img2);
-            Picasso.with(this)
-                    .load(Splash.image.get(spin).get("2"))
-                    .placeholder(R.drawable.emptyimageproducts)
-                    .into(img3);
-            Picasso.with(this)
-                    .load(Splash.image.get(spin).get("3"))
-                    .placeholder(R.drawable.emptyimageproducts)
-                    .into(img4);
-            Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-            int monthscam = 18;
-            String cat1 = Splash.category.get(spin).get("0");
-            String subcat1 = Splash.subCategory.get(spin).get("0");
-            int a = 2;
-            monthscam = months(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), princ1.intValue());
-
-
-            princ1 = princ1 * 0.8;
-            Double rate = 0.21 / 12;
-            Double emi1 = Math.floor((princ1 * rate * Math.pow(1 + rate, monthscam)) / ((Math.pow(1 + rate, monthscam)) - 1));
-            if ((princ1 * 10 / 8) < 5000.0)
-                emi1 = princ1 / monthscam;
-            price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi1.intValue()) + " per month");
-            //emi2
-            Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-            int monthscam2 = 18;
-            monthscam2 = months(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), princ2.intValue());
-
-            princ2 = princ2 * 0.8;
-            // Double rate=0.2;
-            Double emi2 = Math.floor((princ2 * rate * Math.pow(1 + rate, monthscam2)) / ((Math.pow(1 + rate, monthscam2)) - 1));
-            if ((princ2 * 10 / 8) < 5000.0)
-                emi2 = princ2 / monthscam2;
-            price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi2.intValue()) + " per month");
-
-
-            Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-            int monthscam3 = 18;
-            monthscam3 = months(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), princ3.intValue());
-            princ3 = princ3 * 0.8;
-            // Double rate=0.2;
-            Double emi3 = Math.floor((princ3 * rate * Math.pow(1 + rate, monthscam3)) / ((Math.pow(1 + rate, monthscam3)) - 1));
-            if ((princ3 * 10 / 8) < 5000.0)
-                emi3 = princ3 / monthscam3;
-
-            price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi3.intValue()) + " per month");
-
-            //emi4
-
-            Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-            int monthscam4 = 18;
-            monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ3.intValue());
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("0"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img1);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("1"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img2);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("2"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img3);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("3"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img4);
+//        Picasso.with(this)
+//                .load(Splash.image.get(spin).get("4"))
+//                .placeholder(R.drawable.emptyimageproducts)
+//                .into(img5);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("5"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img6);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("6"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img7);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("7"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img8);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("8"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img9);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("9"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img10);
 
 
-            princ4 = princ4 * 0.8;
-            // Double rate=0.2;
-            Double emi4 = Math.floor((princ4 * rate * Math.pow(1 + rate, monthscam4)) / ((Math.pow(1 + rate, monthscam4)) - 1));
-            if ((princ4 * 10 / 8) < 5000.0)
-                emi4 = princ4 / monthscam4;
-            price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
-        }
-////
-    //cardclick();
+        Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
+        int monthscam = 18;
+        String cat1 = Splash.category.get(spin).get("0");
+        String subcat1 = Splash.subCategory.get(spin).get("0");
+        int a = 2;
+        monthscam = months(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), princ1.intValue());
+
+
+        princ1 = princ1 * 0.8;
+        Double rate = 0.21 / 12;
+
+        Double emi1 = Math.floor((princ1 * rate * Math.pow(1 + rate, monthscam)) / ((Math.pow(1 + rate, monthscam)) - 1));
+        if ((princ1 * 10 / 8) < 5000.0)
+            emi1 = princ1 / monthscam;
+        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi1.intValue()) + " per month");
+        //emi2
+        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
+        int monthscam2 = 18;
+        monthscam2 = months(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), princ2.intValue());
+
+        princ2 = princ2 * 0.8;
+        // Double rate=0.2;
+        Double emi2 = Math.floor((princ2 * rate * Math.pow(1 + rate, monthscam2)) / ((Math.pow(1 + rate, monthscam2)) - 1));
+        if ((princ2 * 10 / 8) < 5000.0)
+            emi2 = princ2 / monthscam2;
+        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi2.intValue()) + " per month");
+
+
+        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
+        int monthscam3 = 18;
+        monthscam3 = months(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), princ3.intValue());
+        princ3 = princ3 * 0.8;
+        // Double rate=0.2;
+        Double emi3 = Math.floor((princ3 * rate * Math.pow(1 + rate, monthscam3)) / ((Math.pow(1 + rate, monthscam3)) - 1));
+        if ((princ3 * 10 / 8) < 5000.0)
+            emi3 = princ3 / monthscam3;
+        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi3.intValue()) + " per month");
+
+        //emi4
+
+        Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
+        int monthscam4 = 18;
+        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
+
+
+        princ4 = princ4 * 0.8;
+        // Double rate=0.2;
+        Double emi4 = Math.floor((princ4 * rate * Math.pow(1 + rate, monthscam4)) / ((Math.pow(1 + rate, monthscam4)) - 1));
+        if ((princ4 * 10 / 8) < 5000.0)
+            emi4 = princ4 / monthscam4;
+        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
+
+
+
+
+
+//        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
+//        int monthscam5 = 18;
+//        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
+//
+//
+//        princ5 = princ5 * 0.8;
+//        // Double rate=0.2;
+//        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
+//        if ((princ5 * 10 / 8) < 5000.0)
+//            emi5 = princ5 / monthscam5;
+//        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+
+
+        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
+        int monthscam6 = 18;
+        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
+
+
+        princ6 = princ6 * 0.8;
+        // Double rate=0.2;
+        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
+        if ((princ6 * 10 / 8) < 5000.0)
+            emi6 = princ6 / monthscam6;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+
+
+
+        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
+        int monthscam7 = 18;
+        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
+
+
+        princ7 = princ7 * 0.8;
+        // Double rate=0.2;
+        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
+        if ((princ7 * 10 / 8) < 5000.0)
+            emi7 = princ7 / monthscam7;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+
+
+
+        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
+        int monthscam8 = 18;
+        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
+
+
+        princ8 = princ8 * 0.8;
+        // Double rate=0.2;
+        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
+        if ((princ8 * 10 / 8) < 5000.0)
+            emi8 = princ8 / monthscam8;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+
+
+        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
+        int monthscam9 = 18;
+        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
+
+
+        princ9 = princ9 * 0.8;
+        // Double rate=0.2;
+        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
+        if ((princ9 * 10 / 8) < 5000.0)
+            emi9 = princ9/ monthscam9;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+
+
+
+        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
+        int monthscam10 = 18;
+        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
+
+
+        princ10 = princ10 * 0.8;
+        // Double rate=0.2;
+        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
+        if ((princ10 * 10 / 8) < 5000.0)
+            emi10 = princ10/ monthscam10;
+        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
     }
 
     private void populateSecondRow(){
@@ -2901,18 +3499,47 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         TextView price2 = (TextView) findViewById(R.id.title22);
         TextView price3 = (TextView) findViewById(R.id.title23);
         TextView price4 = (TextView) findViewById(R.id.title24);
+        TextView price5 = (TextView) findViewById(R.id.title25);
+        TextView price6 = (TextView) findViewById(R.id.title26);
+        TextView price7 = (TextView) findViewById(R.id.title27);
+        TextView price8 = (TextView) findViewById(R.id.title28);
+        TextView price9 = (TextView) findViewById(R.id.title29);
+        TextView price10 = (TextView) findViewById(R.id.title30);
+
         TextView title1 = (TextView) findViewById(R.id.titlexxx21);
         TextView title2 = (TextView) findViewById(R.id.titlexxx22);
         TextView title3 = (TextView) findViewById(R.id.titlexxx23);
         TextView title4 = (TextView) findViewById(R.id.titlexxx24);
+        TextView title5 = (TextView) findViewById(R.id.titlexxx25);
+        TextView title6 = (TextView) findViewById(R.id.titlexxx26);
+        TextView title7 = (TextView) findViewById(R.id.titlexxx27);
+        TextView title8 = (TextView) findViewById(R.id.titlexxx28);
+        TextView title9 = (TextView) findViewById(R.id.titlexxx29);
+        TextView title10 = (TextView) findViewById(R.id.titlexxx30);
+
+
+
         ImageView img1 = (ImageView) findViewById(R.id.img21);
         ImageView img2 = (ImageView) findViewById(R.id.img22);
         ImageView img3 = (ImageView) findViewById(R.id.img23);
         ImageView img4 = (ImageView) findViewById(R.id.img24);
+        ImageView img5 = (ImageView) findViewById(R.id.img25);
+        ImageView img6 = (ImageView) findViewById(R.id.img26);
+        ImageView img7 = (ImageView) findViewById(R.id.img27);
+        ImageView img8 = (ImageView) findViewById(R.id.img28);
+        ImageView img9 = (ImageView) findViewById(R.id.img29);
+        ImageView img10 = (ImageView) findViewById(R.id.img30);
+
         ImageView brand1 = (ImageView) findViewById(R.id.brand21);
         ImageView brand2 = (ImageView) findViewById(R.id.brand22);
         ImageView brand3 = (ImageView) findViewById(R.id.brand23);
         ImageView brand4 = (ImageView) findViewById(R.id.brand24);
+        ImageView brand5 = (ImageView) findViewById(R.id.brand25);
+        ImageView brand6 = (ImageView) findViewById(R.id.brand26);
+        ImageView brand7 = (ImageView) findViewById(R.id.brand27);
+        ImageView brand8 = (ImageView) findViewById(R.id.brand28);
+        ImageView brand9 = (ImageView) findViewById(R.id.brand29);
+        ImageView brand10 = (ImageView) findViewById(R.id.brand30);
         if (Splash.sellers.get(spin).get("0").equals("flipkart"))
             brand1.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("0").equals("amazon"))
@@ -2945,6 +3572,56 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             brand4.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+
+
 
 
 //            card1 = (ImageView) findViewById(R.id.img1);
@@ -2956,6 +3633,12 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         title2.setText(Splash.title.get(spin).get("1"));
         title3.setText(Splash.title.get(spin).get("2"));
         title4.setText(Splash.title.get(spin).get("3"));
+        title5.setText(Splash.title.get(spin).get("4"));
+        title6.setText(Splash.title.get(spin).get("5"));
+        title7.setText(Splash.title.get(spin).get("6"));
+        title8.setText(Splash.title.get(spin).get("7"));
+        title9.setText(Splash.title.get(spin).get("8"));
+        title10.setText(Splash.title.get(spin).get("9"));
 
         Picasso.with(this)
                 .load(Splash.image.get(spin).get("0"))
@@ -2973,6 +3656,32 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .load(Splash.image.get(spin).get("3"))
                 .placeholder(R.drawable.emptyimageproducts)
                 .into(img4);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("4"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img5);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("5"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img6);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("6"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img7);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("7"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img8);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("8"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img9);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("9"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img10);
+
+
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
         int monthscam = 18;
         String cat1 = Splash.category.get(spin).get("0");
@@ -3015,7 +3724,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
         int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ3.intValue());
+        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
 
 
         princ4 = princ4 * 0.8;
@@ -3024,6 +3733,90 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         if ((princ4 * 10 / 8) < 5000.0)
             emi4 = princ4 / monthscam4;
         price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
+
+
+
+
+
+        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
+        int monthscam5 = 18;
+        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
+
+
+        princ5 = princ5 * 0.8;
+        // Double rate=0.2;
+        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
+        if ((princ5 * 10 / 8) < 5000.0)
+            emi5 = princ5 / monthscam5;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+
+
+        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
+        int monthscam6 = 18;
+        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
+
+
+        princ6 = princ6 * 0.8;
+        // Double rate=0.2;
+        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
+        if ((princ6 * 10 / 8) < 5000.0)
+            emi6 = princ6 / monthscam6;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+
+
+
+        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
+        int monthscam7 = 18;
+        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
+
+
+        princ7 = princ7 * 0.8;
+        // Double rate=0.2;
+        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
+        if ((princ7 * 10 / 8) < 5000.0)
+            emi7 = princ7 / monthscam7;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+
+
+
+        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
+        int monthscam8 = 18;
+        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
+
+
+        princ8 = princ8 * 0.8;
+        // Double rate=0.2;
+        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
+        if ((princ8 * 10 / 8) < 5000.0)
+            emi8 = princ8 / monthscam8;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+
+
+        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
+        int monthscam9 = 18;
+        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
+
+
+        princ9 = princ9 * 0.8;
+        // Double rate=0.2;
+        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
+        if ((princ9 * 10 / 8) < 5000.0)
+            emi9 = princ9/ monthscam9;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+
+
+
+        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
+        int monthscam10 = 18;
+        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
+
+
+        princ10 = princ10 * 0.8;
+        // Double rate=0.2;
+        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
+        if ((princ10 * 10 / 8) < 5000.0)
+            emi10 = princ10/ monthscam10;
+        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
     }
 
     private void populateThirdRow(){
@@ -3031,18 +3824,47 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         TextView price2 = (TextView) findViewById(R.id.title32);
         TextView price3 = (TextView) findViewById(R.id.title33);
         TextView price4 = (TextView) findViewById(R.id.title34);
+        TextView price5 = (TextView) findViewById(R.id.title35);
+        TextView price6 = (TextView) findViewById(R.id.title36);
+        TextView price7 = (TextView) findViewById(R.id.title37);
+        TextView price8 = (TextView) findViewById(R.id.title38);
+        TextView price9 = (TextView) findViewById(R.id.title39);
+        TextView price10 = (TextView) findViewById(R.id.title40);
+
         TextView title1 = (TextView) findViewById(R.id.titlexxx31);
         TextView title2 = (TextView) findViewById(R.id.titlexxx32);
         TextView title3 = (TextView) findViewById(R.id.titlexxx33);
         TextView title4 = (TextView) findViewById(R.id.titlexxx34);
+        TextView title5 = (TextView) findViewById(R.id.titlexxx35);
+        TextView title6 = (TextView) findViewById(R.id.titlexxx36);
+        TextView title7 = (TextView) findViewById(R.id.titlexxx37);
+        TextView title8 = (TextView) findViewById(R.id.titlexxx38);
+        TextView title9 = (TextView) findViewById(R.id.titlexxx39);
+        TextView title10 = (TextView) findViewById(R.id.titlexxx40);
+
+
+
         ImageView img1 = (ImageView) findViewById(R.id.img31);
         ImageView img2 = (ImageView) findViewById(R.id.img32);
         ImageView img3 = (ImageView) findViewById(R.id.img33);
         ImageView img4 = (ImageView) findViewById(R.id.img34);
+        ImageView img5 = (ImageView) findViewById(R.id.img35);
+        ImageView img6 = (ImageView) findViewById(R.id.img36);
+        ImageView img7 = (ImageView) findViewById(R.id.img37);
+        ImageView img8 = (ImageView) findViewById(R.id.img38);
+        ImageView img9 = (ImageView) findViewById(R.id.img39);
+        ImageView img10 = (ImageView) findViewById(R.id.img40);
+
         ImageView brand1 = (ImageView) findViewById(R.id.brand31);
         ImageView brand2 = (ImageView) findViewById(R.id.brand32);
         ImageView brand3 = (ImageView) findViewById(R.id.brand33);
         ImageView brand4 = (ImageView) findViewById(R.id.brand34);
+        ImageView brand5 = (ImageView) findViewById(R.id.brand35);
+        ImageView brand6 = (ImageView) findViewById(R.id.brand36);
+        ImageView brand7 = (ImageView) findViewById(R.id.brand37);
+        ImageView brand8 = (ImageView) findViewById(R.id.brand38);
+        ImageView brand9 = (ImageView) findViewById(R.id.brand39);
+        ImageView brand10 = (ImageView) findViewById(R.id.brand40);
         if (Splash.sellers.get(spin).get("0").equals("flipkart"))
             brand1.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("0").equals("amazon"))
@@ -3075,6 +3897,56 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             brand4.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+
+
 
 
 //            card1 = (ImageView) findViewById(R.id.img1);
@@ -3086,6 +3958,12 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         title2.setText(Splash.title.get(spin).get("1"));
         title3.setText(Splash.title.get(spin).get("2"));
         title4.setText(Splash.title.get(spin).get("3"));
+        title5.setText(Splash.title.get(spin).get("4"));
+        title6.setText(Splash.title.get(spin).get("5"));
+        title7.setText(Splash.title.get(spin).get("6"));
+        title8.setText(Splash.title.get(spin).get("7"));
+        title9.setText(Splash.title.get(spin).get("8"));
+        title10.setText(Splash.title.get(spin).get("9"));
 
         Picasso.with(this)
                 .load(Splash.image.get(spin).get("0"))
@@ -3103,6 +3981,32 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .load(Splash.image.get(spin).get("3"))
                 .placeholder(R.drawable.emptyimageproducts)
                 .into(img4);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("4"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img5);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("5"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img6);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("6"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img7);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("7"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img8);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("8"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img9);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("9"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img10);
+
+
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
         int monthscam = 18;
         String cat1 = Splash.category.get(spin).get("0");
@@ -3145,7 +4049,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
         int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ3.intValue());
+        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
 
 
         princ4 = princ4 * 0.8;
@@ -3155,6 +4059,89 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             emi4 = princ4 / monthscam4;
         price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
 
+
+
+
+
+        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
+        int monthscam5 = 18;
+        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
+
+
+        princ5 = princ5 * 0.8;
+        // Double rate=0.2;
+        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
+        if ((princ5 * 10 / 8) < 5000.0)
+            emi5 = princ5 / monthscam5;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+
+
+        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
+        int monthscam6 = 18;
+        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
+
+
+        princ6 = princ6 * 0.8;
+        // Double rate=0.2;
+        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
+        if ((princ6 * 10 / 8) < 5000.0)
+            emi6 = princ6 / monthscam6;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+
+
+
+        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
+        int monthscam7 = 18;
+        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
+
+
+        princ7 = princ7 * 0.8;
+        // Double rate=0.2;
+        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
+        if ((princ7 * 10 / 8) < 5000.0)
+            emi7 = princ7 / monthscam7;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+
+
+
+        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
+        int monthscam8 = 18;
+        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
+
+
+        princ8 = princ8 * 0.8;
+        // Double rate=0.2;
+        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
+        if ((princ8 * 10 / 8) < 5000.0)
+            emi8 = princ8 / monthscam8;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+
+
+        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
+        int monthscam9 = 18;
+        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
+
+
+        princ9 = princ9 * 0.8;
+        // Double rate=0.2;
+        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
+        if ((princ9 * 10 / 8) < 5000.0)
+            emi9 = princ9/ monthscam9;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+
+
+
+        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
+        int monthscam10 = 18;
+        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
+
+
+        princ10 = princ10 * 0.8;
+        // Double rate=0.2;
+        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
+        if ((princ10 * 10 / 8) < 5000.0)
+            emi10 = princ10/ monthscam10;
+        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
     }
 
     private void populateFouthRow(){
@@ -3162,18 +4149,47 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         TextView price2 = (TextView) findViewById(R.id.title42);
         TextView price3 = (TextView) findViewById(R.id.title43);
         TextView price4 = (TextView) findViewById(R.id.title44);
+        TextView price5 = (TextView) findViewById(R.id.title45);
+        TextView price6 = (TextView) findViewById(R.id.title46);
+        TextView price7 = (TextView) findViewById(R.id.title47);
+        TextView price8 = (TextView) findViewById(R.id.title48);
+        TextView price9 = (TextView) findViewById(R.id.title49);
+        TextView price10 = (TextView) findViewById(R.id.title50);
+
         TextView title1 = (TextView) findViewById(R.id.titlexxx41);
         TextView title2 = (TextView) findViewById(R.id.titlexxx42);
         TextView title3 = (TextView) findViewById(R.id.titlexxx43);
         TextView title4 = (TextView) findViewById(R.id.titlexxx44);
+        TextView title5 = (TextView) findViewById(R.id.titlexxx45);
+        TextView title6 = (TextView) findViewById(R.id.titlexxx46);
+        TextView title7 = (TextView) findViewById(R.id.titlexxx47);
+        TextView title8 = (TextView) findViewById(R.id.titlexxx48);
+        TextView title9 = (TextView) findViewById(R.id.titlexxx49);
+        TextView title10 = (TextView) findViewById(R.id.titlexxx50);
+
+
+
         ImageView img1 = (ImageView) findViewById(R.id.img41);
         ImageView img2 = (ImageView) findViewById(R.id.img42);
         ImageView img3 = (ImageView) findViewById(R.id.img43);
         ImageView img4 = (ImageView) findViewById(R.id.img44);
+        ImageView img5 = (ImageView) findViewById(R.id.img45);
+        ImageView img6 = (ImageView) findViewById(R.id.img46);
+        ImageView img7 = (ImageView) findViewById(R.id.img47);
+        ImageView img8 = (ImageView) findViewById(R.id.img48);
+        ImageView img9 = (ImageView) findViewById(R.id.img49);
+        ImageView img10 = (ImageView) findViewById(R.id.img50);
+
         ImageView brand1 = (ImageView) findViewById(R.id.brand41);
         ImageView brand2 = (ImageView) findViewById(R.id.brand42);
         ImageView brand3 = (ImageView) findViewById(R.id.brand43);
         ImageView brand4 = (ImageView) findViewById(R.id.brand44);
+        ImageView brand5 = (ImageView) findViewById(R.id.brand45);
+        ImageView brand6 = (ImageView) findViewById(R.id.brand46);
+        ImageView brand7 = (ImageView) findViewById(R.id.brand47);
+        ImageView brand8 = (ImageView) findViewById(R.id.brand48);
+        ImageView brand9 = (ImageView) findViewById(R.id.brand49);
+        ImageView brand10 = (ImageView) findViewById(R.id.brand50);
         if (Splash.sellers.get(spin).get("0").equals("flipkart"))
             brand1.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("0").equals("amazon"))
@@ -3206,6 +4222,56 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             brand4.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+
+
 
 
 //            card1 = (ImageView) findViewById(R.id.img1);
@@ -3217,6 +4283,12 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         title2.setText(Splash.title.get(spin).get("1"));
         title3.setText(Splash.title.get(spin).get("2"));
         title4.setText(Splash.title.get(spin).get("3"));
+        title5.setText(Splash.title.get(spin).get("4"));
+        title6.setText(Splash.title.get(spin).get("5"));
+        title7.setText(Splash.title.get(spin).get("6"));
+        title8.setText(Splash.title.get(spin).get("7"));
+        title9.setText(Splash.title.get(spin).get("8"));
+        title10.setText(Splash.title.get(spin).get("9"));
 
         Picasso.with(this)
                 .load(Splash.image.get(spin).get("0"))
@@ -3234,6 +4306,32 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .load(Splash.image.get(spin).get("3"))
                 .placeholder(R.drawable.emptyimageproducts)
                 .into(img4);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("4"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img5);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("5"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img6);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("6"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img7);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("7"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img8);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("8"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img9);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("9"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img10);
+
+
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
         int monthscam = 18;
         String cat1 = Splash.category.get(spin).get("0");
@@ -3276,7 +4374,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
         int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ3.intValue());
+        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
 
 
         princ4 = princ4 * 0.8;
@@ -3285,26 +4383,138 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         if ((princ4 * 10 / 8) < 5000.0)
             emi4 = princ4 / monthscam4;
         price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
-    }
 
+
+
+
+
+        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
+        int monthscam5 = 18;
+        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
+
+
+        princ5 = princ5 * 0.8;
+        // Double rate=0.2;
+        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
+        if ((princ5 * 10 / 8) < 5000.0)
+            emi5 = princ5 / monthscam5;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+
+
+        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
+        int monthscam6 = 18;
+        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
+
+
+        princ6 = princ6 * 0.8;
+        // Double rate=0.2;
+        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
+        if ((princ6 * 10 / 8) < 5000.0)
+            emi6 = princ6 / monthscam6;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+
+
+
+        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
+        int monthscam7 = 18;
+        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
+
+
+        princ7 = princ7 * 0.8;
+        // Double rate=0.2;
+        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
+        if ((princ7 * 10 / 8) < 5000.0)
+            emi7 = princ7 / monthscam7;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+
+
+
+        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
+        int monthscam8 = 18;
+        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
+
+
+        princ8 = princ8 * 0.8;
+        // Double rate=0.2;
+        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
+        if ((princ8 * 10 / 8) < 5000.0)
+            emi8 = princ8 / monthscam8;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+
+
+        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
+        int monthscam9 = 18;
+        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
+
+
+        princ9 = princ9 * 0.8;
+        // Double rate=0.2;
+        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
+        if ((princ9 * 10 / 8) < 5000.0)
+            emi9 = princ9/ monthscam9;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+
+
+
+        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
+        int monthscam10 = 18;
+        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
+
+
+        princ10 = princ10 * 0.8;
+        // Double rate=0.2;
+        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
+        if ((princ10 * 10 / 8) < 5000.0)
+            emi10 = princ10/ monthscam10;
+        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
+    }
 
     private void populateFifthRow(){
         TextView price1 = (TextView) findViewById(R.id.title51);
         TextView price2 = (TextView) findViewById(R.id.title52);
         TextView price3 = (TextView) findViewById(R.id.title53);
         TextView price4 = (TextView) findViewById(R.id.title54);
+        TextView price5 = (TextView) findViewById(R.id.title55);
+        TextView price6 = (TextView) findViewById(R.id.title56);
+        TextView price7 = (TextView) findViewById(R.id.title57);
+        TextView price8 = (TextView) findViewById(R.id.title58);
+        TextView price9 = (TextView) findViewById(R.id.title59);
+        TextView price10 = (TextView) findViewById(R.id.title60);
+
         TextView title1 = (TextView) findViewById(R.id.titlexxx51);
         TextView title2 = (TextView) findViewById(R.id.titlexxx52);
         TextView title3 = (TextView) findViewById(R.id.titlexxx53);
         TextView title4 = (TextView) findViewById(R.id.titlexxx54);
+        TextView title5 = (TextView) findViewById(R.id.titlexxx55);
+        TextView title6 = (TextView) findViewById(R.id.titlexxx56);
+        TextView title7 = (TextView) findViewById(R.id.titlexxx57);
+        TextView title8 = (TextView) findViewById(R.id.titlexxx58);
+        TextView title9 = (TextView) findViewById(R.id.titlexxx59);
+        TextView title10 = (TextView) findViewById(R.id.titlexxx60);
+
+
+
         ImageView img1 = (ImageView) findViewById(R.id.img51);
         ImageView img2 = (ImageView) findViewById(R.id.img52);
         ImageView img3 = (ImageView) findViewById(R.id.img53);
         ImageView img4 = (ImageView) findViewById(R.id.img54);
+        ImageView img5 = (ImageView) findViewById(R.id.img55);
+        ImageView img6 = (ImageView) findViewById(R.id.img56);
+        ImageView img7 = (ImageView) findViewById(R.id.img57);
+        ImageView img8 = (ImageView) findViewById(R.id.img58);
+        ImageView img9 = (ImageView) findViewById(R.id.img59);
+        ImageView img10 = (ImageView) findViewById(R.id.img60);
+
         ImageView brand1 = (ImageView) findViewById(R.id.brand51);
         ImageView brand2 = (ImageView) findViewById(R.id.brand52);
         ImageView brand3 = (ImageView) findViewById(R.id.brand53);
         ImageView brand4 = (ImageView) findViewById(R.id.brand54);
+        ImageView brand5 = (ImageView) findViewById(R.id.brand55);
+        ImageView brand6 = (ImageView) findViewById(R.id.brand56);
+        ImageView brand7 = (ImageView) findViewById(R.id.brand57);
+        ImageView brand8 = (ImageView) findViewById(R.id.brand58);
+        ImageView brand9 = (ImageView) findViewById(R.id.brand59);
+        ImageView brand10 = (ImageView) findViewById(R.id.brand60);
         if (Splash.sellers.get(spin).get("0").equals("flipkart"))
             brand1.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("0").equals("amazon"))
@@ -3337,6 +4547,56 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             brand4.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+
+
 
 
 //            card1 = (ImageView) findViewById(R.id.img1);
@@ -3348,6 +4608,12 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         title2.setText(Splash.title.get(spin).get("1"));
         title3.setText(Splash.title.get(spin).get("2"));
         title4.setText(Splash.title.get(spin).get("3"));
+        title5.setText(Splash.title.get(spin).get("4"));
+        title6.setText(Splash.title.get(spin).get("5"));
+        title7.setText(Splash.title.get(spin).get("6"));
+        title8.setText(Splash.title.get(spin).get("7"));
+        title9.setText(Splash.title.get(spin).get("8"));
+        title10.setText(Splash.title.get(spin).get("9"));
 
         Picasso.with(this)
                 .load(Splash.image.get(spin).get("0"))
@@ -3365,6 +4631,32 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .load(Splash.image.get(spin).get("3"))
                 .placeholder(R.drawable.emptyimageproducts)
                 .into(img4);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("4"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img5);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("5"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img6);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("6"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img7);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("7"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img8);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("8"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img9);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("9"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img10);
+
+
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
         int monthscam = 18;
         String cat1 = Splash.category.get(spin).get("0");
@@ -3407,7 +4699,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
         int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ3.intValue());
+        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
 
 
         princ4 = princ4 * 0.8;
@@ -3416,25 +4708,139 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         if ((princ4 * 10 / 8) < 5000.0)
             emi4 = princ4 / monthscam4;
         price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
+
+
+
+
+
+        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
+        int monthscam5 = 18;
+        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
+
+
+        princ5 = princ5 * 0.8;
+        // Double rate=0.2;
+        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
+        if ((princ5 * 10 / 8) < 5000.0)
+            emi5 = princ5 / monthscam5;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+
+
+        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
+        int monthscam6 = 18;
+        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
+
+
+        princ6 = princ6 * 0.8;
+        // Double rate=0.2;
+        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
+        if ((princ6 * 10 / 8) < 5000.0)
+            emi6 = princ6 / monthscam6;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+
+
+
+        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
+        int monthscam7 = 18;
+        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
+
+
+        princ7 = princ7 * 0.8;
+        // Double rate=0.2;
+        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
+        if ((princ7 * 10 / 8) < 5000.0)
+            emi7 = princ7 / monthscam7;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+
+
+
+        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
+        int monthscam8 = 18;
+        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
+
+
+        princ8 = princ8 * 0.8;
+        // Double rate=0.2;
+        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
+        if ((princ8 * 10 / 8) < 5000.0)
+            emi8 = princ8 / monthscam8;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+
+
+        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
+        int monthscam9 = 18;
+        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
+
+
+        princ9 = princ9 * 0.8;
+        // Double rate=0.2;
+        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
+        if ((princ9 * 10 / 8) < 5000.0)
+            emi9 = princ9/ monthscam9;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+
+
+
+        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
+        int monthscam10 = 18;
+        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
+
+
+        princ10 = princ10 * 0.8;
+        // Double rate=0.2;
+        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
+        if ((princ10 * 10 / 8) < 5000.0)
+            emi10 = princ10/ monthscam10;
+        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
     }
+
 
     private void populateSixthRow(){
         TextView price1 = (TextView) findViewById(R.id.title61);
         TextView price2 = (TextView) findViewById(R.id.title62);
         TextView price3 = (TextView) findViewById(R.id.title63);
         TextView price4 = (TextView) findViewById(R.id.title64);
+        TextView price5 = (TextView) findViewById(R.id.title65);
+        TextView price6 = (TextView) findViewById(R.id.title66);
+        TextView price7 = (TextView) findViewById(R.id.title67);
+        TextView price8 = (TextView) findViewById(R.id.title68);
+        TextView price9 = (TextView) findViewById(R.id.title69);
+        TextView price10 = (TextView) findViewById(R.id.title70);
+
         TextView title1 = (TextView) findViewById(R.id.titlexxx61);
         TextView title2 = (TextView) findViewById(R.id.titlexxx62);
         TextView title3 = (TextView) findViewById(R.id.titlexxx63);
         TextView title4 = (TextView) findViewById(R.id.titlexxx64);
+        TextView title5 = (TextView) findViewById(R.id.titlexxx65);
+        TextView title6 = (TextView) findViewById(R.id.titlexxx66);
+        TextView title7 = (TextView) findViewById(R.id.titlexxx67);
+        TextView title8 = (TextView) findViewById(R.id.titlexxx68);
+        TextView title9 = (TextView) findViewById(R.id.titlexxx69);
+        TextView title10 = (TextView) findViewById(R.id.titlexxx70);
+
+
+
         ImageView img1 = (ImageView) findViewById(R.id.img61);
         ImageView img2 = (ImageView) findViewById(R.id.img62);
         ImageView img3 = (ImageView) findViewById(R.id.img63);
         ImageView img4 = (ImageView) findViewById(R.id.img64);
+        ImageView img5 = (ImageView) findViewById(R.id.img65);
+        ImageView img6 = (ImageView) findViewById(R.id.img66);
+        ImageView img7 = (ImageView) findViewById(R.id.img67);
+        ImageView img8 = (ImageView) findViewById(R.id.img68);
+        ImageView img9 = (ImageView) findViewById(R.id.img69);
+        ImageView img10 = (ImageView) findViewById(R.id.img70);
+
         ImageView brand1 = (ImageView) findViewById(R.id.brand61);
         ImageView brand2 = (ImageView) findViewById(R.id.brand62);
         ImageView brand3 = (ImageView) findViewById(R.id.brand63);
         ImageView brand4 = (ImageView) findViewById(R.id.brand64);
+        ImageView brand5 = (ImageView) findViewById(R.id.brand65);
+        ImageView brand6 = (ImageView) findViewById(R.id.brand66);
+        ImageView brand7 = (ImageView) findViewById(R.id.brand67);
+        ImageView brand8 = (ImageView) findViewById(R.id.brand68);
+        ImageView brand9 = (ImageView) findViewById(R.id.brand69);
+        ImageView brand10 = (ImageView) findViewById(R.id.brand70);
         if (Splash.sellers.get(spin).get("0").equals("flipkart"))
             brand1.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("0").equals("amazon"))
@@ -3467,6 +4873,56 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             brand4.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
+            brand4.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("amazon"))
+            brand4.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("paytm"))
+            brand4.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
+            brand4.setImageResource(R.drawable.sdeal_fav1x);
+
+
 
 
 //            card1 = (ImageView) findViewById(R.id.img1);
@@ -3478,6 +4934,12 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         title2.setText(Splash.title.get(spin).get("1"));
         title3.setText(Splash.title.get(spin).get("2"));
         title4.setText(Splash.title.get(spin).get("3"));
+        title5.setText(Splash.title.get(spin).get("4"));
+        title6.setText(Splash.title.get(spin).get("5"));
+        title7.setText(Splash.title.get(spin).get("6"));
+        title8.setText(Splash.title.get(spin).get("7"));
+        title9.setText(Splash.title.get(spin).get("8"));
+        title10.setText(Splash.title.get(spin).get("9"));
 
         Picasso.with(this)
                 .load(Splash.image.get(spin).get("0"))
@@ -3495,6 +4957,32 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .load(Splash.image.get(spin).get("3"))
                 .placeholder(R.drawable.emptyimageproducts)
                 .into(img4);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("4"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img5);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("5"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img6);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("6"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img7);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("7"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img8);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("8"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img9);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("9"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img10);
+
+
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
         int monthscam = 18;
         String cat1 = Splash.category.get(spin).get("0");
@@ -3537,7 +5025,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
         int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ3.intValue());
+        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
 
 
         princ4 = princ4 * 0.8;
@@ -3546,7 +5034,98 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         if ((princ4 * 10 / 8) < 5000.0)
             emi4 = princ4 / monthscam4;
         price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
+
+
+
+
+
+        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
+        int monthscam5 = 18;
+        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
+
+
+        princ5 = princ5 * 0.8;
+        // Double rate=0.2;
+        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
+        if ((princ5 * 10 / 8) < 5000.0)
+            emi5 = princ5 / monthscam5;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+
+
+        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
+        int monthscam6 = 18;
+        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
+
+
+        princ6 = princ6 * 0.8;
+        // Double rate=0.2;
+        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
+        if ((princ6 * 10 / 8) < 5000.0)
+            emi6 = princ6 / monthscam6;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+
+
+
+        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
+        int monthscam7 = 18;
+        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
+
+
+        princ7 = princ7 * 0.8;
+        // Double rate=0.2;
+        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
+        if ((princ7 * 10 / 8) < 5000.0)
+            emi7 = princ7 / monthscam7;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+
+
+
+        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
+        int monthscam8 = 18;
+        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
+
+
+        princ8 = princ8 * 0.8;
+        // Double rate=0.2;
+        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
+        if ((princ8 * 10 / 8) < 5000.0)
+            emi8 = princ8 / monthscam8;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+
+
+        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
+        int monthscam9 = 18;
+        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
+
+
+        princ9 = princ9 * 0.8;
+        // Double rate=0.2;
+        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
+        if ((princ9 * 10 / 8) < 5000.0)
+            emi9 = princ9/ monthscam9;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+
+
+
+        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
+        int monthscam10 = 18;
+        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
+
+
+        princ10 = princ10 * 0.8;
+        // Double rate=0.2;
+        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
+        if ((princ10 * 10 / 8) < 5000.0)
+            emi10 = princ10/ monthscam10;
+        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
     }
+
+
+
+
+
+
+
 
 
 ////

@@ -452,6 +452,14 @@ public class ProductsPage extends AppCompatActivity {
         sellingRs = (TextView) findViewById(R.id.sellerMrpValue);
         titlePro = (TextView) findViewById(R.id.titleProduct);
         query = (EditText) findViewById(R.id.query);
+        query.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Intent in=new Intent(ProductsPage.this,FindProduct.class);
+                startActivity(in);
+                return false;
+            }
+        });
         //    querylearFocus();
         plus = (ImageView) findViewById(R.id.plusImg);
         seller = (ImageView) findViewById(R.id.logo);
@@ -2127,6 +2135,15 @@ public class ProductsPage extends AppCompatActivity {
 
         setContentView(R.layout.wrongurl);
         queryNew = (EditText) findViewById(R.id.query);
+        queryNew.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Intent in=new Intent(ProductsPage.this,FindProduct.class);
+                startActivity(in);
+                return false;
+            }
+        });
+
         queryNew.setInputType(InputType.TYPE_NULL);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
         pasteiconnew = (ImageView) findViewById(R.id.pasteAg);
@@ -2190,6 +2207,14 @@ public class ProductsPage extends AppCompatActivity {
         queryNew = (EditText) findViewById(R.id.query);
         pasteiconnew = (ImageView) findViewById(R.id.pasteAg);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        queryNew.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Intent in=new Intent(ProductsPage.this,FindProduct.class);
+                startActivity(in);
+                return false;
+            }
+        });
         myClipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         queryNew.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -2289,17 +2314,19 @@ public class ProductsPage extends AppCompatActivity {
 
         queryNew = (EditText) findViewById(R.id.query);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+
         backpress();
         myClipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        queryNew.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                pasteiconnew.setVisibility(View.VISIBLE);
-                clickpaste();
-
-                return false;
-            }
-        });
+//        queryNew.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                pasteiconnew.setVisibility(View.VISIBLE);
+//                clickpaste();
+//
+//                return false;
+//            }
+//        });
         clickUrl();
         inc = (TextView) findViewById(R.id.check);
         butcheck = (Button) findViewById(R.id.butcheck);

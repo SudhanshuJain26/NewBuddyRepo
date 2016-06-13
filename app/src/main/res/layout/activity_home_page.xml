@@ -133,8 +133,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/activity_vertical_margin"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:padding = "8dp"
                             android:src="@drawable/close"
                             android:textColor="#ffffff"/>
@@ -1424,6 +1424,330 @@
                                         android:text="Apple iPhone 6"
                                         android:textColor="#33A4D0"/>
                                 </RelativeLayout>
+
+                                <!--<RelativeLayout-->
+                                    <!--android:layout_width="140dp"-->
+                                    <!--android:id="@+id/rl15"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_margin="5dp"-->
+                                    <!--android:background="#fff"-->
+                                    <!--android:clickable="true"-->
+                                    <!--&gt;-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/img15"-->
+                                        <!--android:layout_width="280dp"-->
+                                        <!--android:layout_height="120dp"-->
+                                        <!--android:padding="@dimen/fab_margin"-->
+                                        <!--android:src="@drawable/mob"-->
+                                        <!--android:layout_alignTop="@+id/brand15"-->
+                                        <!--android:layout_alignParentLeft="true"-->
+                                        <!--android:layout_alignParentStart="true" />-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/brand15"-->
+                                        <!--android:layout_width="25dp"-->
+                                        <!--android:layout_height="25dp"-->
+                                        <!--android:layout_alignParentRight="true"-->
+                                        <!--android:layout_margin="4dp"-->
+                                        <!--android:src="@drawable/sdeal_fav1x"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/titlexxx15"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="30dp"-->
+                                        <!--android:layout_below="@id/img15"-->
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:textSize="12sp"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:fontFamily="sans-serif-light"-->
+                                        <!--/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/title15"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_below="@id/titlexxx15"-->
+                                        <!--android:layout_marginBottom="@dimen/four"-->
+                                        <!--android:layout_marginTop="5dp"-->
+                                        <!--android:fontFamily="sans-serif-medium"-->
+
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:textColor="#33A4D0"/>-->
+                                <!--</RelativeLayout>-->
+
+                                <RelativeLayout
+                                    android:layout_width="140dp"
+                                    android:id="@+id/rl16"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:background="#fff"
+                                    android:clickable="true"
+                                    >
+
+                                    <ImageView
+                                        android:id="@+id/img16"
+                                        android:layout_width="280dp"
+                                        android:layout_height="120dp"
+                                        android:padding="@dimen/fab_margin"
+                                        android:src="@drawable/mob"
+                                        android:layout_alignTop="@+id/brand16"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true" />
+
+                                    <ImageView
+                                        android:id="@+id/brand16"
+                                        android:layout_width="25dp"
+                                        android:layout_height="25dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_margin="4dp"
+                                        android:src="@drawable/sdeal_fav1x"/>
+
+                                    <TextView
+                                        android:id="@+id/titlexxx16"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:layout_below="@id/img16"
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:textSize="12sp"
+                                        android:text="Apple iPhone 6"
+                                        android:fontFamily="sans-serif-light"
+                                        />
+
+                                    <TextView
+                                        android:id="@+id/title16"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/titlexxx16"
+                                        android:layout_marginBottom="@dimen/four"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="sans-serif-medium"
+
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#33A4D0"/>
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="140dp"
+                                    android:id="@+id/rl17"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:background="#fff"
+                                    android:clickable="true"
+                                    >
+
+                                    <ImageView
+                                        android:id="@+id/img17"
+                                        android:layout_width="280dp"
+                                        android:layout_height="120dp"
+                                        android:padding="@dimen/fab_margin"
+                                        android:src="@drawable/mob"
+                                        android:layout_alignTop="@+id/brand17"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true" />
+
+                                    <ImageView
+                                        android:id="@+id/brand17"
+                                        android:layout_width="25dp"
+                                        android:layout_height="25dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_margin="4dp"
+                                        android:src="@drawable/sdeal_fav1x"/>
+
+                                    <TextView
+                                        android:id="@+id/titlexxx17"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:layout_below="@id/img17"
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:textSize="12sp"
+                                        android:text="Apple iPhone 6"
+                                        android:fontFamily="sans-serif-light"
+                                        />
+
+                                    <TextView
+                                        android:id="@+id/title17"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/titlexxx17"
+                                        android:layout_marginBottom="@dimen/four"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="sans-serif-medium"
+
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#33A4D0"/>
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="140dp"
+                                    android:id="@+id/rl18"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:background="#fff"
+                                    android:clickable="true"
+                                    >
+
+                                    <ImageView
+                                        android:id="@+id/img18"
+                                        android:layout_width="280dp"
+                                        android:layout_height="120dp"
+                                        android:padding="@dimen/fab_margin"
+                                        android:src="@drawable/mob"
+                                        android:layout_alignTop="@+id/brand18"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true" />
+
+                                    <ImageView
+                                        android:id="@+id/brand18"
+                                        android:layout_width="25dp"
+                                        android:layout_height="25dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_margin="4dp"
+                                        android:src="@drawable/sdeal_fav1x"/>
+
+                                    <TextView
+                                        android:id="@+id/titlexxx18"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:layout_below="@id/img18"
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:textSize="12sp"
+                                        android:text="Apple iPhone 6"
+                                        android:fontFamily="sans-serif-light"
+                                        />
+
+                                    <TextView
+                                        android:id="@+id/title18"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/titlexxx18"
+                                        android:layout_marginBottom="@dimen/four"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="sans-serif-medium"
+
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#33A4D0"/>
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="140dp"
+                                    android:id="@+id/rl19"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:background="#fff"
+                                    android:clickable="true"
+                                    >
+
+                                    <ImageView
+                                        android:id="@+id/img19"
+                                        android:layout_width="280dp"
+                                        android:layout_height="120dp"
+                                        android:padding="@dimen/fab_margin"
+                                        android:src="@drawable/mob"
+                                        android:layout_alignTop="@+id/brand19"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true" />
+
+                                    <ImageView
+                                        android:id="@+id/brand19"
+                                        android:layout_width="25dp"
+                                        android:layout_height="25dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_margin="4dp"
+                                        android:src="@drawable/sdeal_fav1x"/>
+
+                                    <TextView
+                                        android:id="@+id/titlexxx19"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:layout_below="@id/img19"
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:textSize="12sp"
+                                        android:text="Apple iPhone 6"
+                                        android:fontFamily="sans-serif-light"
+                                        />
+
+                                    <TextView
+                                        android:id="@+id/title19"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/titlexxx19"
+                                        android:layout_marginBottom="@dimen/four"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="sans-serif-medium"
+
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#33A4D0"/>
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="140dp"
+                                    android:id="@+id/rl20"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:background="#fff"
+                                    android:clickable="true"
+                                    >
+
+                                    <ImageView
+                                        android:id="@+id/img20"
+                                        android:layout_width="280dp"
+                                        android:layout_height="120dp"
+                                        android:padding="@dimen/fab_margin"
+                                        android:src="@drawable/mob"
+                                        android:layout_alignTop="@+id/brand20"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true" />
+
+                                    <ImageView
+                                        android:id="@+id/brand20"
+                                        android:layout_width="25dp"
+                                        android:layout_height="25dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_margin="4dp"
+                                        android:src="@drawable/sdeal_fav1x"/>
+
+                                    <TextView
+                                        android:id="@+id/titlexxx20"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:layout_below="@id/img20"
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:textSize="12sp"
+                                        android:text="Apple iPhone 6"
+                                        android:fontFamily="sans-serif-light"
+                                        />
+
+                                    <TextView
+                                        android:id="@+id/title20"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/titlexxx20"
+                                        android:layout_marginBottom="@dimen/four"
+                                        android:layout_marginTop="5dp"
+                                        android:fontFamily="sans-serif-medium"
+
+                                        android:gravity="center"
+                                        android:maxLines="2"
+                                        android:text="Apple iPhone 6"
+                                        android:textColor="#33A4D0"/>
+                                </RelativeLayout>
                             </LinearLayout>
                         </com.balysv.materialripple.MaterialRippleLayout>
                         </HorizontalScrollView>
@@ -1687,6 +2011,318 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_below="@id/titlexxx24"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:id="@+id/rl25"
+                                        android:clickable="true">
+
+                                        <ImageView
+                                            android:id="@+id/img25"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand25"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand25"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx25"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img25"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title25"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx25"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:id="@+id/rl26"
+                                        android:clickable="true">
+
+                                        <ImageView
+                                            android:id="@+id/img26"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand26"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand26"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx26"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img26"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title26"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx26"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:id="@+id/rl27"
+                                        android:clickable="true">
+
+                                        <ImageView
+                                            android:id="@+id/img27"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand27"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand27"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx27"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img27"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title27"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx27"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:id="@+id/rl28"
+                                        android:clickable="true">
+
+                                        <ImageView
+                                            android:id="@+id/img28"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand28"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand28"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx28"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img28"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title28"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx28"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:id="@+id/rl29"
+                                        android:clickable="true">
+
+                                        <ImageView
+                                            android:id="@+id/img29"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand29"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand29"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx29"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img29"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title29"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx29"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:id="@+id/rl30"
+                                        android:clickable="true">
+
+                                        <ImageView
+                                            android:id="@+id/img30"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand30"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand30"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx30"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img30"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title30"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx30"
                                             android:layout_marginBottom="@dimen/four"
                                             android:layout_marginTop="5dp"
                                             android:fontFamily="sans-serif-medium"
@@ -1968,6 +2604,324 @@
                                             android:text="Apple iPhone 6"
                                             android:textColor="#33A4D0"/>
                                     </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/r35"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img35"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand35"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand35"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx35"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img35"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:maxLines="2"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title35"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx35"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/r36"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img36"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand36"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand36"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx36"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img36"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:maxLines="2"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title36"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx36"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/r37"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img37"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand37"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand37"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx37"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img37"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:maxLines="2"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title37"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx37"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/r38"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img38"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand38"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand38"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx38"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img38"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:maxLines="2"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title38"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx38"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/r39"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img39"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand39"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand39"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx39"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img39"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:maxLines="2"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title39"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx39"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/r40"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img40"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand40"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand40"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx40"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img40"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:maxLines="2"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title40"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx40"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
                                 </LinearLayout>
                             </com.balysv.materialripple.MaterialRippleLayout>
                         </HorizontalScrollView>
@@ -2240,6 +3194,325 @@
                                             android:text="Apple iPhone 6"
                                             android:textColor="#33A4D0"/>
                                     </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl45"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img45"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand45"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand45"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx45"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img45"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title45"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx45"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl46"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img46"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand46"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand46"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx46"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img46"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title46"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx46"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl47"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img47"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand47"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand47"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx47"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img47"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title47"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx47"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl48"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img48"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand48"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand48"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx48"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img48"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title48"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx48"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl49"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img49"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand49"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand49"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx49"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img49"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title49"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx49"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl50"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img50"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand50"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand50"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx50"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img50"
+                                            android:gravity="center"
+                                            android:textSize="12sp"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title50"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx50"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
                                 </LinearLayout>
                             </com.balysv.materialripple.MaterialRippleLayout>
                         </HorizontalScrollView>
@@ -2501,6 +3774,317 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_below="@id/titlexxx54"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl55"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img55"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand55"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand55"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx55"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img55"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title55"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx55"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl56"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img56"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand56"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand56"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx56"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img56"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title56"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx56"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl57"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img57"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand57"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand57"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx57"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img57"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title57"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx57"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl58"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img58"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand58"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand58"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx58"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img58"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title58"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx58"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl59"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img59"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand59"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand59"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx59"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img59"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title59"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx59"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl60"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img60"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand60"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand60"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx60"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img60"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title60"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx60"
                                             android:layout_marginBottom="@dimen/four"
                                             android:layout_marginTop="5dp"
                                             android:fontFamily="sans-serif-medium"
@@ -2780,6 +4364,319 @@
                                             android:text="Apple iPhone 6"
                                             android:textColor="#33A4D0"/>
                                     </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl65"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img65"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand65"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand65"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx65"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img65"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title65"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx65"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl66"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img66"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand66"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand66"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx66"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img66"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title66"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx66"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl67"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img67"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand67"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand67"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx67"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img67"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title67"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx67"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl68"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img68"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand68"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand68"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx68"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img68"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title68"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx68"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl69"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img69"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand69"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand69"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx69"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img69"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title69"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx69"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="140dp"
+                                        android:id="@+id/rl70"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:background="#fff"
+                                        android:clickable="true"
+                                        >
+
+                                        <ImageView
+                                            android:id="@+id/img70"
+                                            android:layout_width="280dp"
+                                            android:layout_height="120dp"
+                                            android:padding="@dimen/fab_margin"
+                                            android:src="@drawable/mob"
+                                            android:layout_alignTop="@+id/brand70"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                        <ImageView
+                                            android:id="@+id/brand70"
+                                            android:layout_width="25dp"
+                                            android:layout_height="25dp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_margin="4dp"
+                                            android:src="@drawable/sdeal_fav1x"/>
+
+                                        <TextView
+                                            android:id="@+id/titlexxx70"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:layout_below="@id/img70"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:textSize="12sp"
+                                            android:text="Apple iPhone 6"
+                                            android:fontFamily="sans-serif-light" />
+
+                                        <TextView
+                                            android:id="@+id/title70"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/titlexxx70"
+                                            android:layout_marginBottom="@dimen/four"
+                                            android:layout_marginTop="5dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:gravity="center"
+                                            android:maxLines="2"
+                                            android:text="Apple iPhone 6"
+                                            android:textColor="#33A4D0"/>
+                                    </RelativeLayout>
+
                                 </LinearLayout>
                             </com.balysv.materialripple.MaterialRippleLayout>
                         </HorizontalScrollView>

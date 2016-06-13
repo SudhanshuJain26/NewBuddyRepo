@@ -11,7 +11,9 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,6 +30,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -62,6 +66,7 @@ public class FindProduct extends AppCompatActivity {
     private String sellerNme = "";
     SharedPreferences sharedpreferences;
     public static boolean linkpressed = false;
+    public static boolean validUrl = false;
 
 
     @Override
@@ -104,7 +109,7 @@ public class FindProduct extends AppCompatActivity {
 
                    search.setText("   " + text);
 
-                   taptoSearch.setVisibility(View.GONE);
+                  // taptoSearch.setVisibility(View.GONE);
 
                } catch (Exception e) {
                    Toast.makeText(FindProduct.this, "Please copy a URL", Toast.LENGTH_SHORT).show();
@@ -129,7 +134,7 @@ public class FindProduct extends AppCompatActivity {
         //recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         //adp = new SearchedProductListAdapter(recentSearchItemsArrayList,this);
 
-        new FindRecentProductLinks(FindProduct.this).execute("https://ninja.hellobuddy.in/api/user/product/recent?userid="+userId +"&count=5");
+        new FindRecentProductLinks(FindProduct.this).execute(getApplicationContext().getResources().getString(R.string.server)+"api/user/product/recent?userid="+userId +"&count=5");
 
 //        if(ProductsPage.backpressed){
 //            RecentSearchItems items = new RecentSearchItems(ProductsPage.brand1,ProductsPage.title1,Integer.toString(ProductsPage.price),productId);
@@ -175,59 +180,76 @@ public class FindProduct extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() != 0) {
-                    Splash.checkNot = 1;
 
-                    search.requestFocus();
-                    //clickpaste();
-                    parse(search.getText().toString().trim());
 
-                    if ((checkValidUrl == 0) && (checkValidFromApis == 0)) {
-                        Long time = Calendar.getInstance().getTimeInMillis() / 1000;
-                        Intent in = new Intent(FindProduct.this, ProductsPage.class);
-                        in.putExtra("seller", sellerNme);
-                        in.putExtra("product", productId);
-                        in.putExtra("query", search.getText().toString());
-                        //adp.addObject(new RecentSearchItems());
-                        //search.setText("");
-                        in.putExtra("page", "api");
-                        checkValidFromApis = 0;
-                        checkValidUrl = 0;
-                        startActivity(in);
-                        //                            if (time + 5 < userP.getLong("expires", 0))
-                        ////                                new checkAuth().execute(url);//
-                        //                            {
-                        //                                new linkSearch().execute();
-                        //                            } else
-                        //                                //   new checkAuth().execute(url);
-                        //                                new AuthTokc().execute("cc");
+                    if (s.length() != 0) {
+//                        try {
+//                            URL url = new URL(s.toString());
+//                        } catch (MalformedURLException e) {
+//                            e.getMessage();
+//                            Log.i("Invalid URL","Invalid");
+//                            Toast.makeText(getApplicationContext(),"Please paste valid URL",Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
 
-                    } else if (checkValidUrl == 1) {
-                        //monkey page
-                        Intent in = new Intent(FindProduct.this, ProductsPage.class);
-                        //search.setText("");
-                        in.putExtra("query", search.getText().toString());
-                        in.putExtra("page", "monkey");
-                        startActivity(in);
-                        checkValidFromApis = 0;
-                        checkValidUrl = 0;
-                        //                            finish();
-                        page = "monkey";
-                    } else if ((checkValidFromApis == 1)) {
-                        //not monley page
-                        //search.setText("");
-                        Intent in = new Intent(FindProduct.this, ProductsPage.class);
-                        in.putExtra("query", search.getText().toString());
-                        in.putExtra("seller", sellerNme);
-                        in.putExtra("page", "pay");
-                        startActivity(in);
-                        checkValidFromApis = 0;
-                        checkValidUrl = 0;
-                        //                            finish();
-                        page = "pay";
+                       // validUrl = URLUtil.isValidUrl(s.toString());
+
+
+                            Splash.checkNot = 1;
+
+                            search.requestFocus();
+                            //clickpaste();
+                            parse(search.getText().toString().trim());
+
+                            if ((checkValidUrl == 0) && (checkValidFromApis == 0)) {
+                                Long time = Calendar.getInstance().getTimeInMillis() / 1000;
+                                Intent in = new Intent(FindProduct.this, ProductsPage.class);
+                                in.putExtra("seller", sellerNme);
+                                in.putExtra("product", productId);
+                                in.putExtra("query", search.getText().toString());
+                                //adp.addObject(new RecentSearchItems());
+                                //search.setText("");
+                                in.putExtra("page", "api");
+                                checkValidFromApis = 0;
+                                checkValidUrl = 0;
+                                startActivity(in);
+                                //                            if (time + 5 < userP.getLong("expires", 0))
+                                ////                                new checkAuth().execute(url);//
+                                //                            {
+                                //                                new linkSearch().execute();
+                                //                            } else
+                                //                                //   new checkAuth().execute(url);
+                                //                                new AuthTokc().execute("cc");
+
+                            } else if (checkValidUrl == 1) {
+                                //monkey page
+                                Intent in = new Intent(FindProduct.this, ProductsPage.class);
+                                //search.setText("");
+                                in.putExtra("query", search.getText().toString());
+                                in.putExtra("page", "monkey");
+                                startActivity(in);
+                                checkValidFromApis = 0;
+                                checkValidUrl = 0;
+                                //                            finish();
+                                page = "monkey";
+                            } else if ((checkValidFromApis == 1)) {
+                                //not monley page
+                                //search.setText("");
+                                Intent in = new Intent(FindProduct.this, ProductsPage.class);
+                                in.putExtra("query", search.getText().toString());
+                                in.putExtra("seller", sellerNme);
+                                in.putExtra("page", "pay");
+                                startActivity(in);
+                                checkValidFromApis = 0;
+                                checkValidUrl = 0;
+                                //                            finish();
+                                page = "pay";
+                            }
+
+
+
                     }
 
-                }
             }
         });
 
@@ -362,11 +384,13 @@ public class FindProduct extends AppCompatActivity {
         super.onResume();
         search.setText("");
         taptoSearch.setVisibility(View.VISIBLE);
+        if(recentSearchItemsArrayList.size()==0)
+            textView.setVisibility(View.INVISIBLE);
         if(ProductsPage.backpressed){
             //RecentSearchItems items = new RecentSearchItems(ProductsPage.brand1,ProductsPage.title1,Integer.toString(ProductsPage.price),productId);
             if(adp!=null){
             //adp.addObject(items);
-            textView.setVisibility(View.VISIBLE);
+           // textView.setVisibility(View.VISIBLE);
             adp.notifyDataSetChanged();
 
 
@@ -623,15 +647,17 @@ private class FindRecentProductLinks extends AsyncTask<String,Void,String> {
                         JSONArray data = jsonObject.getJSONArray("data");
                         recentSearchItemsArrayList = new ArrayList<>();
                         for(int i=0;i<data.length();i++){
-
-                            JSONObject jsonObject1 = data.getJSONObject(i);
-                            String seller = jsonObject1.getString("seller");
-                            String title = jsonObject1.getString("title");
-                            String price = jsonObject1.getString("sellingPrice");
-                            String productId = jsonObject1.getString("fkProductId");
-                            RecentSearchItems recentSearchItems = new RecentSearchItems(seller,price,title,productId);
-                            recentSearchItemsArrayList.add(recentSearchItems);
-
+                            try {
+                                JSONObject jsonObject1 = data.getJSONObject(i);
+                                String seller = jsonObject1.getString("seller");
+                                String title = jsonObject1.getString("title");
+                                String price = jsonObject1.getString("sellingPrice");
+                                String productId = jsonObject1.getString("fkProductId");
+                                RecentSearchItems recentSearchItems = new RecentSearchItems(seller, price, title, productId);
+                                recentSearchItemsArrayList.add(recentSearchItems);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                         return "win";
                     } catch (JSONException e) {
@@ -658,6 +684,10 @@ private class FindRecentProductLinks extends AsyncTask<String,Void,String> {
         super.onPostExecute(s);
         adp = new SearchedProductListAdapter(recentSearchItemsArrayList,ctx);
         recyclerView.setAdapter(adp);
+        if(recentSearchItemsArrayList.size()==0)
+            textView.setVisibility(View.INVISIBLE);
+        else
+            textView.setVisibility(View.VISIBLE);
 
 
 

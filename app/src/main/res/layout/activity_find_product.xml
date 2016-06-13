@@ -129,12 +129,12 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:text="Recently Pasted"
             android:gravity="center"
             android:textSize="14sp"
             android:textColor="#fff"
-            android:padding="10dp"
+
             android:alpha = "0.4"
             android:layout_gravity="center_vertical"
             android:id="@+id/txtheader"
@@ -146,7 +146,9 @@
         android:id="@+id/products_list"
         android:layout_below="@+id/txtheader"
         android:divider="@null"
-        android:padding="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         ></ListView>
 
 

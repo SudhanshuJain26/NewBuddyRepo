@@ -478,7 +478,7 @@ public class Splash extends AppCompatActivity {
 //                    urldisplay = "apparels";
 //                else if (urldisplay.equals("Health%20and%20Beauty"))
 //                    urldisplay = "homeandbeauty";
-                String url = getApplicationContext().getString(R.string.server) + "api/product/trending?category=" + urldisplay;
+                String url = getApplicationContext().getString(R.string.server) + "api/product/trending?category=" + urldisplay + "&count=10";
 
                 HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
                 if (response != null) {
@@ -494,28 +494,32 @@ public class Splash extends AppCompatActivity {
                         if (resp.getString("status").equals("success")) {
                             JSONArray data1 = new JSONArray(resp.getString("data"));
                             int lenght = data1.length();
-                            for (int j = 0; j < lenght; j++) {
-                                JSONObject js = data1.getJSONObject(j);
-                                String categ = js.getString("category");
-                                String subc = js.getString("subCategory");
-                                String brand1 = js.getString("brand");
-                                String id = js.getString("title");
-                                String mrp = js.getString("mrp");
-                                String seller = js.getString("seller");
-                                String fkid = js.getString("fkProductId");
-                                String selling_price = js.getString("sellingPrice");
-                                JSONObject img = new JSONObject(js.getString("imgUrls"));
-                                String imgurl = img.getString("200x200");
-                                category.get(urldisplay).put(String.valueOf(j), categ);
-                                subCategory.get(urldisplay).put(String.valueOf(j), subc);
-                                brand.get(urldisplay).put(String.valueOf(j), brand1);
-                                image.get(urldisplay).put(String.valueOf(j), imgurl);
-                                mrp1.get(urldisplay).put(String.valueOf(j), mrp);
-                                title.get(urldisplay).put(String.valueOf(j), id);
-                                fkid1.get(urldisplay).put(String.valueOf(j), fkid);
-                                selling.get(urldisplay).put(String.valueOf(j), selling_price);
-                                sellers.get(urldisplay).put(String.valueOf(j), seller);
 
+                            for (int j = 0; j < 10; j++) {
+                                try {
+                                    JSONObject js = data1.getJSONObject(j);
+                                    String categ = js.getString("category");
+                                    String subc = js.getString("subCategory");
+                                    String brand1 = js.getString("brand");
+                                    String id = js.getString("title");
+                                    String mrp = js.getString("mrp");
+                                    String seller = js.getString("seller");
+                                    String fkid = js.getString("fkProductId");
+                                    String selling_price = js.getString("sellingPrice");
+                                    JSONObject img = new JSONObject(js.getString("imgUrls"));
+                                    String imgurl = img.getString("200x200");
+                                    category.get(urldisplay).put(String.valueOf(j), categ);
+                                    subCategory.get(urldisplay).put(String.valueOf(j), subc);
+                                    brand.get(urldisplay).put(String.valueOf(j), brand1);
+                                    image.get(urldisplay).put(String.valueOf(j), imgurl);
+                                    mrp1.get(urldisplay).put(String.valueOf(j), mrp);
+                                    title.get(urldisplay).put(String.valueOf(j), id);
+                                    fkid1.get(urldisplay).put(String.valueOf(j), fkid);
+                                    selling.get(urldisplay).put(String.valueOf(j), selling_price);
+                                    sellers.get(urldisplay).put(String.valueOf(j), seller);
+                                }catch (JSONException e){
+                                    e.printStackTrace();
+                                }
 
                             }
                             Log.i("trending", "called");

@@ -100,7 +100,6 @@ public class PaymentLive  extends Activity {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getWindow().setFeatureInt(Window.FEATURE_PROGRESS,
                 Window.PROGRESS_VISIBILITY_ON);
-
         // mProgressBar = new ProgressDialog(mContext);
         showDialog(DIALOG2_KEY);
 //        getActionBar().setBackgroundDrawable(
@@ -137,7 +136,7 @@ public class PaymentLive  extends Activity {
                 e=String.valueOf(d);
             System.out.println(e);
             long t=System.currentTimeMillis();
-                
+
             randomStr = String.valueOf(t)+e;
 
             transactionId = hashCal("SHA-256", randomStr).substring(0,

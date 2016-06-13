@@ -1414,7 +1414,9 @@ mValue=minDownpayment;
             dayToday = d;
             emi = Math.ceil((principal * rate * Math.pow(1 + rate, months - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, months) - 1));
         }
-
+if(emi<0)
+    return 0.0;
+        else
         return emi;
     }
 
@@ -1480,8 +1482,9 @@ int w=0;
             dValue.setText(String.valueOf(mValue));
             sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
 //            EMIcheck=(Math.round(calculateEmi(sellingPrice, Double.valueOf(searchPrice), monthsnow)));
-            EMIcheck=Math.round(calculateEmi(sellingPrice-mValue*1.0, Double.valueOf(searchPrice), monthsnow));
-            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice-mValue*1.0, Double.valueOf(searchPrice), monthsnow)))+" per month");
+            EMIcheck=Math.round(calculateEmi(sellingPrice-mValue*1.0+secondServicecharge, Double.valueOf(searchPrice), monthsnow));
+
+            emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(EMIcheck)+" per month");
             Double tot = calculateEmi(sellingPrice * 0.8, Double.valueOf(sellingPrice), monthsnow) * monthsnow + sellingPrice * .2;
             totalLoan.setText(String.valueOf(Math.round(tot)));
 

@@ -1,4 +1,4 @@
-package indwin.c3.shareapp;
+ package indwin.c3.shareapp;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -863,6 +863,7 @@ public class HomePage extends AppCompatActivity {
                         paste = (ImageView) findViewById(R.id.pasteAg);
                         query.requestFocus();
                         clickpaste();
+                        if(query.getText().toString().trim().length()!=0)
                         parse(query.getText().toString().trim());
 
                         if ((checkValidUrl == 0) && (checkValidFromApis == 0)) {
@@ -1751,7 +1752,7 @@ public class HomePage extends AppCompatActivity {
             sellerNme = "flipkart";
             pos = parseString.indexOf("pid");
             if (pos != -1) {
-                for (int j = pos + 4; ; j++) {
+                for (int j = pos + 4; j<parseString.length(); j++) {
                     if (parseString.charAt(j) == '&')
                         break;
                     else {

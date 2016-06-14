@@ -11,6 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/abc_action_bar_default_height_material"
         android:background="#3380B6">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/arrowlay"
+            android:layout_height="match_parent">
+
+
 
         <ImageView
             android:id="@+id/backo"
@@ -22,6 +28,7 @@
             android:layout_marginTop="18dp"
             android:src="@drawable/back11"
             android:tint="#ffffff" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,7 +37,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
-            android:layout_toRightOf="@id/backo"
+            android:layout_toRightOf="@id/arrowlay"
             android:text="Product Finder"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffff" />
@@ -114,8 +121,8 @@ doesn't seem correct!"
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:layout_below="@id/oops"
-                android:text="Make sure you have copied he entire link!
- If is still doesn't work,take a screenshot of the
+                android:text="Make sure you have copied the entire link!
+ If it still doesn't work,take a screenshot of the
  product page and attach it here."
                 />
             <ImageView

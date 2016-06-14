@@ -237,7 +237,7 @@ private ImageView pasteiconnew;
             int dp = Integer.parseInt(s);
             Double m = sellingPrice * .2;
 
-            if ((dp >= minDownpayment))//&& w>=mindownn
+            if ((dp >= minDownpayment)&&(dp<=sellingPrice+secondServicecharge))//&& w>=mindownn
             {
                 // TODO: 5/14/2016
                 mValue = dp;
@@ -620,6 +620,19 @@ if(dummyCl==1000)
 
                     checkout.setEnabled(false);
                     TextView ok = (TextView) popUpView.findViewById(R.id.ok1);
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popup.dismiss();
+                            Intent profile = new Intent(ProductsPage.this, ProfileActivity.class);
+                            startActivity(profile);
+                            finish();
+                            overridePendingTransition(0, 0);
+                            checkout.setEnabled(true);
+                            //RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
+                            cover1.setVisibility(View.INVISIBLE);
+                        }
+                    });
                     cover1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -2493,6 +2506,7 @@ if(searchPrice<=150)
                 popup.dismiss();
                 RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
 //                prod.setTi(Color.parseColor("#CC000000"));
+                checkout.setEnabled(true);
                 cover.setVisibility(View.GONE);}
             else
             {finish();}}

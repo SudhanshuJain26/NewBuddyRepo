@@ -107,7 +107,7 @@ public class Splash extends AppCompatActivity {
         sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
         String json = sh.getString("UserObject", "");
         setNewIdsNull(json);
-        migrateImages();
+        //migrateImages();
         json = sh.getString("UserObject", "");
         boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
         if (isUpdatingDB) {

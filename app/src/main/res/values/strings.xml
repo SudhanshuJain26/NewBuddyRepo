@@ -50,8 +50,8 @@
     </string>
 
     <string name="title_activity_profile_form_step1">ProfileFormStep1</string>
-    <string name="server">https://ssl.hellobuddy.in/</string>
-    <!--<string name="server">https://ninja.hellobuddy.in/</string>-->
+    <!--<string name="server">https://ssl.hellobuddy.in/</string>-->
+    <string name="server">https://ninja.hellobuddy.in/</string>
     <string name="title_choose_image">Choose an Image</string>
     <string-array name="aadhar_or_pan">
         <item>Aadhar Number</item>

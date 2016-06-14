@@ -83,6 +83,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
             reviewUrl = getIntent().getExtras().getString("reviewUrl");
         } catch (Exception e) {
         }
+
         setContentView(R.layout.activity_view_form);
         setTheme(R.style.DrawerArrowStyle2);
         https:
@@ -137,6 +138,8 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
 
         else if (which_page == 999)
             test.setText("Recharge Paytm Wallet");
+        else if( which_page==20)
+            test.setText("Insane Deals");
 
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
 
@@ -599,6 +602,13 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
                         try {
                             url = reviewUrl;
                         } catch (Exception e) {
+                        }
+
+                    case 20:
+                        try{
+                            url = "http://hellobuddy.in/deals";
+                        }catch (Exception e){
+
                         }
                         break;
 

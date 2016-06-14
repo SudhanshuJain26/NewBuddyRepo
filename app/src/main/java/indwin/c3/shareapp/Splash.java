@@ -36,8 +36,10 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -66,7 +68,7 @@ public class Splash extends AppCompatActivity {
     static HashMap<String, HashMap<String, String>> subCategory;
     static HashMap<String, HashMap<String, String>> brand;
     private RelativeLayout sp;
-    static int checkNot = 0;
+    public static int checkNot = 0;
     SharedPreferences sh, sh_otp;
 
     public static int notify = 0;
@@ -360,7 +362,7 @@ public class Splash extends AppCompatActivity {
 
     private class ItemsByKeyword extends
 
-                                 AsyncTask<String, Void, String> {
+            AsyncTask<String, Void, String> {
 
 
         @Override
@@ -427,6 +429,7 @@ public class Splash extends AppCompatActivity {
                 new trending().execute("Health%20and%20Beauty");
                 new trending().execute("Electronics");
                 new trending().execute("Footwear");
+                new GetTrendingProducts().execute("trending");
 
 
             }
@@ -435,7 +438,7 @@ public class Splash extends AppCompatActivity {
     }
 
     public class trending extends
-                          AsyncTask<String, Void, String> {
+            AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             //            spinner.setVisibility(View.VISIBLE);
@@ -454,6 +457,7 @@ public class Splash extends AppCompatActivity {
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
 
+
                 // httppost.setHeader("x-access-token", tok_sp);
                 // String token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NTY3MjY1NzMsImV4cCI6MTQ1Njc2MjU3M30.98mQFcYm5Uf3Fd7ZNPD-OwMIfObu7vfoq9zNtCCLfyI";
                 // payload.put("action", details.get("action"));
@@ -467,14 +471,14 @@ public class Splash extends AppCompatActivity {
 
 
                 // url2=getApplicationContext().getString(R.string.server)+"api/login/verifyotp";
-                if (urldisplay.equals("Computers&subCategory=Laptops"))
-                    urldisplay = "Laptops";
-
-                else if (urldisplay.equals("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle"))
-                    urldisplay = "apparels";
-                else if (urldisplay.equals("Health%20and%20Beauty"))
-                    urldisplay = "homeandbeauty";
-                String url = getApplicationContext().getString(R.string.server) + "api/product/trending?category=" + urldisplay;
+//                if (urldisplay.equals("Computers&subCategory=Laptops"))
+//                    urldisplay = "Laptops";
+//
+//                else if (urldisplay.equals("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle"))
+//                    urldisplay = "apparels";
+//                else if (urldisplay.equals("Health%20and%20Beauty"))
+//                    urldisplay = "homeandbeauty";
+                String url = getApplicationContext().getString(R.string.server) + "api/product/trending?category=" + urldisplay + "&count=10";
 
                 HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
                 if (response != null) {
@@ -490,29 +494,35 @@ public class Splash extends AppCompatActivity {
                         if (resp.getString("status").equals("success")) {
                             JSONArray data1 = new JSONArray(resp.getString("data"));
                             int lenght = data1.length();
-                            for (int j = 0; j < lenght; j++) {
-                                JSONObject js = data1.getJSONObject(j);
-                                String categ = js.getString("category");
-                                String subc = js.getString("subCategory");
-                                String brand1 = js.getString("brand");
-                                String id = js.getString("title");
-                                String mrp = js.getString("mrp");
-                                String seller = js.getString("seller");
-                                String fkid = js.getString("fkProductId");
-                                String selling_price = js.getString("sellingPrice");
-                                JSONObject img = new JSONObject(js.getString("imgUrls"));
-                                String imgurl = img.getString("200x200");
-                                category.get(urldisplay).put(String.valueOf(j), categ);
-                                subCategory.get(urldisplay).put(String.valueOf(j), subc);
-                                brand.get(urldisplay).put(String.valueOf(j), brand1);
-                                image.get(urldisplay).put(String.valueOf(j), imgurl);
-                                mrp1.get(urldisplay).put(String.valueOf(j), mrp);
-                                title.get(urldisplay).put(String.valueOf(j), id);
-                                fkid1.get(urldisplay).put(String.valueOf(j), fkid);
-                                selling.get(urldisplay).put(String.valueOf(j), selling_price);
-                                sellers.get(urldisplay).put(String.valueOf(j), seller);
-                                String p = id;
+
+                            for (int j = 0; j < 10; j++) {
+                                try {
+                                    JSONObject js = data1.getJSONObject(j);
+                                    String categ = js.getString("category");
+                                    String subc = js.getString("subCategory");
+                                    String brand1 = js.getString("brand");
+                                    String id = js.getString("title");
+                                    String mrp = js.getString("mrp");
+                                    String seller = js.getString("seller");
+                                    String fkid = js.getString("fkProductId");
+                                    String selling_price = js.getString("sellingPrice");
+                                    JSONObject img = new JSONObject(js.getString("imgUrls"));
+                                    String imgurl = img.getString("200x200");
+                                    category.get(urldisplay).put(String.valueOf(j), categ);
+                                    subCategory.get(urldisplay).put(String.valueOf(j), subc);
+                                    brand.get(urldisplay).put(String.valueOf(j), brand1);
+                                    image.get(urldisplay).put(String.valueOf(j), imgurl);
+                                    mrp1.get(urldisplay).put(String.valueOf(j), mrp);
+                                    title.get(urldisplay).put(String.valueOf(j), id);
+                                    fkid1.get(urldisplay).put(String.valueOf(j), fkid);
+                                    selling.get(urldisplay).put(String.valueOf(j), selling_price);
+                                    sellers.get(urldisplay).put(String.valueOf(j), seller);
+                                }catch (JSONException e){
+                                    e.printStackTrace();
+                                }
+
                             }
+                            Log.i("trending", "called");
                             return "win";
                             //versioncode=data1.getString("version_code");
                             //return versioncode;
@@ -553,480 +563,551 @@ public class Splash extends AppCompatActivity {
         }
     }
 
-    private class CheckVersion extends
-
-                               AsyncTask<String, Void, String> {
+    private class GetTrendingProducts extends AsyncTask<String, Void, String> {
 
 
         @Override
         protected String doInBackground(String... params) {
+            String url = getApplicationContext().getResources().getString(R.string.server)+"api/product/trending?category=Computers&category=Mobiles&count=10";
+            String urldisplay = params[0];
             try {
-
-                String url3 = getApplicationContext().getString(R.string.server) + "api/app/version?platform=android";
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
-
-
-                HttpResponse response = AppUtils.connectToServerGet(url3, tok_sp, null);
+               // String tok_sp = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NjU1NDQwMDgsImV4cCI6MTQ2NTU4MDAwOH0.ZpAwCEB0lYSqiYdfaBYjnBJOXfGrqE9qN8USoRzWR8g";
+                HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
                 if (response != null) {
                     HttpEntity ent = response.getEntity();
                     String responseString = EntityUtils.toString(ent, "UTF-8");
-                    String versioncode = "";
                     if (response.getStatusLine().getStatusCode() != 200) {
+
 
                         Log.e("MeshCommunication", "Server returned code "
                                 + response.getStatusLine().getStatusCode());
                         return "fail";
                     } else {
+
                         JSONObject resp = new JSONObject(responseString);
                         if (resp.getString("status").equals("success")) {
-                            JSONObject data1 = new JSONObject(resp.getString("data"));
-                            versioncode = data1.getString("version_code");
-                            return versioncode;
+                            JSONArray data1 = new JSONArray(resp.getString("data"));
+                            int lenght = data1.length();
+                            for (int j = 0; j < 10; j++) {
+                                JSONObject js = data1.getJSONObject(j);
+                                String categ = js.getString("category");
+                                String subc = js.getString("subCategory");
+                                String brand1 = js.getString("brand");
+                                String id = js.getString("title");
+                                //String mrp = js.getString("mrp");
+                                String seller = js.getString("seller");
+                                String fkid = js.getString("fkProductId");
+                                String selling_price = js.getString("sellingPrice");
+                                JSONObject img = new JSONObject(js.getString("imgUrls"));
+                                String imgurl = img.getString("200x200");
+                                category.get(urldisplay).put(String.valueOf(j), categ);
+                                subCategory.get(urldisplay).put(String.valueOf(j), subc);
+                                brand.get(urldisplay).put(String.valueOf(j), brand1);
+                                image.get(urldisplay).put(String.valueOf(j), imgurl);
+                                //mrp1.get(urldisplay).put(String.valueOf(j), mrp);
+                                title.get(urldisplay).put(String.valueOf(j), id);
+                                fkid1.get(urldisplay).put(String.valueOf(j), fkid);
+                                selling.get(urldisplay).put(String.valueOf(j), selling_price);
+                                sellers.get(urldisplay).put(String.valueOf(j), seller);
+
+
+                            }
+                            Log.i("trending", "called");
+                            return "win";
+                            //versioncode=data1.getString("version_code");
+                            //return versioncode;
                         } else
                             return "fail";
 
 
                     }
-                } else {
-                    return "fail";
-
                 }
-            } catch (Exception e) {
-                return "fail";
+
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+
+    public class CheckVersion extends AsyncTask<String, Void, String> {
+
+
+            @Override
+            protected String doInBackground(String... params) {
+                try {
+
+                    String url3 = getApplicationContext().getString(R.string.server) + "api/app/version?platform=android";
+                    SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                    String tok_sp = toks.getString("token_value", "");
+
+
+                    HttpResponse response = AppUtils.connectToServerGet(url3, tok_sp, null);
+                    if (response != null) {
+                        HttpEntity ent = response.getEntity();
+                        String responseString = EntityUtils.toString(ent, "UTF-8");
+                        String versioncode = "";
+                        if (response.getStatusLine().getStatusCode() != 200) {
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return "fail";
+                        } else {
+                            JSONObject resp = new JSONObject(responseString);
+                            if (resp.getString("status").equals("success")) {
+                                JSONObject data1 = new JSONObject(resp.getString("data"));
+                                versioncode = data1.getString("version_code");
+                                return versioncode;
+                            } else
+                                return "fail";
+
+
+                        }
+                    } else {
+                        return "fail";
+
+                    }
+                } catch (Exception e) {
+                    return "fail";
+                }
+            }
+
+            protected void onPostExecute(String result) {
+                if (!result.equals("fail")) {
+                    PackageInfo pInfo = null;
+                    try {
+                        pInfo = getPackageManager().getPackageInfo(
+                                getPackageName(), 0);
+                    } catch (PackageManager.NameNotFoundException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    int versionCode = pInfo.versionCode;
+                    if (Integer.parseInt(result) > versionCode) {
+                        new AlertDialog.Builder(
+                                Splash.this,
+                                AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
+                                .setTitle("Update App Version")
+                                .setCancelable(false)
+                                .setMessage(
+                                        "Looks like you are currently using an older version of our application. Please update your app and come back to check out our latest products and features.")
+                                .setNegativeButton(
+                                        "Exit",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(
+                                                    DialogInterface dialog,
+                                                    int which) {
+                                                // continue with
+                                                // delete
+                                                Intent intent = new Intent(
+                                                        Intent.ACTION_MAIN);
+                                                intent.addCategory(Intent.CATEGORY_HOME);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);// ***Change
+                                                // Here***
+                                                startActivity(intent);
+                                                finish();
+                                                System.exit(0);
+                                            }
+                                        })
+                                .setPositiveButton(
+                                        "Update",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(
+                                                    DialogInterface dialog,
+                                                    int which) {
+                                                // continue with
+                                                // delete
+                                                Uri uri = Uri
+                                                        .parse("https://play.google.com/store/apps/details?id=indwin.c3.shareapp&hl=en"); // missing
+                                                // 'http://'
+                                                //geuse
+                                                // crashed
+                                                Intent intent = new Intent(
+                                                        Intent.ACTION_VIEW,
+                                                        uri);
+                                                startActivity(intent);
+                                            }
+                                        }).show();
+
+                    } else {
+                        String tok1 = "";
+                        SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editorP = userP.edit();
+                        token = userP.getString("tok", "");
+                        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                        sharedpreferences2 = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
+                        if (sharedpreferences.getInt("checklog", 0) == 1) {
+                            userId = sharedpreferences2.getString("name", null);
+                            pass = sharedpreferences2.getString("password", null);
+
+
+                            tok1 = token;
+                            try {
+                                Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
+                                Intercom.client().registerIdentifiedUser(
+                                        new Registration().withUserId(userId));
+                                //  Intercom.client().openGCMMessage(getIntent());
+
+                            } catch (Exception e) {
+                                System.out.println("Intercom eight" + e.toString());
+                            }
+                            // token=MainActivity.token;
+                            // token=MainActivity.token;
+                            url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + userId;
+
+                            new ValidateForm().execute("");
+
+                        } else if (!sh_otp.getString("number", "").equals("")) {
+                            token = tok1;
+                            try {
+                                Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
+                                Intercom.client().registerIdentifiedUser(
+                                        new Registration().withUserId(sh_otp.getString("number", "")));
+                                Intercom.client().openGCMMessage(getIntent());
+                            } catch (Exception e) {
+                                System.out.println("Intercom nine" + e.toString());
+                            }
+                            url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + sh_otp.getString("number", "");
+
+                            new ValidateForm().execute("");
+
+                        } else {
+                            Intent in = new Intent(Splash.this, Landing.class);
+                            finish();
+                            startActivity(in);
+                            overridePendingTransition(0, 0);
+
+                        }
+                    }
+                }
             }
         }
 
-        protected void onPostExecute(String result) {
-            if (!result.equals("fail")) {
-                PackageInfo pInfo = null;
+        public boolean isNetworkAvailable() {
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+
+
+        private class ValidateForm extends
+                AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... data) {
+
+                // String urldisplay = data[0];
+                //   HashMap<String, String> details = data[0];
+                JSONObject payload = new JSONObject();
                 try {
-                    pInfo = getPackageManager().getPackageInfo(
-                            getPackageName(), 0);
-                } catch (PackageManager.NameNotFoundException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-                int versionCode = pInfo.versionCode;
-                if (Integer.parseInt(result) > versionCode) {
-                    new AlertDialog.Builder(
-                            Splash.this,
-                            AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
-                            .setTitle("Update App Version")
-                            .setCancelable(false)
-                            .setMessage(
-                                    "Looks like you are currently using an older version of our application. Please update your app and come back to check out our latest products and features.")
-                            .setNegativeButton(
-                                    "Exit",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(
-                                                DialogInterface dialog,
-                                                int which) {
-                                            // continue with
-                                            // delete
-                                            Intent intent = new Intent(
-                                                    Intent.ACTION_MAIN);
-                                            intent.addCategory(Intent.CATEGORY_HOME);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);// ***Change
-                                            // Here***
-                                            startActivity(intent);
-                                            finish();
-                                            System.exit(0);
-                                        }
-                                    })
-                            .setPositiveButton(
-                                    "Update",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(
-                                                DialogInterface dialog,
-                                                int which) {
-                                            // continue with
-                                            // delete
-                                            Uri uri = Uri
-                                                    .parse("https://play.google.com/store/apps/details?id=indwin.c3.shareapp&hl=en"); // missing
-                                            // 'http://'
-                                            //geuse
-                                            // crashed
-                                            Intent intent = new Intent(
-                                                    Intent.ACTION_VIEW,
-                                                    uri);
-                                            startActivity(intent);
-                                        }
-                                    }).show();
+                    // userid=12&productid=23&action=add
+                    // TYPE: POST
 
-                } else {
-                    String tok1 = "";
-                    SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editorP = userP.edit();
-                    token = userP.getString("tok", "");
-                    sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                    sharedpreferences2 = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
-                    if (sharedpreferences.getInt("checklog", 0) == 1) {
-                        userId = sharedpreferences2.getString("name", null);
-                        pass = sharedpreferences2.getString("password", null);
+                    // payload.put("action", details.get("action"));
+
+                    SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                    String tok_sp = toks.getString("token_value", "");
 
 
-                        tok1 = token;
-                        try {
-                            Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
-                            Intercom.client().registerIdentifiedUser(
-                                    new Registration().withUserId(userId));
-                            //  Intercom.client().openGCMMessage(getIntent());
+                    HttpResponse response = AppUtils.connectToServerGet(url2, tok_sp, null);
+                    if (response != null) {
+                        HttpEntity ent = response.getEntity();
+                        String responseString = EntityUtils.toString(ent, "UTF-8");
 
-                        } catch (Exception e) {
-                            System.out.println("Intercom eight" + e.toString());
+                        if (response.getStatusLine().getStatusCode() != 200) {
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return "fail";
+                        } else {
+                            JSONObject resp = new JSONObject(responseString);
+                            JSONObject data1 = new JSONObject(resp.getString("data"));
+                            try {
+
+                                referral_code = data1.getString("uniqueCode");
+                                SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                editor.putString("rcode", referral_code);
+                                editor.commit();
+                                Gson gson = new Gson();
+                                String json = sh.getString("UserObject", "");
+                                UserModel user = gson.fromJson(json, UserModel.class);
+                                if (user == null)
+                                    user = new UserModel();
+                                name = data1.getString("name");
+                                email = data1.getString("email");
+                                user.setName(name);
+                                user.setEmail(email);
+                                if (!data1.getBoolean("offlineForm"))
+                                    checkDataForNormalUser(user, gson, data1);
+                                else
+                                    checkDataForOfflineUser(user, gson, data1);
+                                json = gson.toJson(user);
+                                sh.edit().putString("UserObject", json).apply();
+                                name = data1.getString("name");
+                                email = data1.getString("email");
+                                SharedPreferences sharedpreferences11 = getSharedPreferences("cred", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor11 = sharedpreferences11.edit();
+                                editor11.putString("n1", name);
+                                editor11.putString("e1", email);
+                                editor11.commit();
+                            } catch (Exception e) {
+                            }
+                            try {
+                                try {
+                                    creditLimit = data1.getString("creditLimit");
+                                } catch (Exception e) {
+                                }
+                                try {
+                                    fbid = data1.getString("fbConnected");
+                                } catch (Exception e) {
+                                    fbid = "empty";
+                                }
+                                if (fbid.equals("") || (fbid.equals("false")))
+                                    fbid = "empty";
+                                try {
+                                    formstatus = data1.getString("formStatus");
+                                } catch (Exception e) {
+                                    formstatus = "empty";
+                                }
+                                int totalCashBack = 0;
+                                try {
+                                    totalCashBack = data1.getInt("totalCashback");
+                                } catch (Exception e) {
+                                    totalCashBack = 0;
+                                }
+                                try {
+                                    approvedBand = data1.getString("approvedBand");
+                                } catch (Exception e) {
+                                    approvedBand = "";
+                                }
+                                int creditLimit = 0;
+                                try {
+                                    creditLimit = data1.getInt("creditLimit");
+                                } catch (Exception e) {
+                                    creditLimit = 0;
+                                }
+                                int totalBorrowed = 0;
+                                try {
+                                    totalBorrowed = data1.getInt("totalBorrowed");
+                                } catch (Exception e) {
+                                    totalBorrowed = 0;
+                                }
+                                String nameadd = "";
+                                String courseend = "";
+
+                                try {
+                                    courseend = data1.getString("courseCompletionDate");
+                                } catch (Exception e) {
+                                    courseend = "";
+                                }
+
+                                try {
+                                    nameadd = data1.getString("college");
+                                } catch (Exception e) {
+                                }
+                                String profileStatus = "";
+                                try {
+                                    profileStatus = data1.getString("profileStatus");
+                                } catch (Exception e) {
+                                    profileStatus = "";
+                                }
+                                SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editorP = userP.edit();
+
+                                editorP.putInt("creditLimit", creditLimit);
+                                editorP.putString("profileStatus", profileStatus);
+                                editorP.putInt("totalBorrowed", totalBorrowed);
+                                editorP.putString("course", courseend);
+                                editorP.putInt("cashBack", totalCashBack);
+                                editorP.putString("nameadd", nameadd);
+                                editorP.putString("formStatus", formstatus);
+                                editorP.putString("approvedBand", approvedBand);
+                                editorP.putString("productdpname", name);
+                                editorP.commit();
+
+
+                                try {
+                                    rejectionReason = data1.getString("rejectionReason");
+                                } catch (Exception e) {
+                                }
+                                if (formstatus.equals(""))
+                                    formstatus = "empty";
+                                try {
+                                    panoradhar = data1.getString("addressProofs");
+                                } catch (Exception e) {
+                                    panoradhar = "NA";
+                                }
+                                if (panoradhar.equals(""))
+                                    panoradhar = "NA";
+                                try {
+                                    collegeid = data1.getString("collegeIDs");
+                                } catch (Exception e) {
+                                    collegeid = "NA";
+                                }
+                                if (collegeid.equals(""))
+                                    collegeid = "NA";
+                                try {
+                                    bankaccount = data1.getString("bankStatement");
+                                } catch (Exception e) {
+                                    bankaccount = "NA";
+                                }
+                                if (bankaccount.equals(""))
+                                    bankaccount = "NA";
+                                try {
+                                    verificationdate = data1.getString("collegeIdVerificationDate");
+                                } catch (Exception e) {
+                                    verificationdate = "NA";
+                                }
+                                if (verificationdate.equals(""))
+                                    verificationdate = "NA";
+
+                                try {
+                                    String dpid = data1.getString("fbUserId");
+                                    SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor2 = sf.edit();
+                                    editor2.putString("dpid", dpid);
+
+                                    //  editor2.putString("password", password.getText().toString());
+                                    editor2.commit();
+                                } catch (Exception e) {
+                                }
+
+                            } catch (Exception e) {
+                            }
+
+                            if (resp.getString("msg").contains("error")) {
+
+                                Log.e("MeshCommunication", "Server returned code "
+                                        + response.getStatusLine().getStatusCode());
+                                return resp.getString("msg");
+                            } else {
+
+                                return "win";
+
+                            }
+
                         }
-                        // token=MainActivity.token;
-                        // token=MainActivity.token;
-                        url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + userId;
-
-                        new ValidateForm().execute("");
-
-                    } else if (!sh_otp.getString("number", "").equals("")) {
-                        token = tok1;
-                        try {
-                            Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
-                            Intercom.client().registerIdentifiedUser(
-                                    new Registration().withUserId(sh_otp.getString("number", "")));
-                            Intercom.client().openGCMMessage(getIntent());
-                        } catch (Exception e) {
-                            System.out.println("Intercom nine" + e.toString());
-                        }
-                        url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + sh_otp.getString("number", "");
-
-                        new ValidateForm().execute("");
-
                     } else {
-                        Intent in = new Intent(Splash.this, Landing.class);
+                        return "fail";
+
+                    }
+
+                } catch (Exception e) {
+                    Log.e("mesherror", e.getMessage());
+                    return "fail";
+
+                }
+            }
+
+            protected void onPostExecute(String result) {
+
+
+                if (result.equals("win")) {
+
+                    if (formstatus.equals("declined")) {
+
+                        Intent in = new Intent(Splash.this, HomePage.class);
                         finish();
+                        // Intent in = new Intent(MainActivity.this, Inviteform.class);
+                        in.putExtra("Name", name);
+                        in.putExtra("fbid", fbid);
+                        in.putExtra("Rej", rejectionReason);
+                        in.putExtra("Email", email);
+                        in.putExtra("Form", formstatus);
+                        in.putExtra("UniC", uniqueCode);
                         startActivity(in);
                         overridePendingTransition(0, 0);
 
                     }
-                }
-            }
-        }
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
 
 
-    private class ValidateForm extends
-                               AsyncTask<String, Void, String> {
+                    if (formstatus.equals("saved")) {
 
-        @Override
-        protected String doInBackground(String... data) {
+                        Intent in = new Intent(Splash.this, HomePage.class);
+                        // Intent in = new Intent(MainActivity.this, Inviteform.class);
+                        finish();
+                        in.putExtra("Name", name);
+                        in.putExtra("fbid", fbid);
+                        in.putExtra("Email", email);
+                        in.putExtra("Form", formstatus);
+                        in.putExtra("UniC", referral_code);
+                        startActivity(in);
+                        overridePendingTransition(0, 0);
+                    } else if (formstatus.equals("submitted")) {
+                        //                 Intent in = new Intent(MainActivity.this, Landing.class);
+                        bankaccount = "some";
+                        Intent in = new Intent(Splash.this, HomePage.class);
+                        if ((panoradhar.equals("NA")) || (bankaccount.equals("NA")) || (collegeid.equals("NA"))) {
+                            in.putExtra("screen_no", 1);
+                        } else if ((!panoradhar.equals("NA")) && (!collegeid.equals("NA")) && (!bankaccount.equals("NA")) && (verificationdate.equals("NA"))) {
+                            in.putExtra("screen_no", 2);
+                        } else if ((!panoradhar.equals("NA")) && (!collegeid.equals("NA")) && (!bankaccount.equals("NA")) && (!verificationdate.equals("NA"))) {
+                            in.putExtra("screen_no", 3);
+                            in.putExtra("VeriDate", verificationdate);
+                        }
 
-            // String urldisplay = data[0];
-            //   HashMap<String, String> details = data[0];
-            JSONObject payload = new JSONObject();
-            try {
-                // userid=12&productid=23&action=add
-                // TYPE: POST
+                        finish();
+                        in.putExtra("Name", name);
+                        in.putExtra("fbid", fbid);
+                        in.putExtra("Email", email);
+                        in.putExtra("Form", formstatus);
+                        in.putExtra("UniC", referral_code);
+                        startActivity(in);
+                        overridePendingTransition(0, 0);
+                    }
+                    if (formstatus.equals("approved") || (formstatus.equals("flashApproved"))) {
 
-                // payload.put("action", details.get("action"));
+                        Intent in = new Intent(Splash.this, HomePage.class);
+                        finish();
+                        // Intent in = new Intent(MainActivity.this, Inviteform.class);
+                        in.putExtra("Name", name);
+                        in.putExtra("fbid", fbid);
+                        in.putExtra("Email", email);//  in.putExtra("Credits",creditLimit);
+                        in.putExtra("Form", formstatus);
+                        in.putExtra("Credits", creditLimit);
+                        in.putExtra("UniC", referral_code);
+                        startActivity(in);
+                        overridePendingTransition(0, 0);
+                    } else if (formstatus.equals("empty")) {
 
-                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
-                String tok_sp = toks.getString("token_value", "");
-
-
-                HttpResponse response = AppUtils.connectToServerGet(url2, tok_sp, null);
-                if (response != null) {
-                    HttpEntity ent = response.getEntity();
-                    String responseString = EntityUtils.toString(ent, "UTF-8");
-
-                    if (response.getStatusLine().getStatusCode() != 200) {
-
-                        Log.e("MeshCommunication", "Server returned code "
-                                + response.getStatusLine().getStatusCode());
-                        return "fail";
+                        //                    Intent in = new Intent(MainActivity.this, Inviteform    .class);
+                        Intent in = new Intent(Splash.this, HomePage.class);
+                        finish();
+                        in.putExtra("Name", name);
+                        in.putExtra("Email", email);
+                        in.putExtra("fbid", fbid);
+                        in.putExtra("Form", formstatus);
+                        in.putExtra("UniC", referral_code);
+                        startActivity(in);
+                        overridePendingTransition(0, 0);
                     } else {
-                        JSONObject resp = new JSONObject(responseString);
-                        JSONObject data1 = new JSONObject(resp.getString("data"));
-                        try {
 
-                            referral_code = data1.getString("uniqueCode");
-                            SharedPreferences sharedpreferences = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedpreferences.edit();
-                            editor.putString("rcode", referral_code);
-                            editor.commit();
-                            Gson gson = new Gson();
-                            String json = sh.getString("UserObject", "");
-                            UserModel user = gson.fromJson(json, UserModel.class);
-                            if (user == null)
-                                user = new UserModel();
-                            name = data1.getString("name");
-                            email = data1.getString("email");
-                            user.setName(name);
-                            user.setEmail(email);
-                            if (!data1.getBoolean("offlineForm"))
-                                checkDataForNormalUser(user, gson, data1);
-                            else
-                                checkDataForOfflineUser(user, gson, data1);
-                            AppUtils.saveUserObject(Splash.this, user);
-                            name = data1.getString("name");
-                            email = data1.getString("email");
-                            SharedPreferences sharedpreferences11 = getSharedPreferences("cred", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor11 = sharedpreferences11.edit();
-                            editor11.putString("n1", name);
-                            editor11.putString("e1", email);
-                            editor11.commit();
-                        } catch (Exception e) {
-                        }
-                        try {
-                            try {
-                                creditLimit = data1.getString("creditLimit");
-                            } catch (Exception e) {
-                            }
-                            try {
-                                fbid = data1.getString("fbConnected");
-                            } catch (Exception e) {
-                                fbid = "empty";
-                            }
-                            if (fbid.equals("") || (fbid.equals("false")))
-                                fbid = "empty";
-                            try {
-                                formstatus = data1.getString("formStatus");
-                            } catch (Exception e) {
-                                formstatus = "empty";
-                            }
-                            int totalCashBack = 0;
-                            try {
-                                totalCashBack = data1.getInt("totalCashback");
-                            } catch (Exception e) {
-                                totalCashBack = 0;
-                            }
-                            try {
-                                approvedBand = data1.getString("approvedBand");
-                            } catch (Exception e) {
-                                approvedBand = "";
-                            }
-                            int creditLimit = 0;
-                            try {
-                                creditLimit = data1.getInt("creditLimit");
-                            } catch (Exception e) {
-                                creditLimit = 0;
-                            }
-                            int totalBorrowed = 0;
-                            try {
-                                totalBorrowed = data1.getInt("totalBorrowed");
-                            } catch (Exception e) {
-                                totalBorrowed = 0;
-                            }
-                            String nameadd = "";
-                            String courseend = "";
-
-                            try {
-                                courseend = data1.getString("courseCompletionDate");
-                            } catch (Exception e) {
-                                courseend = "";
-                            }
-
-                            try {
-                                nameadd = data1.getString("college");
-                            } catch (Exception e) {
-                            }
-                            String profileStatus = "";
-                            try {
-                                profileStatus = data1.getString("profileStatus");
-                            } catch (Exception e) {
-                                profileStatus = "";
-                            }
-                            SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editorP = userP.edit();
-
-                            editorP.putInt("creditLimit", creditLimit);
-                            editorP.putString("profileStatus", profileStatus);
-                            editorP.putInt("totalBorrowed", totalBorrowed);
-                            editorP.putString("course", courseend);
-                            editorP.putInt("cashBack", totalCashBack);
-                            editorP.putString("nameadd", nameadd);
-                            editorP.putString("formStatus", formstatus);
-                            editorP.putString("approvedBand", approvedBand);
-                            editorP.putString("productdpname", name);
-                            editorP.commit();
-
-
-                            try {
-                                rejectionReason = data1.getString("rejectionReason");
-                            } catch (Exception e) {
-                            }
-                            if (formstatus.equals(""))
-                                formstatus = "empty";
-                            try {
-                                panoradhar = data1.getString("addressProofs");
-                            } catch (Exception e) {
-                                panoradhar = "NA";
-                            }
-                            if (panoradhar.equals(""))
-                                panoradhar = "NA";
-                            try {
-                                collegeid = data1.getString("collegeIDs");
-                            } catch (Exception e) {
-                                collegeid = "NA";
-                            }
-                            if (collegeid.equals(""))
-                                collegeid = "NA";
-                            try {
-                                bankaccount = data1.getString("bankStatement");
-                            } catch (Exception e) {
-                                bankaccount = "NA";
-                            }
-                            if (bankaccount.equals(""))
-                                bankaccount = "NA";
-                            try {
-                                verificationdate = data1.getString("collegeIdVerificationDate");
-                            } catch (Exception e) {
-                                verificationdate = "NA";
-                            }
-                            if (verificationdate.equals(""))
-                                verificationdate = "NA";
-
-                            try {
-                                String dpid = data1.getString("fbUserId");
-                                SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor2 = sf.edit();
-                                editor2.putString("dpid", dpid);
-
-                                //  editor2.putString("password", password.getText().toString());
-                                editor2.commit();
-                            } catch (Exception e) {
-                            }
-
-                        } catch (Exception e) {
-                        }
-
-                        if (resp.getString("msg").contains("error")) {
-
-                            Log.e("MeshCommunication", "Server returned code "
-                                    + response.getStatusLine().getStatusCode());
-                            return resp.getString("msg");
-                        } else {
-
-                            return "win";
-
-                        }
-
+                        Intent in = new Intent(Splash.this, HomePage.class);
+                        finish();
+                        in.putExtra("Name", name);
+                        in.putExtra("Email", email);
+                        in.putExtra("fbid", fbid);
+                        in.putExtra("Form", formstatus);
+                        in.putExtra("UniC", referral_code);
+                        startActivity(in);
+                        overridePendingTransition(0, 0);
                     }
                 } else {
-                    return "fail";
-
+                    Intent in = new Intent(Splash.this, MainActivity.class);
+                    finish();
+                    startActivity(in);
+                    overridePendingTransition(0, 0);
                 }
-
-            } catch (Exception e) {
-                Log.e("mesherror", e.getMessage());
-                return "fail";
 
             }
         }
-
-        protected void onPostExecute(String result) {
-
-
-            if (result.equals("win")) {
-
-                if (formstatus.equals("declined")) {
-
-                    Intent in = new Intent(Splash.this, HomePage.class);
-                    finish();
-                    // Intent in = new Intent(MainActivity.this, Inviteform.class);
-                    in.putExtra("Name", name);
-                    in.putExtra("fbid", fbid);
-                    in.putExtra("Rej", rejectionReason);
-                    in.putExtra("Email", email);
-                    in.putExtra("Form", formstatus);
-                    in.putExtra("UniC", uniqueCode);
-                    startActivity(in);
-                    overridePendingTransition(0, 0);
-
-                }
-
-
-                if (formstatus.equals("saved")) {
-
-                    Intent in = new Intent(Splash.this, HomePage.class);
-                    // Intent in = new Intent(MainActivity.this, Inviteform.class);
-                    finish();
-                    in.putExtra("Name", name);
-                    in.putExtra("fbid", fbid);
-                    in.putExtra("Email", email);
-                    in.putExtra("Form", formstatus);
-                    in.putExtra("UniC", referral_code);
-                    startActivity(in);
-                    overridePendingTransition(0, 0);
-                } else if (formstatus.equals("submitted")) {
-                    //                 Intent in = new Intent(MainActivity.this, Landing.class);
-                    bankaccount = "some";
-                    Intent in = new Intent(Splash.this, HomePage.class);
-                    if ((panoradhar.equals("NA")) || (bankaccount.equals("NA")) || (collegeid.equals("NA"))) {
-                        in.putExtra("screen_no", 1);
-                    } else if ((!panoradhar.equals("NA")) && (!collegeid.equals("NA")) && (!bankaccount.equals("NA")) && (verificationdate.equals("NA"))) {
-                        in.putExtra("screen_no", 2);
-                    } else if ((!panoradhar.equals("NA")) && (!collegeid.equals("NA")) && (!bankaccount.equals("NA")) && (!verificationdate.equals("NA"))) {
-                        in.putExtra("screen_no", 3);
-                        in.putExtra("VeriDate", verificationdate);
-                    }
-
-                    finish();
-                    in.putExtra("Name", name);
-                    in.putExtra("fbid", fbid);
-                    in.putExtra("Email", email);
-                    in.putExtra("Form", formstatus);
-                    in.putExtra("UniC", referral_code);
-                    startActivity(in);
-                    overridePendingTransition(0, 0);
-                }
-                if (formstatus.equals("approved") || (formstatus.equals("flashApproved"))) {
-
-                    Intent in = new Intent(Splash.this, HomePage.class);
-                    finish();
-                    // Intent in = new Intent(MainActivity.this, Inviteform.class);
-                    in.putExtra("Name", name);
-                    in.putExtra("fbid", fbid);
-                    in.putExtra("Email", email);//  in.putExtra("Credits",creditLimit);
-                    in.putExtra("Form", formstatus);
-                    in.putExtra("Credits", creditLimit);
-                    in.putExtra("UniC", referral_code);
-                    startActivity(in);
-                    overridePendingTransition(0, 0);
-                } else if (formstatus.equals("empty")) {
-
-                    //                    Intent in = new Intent(MainActivity.this, Inviteform    .class);
-                    Intent in = new Intent(Splash.this, HomePage.class);
-                    finish();
-                    in.putExtra("Name", name);
-                    in.putExtra("Email", email);
-                    in.putExtra("fbid", fbid);
-                    in.putExtra("Form", formstatus);
-                    in.putExtra("UniC", referral_code);
-                    startActivity(in);
-                    overridePendingTransition(0, 0);
-                } else {
-
-                    Intent in = new Intent(Splash.this, HomePage.class);
-                    finish();
-                    in.putExtra("Name", name);
-                    in.putExtra("Email", email);
-                    in.putExtra("fbid", fbid);
-                    in.putExtra("Form", formstatus);
-                    in.putExtra("UniC", referral_code);
-                    startActivity(in);
-                    overridePendingTransition(0, 0);
-                }
-            } else {
-                Intent in = new Intent(Splash.this, MainActivity.class);
-                finish();
-                startActivity(in);
-                overridePendingTransition(0, 0);
-            }
-
-        }
-    }
 
     private void checkDataForNormalUser(UserModel user, Gson gson, JSONObject data1) {
         try {
@@ -1209,94 +1290,104 @@ public class Splash extends AppCompatActivity {
         //}
     }
 
-    private void checkDataForOfflineUser(UserModel user, Gson gson, JSONObject data1) {
-        try {
-            sh.edit().putBoolean("visitedFormStep1Fragment1", true).apply();
-            sh.edit().putBoolean("visitedFormStep1Fragment2", true).apply();
-            sh.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
-            checkDataForNormalUser(user, gson, data1);
-        } catch (Exception e) {
-            e.printStackTrace();
 
+        private void checkDataForOfflineUser(UserModel user, Gson gson, JSONObject data1) {
+            try {
+                sh.edit().putBoolean("visitedFormStep1Fragment1", true).apply();
+                sh.edit().putBoolean("visitedFormStep1Fragment2", true).apply();
+                sh.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
+                checkDataForNormalUser(user, gson, data1);
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+        }
+
+        public boolean checkPlayServices() {
+            int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+            return resultCode == ConnectionResult.SUCCESS;
+        }
+
+        public void init() {
+
+            selling = new HashMap<String, HashMap<String, String>>();
+            selling.put("Mobiles", new HashMap<String, String>());
+            selling.put("Computers&subCategory=Laptops", new HashMap<String, String>());
+            selling.put("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle", new HashMap<String, String>());
+            selling.put("Electronics", new HashMap<String, String>());
+            selling.put("Footwear", new HashMap<String, String>());
+            selling.put("Health%20and%20Beauty", new HashMap<String, String>());
+            selling.put("trending", new HashMap<String, String>());
+            subCategory = new HashMap<String, HashMap<String, String>>();
+            subCategory.put("Mobiles", new HashMap<String, String>());
+            subCategory.put("Computers&subCategory=Laptops", new HashMap<String, String>());
+            subCategory.put("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle", new HashMap<String, String>());
+            subCategory.put("Electronics", new HashMap<String, String>());
+
+            subCategory.put("Footwear", new HashMap<String, String>());
+            subCategory.put("Health%20and%20Beauty", new HashMap<String, String>());
+            subCategory.put("trending", new HashMap<String, String>());
+
+            image = new HashMap<String, HashMap<String, String>>();
+            image.put("Mobiles", new HashMap<String, String>());
+            image.put("Computers&subCategory=Laptops", new HashMap<String, String>());
+            image.put("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle", new HashMap<String, String>());
+            image.put("Electronics", new HashMap<String, String>());
+            image.put("Footwear", new HashMap<String, String>());
+            image.put("Health%20and%20Beauty", new HashMap<String, String>());
+            image.put("trending", new HashMap<String, String>());
+            brand = new HashMap<String, HashMap<String, String>>();
+            brand.put("Mobiles", new HashMap<String, String>());
+            brand.put("Computers&subCategory=Laptops", new HashMap<String, String>());
+            brand.put("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle", new HashMap<String, String>());
+            brand.put("Electronics", new HashMap<String, String>());
+
+            brand.put("Footwear", new HashMap<String, String>());
+            brand.put("Health%20and%20Beauty", new HashMap<String, String>());
+            brand.put("trending", new HashMap<String, String>());
+            category = new HashMap<String, HashMap<String, String>>();
+            category.put("Mobiles", new HashMap<String, String>());
+            category.put("Computers&subCategory=Laptops", new HashMap<String, String>());
+            category.put("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle", new HashMap<String, String>());
+            category.put("Electronics", new HashMap<String, String>());
+            category.put("trending", new HashMap<String, String>());
+            category.put("Footwear", new HashMap<String, String>());
+            category.put("Health%20and%20Beauty", new HashMap<String, String>());
+            sellers = new HashMap<String, HashMap<String, String>>();
+            sellers.put("Mobiles", new HashMap<String, String>());
+            sellers.put("Computers&subCategory=Laptops", new HashMap<String, String>());
+            sellers.put("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle", new HashMap<String, String>());
+            sellers.put("Electronics", new HashMap<String, String>());
+            sellers.put("Footwear", new HashMap<String, String>());
+            sellers.put("Health%20and%20Beauty", new HashMap<String, String>());
+            sellers.put("trending", new HashMap<String, String>());
+
+
+            mrp1 = new HashMap<String, HashMap<String, String>>();
+            mrp1.put("Mobiles", new HashMap<String, String>());
+            mrp1.put("Computers&subCategory=Laptops", new HashMap<String, String>());
+            mrp1.put("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle", new HashMap<String, String>());
+            mrp1.put("Electronics", new HashMap<String, String>());
+            mrp1.put("Footwear", new HashMap<String, String>());
+            mrp1.put("Health%20and%20Beauty", new HashMap<String, String>());
+            mrp1.put("trending", new HashMap<String, String>());
+            fkid1 = new HashMap<String, HashMap<String, String>>();
+            fkid1.put("Mobiles", new HashMap<String, String>());
+            fkid1.put("Computers&subCategory=Laptops", new HashMap<String, String>());
+            fkid1.put("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle", new HashMap<String, String>());
+            fkid1.put("Electronics", new HashMap<String, String>());
+            fkid1.put("Footwear", new HashMap<String, String>());
+            fkid1.put("Health%20and%20Beauty", new HashMap<String, String>());
+            fkid1.put("trending", new HashMap<String, String>());
+            title = new HashMap<String, HashMap<String, String>>();
+            title.put("Mobiles", new HashMap<String, String>());
+            title.put("Computers&subCategory=Laptops", new HashMap<String, String>());
+            title.put("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle", new HashMap<String, String>());
+            title.put("Electronics", new HashMap<String, String>());
+            title.put("Footwear", new HashMap<String, String>());
+            title.put("Health%20and%20Beauty", new HashMap<String, String>());
+            title.put("trending", new HashMap<String, String>());
         }
     }
 
-    public boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        return resultCode == ConnectionResult.SUCCESS;
-    }
-
-    private void init() {
-
-        selling = new HashMap<String, HashMap<String, String>>();
-        selling.put("Mobiles", new HashMap<String, String>());
-        selling.put("Laptops", new HashMap<String, String>());
-        selling.put("apparels", new HashMap<String, String>());
-        selling.put("Electronics", new HashMap<String, String>());
-        selling.put("Footwear", new HashMap<String, String>());
-        selling.put("homeandbeauty", new HashMap<String, String>());
-        subCategory = new HashMap<String, HashMap<String, String>>();
-        subCategory.put("Mobiles", new HashMap<String, String>());
-        subCategory.put("Laptops", new HashMap<String, String>());
-        subCategory.put("apparels", new HashMap<String, String>());
-        subCategory.put("Electronics", new HashMap<String, String>());
-
-        subCategory.put("Footwear", new HashMap<String, String>());
-        subCategory.put("homeandbeauty", new HashMap<String, String>());
-
-        image = new HashMap<String, HashMap<String, String>>();
-        image.put("Mobiles", new HashMap<String, String>());
-        image.put("Laptops", new HashMap<String, String>());
-        image.put("apparels", new HashMap<String, String>());
-        image.put("Electronics", new HashMap<String, String>());
-        image.put("Footwear", new HashMap<String, String>());
-        image.put("homeandbeauty", new HashMap<String, String>());
-        brand = new HashMap<String, HashMap<String, String>>();
-        brand.put("Mobiles", new HashMap<String, String>());
-        brand.put("Laptops", new HashMap<String, String>());
-        brand.put("apparels", new HashMap<String, String>());
-        brand.put("Electronics", new HashMap<String, String>());
-
-        brand.put("Footwear", new HashMap<String, String>());
-        brand.put("homeandbeauty", new HashMap<String, String>());
-        category = new HashMap<String, HashMap<String, String>>();
-        category.put("Mobiles", new HashMap<String, String>());
-        category.put("Laptops", new HashMap<String, String>());
-        category.put("apparels", new HashMap<String, String>());
-        category.put("Electronics", new HashMap<String, String>());
-
-        category.put("Footwear", new HashMap<String, String>());
-        category.put("homeandbeauty", new HashMap<String, String>());
-        sellers = new HashMap<String, HashMap<String, String>>();
-        sellers.put("Mobiles", new HashMap<String, String>());
-        sellers.put("Laptops", new HashMap<String, String>());
-        sellers.put("apparels", new HashMap<String, String>());
-        sellers.put("Electronics", new HashMap<String, String>());
-        sellers.put("Footwear", new HashMap<String, String>());
-        sellers.put("homeandbeauty", new HashMap<String, String>());
-
-
-        mrp1 = new HashMap<String, HashMap<String, String>>();
-        mrp1.put("Mobiles", new HashMap<String, String>());
-        mrp1.put("Laptops", new HashMap<String, String>());
-        mrp1.put("apparels", new HashMap<String, String>());
-        mrp1.put("Electronics", new HashMap<String, String>());
-        mrp1.put("Footwear", new HashMap<String, String>());
-        mrp1.put("homeandbeauty", new HashMap<String, String>());
-        fkid1 = new HashMap<String, HashMap<String, String>>();
-        fkid1.put("Mobiles", new HashMap<String, String>());
-        fkid1.put("Laptops", new HashMap<String, String>());
-        fkid1.put("apparels", new HashMap<String, String>());
-        fkid1.put("Electronics", new HashMap<String, String>());
-        fkid1.put("Footwear", new HashMap<String, String>());
-        fkid1.put("homeandbeauty", new HashMap<String, String>());
-        title = new HashMap<String, HashMap<String, String>>();
-        title.put("Mobiles", new HashMap<String, String>());
-        title.put("Laptops", new HashMap<String, String>());
-        title.put("apparels", new HashMap<String, String>());
-        title.put("Electronics", new HashMap<String, String>());
-        title.put("Footwear", new HashMap<String, String>());
-        title.put("homeandbeauty", new HashMap<String, String>());
-    }
-}
 

@@ -200,9 +200,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 editTextHeader.setVisibility(View.GONE);
                 editTextCardView.setVisibility(View.GONE);
                 aadharPanHeader.setVisibility(View.VISIBLE);
-                editAadhar.setVisibility(View.VISIBLE);
                 saveAadhar.setVisibility(View.GONE);
-                editAadhar.setVisibility(View.GONE);
                 panImageLL.setVisibility(View.GONE);
             } else if ("PAN".equals(user.getPanOrAadhar()) && user.getPanNumber() != null && !"".equals(user.getPanNumber())) {
                 editAadharNumber.setVisibility(View.GONE);
@@ -217,13 +215,17 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 editTextHeader.setVisibility(View.GONE);
                 editTextCardView.setVisibility(View.GONE);
                 aadharPanHeader.setVisibility(View.VISIBLE);
-                editAadhar.setVisibility(View.VISIBLE);
                 saveAadhar.setVisibility(View.GONE);
-                editAadhar.setVisibility(View.GONE);
+
                 panImageLL.setVisibility(View.VISIBLE);
             }
         }
 
+        if (!user.isAppliedFor1k()) {
+            editAadhar.setVisibility(View.VISIBLE);
+        } else {
+            editAadhar.setVisibility(View.GONE);
+        }
         if (user.getPanProof() != null && user.getPanProof().getImgUrl() != null) {
             File file = new File(user.getPanProof().getImgUrl());
             Picasso.with(getActivity()).load(file).fit().placeholder(R.drawable.downloading).into(addPanImage);
@@ -366,15 +368,29 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         editAadhar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if ("Aadhar".equals(user.getPanOrAadhar()) && user.getAadharNumber() != null && !"".equals(user.getAadharNumber())) {
+                    aadharOrPan.setSelection(0);
+                    currentSelected = 0;
+                    editAadharNumber.setText(user.getAadharNumber());
+                } else if
+                        ("PAN".equals(user.getPanOrAadhar()) && AppUtils.isNotEmpty(user.getPanNumber())) {
+                    editAadharNumber.setText(user.getPanNumber());
+                    aadharOrPan.setSelection(1);
+                    currentSelected = 1;
+                }
                 if (currentSelected == 0) {
                     editAadharNumber.setHint("Aadhar Number");
                 } else {
                     editAadharNumber.setHint("PAN Number");
                 }
+                aadharPanHeader.setVisibility(View.GONE);
+                editTextHeader.setVisibility(View.VISIBLE);
                 aadharNuber.setVisibility(View.GONE);
                 editAadhar.setVisibility(View.GONE);
+                completeAadhar1.setVisibility(View.GONE);
                 saveAadhar.setVisibility(View.VISIBLE);
                 editAadharNumber.setVisibility(View.VISIBLE);
+                editTextCardView.setVisibility(View.VISIBLE);
             }
         });
         editAadharNumber.addTextChangedListener(new TextWatcher() {
@@ -471,12 +487,20 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 if (currentSelected == 0) {
                     user.setAadharNumber(text);
                     user.setPanOrAadhar("Aadhar");
+                    aadharPanHeader.setText("Aadhar");
                     user.setUpdateAadharNumber(true);
+                    this.user.setAadharNumber(text);
                 } else {
                     user.setPanNumber(text.toUpperCase());
                     user.setUpdatePanNumber(true);
+                    this.user.setAadharNumber(text.toUpperCase());
                     user.setPanOrAadhar("PAN");
+                    aadharPanHeader.setText("PAN");
                 }
+                aadharPanHeader.setVisibility(View.VISIBLE);
+                completeAadhar1.setVisibility(View.VISIBLE);
+                editTextHeader.setVisibility(View.GONE);
+                editTextCardView.setVisibility(View.GONE);
                 AppUtils.saveUserObject(getActivity(), user);
             }
         } else {

@@ -202,10 +202,6 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
         currentAddressLayout.getLayoutParams().height = displaymetrics.heightPixels - statusBarHeight;
 
 
-        if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature())) {
-            completeAgreement.setVisibility(View.VISIBLE);
-        }
-
         if (user.isAppliedFor1k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
@@ -221,13 +217,15 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
             }
         });
 
+        if (!user.isAppliedFor1k()) {
 
+        }
         setOnClickListener();
 
         if (user.isInCompleteAgreement() && !user.isAppliedFor1k()) {
 
             incompleteAgreement.setVisibility(View.VISIBLE);
-        } else if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature())) {
+        } else if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature()) && (user.isAppliedFor1k() || user.isTncAccepted())) {
 
             completeAgreement.setVisibility(View.VISIBLE);
         }
@@ -329,6 +327,7 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
             user.setUpdateSelfie(userSP.isUpdateSelfie());
 
         }
+        user.setTncAccepted(userSP.isTncAccepted());
     }
 
     private void getAllViews(View rootView) {
@@ -364,7 +363,7 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
 
     public void checkIncomplete() {
         saveSelfieAndSignature();
-        if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
+        if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())||!user.isTncAccepted()) {
             user.setInCompleteAgreement(true);
             incompleteAgreement.setVisibility(View.VISIBLE);
             completeAgreement.setVisibility(View.GONE);

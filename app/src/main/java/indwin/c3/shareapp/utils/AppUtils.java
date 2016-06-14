@@ -262,6 +262,7 @@ public class AppUtils {
                 user.setMonthlyExpenditure(data1.getString("monthlyExpense"));
             if (data1.opt("ownVehicle") != null)
                 user.setVehicle(String.valueOf(data1.getString("ownVehicle")));
+
             if (data1.opt("vehicleType") != null)
                 user.setVehicleType(data1.getString("vehicleType"));
             if (data1.opt("bankStatements") != null)
@@ -282,7 +283,8 @@ public class AppUtils {
             if (data1.opt("panProof") != null) {
                 user.setPanProof(gson.fromJson(data1.getString("panProof"), FrontBackImage.class));
             }
-
+            if (data1.opt("tncAccepted") != null)
+                user.setTncAccepted(data1.getBoolean("tncAccepted"));
             if (data1.opt("selfie") != null) {
                 JSONArray array = data1.getJSONArray("selfie");
                 user.setSelfie((String) array.get(0));

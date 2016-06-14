@@ -460,7 +460,7 @@ inccc=1;
             availbal.setText(getApplicationContext().getString(R.string.Rs) + fcbv);
 int w=serviceCharge(searchPrice,searchPrice-mind.intValue(),sellerNme1);
             firstServicecharge=w;
-            secondServicecharge=serviceCharge(searchPrice,sellingPrice-firstServicecharge,sellerNme1);
+            secondServicecharge=serviceCharge(searchPrice,sellingPrice-(mind.intValue()+w),sellerNme1);
             availbalmsg.setText("Minimum Downpayment for this product: " + getApplicationContext().getString(R.string.Rs) + (mind.intValue()+w));
             minDownpayment=(mind.intValue()+w);
             globalMindown=minDownpayment;
@@ -950,6 +950,9 @@ mDis=0;
                     }
                     minDownpayment=globalMindown;
                     mValue = minDownpayment;
+                    int w=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
+                    firstServicecharge=w;
+                    secondServicecharge=serviceCharge(searchPrice,sellingPrice-firstServicecharge,sellerNme1);
                     setEmi(sellingPrice);
                     appcBack.setChecked(false);
 
@@ -1473,9 +1476,33 @@ if(emi<0)
 
 int w=0;
             mValue=minDownpayment;
-            if(t.contains("0"))
-                mValue=sellingPrice+secondServicecharge;
-//            if((sellingPrice<=1000)&&(sellingPrice>150))
+            if(t.contains("0")) {
+                if((sellerNme1.equals("flipkart"))||(sellerNme1.equals("snapdeal")))
+
+
+                mValue = sellingPrice + 29;
+                else
+                {int serv=0;
+                    {
+                        if (searchPrice < 1000)
+                            serv = 29;
+                        else if (searchPrice < 5000)
+                            serv = 99;
+                        else if (searchPrice < 10000)
+                            serv = 199;
+                        else if (searchPrice < 15000)
+                            serv = 299;
+                        else if (searchPrice < 25000)
+                            serv = 449;
+                        else if (searchPrice > 25000)
+                            serv = 599;
+                    }
+                    mValue=sellingPrice+serv;
+                }
+
+            }
+//
+// if((sellingPrice<=1000)&&(sellingPrice>150))
 //                mValue=0;
 //            dValue.setText(String.valueOf(l.intValue()));
             if(sellingPrice-mValue>fcbv){
@@ -1483,7 +1510,32 @@ int w=0;
             mValue=sellingPrice-fcbv;
             }
             if(t.contains("0"))
-                mValue=sellingPrice+secondServicecharge;
+            {
+
+                if((sellerNme1.equals("flipkart"))||(sellerNme1.equals("snapdeal")))
+
+
+                    mValue = sellingPrice + 29;
+                else
+                {int serv=0;
+                    {
+                        if (searchPrice < 1000)
+                            serv = 29;
+                        else if (searchPrice < 5000)
+                            serv = 99;
+                        else if (searchPrice < 10000)
+                            serv = 199;
+                        else if (searchPrice < 15000)
+                            serv = 299;
+                        else if (searchPrice < 25000)
+                            serv = 449;
+                        else if (searchPrice > 25000)
+                            serv = 599;
+                    }
+                    mValue=sellingPrice+serv;
+                }
+
+            }
             else
             mValue=minDownpayment;
             dValue.setText(String.valueOf(mValue));
@@ -2046,7 +2098,32 @@ if(dummyCl==1000)
 
                 int service=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
                 if(t.contains("0"))
-                    mValue=sellingPrice+service;
+                {
+
+                    if((sellerNme1.equals("flipkart"))||(sellerNme1.equals("snapdeal")))
+
+
+                        mValue = sellingPrice + 29;
+                    else
+                    {int serv=0;
+                        {
+                            if (searchPrice < 1000)
+                                serv = 29;
+                            else if (searchPrice < 5000)
+                                serv = 99;
+                            else if (searchPrice < 10000)
+                                serv = 199;
+                            else if (searchPrice < 15000)
+                                serv = 299;
+                            else if (searchPrice < 25000)
+                                serv = 449;
+                            else if (searchPrice > 25000)
+                                serv = 599;
+                        }
+                        mValue=sellingPrice+serv;
+                    }
+
+                }
                 else
                     mValue=minDownpayment;
                 dValue.setText(String.valueOf(mValue));

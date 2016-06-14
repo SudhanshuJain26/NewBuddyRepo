@@ -139,11 +139,13 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         } catch (Exception e) {
             user.setGradeSheet(new Image());
         }
-        if (user.isIncompleteMarksheets()) {
-            if (user.isAppliedFor7k()) {
-                gradesheetLayout.setVisibility(View.GONE);
-            } else
+
+        if (user.isAppliedFor7k() && user.getGradeSheet().getTotalImageSize() == 0) {
+            gradesheetLayout.setVisibility(View.GONE);
+        } else {
+            if (user.isIncompleteMarksheets()) {
                 incompleteMarksheets.setVisibility(View.VISIBLE);
+            }
         }
         marksheet = user.getGradeSheet();
         if (!marksheet.getImgUrls().contains("add") && !user.isAppliedFor7k())

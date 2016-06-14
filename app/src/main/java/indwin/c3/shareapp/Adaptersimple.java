@@ -39,6 +39,7 @@ import java.util.ArrayList;
 public class Adaptersimple extends BaseAdapter {
     RadioButton checkRR;
     private final Context context;
+    private ImageView min;
     int selectedPosition;
     private RadioButton checkR;
     String t="",editnow="",getli="",sedt1="",sedt2="",sedt3="",sedt4="";
@@ -47,7 +48,7 @@ public class Adaptersimple extends BaseAdapter {
     View rowView, vi;
     int Check = 0;
     int del=0;
-    TextView textAdd1,textAdd2,textAdd3,textAdd4,delete;
+    TextView textAdd1,textAdd2,textAdd3,textAdd4,delete,save;
     Deladd add;
     private SharedPreferences prefs;
     //    private final String[] values;//
@@ -384,8 +385,9 @@ Deladd d=new Deladd();
         vi = parent.getRootView();
 //if(position==myList.size()-1){
 
-        TextView save = (TextView) vi.findViewById(R.id.save);
+        save = (TextView) vi.findViewById(R.id.save);
         e1 = ((EditText) vi.findViewById(R.id.edtAdd11));
+        min=(ImageView)vi.findViewById(R.id.min);
 //        TextView delete = (TextView) vi.findViewById(R.id.delete);
 
         delete.setOnClickListener(new View.OnClickListener() {
@@ -437,6 +439,20 @@ Deladd d=new Deladd();
 
                 }
             });
+        min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RelativeLayout r = (RelativeLayout) vi.findViewById(R.id.cardeditAdd1);
+                r.setVisibility(View.GONE);
+                ListView l = (ListView) vi.findViewById(R.id.list1);
+                TextView paydo=(TextView)vi.findViewById(R.id.paydo);
+                paydo.setVisibility(View.VISIBLE);
+                l.setVisibility(View.VISIBLE);
+                textAdd1.setVisibility(View.VISIBLE);
+                textAdd2.setVisibility(View.VISIBLE);
+                textAdd3.setVisibility(View.VISIBLE);
+            }
+        });
         // change the icon for Windows and iPhone
 //        String s = values[position];
 //        if (s.startsWith("iPhone")) {
@@ -450,7 +466,12 @@ Deladd d=new Deladd();
 
     private class addAddress extends
             AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            save.setEnabled(false);
+            delete.setEnabled(false);
 
+        }
 
         @Override
         protected String doInBackground(String... data) {
@@ -585,6 +606,9 @@ if((!del1.equals("delete"))&&!(getli.contains("address")))
         }
 
         protected void onPostExecute(String result) {
+
+            save.setEnabled(true);
+            delete.setEnabled(true);
             if (result.equals("win")) {
 
 

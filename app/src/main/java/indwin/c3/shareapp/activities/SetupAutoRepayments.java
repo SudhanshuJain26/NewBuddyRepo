@@ -3,10 +3,10 @@ package indwin.c3.shareapp.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -26,50 +26,51 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gun0912.tedpicker.ImagePickerActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
-import indwin.c3.shareapp.fragments.ProfileFormStep2Fragment3;
+import indwin.c3.shareapp.fragments.ProfileFormStep2Fragment4;
+import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
+import indwin.c3.shareapp.utils.Constants;
+import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import indwin.c3.shareapp.utils.ValidationUtils;
 import io.intercom.android.sdk.Intercom;
-import io.intercom.com.google.gson.Gson;
 
 public class SetupAutoRepayments extends AppCompatActivity implements View.OnFocusChangeListener {
 
     private static final int INTENT_REQUEST_GET_IMAGES = 13;
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     ArrayList<Uri> imageUris;
-    SharedPreferences mPrefs;
     UserModel user;
-    Gson gson;
     EditText bankAccNumber, confirmBankAccNumber, ifscCode;
     Button submitRepayments;
     TextView accountNumberMismatch, wrongIfsc;
     boolean hasAccNum = false, hasConfirmAccNum = false, hasIfsc = false;
-    private ArrayList<String> bankProofs;
-    private Map<String, String> newbankProofs;
     ImageUploaderRecyclerAdapter adapter;
     boolean deniedPermissionForever = false;
     public static final int PERMISSION_ALL = 0;
     private static final int REQUEST_PERMISSION_SETTING = 99;
     RecyclerView rvImages;
+    private Image bankProof;
+    private ImageButton bankIfscHelptip, bankProofHelptip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_auto_repayments);
+        getAllViews();
+        setClickListener();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
@@ -91,24 +92,19 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
                 }
             });
 
-            mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-            gson = new Gson();
-            String json = mPrefs.getString("UserObject", "");
-            user = gson.fromJson(json, UserModel.class);
+            user = AppUtils.getUserObject(this);
 
             rvImages = (RecyclerView) findViewById(R.id.rvImages);
             try {
-                bankProofs = user.getBankProofs();
-                if (bankProofs == null) {
-                    bankProofs = new ArrayList<>();
-                } else {
-                    mPrefs.edit().putString("UserObject", json).apply();
+
+                if (user.getBankProof() == null) {
+                    user.setBankProof(new Image());
                 }
             } catch (Exception e) {
-                bankProofs = new ArrayList<>();
             }
-            if (!user.isUpdateNewBankProofs() && !user.isAppliedFor7k())
-                bankProofs.add("add");
+            bankProof = user.getBankProof();
+            if (!user.isAppliedFor7k())
+                bankProof.getImgUrls().add("add");
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             rvImages.setLayoutManager(layoutManager);
@@ -120,7 +116,7 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if (bankProofs.get(position).equals("add")) {
+                        if (bankProof.getImgUrls().get(position - user.getBankProof().getInvalidImgUrls().size() - user.getBankProof().getValidImgUrls().size()).equals("add")) {
                             String[] temp = hasPermissions(SetupAutoRepayments.this, PERMISSIONS);
                             if (temp != null && temp.length != 0) {
                                 deniedPermissionForever = true;
@@ -136,9 +132,8 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
                     }
                 })
         );
-        adapter = new ImageUploaderRecyclerAdapter(this, bankProofs, "Bank Proofs", user.isAppliedFor7k());
+        adapter = new ImageUploaderRecyclerAdapter(this, bankProof, "Bank Proofs", user.isAppliedFor7k(), Constants.IMAGE_TYPE.BANK_PROOF.toString());
         rvImages.setAdapter(adapter);
-        newbankProofs = new HashMap<>();
 
         bankAccNumber = (EditText) findViewById(R.id.bank_acc_number);
         confirmBankAccNumber = (EditText) findViewById(R.id.confirm_bank_acc_number);
@@ -170,8 +165,8 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
                     wrongIfsc.setVisibility(View.VISIBLE);
                     return;
                 }
-                bankProofs.remove(bankProofs.size() - 1);
-                user.setBankProofs(bankProofs);
+                //bankProofs.remove(bankProofs.size() - 1);
+                //user.setBankProofs(bankProofs);
                 //                String encryptedMsg = "";
                 //                try {
                 //                    String password = "bf5cbe23fd8e60697c8ddc2ef25af796";
@@ -192,21 +187,22 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
                 //                    e.printStackTrace();
                 //                } catch (Exception e) {
                 //                    e.printStackTrace();
-                //                }
+                //
+                //             }
+                UserModel user = AppUtils.getUserObject(SetupAutoRepayments.this);
                 String mask = bankAccNumber.getText().toString().replaceAll("\\w(?=\\w{4})", "*");
                 user.setBankAccNum(bankAccNumber.getText().toString());
                 user.setUpdateBankAccNum(true);
                 user.setBankIfsc(ifscCode.getText().toString().toUpperCase());
                 user.setUpdateBankIfsc(true);
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
+                AppUtils.saveUserObject(SetupAutoRepayments.this, user);
                 Intent intent = new Intent(SetupAutoRepayments.this, CheckInternetAndUploadUserDetails.class);
                 sendBroadcast(intent);
-                ProfileFormStep2Fragment3.bankAccNum.setText(mask);
-                ProfileFormStep2Fragment3.setupAutoRepayments.setVisibility(View.GONE);
-                ProfileFormStep2Fragment3.bankAccNum.setVisibility(View.VISIBLE);
-                ProfileFormStep2Fragment3.incompleteSetupRepayments.setVisibility(View.GONE);
-                ProfileFormStep2Fragment3.changeAccNum.setVisibility(View.VISIBLE);
+                ProfileFormStep2Fragment4.bankAccNum.setText(mask);
+                ProfileFormStep2Fragment4.setupAutoRepayments.setVisibility(View.GONE);
+                ProfileFormStep2Fragment4.bankAccNum.setVisibility(View.VISIBLE);
+                ProfileFormStep2Fragment4.incompleteSetupRepayments.setVisibility(View.GONE);
+                ProfileFormStep2Fragment4.changeAccNum.setVisibility(View.VISIBLE);
                 //                ProfileFormStep2Fragment3.completeSetupRepayments.setVisibility(View.GONE);
                 //                ProfileFormStep2Fragment3.changeAccNum.setVisibility(View.VISIBLE);
                 finish();
@@ -235,6 +231,36 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
         });
     }
 
+    private void getAllViews() {
+        bankIfscHelptip = (ImageButton) findViewById(R.id.bank_ifsc_helptip);
+        bankProofHelptip = (ImageButton) findViewById(R.id.bank_proof_helptip);
+    }
+
+    private void setClickListener() {
+
+        bankIfscHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String text1 = "To enable automatic repayments, we require that the bank account is registered in your own name. Please ensure that the IFSC code provided by you corresponds to the same branch in which your account has been opened.";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(SetupAutoRepayments.this, "Upload your College ID", text1, text2, "#44c2a6");
+                dialog.show();
+
+            }
+        });
+        bankProofHelptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text1 = "We require proof of your Bank Account which clearly shows your Name, Account Number and the bank’s IFSC code. You can upload a photo or scan of any of of the following:<br> • First page of Passbook<br>" +
+                        "• Blank/Cancelled Cheque Leaf<br>" +
+                        "• Screenshot of your NetBanking account page\n";
+                String text2 = "";
+                Dialog dialog = new HelpTipDialog(SetupAutoRepayments.this, "Upload your College ID", text1, text2, "#44c2a6");
+                dialog.show();
+            }
+        });
+    }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
@@ -380,18 +406,21 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
         super.onActivityResult(requestCode, resuleCode, intent);
 
         if (requestCode == INTENT_REQUEST_GET_IMAGES && resuleCode == Activity.RESULT_OK) {
-            if (user.getBankProofs() == null)
-                user.setBankProofs(new ArrayList<String>());
+            UserModel userModel = AppUtils.getUserObject(this);
+            if (userModel.getBankProof() == null)
+                userModel.setBankProof(new Image());
             imageUris = intent.getParcelableArrayListExtra(ImageHelperActivity.EXTRA_IMAGE_URIS);
+            Image image = userModel.getBankProof();
             for (Uri uri : imageUris) {
-                bankProofs.add(0, uri.getPath());
-                newbankProofs.put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
-                //                user.addBankProofs(0, uri.getPath(), user.getBankProofs());
-                //                adapter.notifyItemInserted(0);
+                image.getImgUrls().add(0, uri.getPath());
+                image.getNewImgUrls().put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
+                bankProof.getImgUrls().add(0, uri.getPath());
+
             }
+            AppUtils.saveUserObject(this, userModel);
+
             adapter.notifyDataSetChanged();
-            user.setNewBankProofs(newbankProofs);
-            user.setUpdateNewBankProofs(true);
+            image.setUpdateNewImgUrls(true);
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resuleCode == Activity.RESULT_OK) {
             hasPermissions(this, PERMISSIONS);
         }

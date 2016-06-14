@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpEntity;
@@ -41,7 +42,6 @@ import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
-import io.intercom.com.google.gson.Gson;
 
 /**
  * Created by shubhang on 17/03/16.
@@ -70,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        user = AppUtils.getUserObject(this);
         try {
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
@@ -101,13 +102,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             Runnable myRunnable = new Runnable() {
 
                 public void run() {
-                    try {
-                        Thread.sleep(10000);
-
-                    } catch (Exception e) {
-
-                    }
-                    new ValidateForm().execute();
+                    checkForDBUpdate();
                 }
 
 
@@ -257,9 +252,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         actionBarDrawerToggle.syncState();
 
         mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
 
         profilePic = (MLRoundedImageView) findViewById(R.id.profile_pic);
         SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
@@ -327,38 +319,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             declinedUser();
             return;
         }
-        //        String formStatus = user.getFormStatus();
-        //        if ("appliedFor1K".equals(formStatus)) {
-        //            applied1k();
-        //        } else if ("declinedFor1K".equals(formStatus)) {
-        //            verifyIdentityProgressBar.setImageResource(R.drawable.complete);
-        //            verifyIdentityProgressBar.setVisibility(View.VISIBLE);
-        //            verifyIdentityLock.setVisibility(View.GONE);
-        //            verifyIdentityText.setText("Waitlisted. Proceed to next step!");
-        //            mPrefs.edit().putBoolean("step1Editable", false).apply();
-        //        } else if ("approvedFor1K".equals(formStatus)) {
-        //            approved1K();
-        //        } else if ("appliedFor7K".equals(formStatus)) {
-        //            applied7k();
-        //        } else if ("approvedFor7K".equals(formStatus)) {
-        //            approved7k();
-        //        } else if ("appliedFor60K".equals(formStatus)) {
-        //            applied60k();
-        //        } else if ("approvedFor60k".equals(formStatus)) {
-        //            applied60k();
-        //        } else if ("declined".equals(formStatus)) {
-
-        //        }
-        //        if (user.getApprovedBand() != null && !"".equals(user.getApprovedBand())) {
-        //            String approvedBand = user.getApprovedBand();
-        //            if ("Palladium".equals(approvedBand)) {
-        //                approved60k();
-        //                approved7k();
-        //            } else if ("Oxygen".equals(approvedBand)) {
-        //                approved7k();
-        //            }
-        //            approved1K();
-        //        }
 
         String status1K = user.getStatus1K();
         if ("declined".equals(status1K)) {
@@ -368,8 +328,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         } else if ("approved".equals(status1K)) {
             approved1K();
         } else if ("applied".equals(status1K)) {
-            user.setAppliedFor1k(true);
             applied1k();
+            user.setAppliedFor1k(true);
         } else if (!user.isAppliedFor1k()) {
             mPrefs.edit().putBoolean("visitedFormStep1Fragment1", true).apply();
             incomplete1k();
@@ -409,8 +369,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             incomplete60k();
         }
 
-        json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
+        AppUtils.saveUserObject(this, user);
+    }
+
+    private void checkForDBUpdate() {
+        try {
+            Thread.sleep(10000);
+
+        } catch (Exception e) {
+
+        }
+        SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+        boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+        if (isUpdatingDB)
+            checkForDBUpdate();
+        else
+            new ValidateForm().execute();
     }
 
     private void declinedUser() {
@@ -495,7 +469,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             user.setName(name);
                             user.setEmail(email);
                             if (!data1.getBoolean("offlineForm"))
-                                AppUtils.checkDataForNormalUser(user, gson, data1);
+                                AppUtils.checkDataForNormalUser(user, gson, data1, ProfileActivity.this);
                             else
                                 checkDataForOfflineUser(user, gson, data1);
 
@@ -633,7 +607,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             sh.edit().putBoolean("visitedFormStep1Fragment1", true).apply();
             sh.edit().putBoolean("visitedFormStep1Fragment2", true).apply();
             sh.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
-            AppUtils.checkDataForNormalUser(user, gson, data1);
+            AppUtils.checkDataForNormalUser(user, gson, data1, this);
         } catch (Exception e) {
             e.printStackTrace();
 

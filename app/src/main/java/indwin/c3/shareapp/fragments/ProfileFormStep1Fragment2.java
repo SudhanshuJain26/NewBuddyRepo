@@ -17,13 +17,10 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,29 +49,26 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.gun0912.tedpicker.ImagePickerActivity;
-import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Views.MonthYearPicker;
+import indwin.c3.shareapp.activities.FullScreenActivity;
 import indwin.c3.shareapp.activities.ImageHelperActivity;
 import indwin.c3.shareapp.activities.ProfileFormStep1;
 import indwin.c3.shareapp.adapters.AutoCompleteAdapter;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
 import indwin.c3.shareapp.adapters.PlaceAutocompleteAdapter;
+import indwin.c3.shareapp.models.FrontBackImage;
+import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.OnBackPressedListener;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
-import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
-import indwin.c3.shareapp.utils.DaysDifferenceFinder;
+import indwin.c3.shareapp.utils.Constants;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import io.intercom.com.google.gson.Gson;
@@ -87,7 +81,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     public static final int PERMISSION_ALL = 0;
     private static final int REQUEST_PERMISSION_SETTING = 99;
     private SharedPreferences mPrefs;
-    private UserModel user;
+    private static UserModel user;
     private ArrayList<String> collegeIds;
     private Map<String, String> newCollegeIds;
     private static final int INTENT_REQUEST_GET_IMAGES = 13;
@@ -107,7 +101,6 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     private Button saveAndProceed, previous, cantFindCollege;
     private Gson gson;
     private static boolean updateCourseEndDate = false;
-    private TextView gotoFragment1, gotoFragment3, gotoFragment2;
     private RelativeLayout addCollegeLayout, addCourseLayout;
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutocompleteAdapter mGooglePlaceAdapter;
@@ -123,9 +116,10 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
     private ImageButton socialHelptip;
     private Button addCourse, addCollege;
     private EditText addCourseEt;
-    private EditText addRollNumberEt;
-    private ImageView incompleteRollNumber, completeRollNumber;
-    private boolean isRollNUmberUpdate;
+
+    private Image collegeIDs;
+    private int clickedPosition;
+    private ImageButton closeAddCourseLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -138,23 +132,19 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep1Fragment2", true).apply();
         gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
-        user = gson.fromJson(json, UserModel.class);
-
+        ProfileFormStep1 profileFormStep1 = (ProfileFormStep1) getActivity();
+        user = profileFormStep1.getUser();
         try {
-            collegeIds = user.getCollegeIds();
-            if (collegeIds == null) {
-                collegeIds = new ArrayList<>();
-            } else {
+            if (user.getCollegeID() == null) {
+                user.setCollegeID(new Image());
+            } else if (user.getCollegeID().getFront() != null && AppUtils.isNotEmpty(user.getCollegeID().getFront().getImgUrl())) {
                 completeCollegeId.setVisibility(View.VISIBLE);
                 user.setIncompleteCollegeId(false);
-                mPrefs.edit().putString("UserObject", json).apply();
             }
         } catch (Exception e) {
             collegeIds = new ArrayList<>();
         }
-        if (!collegeIds.contains("add") && !user.isAppliedFor1k())
-            collegeIds.add("add");
+        collegeIDs = user.getCollegeID();
         BANGALORE_CENTER.setLatitude(12.97232);
         BANGALORE_CENTER.setLongitude(77.59480);
         if (mGoogleApiClient == null)
@@ -170,7 +160,8 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if (collegeIds.get(position).equals("add")) {
+
+                        if (((position == 0 && (collegeIDs.getFront() == null || AppUtils.isEmpty(collegeIDs.getFront().getImgUrl()))) && !user.isAppliedFor1k()) || (position == 1 && (collegeIDs.getBack() == null || AppUtils.isEmpty(collegeIDs.getBack().getImgUrl()))) && !user.isAppliedFor1k()) {
 
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {
@@ -178,41 +169,36 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                                 PERMISSIONS = temp;
                                 requestPermissions(PERMISSIONS, PERMISSION_ALL);
                             } else {
+                                clickedPosition = position;
                                 Intent intent = new Intent(getActivity(), ImageHelperActivity.class);
                                 startActivityForResult(intent, INTENT_REQUEST_GET_IMAGES);
                             }
+                        } else {
+                            Intent intent = new Intent(getActivity(), FullScreenActivity.class);
+
+                            intent.putExtra(AppUtils.IMAGE_TYPE, Constants.IMAGE_TYPE.COLLEGE_ID.toString());
+                            intent.putExtra(Constants.DISABLE_ADD, true);
+                            intent.putExtra(AppUtils.POSITION, position);
+                            intent.putExtra(AppUtils.HEADING, "College Ids");
+                            getActivity().startActivity(intent);
                         }
                     }
                 })
         );
         newCollegeIds = new HashMap<>();
-        adapter = new ImageUploaderRecyclerAdapter(getActivity(), collegeIds, "College Ids", user.isAppliedFor1k());
+        adapter = new ImageUploaderRecyclerAdapter(getActivity(), collegeIDs, "College Ids", user.isAppliedFor1k(), Constants.IMAGE_TYPE.COLLEGE_ID.toString());
         rvImages.setAdapter(adapter);
 
         googleCollegeName.setOnItemClickListener(mAutocompleteClickListener);
         mGooglePlaceAdapter = new PlaceAutocompleteAdapter(getActivity(), mGoogleApiClient, BOUNDS_GREATER_BANGALORE, null);
         googleCollegeName.setAdapter(mGooglePlaceAdapter);
 
-        if (!mPrefs.getBoolean("step1Editable", true)) {
-            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment1, gotoFragment3);
+        if (user.isAppliedFor1k()) {
+            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();
 
-        if (mPrefs.getBoolean("visitedFormStep1Fragment2", false)) {
-            gotoFragment2.setAlpha(1);
-            gotoFragment2.setClickable(true);
-        }
 
-        if (mPrefs.getBoolean("visitedFormStep1Fragment3", false)) {
-            gotoFragment3.setAlpha(1);
-            gotoFragment3.setClickable(true);
-        }
-
-        if (user.getGender() != null && "girl".equals(user.getGender())) {
-            Picasso.with(getActivity())
-                    .load(R.mipmap.step1fragment2girl)
-                    .into(topImage);
-        }
         if (AppUtils.isNotEmpty(user.getCollegeName())) {
             editCollegeName.setText(user.getCollegeName());
         }
@@ -236,108 +222,35 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
 
         Rect rectangle = new Rect();
         Window window = getActivity().getWindow();
-        window.getDecorView().
+        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
 
-                getWindowVisibleDisplayFrame(rectangle);
 
         int statusBarHeight = rectangle.top;
         int height = displaymetrics.heightPixels - statusBarHeight;
         collegeNameLayout.getLayoutParams().height = height;
         addCollegeLayout.getLayoutParams().height = height;
-        //        collegeNameMapLayout.getLayoutParams().height = height;
 
-        if (AppUtils.isNotEmpty(user.getRollNumber())) {
-            addRollNumberEt.setText(user.getRollNumber());
-            completeRollNumber.setVisibility(View.VISIBLE);
-        }
         if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails() || user.isIncompleteRollNumber())
 
         {
-            incompleteStep2.setVisibility(View.VISIBLE);
-            if (user.isIncompleteCollegeId())
+            if (user.isIncompleteCollegeId() && !user.isAppliedFor1k())
                 incompleteCollegeId.setVisibility(View.VISIBLE);
-            if (user.isIncompleteCollegeDetails())
+            if (user.isIncompleteCollegeDetails() && !user.isAppliedFor1k())
                 incompleteCollegeDetails.setVisibility(View.VISIBLE);
-            if (user.isIncompleteRollNumber()) {
-                incompleteRollNumber.setVisibility(View.VISIBLE);
-            } else {
-                completeRollNumber.setVisibility(View.VISIBLE);
 
-            }
-        } else
-
-        {
-            incompleteStep2.setVisibility(View.GONE);
         }
-
-        if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender())
-
-        {
-            incompleteStep1.setVisibility(View.VISIBLE);
-        } else
-            incompleteStep1.setVisibility(View.GONE);
-
-
-        if (user.getCollegeIds() != null && user.getCollegeIds().size() > 0) {
-            user.setIncompleteCollegeId(false);
-        }
-        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress() || user.isInCompleteAgreement())
-
-        {
-            incompleteStep3.setVisibility(View.VISIBLE);
-        } else
-            incompleteStep3.setVisibility(View.GONE);
-
-
-        if (user.isAppliedFor1k()) {
-            previous.setVisibility(View.INVISIBLE);
-            saveAndProceed.setVisibility(View.INVISIBLE);
-            rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
-        }
-
 
         return rootView;
     }
 
 
     private void setOnCLickListener() {
-        addRollNumberEt.addTextChangedListener(new TextWatcher() {
+        closeAddCourseLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                isRollNUmberUpdate = true;
-                user.setUpdateRollNumber(true);
+            public void onClick(View v) {
+                hideAddCourseLayout();
             }
         });
-        gotoFragment1.setOnClickListener(new View.OnClickListener()
-
-                                         {
-                                             @Override
-                                             public void onClick(View v) {
-                                                 replaceFragment1(true);
-                                             }
-                                         }
-
-        );
-        gotoFragment3.setOnClickListener(new View.OnClickListener()
-
-                                         {
-                                             @Override
-                                             public void onClick(View v) {
-                                                 replaceFragment3(true);
-                                             }
-                                         }
-
-        );
         addCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -491,28 +404,6 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                                                  }
 
         );
-        //        closeCollegeNameMapLayout.setOnClickListener(new View.OnClickListener() {
-        //            @Override
-        //            public void onClick(View v) {
-        //                collegeNameMapLayout.setVisibility(View.GONE);
-        //                collegeNameMap.setText("");
-        //            }
-        //        });
-        //
-        //        acceptCollege.setOnClickListener(new View.OnClickListener() {
-        //            @Override
-        //            public void onClick(View v) {
-        //                editCollegeName.setText(collegeNameMap.getText());
-        //                user.setCollegeName(editCollegeName.getText().toString());
-        //                user.setUpdateCollegeName(true);
-        //                collegeNameMapLayout.setVisibility(View.GONE);
-        //                collegeNameMap.setText("");
-        //                hideCollegeNameLayout();
-        //            }
-        //        });
-        //        map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map))
-        //                .getMap();
-        //        map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 
         monthYearPicker = new MonthYearPicker(getActivity());
         monthYearPicker.build(new DialogInterface.OnClickListener() {
@@ -524,117 +415,52 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         monthYearPicker.setYearValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //                if (newVal == currentYear) {
-                //                    monthYearPicker.setMinMonth(currentMonth);
-                //                } else {
-                //                   monthYearPicker.setMinMonth(10);
-                //                }
-            }
-        });
-        previous.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View v) {
-                replaceFragment1(true);
-            }
-        });
-        saveAndProceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean readyToUpdate = true;
-                boolean isCollegeEndingSoon = false;
-
-                if (isUserRejected) {
-                    readyToUpdate = false;
-                }
-                checkIncomplete();
-                if (isRollNUmberUpdate && AppUtils.isNotEmpty(addRollNumberEt.getText().toString())) {
-                    user.setIncompleteRollNumber(false);
-                    user.setRollNumber(addRollNumberEt.getText().toString());
-                }
-                if (updateCourseEndDate) {
-                    try {
-                        SimpleDateFormat spf = new SimpleDateFormat("MMM yyyy");
-                        Date newDate = spf.parse(editCollegeEndDate.getText().toString());
-                        spf = new SimpleDateFormat("yyyy-MM-dd");
-                        user.setCourseEndDate(spf.format(newDate));
-                        user.setUpdateCourseEndDate(true);
-                        Calendar startCalendar = new GregorianCalendar();
-                        startCalendar.setTime(new Date());
-                        Calendar endCalendar = new GregorianCalendar();
-                        endCalendar.setTime(newDate);
-
-                        int diffMonth = DaysDifferenceFinder.getDifferenceBetweenDatesInMonths(startCalendar, endCalendar);
-                        if (startCalendar.get(Calendar.DAY_OF_MONTH) > 15) {
-                            diffMonth -= 1;
-                        }
-                        if (diffMonth <= 0) {
-                            isCollegeEndingSoon = true;
-                            readyToUpdate = false;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
-                Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);
-                getContext().sendBroadcast(intent);
-                replaceFragment3(false);
             }
         });
     }
 
     private void getAllViews(View rootView) {
         completeCollegeId = (ImageView) rootView.findViewById(R.id.complete_college_id);
-        addCourse = (Button) rootView.findViewById(R.id.add_course);
-        addRollNumberEt = (EditText) rootView.findViewById(R.id.roll_number_et);
+        addCourse = (Button) getActivity().findViewById(R.id.add_course);
 
-        completeRollNumber = (ImageView) rootView.findViewById(R.id.complete_roll_number);
-        incompleteRollNumber = (ImageView) rootView.findViewById(R.id.incomplete_roll_number);
-        addCollege = (Button) rootView.findViewById(R.id.add_college);
+        addCollege = (Button) getActivity().findViewById(R.id.add_college);
         editCollegeName = (TextView) rootView.findViewById(R.id.edit_college_name);
         editCourseName = (TextView) rootView.findViewById(R.id.edit_course_name);
         editCollegeEndDate = (TextView) rootView.findViewById(R.id.edit_college_end_date);
         editCollegeEndDate = (TextView) rootView.findViewById(R.id.edit_college_end_date);
-        collegeNameLayout = (LinearLayout) rootView.findViewById(R.id.college_name_layout);
-        collegeName = (AutoCompleteTextView) rootView.findViewById(R.id.college_name);
-        addCourseEt = (EditText) rootView.findViewById(R.id.course_name_et);
-        closeCollegeNameLayout = (ImageButton) rootView.findViewById(R.id.close_college_name_layout);
+        collegeNameLayout = (LinearLayout) getActivity().findViewById(R.id.college_name_layout);
+        collegeName = (AutoCompleteTextView) getActivity().findViewById(R.id.college_name);
+
+
+        addCourseEt = (EditText) getActivity().findViewById(R.id.course_name_et);
+        closeCollegeNameLayout = (ImageButton) getActivity().findViewById(R.id.close_college_name_layout);
         collegeArrayList = new ArrayList<>(Arrays.asList(getActivity().getResources().getStringArray(R.array.colleges)));
         courseArrayList = new ArrayList<>(Arrays.asList(getActivity().getResources().getStringArray(R.array.courses)));
-        collegeNameHeading = (TextView) rootView.findViewById(R.id.college_name_heading);
-        //        collegeNameMapLayout = (RelativeLayout) rootView.findViewById(R.id.college_name_map_layout);
-        //        collegeNameMap = (TextView) rootView.findViewById(R.id.college_name_map);
-        //        closeCollegeNameMapLayout = (ImageButton) rootView.findViewById(R.id.close_college_name_map_layout);
-        //        acceptCollege = (Button) rootView.findViewById(R.id.accept_college);
-        saveAndProceed = (Button) rootView.findViewById(R.id.save_and_proceed);
+        collegeNameHeading = (TextView) getActivity().findViewById(R.id.college_name_heading);
+        addCollegeLayout = (RelativeLayout) getActivity().findViewById(R.id.add_college_layout);
+        addCourseLayout = (RelativeLayout) getActivity().findViewById(R.id.add_course_layout);
 
-        previous = (Button) rootView.findViewById(R.id.previous);
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        addCollegeLayout = (RelativeLayout) rootView.findViewById(R.id.add_college_layout);
-        addCourseLayout = (RelativeLayout) rootView.findViewById(R.id.add_course_layout);
-
-        cantFindCollege = (Button) rootView.findViewById(R.id.cant_find_college_button);
-        closeAddCollegeLayout = (ImageButton) rootView.findViewById(R.id.close_add_college_name_layout);
+        cantFindCollege = (Button) getActivity().findViewById(R.id.cant_find_college_button);
+        closeAddCollegeLayout = (ImageButton) getActivity().findViewById(R.id.close_add_college_name_layout);
         incompleteCollegeId = (ImageView) rootView.findViewById(R.id.incomplete_college_id);
         completeCollegeDetails = (ImageView) rootView.findViewById(R.id.complete_college_details);
         incompleteCollegeDetails = (ImageView) rootView.findViewById(R.id.incomplete_college_details);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
+        incompleteStep1 = (ImageView) getActivity().findViewById(R.id.incomplete_step_1);
+        incompleteStep2 = (ImageView) getActivity().findViewById(R.id.incomplete_step_2);
+        incompleteStep3 = (ImageView) getActivity().findViewById(R.id.incomplete_step_3);
+        topImage = (ImageView) getActivity().findViewById(R.id.verify_image_view2);
+        saveAndProceed = (Button) getActivity().findViewById(R.id.save_and_proceed);
         socialHelptip = (ImageButton) rootView.findViewById(R.id.social_helptip);
 
-        googleCollegeName = (AutoCompleteTextView) rootView.findViewById(R.id.google_college_autocomplete);
-
+        googleCollegeName = (AutoCompleteTextView) getActivity().findViewById(R.id.google_college_autocomplete);
+        closeAddCourseLayout = (ImageButton) getActivity().findViewById(R.id.close_add_course_name_layout);
     }
 
 
-    private void setAllHelpTipsEnabled() { socialHelptip.setEnabled(true);}
+    private void setAllHelpTipsEnabled() {
+        socialHelptip.setEnabled(true);
+        socialHelptip.setClickable(true);
+    }
 
     @Override
     public void onStart() {
@@ -651,73 +477,67 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         super.onStop();
     }
 
-    private void checkIncomplete() {
-        if (collegeIds.size() == 1) {
+    public void checkIncomplete() {
+        if (collegeIDs.getFront() == null || AppUtils.isEmpty(collegeIDs.getFront().getImgUrl())) {
             incompleteCollegeId.setVisibility(View.VISIBLE);
             user.setIncompleteCollegeId(true);
-        } else if (collegeIds.size() == 1) {
-            if ("add".equals(collegeIds.get(0))) {
-                user.setIncompleteBankStmt(true);
-            } else {
-                user.setIncompleteBankStmt(false);
-            }
         } else {
-            if (!user.isAppliedFor1k()) {
-                collegeIds.remove(collegeIds.size() - 1);
-                user.setCollegeIds(collegeIds);
-            }
             user.setIncompleteCollegeId(false);
-        }
-        if (AppUtils.isEmpty(addRollNumberEt.getText().toString())) {
 
-            user.setIncompleteRollNumber(true);
+        }
+        if (user.isIncompleteCollegeId()) {
+            incompleteCollegeId.setVisibility(View.VISIBLE);
+            completeCollegeId.setVisibility(View.GONE);
+
         } else {
-            user.setIncompleteRollNumber(false);
+            completeCollegeId.setVisibility(View.VISIBLE);
+            incompleteCollegeId.setVisibility(View.GONE);
         }
         if ("".equals(editCollegeName.getText().toString()) || "".equals(editCourseName.getText().toString())
-                || "".equals(editCollegeEndDate.getText().toString()) || AppUtils.isEmpty(addRollNumberEt.getText().toString())) {
+                || "".equals(editCollegeEndDate.getText().toString())) {
             incompleteCollegeDetails.setVisibility(View.VISIBLE);
+            completeCollegeDetails.setVisibility(View.GONE);
             user.setIncompleteCollegeDetails(true);
-        } else
+        } else {
             user.setIncompleteCollegeDetails(false);
+            incompleteCollegeDetails.setVisibility(View.GONE);
+            completeCollegeDetails.setVisibility(View.VISIBLE);
+        }
+
     }
 
-    private void replaceFragment1(boolean check) {
-        if (check)
-            checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep1Fragment1(), "Fragment2Tag");
-        ft.commit();
-    }
-
-    private void replaceFragment3(boolean check) {
-        if (check)
-            checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep1Fragment3(), "Fragment2Tag");
-        ft.commit();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resuleCode, Intent intent) {
         super.onActivityResult(requestCode, resuleCode, intent);
 
         if (requestCode == INTENT_REQUEST_GET_IMAGES && resuleCode == Activity.RESULT_OK) {
+            UserModel user = AppUtils.getUserObject(getActivity());
             imageUris = intent.getParcelableArrayListExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
-            if (user.getCollegeIds() == null)
-                user.setCollegeIds(new ArrayList<String>());
-            for (Uri uri : imageUris) {
-                collegeIds.add(0, uri.getPath());
-                newCollegeIds.put(uri.getPath(), AppUtils.uploadStatus.OPEN.toString());
-                //                user.addCollegeId(0, uri.getPath(), user.getCollegeIds());
+            if (user.getCollegeID() == null)
+                user.setCollegeID(new Image());
+            FrontBackImage frontBackImage = new FrontBackImage();
+            if (imageUris != null && imageUris.size() > 0) {
+                Image collegeId = user.getCollegeID();
+                frontBackImage.setImgUrl(imageUris.get(0).getPath());
+                if (clickedPosition == 0) {
+                    collegeId.setFrontStatus(AppUtils.uploadStatus.OPEN.toString());
+                    collegeId.setFront(frontBackImage);
+                    collegeId.setUpdateFront(true);
+                    collegeIDs.setFront(frontBackImage);
+                } else if (clickedPosition == 1) {
+                    collegeId.setUpdateBack(true);
+                    collegeId.setBack(frontBackImage);
+                    collegeIDs.setBack(frontBackImage);
+                    collegeId.setBackStatus(AppUtils.uploadStatus.OPEN.toString());
+
+                }
+
+                adapter.notifyDataSetChanged();
+                AppUtils.saveUserObject(getActivity(), user);
             }
-            adapter.notifyDataSetChanged();
-            user.setNewCollegeIds(newCollegeIds);
-            user.setUpdateNewCollegeIds(true);
+
+
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resuleCode == Activity.RESULT_OK) {
             hasPermissions(getActivity(), PERMISSIONS);
         }
@@ -752,12 +572,26 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         }
     }
 
+    private void hideAddCourseLayout() {
+        try {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+            addCourseLayout.setVisibility(View.GONE);
+            collegeName.setText("");
+            googleCollegeName.setText("");
+            AppUtils.hideKeyboard(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void confirmCollegeEndDate() {
         String date = monthYearPicker.getSelectedMonthName() + " " + monthYearPicker.getSelectedYear();
         editCollegeEndDate.setText(date);
         editCollegeEndDate.setFocusable(true);
         editCollegeEndDate.setFocusableInTouchMode(true);
         updateCourseEndDate = true;
+        user.setCourseEndDate(date);
+        user.setUpdateCourseEndDate(true);
     }
 
     private AdapterView.OnItemClickListener mAutocompleteClickListener

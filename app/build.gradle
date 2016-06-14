@@ -7,8 +7,8 @@ android {
         applicationId "indwin.c3.shareapp"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 69
-        versionName "2.12"
+        versionCode 71
+        versionName "2.14"
     }
     lintOptions {
         checkReleaseBuilds false
@@ -68,6 +68,7 @@ dependencies {
     compile 'com.commonsware.cwac:cam2:0.5.11'
 
 
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
 android { sourceSets { main { java.srcDirs = ['src/main/java', 'app/model'] } } }
 android {

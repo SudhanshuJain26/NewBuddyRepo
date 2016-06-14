@@ -16,6 +16,8 @@ import indwin.c3.shareapp.HomePage;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Views.RoundedTransformation;
 import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
+import indwin.c3.shareapp.utils.Constants;
 import io.intercom.com.google.gson.Gson;
 
 public class Pending60kApprovalActivity extends AppCompatActivity {
@@ -31,17 +33,15 @@ public class Pending60kApprovalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending60k_approval);
         try {
-//            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.helptip);
-//            upArrow.setColorFilter(getResources().getColor(R.color.colorwhite), PorterDuff.Mode.SRC_ATOP);
-//            getSupportActionBar().setHomeAsUpIndicator(upArrow);
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            //            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.helptip);
+            //            upArrow.setColorFilter(getResources().getColor(R.color.colorwhite), PorterDuff.Mode.SRC_ATOP);
+            //            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+            //            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
             mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-            gson = new Gson();
-            String json = mPrefs.getString("UserObject", "");
-            user = gson.fromJson(json, UserModel.class);
-
+            user = AppUtils.getUserObject(this);
+            user.setStatus60K(Constants.STATUS.APPLIED.toString());
             userPic = (ImageView) findViewById(R.id.user_image);
             SharedPreferences sf = getSharedPreferences("proid", Context.MODE_PRIVATE);
             Picasso.with(this).load("https://graph.facebook.com/" + sf.getString("dpid", "") + "/picture?type=large").transform(new RoundedTransformation(5, 0)).into(userPic);
@@ -50,8 +50,7 @@ public class Pending60kApprovalActivity extends AppCompatActivity {
             userName.setText(userText);
 
             user.setAppliedFor60k(true);
-            json = gson.toJson(user);
-            mPrefs.edit().putString("UserObject", json).apply();
+            AppUtils.saveUserObject(this, user);
         } catch (Exception e) {
             e.printStackTrace();
         }

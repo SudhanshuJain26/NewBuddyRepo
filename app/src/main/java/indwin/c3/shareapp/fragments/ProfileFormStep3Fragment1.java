@@ -2,11 +2,9 @@ package indwin.c3.shareapp.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +17,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.activities.ProfileFormStep3;
 import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
-import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import io.intercom.com.google.gson.Gson;
 
@@ -59,31 +55,12 @@ public class ProfileFormStep3Fragment1 extends Fragment {
                 R.layout.profile_form_step3_fragment1, container, false);
         getAllViews(rootView);
 
+        ProfileFormStep3 profileFormStep3 = (ProfileFormStep3) getActivity();
+        user = profileFormStep3.getUser();
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        gson = new Gson();
-        user = AppUtils.getUserObject(getActivity());
-        if (!mPrefs.getBoolean("step3Editable", true)) {
-            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false, gotoFragment2, gotoFragment3);
-        }
-        mPrefs.edit().putBoolean("visitedFormStep3Fragment1", true).apply();
-        if (mPrefs.getBoolean("visitedFormStep3Fragment2", false)) {
-            gotoFragment2.setAlpha(1);
-            gotoFragment2.setClickable(true);
-        }
-        if (mPrefs.getBoolean("visitedFormStep3Fragment3", false)) {
-            gotoFragment3.setAlpha(1);
-            gotoFragment3.setClickable(true);
-        }
-        if (user.getGender() != null && "girl".equals(user.getGender())) {
-            Picasso.with(getActivity())
-                    .load(R.mipmap.step3fragment1girl)
-                    .into(topImage);
-        }
-
-
+        mPrefs.edit().putBoolean("visitedFormStep3Fragment2", true).apply();
         if (user.isAppliedFor60k()) {
-            saveAndProceed.setVisibility(View.INVISIBLE);
-            rootView.findViewById(R.id.details_submitted_tv).setVisibility(View.VISIBLE);
+            ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setOnclickListener();
         final String annualFeesOptions[] = getResources().getStringArray(R.array.annual_fees);
@@ -95,7 +72,6 @@ public class ProfileFormStep3Fragment1 extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position < annualFeesOptions.length - 1) {
-                    selectedAnnualFees = true;
                     user.setAnnualFees(annualFeesValues[position]);
                     user.setUpdateAnnualFees(true);
                 }
@@ -207,19 +183,14 @@ public class ProfileFormStep3Fragment1 extends Fragment {
         }
 
         if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship()) {
-            incompleteStep1.setVisibility(View.VISIBLE);
             if (user.isIncompleteAnnualFees())
                 incompleteAnnualFees.setVisibility(View.VISIBLE);
             if (user.isIncompleteScholarship())
                 incompleteScholarshipDetails.setVisibility(View.VISIBLE);
 
         }
-        if (user.isIncompleteMonthlyExpenditure() || user.isIncompleteVehicleDetails()) {
-            incompleteStep2.setVisibility(View.VISIBLE);
-        }
-        if (user.isIncompleteBankStmt()) {
-            incompleteStep3.setVisibility(View.VISIBLE);
-        }
+
+
         return rootView;
     }
 
@@ -233,17 +204,10 @@ public class ProfileFormStep3Fragment1 extends Fragment {
     }
 
     private void getAllViews(View rootView) {
-        gotoFragment1 = (TextView) rootView.findViewById(R.id.goto_fragment1);
-        gotoFragment2 = (TextView) rootView.findViewById(R.id.goto_fragment2);
-        gotoFragment3 = (TextView) rootView.findViewById(R.id.goto_fragment3);
-        incompleteStep1 = (ImageView) rootView.findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) rootView.findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) rootView.findViewById(R.id.incomplete_step_3);
         incompleteAnnualFees = (ImageView) rootView.findViewById(R.id.incomplete_annual_fees);
         completeAnnualFees = (ImageView) rootView.findViewById(R.id.complete_annual_fees);
         incompleteScholarshipDetails = (ImageView) rootView.findViewById(R.id.incomplete_scholarship_details);
         completeScholarshipDetails = (ImageView) rootView.findViewById(R.id.complete_scholarship_details);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
         feesHelptip = (ImageButton) rootView.findViewById(R.id.fees_helptip);
         scholarshipHelptip = (ImageButton) rootView.findViewById(R.id.scholarship_helptip);
         scholarshipAmount = (EditText) rootView.findViewById(R.id.edit_scholarship_amount);
@@ -272,39 +236,19 @@ public class ProfileFormStep3Fragment1 extends Fragment {
                 dialog.show();
             }
         });
-        gotoFragment2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment2(true);
-            }
-        });
-
-        gotoFragment3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment3(true);
-            }
-        });
-
-        saveAndProceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkIncomplete();
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
-                Intent intent = new Intent(getActivity(), CheckInternetAndUploadUserDetails.class);
-                getContext().sendBroadcast(intent);
-                replaceFragment2(false);
-            }
-        });
     }
 
-    private void checkIncomplete() {
+    public void checkIncomplete() {
 
-        if (!selectedAnnualFees)
+        if (AppUtils.isEmpty(user.getAnnualFees())) {
             user.setIncompleteAnnualFees(true);
-        else
+            completeAnnualFees.setVisibility(View.GONE);
+            incompleteAnnualFees.setVisibility(View.VISIBLE);
+        } else {
             user.setIncompleteAnnualFees(false);
+            incompleteAnnualFees.setVisibility(View.GONE);
+            completeAnnualFees.setVisibility(View.VISIBLE);
+        }
         if ("".equals(scholarshipAmount.getText().toString().trim()) && scholarshipAmount.getVisibility() == View.VISIBLE)
             user.setIncompleteScholarship(true);
         else if (!"".equals(scholarshipAmount.getText().toString().trim())) {
@@ -322,26 +266,14 @@ public class ProfileFormStep3Fragment1 extends Fragment {
             user.setIncompleteScholarship(true);
         }
 
-    }
+        if (user.isIncompleteScholarship()) {
+            completeScholarshipDetails.setVisibility(View.GONE);
+            incompleteScholarshipDetails.setVisibility(View.VISIBLE);
+        } else {
+            incompleteScholarshipDetails.setVisibility(View.GONE);
+            completeScholarshipDetails.setVisibility(View.VISIBLE);
+        }
 
-    public void replaceFragment2(boolean check) {
-        if (check)
-            checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep3Fragment2(), "Fragment2Tag");
-        ft.commit();
-    }
-
-    public void replaceFragment3(boolean check) {
-        if (check)
-            checkIncomplete();
-        String json = gson.toJson(user);
-        mPrefs.edit().putString("UserObject", json).apply();
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment1, new ProfileFormStep3Fragment3(), "Fragment3Tag");
-        ft.commit();
     }
 
     private void checkTypeandAmount() {

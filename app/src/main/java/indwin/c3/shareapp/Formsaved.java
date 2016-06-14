@@ -46,7 +46,7 @@ public class Formsaved extends AppCompatActivity {
         String value1 = getIntent().getExtras().getString("Email");
         String value2 = getIntent().getExtras().getString("Form");
         setContentView(R.layout.apply_emi);
-        TextView viewDetails=(TextView)findViewById(R.id.view);
+        TextView viewDetails = (TextView) findViewById(R.id.view);
         viewDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +63,7 @@ public class Formsaved extends AppCompatActivity {
             public void onClick(View v) {
                 intform = new Intent(Formsaved.this, ViewForm.class);
                 finish();
-                intform.putExtra("which_page",1);
+                intform.putExtra("which_page", 1);
                 intform.putExtra("url", "http://hellobuddy.in/#/flipkart/products");
                 startActivity(intform);
             }
@@ -79,16 +79,20 @@ public class Formsaved extends AppCompatActivity {
         } catch (Exception e) {
             System.out.println(e.toString() + "digo");
         }
-        ImageView inter=(ImageView)findViewById(R.id.interCom);
+        ImageView inter = (ImageView) findViewById(R.id.interCom);
         inter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intercom.client().displayMessageComposer();
+                try {
+                    Intercom.client().displayMessageComposer();
+                } catch (Exception e) {
+
+                }
             }
         });
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
-//        GridView gridviewshow=(GridView)findViewById(R.id.grid1a);
-//       gridviewshow.setAdapter(new ImageAdapter(this));
+        //        GridView gridviewshow=(GridView)findViewById(R.id.grid1a);
+        //       gridviewshow.setAdapter(new ImageAdapter(this));
 
 
         //Setting Navigation View Item Selected Listener
@@ -113,7 +117,7 @@ public class Formsaved extends AppCompatActivity {
 
                         intform = new Intent(Formsaved.this, ViewForm.class);
                         finish();
-                        intform.putExtra("which_page",2);
+                        intform.putExtra("which_page", 2);
                         intform.putExtra("url", "http://hellobuddy.in/");
                         startActivity(intform);
                         return true;
@@ -121,7 +125,7 @@ public class Formsaved extends AppCompatActivity {
 
                         intform = new Intent(Formsaved.this, ViewForm.class);
                         finish();
-                        intform.putExtra("which_page",3);
+                        intform.putExtra("which_page", 3);
                         intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
                         startActivity(intform);
                         return true;
@@ -129,7 +133,7 @@ public class Formsaved extends AppCompatActivity {
 
                         intform = new Intent(Formsaved.this, ViewForm.class);
                         finish();
-                        intform.putExtra("which_page",4);
+                        intform.putExtra("which_page", 4);
                         intform.putExtra("url", "http://hellobuddy.in/#/faqs");
                         startActivity(intform);
                         return true;
@@ -137,9 +141,9 @@ public class Formsaved extends AppCompatActivity {
 
                         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                         sharingIntent.setType("image/png");
-                        Uri uri = Uri.parse("android.resource://indwin.c3.shareapp/"+R.drawable.buddyrefer);
+                        Uri uri = Uri.parse("android.resource://indwin.c3.shareapp/" + R.drawable.buddyrefer);
                         String shareBody = "Hey check out this crazy website!\n" +
-                                "Remember to use the code "+getIntent().getExtras().getString("UniC")+" while signing up!";
+                                "Remember to use the code " + getIntent().getExtras().getString("UniC") + " while signing up!";
                         sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
                         sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
                         startActivity(Intent.createChooser(sharingIntent, "Share via"));
@@ -148,7 +152,7 @@ public class Formsaved extends AppCompatActivity {
 
                         intform = new Intent(Formsaved.this, ViewForm.class);
                         finish();
-                        intform.putExtra("which_page",5);
+                        intform.putExtra("which_page", 5);
                         intform.putExtra("url", "http://hellobuddy.in/");
                         startActivity(intform);
                         return true;
@@ -219,7 +223,10 @@ public class Formsaved extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intercom.client().displayMessageComposer();
+                try {
+                    Intercom.client().displayMessageComposer();
+                } catch (Exception e) {
+                }
             }
         });
         name.setText(value);
@@ -238,7 +245,6 @@ public class Formsaved extends AppCompatActivity {
         });
 
 
-
     }
 
     @Override
@@ -255,7 +261,8 @@ public class Formsaved extends AppCompatActivity {
                             finish();
                             System.exit(0);
                         }
-                    }).setNegativeButton("No", null).show();}
+                    }).setNegativeButton("No", null).show();
+        }
     }
 
     @Override
@@ -265,8 +272,6 @@ public class Formsaved extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
-
-
 
 
 }

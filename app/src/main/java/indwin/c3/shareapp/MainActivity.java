@@ -1,5 +1,6 @@
 package indwin.c3.shareapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Application;
@@ -29,8 +30,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -57,7 +62,6 @@ import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
-import io.intercom.com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODEC = 2;
@@ -85,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
     private int pL, pT, pR, pB;
     private int checkpass = 0, checkuserid = 0;
     List<SMS> lstSms = new ArrayList<SMS>();
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,11 +302,10 @@ public class MainActivity extends AppCompatActivity {
                 edc.putString("phone_number", userId);
                 edc.commit();
                 SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-                com.google.gson.Gson gson = new com.google.gson.Gson();
+                Gson gson = new Gson();
                 UserModel user = new UserModel();
                 user.setUserId(userId);
-                String json = gson.toJson(user);
-                mPrefs.edit().putString("UserObject", json).apply();
+                AppUtils.saveUserObject(MainActivity.this, user);
                 //                    String tok_sp=toks.getString("token_value","");
 
                 if ((userId.length() != 0) && (pass.length() != 0)) {
@@ -408,14 +416,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
-        Intercom.client().registerIdentifiedUser(
-                new Registration().withUserId(userId));
+        try {
+            Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
+            Intercom.client().registerIdentifiedUser(
+                    new Registration().withUserId(userId));
+        } catch (Exception e) {
+        }
         try {
             Intercom.client().openGCMMessage(getIntent());
         } catch (Exception e) {
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void showAccountDeletedPopup() {
@@ -438,6 +451,46 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
 
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://indwin.c3.shareapp/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://indwin.c3.shareapp/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 
     private class ItemsByKeyword extends
@@ -646,9 +699,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent alarmIntent = new Intent(MainActivity.this, AndroidReceiver.class);
                 pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
                 setAlarm();
-                int results = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.READ_SMS);
+                int results = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS);
                 int w = 0;
-                int resultscon = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.READ_CONTACTS);
+                int resultscon = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS);
                 if (resultscon == PackageManager.PERMISSION_GRANTED) {
                     w = 1;
 
@@ -661,7 +714,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
 
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_CODEC);
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_CODEC);
 
                 }
 
@@ -678,7 +731,7 @@ public class MainActivity extends AppCompatActivity {
                     }).start();
 
                 } else {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.READ_SMS}, PERMISSION_REQUEST_CODE);
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_SMS}, PERMISSION_REQUEST_CODE);
 
                 }
 
@@ -690,14 +743,46 @@ public class MainActivity extends AppCompatActivity {
                 //                }).start();
 
                 //   getALlContacts();
+                SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+                boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+                if (!isUpdatingDB) {
+
+                    new checkuser().execute(url);
+                } else {
+                    Runnable myRunnable = new Runnable() {
+
+                        public void run() {
+                            checkForDBUpdate();
+                        }
 
 
-                new checkuser().execute(url);
+                    };
+                    Thread thread = new Thread(myRunnable);
+                    thread.start();
+
+                }
+
 
             }
 
         }
     }
+
+    private void checkForDBUpdate() {
+        try {
+            Thread.sleep(10000);
+
+        } catch (Exception e) {
+
+        }
+        SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+        boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+        if (isUpdatingDB)
+            checkForDBUpdate();
+        else
+            new checkuser().execute(url);
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -807,7 +892,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Gson gson = new Gson();
                     String json = sharedpreferences.getString("UserObject", "");
-                    UserModel user = gson.fromJson(json, UserModel.class);
+                    UserModel user = AppUtils.getUserObject(MainActivity.this);
                     if (user == null)
                         user = new UserModel();
                     user.setName(Name);
@@ -882,14 +967,14 @@ public class MainActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         profileStatus = "";
                     }
-                    String  courseend="";
+                    String courseend = "";
 
                     try {
                         courseend = data.getString("courseCompletionDate");
                     } catch (Exception e) {
-                        courseend="";
+                        courseend = "";
                     }
-                    String nameadd="";
+                    String nameadd = "";
                     try {
                         nameadd = data.getString("college");
                     } catch (Exception e) {
@@ -977,171 +1062,173 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void checkDataForNormalUser(UserModel user, Gson gson, JSONObject data1) {
+            AppUtils.checkDataForNormalUser(user, gson, data1, MainActivity.this);
             try {
                 Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
                 Intercom.client().registerIdentifiedUser(
                         new Registration().withUserId(user.getUserId()));
-                user.setEmailSent(false);
-                if (data1.opt("gender") != null)
-                    user.setGender(data1.getString("gender"));
-                if (data1.opt("approvedBand") != null)
-                    user.setApprovedBand(data1.getString("approvedBand"));
-                if (data1.opt("formStatus") != null)
-                    user.setFormStatus(data1.getString("formStatus"));
-                Map userMap = new HashMap<>();
-                if (data1.opt("profileStatus") != null) {
-                    user.setProfileStatus(data1.getString("profileStatus"));
-                    userMap.put("profileStatus", user.getProfileStatus());
-                }
-                if (data1.opt("status1K") != null) {
-                    String status1K = data1.getString("status1K");
-                    user.setStatus1K(status1K);
-                    userMap.put("status1K", status1K);
-                    if (Constants.STATUS.DECLINED.toString().equals(status1K) || Constants.STATUS.APPLIED.toString().equals(status1K) || Constants.STATUS.APPROVED.toString().equals(status1K))
-                        user.setAppliedFor1k(true);
-                    else user.setAppliedFor1k(false);
-                }
-                if (data1.opt("status7K") != null) {
-                    String status7K = data1.getString("status7K");
-                    user.setStatus7K(status7K);
-                    userMap.put("status7K", status7K);
-                    if (Constants.STATUS.DECLINED.toString().equals(status7K) || Constants.STATUS.APPLIED.toString().equals(status7K) || Constants.STATUS.APPROVED.toString().equals(status7K))
-                        user.setAppliedFor7k(true);
-                    else user.setAppliedFor7k(false);
-                }
-                if (data1.opt("status60K") != null) {
-                    String status60K = data1.getString("status60K");
-                    user.setStatus60K(status60K);
-                    userMap.put("status60K", status60K);
-                    if (Constants.STATUS.DECLINED.toString().equals(status60K) || Constants.STATUS.APPLIED.toString().equals(status60K) || Constants.STATUS.APPROVED.toString().equals(status60K))
-                        user.setAppliedFor60k(true);
-                    else user.setAppliedFor60k(false);
-                }
-                Intercom.client().updateUser(userMap);
-                if (data1.opt("creditLimit") != null)
-                    user.setCreditLimit(data1.getInt("creditLimit"));
-                if (data1.opt("totalBorrowed") != null) {
-                    if (user.getCreditLimit() == 0) {
-                        user.setAvailableCredit(0);
-                    } else {
-                        int available = user.getCreditLimit() - data1.getInt("totalBorrowed");
-                        if (available > 0) {
-                            user.setAvailableCredit(available);
-                        } else {
-                            user.setAvailableCredit(0);
-                        }
-                    }
-                } else {
-                    user.setAvailableCredit(user.getCreditLimit());
-                }
-                if (data1.opt("totalCashback") != null)
-                    user.setCashBack(data1.getInt("totalCashback"));
-                if (data1.opt("emailVerified") != null)
-                    user.setEmailVerified(data1.getBoolean("emailVerified"));
-                if (data1.opt("fbConnected") != null)
-                    user.setIsFbConnected(Boolean.parseBoolean(data1.getString("fbConnected")));
-                if (data1.opt("college") != null)
-                    user.setCollegeName(data1.getString("college"));
-                if (data1.opt("course") != null)
-                    user.setCourseName(data1.getString("course"));
-                if (data1.opt("courseCompletionDate") != null)
-                    user.setCourseEndDate(data1.getString("courseCompletionDate"));
-                if (data1.opt("gpa") != null) {
 
-                    user.setGpa(data1.getString("gpa"));
-                }
-                if (data1.opt("gpaType") != null) {
-
-                    user.setGpaType(data1.getString("gpaType"));
-                }
-                if (data1.opt("collegeIDs") != null)
-                    user.setCollegeIds(gson.fromJson(data1.getString("collegeIDs"), ArrayList.class));
-                if (data1.opt("addressProofs") != null)
-                    user.setAddressProofs(gson.fromJson(data1.getString("addressProofs"), ArrayList.class));
-                if (data1.opt("panOrAadhar") != null) {
-                    user.setPanOrAadhar(data1.getString("panOrAadhar"));
-                    if ("PAN".equals(user.getPanOrAadhar()))
-                        user.setPanNumber(data1.getString("pan"));
-                    else
-                        user.setAadharNumber(data1.getString("aadhar"));
-                }
-                if (data1.opt("dob") != null)
-                    user.setDob(data1.getString("dob"));
-                if (data1.opt("accomodation") != null)
-                    user.setAccommodation(data1.getString("accomodation"));
-                if (data1.opt("currentAddress") != null)
-                    user.setCurrentAddress(data1.getJSONObject("currentAddress").getString("line1"));
-                if (data1.opt("permanentAddress") != null)
-                    user.setPermanentAddress(data1.getJSONObject("permanentAddress").getString("line1"));
-                if (data1.opt("rollNumber") != null)
-                    user.setRollNumber(data1.getString("rollNumber"));
-                if (data1.opt("rejectionReason") != null)
-                    user.setRejectionReason(data1.getString("rejectionReason"));
-                if (data1.optJSONArray("familyMember") != null) {
-                    JSONArray familyMembers = data1.getJSONArray("familyMember");
-                    for (int i = 0; i < familyMembers.length(); i++) {
-                        JSONObject familyJson = familyMembers.getJSONObject(i);
-                        if (i == 1) {
-                            if (familyJson.getString("relation") != null) {
-                                user.setFamilyMemberType2(familyJson.getString("relation"));
-                                user.setProfessionFamilyMemberType2(familyJson.getString("occupation"));
-                                user.setPhoneFamilyMemberType2(familyJson.getString("phone"));
-                                if (familyJson.opt("preferredLanguage") != null)
-                                    user.setPrefferedLanguageFamilyMemberType2(familyJson.getString("preferredLanguage"));
-                            }
-                        } else {
-                            if (familyJson.getString("relation") != null) {
-                                user.setFamilyMemberType1(familyJson.getString("relation"));
-                                user.setProfessionFamilyMemberType1(familyJson.getString("occupation"));
-                                user.setPhoneFamilyMemberType1(familyJson.getString("phone"));
-                                if (familyJson.opt("preferredLanguage") != null)
-                                    user.setPrefferedLanguageFamilyMemberType1(familyJson.getString("preferredLanguage"));
-                            }
-                        }
-                    }
-                }
-                if (data1.opt("bankAccountNumber") != null)
-                    user.setBankAccNum(data1.getString("bankAccountNumber"));
-                if (data1.opt("bankIFSC") != null)
-                    user.setBankIfsc(data1.getString("bankIFSC"));
-                if (data1.opt("friendName") != null)
-                    user.setClassmateName(data1.getString("friendName"));
-                if (data1.opt("friendNumber") != null)
-                    user.setClassmatePhone(data1.getString("friendNumber"));
-                if (data1.opt("collegeIdVerificationDate") != null)
-                    user.setVerificationDate(data1.getString("collegeIdVerificationDate"));
-                if (data1.opt("annualFees") != null)
-                    user.setAnnualFees(data1.getString("annualFees"));
-                if (data1.opt("scholarship") != null)
-                    user.setScholarship(String.valueOf(data1.getString("scholarship")));
-                if (data1.opt("scholarshipProgram") != null)
-                    user.setScholarshipType(data1.getString("scholarshipProgram"));
-                if (data1.opt("scholarshipAmount") != null)
-                    user.setScholarshipAmount(data1.getString("scholarshipAmount"));
-                if (data1.opt("takenLoan") != null)
-                    user.setStudentLoan(data1.getString("takenLoan"));
-                if (data1.opt("monthlyExpense") != null)
-                    user.setMonthlyExpenditure(data1.getString("monthlyExpense"));
-                if (data1.opt("ownVehicle") != null)
-                    user.setVehicle(String.valueOf(data1.getString("ownVehicle")));
-                if (data1.opt("vehicleType") != null)
-                    user.setVehicleType(data1.getString("vehicleType"));
-                if (data1.opt("bankStatements") != null)
-                    user.setBankStmts(gson.fromJson(data1.getString("bankStatements"), ArrayList.class));
-                if (data1.opt("bankProofs") != null)
-                    user.setBankProofs(gson.fromJson(data1.getString("bankProofs"), ArrayList.class));
-                if (data1.opt("selfie") != null) {
-                    JSONArray array = data1.getJSONArray("selfie");
-                    user.setSelfie((String) array.get(0));
-                } else {
-                    user.setSelfie("");
-                }
-                if (data1.opt("signature") != null) {
-                    JSONArray array = data1.getJSONArray("signature");
-                    user.setSignature((String) array.get(0));
-                } else {
-                    user.setSignature("");
-                }
+                //user.setEmailSent(false);
+                //if (data1.opt("gender") != null)
+                //    user.setGender(data1.getString("gender"));
+                //if (data1.opt("approvedBand") != null)
+                //    user.setApprovedBand(data1.getString("approvedBand"));
+                //if (data1.opt("formStatus") != null)
+                //    user.setFormStatus(data1.getString("formStatus"));
+                //Map userMap = new HashMap<>();
+                //if (data1.opt("profileStatus") != null) {
+                //    user.setProfileStatus(data1.getString("profileStatus"));
+                //    userMap.put("profileStatus", user.getProfileStatus());
+                //}
+                //if (data1.opt("status1K") != null) {
+                //    String status1K = data1.getString("status1K");
+                //    user.setStatus1K(status1K);
+                //    userMap.put("status1K", status1K);
+                //    if (Constants.STATUS.DECLINED.toString().equals(status1K) || Constants.STATUS.APPLIED.toString().equals(status1K) || Constants.STATUS.APPROVED.toString().equals(status1K))
+                //        user.setAppliedFor1k(true);
+                //    else user.setAppliedFor1k(false);
+                //}
+                //if (data1.opt("status7K") != null) {
+                //    String status7K = data1.getString("status7K");
+                //    user.setStatus7K(status7K);
+                //    userMap.put("status7K", status7K);
+                //    if (Constants.STATUS.DECLINED.toString().equals(status7K) || Constants.STATUS.APPLIED.toString().equals(status7K) || Constants.STATUS.APPROVED.toString().equals(status7K))
+                //        user.setAppliedFor7k(true);
+                //    else user.setAppliedFor7k(false);
+                //}
+                //if (data1.opt("status60K") != null) {
+                //    String status60K = data1.getString("status60K");
+                //    user.setStatus60K(status60K);
+                //    userMap.put("status60K", status60K);
+                //    if (Constants.STATUS.DECLINED.toString().equals(status60K) || Constants.STATUS.APPLIED.toString().equals(status60K) || Constants.STATUS.APPROVED.toString().equals(status60K))
+                //        user.setAppliedFor60k(true);
+                //    else user.setAppliedFor60k(false);
+                //}
+                //Intercom.client().updateUser(userMap);
+                //if (data1.opt("creditLimit") != null)
+                //    user.setCreditLimit(data1.getInt("creditLimit"));
+                //if (data1.opt("totalBorrowed") != null) {
+                //    if (user.getCreditLimit() == 0) {
+                //        user.setAvailableCredit(0);
+                //    } else {
+                //        int available = user.getCreditLimit() - data1.getInt("totalBorrowed");
+                //        if (available > 0) {
+                //            user.setAvailableCredit(available);
+                //        } else {
+                //            user.setAvailableCredit(0);
+                //        }
+                //    }
+                //} else {
+                //    user.setAvailableCredit(user.getCreditLimit());
+                //}
+                //if (data1.opt("totalCashback") != null)
+                //    user.setCashBack(data1.getInt("totalCashback"));
+                //if (data1.opt("emailVerified") != null)
+                //    user.setEmailVerified(data1.getBoolean("emailVerified"));
+                //if (data1.opt("fbConnected") != null)
+                //    user.setIsFbConnected(Boolean.parseBoolean(data1.getString("fbConnected")));
+                //if (data1.opt("college") != null)
+                //    user.setCollegeName(data1.getString("college"));
+                //if (data1.opt("course") != null)
+                //    user.setCourseName(data1.getString("course"));
+                //if (data1.opt("courseCompletionDate") != null)
+                //    user.setCourseEndDate(data1.getString("courseCompletionDate"));
+                //if (data1.opt("gpa") != null) {
+                //
+                //    user.setGpa(data1.getString("gpa"));
+                //}
+                //if (data1.opt("gpaType") != null) {
+                //
+                //    user.setGpaType(data1.getString("gpaType"));
+                //}
+                //if (data1.opt("collegeIDs") != null)
+                //    user.setCollegeIds(gson.fromJson(data1.getString("collegeIDs"), ArrayList.class));
+                //if (data1.opt("addressProofs") != null)
+                //    user.setAddressProofs(gson.fromJson(data1.getString("addressProofs"), ArrayList.class));
+                //if (data1.opt("panOrAadhar") != null) {
+                //    user.setPanOrAadhar(data1.getString("panOrAadhar"));
+                //    if ("PAN".equals(user.getPanOrAadhar()))
+                //        user.setPanNumber(data1.getString("pan"));
+                //    else
+                //        user.setAadharNumber(data1.getString("aadhar"));
+                //}
+                //if (data1.opt("dob") != null)
+                //    user.setDob(data1.getString("dob"));
+                //if (data1.opt("accomodation") != null)
+                //    user.setAccommodation(data1.getString("accomodation"));
+                //if (data1.opt("currentAddress") != null)
+                //    user.setCurrentAddress(data1.getJSONObject("currentAddress").getString("line1"));
+                //if (data1.opt("permanentAddress") != null)
+                //    user.setPermanentAddress(data1.getJSONObject("permanentAddress").getString("line1"));
+                //if (data1.opt("rollNumber") != null)
+                //    user.setRollNumber(data1.getString("rollNumber"));
+                //if (data1.opt("rejectionReason") != null)
+                //    user.setRejectionReason(data1.getString("rejectionReason"));
+                //if (data1.optJSONArray("familyMember") != null) {
+                //    JSONArray familyMembers = data1.getJSONArray("familyMember");
+                //    for (int i = 0; i < familyMembers.length(); i++) {
+                //        JSONObject familyJson = familyMembers.getJSONObject(i);
+                //        if (i == 1) {
+                //            if (familyJson.getString("relation") != null) {
+                //                user.setFamilyMemberType2(familyJson.getString("relation"));
+                //                user.setProfessionFamilyMemberType2(familyJson.getString("occupation"));
+                //                user.setPhoneFamilyMemberType2(familyJson.getString("phone"));
+                //                if (familyJson.opt("preferredLanguage") != null)
+                //                    user.setPrefferedLanguageFamilyMemberType2(familyJson.getString("preferredLanguage"));
+                //            }
+                //        } else {
+                //            if (familyJson.getString("relation") != null) {
+                //                user.setFamilyMemberType1(familyJson.getString("relation"));
+                //                user.setProfessionFamilyMemberType1(familyJson.getString("occupation"));
+                //                user.setPhoneFamilyMemberType1(familyJson.getString("phone"));
+                //                if (familyJson.opt("preferredLanguage") != null)
+                //                    user.setPrefferedLanguageFamilyMemberType1(familyJson.getString("preferredLanguage"));
+                //            }
+                //        }
+                //    }
+                //}
+                //if (data1.opt("bankAccountNumber") != null)
+                //    user.setBankAccNum(data1.getString("bankAccountNumber"));
+                //if (data1.opt("bankIFSC") != null)
+                //    user.setBankIfsc(data1.getString("bankIFSC"));
+                //if (data1.opt("friendName") != null)
+                //    user.setClassmateName(data1.getString("friendName"));
+                //if (data1.opt("friendNumber") != null)
+                //    user.setClassmatePhone(data1.getString("friendNumber"));
+                //if (data1.opt("collegeIdVerificationDate") != null)
+                //    user.setVerificationDate(data1.getString("collegeIdVerificationDate"));
+                //if (data1.opt("annualFees") != null)
+                //    user.setAnnualFees(data1.getString("annualFees"));
+                //if (data1.opt("scholarship") != null)
+                //    user.setScholarship(String.valueOf(data1.getString("scholarship")));
+                //if (data1.opt("scholarshipProgram") != null)
+                //    user.setScholarshipType(data1.getString("scholarshipProgram"));
+                //if (data1.opt("scholarshipAmount") != null)
+                //    user.setScholarshipAmount(data1.getString("scholarshipAmount"));
+                //if (data1.opt("takenLoan") != null)
+                //    user.setStudentLoan(data1.getString("takenLoan"));
+                //if (data1.opt("monthlyExpense") != null)
+                //    user.setMonthlyExpenditure(data1.getString("monthlyExpense"));
+                //if (data1.opt("ownVehicle") != null)
+                //    user.setVehicle(String.valueOf(data1.getString("ownVehicle")));
+                //if (data1.opt("vehicleType") != null)
+                //    user.setVehicleType(data1.getString("vehicleType"));
+                //if (data1.opt("bankStatements") != null)
+                //    user.setBankStmts(gson.fromJson(data1.getString("bankStatements"), ArrayList.class));
+                //if (data1.opt("bankProofs") != null)
+                //    user.setBankProofs(gson.fromJson(data1.getString("bankProofs"), ArrayList.class));
+                //if (data1.opt("selfie") != null) {
+                //    JSONArray array = data1.getJSONArray("selfie");
+                //    user.setSelfie((String) array.get(0));
+                //} else {
+                //    user.setSelfie("");
+                //}
+                //if (data1.opt("signature") != null) {
+                //    JSONArray array = data1.getJSONArray("signature");
+                //    user.setSignature((String) array.get(0));
+                //} else {
+                //    user.setSignature("");
+                //}
             } catch (Exception e) {
                 e.printStackTrace();
             }

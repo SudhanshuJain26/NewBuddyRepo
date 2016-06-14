@@ -2,16 +2,15 @@ package indwin.c3.shareapp.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.net.Uri;
@@ -52,38 +51,34 @@ import java.util.Date;
 import java.util.Locale;
 
 import indwin.c3.shareapp.R;
-import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment3;
+import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment4;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
-import io.intercom.com.google.gson.Gson;
+import indwin.c3.shareapp.utils.PicassoTrustAll;
+import indwin.c3.shareapp.utils.TargetButton;
+import io.intercom.android.sdk.Intercom;
 
 public class AgreementActivity extends AppCompatActivity {
 
     private WebView termsAndConditionWebView;
-    public static Button addSignature, takeASelfie;
-    public static ImageView signature;
+    public static TargetButton takeASelfie, addSignature;
     private int REQUEST_TAKE_PHOTO = 13;
-    String mCurrentPhotoPath;
-    SharedPreferences mPrefs;
-    Gson gson;
-    UserModel user;
+    private String mCurrentPhotoPath;
+    private UserModel user;
     private ScrollView parentScrollView;
     private Button acceptTerms;
     public static boolean isSelfieAdded = false, isSignatureAdded = false;
     boolean deniedPermissionForever = false;
-    final static int MY_PERMISSIONS_REQUEST_CAMERA = 13;
     private static final int REQUEST_PERMISSION_SETTING = 99;
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     public static final int PERMISSION_ALL = 0;
-    private Target loadTarget, loadTargetSelfie;
+    private Target loadTarget;
     int widthSelfie = 200, heightSelfie = 180;
-    private ColorDrawable cd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agreement);
-        cd = new ColorDrawable(0xFFFFFF);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
@@ -92,11 +87,8 @@ public class AgreementActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-            mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-            gson = new Gson();
-            String json = mPrefs.getString("UserObject", "");
-            user = gson.fromJson(json, UserModel.class);
-            addSignature = (Button) findViewById(R.id.add_signature_button);
+            user = AppUtils.getUserObject(this);
+            addSignature = (TargetButton) findViewById(R.id.add_signature_button);
             termsAndConditionWebView = (WebView) findViewById(R.id.terms_and_conditions_webview);
             WebSettings settings = termsAndConditionWebView.getSettings();
             settings.setJavaScriptEnabled(true);
@@ -110,13 +102,11 @@ public class AgreementActivity extends AppCompatActivity {
                     return true;
                 }
             });
-            //termsAndConditionWebView.loadUrl(AppUtils.TnC_URL);
             termsAndConditionWebView.loadUrl(getApplicationContext().getString(R.string.web) + "termsApp");
-            takeASelfie = (Button) findViewById(R.id.take_a_selfie_button);
-
+            takeASelfie = (TargetButton) findViewById(R.id.take_a_selfie_button);
             acceptTerms = (Button) findViewById(R.id.accept_terms);
             if (AppUtils.isNotEmpty(user.getSignature())) {
-                //addSignature.setBackgroundDrawable(getResources().getDrawable(R.drawable.downloading));
+                addSignature.setText("");
                 String signatureUrl = user.getSignature();
                 if (signatureUrl.contains("http")) {
 
@@ -131,7 +121,6 @@ public class AgreementActivity extends AppCompatActivity {
                                 Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 300, 100, false));
                                 d.setColorFilter(new
                                         PorterDuffColorFilter(getResources().getColor(R.color.colorSignature), PorterDuff.Mode.MULTIPLY));
-                                //addSignature.setPadding(0, 0, 0, 0);
                                 addSignature.setCompoundDrawablesWithIntrinsicBounds(null, d, null, null);
                                 if (!user.isAppliedFor1k()) {
                                     addSignature.setText("Edit?");
@@ -146,7 +135,7 @@ public class AgreementActivity extends AppCompatActivity {
                         };
 
                     try {
-                        Picasso.with(this).load(signatureUrl).placeholder(R.drawable.downloading).into(loadTarget);
+                        Picasso.with(this).load(signatureUrl).into(loadTarget);
                     } catch (IllegalArgumentException iae) {
                         iae.printStackTrace();
                     }
@@ -155,66 +144,43 @@ public class AgreementActivity extends AppCompatActivity {
                     final File imgFile = new File(signatureUrl);
                     if (imgFile.exists()) {
                         Drawable d = Drawable.createFromPath(signatureUrl);
-
                         d.setColorFilter(new
                                 PorterDuffColorFilter(getResources().getColor(R.color.colorSignature), PorterDuff.Mode.MULTIPLY));
                         addSignature.setPadding(0, 0, 0, 0);
-
-
                         addSignature.setCompoundDrawablesWithIntrinsicBounds(null, d, null, null);
                         if (!user.isAppliedFor1k()) {
                             addSignature.setText("Edit?");
                         }
                         isSignatureAdded = true;
-
                     }
                 }
             }
 
             if (AppUtils.isNotEmpty(user.getSelfie())) {
-                Drawable d = getResources().getDrawable(R.drawable.downloading);
 
-
-                populateSelfie(null, d);
                 String path = user.getSelfie();
                 if (path.contains("http")) {
-
-                    if (loadTargetSelfie == null)
-                        loadTargetSelfie = new Target() {
-                            @Override
-                            public void onBitmapFailed(Drawable arg0) {
-                            }
-
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                handleLoadedBitmap(bitmap);
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable arg0) {
-
-                            }
-                        };
-
-                    try {
-                        Picasso.with(this).load(path).into(loadTargetSelfie);
-                    } catch (IllegalArgumentException iae) {
-                        iae.printStackTrace();
-                    }
-
+                    populateSelfie(path, null);
                 } else {
                     final File imgFile = new File(path);
                     if (imgFile.exists()) {
-                        Drawable drawable = Drawable.createFromPath(user.getSelfie());
-
-
-                        populateSelfie(null, drawable);
-
-
+                        populateSelfie(path, imgFile);
                     }
                 }
             }
 
+            ImageView inter = (ImageView) findViewById(R.id.interCom);
+            inter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
+                        Intercom.client().displayMessageComposer();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
             parentScrollView = (ScrollView) findViewById(R.id.parent_scrollview);
             parentScrollView.setOnTouchListener(new View.OnTouchListener() {
@@ -261,43 +227,40 @@ public class AgreementActivity extends AppCompatActivity {
                 addSignature.setText("");
                 acceptTerms.setVisibility(View.GONE);
             }
-        } catch (Exception e) {
+        } catch (
+                Exception e
+                )
+
+        {
             e.printStackTrace();
         }
-        acceptTerms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                saveSelfieAndSignature();
-                if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature()) && ProfileFormStep1Fragment3.completeAgreement != null) {
+        acceptTerms.setOnClickListener(new View.OnClickListener()
 
-                    ProfileFormStep1Fragment3.completeAgreement.setVisibility(View.VISIBLE);
-                    finish();
-                } else {
-                    if (AppUtils.isEmpty(user.getSelfie()))
-                        Toast.makeText(AgreementActivity.this, "Please add a selfie", Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(AgreementActivity.this, "Please add a signature", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+                                       {
+                                           @Override
+                                           public void onClick(View v) {
+                                               if (isSelfieAdded && isSignatureAdded) {
+                                                   UserModel userModel = AppUtils.getUserObject(AgreementActivity.this);
+                                                   userModel.setTncUpdate(true);
+                                                   userModel.setTncAccepted(true);
+                                                   AppUtils.saveUserObject(AgreementActivity.this, userModel);
+                                                   ProfileFormStep1Fragment4.completeAgreement.setVisibility(View.VISIBLE);
+                                                   finish();
+                                               } else {
+                                                   if (!isSelfieAdded)
+                                                       Toast.makeText(AgreementActivity.this, "Please add a selfie", Toast.LENGTH_SHORT).show();
+                                                   else
+                                                       Toast.makeText(AgreementActivity.this, "Please add a signature", Toast.LENGTH_SHORT).show();
+                                               }
+                                           }
+                                       }
+
+        );
 
 
     }
 
-    private void saveSelfieAndSignature() {
-        UserModel userSaved = AppUtils.getUserObject(AgreementActivity.this);
-        if (AppUtils.isNotEmpty(userSaved.getSignature())) {
-
-            user.setSignature(userSaved.getSignature());
-            user.setUpdateSignature(userSaved.isUpdateSignature());
-        }
-        if (AppUtils.isNotEmpty(userSaved.getSelfie())) {
-
-            user.setSelfie(userSaved.getSelfie());
-            user.setUpdateSelfie(userSaved.isUpdateSelfie());
-        }
-    }
 
     private void dispatchTakePictureIntent() {
         try {
@@ -313,34 +276,18 @@ public class AgreementActivity extends AppCompatActivity {
 
 
         }
-        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //// Ensure that there's a camera activity to handle the intent
-        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-        //    // Create the File where the photo should go
-        //    File photoFile = null;
-        //    try {
-        //        photoFile = createImageFile();
-        //    } catch (IOException ex) {
-        //        // Error occurred while creating the File
-        //    }
-        //    // Continue only if the File was successfully created
-        //    if (photoFile != null) {
-        //        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-        //                Uri.fromFile(photoFile));
-        //        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-        //    }
-        //}
     }
+
     private Facing getCamera() {
 
-           Camera.CameraInfo ci = new Camera.CameraInfo();
-              for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
-                  Camera.getCameraInfo(i, ci);
-                  if (ci.facing == Camera.CameraInfo.CAMERA_FACING_FRONT)
-                    return  Facing.FRONT;
-              }
-           return Facing.BACK;
-       }
+        Camera.CameraInfo ci = new Camera.CameraInfo();
+        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+            Camera.getCameraInfo(i, ci);
+            if (ci.facing == Camera.CameraInfo.CAMERA_FACING_FRONT)
+                return Facing.FRONT;
+        }
+        return Facing.BACK;
+    }
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -360,21 +307,15 @@ public class AgreementActivity extends AppCompatActivity {
         return image;
     }
 
-    public void handleLoadedBitmap(Bitmap b) {
-        populateSelfie(b, null);
-    }
 
-    private void populateSelfie(Bitmap bitmap, Drawable d) {
-        if (bitmap != null) {
-            d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, widthSelfie, heightSelfie, false));
-        } else {
-
-            bitmap = ((BitmapDrawable) d).getBitmap();
-            bitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, false);
-        }
+    private void populateSelfie(String path, File file) {
         takeASelfie.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.transparent_cam), null, null);
-        d = new BitmapDrawable(getResources(), bitmap);
-        takeASelfie.setBackgroundDrawable(d);
+        if (file != null) {
+            PicassoTrustAll.getInstance(this).load(file).placeholder(R.drawable.downloading).into(takeASelfie);
+
+        } else {
+            PicassoTrustAll.getInstance(this).load(path).placeholder(R.drawable.downloading).into(takeASelfie);
+        }
         takeASelfie.setText("");
         isSelfieAdded = true;
     }
@@ -397,12 +338,13 @@ public class AgreementActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "Error while capturing image", Toast.LENGTH_LONG).show();
                 return;
             }
-
+            UserModel user = AppUtils.getUserObject(AgreementActivity.this);
             isSelfieAdded = true;
-            populateSelfie(null, d);
+            populateSelfie(mCurrentPhotoPath, new File(mCurrentPhotoPath));
             user.setUpdateSelfie(true);
-            saveSelfieAndSignature();
             user.setSelfie(mCurrentPhotoPath);
+            user.setTncAccepted(false);
+            user.setTncUpdate(true);
 
             AppUtils.saveUserObject(this, user);
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resultCode == Activity.RESULT_OK) {
@@ -422,11 +364,14 @@ public class AgreementActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
-            user.setInCompleteAgreement(true);
-            ProfileFormStep1Fragment3.incompleteAgreement.setVisibility(View.VISIBLE);
-            ProfileFormStep1Fragment3.completeAgreement.setVisibility(View.GONE);
+        if (!user.isAppliedFor1k()) {
+            UserModel user = AppUtils.getUserObject(this);
+            if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())||!user.isTncAccepted()) {
+                user.setInCompleteAgreement(true);
+                AppUtils.saveUserObject(this, user);
+                ProfileFormStep1Fragment4.incompleteAgreement.setVisibility(View.VISIBLE);
+                ProfileFormStep1Fragment4.completeAgreement.setVisibility(View.GONE);
+            }
         }
         finish();
     }

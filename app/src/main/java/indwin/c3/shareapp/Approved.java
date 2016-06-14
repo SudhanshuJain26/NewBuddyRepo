@@ -142,7 +142,11 @@ public class Approved extends AppCompatActivity {
         inter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intercom.client().displayMessageComposer();
+                try {
+                    Intercom.client().displayMessageComposer();
+                } catch (Exception e) {
+
+                }
             }
         });
         TextView name = (TextView) findViewById(R.id.name);

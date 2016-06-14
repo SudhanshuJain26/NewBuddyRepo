@@ -20,7 +20,7 @@ public final class ValidationUtils {
     }
 
     public static boolean isNotValidIFSCCode(CharSequence charSequence) {
-        String pattern = "[A-Z|a-z]{4}[0][\\d]{6}$";
+        String pattern = "[A-Z|a-z]{4}[0][a-zA-Z0-9]{6}$";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(charSequence);
         if (charSequence.length() == 11 && m.matches()) {
@@ -32,7 +32,9 @@ public final class ValidationUtils {
 
     public static boolean isValidEmail(CharSequence email) {
         if (!TextUtils.isEmpty(email)) {
-            return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+            String pattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+            		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+            return Pattern.compile(pattern).matcher(email).matches();
         }
         return false;
     }

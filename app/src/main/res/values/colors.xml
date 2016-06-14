@@ -13,7 +13,12 @@
     <color name="buddy_red">#C77373</color>
     <color name="buddy_green">#44c2a6</color>
 
+    <color name="background">#33A4D0</color>
 
 
+
+
+
+    <color name="buddy_light_green">#ecf7f5</color>
 
 </resources>

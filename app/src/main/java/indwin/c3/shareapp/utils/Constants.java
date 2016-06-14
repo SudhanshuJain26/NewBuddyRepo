@@ -5,9 +5,45 @@ package indwin.c3.shareapp.utils;
  */
 public class Constants {
 
-
+    public static int FRONT_BACK_SIZE = 2;
     public static final String ACCOUNT_DELETED = "account_deleted";
     public static final String DISABLE_ADD = "disableAdd";
+
+
+    public static enum IMAGE_TYPE {
+        COLLEGE_ID {
+            @Override
+            public String toString() {
+                return "collegeId";
+            }
+        }, ADDRESS_PROOF {
+            @Override
+            public String toString() {
+                return "addressProof";
+            }
+        },
+        PAN {
+            @Override
+            public String toString() {
+                return "pan";
+            }
+        }, BANK_PROOF {
+            @Override
+            public String toString() {
+                return "bankProof";
+            }
+        }, BANK_STMNTS {
+            @Override
+            public String toString() {
+                return "bankStmnts";
+            }
+        }, MARKSHEETS {
+            @Override
+            public String toString() {
+                return "marksheets";
+            }
+        }
+    }
 
     public static enum STATUS {
         APPLIED {
@@ -32,6 +68,27 @@ public class Constants {
             }
         }
     }
+
+
+    public static enum VERIFICATION_STATUS {
+        UNDER_VEIFICATION {
+            @Override
+            public String toString() {
+                return "Under verification...";
+            }
+        }, VERIFIED {
+            @Override
+            public String toString() {
+                return "Verified...";
+            }
+        }, REJECTED {
+            @Override
+            public String toString() {
+                return "Rejected...";
+            }
+        }
+    }
+
 
     public static enum BANDS {
         FLASH {

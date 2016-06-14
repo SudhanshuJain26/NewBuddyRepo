@@ -292,7 +292,7 @@ private ImageView pasteiconnew;
         //            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
         Double tot = emi * monthsnow + mValue;
         totalLoan.setText(String.valueOf(Math.round(tot)));
-        Toast.makeText(ProductsPage.this, "lets do it", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(ProductsPage.this, "lets do it", Toast.LENGTH_SHORT).show();
         EMIcheck=Math.round(emi);
         emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi))+" per month");
         //calculate emi and set emi call
@@ -308,7 +308,7 @@ if(checkLongpress==1)
             else
 inccc=1;
 
-        if (mValue + inccc <= sellingPrice - mDis) {
+        if (mValue + inccc <= sellingPrice - mDis+secondServicecharge) {
             mValue += inccc;
             spInc = sellingPrice - mValue;
             Double emi = calculateEmi(Double.valueOf(sellingPrice -mValue+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
@@ -924,6 +924,7 @@ if(dummyCl==1000)
                 //                Drawable i=R.drawable.cancel;
                 //                if (pl.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.cancel).getConstantState())) {
                 if ((checkImg == 2) || (checkImg == 3)) {
+mDis=0;
                     ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
                     sellingPrice = searchPrice;
                     System.out.println("entering here" + checkImg);
@@ -942,7 +943,6 @@ if(dummyCl==1000)
                         dummyCl=1000;
                         fcbv=100000000;
                     }
-
 
                     if(searchPrice-dopay2>fcbv)
                     {
@@ -1484,6 +1484,8 @@ int w=0;
             }
             if(t.contains("0"))
                 mValue=sellingPrice+secondServicecharge;
+            else
+            mValue=minDownpayment;
             dValue.setText(String.valueOf(mValue));
             sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
 //            EMIcheck=(Math.round(calculateEmi(sellingPrice, Double.valueOf(searchPrice), monthsnow)));
@@ -2041,13 +2043,20 @@ if(dummyCl==1000)
                 }
                 if(sellingPrice-mValue>fcbv)
                     mValue=sellingPrice-fcbv;
-                if(t.contains("0"))
-                    mValue=sellingPrice+secondServicecharge;
+
                 int service=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
-                dValue.setText(String.valueOf(mValue+service));
+                if(t.contains("0"))
+                    mValue=sellingPrice+service;
+                else
+                    mValue=minDownpayment;
+                dValue.setText(String.valueOf(mValue));
                 sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
-                EMIcheck=(Math.round(calculateEmi(sellingPrice -mValue*1.0, Double.valueOf(searchPrice), monthsnow)));
-                emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0, Double.valueOf(searchPrice), monthsnow)))+" per month");
+                int w=serviceCharge(searchPrice,searchPrice-mValue,sellerNme1);
+                firstServicecharge=w;
+                secondServicecharge=serviceCharge(searchPrice,sellingPrice-firstServicecharge,sellerNme1);
+
+                EMIcheck=(Math.round(calculateEmi(sellingPrice -mValue*1.0+secondServicecharge, Double.valueOf(searchPrice), monthsnow)));
+                emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0+secondServicecharge, Double.valueOf(searchPrice), monthsnow)))+" per month");
 
                 //                    Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
             }

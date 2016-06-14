@@ -140,7 +140,10 @@ if(position!=0){
                     edt2=(EditText)vi.findViewById(R.id.edtAdd22);
                     edt3=(EditText)vi.findViewById(R.id.edtAdd33);
                     edt4=(EditText)vi.findViewById(R.id.edtAdd44);
-
+                    edt1.setText(myList.get(position).getLine1().toString());
+                    edt2.setText(myList.get(position).getLine2().toString());
+                    edt3.setText(myList.get(position).getcity().toString());
+                    edt4.setText(myList.get(position).getstate().toString());
                     if(getli.contains("address"))
                     {
 

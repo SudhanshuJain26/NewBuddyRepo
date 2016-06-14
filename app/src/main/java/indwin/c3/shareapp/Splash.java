@@ -423,7 +423,7 @@ public class Splash extends AppCompatActivity {
         protected void onPostExecute(String result) {
             if (result.equals("win")) {
                 new CheckVersion().execute("");
-                new trending().execute("Mobiles=");
+                new trending().execute("Mobiles");
                 new trending().execute("Computers&subCategory=Laptops");
                 new trending().execute("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle");
                 new trending().execute("Health%20and%20Beauty");

@@ -235,6 +235,8 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         else {
             setContentView(R.layout.activity_home_page);
 
+
+
             ImageView image1 = (ImageView)findViewById(R.id.img11);
             ImageView image2 = (ImageView)findViewById(R.id.img12);
             ImageView image3 = (ImageView)findViewById(R.id.img13);
@@ -268,6 +270,8 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             ImageView image31 = (ImageView)findViewById(R.id.img07);
             ImageView image32 = (ImageView)findViewById(R.id.img08);
             ImageView image33 = (ImageView)findViewById(R.id.img09);
+            ImageView image34 = (ImageView)findViewById(R.id.img10);
+
    //         ImageView image34 = (ImageView)findViewById(R.id.img15);
             ImageView image35 = (ImageView)findViewById(R.id.img16);
             ImageView image36 = (ImageView)findViewById(R.id.img17);
@@ -342,7 +346,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             image31.setOnClickListener(this);
             image32.setOnClickListener(this);
             image33.setOnClickListener(this);
-//            image34.setOnClickListener(this);
+            image34.setOnClickListener(this);
             image35.setOnClickListener(this);
             image36.setOnClickListener(this);
             image37.setOnClickListener(this);
@@ -369,7 +373,6 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             image58.setOnClickListener(this);
             image59.setOnClickListener(this);
             image60.setOnClickListener(this);
-            image61.setOnClickListener(this);
             image61.setOnClickListener(this);
             image62.setOnClickListener(this);
             image63.setOnClickListener(this);
@@ -768,6 +771,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 @Override
                 public void onClick(View v) {
                     noti.setVisibility(View.GONE);
+                    Splash.notify = 1;
 
                    // clickpaste();
 
@@ -2914,53 +2918,53 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand5.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand5.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand5.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand5.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand6.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand6.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand6.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand6.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand7.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand7.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand7.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand7.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand8.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand8.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand8.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand8.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand9.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand9.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand9.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand9.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand10.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand10.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand10.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand10.setImageResource(R.drawable.sdeal_fav1x);
 
 
 
@@ -3574,53 +3578,53 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand5.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand5.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand5.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand5.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand6.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand6.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand6.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand6.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand7.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand7.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand7.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand7.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand8.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand8.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand8.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand8.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand9.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand9.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand9.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand9.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand10.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand10.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand10.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand10.setImageResource(R.drawable.sdeal_fav1x);
 
 
 
@@ -3898,54 +3902,55 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             brand4.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
+
         if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand5.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand5.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand5.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand5.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand6.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand6.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand6.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand6.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand7.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand7.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand7.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand7.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand8.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand8.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand8.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand8.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand9.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand9.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand9.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand9.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand10.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand10.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand10.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand10.setImageResource(R.drawable.sdeal_fav1x);
 
 
 
@@ -4224,54 +4229,53 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand5.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand5.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand5.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand5.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand6.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand6.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand6.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand6.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand7.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand7.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand7.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand7.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand8.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand8.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand8.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand8.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand9.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand9.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand9.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand9.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand10.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand10.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand10.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
-
+            brand10.setImageResource(R.drawable.sdeal_fav1x);
 
 
 
@@ -4549,53 +4553,54 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand5.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand5.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand5.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand5.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand6.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand6.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand6.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand6.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand7.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand7.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand7.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand7.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand8.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand8.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand8.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand8.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand9.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand9.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand9.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand9.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand10.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand10.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand10.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand10.setImageResource(R.drawable.sdeal_fav1x);
+
 
 
 
@@ -4875,53 +4880,54 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand5.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand5.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand5.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand5.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand6.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand6.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand6.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand6.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand7.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand7.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand7.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand7.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand8.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand8.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand8.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand8.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand9.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand9.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand9.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand9.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-            brand4.setImageResource(R.drawable.fk_fav1x);
+            brand10.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("amazon"))
-            brand4.setImageResource(R.drawable.amazon_fav1x);
+            brand10.setImageResource(R.drawable.amazon_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("paytm"))
-            brand4.setImageResource(R.drawable.paytm_fav1x);
+            brand10.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-            brand4.setImageResource(R.drawable.sdeal_fav1x);
+            brand10.setImageResource(R.drawable.sdeal_fav1x);
+
 
 
 

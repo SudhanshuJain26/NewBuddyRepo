@@ -2141,6 +2141,9 @@ int w=0;
         } else if (parseString.contains("paytm")) {
             sellerNme1 = "paytm";
             checkValidFromApis = 1;
+        }else if(parseString.contains("infibeam")){
+            sellerNme1 = "infibeam";
+            checkValidFromApis = 1;
         }
         //amazon
         else if (parseString.contains("amazon")) {
@@ -2306,6 +2309,9 @@ finish();
         if ("snapdeal".equals(seller)) {
             logo.setImageResource(R.drawable.snapdeal);
         }
+        if("infibeam".equals(seller)) {
+            logo.setImageResource(R.drawable.ibeam1x);
+        }
 
 
         queryNew = (EditText) findViewById(R.id.query);
@@ -2364,6 +2370,9 @@ finish();
                     }
                     if ("shopclues".equals(sellerNme1)) {
                         logo.setImageResource(R.drawable.shopclues);
+                    }
+                    if("infibeam".equals(sellerNme1)){
+                        logo.setImageResource(R.drawable.ibeam1x);
                     }
                     //                JSONObject img = new JSONObject(data1.getString("imgUrls"));
                     //                urlImg = img.getString("400x400");

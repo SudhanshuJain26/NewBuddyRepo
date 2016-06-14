@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
         android:adjustViewBounds="true"
-        android:scaleType="matrix"
-        />
+        android:scaleType="fitXY"
+    />
 
 </LinearLayout>

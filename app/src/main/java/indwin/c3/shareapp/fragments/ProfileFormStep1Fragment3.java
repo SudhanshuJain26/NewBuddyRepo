@@ -224,6 +224,9 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         if (!user.isAppliedFor1k()) {
             editAadhar.setVisibility(View.VISIBLE);
         } else {
+            if (user.getAddressProof() == null || AppUtils.isEmpty(user.getAddressProof().getType())) {
+                addressProofCv.setVisibility(View.GONE);
+            }
             editAadhar.setVisibility(View.GONE);
         }
         if (user.getPanProof() != null && user.getPanProof().getImgUrl() != null) {

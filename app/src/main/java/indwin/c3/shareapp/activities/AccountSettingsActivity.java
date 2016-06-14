@@ -195,12 +195,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                          public void onClick(View v) {
                                              if (ValidationUtils.isValidEmail(editTextEmail.getText().toString())) {
                                                  if (!editTextEmail.getText().toString().equals(user.getEmail())) {
-                                                     user.setEmail(userEmail.getText().toString());
+                                                     user.setEmail(editTextEmail.getText().toString());
                                                      user.setUpdateEmail(true);
                                                      user.setEmailVerified(false);
                                                      UserModel user = AppUtils.getUserObject(AccountSettingsActivity.this);
                                                      userEmail.setText(editTextEmail.getText().toString());
-                                                     user.setEmail(userEmail.getText().toString());
+                                                     user.setEmail(editTextEmail.getText().toString());
                                                      user.setUpdateEmail(true);
                                                      user.setEmailVerified(false);
                                                      verifyEmail.setText("Verify");

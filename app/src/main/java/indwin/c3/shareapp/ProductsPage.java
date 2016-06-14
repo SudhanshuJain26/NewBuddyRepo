@@ -452,12 +452,22 @@ public class ProductsPage extends AppCompatActivity {
         sellingRs = (TextView) findViewById(R.id.sellerMrpValue);
         titlePro = (TextView) findViewById(R.id.titleProduct);
         query = (EditText) findViewById(R.id.query);
-        query.setOnTouchListener(new View.OnTouchListener() {
+        query.setInputType(InputType.TYPE_NULL);
+//        query.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v, MotionEvent event) {
+//                Intent in=new Intent(ProductsPage.this,FindProduct.class);
+//                startActivity(in);
+//                return false;
+//            }
+//        });
+
+        query.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 Intent in=new Intent(ProductsPage.this,FindProduct.class);
                 startActivity(in);
-                return false;
+
             }
         });
         //    querylearFocus();
@@ -2135,6 +2145,7 @@ public class ProductsPage extends AppCompatActivity {
 
         setContentView(R.layout.wrongurl);
         queryNew = (EditText) findViewById(R.id.query);
+        queryNew.setInputType(InputType.TYPE_NULL);
         queryNew.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -2205,6 +2216,7 @@ public class ProductsPage extends AppCompatActivity {
 
 
         queryNew = (EditText) findViewById(R.id.query);
+        queryNew.setInputType(InputType.TYPE_NULL);
         pasteiconnew = (ImageView) findViewById(R.id.pasteAg);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
         queryNew.setOnTouchListener(new View.OnTouchListener() {
@@ -2314,6 +2326,7 @@ public class ProductsPage extends AppCompatActivity {
 
         queryNew = (EditText) findViewById(R.id.query);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        queryNew.setInputType(InputType.TYPE_NULL);
 
 
         backpress();

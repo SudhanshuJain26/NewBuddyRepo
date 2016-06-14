@@ -252,8 +252,8 @@ private ImageView pasteiconnew;
                     fcbv=100000000;
                 }
 
-                if(sellingPrice-mValue>fcbv)
-                    mValue=sellingPrice-fcbv;
+//                if(sellingPrice-mValue>fcbv)
+//                    mValue=sellingPrice-fcbv;
 
             } else {
                 Double downValue = sellingPrice * .2;
@@ -288,10 +288,11 @@ private ImageView pasteiconnew;
             sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
         }
         dValue.setText(String.valueOf(mValue));
-        Double emi = calculateEmi(Double.valueOf(sellingPrice -mValue-firstServicecharge+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
+        Double emi = calculateEmi(Double.valueOf(sellingPrice -mValue+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
         //            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
         Double tot = emi * monthsnow + mValue;
         totalLoan.setText(String.valueOf(Math.round(tot)));
+//        Toast.makeText(ProductsPage.this, "lets do it", Toast.LENGTH_SHORT).show();
         EMIcheck=Math.round(emi);
         emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(emi))+" per month");
         //calculate emi and set emi call
@@ -307,7 +308,7 @@ if(checkLongpress==1)
             else
 inccc=1;
 
-        if (mValue + inccc <= sellingPrice - mDis) {
+        if (mValue + inccc <= sellingPrice - mDis+secondServicecharge) {
             mValue += inccc;
             spInc = sellingPrice - mValue;
             Double emi = calculateEmi(Double.valueOf(sellingPrice -mValue+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
@@ -889,7 +890,11 @@ if(dummyCl==1000)
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideSoftKeyboard(ProductsPage.this);
+                try {
+                    hideSoftKeyboard(ProductsPage.this);
+                }
+                catch (Exception e)
+                {}
 //                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 if (hve.getKeyListener() == null) {
@@ -919,6 +924,7 @@ if(dummyCl==1000)
                 //                Drawable i=R.drawable.cancel;
                 //                if (pl.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.cancel).getConstantState())) {
                 if ((checkImg == 2) || (checkImg == 3)) {
+mDis=0;
                     ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
                     sellingPrice = searchPrice;
                     System.out.println("entering here" + checkImg);
@@ -937,7 +943,6 @@ if(dummyCl==1000)
                         dummyCl=1000;
                         fcbv=100000000;
                     }
-
 
                     if(searchPrice-dopay2>fcbv)
                     {
@@ -1469,7 +1474,7 @@ if(emi<0)
 int w=0;
             mValue=minDownpayment;
             if(t.contains("0"))
-                mValue=sellingPrice;
+                mValue=sellingPrice+secondServicecharge;
 //            if((sellingPrice<=1000)&&(sellingPrice>150))
 //                mValue=0;
 //            dValue.setText(String.valueOf(l.intValue()));
@@ -1478,7 +1483,9 @@ int w=0;
             mValue=sellingPrice-fcbv;
             }
             if(t.contains("0"))
-                mValue=sellingPrice;
+                mValue=sellingPrice+secondServicecharge;
+            else
+            mValue=minDownpayment;
             dValue.setText(String.valueOf(mValue));
             sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
 //            EMIcheck=(Math.round(calculateEmi(sellingPrice, Double.valueOf(searchPrice), monthsnow)));
@@ -2036,13 +2043,20 @@ if(dummyCl==1000)
                 }
                 if(sellingPrice-mValue>fcbv)
                     mValue=sellingPrice-fcbv;
-                if(t.contains("0"))
-                    mValue=sellingPrice;
+
                 int service=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
-                dValue.setText(String.valueOf(mValue+service));
+                if(t.contains("0"))
+                    mValue=sellingPrice+service;
+                else
+                    mValue=minDownpayment;
+                dValue.setText(String.valueOf(mValue));
                 sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
-                EMIcheck=(Math.round(calculateEmi(sellingPrice -mValue*1.0, Double.valueOf(searchPrice), monthsnow)));
-                emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0, Double.valueOf(searchPrice), monthsnow)))+" per month");
+                int w=serviceCharge(searchPrice,searchPrice-mValue,sellerNme1);
+                firstServicecharge=w;
+                secondServicecharge=serviceCharge(searchPrice,sellingPrice-firstServicecharge,sellerNme1);
+
+                EMIcheck=(Math.round(calculateEmi(sellingPrice -mValue*1.0+secondServicecharge, Double.valueOf(searchPrice), monthsnow)));
+                emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0+secondServicecharge, Double.valueOf(searchPrice), monthsnow)))+" per month");
 
                 //                    Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
             }
@@ -2413,9 +2427,10 @@ if(searchPrice<=150)
 
     ;
     public static void hideSoftKeyboard(Activity activity) {
+        try{
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-    }
+    }catch (Exception e){}}
     public void clickpaste() {
         pasteiconnew.setOnClickListener(new View.OnClickListener() {
             @Override

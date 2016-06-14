@@ -653,7 +653,9 @@
                                             android:textSize="12sp"
                                             android:maxLines = "2"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title01"
@@ -706,6 +708,8 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"
                                             />
 
                                         <TextView
@@ -764,6 +768,8 @@
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
                                             android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"
                                              />
 
                                         <TextView
@@ -817,7 +823,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title04"
@@ -869,7 +877,10 @@
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
                                             android:textSize="12sp"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingRight="4dp"
+                                            android:paddingLeft="4dp"
+                                            />
 
                                         <TextView
                                             android:id="@+id/title05"
@@ -921,7 +932,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title06"
@@ -973,7 +986,9 @@
                                             android:textSize="12sp"
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft="4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title07"
@@ -1026,6 +1041,8 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"
                                              />
 
                                         <TextView
@@ -1079,6 +1096,8 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"
                                              />
 
                                         <TextView
@@ -1132,6 +1151,8 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"
                                              />
 
                                         <TextView
@@ -1243,6 +1264,8 @@
                                         android:textSize="12sp"
                                         android:text="Apple iPhone 6"
                                         android:fontFamily="sans-serif-light"
+                                        android:paddingLeft = "4dp"
+                                        android:paddingRight="4dp"
                                          />
 
                                     <TextView
@@ -1296,6 +1319,8 @@
                                         android:maxLines="2"
                                         android:text="Apple iPhone 6"
                                         android:fontFamily="sans-serif-light"
+                                        android:paddingLeft = "4dp"
+                                        android:paddingRight="4dp"
                                         />
 
                                     <TextView
@@ -1354,6 +1379,8 @@
                                         android:textSize="12sp"
                                         android:text="Apple iPhone 6"
                                         android:fontFamily="sans-serif-light"
+                                        android:paddingLeft = "4dp"
+                                        android:paddingRight="4dp"
                                          />
 
                                     <TextView
@@ -1408,6 +1435,8 @@
                                         android:textSize="12sp"
                                         android:text="Apple iPhone 6"
                                         android:fontFamily="sans-serif-light"
+                                        android:paddingLeft = "4dp"
+                                        android:paddingRight="4dp"
                                          />
 
                                     <TextView
@@ -1516,6 +1545,8 @@
                                         android:textSize="12sp"
                                         android:text="Apple iPhone 6"
                                         android:fontFamily="sans-serif-light"
+                                        android:paddingLeft = "4dp"
+                                        android:paddingRight="4dp"
                                         />
 
                                     <TextView
@@ -1570,6 +1601,8 @@
                                         android:textSize="12sp"
                                         android:text="Apple iPhone 6"
                                         android:fontFamily="sans-serif-light"
+                                        android:paddingLeft = "4dp"
+                                        android:paddingRight="4dp"
                                         />
 
                                     <TextView
@@ -1624,6 +1657,8 @@
                                         android:textSize="12sp"
                                         android:text="Apple iPhone 6"
                                         android:fontFamily="sans-serif-light"
+                                        android:paddingLeft = "4dp"
+                                        android:paddingRight="4dp"
                                         />
 
                                     <TextView
@@ -1678,6 +1713,8 @@
                                         android:textSize="12sp"
                                         android:text="Apple iPhone 6"
                                         android:fontFamily="sans-serif-light"
+                                        android:paddingLeft = "4dp"
+                                        android:paddingRight="4dp"
                                         />
 
                                     <TextView
@@ -1732,6 +1769,8 @@
                                         android:textSize="12sp"
                                         android:text="Apple iPhone 6"
                                         android:fontFamily="sans-serif-light"
+                                        android:paddingLeft = "4dp"
+                                        android:paddingRight="4dp"
                                         />
 
                                     <TextView
@@ -1756,7 +1795,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:layout_marginTop="10dp"
                             android:background="@color/background">
 
                             <TextView
@@ -1842,6 +1880,8 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"
                                              />
 
                                         <TextView
@@ -1895,6 +1935,8 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"
                                             />
 
                                         <TextView
@@ -1952,7 +1994,9 @@
                                             android:gravity="center"
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title23"
@@ -2004,7 +2048,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title24"
@@ -2056,7 +2102,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title25"
@@ -2108,7 +2156,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title26"
@@ -2160,7 +2210,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title27"
@@ -2212,7 +2264,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title28"
@@ -2264,7 +2318,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title29"
@@ -2316,7 +2372,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title30"
@@ -2425,6 +2483,8 @@
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
                                             android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"
                                             />
 
                                         <TextView
@@ -2477,7 +2537,9 @@
                                             android:textSize="12sp"
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title32"
@@ -2535,6 +2597,8 @@
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
                                             android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"
                                             />
 
                                         <TextView
@@ -2588,7 +2652,9 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:maxLines="2"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title34"
@@ -2641,7 +2707,9 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:maxLines="2"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title35"
@@ -2694,7 +2762,9 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:maxLines="2"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title36"
@@ -2747,7 +2817,9 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:maxLines="2"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title37"
@@ -2800,7 +2872,9 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:maxLines="2"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title38"
@@ -2853,7 +2927,9 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:maxLines="2"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title39"
@@ -2906,7 +2982,9 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:maxLines="2"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title40"
@@ -3014,7 +3092,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title41"
@@ -3067,6 +3147,8 @@
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
                                             android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"
                                              />
 
                                         <TextView
@@ -3125,6 +3207,8 @@
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
                                             android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"
                                             />
 
                                         <TextView
@@ -3178,7 +3262,9 @@
                                             android:textSize="12sp"
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title44"
@@ -3231,7 +3317,9 @@
                                             android:textSize="12sp"
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title45"
@@ -3284,7 +3372,9 @@
                                             android:textSize="12sp"
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title46"
@@ -3337,7 +3427,9 @@
                                             android:textSize="12sp"
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title47"
@@ -3390,7 +3482,9 @@
                                             android:textSize="12sp"
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title48"
@@ -3443,7 +3537,9 @@
                                             android:textSize="12sp"
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title49"
@@ -3497,7 +3593,9 @@
                                             android:textSize="12sp"
                                             android:maxLines="2"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title50"
@@ -3605,7 +3703,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title51"
@@ -3657,7 +3757,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title52"
@@ -3714,7 +3816,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title53"
@@ -3767,7 +3871,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title54"
@@ -3819,7 +3925,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title55"
@@ -3871,7 +3979,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title56"
@@ -3923,7 +4033,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title57"
@@ -3974,7 +4086,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title58"
@@ -4026,7 +4140,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title59"
@@ -4078,7 +4194,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title60"
@@ -4187,7 +4305,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title61"
@@ -4239,7 +4359,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title62"
@@ -4296,7 +4418,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title63"
@@ -4349,7 +4473,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title64"
@@ -4401,7 +4527,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title65"
@@ -4453,7 +4581,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title66"
@@ -4505,7 +4635,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title67"
@@ -4557,7 +4689,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title68"
@@ -4609,7 +4743,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title69"
@@ -4661,7 +4797,9 @@
                                             android:maxLines="2"
                                             android:textSize="12sp"
                                             android:text="Apple iPhone 6"
-                                            android:fontFamily="sans-serif-light" />
+                                            android:fontFamily="sans-serif-light"
+                                            android:paddingLeft = "4dp"
+                                            android:paddingRight="4dp"/>
 
                                         <TextView
                                             android:id="@+id/title70"

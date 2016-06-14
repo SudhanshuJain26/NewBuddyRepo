@@ -134,7 +134,7 @@ public class FindProduct extends AppCompatActivity {
         //recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         //adp = new SearchedProductListAdapter(recentSearchItemsArrayList,this);
 
-        new FindRecentProductLinks(FindProduct.this).execute(getApplicationContext().getResources().getString(R.string.server)+"api/user/product/recent?userid="+userId +"&count=5");
+        new FindRecentProductLinks(FindProduct.this).execute(getApplicationContext().getResources().getString(R.string.server)+"api/user/product/recent?userid="+userId +"&count=50");
 
 //        if(ProductsPage.backpressed){
 //            RecentSearchItems items = new RecentSearchItems(ProductsPage.brand1,ProductsPage.title1,Integer.toString(ProductsPage.price),productId);
@@ -477,6 +477,9 @@ public class FindProduct extends AppCompatActivity {
 
         } else if (parseString.contains("paytm")) {
             sellerNme = "paytm";
+            checkValidFromApis = 1;
+        }else if(parseString.contains("infibeam")){
+            sellerNme = "infibeam";
             checkValidFromApis = 1;
         }
         //amazon

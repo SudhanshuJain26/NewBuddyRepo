@@ -40,45 +40,46 @@ public class SecondViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        layout = inflater.inflate(R.layout.pages2, container, false);
-        try {
-            View dot1 = (View) layout.findViewById(R.id.c1);
-            View dot2 = (View) layout.findViewById(R.id.c2);
-            View dot3 = (View) layout.findViewById(R.id.c3);
-            View dot4 = (View) layout.findViewById(R.id.c4);
+       try {
+           layout = inflater.inflate(R.layout.pages2, container, false);
+           try {
+               View dot1 = (View) layout.findViewById(R.id.c1);
+               View dot2 = (View) layout.findViewById(R.id.c2);
+               View dot3 = (View) layout.findViewById(R.id.c3);
+               View dot4 = (View) layout.findViewById(R.id.c4);
 
-            if (position == 0) {
-                dot1.setVisibility(View.GONE);
-                dot1.setBackgroundResource(R.drawable.circle2);
-                dot2.setVisibility(View.GONE);
-                dot3.setVisibility(View.GONE);
-                dot4.setVisibility(View.GONE);
-                img1 = (ImageView) layout.findViewById(R.id.imageView1);
-                img1.setImageResource(R.drawable.first_image);
-                img1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(act,ViewForm.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("which_page", 20);
-                       // intent.putExtra("url", "http://hellobuddy.in/#/how-it-works");
-                        context.startActivity(intent);
-                        act.finish();
-                    }
-                });
+               if (position == 0) {
+                   dot1.setVisibility(View.GONE);
+                   dot1.setBackgroundResource(R.drawable.circle2);
+                   dot2.setVisibility(View.GONE);
+                   dot3.setVisibility(View.GONE);
+                   dot4.setVisibility(View.GONE);
+                   img1 = (ImageView) layout.findViewById(R.id.imageView1);
+                   img1.setImageResource(R.drawable.first_image);
+                   img1.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           Intent intent = new Intent(act, ViewForm.class);
+                           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                           intent.putExtra("which_page", 20);
+                           // intent.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+                           context.startActivity(intent);
+                           act.finish();
+                       }
+                   });
 
 
-                //((BitmapDrawable)img1.getDrawable()).getBitmap().recycle();
+                   //((BitmapDrawable)img1.getDrawable()).getBitmap().recycle();
 
-            }
-            if (position == 1) {
-                dot1.setVisibility(View.GONE);
-                dot2.setVisibility(View.GONE);
-                dot2.setBackgroundResource(R.drawable.circle2);
-                dot3.setVisibility(View.GONE);
-                dot4.setVisibility(View.GONE);
-                img2 = (ImageView) layout.findViewById(R.id.imageView1);
-                img2.setImageResource(R.drawable.second_image);
+               }
+               if (position == 1) {
+                   dot1.setVisibility(View.GONE);
+                   dot2.setVisibility(View.GONE);
+                   dot2.setBackgroundResource(R.drawable.circle2);
+                   dot3.setVisibility(View.GONE);
+                   dot4.setVisibility(View.GONE);
+                   img2 = (ImageView) layout.findViewById(R.id.imageView1);
+                   img2.setImageResource(R.drawable.second_image);
 //                img.setOnClickListener(new View.OnClickListener() {
 ////                    @Override
 ////                    public void onClick(View v) {
@@ -90,51 +91,56 @@ public class SecondViewPagerAdapter extends PagerAdapter {
 ////                        act.finish();
 ////                    }
 ////                });
-                //((BitmapDrawable)img2.getDrawable()).getBitmap().recycle();
+                   //((BitmapDrawable)img2.getDrawable()).getBitmap().recycle();
 
 
-            }
-            if (position == 2) {
-                dot1.setVisibility(View.GONE);
-                dot2.setVisibility(View.GONE);
+               }
+               if (position == 2) {
+                   dot1.setVisibility(View.GONE);
+                   dot2.setVisibility(View.GONE);
 
-                dot3.setVisibility(View.GONE);
-                dot3.setBackgroundResource(R.drawable.circle2);
-                dot4.setVisibility(View.GONE);
+                   dot3.setVisibility(View.GONE);
+                   dot3.setBackgroundResource(R.drawable.circle2);
+                   dot4.setVisibility(View.GONE);
 
-                img3 = (ImageView) layout.findViewById(R.id.imageView1);
-                img3.setImageResource(R.drawable.third_image);
-                img3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(act,ViewForm.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("which_page", 999);
-                        intent.putExtra("url", "http://hellobuddy.in/#/how-it-works");
-                        context.startActivity(intent);
-                        act.finish();
+                   img3 = (ImageView) layout.findViewById(R.id.imageView1);
+                   img3.setImageResource(R.drawable.third_image);
+                   img3.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           Intent intent = new Intent(act, ViewForm.class);
+                           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                           intent.putExtra("which_page", 999);
+                           intent.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+                           context.startActivity(intent);
+                           act.finish();
 
-                    }
-                });
-               // ((BitmapDrawable)img3.getDrawable()).getBitmap().recycle();
+                       }
+                   });
+                   // ((BitmapDrawable)img3.getDrawable()).getBitmap().recycle();
 
-            }
-            if(position==3){
-                dot1.setVisibility(View.GONE);
-                dot2.setVisibility(View.GONE);
-                dot3.setVisibility(View.GONE);
-                dot4.setVisibility(View.GONE);
-                dot4.setBackgroundResource(R.drawable.circle2);
-                ImageView img = (ImageView) layout.findViewById(R.id.imageView1);
-                img.setImageResource(R.drawable.forth_image);
-            }
+               }
+               if (position == 3) {
+                   dot1.setVisibility(View.GONE);
+                   dot2.setVisibility(View.GONE);
+                   dot3.setVisibility(View.GONE);
+                   dot4.setVisibility(View.GONE);
+                   dot4.setBackgroundResource(R.drawable.circle2);
+                   ImageView img = (ImageView) layout.findViewById(R.id.imageView1);
+                   img.setImageResource(R.drawable.forth_image);
+               }
 
-        } catch (OutOfMemoryError e) {
-            e.printStackTrace();
-        }
-        ( container).addView(layout);
-        return layout;
+           } catch (OutOfMemoryError e) {
+               e.printStackTrace();
+           }
 
+           (container).addView(layout);
+           return layout;
+       }catch (OutOfMemoryError e){
+           e.printStackTrace();
+           (container).addView(layout);
+           return layout;
+       }
 
     }
 

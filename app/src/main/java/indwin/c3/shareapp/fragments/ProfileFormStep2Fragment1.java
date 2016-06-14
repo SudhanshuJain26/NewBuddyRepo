@@ -150,19 +150,16 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         marksheet = user.getGradeSheet();
         if (!marksheet.getImgUrls().contains("add") && !user.isAppliedFor7k())
             marksheet.getImgUrls().add("add");
+        if (AppUtils.isNotEmpty(user.getGpaType()) && AppUtils.isNotEmpty(user.getGpa())) {
+            incompleteAP.setVisibility(View.GONE);
+            completeAP.setVisibility(View.VISIBLE);
 
+        }
 
         if (!user.isAppliedFor7k()) {
             if (user.isIncompleteGpa()) {
                 incompleteAP.setVisibility(View.VISIBLE);
                 completeAP.setVisibility(View.GONE);
-            } else {
-
-                if (AppUtils.isNotEmpty(user.getGpaType()) && AppUtils.isNotEmpty(user.getGpa())) {
-                    incompleteAP.setVisibility(View.GONE);
-                    completeAP.setVisibility(View.VISIBLE);
-
-                }
             }
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

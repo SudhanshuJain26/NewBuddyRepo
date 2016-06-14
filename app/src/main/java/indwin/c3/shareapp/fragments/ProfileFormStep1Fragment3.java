@@ -191,7 +191,9 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 editAadharNumber.setVisibility(View.GONE);
                 addressProofCv.setVisibility(View.GONE);
                 aadharOrPan.setTag(0);
-                uploadImageMsgTv.setText("Upload your Aadhar Proof");
+                if (user.isAppliedFor1k() && (user.getAddressProof() == null || AppUtils.isEmpty(user.getAddressProof().getType()))) {
+                    uploadImageMsgTv.setText("Upload your Permanent Address Proof");
+                } else uploadImageMsgTv.setText("Upload your Aadhar Proof");
                 aadharPanHeader.setText(arrayAaadharOrPan[0]);
                 aadharNuber.setText(user.getAadharNumber());
                 completeAadhar1.setVisibility(View.VISIBLE);
@@ -466,6 +468,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
         aadharHelptip.setEnabled(true);
         addressHelptip.setEnabled(true);
+        addPanHelptip.setEnabled(true);
     }
 
     private void saveAadharorPan() {
@@ -486,25 +489,27 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 editAadhar.setVisibility(View.VISIBLE);
                 editAadharNumber.setVisibility(View.GONE);
                 saveAadhar.setVisibility(View.GONE);
-                UserModel user = AppUtils.getUserObject(getActivity());
+                UserModel userModel = AppUtils.getUserObject(getActivity());
                 if (currentSelected == 0) {
-                    user.setAadharNumber(text);
-                    user.setPanOrAadhar("Aadhar");
+                    userModel.setAadharNumber(text);
+                    userModel.setPanOrAadhar("Aadhar");
                     aadharPanHeader.setText("Aadhar");
-                    user.setUpdateAadharNumber(true);
+                    userModel.setUpdateAadharNumber(true);
+                    AppUtils.saveUserObject(getActivity(), userModel);
                     this.user.setAadharNumber(text);
                 } else {
-                    user.setPanNumber(text.toUpperCase());
-                    user.setUpdatePanNumber(true);
+                    userModel.setPanNumber(text.toUpperCase());
+                    userModel.setUpdatePanNumber(true);
                     this.user.setAadharNumber(text.toUpperCase());
-                    user.setPanOrAadhar("PAN");
+                    userModel.setPanOrAadhar("PAN");
+                    AppUtils.saveUserObject(getActivity(), userModel);
                     aadharPanHeader.setText("PAN");
                 }
                 aadharPanHeader.setVisibility(View.VISIBLE);
                 completeAadhar1.setVisibility(View.VISIBLE);
                 editTextHeader.setVisibility(View.GONE);
                 editTextCardView.setVisibility(View.GONE);
-                AppUtils.saveUserObject(getActivity(), user);
+
             }
         } else {
             aadharNuber.setVisibility(View.VISIBLE);
@@ -574,16 +579,16 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         super.onActivityResult(requestCode, resuleCode, intent);
 
         if (requestCode == INTENT_REQUEST_GET_IMAGES && resuleCode == Activity.RESULT_OK) {
-            UserModel user = AppUtils.getUserObject(getActivity());
+            UserModel userModel = AppUtils.getUserObject(getActivity());
 
             imageUris = intent.getParcelableArrayListExtra(ImageHelperActivity.EXTRA_IMAGE_URIS);
             if (Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(typeImage)) {
-                if (user.getAddressProof() == null)
-                    user.setAddressProof(new Image());
+                if (userModel.getAddressProof() == null)
+                    userModel.setAddressProof(new Image());
                 FrontBackImage frontBackImage = new FrontBackImage();
                 if (imageUris != null && imageUris.size() > 0) {
                     frontBackImage.setImgUrl(imageUris.get(0).getPath());
-                    Image addressProof = user.getAddressProof();
+                    Image addressProof = userModel.getAddressProof();
                     if (clickedPosition == 0) {
                         addressProof.setFrontStatus(AppUtils.uploadStatus.OPEN.toString());
                         addressProof.setFront(frontBackImage);
@@ -596,19 +601,19 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                         this.addressProof.setBack(frontBackImage);
                     }
                     adapter.notifyDataSetChanged();
-                    user.setUpdateNewAddressProofs(true);
+                    userModel.setUpdateNewAddressProofs(true);
                 }
             } else {
                 if (imageUris != null && imageUris.size() > 0) {
-                    user.setUpdatePanProof(true);
-                    user.setPanProof(new FrontBackImage());
-                    user.setPanStatus(AppUtils.uploadStatus.OPEN.toString());
-                    user.getPanProof().setImgUrl(imageUris.get(0).getPath());
+                    userModel.setUpdatePanProof(true);
+                    userModel.setPanProof(new FrontBackImage());
+                    userModel.setPanStatus(AppUtils.uploadStatus.OPEN.toString());
+                    userModel.getPanProof().setImgUrl(imageUris.get(0).getPath());
                     File file = new File(imageUris.get(0).getPath());
                     Picasso.with(getActivity()).load(file).fit().placeholder(R.drawable.downloading).into(addPanImage);
                 }
             }
-            AppUtils.saveUserObject(getActivity(), user);
+            AppUtils.saveUserObject(getActivity(), userModel);
 
         }
     }

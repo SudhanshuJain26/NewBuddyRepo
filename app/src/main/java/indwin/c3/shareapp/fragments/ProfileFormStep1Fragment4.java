@@ -135,16 +135,16 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
 
         BANGALORE_CENTER.setLatitude(12.97232);
         BANGALORE_CENTER.setLongitude(77.59480);
-        if (mGoogleApiClient == null)
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .addApi(Places.GEO_DATA_API)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-        mGooglePlaceAdapter = new PlaceAutocompleteAdapter(getActivity(), mGoogleApiClient, BOUNDS_GREATER_BANGALORE,
-                null);
-        googleCurrentAddress.setAdapter(mGooglePlaceAdapter);
-
-        googleCurrentAddress.setOnItemClickListener(mAutocompleteClickListener);
+        //if (mGoogleApiClient == null)
+        //    mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+        //            .addApi(Places.GEO_DATA_API)
+        //            .addOnConnectionFailedListener(this)
+        //            .build();
+        //mGooglePlaceAdapter = new PlaceAutocompleteAdapter(getActivity(), mGoogleApiClient, BOUNDS_GREATER_BANGALORE,
+        //        null);
+        //googleCurrentAddress.setAdapter(mGooglePlaceAdapter);
+        //
+        //googleCurrentAddress.setOnItemClickListener(mAutocompleteClickListener);
 
 
         final Spinner spinner = (Spinner) rootView.findViewById(R.id.place_of_stay);
@@ -363,7 +363,7 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
 
     public void checkIncomplete() {
         saveSelfieAndSignature();
-        if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())||!user.isTncAccepted()) {
+        if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature()) || !user.isTncAccepted()) {
             user.setInCompleteAgreement(true);
             incompleteAgreement.setVisibility(View.VISIBLE);
             completeAgreement.setVisibility(View.GONE);
@@ -496,6 +496,7 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
                     userModel.setCurrentAddressPinCode(pinCodeEt.getText().toString());
                     userModel.setCurrentAddress(houseNoEt.getText().toString());
                     userModel.setUpdateCurrentAddress(true);
+                    AppUtils.saveUserObject(getActivity(), userModel);
                     editCurrentAddress.setText(houseNoEt.getText().toString() + "," + streetEt.getText().toString() + "," + cityEt.getText().toString() + "," + pinCodeEt.getText().toString());
                 } else {
 
@@ -504,10 +505,11 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
                     userModel.setPermanentAddressPinCode(pinCodeEt.getText().toString());
                     userModel.setPermanentAddress(houseNoEt.getText().toString());
                     userModel.setUpdatePermanentAddress(true);
+                    AppUtils.saveUserObject(getActivity(), userModel);
                     editPermanentAddress.setText(houseNoEt.getText().toString() + "," + streetEt.getText().toString() + "," + cityEt.getText().toString() + "," + pinCodeEt.getText().toString());
 
                 }
-                AppUtils.saveUserObject(getActivity(), userModel);
+
                 dialogView.dismiss();
 
 

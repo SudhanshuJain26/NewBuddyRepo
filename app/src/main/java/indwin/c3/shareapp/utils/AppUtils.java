@@ -182,6 +182,7 @@ public class AppUtils {
             if (data1.opt("accomodation") != null)
                 user.setAccommodation(data1.getString("accomodation"));
             if (data1.opt("currentAddress") != null) {
+
                 JSONObject currentAddress = data1.getJSONObject("currentAddress");
                 user.setCurrentAddress(currentAddress.getString("line1"));
 

@@ -25,6 +25,7 @@ import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
+import indwin.c3.shareapp.utils.PicassoTrustAll;
 
 public class FullScreenActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     private List<String> images;
@@ -36,6 +37,7 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
     private String title;
     private TextView verificationStatusTv;
     private ImageView imageStatus;
+    private boolean statusApplied;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +53,34 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
         headerTitle = (TextView) findViewById(R.id.activity_header);
         title = intent.getStringExtra(AppUtils.HEADING);
         headerTitle.setText(title);
-
+        statusApplied = true;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         UserModel user = AppUtils.getUserObject(this);
         if (Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type)) {
             image = user.getCollegeID();
+            if (!user.isAppliedFor1k()) {
+
+                if (position == 1 && image.isFrontEmpty()) {
+                    position = position - 1;
+                }
+                if (position > 1) {
+                    if (image.isFrontEmpty()) {
+                        position = position - 1;
+                    }
+                    if (image.isBackEmpty()) {
+                        position = position - 1;
+                    }
+                }
+            }
+
         } else if (Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type)) {
             image = user.getAddressProof();
+            if (!user.isAppliedFor1k() && (image.getFront() == null || AppUtils.isEmpty(image.getFront().getImgUrl())) && (image.getBack() != null && AppUtils.isNotEmpty(image.getBack().getImgUrl()))) {
+                position = position - 1;
+
+            }
 
         } else if (Constants.IMAGE_TYPE.BANK_PROOF.toString().equals(type)) {
             image = user.getBankProof();
@@ -70,11 +91,10 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
         } else if (Constants.IMAGE_TYPE.MARKSHEETS.toString().equals(type)) {
             image = user.getGradeSheet();
         }
-        if (Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type) || Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type)) {
-            size = image.getTotalImageSize() + 2;
-        } else {
-            size = image.getTotalImageSize();
+        if (image == null) {
+            image = new Image();
         }
+        size = getToTalCount();
         setHeaderTitle(position);
         currentPageCountTv.setText((position + 1) + " of " + (size));
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -92,16 +112,19 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
         boolean showStatusImage = true;
         Boolean status = null;
         if (Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type) || Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type)) {
-            if (position == 0) {
-                headerTitle.setText("Front Side " + title);
-                if (image.getFront() != null) {
-                    status = image.getFront().isVerified();
-                } else showStatusImage = false;
-            } else if (position == 1) {
-                headerTitle.setText("Back Side " + title);
-                if (image.getBack() != null)
-                    status = image.getBack().isVerified();
-                else showStatusImage = false;
+            if (image.getFrontBankSize(statusApplied) > 0 && (position + 1) <= image.getFrontBankSize(statusApplied)) {
+                if (position == 0 && (!statusApplied || (image.getFront() != null && AppUtils.isNotEmpty(image.getFront().getImgUrl())))) {
+                    headerTitle.setText("Front Side " + title);
+                    if (image.getFront() != null) {
+                        status = image.getFront().isVerified();
+                    } else showStatusImage = false;
+                } else if ((position == 0 || (position == 1 && image.getFrontBankSize(statusApplied) == 2)) && ((image.getBack() != null && AppUtils.isNotEmpty(image.getBack().getImgUrl()) || !statusApplied))) {
+
+                    headerTitle.setText("Back Side " + title);
+                    if (image.getBack() != null)
+                        status = image.getBack().isVerified();
+                    else showStatusImage = false;
+                }
             } else {
                 headerTitle.setText(title);
             }
@@ -136,7 +159,7 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
     public void onPageSelected(int position) {
         setHeaderTitle(position);
 
-        currentPageCountTv.setText((position + 1) + " of " + (size));
+        currentPageCountTv.setText((position + 1) + " of " + size);
     }
 
     @Override
@@ -156,15 +179,9 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
 
         @Override
         public int getCount() {
-            int imgUrlSize = 0;
-            imgUrlSize = image.getImgUrls().size() + image.getValidImgUrls().size() + image.getInvalidImgUrls().size();
-
-            if (Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type) || Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type)) {
-                return 2 + imgUrlSize;
-            } else {
-                return imgUrlSize;
-            }
+            return getToTalCount();
         }
+
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
@@ -181,47 +198,35 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
             int imgUrlSize = image.getImgUrls().size();
             String imgUrl = "";
             if (Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type) || Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type)) {
-                if (position == 0) {
-                    {
-                        if (image.getFront() != null && AppUtils.isNotEmpty(image.getFront().getImgUrl()))
-                            imgUrl = image.getFront().getImgUrl();
-                        else
-                            Picasso.with(mContext).load(R.mipmap.frontside_noimage).fit().placeholder(R.drawable.downloading).into(imageView);
+                if (image.getFrontBankSize(statusApplied) > 0 && (position + 1) <= image.getFrontBankSize(statusApplied)) {
+                    if (position == 0 && (!statusApplied || (image.getFront() != null && AppUtils.isNotEmpty(image.getFront().getImgUrl())))) {
+                        {
+                            if (image.getFront() != null && AppUtils.isNotEmpty(image.getFront().getImgUrl()))
+                                imgUrl = image.getFront().getImgUrl();
+                            else
+                                Picasso.with(mContext).load(R.mipmap.frontside_noimage).fit().placeholder(R.drawable.downloading).into(imageView);
 
-                    }
-                } else if (position == 1) {
-                    if (image.getBack() != null)
+                        }
+                    } else if ((position == 0 || (position == 1 && image.getFrontBankSize(statusApplied) == 2)) && ((image.getBack() != null && AppUtils.isNotEmpty(image.getBack().getImgUrl()) || !statusApplied))) {
+
                         imgUrl = image.getBack().getImgUrl();
-                    else
-                        Picasso.with(mContext).load(R.mipmap.backside_noimage).fit().placeholder(R.drawable.downloading).into(imageView);
 
-                } else {
-                    if ((position - 1) <= validUrlSize && validUrlSize > 0) {
-                        imgUrl = image.getValidImgUrls().get(position - 2);
-                    } else if ((position - 1) <= (validUrlSize + invalidUrlSize) && invalidUrlSize > 0) {
-                        imgUrl = image.getInvalidImgUrls().get(position - 2 - validUrlSize);
-                    } else if ((position - 1) <= (validUrlSize + invalidUrlSize + imgUrlSize) && imgUrlSize > 0) {
-                        imgUrl = image.getImgUrls().get(position - 2 - validUrlSize - invalidUrlSize);
                     }
+                } else {
+                    imgUrl = setNormalImages(position, validUrlSize, invalidUrlSize, imgUrlSize);
                 }
             } else {
 
-                if ((position + 1) <= validUrlSize && validUrlSize > 0) {
-                    imgUrl = image.getValidImgUrls().get(position);
-                } else if ((position + 1) <= (validUrlSize + invalidUrlSize) && invalidUrlSize > 0) {
-                    imgUrl = image.getInvalidImgUrls().get(position - validUrlSize);
-                } else if ((position + 1) <= (validUrlSize + invalidUrlSize + imgUrlSize) && imgUrlSize > 0) {
-                    imgUrl = image.getImgUrls().get(position - validUrlSize - invalidUrlSize);
-                }
+                imgUrl = setNormalImages(position, validUrlSize, invalidUrlSize, imgUrlSize);
             }
 
             if (AppUtils.isNotEmpty(imgUrl)) {
                 if (imgUrl.contains("http"))
-                    Picasso.with(FullScreenActivity.this).load(imgUrl).fit().placeholder(R.drawable.downloading).into(imageView);
+                    PicassoTrustAll.getInstance(FullScreenActivity.this).load(imgUrl).placeholder(R.drawable.downloading).into(imageView);
                 else {
                     final File imgFile = new File(imgUrl);
                     if (imgFile.exists()) {
-                        Picasso.with(mContext).load(imgFile).fit().placeholder(R.drawable.downloading).into(imageView);
+                        Picasso.with(mContext).load(imgFile).placeholder(R.drawable.downloading).into(imageView);
                     }
                 }
             }
@@ -233,6 +238,29 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((LinearLayout) object);
         }
+    }
+
+    private int getToTalCount() {
+        int imgUrlSize = 0;
+        imgUrlSize = image.getTotalImageSize();
+
+        if (Constants.IMAGE_TYPE.ADDRESS_PROOF.toString().equals(type) || Constants.IMAGE_TYPE.COLLEGE_ID.toString().equals(type)) {
+            return image.getFrontBankSize(statusApplied) + imgUrlSize;
+        } else {
+            return imgUrlSize;
+        }
+    }
+
+    private String setNormalImages(int position, int validUrlSize, int invalidUrlSize, int imgUrlSize) {
+        String imgUrl = null;
+        if ((position + 1 - image.getFrontBankSize(statusApplied)) <= validUrlSize && validUrlSize > 0) {
+            imgUrl = image.getValidImgUrls().get(position - image.getFrontBankSize(statusApplied));
+        } else if ((position + 1 - image.getFrontBankSize(statusApplied)) <= (validUrlSize + invalidUrlSize) && invalidUrlSize > 0) {
+            imgUrl = image.getInvalidImgUrls().get(position - image.getFrontBankSize(statusApplied) - validUrlSize);
+        } else if ((position + 1 - image.getFrontBankSize(statusApplied)) <= (validUrlSize + invalidUrlSize + imgUrlSize) && imgUrlSize > 0) {
+            imgUrl = image.getImgUrls().get(position - image.getFrontBankSize(statusApplied) - validUrlSize - invalidUrlSize);
+        }
+        return imgUrl;
     }
 
     @Override

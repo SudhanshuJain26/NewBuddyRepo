@@ -179,9 +179,26 @@ public class Landing extends AppCompatActivity {
                     overridePendingTransition(0, 0);
                     return;
                 }
-                if (time + 5 < userP.getLong("expires", 0))
-                    new ValidateForm().execute("");
-                else
+                if (time + 5 < userP.getLong("expires", 0)) {
+                    SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+                    boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+                    if (!isUpdatingDB) {
+
+                        new ValidateForm().execute("");
+                    } else {
+                        Runnable myRunnable = new Runnable() {
+
+                            public void run() {
+                                checkForDBUpdate();
+                            }
+
+
+                        };
+                        Thread thread = new Thread(myRunnable);
+                        thread.start();
+
+                    }
+                } else
                     new AuthTokc().execute();
             }
             // else
@@ -278,10 +295,43 @@ public class Landing extends AppCompatActivity {
                 // new fblogin().execute();
                 //            next.fblogin().execute();
                 //                new forgotpass().execute();
-                new ValidateForm().execute("");
+
+                SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+                boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+                if (!isUpdatingDB) {
+
+                    new ValidateForm().execute("");
+                } else {
+                    Runnable myRunnable = new Runnable() {
+
+                        public void run() {
+                            checkForDBUpdate();
+                        }
+
+
+                    };
+                    Thread thread = new Thread(myRunnable);
+                    thread.start();
+
+                }
 
             }
         }
+    }
+
+    private void checkForDBUpdate() {
+        try {
+            Thread.sleep(10000);
+
+        } catch (Exception e) {
+
+        }
+        SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+        boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+        if (isUpdatingDB)
+            checkForDBUpdate();
+        else
+            new ValidateForm().execute("");
     }
 
     @Override
@@ -353,7 +403,7 @@ public class Landing extends AppCompatActivity {
                             email = data1.getString("email");
                             user.setName(name);
                             user.setEmail(email);
-                            if (!data1.getBoolean("offlineForm"))
+                            if (data1.opt("offlineForm") == null || !data1.getBoolean("offlineForm"))
                                 checkDataForNormalUser(user, gson, data1);
                             else
                                 checkDataForOfflineUser(user, gson, data1);
@@ -506,7 +556,7 @@ public class Landing extends AppCompatActivity {
 
         private void checkDataForNormalUser(UserModel user, Gson gson, JSONObject data1) {
             try {
-                AppUtils.checkDataForNormalUser(user, gson, data1);
+                AppUtils.checkDataForNormalUser(user, gson, data1, Landing.this);
                 //user.setEmailSent(false);
                 //if (data1.opt("gender") != null)
                 //    user.setGender(data1.getString("gender"));

@@ -5,7 +5,7 @@ package indwin.c3.shareapp.utils;
  */
 public class Constants {
 
-
+    public static int FRONT_BACK_SIZE = 2;
     public static final String ACCOUNT_DELETED = "account_deleted";
     public static final String DISABLE_ADD = "disableAdd";
 

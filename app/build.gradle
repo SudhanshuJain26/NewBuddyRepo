@@ -68,6 +68,7 @@ dependencies {
     compile 'com.commonsware.cwac:cam2:0.5.11'
 
 
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
 android { sourceSets { main { java.srcDirs = ['src/main/java', 'app/model'] } } }
 android {

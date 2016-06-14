@@ -235,7 +235,7 @@ if(isActive)
                 adapter.notifyDataSetChanged();
                 TextView paydo=(TextView)findViewById(R.id.paydo);
                SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
-                     String payamt=String.valueOf(get.getInt("downpayment", 0)+get.getInt("service", 0));
+                     String payamt=String.valueOf(get.getInt("downpayment", 0));
                paydo.setText("Pay "+getApplicationContext().getString(R.string.Rs)+payamt);
                 paydo.setOnClickListener(new View.OnClickListener() {
                     @Override

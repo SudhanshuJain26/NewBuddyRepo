@@ -214,26 +214,18 @@ public class ProfileFormStep1Fragment1 extends Fragment {
 
 
         if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()) {
-            incompleteStep1.setVisibility(View.VISIBLE);
-            if (user.isIncompleteFb()) {
+            if (user.isIncompleteFb() && !user.isAppliedFor1k()) {
                 incompleteFb.setVisibility(View.VISIBLE);
             }
-            if (user.isIncompleteEmail()) {
+            if (user.isIncompleteEmail() && !user.isAppliedFor1k()) {
                 incompleteEmail.setVisibility(View.VISIBLE);
             }
-            if (user.isIncompleteGender()) {
+            if (user.isIncompleteGender() && !user.isAppliedFor1k()) {
                 incompleteGender.setVisibility(View.VISIBLE);
             }
         }
         if (user.getCollegeIds() != null && user.getCollegeIds().size() > 0) {
             user.setIncompleteCollegeId(false);
-        }
-        if (user.isIncompleteCollegeId() || user.isIncompleteCollegeDetails() || user.isIncompleteRollNumber()) {
-            incompleteStep2.setVisibility(View.VISIBLE);
-        }
-
-        if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress() && user.isInCompleteAgreement()) {
-            incompleteStep3.setVisibility(View.VISIBLE);
         }
 
         return rootView;
@@ -398,9 +390,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         saveEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if (userEmailEditText.getText().length() > 0 && !"".equals(userEmailEditText.getText().toString().trim()))
-                //    saveEmail();
-                //else
                 if (AppUtils.isEmpty(userEmailEditText.getText().toString())) {
                     return;
                 }
@@ -532,12 +521,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                 e.printStackTrace();
             }
         }
-        //if (!user.isEmailVerified()) {
-        //    incompleteEmail.setVisibility(View.VISIBLE);
-        //    user.setIncompleteEmail(true);
-        //} else {
-        //    user.setIncompleteEmail(false);
-        //}
         if (!user.isFbConnected()) {
             incompleteFb.setVisibility(View.VISIBLE);
             user.setIncompleteFb(true);
@@ -635,9 +618,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
 
         @Override
         protected String doInBackground(String... data) {
-
-            // String urldisplay = data[0];
-            //   HashMap<String, String> details = data[0];
             JSONObject payload = new JSONObject();
             try {
                 payload.put("fbUserId", fbuserId);
@@ -649,7 +629,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                 payload.put("fbLink", link);
                 payload.put("fbVerified", veri);
                 payload.put("fbFriends", friends);
-                // payload.put("action", details.get("action"));
 
                 HttpParams httpParameters = new BasicHttpParams();
                 SharedPreferences cred = getActivity().getSharedPreferences("cred", Context.MODE_PRIVATE);
@@ -719,7 +698,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             if (user.isFbConnected()) {
                 completeFb.setVisibility(View.VISIBLE);
                 user.setIncompleteFb(false);
-                //                dontHaveFb.setVisibility(View.INVISIBLE);
                 incompleteFb.setVisibility(View.GONE);
                 connectSocialAccountFb.setClickable(false);
                 connectSocialAccountFb.setEnabled(false);
@@ -727,7 +705,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                 connectSocialAccountFb.setTextColor(getActivity().getResources().getColor(R.color.colorwhite));
                 connectSocialAccountFb.setText("Account Connected!");
                 connectSocialAccountFb.setBackgroundResource(R.drawable.border_button_green);
-                //                connectSocialAccountFb.setBackgroundColor(Color.parseColor("#44c2a6"));
             }
         } catch (Exception e) {
             e.printStackTrace();

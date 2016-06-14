@@ -423,7 +423,7 @@ public class Splash extends AppCompatActivity {
         protected void onPostExecute(String result) {
             if (result.equals("win")) {
                 new CheckVersion().execute("");
-                new trending().execute("Mobiles");
+                new trending().execute("Mobiles=");
                 new trending().execute("Computers&subCategory=Laptops");
                 new trending().execute("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle");
                 new trending().execute("Health%20and%20Beauty");
@@ -1118,7 +1118,7 @@ public class Splash extends AppCompatActivity {
 
         } catch (Exception e) {
         }
-        AppUtils.checkDataForNormalUser(user, gson, data1);
+        AppUtils.checkDataForNormalUser(user, gson, data1, this);
         //    user.setEmailSent(false);
         //    if (data1.opt("gender") != null)
         //        user.setGender(data1.getString("gender"));

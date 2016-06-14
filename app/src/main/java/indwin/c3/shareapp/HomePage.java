@@ -1,4 +1,4 @@
-package indwin.c3.shareapp;
+ package indwin.c3.shareapp;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -1247,6 +1247,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 }
             });
             //
+
 
 //            query.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 //                @Override
@@ -5183,7 +5184,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             sellerNme = "flipkart";
             pos = parseString.indexOf("pid");
             if (pos != -1) {
-                for (int j = pos + 4; ; j++) {
+                for (int j = pos + 4; j<parseString.length(); j++) {
                     if (parseString.charAt(j) == '&')
                         break;
                     else {

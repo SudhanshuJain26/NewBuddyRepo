@@ -15,7 +15,6 @@ import org.json.JSONObject;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.activities.AccountSettingsActivity;
-import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment1;
 import indwin.c3.shareapp.models.UserModel;
 
 /**
@@ -37,7 +36,7 @@ public class FetchLatestUserDetails extends
 
     @Override
     protected void onPreExecute() {
-        ProfileFormStep1Fragment1.verifyEmail.setText("...");
+        AccountSettingsActivity.verifyEmail.setText("...");
     }
 
     @Override

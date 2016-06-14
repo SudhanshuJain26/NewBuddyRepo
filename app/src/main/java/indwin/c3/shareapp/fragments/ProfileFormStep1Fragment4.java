@@ -179,6 +179,9 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
             user.setIncompleteAddressDetails(false);
         }
 
+        if (user.isIncompleteAddressDetails() && !user.isAppliedFor1k()) {
+            incompleteAddressDetails.setVisibility(View.VISIBLE);
+        }
 
         if (user.getAccommodation() != null && !"".equals(user.getAccommodation())) {
             for (int i = 0; i < placesToStay.length - 1; i++) {
@@ -199,10 +202,6 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
         currentAddressLayout.getLayoutParams().height = displaymetrics.heightPixels - statusBarHeight;
 
 
-        if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature())) {
-            completeAgreement.setVisibility(View.VISIBLE);
-        }
-
         if (user.isAppliedFor1k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
@@ -218,13 +217,15 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
             }
         });
 
+        if (!user.isAppliedFor1k()) {
 
+        }
         setOnClickListener();
 
-        if (user.isInCompleteAgreement()) {
+        if (user.isInCompleteAgreement() && !user.isAppliedFor1k()) {
 
             incompleteAgreement.setVisibility(View.VISIBLE);
-        } else if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature())) {
+        } else if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isNotEmpty(user.getSignature()) && (user.isAppliedFor1k() || user.isTncAccepted())) {
 
             completeAgreement.setVisibility(View.VISIBLE);
         }
@@ -238,8 +239,7 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
         addressHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text1 = "Please enter the locality of both, your local address locality (the city where you study) " +
-                        "as well as your permanent address locality (as on your permanent address proof)";
+                String text1 = "Please enter the locality of both, your local address locality (the city where you study) as well as your permanent address locality (as on your permanent address proof)";
                 String text2 = "";
                 Dialog dialog = new HelpTipDialog(getActivity(), "Upload your College ID", text1, text2, "#eeb85f");
                 dialog.show();
@@ -327,6 +327,7 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
             user.setUpdateSelfie(userSP.isUpdateSelfie());
 
         }
+        user.setTncAccepted(userSP.isTncAccepted());
     }
 
     private void getAllViews(View rootView) {
@@ -362,7 +363,7 @@ public class ProfileFormStep1Fragment4 extends Fragment implements GoogleApiClie
 
     public void checkIncomplete() {
         saveSelfieAndSignature();
-        if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
+        if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())||!user.isTncAccepted()) {
             user.setInCompleteAgreement(true);
             incompleteAgreement.setVisibility(View.VISIBLE);
             completeAgreement.setVisibility(View.GONE);

@@ -364,11 +364,14 @@ public class AgreementActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())) {
-            user.setInCompleteAgreement(true);
-            ProfileFormStep1Fragment4.incompleteAgreement.setVisibility(View.VISIBLE);
-            ProfileFormStep1Fragment4.completeAgreement.setVisibility(View.GONE);
+        if (!user.isAppliedFor1k()) {
+            UserModel user = AppUtils.getUserObject(this);
+            if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())||!user.isTncAccepted()) {
+                user.setInCompleteAgreement(true);
+                AppUtils.saveUserObject(this, user);
+                ProfileFormStep1Fragment4.incompleteAgreement.setVisibility(View.VISIBLE);
+                ProfileFormStep1Fragment4.completeAgreement.setVisibility(View.GONE);
+            }
         }
         finish();
     }

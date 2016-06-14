@@ -81,91 +81,113 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <Spinner
-                            android:id="@+id/gpa_spinner"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:entries="@array/gpa_values"/>
+
+                        <LinearLayout android:id="@+id/gpa_sp_ll"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:orientation="vertical">
+
+
+                            <Spinner
+                                android:id="@+id/gpa_spinner"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:entries="@array/gpa_values"/>
+                            <View
+                                android:layout_width="fill_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginBottom="32dp"
+                                android:alpha="0.6"
+                                android:background="#000000"/>
+                        </LinearLayout>
 
                         <EditText
                             android:id="@+id/gpa_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:layout_toRightOf="@id/gpa_spinner"
+                            android:layout_toRightOf="@id/gpa_sp_ll"
                             android:digits="0123456789."
                             android:hint="Percentage/GPA"
                             android:inputType="numberDecimal"
-                            android:maxLength="5"/>
+                            android:maxLength="5"
+                            android:textSize="16dp"/>
 
                         <TextView
                             android:id="@+id/spinner_error_msg_tv"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:layout_alignParentBottom="true"
                             android:layout_below="@id/gpa_value"
-                            android:layout_toRightOf="@id/gpa_spinner"
+                            android:layout_toRightOf="@id/gpa_sp_ll"
                             android:textColor="@color/intercomsdk_red"/>
 
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center_vertical">
 
-                        <TextView
-                            android:id="@+id/marksheet_header"
-                            android:layout_width="200dp"
+                    <LinearLayout android:id="@+id/gradesheet_ll"
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="vertical">
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Upload your Marksheet"
-                            android:textColor="#eeb85f"
-                            android:textSize="14sp"
-                            android:textStyle="bold"/>
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_vertical">
 
-                        <ImageView
-                            android:id="@+id/incomplete_marksheet"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_toEndOf="@id/marksheet_header"
-                            android:layout_toRightOf="@id/marksheet_header"
-                            android:src="@drawable/incomplete"
-                            android:visibility="gone"/>
+                            <TextView
+                                android:id="@+id/marksheet_header"
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:text="Upload your Marksheet"
+                                android:textColor="#eeb85f"
+                                android:textSize="14sp"
+                                android:textStyle="bold"/>
 
-                        <ImageView
-                            android:id="@+id/complete_marksheet"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_toEndOf="@id/marksheet_header"
-                            android:layout_toRightOf="@id/marksheet_header"
-                            android:src="@drawable/complete"
-                            android:visibility="gone"/>
+                            <ImageView
+                                android:id="@+id/incomplete_marksheet"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_toEndOf="@id/marksheet_header"
+                                android:layout_toRightOf="@id/marksheet_header"
+                                android:src="@drawable/incomplete"
+                                android:visibility="gone"/>
 
-                        <ImageButton
-                            android:id="@+id/marksheet_helptip"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginTop="2dp"
-                            android:background="?android:attr/selectableItemBackground"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/helptip"/>
-                    </RelativeLayout>
+                            <ImageView
+                                android:id="@+id/complete_marksheet"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_toEndOf="@id/marksheet_header"
+                                android:layout_toRightOf="@id/marksheet_header"
+                                android:src="@drawable/complete"
+                                android:visibility="gone"/>
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rvImages"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"/>
+                            <ImageButton
+                                android:id="@+id/marksheet_helptip"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginTop="2dp"
+                                android:background="?android:attr/selectableItemBackground"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/helptip"/>
+                        </RelativeLayout>
 
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rvImages"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"/>
+
+
+                    </LinearLayout>
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -202,7 +224,6 @@
                                 android:visibility="gone"/>
                         </LinearLayout>
                     </RelativeLayout>
-
                     <Spinner
                         android:id="@+id/student_loan"
                         android:layout_width="200dp"

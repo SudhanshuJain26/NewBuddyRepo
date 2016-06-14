@@ -1,9 +1,12 @@
 package indwin.c3.shareapp.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -66,7 +69,14 @@ public class AppUtils {
     }
 
 
-    public static void checkDataForNormalUser(UserModel user, Gson gson, JSONObject data1) {
+    public static void checkDataForNormalUser(UserModel user, Gson gson, JSONObject data1, final Activity context) {
+
+        //context.runOnUiThread(new Runnable() {
+        //    public void run() {
+        //        Toast.makeText(context, "Fetching data", Toast.LENGTH_SHORT).show();
+        //    }
+        //});
+
         try {
             user.setEmailSent(false);
             if (data1.opt("gender") != null)
@@ -106,7 +116,15 @@ public class AppUtils {
                 userMap.put("status1K", status1K);
                 if (Constants.STATUS.DECLINED.toString().equals(status1K) || Constants.STATUS.APPLIED.toString().equals(status1K) || Constants.STATUS.APPROVED.toString().equals(status1K))
                     user.setAppliedFor1k(true);
-                else user.setAppliedFor1k(false);
+                else {
+                    user.setAppliedFor1k(false);
+
+                    //context.runOnUiThread(new Runnable() {
+                    //    public void run() {
+                    //        Toast.makeText(context, "Setting 1k status appstart", Toast.LENGTH_SHORT).show();
+                    //    }
+                    //});
+                }
             }
             if (data1.opt("status7K") != null) {
                 String status7K = data1.getString("status7K");
@@ -244,6 +262,7 @@ public class AppUtils {
                 user.setMonthlyExpenditure(data1.getString("monthlyExpense"));
             if (data1.opt("ownVehicle") != null)
                 user.setVehicle(String.valueOf(data1.getString("ownVehicle")));
+
             if (data1.opt("vehicleType") != null)
                 user.setVehicleType(data1.getString("vehicleType"));
             if (data1.opt("bankStatements") != null)
@@ -264,7 +283,8 @@ public class AppUtils {
             if (data1.opt("panProof") != null) {
                 user.setPanProof(gson.fromJson(data1.getString("panProof"), FrontBackImage.class));
             }
-
+            if (data1.opt("tncAccepted") != null)
+                user.setTncAccepted(data1.getBoolean("tncAccepted"));
             if (data1.opt("selfie") != null) {
                 JSONArray array = data1.getJSONArray("selfie");
                 user.setSelfie((String) array.get(0));
@@ -276,6 +296,16 @@ public class AppUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static void hideKeyboard(Activity activity) {
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
     }
 
     public static HttpResponse connectToServerGet(String url, String x_access_token, String basicAuth) {

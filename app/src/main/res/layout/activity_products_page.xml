@@ -172,6 +172,14 @@
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:text="Rs 49,999"
                     android:textColor="#000000" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/editprice"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/sellerMrp"
+                    android:layout_below="@id/sellerMrp"
+                    android:visibility="gone"
+                    android:src="@drawable/editadd"/>
 
                 <TextView
                     android:id="@+id/priceChange"
@@ -204,7 +212,7 @@
                 <RelativeLayout
                     android:id="@+id/overView"
                     android:layout_width="match_parent"
-
+android:animateLayoutChanges="true"
                     android:layout_height="wrap_content">
 
                     <ImageView

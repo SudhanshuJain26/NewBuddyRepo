@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -24,6 +26,7 @@ import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.FetchLatestUserDetails;
+import indwin.c3.shareapp.utils.ValidationUtils;
 import indwin.c3.shareapp.utils.VerifyEmail;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.com.google.gson.Gson;
@@ -45,6 +48,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     View nameUnderline,
             emailUnderline;
     LinearLayout changePasswordLayout, deleteAccountLayout;
+    private TextView incorrectEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        incorrectEmail = (TextView) findViewById(R.id.incorrect_email);
         userName = (TextView) findViewById(R.id.user_name);
         userEmail = (TextView) findViewById(R.id.user_email);
         editName = (ImageButton) findViewById(R.id.edit_name);
@@ -111,7 +115,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         userName.setText(user.getName());
         userEmail.setText(user.getEmail());
-
         editName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,92 +150,166 @@ public class AccountSettingsActivity extends AppCompatActivity {
             }
         });
 
+        editTextName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 0) {
+                    saveName.setEnabled(false);
+
+                    saveName.setAlpha(0.5f);
+                } else {
+                    saveName.setEnabled(true);
+
+                    saveName.setAlpha(1);
+                }
+            }
+        });
+        editTextEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                incorrectEmail.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         saveEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                                         @Override
+                                         public void onClick(View v) {
+                                             if (ValidationUtils.isValidEmail(editTextEmail.getText().toString())) {
+                                                 if (!editTextEmail.getText().toString().equals(user.getEmail())) {
+                                                     user.setEmail(userEmail.getText().toString());
+                                                     user.setUpdateEmail(true);
+                                                     user.setEmailVerified(false);
+                                                     UserModel user = AppUtils.getUserObject(AccountSettingsActivity.this);
+                                                     userEmail.setText(editTextEmail.getText().toString());
+                                                     user.setEmail(userEmail.getText().toString());
+                                                     user.setUpdateEmail(true);
+                                                     user.setEmailVerified(false);
+                                                     verifyEmail.setText("Verify");
+                                                     AppUtils.saveUserObject(AccountSettingsActivity.this, user);
+                                                 }
+                                                 editTextEmail.setVisibility(View.GONE);
+                                                 userEmail.setVisibility(View.VISIBLE);
+                                                 verifyEmail.setVisibility(View.VISIBLE);
+                                                 editEmail.setVisibility(View.VISIBLE);
+                                                 saveEmail.setVisibility(View.GONE);
+                                                 LayoutParams params = (LinearLayout.LayoutParams) emailUnderline.getLayoutParams();
+                                                 params.setMargins(2, 32, 2, 0);
+                                                 emailUnderline.setLayoutParams(params);
+                                             } else {
+                                                 incorrectEmail.setVisibility(View.VISIBLE);
 
-                user.setEmail(userEmail.getText().toString());
-                user.setUpdateEmail(true);
-                user.setEmailVerified(false);
-                UserModel user = AppUtils.getUserObject(AccountSettingsActivity.this);
-                userEmail.setText(editTextEmail.getText().toString());
-                user.setEmail(userEmail.getText().toString());
-                user.setUpdateEmail(true);
-                user.setEmailVerified(false);
-                editEmail.setVisibility(View.VISIBLE);
-                verifyEmail.setVisibility(View.VISIBLE);
-                saveEmail.setVisibility(View.GONE);
-                editTextEmail.setVisibility(View.GONE);
-                userEmail.setVisibility(View.VISIBLE);
-                user.setEmailVerified(false);
-                AppUtils.saveUserObject(AccountSettingsActivity.this, user);
-                LayoutParams params = (LinearLayout.LayoutParams) emailUnderline.getLayoutParams();
-                params.setMargins(2, 32, 2, 0);
-                emailUnderline.setLayoutParams(params);
-            }
-        });
-        editEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userEmail.setVisibility(View.GONE);
-                editTextEmail.setText(userEmail.getText());
-                editTextEmail.requestFocus();
-                editTextEmail.setVisibility(View.VISIBLE);
-                editEmail.setVisibility(View.GONE);
-                saveEmail.setVisibility(View.VISIBLE);
-                verifyEmail.setTextColor(Color.parseColor("#7c6a94"));
-                verifyEmail.setText("Verify");
-                verifyEmail.setClickable(true);
-                verifyEmail.setEnabled(true);
-                verifyEmail.setVisibility(View.GONE);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(editTextEmail, InputMethodManager.SHOW_IMPLICIT);
-                LayoutParams params = (LinearLayout.LayoutParams) emailUnderline.getLayoutParams();
-                params.setMargins(2, 0, 2, 0);
-                emailUnderline.setLayoutParams(params);
-            }
-        });
-        verifyEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!"".equals(userEmail.getText().toString()))
-                    if ("Check".equals(verifyEmail.getText().toString()))
-                        new FetchLatestUserDetails(AccountSettingsActivity.this, user.getUserId(), user).execute();
-                    else {
-                        new VerifyEmail(AccountSettingsActivity.this, user.getUserId(), userEmail.getText().toString()).execute();
-                        user.setEmailSent(true);
-                    }
-            }
-        });
+                                             }
+                                         }
 
-        changePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AccountSettingsActivity.this, ChangePasswordActivity.class);
-                startActivity(intent);
-            }
-        });
-        changePasswordLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AccountSettingsActivity.this, ChangePasswordActivity.class);
-                startActivity(intent);
-            }
-        });
-        deleteAccountLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AccountSettingsActivity.this, DeleteAccountActivity.class);
-                startActivity(intent);
-            }
-        });
-        deleteAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AccountSettingsActivity.this, DeleteAccountActivity.class);
-                startActivity(intent);
-            }
-        });
+                                     }
+
+        );
+        editEmail.setOnClickListener(new View.OnClickListener()
+
+                                     {
+                                         @Override
+                                         public void onClick(View v) {
+                                             userEmail.setVisibility(View.GONE);
+                                             editTextEmail.setText(userEmail.getText());
+                                             editTextEmail.requestFocus();
+                                             editTextEmail.setVisibility(View.VISIBLE);
+                                             editEmail.setVisibility(View.GONE);
+                                             saveEmail.setVisibility(View.VISIBLE);
+                                             verifyEmail.setTextColor(Color.parseColor("#7c6a94"));
+
+
+                                             verifyEmail.setClickable(true);
+                                             verifyEmail.setEnabled(true);
+                                             verifyEmail.setVisibility(View.GONE);
+                                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                             imm.showSoftInput(editTextEmail, InputMethodManager.SHOW_IMPLICIT);
+                                             LayoutParams params = (LinearLayout.LayoutParams) emailUnderline.getLayoutParams();
+                                             params.setMargins(2, 0, 2, 0);
+                                             emailUnderline.setLayoutParams(params);
+                                         }
+                                     }
+
+        );
+        verifyEmail.setOnClickListener(new View.OnClickListener()
+
+                                       {
+                                           @Override
+                                           public void onClick(View v) {
+                                               if (!"".equals(userEmail.getText().toString()))
+                                                   if ("Check".equals(verifyEmail.getText().toString()))
+                                                       new FetchLatestUserDetails(AccountSettingsActivity.this, user.getUserId(), user).execute();
+                                                   else {
+                                                       new VerifyEmail(AccountSettingsActivity.this, user.getUserId(), userEmail.getText().toString()).execute();
+                                                       user.setEmailSent(true);
+                                                   }
+                                           }
+                                       }
+
+        );
+
+        changePassword.setOnClickListener(new View.OnClickListener()
+
+                                          {
+                                              @Override
+                                              public void onClick(View v) {
+                                                  Intent intent = new Intent(AccountSettingsActivity.this, ChangePasswordActivity.class);
+                                                  startActivity(intent);
+                                              }
+                                          }
+
+        );
+        changePasswordLayout.setOnClickListener(new View.OnClickListener()
+
+                                                {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        Intent intent = new Intent(AccountSettingsActivity.this, ChangePasswordActivity.class);
+                                                        startActivity(intent);
+                                                    }
+                                                }
+
+        );
+        deleteAccountLayout.setOnClickListener(new View.OnClickListener()
+
+                                               {
+                                                   @Override
+                                                   public void onClick(View v) {
+                                                       Intent intent = new Intent(AccountSettingsActivity.this, DeleteAccountActivity.class);
+                                                       startActivity(intent);
+                                                   }
+                                               }
+
+        );
+        deleteAccount.setOnClickListener(new View.OnClickListener()
+
+                                         {
+                                             @Override
+                                             public void onClick(View v) {
+                                                 Intent intent = new Intent(AccountSettingsActivity.this, DeleteAccountActivity.class);
+                                                 startActivity(intent);
+                                             }
+                                         }
+
+        );
     }
 
     @Override

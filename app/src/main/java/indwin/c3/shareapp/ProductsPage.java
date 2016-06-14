@@ -2087,7 +2087,7 @@ if(dummyCl==1000)
 
                     t = t + selectedText.charAt(i);
                     i++;
-                }
+                }   
                 Double v = (sellingPrice * .2);
                 if((sellingPrice<=1000)&&(sellingPrice>150))
                     v=0.0;

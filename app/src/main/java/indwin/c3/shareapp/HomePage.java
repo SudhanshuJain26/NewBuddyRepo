@@ -243,7 +243,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
             ImageView image1 = (ImageView)findViewById(R.id.img11);
             ImageView image2 = (ImageView)findViewById(R.id.img12);
-//            ImageView image3 = (ImageView)findViewById(R.id.img13);
+            ImageView image3 = (ImageView)findViewById(R.id.img13);
             ImageView image4 = (ImageView)findViewById(R.id.img14);
             ImageView image5 = (ImageView)findViewById(R.id.img21);
             ImageView image6 = (ImageView)findViewById(R.id.img22);
@@ -276,7 +276,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             ImageView image33 = (ImageView)findViewById(R.id.img09);
             ImageView image34 = (ImageView)findViewById(R.id.img10);
 
-            ImageView image3 = (ImageView)findViewById(R.id.img15);
+            ImageView image70 = (ImageView)findViewById(R.id.img15);
             ImageView image35 = (ImageView)findViewById(R.id.img16);
             ImageView image36 = (ImageView)findViewById(R.id.img17);
             ImageView image37 = (ImageView)findViewById(R.id.img18);
@@ -386,7 +386,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             image67.setOnClickListener(this);
             image68.setOnClickListener(this);
             image69.setOnClickListener(this);
-
+            image70.setOnClickListener(this);
 
 
 
@@ -1703,13 +1703,13 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
                 break;
 
-//            case R.id.img13:
-//                spin = "Mobiles";
-//                productId = Splash.fkid1.get(spin).get("2");
-//                sellerNme = Splash.sellers.get(spin).get("2");
-//                switchtoProductPage();
+            case R.id.img13:
+                spin = "Mobiles";
+                productId = Splash.fkid1.get(spin).get("2");
+                sellerNme = Splash.sellers.get(spin).get("2");
+                switchtoProductPage();
 
-               // break;
+                break;
 
             case R.id.img14:
                 spin = "Mobiles";
@@ -3137,7 +3137,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         TextView price1 = (TextView) findViewById(R.id.title11);
         TextView price2 = (TextView) findViewById(R.id.title12);
-//        TextView price3 = (TextView) findViewById(R.id.title13);
+        TextView price3 = (TextView) findViewById(R.id.title13);
         TextView price4 = (TextView) findViewById(R.id.title14);
         TextView price5 = (TextView) findViewById(R.id.title15);
         TextView price6 = (TextView) findViewById(R.id.title16);
@@ -3148,7 +3148,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         TextView title1 = (TextView) findViewById(R.id.titlexxx11);
         TextView title2 = (TextView) findViewById(R.id.titlexxx12);
-//        TextView title3 = (TextView) findViewById(R.id.titlexxx13);
+        TextView title3 = (TextView) findViewById(R.id.titlexxx13);
         TextView title4 = (TextView) findViewById(R.id.titlexxx14);
         TextView title5 = (TextView) findViewById(R.id.titlexxx15);
         TextView title6 = (TextView) findViewById(R.id.titlexxx16);
@@ -3161,7 +3161,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         ImageView img1 = (ImageView) findViewById(R.id.img11);
         ImageView img2 = (ImageView) findViewById(R.id.img12);
-//        ImageView img3 = (ImageView) findViewById(R.id.img13);
+        ImageView img3 = (ImageView) findViewById(R.id.img13);
         ImageView img4 = (ImageView) findViewById(R.id.img14);
         ImageView img5 = (ImageView) findViewById(R.id.img15);
         ImageView img6 = (ImageView) findViewById(R.id.img16);
@@ -3172,7 +3172,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         ImageView brand1 = (ImageView) findViewById(R.id.brand11);
         ImageView brand2 = (ImageView) findViewById(R.id.brand12);
-//        ImageView brand3 = (ImageView) findViewById(R.id.brand13);
+        ImageView brand3 = (ImageView) findViewById(R.id.brand13);
         ImageView brand4 = (ImageView) findViewById(R.id.brand14);
         ImageView brand5 = (ImageView) findViewById(R.id.brand15);
         ImageView brand6 = (ImageView) findViewById(R.id.brand16);
@@ -3196,14 +3196,14 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             brand2.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
             brand2.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
-//            brand3.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("amazon"))
-//            brand3.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("paytm"))
-//            brand3.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
-//            brand3.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
+            brand3.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("2").equals("amazon"))
+            brand3.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("2").equals("paytm"))
+            brand3.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
+            brand3.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("3").equals("flipkart"))
             brand4.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("3").equals("amazon"))
@@ -3271,7 +3271,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         title1.setText(Splash.title.get(spin).get("0"));
         title2.setText(Splash.title.get(spin).get("1"));
-//        title3.setText(Splash.title.get(spin).get("2"));
+        title3.setText(Splash.title.get(spin).get("2"));
         title4.setText(Splash.title.get(spin).get("3"));
         title5.setText(Splash.title.get(spin).get("4"));
         title6.setText(Splash.title.get(spin).get("5"));
@@ -3288,10 +3288,10 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .load(Splash.image.get(spin).get("1"))
                 .placeholder(R.drawable.emptyimageproducts)
                 .into(img2);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("2"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img3);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("2"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img3);
         Picasso.with(this)
                 .load(Splash.image.get(spin).get("3"))
                 .placeholder(R.drawable.emptyimageproducts)
@@ -3343,12 +3343,12 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
 
 
-//        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-//        int price03 = princ3.intValue();
-//        Double emi03 = show(Splash.subCategory.get(spin).get("2"),Splash.category.get(spin).get("2"),Splash.brand.get(spin).get("2"),price03);
-//        if(emi03.intValue()<200)
-//            emi03 = 200.0;
-//        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
+        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
+        int price03 = princ3.intValue();
+        Double emi03 = show(Splash.subCategory.get(spin).get("2"),Splash.category.get(spin).get("2"),Splash.brand.get(spin).get("2"),price03);
+        if(emi03.intValue()<200)
+            emi03 = 200.0;
+        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
 //
 
         //emi4

@@ -386,16 +386,16 @@ public class FindProduct extends AppCompatActivity {
         taptoSearch.setVisibility(View.VISIBLE);
         if(recentSearchItemsArrayList.size()==0)
             textView.setVisibility(View.INVISIBLE);
-        if(ProductsPage.backpressed){
+      //  if(ProductsPage.backpressed){
             //RecentSearchItems items = new RecentSearchItems(ProductsPage.brand1,ProductsPage.title1,Integer.toString(ProductsPage.price),productId);
-            if(adp!=null){
+        {     if(adp!=null){
             //adp.addObject(items);
            // textView.setVisibility(View.VISIBLE);
             adp.notifyDataSetChanged();
 
 
 
-            ProductsPage.backpressed = false;
+           // ProductsPage.backpressed = false;
         }}
     }
 

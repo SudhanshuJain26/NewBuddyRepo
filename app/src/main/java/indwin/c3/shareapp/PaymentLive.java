@@ -2,8 +2,10 @@ package indwin.c3.shareapp;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -50,10 +52,10 @@ public class PaymentLive  extends Activity {
     private String payname,payemail,payamt,paytitle,payphone;
     public static final String EXTRA_PARAMS = "params";
     private String randomStr="";
-    private static final String MERCHANT_KEY = "n46r73";// old account "zMXH8C";
-    private static final String SALT = "L3gouXYu";// "YBLKG80u";
-    private static final String BASE_URL = "https://secure.payu.in";
-    //private static final String BASE_URL = "https://test.payu.in";
+    private static final String MERCHANT_KEY ="lhqOEOUh" ;// old account "zMXH8C"prod "n46r73";
+    private static final String SALT = "QsBtDKH3k8";// "YBLKG80u",prod "L3gouXYu";
+//    private static final String BASE_URL = "https://secure.payu.in";
+    private static final String BASE_URL = "https://test.payu.in";
     private static final String PAYMENT_URL = BASE_URL + "/_payment";
     private String orderI="";
     public static final String PARAM_KEY = "key";
@@ -148,7 +150,7 @@ public class PaymentLive  extends Activity {
             mInputParams.put(PARAM_KEY, MERCHANT_KEY);
         }
         SharedPreferences get = getSharedPreferences("cred", Context.MODE_PRIVATE);
-        payamt=String.valueOf(get.getInt("downpayment", 0)+get.getInt("service", 0));
+        payamt=String.valueOf(get.getInt("downpayment", 0));
         paytitle=get.getString("title", "");
         payname=get.getString("n1", "");
 //        payname="jon sno";
@@ -521,10 +523,24 @@ public class PaymentLive  extends Activity {
         }
 
         @Override
-        public void onReceivedSslError(WebView view, SslErrorHandler handler,
+        public void onReceivedSslError(WebView view, final SslErrorHandler handler,
                                        SslError error) {
-            showToast("SslError! " + error);
-            handler.proceed();
+            final AlertDialog.Builder builder = new AlertDialog.Builder(PaymentLive.this);
+                builder.setMessage("Insecure connection");
+                builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.proceed();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.cancel();
+                    }
+                });
+                final AlertDialog dialog = builder.create();
+                dialog.show();
         }
 
         @Override
@@ -708,7 +724,7 @@ public class PaymentLive  extends Activity {
                 payload.put("serviceCharges",cred.getInt("service",0));
                 payload.put("productFrom","android");
                 payload.put("interestRate",21);
-                payload.put("totalPayable" ,cred.getInt("emi",0)*cred.getInt("monthtenure",0)+cred.getInt("downpayment",0)+cred.getInt("service",0));
+                payload.put("totalPayable" ,cred.getInt("emi",0)*cred.getInt("monthtenure",0)+cred.getInt("downpayment",0));
 //
                 if(cred.getInt("checkCashback",0)==1)
                     payload.put("isCashbackApplied" ,true);

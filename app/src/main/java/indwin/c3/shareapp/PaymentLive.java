@@ -2,8 +2,10 @@ package indwin.c3.shareapp;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -521,10 +523,24 @@ public class PaymentLive  extends Activity {
         }
 
         @Override
-        public void onReceivedSslError(WebView view, SslErrorHandler handler,
+        public void onReceivedSslError(WebView view, final SslErrorHandler handler,
                                        SslError error) {
-            showToast("SslError! " + error);
-            handler.proceed();
+            final AlertDialog.Builder builder = new AlertDialog.Builder(PaymentLive.this);
+                builder.setMessage("Insecure connection");
+                builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.proceed();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.cancel();
+                    }
+                });
+                final AlertDialog dialog = builder.create();
+                dialog.show();
         }
 
         @Override

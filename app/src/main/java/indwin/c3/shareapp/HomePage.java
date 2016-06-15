@@ -107,6 +107,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     int screen_no;
     private int searchPrice = 0;
     private String urlImg = "", page = "";
+    public int mValue = 0, mValue2 = 0;
 
     private RelativeLayout drops, newtren;
     private DrawerLayout drawerLayout;
@@ -135,11 +136,14 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     private Double emi = 0.0;
 
     private int checkValidFromApis = 0;
+    public int cb =0;
+    SharedPreferences st;
     private String sellerNme = "";
     private String token = "";
     private SharedPreferences userP;
     private SharedPreferences mPrefs;
     private Gson gson;
+    private int cuurr,dayToday;
     private UserModel user;
     private Tracker mTracker;
 //    TimerTask mTimerTask;
@@ -239,7 +243,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
             ImageView image1 = (ImageView)findViewById(R.id.img11);
             ImageView image2 = (ImageView)findViewById(R.id.img12);
-            ImageView image3 = (ImageView)findViewById(R.id.img13);
+//            ImageView image3 = (ImageView)findViewById(R.id.img13);
             ImageView image4 = (ImageView)findViewById(R.id.img14);
             ImageView image5 = (ImageView)findViewById(R.id.img21);
             ImageView image6 = (ImageView)findViewById(R.id.img22);
@@ -272,7 +276,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             ImageView image33 = (ImageView)findViewById(R.id.img09);
             ImageView image34 = (ImageView)findViewById(R.id.img10);
 
-   //         ImageView image34 = (ImageView)findViewById(R.id.img15);
+            ImageView image3 = (ImageView)findViewById(R.id.img15);
             ImageView image35 = (ImageView)findViewById(R.id.img16);
             ImageView image36 = (ImageView)findViewById(R.id.img17);
             ImageView image37 = (ImageView)findViewById(R.id.img18);
@@ -1699,13 +1703,13 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
                 break;
 
-            case R.id.img13:
-                spin = "Mobiles";
-                productId = Splash.fkid1.get(spin).get("2");
-                sellerNme = Splash.sellers.get(spin).get("2");
-                switchtoProductPage();
+//            case R.id.img13:
+//                spin = "Mobiles";
+//                productId = Splash.fkid1.get(spin).get("2");
+//                sellerNme = Splash.sellers.get(spin).get("2");
+//                switchtoProductPage();
 
-                break;
+               // break;
 
             case R.id.img14:
                 spin = "Mobiles";
@@ -1716,14 +1720,14 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
                 break;
 
-//            case R.id.img15:
-//                spin = "Mobiles";
-//
-//                productId = Splash.fkid1.get(spin).get("4");
-//                sellerNme = Splash.sellers.get(spin).get("4");
-//                switchtoProductPage();
-//
-//                break;
+            case R.id.img15:
+                spin = "Mobiles";
+
+                productId = Splash.fkid1.get(spin).get("4");
+                sellerNme = Splash.sellers.get(spin).get("4");
+                switchtoProductPage();
+
+                break;
 
             case R.id.img16:
                 spin = "Mobiles";
@@ -3029,140 +3033,98 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
 
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-        int monthscam = 18;
-        String cat1 = Splash.category.get(spin).get("0");
-        String subcat1 = Splash.subCategory.get(spin).get("0");
-        int a = 2;
-        monthscam = months(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), princ1.intValue());
 
-
-        princ1 = princ1 * 0.8;
-        Double rate = 0.21 / 12;
-
-        Double emi1 = Math.floor((princ1 * rate * Math.pow(1 + rate, monthscam)) / ((Math.pow(1 + rate, monthscam)) - 1));
-        if ((princ1 * 10 / 8) < 5000.0)
-            emi1 = princ1 / monthscam;
-        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi1.intValue()) + " per month");
+        int price01 = princ1.intValue();
+        Double emi01 = show(Splash.subCategory.get(spin).get("0"),Splash.category.get(spin).get("0"),Splash.brand.get(spin).get("0"),price01);
+        if(emi01.intValue()<200)
+            emi01 = 200.0;
+        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
         //emi2
-        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-        int monthscam2 = 18;
-        monthscam2 = months(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), princ2.intValue());
 
-        princ2 = princ2 * 0.8;
-        // Double rate=0.2;
-        Double emi2 = Math.floor((princ2 * rate * Math.pow(1 + rate, monthscam2)) / ((Math.pow(1 + rate, monthscam2)) - 1));
-        if ((princ2 * 10 / 8) < 5000.0)
-            emi2 = princ2 / monthscam2;
-        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi2.intValue()) + " per month");
+
+
+
+        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
+
+        int price02 = princ2.intValue();
+        Double emi02 = show(Splash.subCategory.get(spin).get("1"),Splash.category.get(spin).get("1"),Splash.brand.get(spin).get("1"),price02);
+        if(emi02.intValue()<200)
+            emi02 = 200.0;
+        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
 
 
         Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-        int monthscam3 = 18;
-        monthscam3 = months(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), princ3.intValue());
-        princ3 = princ3 * 0.8;
-        // Double rate=0.2;
-        Double emi3 = Math.floor((princ3 * rate * Math.pow(1 + rate, monthscam3)) / ((Math.pow(1 + rate, monthscam3)) - 1));
-        if ((princ3 * 10 / 8) < 5000.0)
-            emi3 = princ3 / monthscam3;
-        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi3.intValue()) + " per month");
+        int price03 = princ3.intValue();
+        Double emi03 = show(Splash.subCategory.get(spin).get("2"),Splash.category.get(spin).get("2"),Splash.brand.get(spin).get("2"),price03);
+        if(emi03.intValue()<200)
+            emi03 = 200.0;
+        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
+
 
         //emi4
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-        int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
+        int price04 = princ4.intValue();
+        Double emi04 = show(Splash.subCategory.get(spin).get("3"),Splash.category.get(spin).get("3"),Splash.brand.get(spin).get("3"),price04);
+        if(emi04.intValue()<200)
+            emi04 = 200.0;
+        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
 
-
-        princ4 = princ4 * 0.8;
-        // Double rate=0.2;
-        Double emi4 = Math.floor((princ4 * rate * Math.pow(1 + rate, monthscam4)) / ((Math.pow(1 + rate, monthscam4)) - 1));
-        if ((princ4 * 10 / 8) < 5000.0)
-            emi4 = princ4 / monthscam4;
-        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
 
 
 
 
 
         Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-        int monthscam5 = 18;
-        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
-
-
-        princ5 = princ5 * 0.8;
-        // Double rate=0.2;
-        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
-        if ((princ5 * 10 / 8) < 5000.0)
-            emi5 = princ5 / monthscam5;
-        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+        int price05 = princ5.intValue();
+        Double emi05 = show(Splash.subCategory.get(spin).get("4"),Splash.category.get(spin).get("4"),Splash.brand.get(spin).get("4"),price05);
+        if(emi05.intValue()<200)
+            emi05 = 200.0;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
 
 
         Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-        int monthscam6 = 18;
-        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
+        int price06 = princ6.intValue();
+        Double emi06 = show(Splash.subCategory.get(spin).get("5"),Splash.category.get(spin).get("5"),Splash.brand.get(spin).get("5"),price06);
+        if(emi06.intValue()<200)
+            emi06 = 200.0;
 
-
-        princ6 = princ6 * 0.8;
-        // Double rate=0.2;
-        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
-        if ((princ6 * 10 / 8) < 5000.0)
-            emi6 = princ6 / monthscam6;
-        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
-
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
 
 
         Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-        int monthscam7 = 18;
-        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
-
-
-        princ7 = princ7 * 0.8;
-        // Double rate=0.2;
-        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
-        if ((princ7 * 10 / 8) < 5000.0)
-            emi7 = princ7 / monthscam7;
-        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+        int price07 = princ7.intValue();
+        Double emi07 = show(Splash.subCategory.get(spin).get("6"),Splash.category.get(spin).get("6"),Splash.brand.get(spin).get("6"),price07);
+        if(emi07.intValue()<200)
+            emi07 = 200.0;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
 
 
 
         Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-        int monthscam8 = 18;
-        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
-
-
-        princ8 = princ8 * 0.8;
-        // Double rate=0.2;
-        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
-        if ((princ8 * 10 / 8) < 5000.0)
-            emi8 = princ8 / monthscam8;
-        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+        int price08 = princ8.intValue();
+        Double emi08 = show(Splash.subCategory.get(spin).get("7"),Splash.category.get(spin).get("7"),Splash.brand.get(spin).get("7"),price08);
+        if(emi08.intValue()<200)
+            emi08 = 200.0;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
 
 
         Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-        int monthscam9 = 18;
-        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
-
-
-        princ9 = princ9 * 0.8;
-        // Double rate=0.2;
-        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
-        if ((princ9 * 10 / 8) < 5000.0)
-            emi9 = princ9/ monthscam9;
-        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+        int price09 = princ9.intValue();
+        Double emi09 = show(Splash.subCategory.get(spin).get("8"),Splash.category.get(spin).get("8"),Splash.brand.get(spin).get("8"),price09);
+        if(emi09.intValue()<200)
+            emi09 = 200.0;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
 
 
 
         Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-        int monthscam10 = 18;
-        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
-
-
-        princ10 = princ10 * 0.8;
-        // Double rate=0.2;
-        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
-        if ((princ10 * 10 / 8) < 5000.0)
-            emi10 = princ10/ monthscam10;
+        int price00 = princ10.intValue();
+        Double emi10 = show(Splash.subCategory.get(spin).get("9"),Splash.category.get(spin).get("9"),Splash.brand.get(spin).get("9"),price00);
+        if(emi10.intValue()<200)
+            emi10 = 200.0;
         price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
+
 
 
 
@@ -3175,9 +3137,9 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         TextView price1 = (TextView) findViewById(R.id.title11);
         TextView price2 = (TextView) findViewById(R.id.title12);
-        TextView price3 = (TextView) findViewById(R.id.title13);
+//        TextView price3 = (TextView) findViewById(R.id.title13);
         TextView price4 = (TextView) findViewById(R.id.title14);
-//        TextView price5 = (TextView) findViewById(R.id.title15);
+        TextView price5 = (TextView) findViewById(R.id.title15);
         TextView price6 = (TextView) findViewById(R.id.title16);
         TextView price7 = (TextView) findViewById(R.id.title17);
         TextView price8 = (TextView) findViewById(R.id.title18);
@@ -3186,9 +3148,9 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         TextView title1 = (TextView) findViewById(R.id.titlexxx11);
         TextView title2 = (TextView) findViewById(R.id.titlexxx12);
-        TextView title3 = (TextView) findViewById(R.id.titlexxx13);
+//        TextView title3 = (TextView) findViewById(R.id.titlexxx13);
         TextView title4 = (TextView) findViewById(R.id.titlexxx14);
-//        TextView title5 = (TextView) findViewById(R.id.titlexxx15);
+        TextView title5 = (TextView) findViewById(R.id.titlexxx15);
         TextView title6 = (TextView) findViewById(R.id.titlexxx16);
         TextView title7 = (TextView) findViewById(R.id.titlexxx17);
         TextView title8 = (TextView) findViewById(R.id.titlexxx18);
@@ -3199,9 +3161,9 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         ImageView img1 = (ImageView) findViewById(R.id.img11);
         ImageView img2 = (ImageView) findViewById(R.id.img12);
-        ImageView img3 = (ImageView) findViewById(R.id.img13);
+//        ImageView img3 = (ImageView) findViewById(R.id.img13);
         ImageView img4 = (ImageView) findViewById(R.id.img14);
-//        ImageView img5 = (ImageView) findViewById(R.id.img15);
+        ImageView img5 = (ImageView) findViewById(R.id.img15);
         ImageView img6 = (ImageView) findViewById(R.id.img16);
         ImageView img7 = (ImageView) findViewById(R.id.img17);
         ImageView img8 = (ImageView) findViewById(R.id.img18);
@@ -3210,9 +3172,9 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         ImageView brand1 = (ImageView) findViewById(R.id.brand11);
         ImageView brand2 = (ImageView) findViewById(R.id.brand12);
-        ImageView brand3 = (ImageView) findViewById(R.id.brand13);
+//        ImageView brand3 = (ImageView) findViewById(R.id.brand13);
         ImageView brand4 = (ImageView) findViewById(R.id.brand14);
-//        ImageView brand5 = (ImageView) findViewById(R.id.brand15);
+        ImageView brand5 = (ImageView) findViewById(R.id.brand15);
         ImageView brand6 = (ImageView) findViewById(R.id.brand16);
         ImageView brand7 = (ImageView) findViewById(R.id.brand17);
         ImageView brand8 = (ImageView) findViewById(R.id.brand18);
@@ -3234,14 +3196,14 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             brand2.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
             brand2.setImageResource(R.drawable.sdeal_fav1x);
-        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
-            brand3.setImageResource(R.drawable.fk_fav1x);
-        if (Splash.sellers.get(spin).get("2").equals("amazon"))
-            brand3.setImageResource(R.drawable.amazon_fav1x);
-        if (Splash.sellers.get(spin).get("2").equals("paytm"))
-            brand3.setImageResource(R.drawable.paytm_fav1x);
-        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
-            brand3.setImageResource(R.drawable.sdeal_fav1x);
+//        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
+//            brand3.setImageResource(R.drawable.fk_fav1x);
+//        if (Splash.sellers.get(spin).get("2").equals("amazon"))
+//            brand3.setImageResource(R.drawable.amazon_fav1x);
+//        if (Splash.sellers.get(spin).get("2").equals("paytm"))
+//            brand3.setImageResource(R.drawable.paytm_fav1x);
+//        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
+//            brand3.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("3").equals("flipkart"))
             brand4.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("3").equals("amazon"))
@@ -3250,14 +3212,14 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             brand4.setImageResource(R.drawable.paytm_fav1x);
         if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
             brand4.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-//            brand5.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("amazon"))
-//            brand5.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("paytm"))
-//            brand5.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-//            brand5.setImageResource(R.drawable.sdeal_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
+            brand5.setImageResource(R.drawable.fk_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("amazon"))
+            brand5.setImageResource(R.drawable.amazon_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("paytm"))
+            brand5.setImageResource(R.drawable.paytm_fav1x);
+        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
+            brand5.setImageResource(R.drawable.sdeal_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("flipkart"))
             brand6.setImageResource(R.drawable.fk_fav1x);
         if (Splash.sellers.get(spin).get("5").equals("amazon"))
@@ -3309,9 +3271,9 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
         title1.setText(Splash.title.get(spin).get("0"));
         title2.setText(Splash.title.get(spin).get("1"));
-        title3.setText(Splash.title.get(spin).get("2"));
+//        title3.setText(Splash.title.get(spin).get("2"));
         title4.setText(Splash.title.get(spin).get("3"));
-        //title5.setText(Splash.title.get(spin).get("4"));
+        title5.setText(Splash.title.get(spin).get("4"));
         title6.setText(Splash.title.get(spin).get("5"));
         title7.setText(Splash.title.get(spin).get("6"));
         title8.setText(Splash.title.get(spin).get("7"));
@@ -3326,18 +3288,18 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .load(Splash.image.get(spin).get("1"))
                 .placeholder(R.drawable.emptyimageproducts)
                 .into(img2);
-        Picasso.with(this)
-                .load(Splash.image.get(spin).get("2"))
-                .placeholder(R.drawable.emptyimageproducts)
-                .into(img3);
+//        Picasso.with(this)
+//                .load(Splash.image.get(spin).get("2"))
+//                .placeholder(R.drawable.emptyimageproducts)
+//                .into(img3);
         Picasso.with(this)
                 .load(Splash.image.get(spin).get("3"))
                 .placeholder(R.drawable.emptyimageproducts)
                 .into(img4);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("4"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img5);
+        Picasso.with(this)
+                .load(Splash.image.get(spin).get("4"))
+                .placeholder(R.drawable.emptyimageproducts)
+                .into(img5);
         Picasso.with(this)
                 .load(Splash.image.get(spin).get("5"))
                 .placeholder(R.drawable.emptyimageproducts)
@@ -3361,140 +3323,101 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
 
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-        int monthscam = 18;
-        String cat1 = Splash.category.get(spin).get("0");
-        String subcat1 = Splash.subCategory.get(spin).get("0");
-        int a = 2;
-        monthscam = months(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), princ1.intValue());
 
-
-        princ1 = princ1 * 0.8;
-        Double rate = 0.21 / 12;
-
-        Double emi1 = Math.floor((princ1 * rate * Math.pow(1 + rate, monthscam)) / ((Math.pow(1 + rate, monthscam)) - 1));
-        if ((princ1 * 10 / 8) < 5000.0)
-            emi1 = princ1 / monthscam;
-        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi1.intValue()) + " per month");
+        int price01 = princ1.intValue();
+        Double emi01 = show(Splash.subCategory.get(spin).get("0"),Splash.category.get(spin).get("0"),Splash.brand.get(spin).get("0"),price01);
+        if(emi01.intValue()<200)
+            emi01 = 200.0;
+        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
         //emi2
+
+
+
+
         Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-        int monthscam2 = 18;
-        monthscam2 = months(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), princ2.intValue());
 
-        princ2 = princ2 * 0.8;
-        // Double rate=0.2;
-        Double emi2 = Math.floor((princ2 * rate * Math.pow(1 + rate, monthscam2)) / ((Math.pow(1 + rate, monthscam2)) - 1));
-        if ((princ2 * 10 / 8) < 5000.0)
-            emi2 = princ2 / monthscam2;
-        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi2.intValue()) + " per month");
+        int price02 = princ2.intValue();
+        Double emi02 = show(Splash.subCategory.get(spin).get("1"),Splash.category.get(spin).get("1"),Splash.brand.get(spin).get("1"),price02);
+        if(emi02.intValue()<200)
+            emi02 = 200.0;
+        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
 
 
-        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-        int monthscam3 = 18;
-        monthscam3 = months(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), princ3.intValue());
-        princ3 = princ3 * 0.8;
-        // Double rate=0.2;
-        Double emi3 = Math.floor((princ3 * rate * Math.pow(1 + rate, monthscam3)) / ((Math.pow(1 + rate, monthscam3)) - 1));
-        if ((princ3 * 10 / 8) < 5000.0)
-            emi3 = princ3 / monthscam3;
-        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi3.intValue()) + " per month");
+//        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
+//        int price03 = princ3.intValue();
+//        Double emi03 = show(Splash.subCategory.get(spin).get("2"),Splash.category.get(spin).get("2"),Splash.brand.get(spin).get("2"),price03);
+//        if(emi03.intValue()<200)
+//            emi03 = 200.0;
+//        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
+//
 
         //emi4
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-        int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
-
-
-        princ4 = princ4 * 0.8;
-        // Double rate=0.2;
-        Double emi4 = Math.floor((princ4 * rate * Math.pow(1 + rate, monthscam4)) / ((Math.pow(1 + rate, monthscam4)) - 1));
-        if ((princ4 * 10 / 8) < 5000.0)
-            emi4 = princ4 / monthscam4;
-        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
+        int price04 = princ4.intValue();
+        Double emi04 = show(Splash.subCategory.get(spin).get("3"),Splash.category.get(spin).get("3"),Splash.brand.get(spin).get("3"),price04);
+        if(emi04.intValue()<200)
+            emi04 = 200.0;
+        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
 
 
 
 
 
-//        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-//        int monthscam5 = 18;
-//        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
-//
-//
-//        princ5 = princ5 * 0.8;
-//        // Double rate=0.2;
-//        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
-//        if ((princ5 * 10 / 8) < 5000.0)
-//            emi5 = princ5 / monthscam5;
-//        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+
+        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
+        int price05 = princ5.intValue();
+        Double emi05 = show(Splash.subCategory.get(spin).get("4"),Splash.category.get(spin).get("4"),Splash.brand.get(spin).get("4"),price05);
+        if(emi05.intValue()<200)
+            emi05 = 200.0;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
 
 
         Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-        int monthscam6 = 18;
-        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
-
-
-        princ6 = princ6 * 0.8;
-        // Double rate=0.2;
-        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
-        if ((princ6 * 10 / 8) < 5000.0)
-            emi6 = princ6 / monthscam6;
-        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+        int price06 = princ6.intValue();
+        Double emi06 = show(Splash.subCategory.get(spin).get("5"),Splash.category.get(spin).get("5"),Splash.brand.get(spin).get("5"),price06);
+        if(emi06.intValue()<200)
+            emi06 = 200.0;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
 
 
 
         Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-        int monthscam7 = 18;
-        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
-
-
-        princ7 = princ7 * 0.8;
-        // Double rate=0.2;
-        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
-        if ((princ7 * 10 / 8) < 5000.0)
-            emi7 = princ7 / monthscam7;
-        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+        int price07 = princ7.intValue();
+        Double emi07 = show(Splash.subCategory.get(spin).get("6"),Splash.category.get(spin).get("6"),Splash.brand.get(spin).get("6"),price07);
+        if(emi07.intValue()<200)
+            emi07 = 200.0;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
 
 
 
         Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-        int monthscam8 = 18;
-        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
-
-
-        princ8 = princ8 * 0.8;
-        // Double rate=0.2;
-        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
-        if ((princ8 * 10 / 8) < 5000.0)
-            emi8 = princ8 / monthscam8;
-        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+        int price08 = princ8.intValue();
+        Double emi08 = show(Splash.subCategory.get(spin).get("7"),Splash.category.get(spin).get("7"),Splash.brand.get(spin).get("7"),price08);
+        if(emi08.intValue()<200)
+            emi08 = 200.0;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
 
 
         Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-        int monthscam9 = 18;
-        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
-
-
-        princ9 = princ9 * 0.8;
-        // Double rate=0.2;
-        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
-        if ((princ9 * 10 / 8) < 5000.0)
-            emi9 = princ9/ monthscam9;
-        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+        int price09 = princ9.intValue();
+        Double emi09 = show(Splash.subCategory.get(spin).get("8"),Splash.category.get(spin).get("8"),Splash.brand.get(spin).get("8"),price09);
+        if(emi09.intValue()<200)
+            emi09 = 200.0;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
 
 
 
         Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-        int monthscam10 = 18;
-        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
-
-
-        princ10 = princ10 * 0.8;
-        // Double rate=0.2;
-        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
-        if ((princ10 * 10 / 8) < 5000.0)
-            emi10 = princ10/ monthscam10;
+        int price00 = princ10.intValue();
+        Double emi10 = show(Splash.subCategory.get(spin).get("9"),Splash.category.get(spin).get("9"),Splash.brand.get(spin).get("9"),price00);
+        if(emi10.intValue()<200)
+            emi10 = 200.0;
         price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
+
+
+
+
     }
 
     private void populateSecondRow(){
@@ -3686,142 +3609,103 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .placeholder(R.drawable.emptyimageproducts)
                 .into(img10);
 
-
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-        int monthscam = 18;
-        String cat1 = Splash.category.get(spin).get("0");
-        String subcat1 = Splash.subCategory.get(spin).get("0");
-        int a = 2;
-        monthscam = months(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), princ1.intValue());
 
-
-        princ1 = princ1 * 0.8;
-        Double rate = 0.21 / 12;
-
-        Double emi1 = Math.floor((princ1 * rate * Math.pow(1 + rate, monthscam)) / ((Math.pow(1 + rate, monthscam)) - 1));
-        if ((princ1 * 10 / 8) < 5000.0)
-            emi1 = princ1 / monthscam;
-        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi1.intValue()) + " per month");
+        int price01 = princ1.intValue();
+        Double emi01 = show(Splash.subCategory.get(spin).get("0"),Splash.category.get(spin).get("0"),Splash.brand.get(spin).get("0"),price01);
+        if(emi01.intValue()<200)
+            emi01 = 200.0;
+        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
         //emi2
-        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-        int monthscam2 = 18;
-        monthscam2 = months(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), princ2.intValue());
 
-        princ2 = princ2 * 0.8;
-        // Double rate=0.2;
-        Double emi2 = Math.floor((princ2 * rate * Math.pow(1 + rate, monthscam2)) / ((Math.pow(1 + rate, monthscam2)) - 1));
-        if ((princ2 * 10 / 8) < 5000.0)
-            emi2 = princ2 / monthscam2;
-        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi2.intValue()) + " per month");
+
+
+
+        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
+
+        int price02 = princ2.intValue();
+        Double emi02 = show(Splash.subCategory.get(spin).get("1"),Splash.category.get(spin).get("1"),Splash.brand.get(spin).get("1"),price02);
+        if(emi02.intValue()<200)
+            emi02 = 200.0;
+        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
 
 
         Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-        int monthscam3 = 18;
-        monthscam3 = months(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), princ3.intValue());
-        princ3 = princ3 * 0.8;
-        // Double rate=0.2;
-        Double emi3 = Math.floor((princ3 * rate * Math.pow(1 + rate, monthscam3)) / ((Math.pow(1 + rate, monthscam3)) - 1));
-        if ((princ3 * 10 / 8) < 5000.0)
-            emi3 = princ3 / monthscam3;
-        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi3.intValue()) + " per month");
+        int price03 = princ3.intValue();
+        Double emi03 = show(Splash.subCategory.get(spin).get("2"),Splash.category.get(spin).get("2"),Splash.brand.get(spin).get("2"),price03);
+        if(emi03.intValue()<200)
+            emi03 = 200.0;
+        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
+
 
         //emi4
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-        int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
+        int price04 = princ4.intValue();
+        Double emi04 = show(Splash.subCategory.get(spin).get("3"),Splash.category.get(spin).get("3"),Splash.brand.get(spin).get("3"),price04);
+        if(emi04.intValue()<200)
+            emi04 = 200.0;
+        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
 
-
-        princ4 = princ4 * 0.8;
-        // Double rate=0.2;
-        Double emi4 = Math.floor((princ4 * rate * Math.pow(1 + rate, monthscam4)) / ((Math.pow(1 + rate, monthscam4)) - 1));
-        if ((princ4 * 10 / 8) < 5000.0)
-            emi4 = princ4 / monthscam4;
-        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
 
 
 
 
 
         Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-        int monthscam5 = 18;
-        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
-
-
-        princ5 = princ5 * 0.8;
-        // Double rate=0.2;
-        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
-        if ((princ5 * 10 / 8) < 5000.0)
-            emi5 = princ5 / monthscam5;
-        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+        int price05 = princ5.intValue();
+        Double emi05 = show(Splash.subCategory.get(spin).get("4"),Splash.category.get(spin).get("4"),Splash.brand.get(spin).get("4"),price05);
+       // price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
+        if(emi05.intValue()<200)
+            emi05 = 200.0;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
 
 
         Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-        int monthscam6 = 18;
-        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
-
-
-        princ6 = princ6 * 0.8;
-        // Double rate=0.2;
-        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
-        if ((princ6 * 10 / 8) < 5000.0)
-            emi6 = princ6 / monthscam6;
-        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+        int price06 = princ6.intValue();
+        Double emi06 = show(Splash.subCategory.get(spin).get("5"),Splash.category.get(spin).get("5"),Splash.brand.get(spin).get("5"),price06);
+        //price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
+        if(emi06.intValue()<200)
+            emi06 = 200.0;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
 
 
 
         Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-        int monthscam7 = 18;
-        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
-
-
-        princ7 = princ7 * 0.8;
-        // Double rate=0.2;
-        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
-        if ((princ7 * 10 / 8) < 5000.0)
-            emi7 = princ7 / monthscam7;
-        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+        int price07 = princ7.intValue();
+        Double emi07 = show(Splash.subCategory.get(spin).get("6"),Splash.category.get(spin).get("6"),Splash.brand.get(spin).get("6"),price07);
+        if(emi07.intValue()<200)
+            emi07 = 200.0;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
 
 
 
         Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-        int monthscam8 = 18;
-        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
-
-
-        princ8 = princ8 * 0.8;
-        // Double rate=0.2;
-        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
-        if ((princ8 * 10 / 8) < 5000.0)
-            emi8 = princ8 / monthscam8;
-        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+        int price08 = princ8.intValue();
+        Double emi08 = show(Splash.subCategory.get(spin).get("7"),Splash.category.get(spin).get("7"),Splash.brand.get(spin).get("7"),price08);
+        if(emi08.intValue()<200)
+            emi08 = 200.0;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
 
 
         Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-        int monthscam9 = 18;
-        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
-
-
-        princ9 = princ9 * 0.8;
-        // Double rate=0.2;
-        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
-        if ((princ9 * 10 / 8) < 5000.0)
-            emi9 = princ9/ monthscam9;
-        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+        int price09 = princ9.intValue();
+        Double emi09 = show(Splash.subCategory.get(spin).get("8"),Splash.category.get(spin).get("8"),Splash.brand.get(spin).get("8"),price09);
+        if(emi09.intValue()<200)
+            emi09 = 200.0;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
 
 
 
         Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-        int monthscam10 = 18;
-        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
-
-
-        princ10 = princ10 * 0.8;
-        // Double rate=0.2;
-        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
-        if ((princ10 * 10 / 8) < 5000.0)
-            emi10 = princ10/ monthscam10;
+        int price00 = princ10.intValue();
+        Double emi10 = show(Splash.subCategory.get(spin).get("9"),Splash.category.get(spin).get("9"),Splash.brand.get(spin).get("9"),price00);
+        if(emi10.intValue()<200)
+            emi10 = 200.0;
         price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
+
+
+
     }
 
     private void populateThirdRow(){
@@ -4012,142 +3896,103 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .placeholder(R.drawable.emptyimageproducts)
                 .into(img10);
 
-
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-        int monthscam = 18;
-        String cat1 = Splash.category.get(spin).get("0");
-        String subcat1 = Splash.subCategory.get(spin).get("0");
-        int a = 2;
-        monthscam = months(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), princ1.intValue());
 
-
-        princ1 = princ1 * 0.8;
-        Double rate = 0.21 / 12;
-
-        Double emi1 = Math.floor((princ1 * rate * Math.pow(1 + rate, monthscam)) / ((Math.pow(1 + rate, monthscam)) - 1));
-        if ((princ1 * 10 / 8) < 5000.0)
-            emi1 = princ1 / monthscam;
-        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi1.intValue()) + " per month");
+        int price01 = princ1.intValue();
+        Double emi01 = show(Splash.subCategory.get(spin).get("0"),Splash.category.get(spin).get("0"),Splash.brand.get(spin).get("0"),price01);
+        if(emi01.intValue()<200)
+            emi01 = 200.0;
+        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
         //emi2
-        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-        int monthscam2 = 18;
-        monthscam2 = months(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), princ2.intValue());
 
-        princ2 = princ2 * 0.8;
-        // Double rate=0.2;
-        Double emi2 = Math.floor((princ2 * rate * Math.pow(1 + rate, monthscam2)) / ((Math.pow(1 + rate, monthscam2)) - 1));
-        if ((princ2 * 10 / 8) < 5000.0)
-            emi2 = princ2 / monthscam2;
-        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi2.intValue()) + " per month");
+
+
+
+        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
+
+        int price02 = princ2.intValue();
+        Double emi02 = show(Splash.subCategory.get(spin).get("1"),Splash.category.get(spin).get("1"),Splash.brand.get(spin).get("1"),price02);
+        if(emi02.intValue()<200)
+            emi02 = 200.0;
+        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
 
 
         Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-        int monthscam3 = 18;
-        monthscam3 = months(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), princ3.intValue());
-        princ3 = princ3 * 0.8;
-        // Double rate=0.2;
-        Double emi3 = Math.floor((princ3 * rate * Math.pow(1 + rate, monthscam3)) / ((Math.pow(1 + rate, monthscam3)) - 1));
-        if ((princ3 * 10 / 8) < 5000.0)
-            emi3 = princ3 / monthscam3;
-        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi3.intValue()) + " per month");
+        int price03 = princ3.intValue();
+        Double emi03 = show(Splash.subCategory.get(spin).get("2"),Splash.category.get(spin).get("2"),Splash.brand.get(spin).get("2"),price03);
+        if(emi03.intValue()<200)
+            emi03 = 200.0;
+        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
+
 
         //emi4
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-        int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
+        int price04 = princ4.intValue();
+        Double emi04 = show(Splash.subCategory.get(spin).get("3"),Splash.category.get(spin).get("3"),Splash.brand.get(spin).get("3"),price04);
+        if(emi04.intValue()<200)
+            emi04 = 200.0;
+        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
 
-
-        princ4 = princ4 * 0.8;
-        // Double rate=0.2;
-        Double emi4 = Math.floor((princ4 * rate * Math.pow(1 + rate, monthscam4)) / ((Math.pow(1 + rate, monthscam4)) - 1));
-        if ((princ4 * 10 / 8) < 5000.0)
-            emi4 = princ4 / monthscam4;
-        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
 
 
 
 
 
         Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-        int monthscam5 = 18;
-        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
-
-
-        princ5 = princ5 * 0.8;
-        // Double rate=0.2;
-        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
-        if ((princ5 * 10 / 8) < 5000.0)
-            emi5 = princ5 / monthscam5;
-        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+        int price05 = princ5.intValue();
+        Double emi05 = show(Splash.subCategory.get(spin).get("4"),Splash.category.get(spin).get("4"),Splash.brand.get(spin).get("4"),price05);
+        //price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
+        if(emi05.intValue()<200)
+            emi05 = 200.0;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
 
 
         Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-        int monthscam6 = 18;
-        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
-
-
-        princ6 = princ6 * 0.8;
-        // Double rate=0.2;
-        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
-        if ((princ6 * 10 / 8) < 5000.0)
-            emi6 = princ6 / monthscam6;
-        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+        int price06 = princ6.intValue();
+        Double emi06 = show(Splash.subCategory.get(spin).get("5"),Splash.category.get(spin).get("5"),Splash.brand.get(spin).get("5"),price06);
+        //price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
+        if(emi06.intValue()<200)
+            emi06 = 200.0;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
 
 
 
         Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-        int monthscam7 = 18;
-        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
-
-
-        princ7 = princ7 * 0.8;
-        // Double rate=0.2;
-        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
-        if ((princ7 * 10 / 8) < 5000.0)
-            emi7 = princ7 / monthscam7;
-        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+        int price07 = princ7.intValue();
+        Double emi07 = show(Splash.subCategory.get(spin).get("6"),Splash.category.get(spin).get("6"),Splash.brand.get(spin).get("6"),price07);
+        if(emi07.intValue()<200)
+            emi07 = 200.0;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
 
 
 
         Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-        int monthscam8 = 18;
-        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
-
-
-        princ8 = princ8 * 0.8;
-        // Double rate=0.2;
-        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
-        if ((princ8 * 10 / 8) < 5000.0)
-            emi8 = princ8 / monthscam8;
-        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+        int price08 = princ8.intValue();
+        Double emi08 = show(Splash.subCategory.get(spin).get("7"),Splash.category.get(spin).get("7"),Splash.brand.get(spin).get("7"),price08);
+        if(emi08.intValue()<200)
+            emi08 = 200.0;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
 
 
         Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-        int monthscam9 = 18;
-        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
-
-
-        princ9 = princ9 * 0.8;
-        // Double rate=0.2;
-        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
-        if ((princ9 * 10 / 8) < 5000.0)
-            emi9 = princ9/ monthscam9;
-        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+        int price09 = princ9.intValue();
+        Double emi09 = show(Splash.subCategory.get(spin).get("8"),Splash.category.get(spin).get("8"),Splash.brand.get(spin).get("8"),price09);
+        if(emi09.intValue()<200)
+            emi09 = 200.0;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
 
 
 
         Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-        int monthscam10 = 18;
-        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
-
-
-        princ10 = princ10 * 0.8;
-        // Double rate=0.2;
-        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
-        if ((princ10 * 10 / 8) < 5000.0)
-            emi10 = princ10/ monthscam10;
+        int price00 = princ10.intValue();
+        Double emi10 = show(Splash.subCategory.get(spin).get("9"),Splash.category.get(spin).get("9"),Splash.brand.get(spin).get("9"),price00);
+        if(emi10.intValue()<200)
+            emi10 = 200.0;
         price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
+
+
+
     }
 
     private void populateFouthRow(){
@@ -4337,141 +4182,102 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .into(img10);
 
 
+
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-        int monthscam = 18;
-        String cat1 = Splash.category.get(spin).get("0");
-        String subcat1 = Splash.subCategory.get(spin).get("0");
-        int a = 2;
-        monthscam = months(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), princ1.intValue());
 
-
-        princ1 = princ1 * 0.8;
-        Double rate = 0.21 / 12;
-
-        Double emi1 = Math.floor((princ1 * rate * Math.pow(1 + rate, monthscam)) / ((Math.pow(1 + rate, monthscam)) - 1));
-        if ((princ1 * 10 / 8) < 5000.0)
-            emi1 = princ1 / monthscam;
-        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi1.intValue()) + " per month");
+        int price01 = princ1.intValue();
+        Double emi01 = show(Splash.subCategory.get(spin).get("0"),Splash.category.get(spin).get("0"),Splash.brand.get(spin).get("0"),price01);
+        if(emi01.intValue()<200)
+            emi01 = 200.0;
+        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
         //emi2
-        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-        int monthscam2 = 18;
-        monthscam2 = months(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), princ2.intValue());
 
-        princ2 = princ2 * 0.8;
-        // Double rate=0.2;
-        Double emi2 = Math.floor((princ2 * rate * Math.pow(1 + rate, monthscam2)) / ((Math.pow(1 + rate, monthscam2)) - 1));
-        if ((princ2 * 10 / 8) < 5000.0)
-            emi2 = princ2 / monthscam2;
-        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi2.intValue()) + " per month");
+
+
+
+        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
+
+        int price02 = princ2.intValue();
+        Double emi02 = show(Splash.subCategory.get(spin).get("1"),Splash.category.get(spin).get("1"),Splash.brand.get(spin).get("1"),price02);
+        if(emi02.intValue()<200)
+            emi02 = 200.0;
+        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
 
 
         Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-        int monthscam3 = 18;
-        monthscam3 = months(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), princ3.intValue());
-        princ3 = princ3 * 0.8;
-        // Double rate=0.2;
-        Double emi3 = Math.floor((princ3 * rate * Math.pow(1 + rate, monthscam3)) / ((Math.pow(1 + rate, monthscam3)) - 1));
-        if ((princ3 * 10 / 8) < 5000.0)
-            emi3 = princ3 / monthscam3;
-        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi3.intValue()) + " per month");
+        int price03 = princ3.intValue();
+        Double emi03 = show(Splash.subCategory.get(spin).get("2"),Splash.category.get(spin).get("2"),Splash.brand.get(spin).get("2"),price03);
+        if(emi03.intValue()<200)
+            emi03 = 200.0;
+        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
+
 
         //emi4
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-        int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
+        int price04 = princ4.intValue();
+        Double emi04 = show(Splash.subCategory.get(spin).get("3"),Splash.category.get(spin).get("3"),Splash.brand.get(spin).get("3"),price04);
+        if(emi04.intValue()<200)
+            emi04 = 200.0;
+        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
 
-
-        princ4 = princ4 * 0.8;
-        // Double rate=0.2;
-        Double emi4 = Math.floor((princ4 * rate * Math.pow(1 + rate, monthscam4)) / ((Math.pow(1 + rate, monthscam4)) - 1));
-        if ((princ4 * 10 / 8) < 5000.0)
-            emi4 = princ4 / monthscam4;
-        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
 
 
 
 
 
         Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-        int monthscam5 = 18;
-        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
-
-
-        princ5 = princ5 * 0.8;
-        // Double rate=0.2;
-        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
-        if ((princ5 * 10 / 8) < 5000.0)
-            emi5 = princ5 / monthscam5;
-        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+        int price05 = princ5.intValue();
+        Double emi05 = show(Splash.subCategory.get(spin).get("4"),Splash.category.get(spin).get("4"),Splash.brand.get(spin).get("4"),price05);
+        //price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
+        if(emi05.intValue()<200)
+            emi05 = 200.0;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
 
 
         Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-        int monthscam6 = 18;
-        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
-
-
-        princ6 = princ6 * 0.8;
-        // Double rate=0.2;
-        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
-        if ((princ6 * 10 / 8) < 5000.0)
-            emi6 = princ6 / monthscam6;
-        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+        int price06 = princ6.intValue();
+        Double emi06 = show(Splash.subCategory.get(spin).get("5"),Splash.category.get(spin).get("5"),Splash.brand.get(spin).get("5"),price06);
+        //price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
+        if(emi06.intValue()<200)
+            emi06 = 200.0;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
 
 
 
         Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-        int monthscam7 = 18;
-        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
-
-
-        princ7 = princ7 * 0.8;
-        // Double rate=0.2;
-        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
-        if ((princ7 * 10 / 8) < 5000.0)
-            emi7 = princ7 / monthscam7;
-        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+        int price07 = princ7.intValue();
+        Double emi07 = show(Splash.subCategory.get(spin).get("6"),Splash.category.get(spin).get("6"),Splash.brand.get(spin).get("6"),price07);
+        if(emi07.intValue()<200)
+            emi07 = 200.0;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
 
 
 
         Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-        int monthscam8 = 18;
-        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
-
-
-        princ8 = princ8 * 0.8;
-        // Double rate=0.2;
-        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
-        if ((princ8 * 10 / 8) < 5000.0)
-            emi8 = princ8 / monthscam8;
-        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+        int price08 = princ8.intValue();
+        Double emi08 = show(Splash.subCategory.get(spin).get("7"),Splash.category.get(spin).get("7"),Splash.brand.get(spin).get("7"),price08);
+        if(emi08.intValue()<200)
+            emi08 = 200.0;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
 
 
         Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-        int monthscam9 = 18;
-        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
-
-
-        princ9 = princ9 * 0.8;
-        // Double rate=0.2;
-        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
-        if ((princ9 * 10 / 8) < 5000.0)
-            emi9 = princ9/ monthscam9;
-        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+        int price09 = princ9.intValue();
+        Double emi09 = show(Splash.subCategory.get(spin).get("8"),Splash.category.get(spin).get("8"),Splash.brand.get(spin).get("8"),price09);
+        if(emi09.intValue()<200)
+            emi09 = 200.0;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
 
 
 
         Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-        int monthscam10 = 18;
-        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
-
-
-        princ10 = princ10 * 0.8;
-        // Double rate=0.2;
-        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
-        if ((princ10 * 10 / 8) < 5000.0)
-            emi10 = princ10/ monthscam10;
+        int price00 = princ10.intValue();
+        Double emi10 = show(Splash.subCategory.get(spin).get("9"),Splash.category.get(spin).get("9"),Splash.brand.get(spin).get("9"),price00);
+        if(emi10.intValue()<200)
+            emi10 = 200.0;
         price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
+
     }
 
     private void populateFifthRow(){
@@ -4663,141 +4469,104 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .into(img10);
 
 
+
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-        int monthscam = 18;
-        String cat1 = Splash.category.get(spin).get("0");
-        String subcat1 = Splash.subCategory.get(spin).get("0");
-        int a = 2;
-        monthscam = months(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), princ1.intValue());
 
-
-        princ1 = princ1 * 0.8;
-        Double rate = 0.21 / 12;
-
-        Double emi1 = Math.floor((princ1 * rate * Math.pow(1 + rate, monthscam)) / ((Math.pow(1 + rate, monthscam)) - 1));
-        if ((princ1 * 10 / 8) < 5000.0)
-            emi1 = princ1 / monthscam;
-        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi1.intValue()) + " per month");
+        int price01 = princ1.intValue();
+        Double emi01 = show(Splash.subCategory.get(spin).get("0"),Splash.category.get(spin).get("0"),Splash.brand.get(spin).get("0"),price01);
+        if(emi01.intValue()<200)
+            emi01 = 200.0;
+        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
         //emi2
-        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-        int monthscam2 = 18;
-        monthscam2 = months(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), princ2.intValue());
 
-        princ2 = princ2 * 0.8;
-        // Double rate=0.2;
-        Double emi2 = Math.floor((princ2 * rate * Math.pow(1 + rate, monthscam2)) / ((Math.pow(1 + rate, monthscam2)) - 1));
-        if ((princ2 * 10 / 8) < 5000.0)
-            emi2 = princ2 / monthscam2;
-        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi2.intValue()) + " per month");
+
+
+
+        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
+
+        int price02 = princ2.intValue();
+        Double emi02 = show(Splash.subCategory.get(spin).get("1"),Splash.category.get(spin).get("1"),Splash.brand.get(spin).get("1"),price02);
+        if(emi02.intValue()<200)
+            emi02 = 200.0;
+        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
 
 
         Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-        int monthscam3 = 18;
-        monthscam3 = months(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), princ3.intValue());
-        princ3 = princ3 * 0.8;
-        // Double rate=0.2;
-        Double emi3 = Math.floor((princ3 * rate * Math.pow(1 + rate, monthscam3)) / ((Math.pow(1 + rate, monthscam3)) - 1));
-        if ((princ3 * 10 / 8) < 5000.0)
-            emi3 = princ3 / monthscam3;
-        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi3.intValue()) + " per month");
+        int price03 = princ3.intValue();
+        Double emi03 = show(Splash.subCategory.get(spin).get("2"),Splash.category.get(spin).get("2"),Splash.brand.get(spin).get("2"),price03);
+        if(emi03.intValue()<200)
+            emi03 = 200.0;
+        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
+
 
         //emi4
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-        int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
+        int price04 = princ4.intValue();
+        Double emi04 = show(Splash.subCategory.get(spin).get("3"),Splash.category.get(spin).get("3"),Splash.brand.get(spin).get("3"),price04);
+        if(emi04.intValue()<200)
+            emi04 = 200.0;
+        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
 
-
-        princ4 = princ4 * 0.8;
-        // Double rate=0.2;
-        Double emi4 = Math.floor((princ4 * rate * Math.pow(1 + rate, monthscam4)) / ((Math.pow(1 + rate, monthscam4)) - 1));
-        if ((princ4 * 10 / 8) < 5000.0)
-            emi4 = princ4 / monthscam4;
-        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
 
 
 
 
 
         Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-        int monthscam5 = 18;
-        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
-
-
-        princ5 = princ5 * 0.8;
-        // Double rate=0.2;
-        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
-        if ((princ5 * 10 / 8) < 5000.0)
-            emi5 = princ5 / monthscam5;
-        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+        int price05 = princ5.intValue();
+        Double emi05 = show(Splash.subCategory.get(spin).get("4"),Splash.category.get(spin).get("4"),Splash.brand.get(spin).get("4"),price05);
+       // price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
+        if(emi05.intValue()<200)
+            emi05 = 200.0;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
 
 
         Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-        int monthscam6 = 18;
-        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
-
-
-        princ6 = princ6 * 0.8;
-        // Double rate=0.2;
-        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
-        if ((princ6 * 10 / 8) < 5000.0)
-            emi6 = princ6 / monthscam6;
-        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+        int price06 = princ6.intValue();
+        Double emi06 = show(Splash.subCategory.get(spin).get("5"),Splash.category.get(spin).get("5"),Splash.brand.get(spin).get("5"),price06);
+        //price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
+        if(emi06.intValue()<200)
+            emi06 = 200.0;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
 
 
 
         Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-        int monthscam7 = 18;
-        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
-
-
-        princ7 = princ7 * 0.8;
-        // Double rate=0.2;
-        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
-        if ((princ7 * 10 / 8) < 5000.0)
-            emi7 = princ7 / monthscam7;
-        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+        int price07 = princ7.intValue();
+        Double emi07 = show(Splash.subCategory.get(spin).get("6"),Splash.category.get(spin).get("6"),Splash.brand.get(spin).get("6"),price07);
+        if(emi07.intValue()<200)
+            emi07 = 200.0;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
 
 
 
         Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-        int monthscam8 = 18;
-        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
-
-
-        princ8 = princ8 * 0.8;
-        // Double rate=0.2;
-        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
-        if ((princ8 * 10 / 8) < 5000.0)
-            emi8 = princ8 / monthscam8;
-        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+        int price08 = princ8.intValue();
+        Double emi08 = show(Splash.subCategory.get(spin).get("7"),Splash.category.get(spin).get("7"),Splash.brand.get(spin).get("7"),price08);
+        if(emi08.intValue()<200)
+            emi08 = 200.0;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
 
 
         Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-        int monthscam9 = 18;
-        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
-
-
-        princ9 = princ9 * 0.8;
-        // Double rate=0.2;
-        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
-        if ((princ9 * 10 / 8) < 5000.0)
-            emi9 = princ9/ monthscam9;
-        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+        int price09 = princ9.intValue();
+        Double emi09 = show(Splash.subCategory.get(spin).get("8"),Splash.category.get(spin).get("8"),Splash.brand.get(spin).get("8"),price09);
+        if(emi09.intValue()<200)
+            emi09 = 200.0;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
 
 
 
         Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-        int monthscam10 = 18;
-        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
-
-
-        princ10 = princ10 * 0.8;
-        // Double rate=0.2;
-        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
-        if ((princ10 * 10 / 8) < 5000.0)
-            emi10 = princ10/ monthscam10;
+        int price00 = princ10.intValue();
+        Double emi10 = show(Splash.subCategory.get(spin).get("9"),Splash.category.get(spin).get("9"),Splash.brand.get(spin).get("9"),price00);
+        if(emi10.intValue()<200)
+            emi10 = 200.0;
         price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
+
+
+
     }
 
 
@@ -4990,141 +4759,104 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .into(img10);
 
 
+
         Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-        int monthscam = 18;
-        String cat1 = Splash.category.get(spin).get("0");
-        String subcat1 = Splash.subCategory.get(spin).get("0");
-        int a = 2;
-        monthscam = months(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), princ1.intValue());
 
-
-        princ1 = princ1 * 0.8;
-        Double rate = 0.21 / 12;
-
-        Double emi1 = Math.floor((princ1 * rate * Math.pow(1 + rate, monthscam)) / ((Math.pow(1 + rate, monthscam)) - 1));
-        if ((princ1 * 10 / 8) < 5000.0)
-            emi1 = princ1 / monthscam;
-        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi1.intValue()) + " per month");
+        int price01 = princ1.intValue();
+        Double emi01 = show(Splash.subCategory.get(spin).get("0"),Splash.category.get(spin).get("0"),Splash.brand.get(spin).get("0"),price01);
+        if(emi01.intValue()<200)
+            emi01 = 200.0;
+        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
         //emi2
-        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-        int monthscam2 = 18;
-        monthscam2 = months(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), princ2.intValue());
 
-        princ2 = princ2 * 0.8;
-        // Double rate=0.2;
-        Double emi2 = Math.floor((princ2 * rate * Math.pow(1 + rate, monthscam2)) / ((Math.pow(1 + rate, monthscam2)) - 1));
-        if ((princ2 * 10 / 8) < 5000.0)
-            emi2 = princ2 / monthscam2;
-        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi2.intValue()) + " per month");
+
+
+
+        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
+
+        int price02 = princ2.intValue();
+        Double emi02 = show(Splash.subCategory.get(spin).get("1"),Splash.category.get(spin).get("1"),Splash.brand.get(spin).get("1"),price02);
+        if(emi02.intValue()<200)
+            emi02 = 200.0;
+        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
 
 
         Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-        int monthscam3 = 18;
-        monthscam3 = months(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), princ3.intValue());
-        princ3 = princ3 * 0.8;
-        // Double rate=0.2;
-        Double emi3 = Math.floor((princ3 * rate * Math.pow(1 + rate, monthscam3)) / ((Math.pow(1 + rate, monthscam3)) - 1));
-        if ((princ3 * 10 / 8) < 5000.0)
-            emi3 = princ3 / monthscam3;
-        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi3.intValue()) + " per month");
+        int price03 = princ3.intValue();
+        Double emi03 = show(Splash.subCategory.get(spin).get("2"),Splash.category.get(spin).get("2"),Splash.brand.get(spin).get("2"),price03);
+        if(emi03.intValue()<200)
+            emi03 = 200.0;
+        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
+
 
         //emi4
 
         Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-        int monthscam4 = 18;
-        monthscam4 = months(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), princ4.intValue());
+        int price04 = princ4.intValue();
+        Double emi04 = show(Splash.subCategory.get(spin).get("3"),Splash.category.get(spin).get("3"),Splash.brand.get(spin).get("3"),price04);
+        if(emi04.intValue()<200)
+            emi04 = 200.0;
+        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
 
-
-        princ4 = princ4 * 0.8;
-        // Double rate=0.2;
-        Double emi4 = Math.floor((princ4 * rate * Math.pow(1 + rate, monthscam4)) / ((Math.pow(1 + rate, monthscam4)) - 1));
-        if ((princ4 * 10 / 8) < 5000.0)
-            emi4 = princ4 / monthscam4;
-        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi4.intValue()) + " per month");
 
 
 
 
 
         Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-        int monthscam5 = 18;
-        monthscam5 = months(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), princ5.intValue());
-
-
-        princ5 = princ5 * 0.8;
-        // Double rate=0.2;
-        Double emi5 = Math.floor((princ5 * rate * Math.pow(1 + rate, monthscam5)) / ((Math.pow(1 + rate, monthscam5)) - 1));
-        if ((princ5 * 10 / 8) < 5000.0)
-            emi5 = princ5 / monthscam5;
-        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi5.intValue()) + " per month");
+        int price05 = princ5.intValue();
+        Double emi05 = show(Splash.subCategory.get(spin).get("4"),Splash.category.get(spin).get("4"),Splash.brand.get(spin).get("4"),price05);
+        //price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
+        if(emi05.intValue()<200)
+            emi05 = 200.0;
+        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
 
 
         Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-        int monthscam6 = 18;
-        monthscam6 = months(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), princ6.intValue());
-
-
-        princ6 = princ6 * 0.8;
-        // Double rate=0.2;
-        Double emi6 = Math.floor((princ6 * rate * Math.pow(1 + rate, monthscam6)) / ((Math.pow(1 + rate, monthscam6)) - 1));
-        if ((princ6 * 10 / 8) < 5000.0)
-            emi6 = princ6 / monthscam6;
-        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi6.intValue()) + " per month");
+        int price06 = princ6.intValue();
+        Double emi06 = show(Splash.subCategory.get(spin).get("5"),Splash.category.get(spin).get("5"),Splash.brand.get(spin).get("5"),price06);
+        //price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
+        if(emi06.intValue()<200)
+            emi06 = 200.0;
+        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
 
 
 
         Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-        int monthscam7 = 18;
-        monthscam7 = months(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), princ7.intValue());
-
-
-        princ7 = princ7 * 0.8;
-        // Double rate=0.2;
-        Double emi7 = Math.floor((princ7 * rate * Math.pow(1 + rate, monthscam7)) / ((Math.pow(1 + rate, monthscam7)) - 1));
-        if ((princ7 * 10 / 8) < 5000.0)
-            emi7 = princ7 / monthscam7;
-        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi7.intValue()) + " per month");
+        int price07 = princ7.intValue();
+        Double emi07 = show(Splash.subCategory.get(spin).get("6"),Splash.category.get(spin).get("6"),Splash.brand.get(spin).get("6"),price07);
+        if(emi07.intValue()<200)
+            emi07 = 200.0;
+        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
 
 
 
         Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-        int monthscam8 = 18;
-        monthscam8 = months(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), princ8.intValue());
-
-
-        princ8 = princ8 * 0.8;
-        // Double rate=0.2;
-        Double emi8 = Math.floor((princ8 * rate * Math.pow(1 + rate, monthscam8)) / ((Math.pow(1 + rate, monthscam8)) - 1));
-        if ((princ8 * 10 / 8) < 5000.0)
-            emi8 = princ8 / monthscam8;
-        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi8.intValue()) + " per month");
+        int price08 = princ8.intValue();
+        Double emi08 = show(Splash.subCategory.get(spin).get("7"),Splash.category.get(spin).get("7"),Splash.brand.get(spin).get("7"),price08);
+        if(emi08.intValue()<200)
+            emi08 = 200.0;
+        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
 
 
         Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-        int monthscam9 = 18;
-        monthscam9 = months(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), princ9.intValue());
-
-
-        princ9 = princ9 * 0.8;
-        // Double rate=0.2;
-        Double emi9 = Math.floor((princ9 * rate * Math.pow(1 + rate, monthscam9)) / ((Math.pow(1 + rate, monthscam9)) - 1));
-        if ((princ9 * 10 / 8) < 5000.0)
-            emi9 = princ9/ monthscam9;
-        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi9.intValue()) + " per month");
+        int price09 = princ9.intValue();
+        Double emi09 = show(Splash.subCategory.get(spin).get("8"),Splash.category.get(spin).get("8"),Splash.brand.get(spin).get("8"),price09);
+        if(emi09.intValue()<200)
+            emi09 = 200.0;
+        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
 
 
 
         Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-        int monthscam10 = 18;
-        monthscam10 = months(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), princ10.intValue());
-
-
-        princ10 = princ10 * 0.8;
-        // Double rate=0.2;
-        Double emi10 = Math.floor((princ10 * rate * Math.pow(1 + rate, monthscam10)) / ((Math.pow(1 + rate, monthscam10)) - 1));
-        if ((princ10 * 10 / 8) < 5000.0)
-            emi10 = princ10/ monthscam10;
+        int price00 = princ10.intValue();
+        Double emi10 = show(Splash.subCategory.get(spin).get("9"),Splash.category.get(spin).get("9"),Splash.brand.get(spin).get("9"),price00);
+        if(emi10.intValue()<200)
+            emi10 = 200.0;
         price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
+
+
+
     }
 
 
@@ -5134,11 +4866,24 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
 
 
-
-////
-
-
-
+//    public Double calculateEmi( int monthsallowed ,int sellingPrice){
+//        Double rate = 21.0 / 1200.0;
+//        int d = 0;
+//        if (sellingPrice <= 5000) {
+//            emi = sellingPrice * 0.8 / monthsallowed;
+//        } else {
+//            if (currDay <= 15)
+//                d = 35 - currDay;
+//            else
+//                d = 65 - currDay;
+//
+//            emi = Math.ceil((sellingPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
+//        }
+//        return emi;
+//    }
+//
+//
+//
     public int months(String subcat, String cat, String brand, int price)
 
     {
@@ -5176,8 +4921,113 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 m = mn;
         }
 
+        int monthscheck = 0;
+        //digo
+        String course = userP.getString("course", "");
+
+        if (!course.equals("")) {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date courseDate;
+            Double diff = 18.0;
+            try {
+                courseDate = df.parse(course);
+                String newDateString = df.format(courseDate);
+                System.out.println(newDateString);
+                Long milli = courseDate.getTime();
+                Date date = new Date();
+                Long currentMilli = date.getTime();
+                Double diffDouble = (milli.doubleValue() - currentMilli.doubleValue());
+                Double mul = (1000.0 * 60.0 * 60.0 * 24.0 * 365.0);
+                diff = diffDouble / mul;
+                diff = diff * 12.0;
+                diff = Math.floor(diff);
+                String curr = df.format(date);
+                String currentDay = "";
+                for (int j = curr.length() - 2; j < curr.length(); j++) {
+
+                    currentDay += curr.charAt(j);
+                }
+
+                currDay = Integer.parseInt(currentDay);
+                int months;
+                if (currDay > 15)
+                    diff -= 1.0;
+
+                if (diff > 0) {
+                    months = diff.intValue();
+                    if (diff.intValue() == 1)
+                        months = 1;
+                    else if (diff.intValue() == 2)
+                        months = 2;
+                    else if (diff.intValue() >= 3 && diff.intValue() <= 5) {
+                        months = 3;
+                    } else if (diff.intValue() >= 6 && diff.intValue() <= 8) {
+                        months = 6;
+                    } else if (diff.intValue() >= 9 && diff.intValue() <= 11) {
+                        months = 9;
+                    } else if (diff.intValue() >= 12 && diff.intValue() <= 14) {
+                        months = 12;
+                    } else if (diff.intValue() >= 15 && diff.intValue() <= 18) {
+                        months = 15;
+                    }
+                    if (m > months)
+                        m = months;
+                }
+
+
+                //                        Toast.makeText(HomePage.this, curr, Toast.LENGTH_SHORT).show();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+
         return m;
     }
+
+
+//   public int serviceCharge(int sellingCost,int loanAmt,String seller)
+//    {
+//        int serv = 0;
+//
+//        if (seller.equals("flipkart") || seller.equals("snapdeal")) {
+//
+//            if (loanAmt < 1000)
+//                serv = 29;
+//            else if (loanAmt < 5000)
+//                serv = 99;
+//            else if (loanAmt < 15000)
+//                serv = 149;
+//            else if (loanAmt < 20000)
+//                serv = 199;
+//            else if (loanAmt < 25000)
+//                serv = 299;
+//            else if (loanAmt > 25000)
+//                serv = 549;
+//
+//
+//        } else {
+//            if (sellingCost < 1000)
+//                serv = 29;
+//            else if (sellingCost < 5000)
+//                serv = 99;
+//            else if (sellingCost < 10000)
+//                serv = 199;
+//            else if (sellingCost < 15000)
+//                serv = 299;
+//            else if (sellingCost < 25000)
+//                serv = 449;
+//            else if (sellingCost > 25000)
+//                serv = 599;
+//        }
+//
+//        return serv;
+//
+//    }
+
+
+
 
     public void parse(String parseString) {
         SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
@@ -5557,207 +5407,314 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
 
 
-    public class linkSearch extends
-                            AsyncTask<String, Void, String> {
-        @Override
-        public void onPreExecute() {
-            //            spinner.setVisibility(View.VISIBLE);
+//    public class linkSearch extends
+//                            AsyncTask<String, Void, String> {
+//        @Override
+//        public void onPreExecute() {
+//            //            spinner.setVisibility(View.VISIBLE);
+//
+//        }
+//
+//
+//        @Override
+//
+//        public String doInBackground(String... data) {
+//
+//            //  String urldisplay = data[0];
+//            JSONObject payload = new JSONObject();
+//            try {
+//                // userid=12&productid=23&action=add
+//                // TYPE: get
+//                String url = getApplicationContext().getString(R.string.server) + "api/product?productId=" + productId + "&seller=" + sellerNme + "&userid=" + cred.getString("phone_number", "");
+//
+//                // payload.put("action", details.get("action"));
+//
+//
+//                HttpParams httpParameters = new BasicHttpParams();
+//
+//                HttpConnectionParams
+//                        .setConnectionTimeout(httpParameters, 30000);
+//
+//                HttpClient client = new DefaultHttpClient(httpParameters);
+//                HttpGet httppost = new HttpGet(url);
+//                httppost.setHeader("x-access-token", token);
+//                httppost.setHeader("Content-Type", "application/json");
+//
+//
+//                HttpResponse response = client.execute(httppost);
+//                HttpEntity ent = response.getEntity();
+//                String responseString = EntityUtils.toString(ent, "UTF-8");
+//                if (response.getStatusLine().getStatusCode() != 200) {
+//                    return "fail";
+//                } else {
+//                    JSONObject resp = new JSONObject(responseString);
+//                    if (resp.getString("status").equals("success")) {
+//                        JSONObject data1 = new JSONObject(resp.getString("data"));
+//                        searchTitle = data1.getString("title");
+//                        searchBrand = data1.getString("brand");
+//                        searchCategory = data1.getString("category");
+//                        searchSubcategory = data1.getString("subCategory");
+//                        searchPrice = data1.getInt("sellingPrice");
+//
+//                        JSONObject img = new JSONObject(data1.getString("imgUrls"));
+//                        urlImg = img.getString("400x400");
+//                        //                        infor=data1.getString("")
+//                        try {
+//                            specification = data1.getString("specificaiton");
+//                        } catch (Exception e) {
+//                            specification = "";
+//                        }
+//                        try {
+//                            description = data1.getString("description");
+//                        } catch (Exception e) {
+//                            description = "";
+//                        }
+//                        try {
+//                            review = data1.getString("fkProductUrl");
+//                        } catch (Exception e) {
+//                            review = "";
+//                        }
+//                        infor = "The minimum downpayment is 20% of the product price and also depends on the payment band (Oxygen/Silicon/Palladium/Krypton) you lie in, which you will get to know after your college ID verification.";
+//
+//
+//                        return "win";
+//
+//
+//                    }
+//
+//                }
+//            } catch (Exception e) {
+//            }
+//            return "";
+//        }
+//
+//        protected void onPostExecute(String result) {
+//            if (!result.equals("win")) {
+//                System.out.println("Error while computing data");
+//            } else {
+//
+//                monthsallowed = months(searchSubcategory, searchCategory, searchBrand, searchPrice);
+//                int monthscheck = 0;
+//                //digo
+//                String course = userP.getString("course", "");
+//
+//                if (!course.equals("")) {
+//                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+//
+//                    Date courseDate;
+//                    Double diff = 18.0;
+//                    try {
+//                        courseDate = df.parse(course);
+//                        String newDateString = df.format(courseDate);
+//                        System.out.println(newDateString);
+//                        Long milli = courseDate.getTime();
+//                        Date date = new Date();
+//                        Long currentMilli = date.getTime();
+//                        Double diffDouble = (milli.doubleValue() - currentMilli.doubleValue());
+//                        Double mul = (1000.0 * 60.0 * 60.0 * 24.0 * 365.0);
+//
+//                        diff = diffDouble / mul;
+//                        diff = diff * 12.0;
+//                        diff = Math.floor(diff);
+//                        String curr = df.format(date);
+//                        String currentDay = "";
+//                        for (int j = curr.length() - 2; j < curr.length(); j++) {
+//                            currentDay += curr.charAt(j);
+//                        }
+//
+//                        currDay = Integer.parseInt(currentDay);
+//                        int months;
+//                        if (currDay > 15)
+//                            diff -= 1.0;
+//
+//                        if (diff > 0) {
+//                            months = diff.intValue();
+//                            if (diff.intValue() == 1)
+//                                months = 1;
+//                            else if (diff.intValue() == 2)
+//                                months = 2;
+//                            else if (diff.intValue() >= 3 && diff.intValue() <= 5) {
+//                                months = 3;
+//                            } else if (diff.intValue() >= 6 && diff.intValue() <= 8) {
+//                                months = 6;
+//                            } else if (diff.intValue() >= 9 && diff.intValue() <= 11) {
+//                                months = 9;
+//                            } else if (diff.intValue() >= 12 && diff.intValue() <= 14) {
+//                                months = 12;
+//                            } else if (diff.intValue() >= 15 && diff.intValue() <= 18) {
+//                                months = 15;
+//                            }
+//                            monthscheck = months;
+//                        }
+//
+//
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                if (monthsallowed > monthscheck)
+//                    monthsallowed = monthscheck;
+//
+//                Double rate = 21.0 / 1200.0;
+//                int d = 0;
+//                if (searchPrice <= 5000) {
+//                    emi = searchPrice * 0.8 / monthsallowed;
+//                } else {
+//                    if (currDay <= 15)
+//                        d = 35 - currDay;
+//                    else
+//                        d = 65 - currDay;
+//
+//                    emi = Math.floor((searchPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
+//
+//                }
+//                String q = query.getText().toString();
+//                Intent in = new Intent(HomePage.this, ProductsPage.class);
+//                in.putExtra("title", searchTitle);
+//                try {
+//                    Map userMap = new HashMap<>();
+//                    userMap.put("PRODUCT_TITLE", searchTitle);
+//                    //                    userMap.put("email", mEmail);
+//                    //                    userMap.put("user_id", mPhone);
+//                    //                    userMap.put("phone", mPhone);
+//                    //                    System.out.println("Intercom data 4" + mPhone);
+//                    Intercom.client().updateUser(userMap);
+//                } catch (Exception e) {
+//
+//
+//                    System.out.println("Intercom two" + e.toString());
+//                }
+//                in.putExtra("price", searchPrice);
+//                in.putExtra("brand", searchBrand);
+//                in.putExtra("name", name);
+//                in.putExtra("image", urlImg);
+//                in.putExtra("emi", emi);
+//                in.putExtra("desc", "");
+//
+//
+//                in.putExtra("monthsallowed", monthsallowed);
+//                in.putExtra("seller", sellerNme);
+//                in.putExtra("query", q);
+//                in.putExtra("page", page);
+//
+//                startActivity(in);
+//                query.setText("");
+//
+//                //                    Toast.makeText(HomePage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
+//
+//
+//            }
+//            //else
+//
+//
+//        }
 
-        }
-
-
-        @Override
-
-        public String doInBackground(String... data) {
-
-            //  String urldisplay = data[0];
-            JSONObject payload = new JSONObject();
-            try {
-                // userid=12&productid=23&action=add
-                // TYPE: get
-                String url = getApplicationContext().getString(R.string.server) + "api/product?productId=" + productId + "&seller=" + sellerNme + "&userid=" + cred.getString("phone_number", "");
-
-                // payload.put("action", details.get("action"));
-
-
-                HttpParams httpParameters = new BasicHttpParams();
-
-                HttpConnectionParams
-                        .setConnectionTimeout(httpParameters, 30000);
-
-                HttpClient client = new DefaultHttpClient(httpParameters);
-                HttpGet httppost = new HttpGet(url);
-                httppost.setHeader("x-access-token", token);
-                httppost.setHeader("Content-Type", "application/json");
-
-
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
-                if (response.getStatusLine().getStatusCode() != 200) {
-                    return "fail";
-                } else {
-                    JSONObject resp = new JSONObject(responseString);
-                    if (resp.getString("status").equals("success")) {
-                        JSONObject data1 = new JSONObject(resp.getString("data"));
-                        searchTitle = data1.getString("title");
-                        searchBrand = data1.getString("brand");
-                        searchCategory = data1.getString("category");
-                        searchSubcategory = data1.getString("subCategory");
-                        searchPrice = data1.getInt("sellingPrice");
-
-                        JSONObject img = new JSONObject(data1.getString("imgUrls"));
-                        urlImg = img.getString("400x400");
-                        //                        infor=data1.getString("")
-                        try {
-                            specification = data1.getString("specificaiton");
-                        } catch (Exception e) {
-                            specification = "";
-                        }
-                        try {
-                            description = data1.getString("description");
-                        } catch (Exception e) {
-                            description = "";
-                        }
-                        try {
-                            review = data1.getString("fkProductUrl");
-                        } catch (Exception e) {
-                            review = "";
-                        }
-                        infor = "The minimum downpayment is 20% of the product price and also depends on the payment band (Oxygen/Silicon/Palladium/Krypton) you lie in, which you will get to know after your college ID verification.";
-
-
-                        return "win";
-
-
-                    }
-
-                }
-            } catch (Exception e) {
+        public int setLoanAmt(int sellingPrice){
+            int loanAmt =0;
+            Double value = sellingPrice* .8;
+            int loanAmt1 = value.intValue();
+            int loanAmt2 = userP.getInt("creditLimit", 0)-userP.getInt("totalBorrowed",0);
+            if(loanAmt1<loanAmt2){
+                 loanAmt = loanAmt1;
+            }else{
+               loanAmt = loanAmt2;
             }
-            return "";
+            return loanAmt;
         }
 
-        protected void onPostExecute(String result) {
-            if (!result.equals("win")) {
-                System.out.println("Error while computing data");
+//        public int months(String subcat, String cat, String brand, int price)
+//
+//        {
+//            int m = 18;
+//            if ((subcat.equals("Fitness " +
+//                    "Equipments")) || ((subcat.equals("Jewellery"))) || ((subcat.equals("Combos and Kit"))) || ((subcat.equals("Speakers"))) || ((subcat.equals("Team Sports"))) || ((subcat.equals("Racquet Sports"))) || ((subcat.equals("Watches"))) || ((subcat.equals("Health and Personal Care"))) || ((subcat.equals("Leather & Travel Accessories"))) || ((cat.equals("Footwear")))) {
+//                int mn = 6;
+//                if (mn < m)
+//                    m = mn;
+//            } else if ((subcat.equals("Cameras")) || ((subcat.equals("Entertainment"))) || ((subcat.equals("Smartwatches"))) || ((subcat.equals("Smart Headphones"))) || ((subcat.equals("Smart Bands"))) || ((subcat.equals("Digital Accessories"))) || ((subcat.equals("Tablets"))) || ((subcat.equals("Kindle")))) {
+//                int mn = 12;
+//                if (mn < m)
+//                    m = mn;
+//            }
+//            if ((!brand.equals("Apple")) && !(brand.equals("APPLE"))) {
+//                int mn = 15;
+//                if (mn < m)
+//                    m = mn;
+//            }
+//            if(price<=400)
+//            {
+//                int mn = 1;
+//                if (mn < m)
+//                    m = mn;
+//            }
+//            else if(price<=1000)
+//            {
+//                int mn = 2;
+//                if (mn < m)
+//                    m = mn;
+//            }
+//            else if (price < 2000) {
+//                int mn = 3;
+//                if (mn < m)
+//                    m = mn;
+//            }
+//            else if (price < 5000) {
+//                int mn = 6;
+//                if (mn < m)
+//                    m = mn;
+//            } else if (price < 10000) {
+//                int mn = 9;
+//                if (mn < m)
+//                    m = mn;
+//            } else if (price < 20000) {
+//                int mn = 12;
+//                if (mn < m)
+//                    m = mn;
+//            } else if (price < 40000) {
+//                int mn = 15;
+//                if (mn < m)
+//                    m = mn;
+//            }
+//
+//            return m;
+//        }
+
+        public Double show(String subcat, String cat,String brand,int price) {
+
+            int loanPrice = setLoanAmt(price);
+            int monthsallowed = months(subcat,cat,brand,price);
+//
+            Double rate = 21.0 / 1200.0;
+            int d = 0;
+            if (price<= 5000) {
+                emi = price* 0.8 / monthsallowed;
             } else {
 
-                monthsallowed = months(searchSubcategory, searchCategory, searchBrand, searchPrice);
-                int monthscheck = 0;
-                //digo
-                String course = userP.getString("course", "");
+                Date date = new Date();
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                String curr = df.format(date);
+                String currentDay = "";
+                for (int j = curr.length() - 2; j < curr.length(); j++) {
 
-                if (!course.equals("")) {
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-
-                    Date courseDate;
-                    Double diff = 18.0;
-                    try {
-                        courseDate = df.parse(course);
-                        String newDateString = df.format(courseDate);
-                        System.out.println(newDateString);
-                        Long milli = courseDate.getTime();
-                        Date date = new Date();
-                        Long currentMilli = date.getTime();
-                        Double diffDouble = (milli.doubleValue() - currentMilli.doubleValue());
-                        Double mul = (1000.0 * 60.0 * 60.0 * 24.0 * 365.0);
-
-                        diff = diffDouble / mul;
-                        diff = diff * 12.0;
-                        diff = Math.floor(diff);
-                        String curr = df.format(date);
-                        String currentDay = "";
-                        for (int j = curr.length() - 2; j < curr.length(); j++) {
-                            currentDay += curr.charAt(j);
-                        }
-
-                        currDay = Integer.parseInt(currentDay);
-                        int months;
-                        if (currDay > 15)
-                            diff -= 1.0;
-
-                        if (diff > 0) {
-                            months = diff.intValue();
-                            if (diff.intValue() == 1)
-                                months = 1;
-                            else if (diff.intValue() == 2)
-                                months = 2;
-                            else if (diff.intValue() >= 3 && diff.intValue() <= 5) {
-                                months = 3;
-                            } else if (diff.intValue() >= 6 && diff.intValue() <= 8) {
-                                months = 6;
-                            } else if (diff.intValue() >= 9 && diff.intValue() <= 11) {
-                                months = 9;
-                            } else if (diff.intValue() >= 12 && diff.intValue() <= 14) {
-                                months = 12;
-                            } else if (diff.intValue() >= 15 && diff.intValue() <= 18) {
-                                months = 15;
-                            }
-                            monthscheck = months;
-                        }
-
-
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    currentDay += curr.charAt(j);
                 }
-                if (monthsallowed > monthscheck)
-                    monthsallowed = monthscheck;
 
-                Double rate = 21.0 / 1200.0;
-                int d = 0;
-                if (searchPrice <= 5000) {
-                    emi = searchPrice * 0.8 / monthsallowed;
-                } else {
-                    if (currDay <= 15)
-                        d = 35 - currDay;
-                    else
-                        d = 65 - currDay;
+                currDay = Integer.parseInt(currentDay);
+                if (currDay <= 15)
+                    d = 35 - currDay;
+                else
+                    d = 65 - currDay;
 
-                    emi = Math.floor((searchPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
-
-                }
-                String q = query.getText().toString();
-                Intent in = new Intent(HomePage.this, ProductsPage.class);
-                in.putExtra("title", searchTitle);
-                try {
-                    Map userMap = new HashMap<>();
-                    userMap.put("PRODUCT_TITLE", searchTitle);
-                    //                    userMap.put("email", mEmail);
-                    //                    userMap.put("user_id", mPhone);
-                    //                    userMap.put("phone", mPhone);
-                    //                    System.out.println("Intercom data 4" + mPhone);
-                    Intercom.client().updateUser(userMap);
-                } catch (Exception e) {
-
-
-                    System.out.println("Intercom two" + e.toString());
-                }
-                in.putExtra("price", searchPrice);
-                in.putExtra("brand", searchBrand);
-                in.putExtra("name", name);
-                in.putExtra("image", urlImg);
-                in.putExtra("emi", emi);
-                in.putExtra("desc", "");
-
-
-                in.putExtra("monthsallowed", monthsallowed);
-                in.putExtra("seller", sellerNme);
-                in.putExtra("query", q);
-                in.putExtra("page", page);
-
-                startActivity(in);
-                query.setText("");
-
-                //                    Toast.makeText(HomePage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
-
-
+                emi = Math.ceil((loanPrice  * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
             }
-            //else
-
-
+            return emi;
         }
+
+
+
+
     }
-}
+
+
+
 

@@ -25,7 +25,6 @@ import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
-import indwin.c3.shareapp.utils.PicassoTrustAll;
 
 public class FullScreenActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     private List<String> images;
@@ -192,7 +191,7 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
         public Object instantiateItem(ViewGroup container, int position) {
             View itemView = mLayoutInflater.inflate(R.layout.full_screeen_pager_item, container, false);
 
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.fullImage);
+             ImageView imageView = (ImageView) itemView.findViewById(R.id.fullImage);
             int validUrlSize = image.getValidImgUrls().size();
             int invalidUrlSize = image.getInvalidImgUrls().size();
             int imgUrlSize = image.getImgUrls().size();
@@ -221,9 +220,9 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
             }
 
             if (AppUtils.isNotEmpty(imgUrl)) {
-                if (imgUrl.contains("http"))
-                    PicassoTrustAll.getInstance(FullScreenActivity.this).load(imgUrl).placeholder(R.drawable.downloading).into(imageView);
-                else {
+                if (imgUrl.contains("http")) {
+                    Picasso.with(mContext).load(imgUrl).fit().placeholder(R.drawable.downloading).into(imageView);
+                } else {
                     final File imgFile = new File(imgUrl);
                     if (imgFile.exists()) {
                         Picasso.with(mContext).load(imgFile).placeholder(R.drawable.downloading).into(imageView);

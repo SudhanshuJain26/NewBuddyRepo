@@ -105,11 +105,11 @@ if(results== PackageManager.PERMISSION_GRANTED)
         switch (requestCode) {
             case 1:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Uri uri = Uri.parse("android.resource://indwin.c3.shareapp/" + R.drawable.buddyrefer);
+                Uri uri = Uri.parse("android.resource://indwin.c3.shareapp/" + R.drawable.buddyrefer2);
                 Uri imageUri = null;
                 try {
                     imageUri = Uri.parse(MediaStore.Images.Media.insertImage(Share.this.getContentResolver(),
-                            BitmapFactory.decodeResource(getResources(), R.drawable.buddyrefer), null, null));
+                            BitmapFactory.decodeResource(getResources(), R.drawable.buddyrefer2), null, null));
                 } catch (NullPointerException e) {
                 }
 //                String shareBody="https://play.google.com/store/apps/details?id=indwin.c3.shareapp&referrer="+sh_otp.getString("rcode","");

@@ -108,6 +108,7 @@ public class Adaptersimple extends BaseAdapter {
 if(position!=0){
                 SharedPreferences tt=context.getSharedPreferences("cred", Context.MODE_PRIVATE);
                 int w=tt.getInt("add",0);
+//    w=3;
                 if(w==0) {
 
                     Intent inSend=new Intent(context,SendOtpaddress.class);
@@ -148,8 +149,10 @@ if(position!=0){
                     {
 
                         delete.setVisibility(View.GONE);}
-                    else
-                        delete.setVisibility(View.VISIBLE);
+                    else{
+                        TextView newadd=(TextView)vi.findViewById(R.id.newAdd);
+                        newadd.setText("Update Address");
+                        delete.setVisibility(View.VISIBLE);}
                     textAdd1.setVisibility(View.GONE);
                     textAdd2.setVisibility(View.GONE);
                     textAdd3.setVisibility(View.GONE);
@@ -614,6 +617,9 @@ if((!del1.equals("delete"))&&!(getli.contains("address")))
             delete.setEnabled(true);
             if (result.equals("win")) {
 
+                Intent in =new Intent(context,Editaddress.class);
+                context.startActivity(in);
+                ((Activity)context).finish();
 
 //                context.list.setParams(mParam);
                 Deladd c=new Deladd();
@@ -646,5 +652,6 @@ if((!del1.equals("delete"))&&!(getli.contains("address")))
             }
         }
     }
+
 
 }

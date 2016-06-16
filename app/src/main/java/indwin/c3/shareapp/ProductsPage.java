@@ -73,7 +73,7 @@ import indwin.c3.shareapp.activities.ProfileActivity;
 import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
 
-public class ProductsPage extends AppCompatActivity {
+public class ProductsPage extends AppCompatActivity  {
     private TextView inc, priceChange, status, creditBalance, creditLimit, cashBack, availbal, availbalmsg, knowmore;
     private EditText hve, queryN;
     private long EMIcheck=0;
@@ -110,7 +110,7 @@ public class ProductsPage extends AppCompatActivity {
     private int checkLenghtedittext = 0;
     private int value = 0;
     private int maxValue = 0, minProd = 0;
-    private String type = "";
+    private String type = "",checkmonths="";
 
     private int[] myMonths = {1, 2, 3, 6, 9, 12, 15, 18};
     private String selectedText = "", downPayment = "";
@@ -118,8 +118,10 @@ public class ProductsPage extends AppCompatActivity {
     private String title, brand, sellerNme, searchQuery, urlforImage;
     private int sellingPrice, monthsallowed, spInc, spDec, dayToday, cuurr;
     private TextView brandName, sellingRs, pname;
-    private EditText query, dValue, queryNew;
-    private String userCode = "";
+    private EditText query, queryNew;
+    private String userCode1k = "",userCode7k="";
+    private CustomEditText dValue;
+    private int minDownpaymentfornofina=0;
     private TextView emiAmount, titlePro, totalLoan, detInfo, detSpec, detRet, detDes;
     private ImageView seller, spinnArr,
 
@@ -173,7 +175,8 @@ public class ProductsPage extends AppCompatActivity {
             try {
                 SharedPreferences user = getSharedPreferences("token", Context.MODE_PRIVATE);
 
-                userCode = user.getString("formStatus", "");
+                userCode1k = user.getString("status1K", "");
+                userCode7k = user.getString("status7K", "");
                 userProfileStatus = user.getString("profileStatus", "");
                 productId1 = getIntent().getExtras().getString("product");
                 sellerNme1 = getIntent().getExtras().getString("seller");
@@ -209,6 +212,8 @@ public class ProductsPage extends AppCompatActivity {
 
     }
 
+
+
     class RptUpdater implements Runnable {
         public void run() {
             if (mAutoIncrement) {
@@ -233,9 +238,13 @@ public class ProductsPage extends AppCompatActivity {
         // Toast.makeText(ProductsPage.this, "checkdp", Toast.LENGTH_SHORT).show();
         //        String s = dValue.getText().toString();
         try {
+            int dp;
             if (("").equals(s))
                 s = dValue.getText().toString();
-            int dp = Integer.parseInt(s);
+            if(s.equals("")||(s==null))
+                dp=0;
+            else
+             dp = Integer.parseInt(s);
             Double m = sellingPrice * .2;
 
             if ((dp >= minDownpayment)&&(dp<=sellingPrice+secondServicecharge))//&& w>=mindownn
@@ -276,6 +285,9 @@ public class ProductsPage extends AppCompatActivity {
                     mValue=sellingPrice-fcbv;
 //
                 mValue=minDownpayment;
+//                if(checkmonths.equals("0"))
+//                    mValue=minDownpaymentfornofina
+
 //     dValue.setText(String.valueOf(mValue));
             }
             s = "";
@@ -374,7 +386,14 @@ public class ProductsPage extends AppCompatActivity {
         crcode = hve.getText().toString().trim().toUpperCase();
         spinner = (Spinner) findViewById(R.id.spinnerItem);
         emiAmount = (TextView) findViewById(R.id.calMonPayRs);
-        dValue = (EditText) findViewById(R.id.dValue);
+        dValue = (CustomEditText) findViewById(R.id.dValue);
+        dValue.setOnBackButtonListener(new CustomEditText.IOnBackButtonListener() {
+            @Override
+            public boolean OnEditTextBackButton() {
+                editdp();
+                return false;
+            }
+        });
         dValue.setImeOptions(EditorInfo.IME_ACTION_DONE);
         dValue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -382,7 +401,6 @@ public class ProductsPage extends AppCompatActivity {
                 dValue.requestFocusFromTouch();
             }
         });
-
         dValue.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -496,7 +514,8 @@ public class ProductsPage extends AppCompatActivity {
         }
         SharedPreferences user = getSharedPreferences("token", Context.MODE_PRIVATE);
         userProfileStatus = user.getString("profileStatus", "");
-        userCode = user.getString("formStatus", "");
+        userCode1k = user.getString("status1K", "");
+        userCode7k = user.getString("status7K", "");
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -993,7 +1012,11 @@ public class ProductsPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(cb!=0){
-                    if (!userCode.equals("flashApproved")) {
+                    Boolean flash=true;
+                    if(userCode1k.equals("approved")&&(!(userCode7k.equals("approved"))))
+                        flash=false;
+
+                    if (flash) {
                         int checkD = 0;
                         if (appcBack.isChecked()) {
                             // TODO: 4/21/2016 do something with cashback
@@ -1268,8 +1291,11 @@ public class ProductsPage extends AppCompatActivity {
                         }
                         if (searchPrice < minProd)
                             return "min";
-                        //// TODO: 14/6/16 flash users 1k approved and 7k not approved then only flash users  
-                        if (userCode.equals("flashApproved")) {
+                        //// TODO: 14/6/16 flash users 1k approved and 7k not approved then only flash users
+                        Boolean flash=true;
+                        if(userCode1k.equals("approved")&&(!(userCode7k.equals("approved"))))
+                            flash=false;
+                        if (!flash) {
                             return "flash";
                         }
                         return "win";
@@ -1329,13 +1355,13 @@ public class ProductsPage extends AppCompatActivity {
                     checkD = 0;
                     mDis = sellingPrice;
                     sellingPrice = 0;
-                    setEmi(2);
+
                 } else {
 
                     checkD = 0;
                     mDis = dis;
                     sellingPrice = sellingPrice - mDis;
-                    setEmi(2);
+//                    setEmi(2);
 
                 }
 
@@ -1368,12 +1394,16 @@ public class ProductsPage extends AppCompatActivity {
                 firstServicecharge=w;
                 secondServicecharge=serviceCharge(searchPrice,sellingPrice-mind.intValue()-w,sellerNme1);
                 checkCorrectdis = 1;
-
+if(!checkmonths.equals("0"))
                 dValue.setText(String.valueOf(Math.round(mind+w)));
+                mValue=mind.intValue()+w;
                 sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
-                minDownpayment=Integer.parseInt(dValue.getText().toString());
+                minDownpayment=mValue;
+
 
                 checkImg = 2;
+                setEmi(2);
+
                 ((ImageView) findViewById(R.id.plus)).setImageResource(R.drawable.cancel);
 
                 hve.setKeyListener(null);
@@ -1517,8 +1547,12 @@ public class ProductsPage extends AppCompatActivity {
                     }
                     mValue=sellingPrice+serv;
                 }
+                minDownpaymentfornofina=mValue;
+                checkmonths="0";
 
             }
+            else
+            checkmonths="1";
 //
 // if((sellingPrice<=1000)&&(sellingPrice>150))
 //                mValue=0;
@@ -1553,11 +1587,19 @@ public class ProductsPage extends AppCompatActivity {
                     mValue=sellingPrice+serv;
                 }
 
+                minDownpaymentfornofina=mValue;
+                checkmonths="0";
             }
-            else
-                mValue=minDownpayment;
-            dValue.setText(String.valueOf(mValue));
+            else {
+                mValue = minDownpayment;
+            checkmonths="1";
+            }dValue.setText(String.valueOf(mValue));
+            minDownpayment=mValue;
             sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+            int ww=serviceCharge(searchPrice,searchPrice-mValue,sellerNme1);
+            firstServicecharge=ww;
+            secondServicecharge=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
+
 //            EMIcheck=(Math.round(calculateEmi(sellingPrice, Double.valueOf(searchPrice), monthsnow)));
             EMIcheck=Math.round(calculateEmi(sellingPrice-mValue*1.0+secondServicecharge, Double.valueOf(searchPrice), monthsnow));
 
@@ -2171,11 +2213,11 @@ public class ProductsPage extends AppCompatActivity {
                         }
                         mValue=sellingPrice+serv;
                     }
-
+minDownpayment=mValue;
                 }
-                else
-                    mValue=minDownpayment;
-                dValue.setText("");
+                else {minDownpayment=globalMindown;
+                    mValue = minDownpayment;
+                }dValue.setText("");
                 dValue.setText(String.valueOf(mValue));
                 sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
                 int w=serviceCharge(searchPrice,searchPrice-mValue,sellerNme1);
@@ -2620,5 +2662,7 @@ public class ProductsPage extends AppCompatActivity {
         return serv;
 
     }
+
+
 
 }

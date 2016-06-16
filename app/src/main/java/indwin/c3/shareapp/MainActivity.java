@@ -974,6 +974,19 @@ public class MainActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         courseend = "";
                     }
+                    String status1k="";
+                    try{
+                        status1k=data.getString("status1K");
+                    }
+                    catch (Exception e)
+                    {status1k="";}
+                    String status7k="";
+                    try{
+                        status7k=data.getString("status7K");
+                    }
+                    catch (Exception e)
+                    {status7k="";}
+
                     String nameadd = "";
                     try {
                         nameadd = data.getString("college");
@@ -982,6 +995,8 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editorP = userP.edit();
                     editorP.putString("approvedBand", approvedBand);
+                    editorP.putString("status1K", status1k);
+                    editorP.putString("status7K", status7k);
                     editorP.putString("profileStatus", profileStatus);
                     editorP.putString("course", courseend);
                     editorP.putString("formStatus", formstatus);

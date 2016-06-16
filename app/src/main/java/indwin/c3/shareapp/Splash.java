@@ -502,7 +502,7 @@ public class Splash extends AppCompatActivity {
                                     String subc = js.getString("subCategory");
                                     String brand1 = js.getString("brand");
                                     String id = js.getString("title");
-                                    String mrp = js.getString("mrp");
+                                    //String mrp = js.getString("mrp");
                                     String seller = js.getString("seller");
                                     String fkid = js.getString("fkProductId");
                                     String selling_price = js.getString("sellingPrice");
@@ -512,7 +512,7 @@ public class Splash extends AppCompatActivity {
                                     subCategory.get(urldisplay).put(String.valueOf(j), subc);
                                     brand.get(urldisplay).put(String.valueOf(j), brand1);
                                     image.get(urldisplay).put(String.valueOf(j), imgurl);
-                                    mrp1.get(urldisplay).put(String.valueOf(j), mrp);
+                                   // mrp1.get(urldisplay).put(String.valueOf(j), mrp);
                                     title.get(urldisplay).put(String.valueOf(j), id);
                                     fkid1.get(urldisplay).put(String.valueOf(j), fkid);
                                     selling.get(urldisplay).put(String.valueOf(j), selling_price);

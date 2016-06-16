@@ -1883,7 +1883,7 @@ public class ProductsPage extends AppCompatActivity {
                 return false;
             }
         });
-        pasteiconnew=(ImageView)findViewById(R.id.pasteAg);
+        //pasteiconnew=(ImageView)findViewById(R.id.pasteAg);
         TextView t=(TextView)findViewById(R.id.textattach);
         t.setOnClickListener(new View.OnClickListener() {
             @Override

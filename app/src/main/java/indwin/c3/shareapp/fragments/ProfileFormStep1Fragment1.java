@@ -180,10 +180,10 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                     saveGender();
                 }
                 if (position == 1) {
-                    topImage.setImageDrawable(getResources().getDrawable(R.mipmap.step1fragment1girl));
+                    topImage.setImageDrawable(getResources().getDrawable(R.drawable.step1fragment1girl));
 
                 } else {
-                    topImage.setImageDrawable(getResources().getDrawable(R.mipmap.step1fragment1));
+                    topImage.setImageDrawable(getResources().getDrawable(R.drawable.step1fragment1));
 
                 }
             }
@@ -201,7 +201,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                 if (genderOptions[i].equals(user.getGender())) {
                     if (i == 1) {
                         Picasso.with(getActivity())
-                                .load(R.mipmap.step1fragment1girl)
+                                .load(R.drawable.step1fragment1girl)
                                 .into(topImage);
                     }
                     genderSpinner.setSelection(i);

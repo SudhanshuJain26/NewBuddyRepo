@@ -89,7 +89,7 @@ public class ImageUploaderRecyclerAdapter extends
                         imgUrl = image.getBack().getImgUrl();
                     } else {
                         if (disableAddButton) {
-                            Picasso.with(mContext).load(R.mipmap.backside_noimage).fit().placeholder(R.drawable.downloading).into(viewHolder.image);
+                            //Picasso.with(mContext).load(R.drawable.backside_noimage).fit().placeholder(R.drawable.downloading).into(viewHolder.image);
                         }
                     }
                     viewHolder.textView.setVisibility(View.VISIBLE);

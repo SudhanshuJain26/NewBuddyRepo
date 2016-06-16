@@ -62,13 +62,14 @@
                 android:background="@drawable/layout_bg"
                 android:cursorVisible="false"
                 android:hint="Paste a product page link here"
-                android:textColorHint="@color/background"
+                android:textColorHint   ="@color/background"
                 android:imeOptions="actionDone"
                 android:paddingBottom="@dimen/left"
                 android:paddingLeft="5dp"
                 android:paddingTop="@dimen/left"
                 android:singleLine="true"
                 android:textAppearance="?android:textAppearanceSmall"/>
+
 
         </RelativeLayout>
 
@@ -81,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/editlayout"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:fillViewport="true"
                     android:scrollbars="none">
 
@@ -105,6 +106,22 @@
                     android:descendantFocusability="beforeDescendants"
                     android:focusableInTouchMode="true">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="26dp"
+                        android:text="Supported Websites"
+                        android:textColor="#fff"
+                        android:alpha = "0.8"
+                        android:padding="3dp"
+
+                        android:textSize="14sp"
+                        android:id="@+id/supported"
+                        android:gravity = "center"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true" />
+
+
+
                     <RelativeLayout
                         android:id="@+id/not"
                         android:layout_width="wrap_content"
@@ -114,6 +131,8 @@
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:elevation="5dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_below="@+id/supported"
                         android:layout_marginBottom="10dp"
                         android:visibility="gone"
                         >
@@ -207,25 +226,12 @@
                             android:textStyle="bold"/>
                     </RelativeLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="26dp"
-                        android:text="Supported Websites"
-                        android:textColor="#fff"
-                        android:alpha = "0.8"
-                        android:padding="3dp"
 
-                        android:textSize="14sp"
-
-                        android:id="@+id/supported"
-                        android:gravity = "center"
-
-                        android:layout_below="@+id/not"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="210dp"
-                        android:layout_below="@+id/supported"
+                        android:layout_below="@+id/not"
                         android:layout_marginBottom="5dp">
                     <android.support.v4.view.ViewPager
                         android:id="@+id/imageslider"
@@ -293,6 +299,8 @@
 
 
                         </RelativeLayout>
+
+
 
 
                     </RelativeLayout>

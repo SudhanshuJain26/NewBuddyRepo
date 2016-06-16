@@ -706,8 +706,10 @@ public class PaymentLive  extends Activity {
                 payload.put("seller",cred.getString("seller", ""));
                 payload.put("sellingPrice",cred.getInt("sp", 0));
                 payload.put("downPayment",payamt);
-                int loanamt=cred.getInt("emi",0)*cred.getInt("monthtenure",0);
-                payload.put("loanAmount",loanamt-cred.getInt("interEst",0));
+                //int loanamt=cred.getInt("emi",0)*cred.getInt("monthtenure",0);
+//                get.getInt("downpayment", 0)
+                int loanamt=cred.getInt("sp", 0)-cred.getInt("downpayment", 0)-cred.getInt("discount",0)+cred.getInt("service",0);
+                payload.put("loanAmount",loanamt);
                 if(cred.getInt("emi",0)==0)
                     payload.put("emiTenure",0);
                 else

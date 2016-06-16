@@ -358,7 +358,6 @@
                         android:id="@+id/ecom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/link"
                         android:layout_marginLeft="@dimen/left"
                         android:layout_marginTop="@dimen/left"
                         android:padding="4dp"

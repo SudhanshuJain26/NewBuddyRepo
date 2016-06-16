@@ -596,6 +596,13 @@
                                 android:textScaleX="1.1"
                                 android:layout_gravity="center_vertical"/>
 
+                            <!--<ProgressBar-->
+                                <!--android:id="@+id/progressBar1"-->
+                                <!--style="?android:attr/progressBarStyleLarge"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_centerHorizontal="true" />-->
+
 
                         </LinearLayout>
 
@@ -1209,596 +1216,610 @@
                             <!--android:layout_gravity="center_vertical"/>-->
                         </LinearLayout>
 
-                        <HorizontalScrollView
+                        <indwin.c3.shareapp.Views.CustomHorizontalScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="#3380B6"
-                            android:layout_marginLeft="8dp"
-                            android:scrollbars="none">
-
-                        <com.balysv.materialripple.MaterialRippleLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:mrl_rippleAlpha="0.10"
-                            app:mrl_rippleColor="@color/rippplecolorlist"
-                            app:mrl_rippleDimension="1dp"
-                            app:mrl_rippleDuration="250"
-                            app:mrl_rippleHover="true"
-                            app:mrl_rippleOverlay="false">
+                            android:id="@+id/horizontal1">
 
                             <LinearLayout
-
-                                android:layout_width="match_parent"
+                                android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/background"
-                                android:orientation="horizontal"
-                                >
-
-                                <RelativeLayout
-                                    android:layout_width="140dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="5dp"
-                                    android:background="#fff"
-                                    android:id="@+id/rl11"
-                                    android:clickable="true"
-                                   >
-
-                                    <ImageView
-                                        android:id="@+id/img11"
-                                        android:layout_width="280dp"
-                                        android:layout_height="120dp"
-                                        android:padding="@dimen/fab_margin"
-                                        android:src="@drawable/mob"
-                                        android:layout_alignTop="@+id/brand11"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true" />
-
-                                    <ImageView
-                                        android:id="@+id/brand11"
-                                        android:layout_width="25dp"
-                                        android:layout_height="25dp"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_margin="4dp"
-                                        android:src="@drawable/sdeal_fav1x"/>
-
-                                    <TextView
-                                        android:id="@+id/titlexxx11"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_below="@+id/img11"
-                                        android:gravity="center"
-                                        android:maxLines = "2"
-                                        android:textSize="12sp"
-                                        android:text="Apple iPhone 6"
-                                        android:fontFamily="sans-serif-light"
-                                        android:paddingLeft = "4dp"
-                                        android:paddingRight="4dp"
-                                         />
-
-                                    <TextView
-                                        android:id="@+id/title11"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/titlexxx11"
-                                        android:layout_marginBottom="@dimen/four"
-                                        android:layout_marginTop="5dp"
-                                        android:fontFamily="sans-serif-medium"
-
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:text="Apple iPhone 6"
-                                        android:textColor="#33A4D0"/>
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="140dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="5dp"
-                                    android:background="#fff"
-                                    android:id="@+id/rl12"
-                                    android:clickable="true">
-
-                                    <ImageView
-                                        android:id="@+id/img12"
-                                        android:layout_width="280dp"
-                                        android:layout_height="120dp"
-                                        android:padding="@dimen/fab_margin"
-                                        android:src="@drawable/mob"
-                                        android:layout_alignTop="@+id/brand12"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true" />
-
-                                    <ImageView
-                                        android:id="@+id/brand12"
-                                        android:layout_width="25dp"
-                                        android:layout_height="25dp"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_margin="4dp"
-                                        android:src="@drawable/sdeal_fav1x"/>
-
-                                    <TextView
-                                        android:id="@+id/titlexxx12"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_below="@id/img12"
-                                        android:gravity="center"
-                                        android:textSize="12sp"
-                                        android:maxLines="2"
-                                        android:text="Apple iPhone 6"
-                                        android:fontFamily="sans-serif-light"
-                                        android:paddingLeft = "4dp"
-                                        android:paddingRight="4dp"
-                                        />
-
-                                    <TextView
-                                        android:id="@+id/title12"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/titlexxx12"
-                                        android:layout_marginBottom="@dimen/four"
-                                        android:layout_marginTop="5dp"
-                                        android:fontFamily="sans-serif-medium"
-
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:text="Apple iPhone 6"
-                                        android:textColor="#33A4D0"/>
-                                </RelativeLayout>
-
-                                <!--<View-->
-                                    <!--android:layout_width="1dp"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:background="#664A4A4A"/>-->
-
-                                <RelativeLayout
-                                    android:layout_width="140dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="5dp"
-                                    android:background="#fff"
-                                    android:id="@+id/rl13"
-                                    android:clickable="true">
-
-                                    <ImageView
-                                        android:id="@+id/img13"
-                                        android:layout_width="280dp"
-                                        android:layout_height="120dp"
-                                        android:padding="@dimen/fab_margin"
-                                        android:src="@drawable/mob"
-                                        android:layout_alignTop="@+id/brand13"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true" />
-
-                                    <ImageView
-                                        android:id="@+id/brand13"
-                                        android:layout_width="25dp"
-                                        android:layout_height="25dp"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_margin="4dp"
-                                        android:src="@drawable/sdeal_fav1x"/>
-
-                                    <TextView
-                                        android:id="@+id/titlexxx13"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_below="@id/img13"
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:textSize="12sp"
-                                        android:text="Apple iPhone 6"
-                                        android:fontFamily="sans-serif-light"
-                                        android:paddingLeft = "4dp"
-                                        android:paddingRight="4dp"
-                                         />
-
-                                    <TextView
-                                        android:id="@+id/title13"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/titlexxx13"
-                                        android:layout_marginBottom="@dimen/four"
-                                        android:layout_marginTop="5dp"
-                                        android:fontFamily="sans-serif-medium"
-
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:text="Apple iPhone 6"
-                                        android:textColor="#33A4D0"/>
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="140dp"
-                                    android:id="@+id/rl14"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="5dp"
-                                    android:background="#fff"
-                                    android:clickable="true"
-                                    >
-
-                                    <ImageView
-                                        android:id="@+id/img14"
-                                        android:layout_width="280dp"
-                                        android:layout_height="120dp"
-                                        android:padding="@dimen/fab_margin"
-                                        android:src="@drawable/mob"
-                                        android:layout_alignTop="@+id/brand14"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true" />
-
-                                    <ImageView
-                                        android:id="@+id/brand14"
-                                        android:layout_width="25dp"
-                                        android:layout_height="25dp"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_margin="4dp"
-                                        android:src="@drawable/sdeal_fav1x"/>
-
-                                    <TextView
-                                        android:id="@+id/titlexxx14"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_below="@id/img14"
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:textSize="12sp"
-                                        android:text="Apple iPhone 6"
-                                        android:fontFamily="sans-serif-light"
-                                        android:paddingLeft = "4dp"
-                                        android:paddingRight="4dp"
-                                         />
-
-                                    <TextView
-                                        android:id="@+id/title14"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/titlexxx14"
-                                        android:layout_marginBottom="@dimen/four"
-                                        android:layout_marginTop="5dp"
-                                        android:fontFamily="sans-serif-medium"
-
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:text="Apple iPhone 6"
-                                        android:textColor="#33A4D0"/>
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="140dp"
-                                    android:id="@+id/rl15"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="5dp"
-                                    android:background="#fff"
-                                    android:clickable="true"
-                                    >
-
-                                    <ImageView
-                                        android:id="@+id/img15"
-                                        android:layout_width="280dp"
-                                        android:layout_height="120dp"
-                                        android:padding="@dimen/fab_margin"
-                                        android:src="@drawable/mob"
-                                        android:layout_alignTop="@+id/brand15"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true" />
-
-                                    <ImageView
-                                        android:id="@+id/brand15"
-                                        android:layout_width="25dp"
-                                        android:layout_height="25dp"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_margin="4dp"
-                                        android:src="@drawable/sdeal_fav1x"/>
-
-                                    <TextView
-                                        android:id="@+id/titlexxx15"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_below="@id/img15"
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:textSize="12sp"
-                                        android:text="Apple iPhone 6"
-                                        android:fontFamily="sans-serif-light"
-                                        android:paddingRight="4dp"
-                                        android:paddingLeft="4dp"
-                                        />
-
-                                    <TextView
-                                        android:id="@+id/title15"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/titlexxx15"
-                                        android:layout_marginBottom="@dimen/four"
-                                        android:layout_marginTop="5dp"
-                                        android:fontFamily="sans-serif-medium"
-
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:text="Apple iPhone 6"
-                                        android:textColor="#33A4D0"/>
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="140dp"
-                                    android:id="@+id/rl16"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="5dp"
-                                    android:background="#fff"
-                                    android:clickable="true"
-                                    >
-
-                                    <ImageView
-                                        android:id="@+id/img16"
-                                        android:layout_width="280dp"
-                                        android:layout_height="120dp"
-                                        android:padding="@dimen/fab_margin"
-                                        android:src="@drawable/mob"
-                                        android:layout_alignTop="@+id/brand16"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true" />
-
-                                    <ImageView
-                                        android:id="@+id/brand16"
-                                        android:layout_width="25dp"
-                                        android:layout_height="25dp"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_margin="4dp"
-                                        android:src="@drawable/sdeal_fav1x"/>
-
-                                    <TextView
-                                        android:id="@+id/titlexxx16"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_below="@id/img16"
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:textSize="12sp"
-                                        android:text="Apple iPhone 6"
-                                        android:fontFamily="sans-serif-light"
-                                        android:paddingLeft = "4dp"
-                                        android:paddingRight="4dp"
-                                        />
-
-                                    <TextView
-                                        android:id="@+id/title16"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/titlexxx16"
-                                        android:layout_marginBottom="@dimen/four"
-                                        android:layout_marginTop="5dp"
-                                        android:fontFamily="sans-serif-medium"
-
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:text="Apple iPhone 6"
-                                        android:textColor="#33A4D0"/>
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="140dp"
-                                    android:id="@+id/rl17"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="5dp"
-                                    android:background="#fff"
-                                    android:clickable="true"
-                                    >
-
-                                    <ImageView
-                                        android:id="@+id/img17"
-                                        android:layout_width="280dp"
-                                        android:layout_height="120dp"
-                                        android:padding="@dimen/fab_margin"
-                                        android:src="@drawable/mob"
-                                        android:layout_alignTop="@+id/brand17"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true" />
-
-                                    <ImageView
-                                        android:id="@+id/brand17"
-                                        android:layout_width="25dp"
-                                        android:layout_height="25dp"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_margin="4dp"
-                                        android:src="@drawable/sdeal_fav1x"/>
-
-                                    <TextView
-                                        android:id="@+id/titlexxx17"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_below="@id/img17"
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:textSize="12sp"
-                                        android:text="Apple iPhone 6"
-                                        android:fontFamily="sans-serif-light"
-                                        android:paddingLeft = "4dp"
-                                        android:paddingRight="4dp"
-                                        />
-
-                                    <TextView
-                                        android:id="@+id/title17"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/titlexxx17"
-                                        android:layout_marginBottom="@dimen/four"
-                                        android:layout_marginTop="5dp"
-                                        android:fontFamily="sans-serif-medium"
-
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:text="Apple iPhone 6"
-                                        android:textColor="#33A4D0"/>
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="140dp"
-                                    android:id="@+id/rl18"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="5dp"
-                                    android:background="#fff"
-                                    android:clickable="true"
-                                    >
-
-                                    <ImageView
-                                        android:id="@+id/img18"
-                                        android:layout_width="280dp"
-                                        android:layout_height="120dp"
-                                        android:padding="@dimen/fab_margin"
-                                        android:src="@drawable/mob"
-                                        android:layout_alignTop="@+id/brand18"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true" />
-
-                                    <ImageView
-                                        android:id="@+id/brand18"
-                                        android:layout_width="25dp"
-                                        android:layout_height="25dp"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_margin="4dp"
-                                        android:src="@drawable/sdeal_fav1x"/>
-
-                                    <TextView
-                                        android:id="@+id/titlexxx18"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_below="@id/img18"
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:textSize="12sp"
-                                        android:text="Apple iPhone 6"
-                                        android:fontFamily="sans-serif-light"
-                                        android:paddingLeft = "4dp"
-                                        android:paddingRight="4dp"
-                                        />
-
-                                    <TextView
-                                        android:id="@+id/title18"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/titlexxx18"
-                                        android:layout_marginBottom="@dimen/four"
-                                        android:layout_marginTop="5dp"
-                                        android:fontFamily="sans-serif-medium"
-
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:text="Apple iPhone 6"
-                                        android:textColor="#33A4D0"/>
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="140dp"
-                                    android:id="@+id/rl19"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="5dp"
-                                    android:background="#fff"
-                                    android:clickable="true"
-                                    >
-
-                                    <ImageView
-                                        android:id="@+id/img19"
-                                        android:layout_width="280dp"
-                                        android:layout_height="120dp"
-                                        android:padding="@dimen/fab_margin"
-                                        android:src="@drawable/mob"
-                                        android:layout_alignTop="@+id/brand19"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true" />
-
-                                    <ImageView
-                                        android:id="@+id/brand19"
-                                        android:layout_width="25dp"
-                                        android:layout_height="25dp"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_margin="4dp"
-                                        android:src="@drawable/sdeal_fav1x"/>
-
-                                    <TextView
-                                        android:id="@+id/titlexxx19"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_below="@id/img19"
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:textSize="12sp"
-                                        android:text="Apple iPhone 6"
-                                        android:fontFamily="sans-serif-light"
-                                        android:paddingLeft = "4dp"
-                                        android:paddingRight="4dp"
-                                        />
-
-                                    <TextView
-                                        android:id="@+id/title19"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/titlexxx19"
-                                        android:layout_marginBottom="@dimen/four"
-                                        android:layout_marginTop="5dp"
-                                        android:fontFamily="sans-serif-medium"
-
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:text="Apple iPhone 6"
-                                        android:textColor="#33A4D0"/>
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="140dp"
-                                    android:id="@+id/rl20"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="5dp"
-                                    android:background="#fff"
-                                    android:clickable="true"
-                                    >
-
-                                    <ImageView
-                                        android:id="@+id/img20"
-                                        android:layout_width="280dp"
-                                        android:layout_height="120dp"
-                                        android:padding="@dimen/fab_margin"
-                                        android:src="@drawable/mob"
-                                        android:layout_alignTop="@+id/brand20"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true" />
-
-                                    <ImageView
-                                        android:id="@+id/brand20"
-                                        android:layout_width="25dp"
-                                        android:layout_height="25dp"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_margin="4dp"
-                                        android:src="@drawable/sdeal_fav1x"/>
-
-                                    <TextView
-                                        android:id="@+id/titlexxx20"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_below="@id/img20"
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:textSize="12sp"
-                                        android:text="Apple iPhone 6"
-                                        android:fontFamily="sans-serif-light"
-                                        android:paddingLeft = "4dp"
-                                        android:paddingRight="4dp"
-                                        />
-
-                                    <TextView
-                                        android:id="@+id/title20"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/titlexxx20"
-                                        android:layout_marginBottom="@dimen/four"
-                                        android:layout_marginTop="5dp"
-                                        android:fontFamily="sans-serif-medium"
-
-                                        android:gravity="center"
-                                        android:maxLines="2"
-                                        android:text="Apple iPhone 6"
-                                        android:textColor="#33A4D0"/>
-                                </RelativeLayout>
+                                android:orientation="horizontal" >
                             </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
-                        </HorizontalScrollView>
+
+
+                        </indwin.c3.shareapp.Views.CustomHorizontalScrollView>
+
+                        <!--<HorizontalScrollView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:background="#3380B6"-->
+                            <!--android:layout_marginLeft="8dp"-->
+                            <!--android:scrollbars="none">-->
+
+                        <!--<com.balysv.materialripple.MaterialRippleLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--app:mrl_rippleAlpha="0.10"-->
+                            <!--app:mrl_rippleColor="@color/rippplecolorlist"-->
+                            <!--app:mrl_rippleDimension="1dp"-->
+                            <!--app:mrl_rippleDuration="250"-->
+                            <!--app:mrl_rippleHover="true"-->
+                            <!--app:mrl_rippleOverlay="false">-->
+
+                            <!--<LinearLayout-->
+
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:background="@color/background"-->
+                                <!--android:orientation="horizontal"-->
+                                <!--&gt;-->
+
+                                <!--<RelativeLayout-->
+                                    <!--android:layout_width="140dp"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_margin="5dp"-->
+                                    <!--android:background="#fff"-->
+                                    <!--android:id="@+id/rl11"-->
+                                    <!--android:clickable="true"-->
+                                   <!--&gt;-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/img11"-->
+                                        <!--android:layout_width="280dp"-->
+                                        <!--android:layout_height="120dp"-->
+                                        <!--android:padding="@dimen/fab_margin"-->
+                                        <!--android:src="@drawable/mob"-->
+                                        <!--android:layout_alignTop="@+id/brand11"-->
+                                        <!--android:layout_alignParentLeft="true"-->
+                                        <!--android:layout_alignParentStart="true" />-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/brand11"-->
+                                        <!--android:layout_width="25dp"-->
+                                        <!--android:layout_height="25dp"-->
+                                        <!--android:layout_alignParentRight="true"-->
+                                        <!--android:layout_margin="4dp"-->
+                                        <!--android:src="@drawable/sdeal_fav1x"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/titlexxx11"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="30dp"-->
+                                        <!--android:layout_below="@+id/img11"-->
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines = "2"-->
+                                        <!--android:textSize="12sp"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:fontFamily="sans-serif-light"-->
+                                        <!--android:paddingLeft = "4dp"-->
+                                        <!--android:paddingRight="4dp"-->
+                                         <!--/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/title11"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_below="@id/titlexxx11"-->
+                                        <!--android:layout_marginBottom="@dimen/four"-->
+                                        <!--android:layout_marginTop="5dp"-->
+                                        <!--android:fontFamily="sans-serif-medium"-->
+
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:textColor="#33A4D0"/>-->
+                                <!--</RelativeLayout>-->
+
+                                <!--<RelativeLayout-->
+                                    <!--android:layout_width="140dp"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_margin="5dp"-->
+                                    <!--android:background="#fff"-->
+                                    <!--android:id="@+id/rl12"-->
+                                    <!--android:clickable="true">-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/img12"-->
+                                        <!--android:layout_width="280dp"-->
+                                        <!--android:layout_height="120dp"-->
+                                        <!--android:padding="@dimen/fab_margin"-->
+                                        <!--android:src="@drawable/mob"-->
+                                        <!--android:layout_alignTop="@+id/brand12"-->
+                                        <!--android:layout_alignParentLeft="true"-->
+                                        <!--android:layout_alignParentStart="true" />-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/brand12"-->
+                                        <!--android:layout_width="25dp"-->
+                                        <!--android:layout_height="25dp"-->
+                                        <!--android:layout_alignParentRight="true"-->
+                                        <!--android:layout_margin="4dp"-->
+                                        <!--android:src="@drawable/sdeal_fav1x"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/titlexxx12"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="30dp"-->
+                                        <!--android:layout_below="@id/img12"-->
+                                        <!--android:gravity="center"-->
+                                        <!--android:textSize="12sp"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:fontFamily="sans-serif-light"-->
+                                        <!--android:paddingLeft = "4dp"-->
+                                        <!--android:paddingRight="4dp"-->
+                                        <!--/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/title12"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_below="@id/titlexxx12"-->
+                                        <!--android:layout_marginBottom="@dimen/four"-->
+                                        <!--android:layout_marginTop="5dp"-->
+                                        <!--android:fontFamily="sans-serif-medium"-->
+
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:textColor="#33A4D0"/>-->
+                                <!--</RelativeLayout>-->
+
+                                <!--&lt;!&ndash;<View&ndash;&gt;-->
+                                    <!--&lt;!&ndash;android:layout_width="1dp"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;android:background="#664A4A4A"/>&ndash;&gt;-->
+
+                                <!--<RelativeLayout-->
+                                    <!--android:layout_width="140dp"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_margin="5dp"-->
+                                    <!--android:background="#fff"-->
+                                    <!--android:id="@+id/rl13"-->
+                                    <!--android:clickable="true">-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/img13"-->
+                                        <!--android:layout_width="280dp"-->
+                                        <!--android:layout_height="120dp"-->
+                                        <!--android:padding="@dimen/fab_margin"-->
+                                        <!--android:src="@drawable/mob"-->
+                                        <!--android:layout_alignTop="@+id/brand13"-->
+                                        <!--android:layout_alignParentLeft="true"-->
+                                        <!--android:layout_alignParentStart="true" />-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/brand13"-->
+                                        <!--android:layout_width="25dp"-->
+                                        <!--android:layout_height="25dp"-->
+                                        <!--android:layout_alignParentRight="true"-->
+                                        <!--android:layout_margin="4dp"-->
+                                        <!--android:src="@drawable/sdeal_fav1x"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/titlexxx13"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="30dp"-->
+                                        <!--android:layout_below="@id/img13"-->
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:textSize="12sp"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:fontFamily="sans-serif-light"-->
+                                        <!--android:paddingLeft = "4dp"-->
+                                        <!--android:paddingRight="4dp"-->
+                                         <!--/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/title13"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_below="@id/titlexxx13"-->
+                                        <!--android:layout_marginBottom="@dimen/four"-->
+                                        <!--android:layout_marginTop="5dp"-->
+                                        <!--android:fontFamily="sans-serif-medium"-->
+
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:textColor="#33A4D0"/>-->
+                                <!--</RelativeLayout>-->
+
+                                <!--<RelativeLayout-->
+                                    <!--android:layout_width="140dp"-->
+                                    <!--android:id="@+id/rl14"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_margin="5dp"-->
+                                    <!--android:background="#fff"-->
+                                    <!--android:clickable="true"-->
+                                    <!--&gt;-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/img14"-->
+                                        <!--android:layout_width="280dp"-->
+                                        <!--android:layout_height="120dp"-->
+                                        <!--android:padding="@dimen/fab_margin"-->
+                                        <!--android:src="@drawable/mob"-->
+                                        <!--android:layout_alignTop="@+id/brand14"-->
+                                        <!--android:layout_alignParentLeft="true"-->
+                                        <!--android:layout_alignParentStart="true" />-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/brand14"-->
+                                        <!--android:layout_width="25dp"-->
+                                        <!--android:layout_height="25dp"-->
+                                        <!--android:layout_alignParentRight="true"-->
+                                        <!--android:layout_margin="4dp"-->
+                                        <!--android:src="@drawable/sdeal_fav1x"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/titlexxx14"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="30dp"-->
+                                        <!--android:layout_below="@id/img14"-->
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:textSize="12sp"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:fontFamily="sans-serif-light"-->
+                                        <!--android:paddingLeft = "4dp"-->
+                                        <!--android:paddingRight="4dp"-->
+                                         <!--/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/title14"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_below="@id/titlexxx14"-->
+                                        <!--android:layout_marginBottom="@dimen/four"-->
+                                        <!--android:layout_marginTop="5dp"-->
+                                        <!--android:fontFamily="sans-serif-medium"-->
+
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:textColor="#33A4D0"/>-->
+                                <!--</RelativeLayout>-->
+
+                                <!--<RelativeLayout-->
+                                    <!--android:layout_width="140dp"-->
+                                    <!--android:id="@+id/rl15"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_margin="5dp"-->
+                                    <!--android:background="#fff"-->
+                                    <!--android:clickable="true"-->
+                                    <!--&gt;-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/img15"-->
+                                        <!--android:layout_width="280dp"-->
+                                        <!--android:layout_height="120dp"-->
+                                        <!--android:padding="@dimen/fab_margin"-->
+                                        <!--android:src="@drawable/mob"-->
+                                        <!--android:layout_alignTop="@+id/brand15"-->
+                                        <!--android:layout_alignParentLeft="true"-->
+                                        <!--android:layout_alignParentStart="true" />-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/brand15"-->
+                                        <!--android:layout_width="25dp"-->
+                                        <!--android:layout_height="25dp"-->
+                                        <!--android:layout_alignParentRight="true"-->
+                                        <!--android:layout_margin="4dp"-->
+                                        <!--android:src="@drawable/sdeal_fav1x"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/titlexxx15"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="30dp"-->
+                                        <!--android:layout_below="@id/img15"-->
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:textSize="12sp"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:fontFamily="sans-serif-light"-->
+                                        <!--android:paddingRight="4dp"-->
+                                        <!--android:paddingLeft="4dp"-->
+                                        <!--/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/title15"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_below="@id/titlexxx15"-->
+                                        <!--android:layout_marginBottom="@dimen/four"-->
+                                        <!--android:layout_marginTop="5dp"-->
+                                        <!--android:fontFamily="sans-serif-medium"-->
+
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:textColor="#33A4D0"/>-->
+                                <!--</RelativeLayout>-->
+
+                                <!--<RelativeLayout-->
+                                    <!--android:layout_width="140dp"-->
+                                    <!--android:id="@+id/rl16"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_margin="5dp"-->
+                                    <!--android:background="#fff"-->
+                                    <!--android:clickable="true"-->
+                                    <!--&gt;-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/img16"-->
+                                        <!--android:layout_width="280dp"-->
+                                        <!--android:layout_height="120dp"-->
+                                        <!--android:padding="@dimen/fab_margin"-->
+                                        <!--android:src="@drawable/mob"-->
+                                        <!--android:layout_alignTop="@+id/brand16"-->
+                                        <!--android:layout_alignParentLeft="true"-->
+                                        <!--android:layout_alignParentStart="true" />-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/brand16"-->
+                                        <!--android:layout_width="25dp"-->
+                                        <!--android:layout_height="25dp"-->
+                                        <!--android:layout_alignParentRight="true"-->
+                                        <!--android:layout_margin="4dp"-->
+                                        <!--android:src="@drawable/sdeal_fav1x"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/titlexxx16"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="30dp"-->
+                                        <!--android:layout_below="@id/img16"-->
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:textSize="12sp"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:fontFamily="sans-serif-light"-->
+                                        <!--android:paddingLeft = "4dp"-->
+                                        <!--android:paddingRight="4dp"-->
+                                        <!--/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/title16"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_below="@id/titlexxx16"-->
+                                        <!--android:layout_marginBottom="@dimen/four"-->
+                                        <!--android:layout_marginTop="5dp"-->
+                                        <!--android:fontFamily="sans-serif-medium"-->
+
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:textColor="#33A4D0"/>-->
+                                <!--</RelativeLayout>-->
+
+                                <!--<RelativeLayout-->
+                                    <!--android:layout_width="140dp"-->
+                                    <!--android:id="@+id/rl17"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_margin="5dp"-->
+                                    <!--android:background="#fff"-->
+                                    <!--android:clickable="true"-->
+                                    <!--&gt;-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/img17"-->
+                                        <!--android:layout_width="280dp"-->
+                                        <!--android:layout_height="120dp"-->
+                                        <!--android:padding="@dimen/fab_margin"-->
+                                        <!--android:src="@drawable/mob"-->
+                                        <!--android:layout_alignTop="@+id/brand17"-->
+                                        <!--android:layout_alignParentLeft="true"-->
+                                        <!--android:layout_alignParentStart="true" />-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/brand17"-->
+                                        <!--android:layout_width="25dp"-->
+                                        <!--android:layout_height="25dp"-->
+                                        <!--android:layout_alignParentRight="true"-->
+                                        <!--android:layout_margin="4dp"-->
+                                        <!--android:src="@drawable/sdeal_fav1x"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/titlexxx17"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="30dp"-->
+                                        <!--android:layout_below="@id/img17"-->
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:textSize="12sp"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:fontFamily="sans-serif-light"-->
+                                        <!--android:paddingLeft = "4dp"-->
+                                        <!--android:paddingRight="4dp"-->
+                                        <!--/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/title17"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_below="@id/titlexxx17"-->
+                                        <!--android:layout_marginBottom="@dimen/four"-->
+                                        <!--android:layout_marginTop="5dp"-->
+                                        <!--android:fontFamily="sans-serif-medium"-->
+
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:textColor="#33A4D0"/>-->
+                                <!--</RelativeLayout>-->
+
+                                <!--<RelativeLayout-->
+                                    <!--android:layout_width="140dp"-->
+                                    <!--android:id="@+id/rl18"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_margin="5dp"-->
+                                    <!--android:background="#fff"-->
+                                    <!--android:clickable="true"-->
+                                    <!--&gt;-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/img18"-->
+                                        <!--android:layout_width="280dp"-->
+                                        <!--android:layout_height="120dp"-->
+                                        <!--android:padding="@dimen/fab_margin"-->
+                                        <!--android:src="@drawable/mob"-->
+                                        <!--android:layout_alignTop="@+id/brand18"-->
+                                        <!--android:layout_alignParentLeft="true"-->
+                                        <!--android:layout_alignParentStart="true" />-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/brand18"-->
+                                        <!--android:layout_width="25dp"-->
+                                        <!--android:layout_height="25dp"-->
+                                        <!--android:layout_alignParentRight="true"-->
+                                        <!--android:layout_margin="4dp"-->
+                                        <!--android:src="@drawable/sdeal_fav1x"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/titlexxx18"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="30dp"-->
+                                        <!--android:layout_below="@id/img18"-->
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:textSize="12sp"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:fontFamily="sans-serif-light"-->
+                                        <!--android:paddingLeft = "4dp"-->
+                                        <!--android:paddingRight="4dp"-->
+                                        <!--/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/title18"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_below="@id/titlexxx18"-->
+                                        <!--android:layout_marginBottom="@dimen/four"-->
+                                        <!--android:layout_marginTop="5dp"-->
+                                        <!--android:fontFamily="sans-serif-medium"-->
+
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:textColor="#33A4D0"/>-->
+                                <!--</RelativeLayout>-->
+
+                                <!--<RelativeLayout-->
+                                    <!--android:layout_width="140dp"-->
+                                    <!--android:id="@+id/rl19"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_margin="5dp"-->
+                                    <!--android:background="#fff"-->
+                                    <!--android:clickable="true"-->
+                                    <!--&gt;-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/img19"-->
+                                        <!--android:layout_width="280dp"-->
+                                        <!--android:layout_height="120dp"-->
+                                        <!--android:padding="@dimen/fab_margin"-->
+                                        <!--android:src="@drawable/mob"-->
+                                        <!--android:layout_alignTop="@+id/brand19"-->
+                                        <!--android:layout_alignParentLeft="true"-->
+                                        <!--android:layout_alignParentStart="true" />-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/brand19"-->
+                                        <!--android:layout_width="25dp"-->
+                                        <!--android:layout_height="25dp"-->
+                                        <!--android:layout_alignParentRight="true"-->
+                                        <!--android:layout_margin="4dp"-->
+                                        <!--android:src="@drawable/sdeal_fav1x"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/titlexxx19"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="30dp"-->
+                                        <!--android:layout_below="@id/img19"-->
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:textSize="12sp"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:fontFamily="sans-serif-light"-->
+                                        <!--android:paddingLeft = "4dp"-->
+                                        <!--android:paddingRight="4dp"-->
+                                        <!--/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/title19"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_below="@id/titlexxx19"-->
+                                        <!--android:layout_marginBottom="@dimen/four"-->
+                                        <!--android:layout_marginTop="5dp"-->
+                                        <!--android:fontFamily="sans-serif-medium"-->
+
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:textColor="#33A4D0"/>-->
+                                <!--</RelativeLayout>-->
+
+                                <!--<RelativeLayout-->
+                                    <!--android:layout_width="140dp"-->
+                                    <!--android:id="@+id/rl20"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_margin="5dp"-->
+                                    <!--android:background="#fff"-->
+                                    <!--android:clickable="true"-->
+                                    <!--&gt;-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/img20"-->
+                                        <!--android:layout_width="280dp"-->
+                                        <!--android:layout_height="120dp"-->
+                                        <!--android:padding="@dimen/fab_margin"-->
+                                        <!--android:src="@drawable/mob"-->
+                                        <!--android:layout_alignTop="@+id/brand20"-->
+                                        <!--android:layout_alignParentLeft="true"-->
+                                        <!--android:layout_alignParentStart="true" />-->
+
+                                    <!--<ImageView-->
+                                        <!--android:id="@+id/brand20"-->
+                                        <!--android:layout_width="25dp"-->
+                                        <!--android:layout_height="25dp"-->
+                                        <!--android:layout_alignParentRight="true"-->
+                                        <!--android:layout_margin="4dp"-->
+                                        <!--android:src="@drawable/sdeal_fav1x"/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/titlexxx20"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="30dp"-->
+                                        <!--android:layout_below="@id/img20"-->
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:textSize="12sp"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:fontFamily="sans-serif-light"-->
+                                        <!--android:paddingLeft = "4dp"-->
+                                        <!--android:paddingRight="4dp"-->
+                                        <!--/>-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/title20"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_below="@id/titlexxx20"-->
+                                        <!--android:layout_marginBottom="@dimen/four"-->
+                                        <!--android:layout_marginTop="5dp"-->
+                                        <!--android:fontFamily="sans-serif-medium"-->
+
+                                        <!--android:gravity="center"-->
+                                        <!--android:maxLines="2"-->
+                                        <!--android:text="Apple iPhone 6"-->
+                                        <!--android:textColor="#33A4D0"/>-->
+                                <!--</RelativeLayout>-->
+                            <!--</LinearLayout>-->
+                        <!--</com.balysv.materialripple.MaterialRippleLayout>-->
+                        <!--</HorizontalScrollView>-->
 
                         <LinearLayout
                             android:layout_width="match_parent"

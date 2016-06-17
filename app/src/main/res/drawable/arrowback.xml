@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item><layer-list>
+        <item><shape>
+            <padding  android:left="10dp"  />
+        </shape></item>
+        <item ><bitmap android:tint="#000000"  android:gravity="bottom|right" android:src="@drawable/downar" />   // you can use any other image here, instead of default_holo_dark_am
+        </item>
+    </layer-list></item>
+
+</selector>

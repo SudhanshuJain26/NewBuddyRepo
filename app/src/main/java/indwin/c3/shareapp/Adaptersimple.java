@@ -99,66 +99,69 @@ public class Adaptersimple extends BaseAdapter {
         final TextView textView3 = (TextView) rowView.findViewById(R.id.addRess3);
         final TextView textView2 = (TextView) rowView.findViewById(R.id.addRess2);
         final ImageView imicon = (ImageView) rowView.findViewById(R.id.img);
-         edit = (ImageView) rowView.findViewById(R.id.edit);
+        edit = (ImageView) rowView.findViewById(R.id.edit);
         if(position==0)
             edit.setVisibility(View.INVISIBLE);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-if(position!=0){
-                SharedPreferences tt=context.getSharedPreferences("cred", Context.MODE_PRIVATE);
-                int w=tt.getInt("add",0);
-                if(w==0) {
+                if(position!=0){
+                    SharedPreferences tt=context.getSharedPreferences("cred", Context.MODE_PRIVATE);
+                    int w=tt.getInt("add",0);
+//    w=3;
+                    if(w==0) {
 
-                    Intent inSend=new Intent(context,SendOtpaddress.class);
-                    ((Activity)context).finish();
-                    context.startActivity(inSend);
-                }
-                else{
+                        Intent inSend=new Intent(context,SendOtpaddress.class);
+                        ((Activity)context).finish();
+                        context.startActivity(inSend);
+                    }
+                    else{
 
-                    Deladd d=new Deladd();
-                    try{
+                        Deladd d=new Deladd();
+                        try{
 
-                        editnow=myList.get(position).getAdd().toString();}
-                    catch (Exception e)
-                    {}
+                            editnow=myList.get(position).getAdd().toString();}
+                        catch (Exception e)
+                        {}
 
-                    getli=myList.get(position).getLine1().toString();
+                        getli=myList.get(position).getLine1().toString();
 //                Toast.makeText(context, t, Toast.LENGTH_SHORT).show();
 
 
 
 
 
-                    RelativeLayout r = (RelativeLayout) vi.findViewById(R.id.cardeditAdd1);
-                    r.setVisibility(View.VISIBLE);
-                    ListView l = (ListView) vi.findViewById(R.id.list1);
-                    l.setVisibility(View.GONE);
-                    TextView paydo=(TextView)vi.findViewById(R.id.paydo);
-                    paydo.setVisibility(View.GONE);
-                    edt1=(EditText)vi.findViewById(R.id.edtAdd11);
-                    edt2=(EditText)vi.findViewById(R.id.edtAdd22);
-                    edt3=(EditText)vi.findViewById(R.id.edtAdd33);
-                    edt4=(EditText)vi.findViewById(R.id.edtAdd44);
-                    edt1.setText(myList.get(position).getLine1().toString());
-                    edt2.setText(myList.get(position).getLine2().toString());
-                    edt3.setText(myList.get(position).getcity().toString());
-                    edt4.setText(myList.get(position).getstate().toString());
-                    if(getli.contains("address"))
-                    {
+                        RelativeLayout r = (RelativeLayout) vi.findViewById(R.id.cardeditAdd1);
+                        r.setVisibility(View.VISIBLE);
+                        ListView l = (ListView) vi.findViewById(R.id.list1);
+                        l.setVisibility(View.GONE);
+                        TextView paydo=(TextView)vi.findViewById(R.id.paydo);
+                        paydo.setVisibility(View.GONE);
+                        edt1=(EditText)vi.findViewById(R.id.edtAdd11);
+                        edt2=(EditText)vi.findViewById(R.id.edtAdd22);
+                        edt3=(EditText)vi.findViewById(R.id.edtAdd33);
+                        edt4=(EditText)vi.findViewById(R.id.edtAdd44);
+                        edt1.setText(myList.get(position).getLine1().toString());
+                        edt2.setText(myList.get(position).getLine2().toString());
+                        edt3.setText(myList.get(position).getcity().toString());
+                        edt4.setText(myList.get(position).getstate().toString());
+                        if(getli.contains("address"))
+                        {
 
-                        delete.setVisibility(View.GONE);}
-                    else
-                        delete.setVisibility(View.VISIBLE);
-                    textAdd1.setVisibility(View.GONE);
-                    textAdd2.setVisibility(View.GONE);
-                    textAdd3.setVisibility(View.GONE);
+                            delete.setVisibility(View.GONE);}
+                        else{
+                            TextView newadd=(TextView)vi.findViewById(R.id.newAdd);
+                            newadd.setText("Update Address");
+                            delete.setVisibility(View.VISIBLE);}
+                        textAdd1.setVisibility(View.GONE);
+                        textAdd2.setVisibility(View.GONE);
+                        textAdd3.setVisibility(View.GONE);
 //                    Toast.makeText(context, "True that yo" + position, Toast.LENGTH_SHORT).show();
 //                    ((ImageView)rowView.findViewById(R.id.edit)).setVisibility(View.INVISIBLE);
 
-                    //edit.setVisibility(View.VISIBLE);
-                }
-            }}
+                        //edit.setVisibility(View.VISIBLE);
+                    }
+                }}
         });
         final RadioButton rd = (RadioButton) rowView.findViewById(R.id.radioAdd);
         SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
@@ -187,7 +190,7 @@ if(position!=0){
 //r.setVisibility(View.GONE);
 
                         checkR = (RadioButton) v.findViewById(R.id.radioAdd);
-                       // im.setVisibility(View.VISIBLE);
+                        // im.setVisibility(View.VISIBLE);
                         checkR.setChecked(true);
                     }
 
@@ -204,14 +207,14 @@ if(position!=0){
                     ((RadioButton) v.findViewById(R.id.radioAdd)).setChecked(true);
                     View p=parent.getRootView();
 //                    String cc=myList.get(position).getLine1().toString()+myList.get(position).getLine2().toString()+myList.get(position).getcity().toString()+myList.get(position).getstate().toString();
-               //     Toast.makeText(context, cc, Toast.LENGTH_SHORT).show();
+                    //     Toast.makeText(context, cc, Toast.LENGTH_SHORT).show();
                     SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
                     SharedPreferences.Editor e1=cred.edit();
                     String cc="";
                     if(position!=0)
-                    cc=myList.get(position).getLine1().toString()+myList.get(position).getLine2().toString()+myList.get(position).getcity().toString()+myList.get(position).getstate().toString();
+                        cc=myList.get(position).getLine1().toString()+myList.get(position).getLine2().toString()+myList.get(position).getcity().toString()+myList.get(position).getstate().toString();
                     else
-                    cc=myList.get(position).getLine1().toString();
+                        cc=myList.get(position).getLine1().toString();
                     e1.putString("address",cc);
                     e1.commit();
 
@@ -228,66 +231,66 @@ if(position!=0){
         View par=parent.getRootView();
         delete = (TextView) par.findViewById(R.id.delete);
 //        String cc=((TextView) par.findViewById(R.id.addRess2)).getText().toString();
-  //      Toast.makeText(context, cc, Toast.LENGTH_SHORT).show();
+        //      Toast.makeText(context, cc, Toast.LENGTH_SHORT).show();
         //radio now
         rradd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        }});
+            }});
 //radio ten
         rradd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(position==myList.size()-1){
-                SharedPreferences tt=context.getSharedPreferences("cred", Context.MODE_PRIVATE);
-                int w=tt.getInt("add",0);
-                if(w==0) {
+                    SharedPreferences tt=context.getSharedPreferences("cred", Context.MODE_PRIVATE);
+                    int w=tt.getInt("add",0);
+                    if(w==0) {
 
-                    Intent inSend=new Intent(context,SendOtpaddress.class);
-                    ((Activity)context).finish();
-                    context.startActivity(inSend);
-                }
-                else{
+                        Intent inSend=new Intent(context,SendOtpaddress.class);
+                        ((Activity)context).finish();
+                        context.startActivity(inSend);
+                    }
+                    else{
 
-Deladd d=new Deladd();
-                try{
+                        Deladd d=new Deladd();
+                        try{
 
-                 editnow=myList.get(position).getAdd().toString();}
-                catch (Exception e)
-                {}
+                            editnow=myList.get(position).getAdd().toString();}
+                        catch (Exception e)
+                        {}
 
-                getli=myList.get(position).getLine1().toString();
+                        getli=myList.get(position).getLine1().toString();
 //                Toast.makeText(context, t, Toast.LENGTH_SHORT).show();
 
 
 
 
-                    RelativeLayout r = (RelativeLayout) vi.findViewById(R.id.cardeditAdd1);
-                    r.setVisibility(View.VISIBLE);
-                    ListView l = (ListView) vi.findViewById(R.id.list1);
-                    l.setVisibility(View.GONE);
+                        RelativeLayout r = (RelativeLayout) vi.findViewById(R.id.cardeditAdd1);
+                        r.setVisibility(View.VISIBLE);
+                        ListView l = (ListView) vi.findViewById(R.id.list1);
+                        l.setVisibility(View.GONE);
 
-                    TextView paydo=(TextView)vi.findViewById(R.id.paydo);
-                    paydo.setVisibility(View.GONE);
-                edt1=(EditText)vi.findViewById(R.id.edtAdd11);
-                edt2=(EditText)vi.findViewById(R.id.edtAdd22);
-                edt3=(EditText)vi.findViewById(R.id.edtAdd33);
-                edt4=(EditText)vi.findViewById(R.id.edtAdd44);
+                        TextView paydo=(TextView)vi.findViewById(R.id.paydo);
+                        paydo.setVisibility(View.GONE);
+                        edt1=(EditText)vi.findViewById(R.id.edtAdd11);
+                        edt2=(EditText)vi.findViewById(R.id.edtAdd22);
+                        edt3=(EditText)vi.findViewById(R.id.edtAdd33);
+                        edt4=(EditText)vi.findViewById(R.id.edtAdd44);
 
-                if(getli.contains("address"))
-                {
+                        if(getli.contains("address"))
+                        {
 
-                    delete.setVisibility(View.GONE);}
-                else
-                    delete.setVisibility(View.VISIBLE);
-                    textAdd1.setVisibility(View.GONE);
-                textAdd2.setVisibility(View.GONE);
-                textAdd3.setVisibility(View.GONE);
+                            delete.setVisibility(View.GONE);}
+                        else
+                            delete.setVisibility(View.VISIBLE);
+                        textAdd1.setVisibility(View.GONE);
+                        textAdd2.setVisibility(View.GONE);
+                        textAdd3.setVisibility(View.GONE);
 //                    Toast.makeText(context, "True that yo" + position, Toast.LENGTH_SHORT).show();
 //                    ((ImageView)rowView.findViewById(R.id.edit)).setVisibility(View.INVISIBLE);
 
-                //edit.setVisibility(View.VISIBLE);
-                 }}
+                        //edit.setVisibility(View.VISIBLE);
+                    }}
                 else if(position!=myList.size()-1){
                     ViewGroup f = (ViewGroup) v;
 
@@ -375,12 +378,12 @@ Deladd d=new Deladd();
         String text1 = myList.get(position).getLine1().toString();
         textAdd1.setText(text1);
         try{
-        String text2 = myList.get(position).getLine2().toString();
-        String text3 = myList.get(position).getcity().toString();
-        String text4 = myList.get(position).getstate().toString();
+            String text2 = myList.get(position).getLine2().toString();
+            String text3 = myList.get(position).getcity().toString();
+            String text4 = myList.get(position).getstate().toString();
 
-        textAdd2.setText(text2);
-        textAdd3.setText(text3+""+text4);}
+            textAdd2.setText(text2);
+            textAdd3.setText(text3+""+text4);}
         catch (Exception e)
         {
             System.out.println(e.toString());
@@ -418,30 +421,30 @@ Deladd d=new Deladd();
 //
 //            }
 //        });
-            save.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    add = new Deladd();
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                add = new Deladd();
 
-                    sedt1 = edt1.getText().toString();
-                    sedt2 = edt2.getText().toString();
-                    sedt3 = edt3.getText().toString();
-                    sedt4 = edt4.getText().toString();
+                sedt1 = edt1.getText().toString();
+                sedt2 = edt2.getText().toString();
+                sedt3 = edt3.getText().toString();
+                sedt4 = edt4.getText().toString();
 //                Toast.makeText(context, ((EditText) vi.findViewById(R.id.edtAdd1)).getText().toString(), Toast.LENGTH_SHORT).show();
-                    if((sedt1.trim().length()>0)&&(sedt2.trim().length()>0)&&(sedt3.trim().length()>0)&&(sedt4.trim().length()>0)){
+                if((sedt1.trim().length()>0)&&(sedt2.trim().length()>0)&&(sedt3.trim().length()>0)&&(sedt4.trim().length()>0)){
                     add.setLine1(((EditText) vi.findViewById(R.id.edtAdd11)).getText().toString());
                     add.setLine2(sedt2);
                     add.setcity(sedt3);
                     add.setstate(sedt4);
                     new addAddress().execute();}
-                    else
-                    {
-                        Toast.makeText(context, "Please enter the complete details!", Toast.LENGTH_SHORT).show();
-                    }
-
-
+                else
+                {
+                    Toast.makeText(context, "Please enter the complete details!", Toast.LENGTH_SHORT).show();
                 }
-            });
+
+
+            }
+        });
         min.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -479,9 +482,9 @@ Deladd d=new Deladd();
         @Override
         protected String doInBackground(String... data) {
 
-             String del1="";
+            String del1="";
             try{
-                     del1 = data[0];}
+                del1 = data[0];}
             catch (Exception e){del1="";}
             //   HashMap<String, String> details = data[0];
             JSONObject payload = new JSONObject();
@@ -503,13 +506,13 @@ Deladd d=new Deladd();
                 if(del1.equals("delete"))
                     pay.put("isActive",false);
                 else
-                pay.put("isActive",true);
+                    pay.put("isActive",true);
                 pay.put("pin", "");
                 JSONObject pay2 = new JSONObject();
                 if(editnow.trim().length()!=0)
-                pay2.put(editnow, pay);
+                    pay2.put(editnow, pay);
                 else
-                pay2.put("add"+String.valueOf(Check),pay);
+                    pay2.put("add"+String.valueOf(Check),pay);
                 payload.put("deliveryAddress", pay2);
 
 //                payload.put("code", crcode);
@@ -564,20 +567,20 @@ Deladd d=new Deladd();
 //                        myListnew=new ArrayList<Deladd>();
                         for(int i=0;i<myList.size()-1;i++)
                         {
-if((!del1.equals("delete"))&&!(getli.contains("address")))
-{
-    if(myList.get(i).getAdd().equals(editnow))
-    {
-        Deladd p=new Deladd();
-        p.setLine1(sedt1);
-        p.setLine2(sedt2);
-        p.setcity(sedt3);
-        p.setstate(sedt4);
-        myListnew.add(p);
-    }
-    else
-    { myListnew.add(myList.get(i));}
-}
+                            if((!del1.equals("delete"))&&!(getli.contains("address")))
+                            {
+                                if(myList.get(i).getAdd().equals(editnow))
+                                {
+                                    Deladd p=new Deladd();
+                                    p.setLine1(sedt1);
+                                    p.setLine2(sedt2);
+                                    p.setcity(sedt3);
+                                    p.setstate(sedt4);
+                                    myListnew.add(p);
+                                }
+                                else
+                                { myListnew.add(myList.get(i));}
+                            }
                             if (editnow.equals(myList.get(i).getAdd())&&(del1.equals("delete")))
                                 continue;
                             else
@@ -585,15 +588,15 @@ if((!del1.equals("delete"))&&!(getli.contains("address")))
                             { myListnew.add(myList.get(i));}
                         }
                         myList.clear();
-                     //   JSONObject data1 = new JSONObject(resp.getString("data"));
+                        //   JSONObject data1 = new JSONObject(resp.getString("data"));
                         if(getli.contains("address"))
                         {Check++;
-                        Deladd p=new Deladd();
+                            Deladd p=new Deladd();
                             p.setLine1(sedt1);
                             p.setLine2(sedt2);
                             p.setcity(sedt3);
                             p.setstate(sedt4);
-                        myListnew.add(p);}
+                            myListnew.add(p);}
                         myList=myListnew;
                         return "win";
 
@@ -614,6 +617,9 @@ if((!del1.equals("delete"))&&!(getli.contains("address")))
             delete.setEnabled(true);
             if (result.equals("win")) {
 
+                Intent in =new Intent(context,Editaddress.class);
+                context.startActivity(in);
+                ((Activity)context).finish();
 
 //                context.list.setParams(mParam);
                 Deladd c=new Deladd();
@@ -646,5 +652,6 @@ if((!del1.equals("delete"))&&!(getli.contains("address")))
             }
         }
     }
+
 
 }

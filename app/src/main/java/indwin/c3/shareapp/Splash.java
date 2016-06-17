@@ -907,6 +907,18 @@ public class Splash extends AppCompatActivity {
                                 } catch (Exception e) {
                                     courseend = "";
                                 }
+                                String status1k="";
+                                try{
+                                    status1k=data1.getString("status1K");
+                                }
+                                catch (Exception e)
+                                {status1k="";}
+                                String status7k="";
+                                try{
+                                    status7k=data1.getString("status7K");
+                                }
+                                catch (Exception e)
+                                {status7k="";}
 
                                 try {
                                     nameadd = data1.getString("college");
@@ -923,6 +935,8 @@ public class Splash extends AppCompatActivity {
 
                                 editorP.putInt("creditLimit", creditLimit);
                                 editorP.putString("profileStatus", profileStatus);
+                                editorP.putString("status1K", status1k);
+                                editorP.putString("status7K", status7k);
                                 editorP.putInt("totalBorrowed", totalBorrowed);
                                 editorP.putString("course", courseend);
                                 editorP.putInt("cashBack", totalCashBack);

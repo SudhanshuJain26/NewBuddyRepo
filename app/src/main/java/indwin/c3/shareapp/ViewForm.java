@@ -66,7 +66,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
 
-    private String reviewUrl = "";
+    private String reviewUrl = "",checkConfirm="";
     private String seller, prodid;
     int which_page = 0;
 
@@ -74,6 +74,12 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userP = getSharedPreferences("token", Context.MODE_PRIVATE);
+
+        try {
+            checkConfirm= getIntent().getExtras().getString("Confirm");
+        } catch (Exception e) {
+            checkConfirm="";
+        }
 
         try {
             which_page = getIntent().getExtras().getInt("which_page");
@@ -436,6 +442,11 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
         } else {
             if (form.canGoBack())
                 form.goBack();
+//            else
+           if("yes".equals(checkConfirm)){
+               finish();
+           }
+
             else {
                 if (!isNetworkAvailable()) {
                     Intent in = new Intent(ViewForm.this, Landing.class);
@@ -779,7 +790,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
             // TODO Auto-generated method stub
 
             if (url.equals("buddy://profile")) {
-                Toast.makeText(ViewForm.this, "gopi", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(ViewForm.this, "gopi", Toast.LENGTH_SHORT).show();
             } else
 
                 view.loadUrl(url);

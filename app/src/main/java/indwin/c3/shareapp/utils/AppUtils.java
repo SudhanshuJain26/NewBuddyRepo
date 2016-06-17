@@ -71,12 +71,6 @@ public class AppUtils {
 
     public static void checkDataForNormalUser(UserModel user, Gson gson, JSONObject data1, final Activity context) {
 
-        //context.runOnUiThread(new Runnable() {
-        //    public void run() {
-        //        Toast.makeText(context, "Fetching data", Toast.LENGTH_SHORT).show();
-        //    }
-        //});
-
         try {
             user.setEmailSent(false);
             if (data1.opt("gender") != null)
@@ -118,12 +112,6 @@ public class AppUtils {
                     user.setAppliedFor1k(true);
                 else {
                     user.setAppliedFor1k(false);
-
-                    //context.runOnUiThread(new Runnable() {
-                    //    public void run() {
-                    //        Toast.makeText(context, "Setting 1k status appstart", Toast.LENGTH_SHORT).show();
-                    //    }
-                    //});
                 }
             }
             if (data1.opt("status7K") != null) {

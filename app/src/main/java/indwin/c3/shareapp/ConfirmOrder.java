@@ -217,6 +217,7 @@ public class ConfirmOrder extends AppCompatActivity {
                 TextView inter = (TextView) popUpView.findViewById(R.id.textPopserintamt);
                 TextView disc = (TextView) popUpView.findViewById(R.id.textPopserdisamt);
                 TextView faq = (TextView) popUpView.findViewById(R.id.cbfaq);
+                TextView payamtvalue=(TextView)popUpView.findViewById(R.id.textPayamt);
                 TextView sellerss = (TextView) popUpView.findViewById(R.id.textPopseller);
                 sellerss.setText("Charged by "+getIntent().getExtras().getString("seller"));
                 faq.setOnClickListener(new View.OnClickListener() {
@@ -224,12 +225,19 @@ public class ConfirmOrder extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent i = new Intent(ConfirmOrder.this, ViewForm.class);
                         i.putExtra("which_page", 5);
+                        i.putExtra("Confirm","yes");
                         startActivity(i);
                     }
                 });
                 sp.setText(getApplicationContext().getString(R.string.Rs) + getIntent().getExtras().getInt("sellingprice"));
                 //servicennnnnn
                 svc.setText(getApplicationContext().getString(R.string.Rs) + getIntent().getExtras().getInt("servicecharge"));
+                if(getIntent().getExtras().getInt("monthforemi")==0)
+                    payamtvalue.setText("No Financing!");
+                else
+                    payamtvalue.setText(getIntent().getExtras().getInt("monthforemi")+" Months");
+
+
 
 
                 if (interest < 0)

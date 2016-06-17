@@ -263,30 +263,57 @@ public class AgreementActivity extends AppCompatActivity {
 
 
     private void dispatchTakePictureIntent() {
-        try {
-            Intent takePictureIntent = new CameraActivity.IntentBuilder(AgreementActivity.this)
-                    .skipConfirm()
-                    .to(createImageFile()).facing(getCamera())
-                    .debug()
-                    .zoomStyle(ZoomStyle.SEEKBAR)
-                    .updateMediaStore()
-                    .build();
-            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-        } catch (Exception e) {
-
-
-        }
-    }
-
-    private Facing getCamera() {
+        boolean frontCameraOpened = false;
+        boolean backCameraOpened = false;
+        Facing facing = Facing.BACK;
 
         Camera.CameraInfo ci = new Camera.CameraInfo();
         for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
             Camera.getCameraInfo(i, ci);
-            if (ci.facing == Camera.CameraInfo.CAMERA_FACING_FRONT)
-                return Facing.FRONT;
+            if (ci.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                frontCameraOpened = false;
+                facing = Facing.FRONT;
+                Camera camera = null;
+                try {
+                    camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+                } catch (RuntimeException e) {
+                    frontCameraOpened = true;
+                    facing = Facing.BACK;
+                } finally {
+                    if (camera != null) camera.release();
+                }
+                break;
+            } else {
+                frontCameraOpened = true;
+            }
         }
-        return Facing.BACK;
+        if (facing == Facing.BACK) {
+            Camera camera = null;
+            try {
+                camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
+            } catch (RuntimeException e) {
+                backCameraOpened = true;
+            } finally {
+                if (camera != null) camera.release();
+            }
+        }
+        if (frontCameraOpened && backCameraOpened) {
+            Toast.makeText(this, "Your camera is being used by other applications. Please close the camera from other applications", Toast.LENGTH_SHORT).show();
+
+        } else {
+            try {
+                Intent takePictureIntent = new CameraActivity.IntentBuilder(AgreementActivity.this)
+                        .skipConfirm()
+                        .to(createImageFile()).facing(facing)
+                        .debug()
+                        .zoomStyle(ZoomStyle.SEEKBAR)
+                        .updateMediaStore()
+                        .build();
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            } catch (Exception e1) {
+                Toast.makeText(this, "Error opening camera.Please try again or send your selfie over chat", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private File createImageFile() throws IOException {
@@ -366,7 +393,7 @@ public class AgreementActivity extends AppCompatActivity {
         super.onBackPressed();
         if (!user.isAppliedFor1k()) {
             UserModel user = AppUtils.getUserObject(this);
-            if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature())||!user.isTncAccepted()) {
+            if (AppUtils.isEmpty(user.getSelfie()) || AppUtils.isEmpty(user.getSignature()) || !user.isTncAccepted()) {
                 user.setInCompleteAgreement(true);
                 AppUtils.saveUserObject(this, user);
                 ProfileFormStep1Fragment4.incompleteAgreement.setVisibility(View.VISIBLE);

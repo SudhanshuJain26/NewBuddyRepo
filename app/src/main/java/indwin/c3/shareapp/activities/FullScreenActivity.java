@@ -202,8 +202,8 @@ public class FullScreenActivity extends AppCompatActivity implements ViewPager.O
                         {
                             if (image.getFront() != null && AppUtils.isNotEmpty(image.getFront().getImgUrl()))
                                 imgUrl = image.getFront().getImgUrl();
-                            else
-                                Picasso.with(mContext).load(R.mipmap.frontside_noimage).fit().placeholder(R.drawable.downloading).into(imageView);
+                            //else
+                            //    Picasso.with(mContext).load(R.drawable.frontside_noimage).fit().placeholder(R.drawable.downloading).into(imageView);
 
                         }
                     } else if ((position == 0 || (position == 1 && image.getFrontBankSize(statusApplied) == 2)) && ((image.getBack() != null && AppUtils.isNotEmpty(image.getBack().getImgUrl()) || !statusApplied))) {

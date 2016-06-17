@@ -161,7 +161,13 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                     @Override
                     public void onItemClick(View view, int position) {
 
-                        if (((position == 0 && (collegeIDs.getFront() == null || AppUtils.isEmpty(collegeIDs.getFront().getImgUrl()))) && !user.isAppliedFor1k()) || (position == 1 && (collegeIDs.getBack() == null || AppUtils.isEmpty(collegeIDs.getBack().getImgUrl()))) && !user.isAppliedFor1k()) {
+                        if (
+                                //((position == 0 && (collegeIDs.getFront() == null || AppUtils.isEmpty(collegeIDs.getFront().getImgUrl()))) &&
+                                        !user.isAppliedFor1k()
+                                //)
+
+                                //|| (position == 1 && (collegeIDs.getBack() == null || AppUtils.isEmpty(collegeIDs.getBack().getImgUrl()))) && !user.isAppliedFor1k()
+                                ) {
 
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {

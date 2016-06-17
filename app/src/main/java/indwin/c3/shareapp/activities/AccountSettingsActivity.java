@@ -56,6 +56,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account_settings);
         verifyEmail = (Button) findViewById(R.id.verify_user_email);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setupClickToolbarBackButton(toolbar);
         try {
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
             headerTitle.setText("Account Settings");
@@ -312,9 +313,21 @@ public class AccountSettingsActivity extends AppCompatActivity {
         );
     }
 
+
+    private void setupClickToolbarBackButton(Toolbar toolbar) {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppUtils.hideKeyboard(AccountSettingsActivity.this);
+                onBackPressed();
+            }
+        });
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            AppUtils.hideKeyboard(this);
             onBackPressed();
             return true;
         }

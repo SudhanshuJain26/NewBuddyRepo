@@ -974,6 +974,19 @@ public class MainActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         courseend = "";
                     }
+                    String status1k = "";
+                    try {
+                        status1k = data.getString("status1K");
+                    } catch (Exception e) {
+                        status1k = "";
+                    }
+                    String status7k = "";
+                    try {
+                        status7k = data.getString("status7K");
+                    } catch (Exception e) {
+                        status7k = "";
+                    }
+
                     String nameadd = "";
                     try {
                         nameadd = data.getString("college");
@@ -982,6 +995,8 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences userP = getSharedPreferences("token", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editorP = userP.edit();
                     editorP.putString("approvedBand", approvedBand);
+                    editorP.putString("status1K", status1k);
+                    editorP.putString("status7K", status7k);
                     editorP.putString("profileStatus", profileStatus);
                     editorP.putString("course", courseend);
                     editorP.putString("formStatus", formstatus);
@@ -1067,7 +1082,11 @@ public class MainActivity extends AppCompatActivity {
                 Intercom.initialize((Application) getApplicationContext(), "android_sdk-a252775c0f9cdd6cd922b6420a558fd2eb3f89b0", "utga6z2r");
                 Intercom.client().registerIdentifiedUser(
                         new Registration().withUserId(user.getUserId()));
-
+                Map userMap = new HashMap<>();
+                userMap.put("name", user.getName());
+                userMap.put("email", user.getEmail());
+                userMap.put("phone", user.getUserId());
+                Intercom.client().updateUser(userMap);
                 //user.setEmailSent(false);
                 //if (data1.opt("gender") != null)
                 //    user.setGender(data1.getString("gender"));

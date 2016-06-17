@@ -472,30 +472,30 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             previous.setVisibility(View.GONE);
             findViewById(R.id.up_arrow_1).setVisibility(View.VISIBLE);
             if (isGirl) {
-                image = R.mipmap.step1fragment1girl;
+                image = R.drawable.step1fragment1girl;
             } else {
-                image = R.mipmap.step1fragment1;
+                image = R.drawable.step1fragment1;
             }
 
         } else if (i == 1) {
             if (isGirl) {
-                image = R.mipmap.step1fragment2girl;
+                image = R.drawable.step1fragment2girl;
             } else {
-                image = R.mipmap.step1fragment2;
+                image = R.drawable.step1fragment2;
             }
             findViewById(R.id.up_arrow_2).setVisibility(View.VISIBLE);
         } else if (i == 2) {
             if (isGirl) {
-                image = R.mipmap.step1fragment3girl;
+                image = R.drawable.step1fragment3girl;
             } else {
-                image = R.mipmap.step1fragment3;
+                image = R.drawable.step1fragment3;
             }
             findViewById(R.id.up_arrow_3).setVisibility(View.VISIBLE);
         } else if (i == 3) {
             if (isGirl) {
-                image = R.mipmap.step1fragment4girl;
+                image = R.drawable.step1fragment4girl;
             } else {
-                image = R.mipmap.step1fragment4;
+                image = R.drawable.step1fragment4;
             }
             findViewById(R.id.up_arrow_4).setVisibility(View.VISIBLE);
         }

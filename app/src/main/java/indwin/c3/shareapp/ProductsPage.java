@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -66,14 +67,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import indwin.c3.shareapp.activities.FindProduct;
 import indwin.c3.shareapp.activities.ProfileActivity;
+import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
 
-public class ProductsPage extends AppCompatActivity {
+public class ProductsPage extends AppCompatActivity  {
+    private long checkDiffernece=0;
     private TextView inc, priceChange, status, creditBalance, creditLimit, cashBack, availbal, availbalmsg, knowmore;
     private EditText hve, queryN;
     private long EMIcheck=0;
@@ -110,16 +114,18 @@ public class ProductsPage extends AppCompatActivity {
     private int checkLenghtedittext = 0;
     private int value = 0;
     private int maxValue = 0, minProd = 0;
-    private String type = "";
+    private String type = "",checkmonths="";
 
     private int[] myMonths = {1, 2, 3, 6, 9, 12, 15, 18};
     private String selectedText = "", downPayment = "";
     private ImageView pasteiconnew;
     private String title, brand, sellerNme, searchQuery, urlforImage;
     private int sellingPrice, monthsallowed, spInc, spDec, dayToday, cuurr;
-    private TextView brandName, sellingRs, pname;
-    private EditText query, dValue, queryNew;
-    private String userCode = "";
+    private TextView brandName, sellingRs, pname,sellingRschange;
+    private EditText query, queryNew;
+    private String userCode1k = "",userCode7k="";
+    private CustomEditText dValue;
+    private int minDownpaymentfornofina=0;
     private TextView emiAmount, titlePro, totalLoan, detInfo, detSpec, detRet, detDes;
     private ImageView seller, spinnArr,
 
@@ -173,7 +179,8 @@ public class ProductsPage extends AppCompatActivity {
             try {
                 SharedPreferences user = getSharedPreferences("token", Context.MODE_PRIVATE);
 
-                userCode = user.getString("formStatus", "");
+                userCode1k = user.getString("status1K", "");
+                userCode7k = user.getString("status7K", "");
                 userProfileStatus = user.getString("profileStatus", "");
                 productId1 = getIntent().getExtras().getString("product");
                 sellerNme1 = getIntent().getExtras().getString("seller");
@@ -209,6 +216,8 @@ public class ProductsPage extends AppCompatActivity {
 
     }
 
+
+
     class RptUpdater implements Runnable {
         public void run() {
             if (mAutoIncrement) {
@@ -233,9 +242,14 @@ public class ProductsPage extends AppCompatActivity {
         // Toast.makeText(ProductsPage.this, "checkdp", Toast.LENGTH_SHORT).show();
         //        String s = dValue.getText().toString();
         try {
+            int dp;
             if (("").equals(s))
                 s = dValue.getText().toString();
-            int dp = Integer.parseInt(s);
+//            if(s.equals("")||(s==null))
+               if(AppUtils.isEmpty(s))
+                dp=0;
+            else
+             dp = Integer.parseInt(s);
             Double m = sellingPrice * .2;
 
             if ((dp >= minDownpayment)&&(dp<=sellingPrice+secondServicecharge))//&& w>=mindownn
@@ -276,6 +290,9 @@ public class ProductsPage extends AppCompatActivity {
                     mValue=sellingPrice-fcbv;
 //
                 mValue=minDownpayment;
+//                if(checkmonths.equals("0"))
+//                    mValue=minDownpaymentfornofina
+
 //     dValue.setText(String.valueOf(mValue));
             }
             s = "";
@@ -287,10 +304,24 @@ public class ProductsPage extends AppCompatActivity {
             dValue.setText("");
             dValue.setText(String.valueOf(mValue));
             s = "";
-            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+            if(sellingPrice!=searchPrice)
+            {
+                sellingRschange.setVisibility(View.VISIBLE);
+                sellingRschange.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(searchPrice)));
+                sellingRschange.setPaintFlags(sellingRschange.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+            }
+            else{
+                sellingRschange.setVisibility(View.GONE);
+                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));}
+//            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
         }
         dValue.setText("");
         dValue.setText(String.valueOf(mValue));
+        int w=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
+        firstServicecharge=w;
+        secondServicecharge=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
+
         Double emi = calculateEmi(Double.valueOf(sellingPrice -mValue+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
         //            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
         Double tot = emi * monthsnow + mValue;
@@ -314,6 +345,9 @@ public class ProductsPage extends AppCompatActivity {
             if (mValue + inccc <= sellingPrice+secondServicecharge) {
                 mValue += inccc;
                 spInc = sellingPrice - mValue;
+                int w=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
+                firstServicecharge=w;
+                secondServicecharge=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
                 Double emi = calculateEmi(Double.valueOf(sellingPrice -mValue+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
                 Double tot = emi * monthsnow + mValue;
                 totalLoan.setText(String.valueOf(Math.round(tot)));
@@ -335,7 +369,9 @@ public class ProductsPage extends AppCompatActivity {
             if (mValue - inccc >= minDownpayment) {
                 mValue -= inccc;
                 spInc = sellingPrice - mValue;
-
+                int w=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
+                firstServicecharge=w;
+                secondServicecharge=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
                 Double emi = calculateEmi(Double.valueOf(sellingPrice -mValue+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
 
                 //            Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
@@ -374,7 +410,14 @@ public class ProductsPage extends AppCompatActivity {
         crcode = hve.getText().toString().trim().toUpperCase();
         spinner = (Spinner) findViewById(R.id.spinnerItem);
         emiAmount = (TextView) findViewById(R.id.calMonPayRs);
-        dValue = (EditText) findViewById(R.id.dValue);
+        dValue = (CustomEditText) findViewById(R.id.dValue);
+        dValue.setOnBackButtonListener(new CustomEditText.IOnBackButtonListener() {
+            @Override
+            public boolean OnEditTextBackButton() {
+                editdp();
+                return false;
+            }
+        });
         dValue.setImeOptions(EditorInfo.IME_ACTION_DONE);
         dValue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -382,7 +425,6 @@ public class ProductsPage extends AppCompatActivity {
                 dValue.requestFocusFromTouch();
             }
         });
-
         dValue.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -410,6 +452,9 @@ public class ProductsPage extends AppCompatActivity {
         minusR = (RelativeLayout) findViewById(R.id.minusR);
         brandName = (TextView) findViewById(R.id.manProduct);
         sellingRs = (TextView) findViewById(R.id.sellerMrpValue);
+        sellingRschange=(TextView)findViewById(R.id.sellerMrpValueold);
+        sellingRschange.setPaintFlags(sellingRschange.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+sellingRschange.setVisibility(View.GONE);
         titlePro = (TextView) findViewById(R.id.titleProduct);
         query = (EditText) findViewById(R.id.query);
         //    querylearFocus();
@@ -496,11 +541,12 @@ public class ProductsPage extends AppCompatActivity {
         }
         SharedPreferences user = getSharedPreferences("token", Context.MODE_PRIVATE);
         userProfileStatus = user.getString("profileStatus", "");
-        userCode = user.getString("formStatus", "");
+        userCode1k = user.getString("status1K", "");
+        userCode7k = user.getString("status7K", "");
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userProfileStatus.equals("approved")&&((dummyCl!=1000))) {
+                if (userProfileStatus.equals("approved")&&(checkDiffernece>30)) {
                     if (checkCorrectdis == 1) {
                         try {
                             Map userMap = new HashMap<>();
@@ -514,8 +560,10 @@ public class ProductsPage extends AppCompatActivity {
                             System.out.println("Intercom two" + e.toString());
                         }
 //                        if(dValue.getText().toString();)
-                        int minD=Integer.parseInt(dValue.getText().toString());
-                        if(minD<minDownpayment)
+                        int minD=0;
+                        if(dValue.getText().toString().length()!=0)
+                         minD=Integer.parseInt(dValue.getText().toString());
+                        if((minD<minDownpayment)||(dValue.getText().toString().length()==0))
                             editdp();
                         Intent in = new Intent(ProductsPage.this, ConfirmOrder.class);
                         in.putExtra("title", title);
@@ -524,6 +572,7 @@ public class ProductsPage extends AppCompatActivity {
                         in.putExtra("brand", brand);
                         in.putExtra("emicheck",EMIcheck);
                         in.putExtra("cashback", checkCashback);
+                        if(hve.getText().toString().contains("off!"))
                         in.putExtra("whichCoupon", whichCoupon);
                         String t=hve.getText().toString();
                         if(((hve.getText().toString().equals("")))||(hve.getText().toString().contains("Offers")))
@@ -549,7 +598,7 @@ public class ProductsPage extends AppCompatActivity {
                         et.putInt("service", secondServicecharge);
                         et.putString("brand", brand);
                         et.putInt("checkCashback", checkCashback);
-                        if ((mDis != 0))
+                        if(hve.getText().toString().contains("off!"))
                             et.putString("whichCoupon", whichCoupon);
                         et.putInt("monthtenure", monthsnow);
                         et.putInt("discount", mDis);
@@ -561,7 +610,7 @@ public class ProductsPage extends AppCompatActivity {
 
                     }
                     //     finish();in.putE
-                } else if (userProfileStatus.equals("waitlisted") || userProfileStatus.equals("declined")) {
+                } else if (userProfileStatus.equals("waitlisted") || userProfileStatus.equals("declined")||(checkDiffernece<30)) {
                     LayoutInflater inflater = (LayoutInflater) (ProductsPage.this).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     //                 View   parent = inflater.inflate(R.layout.activity_products_page, null, false);
                     View popUpView = inflater.inflate(R.layout.popupwaitlisted, null, false);
@@ -581,7 +630,15 @@ public class ProductsPage extends AppCompatActivity {
                     checkout.setEnabled(false);
 
                     TextView talk = (TextView) popUpView.findViewById(R.id.talk);
-                    String set = "<font color=#3380B6>Talk to us </font> <font color=#33A4D0>to find out more</font>";
+                    String set="";
+                    if(checkDiffernece<30) {
+                        TextView status=(TextView)popUpView.findViewById(R.id.status);
+                        status.setVisibility(View.GONE);
+                        TextView msg=(TextView)popUpView.findViewById(R.id.msg);
+                        msg.setVisibility(View.GONE);
+                        set = "<font color=#3380B6>As per our current policies you cannot place your next order. </font> <font color=#33A4D0>Contact us to find out more.</font>";
+                    }else
+                     set = "<font color=#3380B6>Talk to us </font> <font color=#33A4D0>to find out more</font>";
                     talk.setText(Html.fromHtml(set));
                     talk.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -822,6 +879,7 @@ public class ProductsPage extends AppCompatActivity {
         hve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editdp();
 
                 RelativeLayout cash = (RelativeLayout) findViewById(R.id.cashback);
                 if (hve.getText().toString().trim().length() == 0)
@@ -833,6 +891,8 @@ public class ProductsPage extends AppCompatActivity {
         hve.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                editdp();
+
                 //int t=hve.getText().toString().length();
                 //                Boolean ttt = hve.hasSelection();
 
@@ -989,11 +1049,18 @@ public class ProductsPage extends AppCompatActivity {
         {
             appcBack.setChecked(false);
             appcBack.setEnabled(true);}
+        Boolean flash=true;
+        if(userCode1k.equals("approved")&&(!(userCode7k.equals("approved"))))
+            flash=false;
+        appcBack.setEnabled(flash);
         appcBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(cb!=0){
-                    if (!userCode.equals("flashApproved")) {
+
+
+
+                  {
                         int checkD = 0;
                         if (appcBack.isChecked()) {
                             // TODO: 4/21/2016 do something with cashback
@@ -1085,8 +1152,6 @@ public class ProductsPage extends AppCompatActivity {
                         }
 
 
-                    } else {
-                        Toast.makeText(ProductsPage.this, "You cannot apply Cashback!", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else
@@ -1161,7 +1226,16 @@ public class ProductsPage extends AppCompatActivity {
         else if (sellerNme.equals("snapdeal"))
 
             seller.setImageResource(R.drawable.snapdeal);
-        sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+        if(sellingPrice!=searchPrice)
+        {
+            sellingRschange.setVisibility(View.VISIBLE);
+            sellingRschange.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(searchPrice)));
+            sellingRschange.setPaintFlags(sellingRschange.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+        }
+        else{
+            sellingRschange.setVisibility(View.GONE);
+        sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));}
         titlePro.setText(searchTitle);
         query.setText(searchQuery);
     }
@@ -1172,6 +1246,7 @@ public class ProductsPage extends AppCompatActivity {
         protected void onPreExecute() {
             spinner.setVisibility(View.VISIBLE);
             checkout.setEnabled(false);
+            ((RelativeLayout) findViewById(R.id.plusRelative)).setEnabled(false);
         }
 
         @Override
@@ -1268,8 +1343,11 @@ public class ProductsPage extends AppCompatActivity {
                         }
                         if (searchPrice < minProd)
                             return "min";
-                        //// TODO: 14/6/16 flash users 1k approved and 7k not approved then only flash users  
-                        if (userCode.equals("flashApproved")) {
+                        //// TODO: 14/6/16 flash users 1k approved and 7k not approved then only flash users
+                        Boolean flash=true;
+                        if(userCode1k.equals("approved")&&(!(userCode7k.equals("approved"))))
+                            flash=false;
+                        if (!flash) {
                             return "flash";
                         }
                         return "win";
@@ -1287,6 +1365,7 @@ public class ProductsPage extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             checkout.setEnabled(true);
+            ((RelativeLayout) findViewById(R.id.plusRelative)).setEnabled(true);
             if (result.equals("win")) {
                 int dis = 0;
                 if (type.equals("flat"))
@@ -1329,13 +1408,13 @@ public class ProductsPage extends AppCompatActivity {
                     checkD = 0;
                     mDis = sellingPrice;
                     sellingPrice = 0;
-                    setEmi(2);
+
                 } else {
 
                     checkD = 0;
                     mDis = dis;
                     sellingPrice = sellingPrice - mDis;
-                    setEmi(2);
+//                    setEmi(2);
 
                 }
 
@@ -1368,12 +1447,26 @@ public class ProductsPage extends AppCompatActivity {
                 firstServicecharge=w;
                 secondServicecharge=serviceCharge(searchPrice,sellingPrice-mind.intValue()-w,sellerNme1);
                 checkCorrectdis = 1;
-
+if(!checkmonths.equals("0"))
                 dValue.setText(String.valueOf(Math.round(mind+w)));
-                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
-                minDownpayment=Integer.parseInt(dValue.getText().toString());
+                mValue=mind.intValue()+w;
+                if(sellingPrice!=searchPrice)
+                {
+                    sellingRschange.setVisibility(View.VISIBLE);
+                    sellingRschange.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(searchPrice)));
+                    sellingRschange.setPaintFlags(sellingRschange.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+                }
+                else{
+                    sellingRschange.setVisibility(View.GONE);
+                    sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));}
+//                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+                minDownpayment=mValue;
+
 
                 checkImg = 2;
+                setEmi(2);
+
                 ((ImageView) findViewById(R.id.plus)).setImageResource(R.drawable.cancel);
 
                 hve.setKeyListener(null);
@@ -1386,7 +1479,7 @@ public class ProductsPage extends AppCompatActivity {
                     truth = "Invalid Code";
                 }
                 if (result.contains("flash")) {
-                    Toast.makeText(ProductsPage.this, "You cannot apply Cashback!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductsPage.this, "This discount code is not applicable for you!.", Toast.LENGTH_SHORT).show();
                     truth = "Invalid Code";
                 }
                 hve.setText(truth);
@@ -1431,19 +1524,26 @@ public class ProductsPage extends AppCompatActivity {
         Double rate = 21.0 / 1200.0;
         int d = 0;
         if (searchPrice <= 5000) {
-            emi = Math.ceil(principal * 1.0 / months);
+            emi = (principal * 1.0 / months);
         } else {
             if (currDay <= 15)
                 d = 35 - currDay;
             else
                 d = 65 - currDay;
             dayToday = d;
-            emi = Math.ceil((principal * rate * Math.pow(1 + rate, months - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, months) - 1));
+            emi = ((principal * rate * Math.pow(1 + rate, months - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, months) - 1));
         }
+        //Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
         if(emi<0)
             return 0.0;
         else
-            return emi;
+        {
+        if(emi-Math.round(emi)>0)
+            return Math.floor(emi);
+            else
+        return
+        Math.ceil(emi);
+            }
     }
 
     public void setEmi(int sellingP) {
@@ -1483,7 +1583,17 @@ public class ProductsPage extends AppCompatActivity {
 //            Double r = (mValue - mDis);
             mValue = mValue-mDis;
             dValue.setText(String.valueOf(Math.round(mValue)));
-            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+            if(sellingPrice!=searchPrice)
+            {
+                sellingRschange.setVisibility(View.VISIBLE);
+                sellingRschange.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(searchPrice)));
+                sellingRschange.setPaintFlags(sellingRschange.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+            }
+            else{
+                sellingRschange.setVisibility(View.GONE);
+                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));}
+//            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
             totalLoan.setText(String.valueOf(tot));
         } else {
 
@@ -1517,8 +1627,12 @@ public class ProductsPage extends AppCompatActivity {
                     }
                     mValue=sellingPrice+serv;
                 }
+                minDownpaymentfornofina=mValue;
+                checkmonths="0";
 
             }
+            else
+            checkmonths="1";
 //
 // if((sellingPrice<=1000)&&(sellingPrice>150))
 //                mValue=0;
@@ -1553,11 +1667,30 @@ public class ProductsPage extends AppCompatActivity {
                     mValue=sellingPrice+serv;
                 }
 
+                minDownpaymentfornofina=mValue;
+                checkmonths="0";
             }
-            else
-                mValue=minDownpayment;
-            dValue.setText(String.valueOf(mValue));
-            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+            else {
+                mValue = minDownpayment;
+            checkmonths="1";
+            }dValue.setText(String.valueOf(mValue));
+            minDownpayment=mValue;
+            availbalmsg.setText("Minimum Downpayment for this product: " + getApplicationContext().getString(R.string.Rs) + minDownpayment);
+            if(sellingPrice!=searchPrice)
+            {
+                sellingRschange.setVisibility(View.VISIBLE);
+                sellingRschange.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(searchPrice)));
+                sellingRschange.setPaintFlags(sellingRschange.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+            }
+            else{
+                sellingRschange.setVisibility(View.GONE);
+                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));}
+//            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+            int ww=serviceCharge(searchPrice,searchPrice-mValue,sellerNme1);
+            firstServicecharge=ww;
+            secondServicecharge=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
+
 //            EMIcheck=(Math.round(calculateEmi(sellingPrice, Double.valueOf(searchPrice), monthsnow)));
             EMIcheck=Math.round(calculateEmi(sellingPrice-mValue*1.0+secondServicecharge, Double.valueOf(searchPrice), monthsnow));
 
@@ -2171,18 +2304,53 @@ public class ProductsPage extends AppCompatActivity {
                         }
                         mValue=sellingPrice+serv;
                     }
-
+minDownpayment=mValue;
                 }
-                else
+                else {
+                    if(mDis==0)
+                    minDownpayment=globalMindown;
+                    mValue = minDownpayment;
+                }
+                if((mDis!=0)&&(!t.contains("0")))
+                {
+                    Double mind =0.0;
+                    if(searchPrice>=1000)
+                        mind=sellingPrice * .2;
+                    else
+                    if((searchPrice<=1000)&&(searchPrice>150))
+                        mind=0.0;
+
+                    if(sellingPrice-mind>fcbv)
+                    {
+                        mind=Double.valueOf(sellingPrice)-fcbv;
+                    }
+                    if(dummyCl==1000)
+                        availbal.setText(getApplicationContext().getString(R.string.Rs) + "0");
+                    else
+                        availbal.setText(getApplicationContext().getString(R.string.Rs) + fcbv);
+                    int w=serviceCharge(searchPrice,sellingPrice-mind.intValue(),sellerNme1);
+                    firstServicecharge=w;
+                    secondServicecharge=serviceCharge(searchPrice,sellingPrice-mind.intValue()-w,sellerNme1);
+                    minDownpayment=mind.intValue()+w;
                     mValue=minDownpayment;
+                }
                 dValue.setText("");
                 dValue.setText(String.valueOf(mValue));
-                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+                if(sellingPrice!=searchPrice)
+                {
+                    sellingRschange.setVisibility(View.VISIBLE);
+                    sellingRschange.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(searchPrice)));
+                    sellingRschange.setPaintFlags(sellingRschange.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
+                }
+                else{
+                    sellingRschange.setVisibility(View.GONE);
+                    sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));}
+//                sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
                 int w=serviceCharge(searchPrice,searchPrice-mValue,sellerNme1);
                 firstServicecharge=w;
                 secondServicecharge=serviceCharge(searchPrice,sellingPrice-mValue,sellerNme1);
-
-                EMIcheck=(Math.round(calculateEmi(sellingPrice -mValue*1.0+secondServicecharge, Double.valueOf(searchPrice), monthsnow)));
+               EMIcheck=(Math.round(calculateEmi(sellingPrice -mValue*1.0+secondServicecharge, Double.valueOf(searchPrice), monthsnow)));
                 emiAmount.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(calculateEmi(sellingPrice -mValue*1.0+secondServicecharge, Double.valueOf(searchPrice), monthsnow)))+" per month");
 
                 //                    Toast.makeText(ProductsPage.this, selectedText, Toast.LENGTH_SHORT).show();
@@ -2205,10 +2373,18 @@ public class ProductsPage extends AppCompatActivity {
                 //categories.add(String.valueOf(myMonths[j]) + " months");
             }
         }
+        int cl = st.getInt("creditLimit", 0);
+        int cbv = st.getInt("totalBorrowed", 0);
+        int fcbv = cl - cbv;
+        if(fcbv==0)
+        {
+            dummyCl=1000;
+            fcbv=100000000;
+        }
         for (int w = p; w >= 0; w--) {
             categories.add(String.valueOf(myMonths[w]) + " months");
         }
-        if(searchPrice<=150)
+        if((searchPrice<=150)||(dummyCl==1000))
         {
             categories.clear();
             categories.add("No Financing");
@@ -2363,7 +2539,10 @@ public class ProductsPage extends AppCompatActivity {
                 System.out.println(newDateString);
                 Long milli = courseDate.getTime();
                 Date date = new Date();
+
                 Long currentMilli = date.getTime();
+                checkDiffernece=milli-currentMilli;
+                checkDiffernece=TimeUnit.DAYS.convert(checkDiffernece, TimeUnit.MILLISECONDS);
                 Double diffDouble = (milli.doubleValue() - currentMilli.doubleValue());
                 Double mul = (1000.0 * 60.0 * 60.0 * 24.0 * 365.0);
                 diff = diffDouble / mul;
@@ -2590,28 +2769,28 @@ public class ProductsPage extends AppCompatActivity {
 
             if (loanAmt < 1000)
                 serv = 29;
-            else if (loanAmt < 5000)
+            else if (loanAmt <= 5000)
                 serv = 99;
-            else if (loanAmt < 15000)
+            else if (loanAmt <= 15000)
                 serv = 149;
-            else if (loanAmt < 20000)
+            else if (loanAmt <= 20000)
                 serv = 199;
-            else if (loanAmt < 25000)
+            else if (loanAmt <= 25000)
                 serv = 299;
             else if (loanAmt > 25000)
                 serv = 549;
 
 
         } else {
-            if (sellingCost < 1000)
+            if (sellingCost <= 1000)
                 serv = 29;
-            else if (sellingCost < 5000)
+            else if (sellingCost <= 5000)
                 serv = 99;
-            else if (sellingCost < 10000)
+            else if (sellingCost <= 10000)
                 serv = 199;
-            else if (sellingCost < 15000)
+            else if (sellingCost <= 15000)
                 serv = 299;
-            else if (sellingCost < 25000)
+            else if (sellingCost <= 25000)
                 serv = 449;
             else if (sellingCost > 25000)
                 serv = 599;
@@ -2620,5 +2799,7 @@ public class ProductsPage extends AppCompatActivity {
         return serv;
 
     }
+
+
 
 }

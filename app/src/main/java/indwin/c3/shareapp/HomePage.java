@@ -396,6 +396,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
             imageSlider = (ViewPager)findViewById(R.id.imageslider);
             dot1 = (ImageView) findViewById(R.id.c1);
+//            dot1.setImageResource(R.drawable.circle2);
             dot2 = (ImageView) findViewById(R.id.c2);
             dot3 = (ImageView) findViewById(R.id.c3);
             dot4 = (ImageView) findViewById(R.id.c4);
@@ -420,6 +421,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             adp.notifyDataSetChanged();
 
             imageSlider.setCurrentItem(0);
+            dot1.setBackgroundResource(R.drawable.circle2);
             imageSlider.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

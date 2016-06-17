@@ -29,6 +29,7 @@ public class SecondViewPagerAdapter extends PagerAdapter {
     ImageView img1;
     ImageView img2;
     ImageView img3;
+    ImageView img4;
 
     public SecondViewPagerAdapter(Context context, int size, HomePage act) {
         this.context = context;
@@ -56,17 +57,17 @@ public class SecondViewPagerAdapter extends PagerAdapter {
                    dot4.setVisibility(View.GONE);
                    img1 = (ImageView) layout.findViewById(R.id.imageView1);
                    img1.setImageResource(R.drawable.first_image);
-                   img1.setOnClickListener(new View.OnClickListener() {
-                       @Override
-                       public void onClick(View v) {
-                           Intent intent = new Intent(act, ViewForm.class);
-                           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                           intent.putExtra("which_page", 20);
-                           // intent.putExtra("url", "http://hellobuddy.in/#/how-it-works");
-                           context.startActivity(intent);
-                           act.finish();
-                       }
-                   });
+//                   img1.setOnClickListener(new View.OnClickListener() {
+//                       @Override
+//                       public void onClick(View v) {
+//                           Intent intent = new Intent(act, ViewForm.class);
+//                           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                           intent.putExtra("which_page", 20);
+//                           // intent.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+//                           context.startActivity(intent);
+//                           act.finish();
+//                       }
+//                   });
 
 
                    //((BitmapDrawable)img1.getDrawable()).getBitmap().recycle();
@@ -126,8 +127,20 @@ public class SecondViewPagerAdapter extends PagerAdapter {
                    dot3.setVisibility(View.GONE);
                    dot4.setVisibility(View.GONE);
                    dot4.setBackgroundResource(R.drawable.circle2);
-                   ImageView img = (ImageView) layout.findViewById(R.id.imageView1);
-                   img.setImageResource(R.drawable.forth_image);
+                   img4 = (ImageView) layout.findViewById(R.id.imageView1);
+                   img4.setImageResource(R.drawable.forth_image);
+                   img4.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           Intent intent = new Intent(act, ViewForm.class);
+                           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                           intent.putExtra("which_page", 20);
+                           // intent.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+                           context.startActivity(intent);
+                           act.finish();
+                       }
+                   });
+
                }
 
            } catch (OutOfMemoryError e) {
@@ -138,6 +151,8 @@ public class SecondViewPagerAdapter extends PagerAdapter {
            return layout;
        }catch (OutOfMemoryError e){
            e.printStackTrace();
+           if(layout.getParent()!=null)
+               ((ViewGroup)layout.getParent()).removeView(layout);
            (container).addView(layout);
            return layout;
        }

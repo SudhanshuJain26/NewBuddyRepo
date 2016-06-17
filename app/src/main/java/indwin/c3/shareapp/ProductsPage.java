@@ -611,7 +611,7 @@ sellingRschange.setVisibility(View.GONE);
 
                     }
                     //     finish();in.putE
-                } else if (userProfileStatus.equals("waitlisted") || userProfileStatus.equals("declined")||(checkDiffernece<=30)) {
+                } else if (userProfileStatus.equals("waitlisted") || userProfileStatus.equals("declined")||(checkDiffernece<=30)||("onHold".equals(userProfileStatus))) {
                     LayoutInflater inflater = (LayoutInflater) (ProductsPage.this).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     //                 View   parent = inflater.inflate(R.layout.activity_products_page, null, false);
                     View popUpView = inflater.inflate(R.layout.popupwaitlisted, null, false);
@@ -632,7 +632,7 @@ sellingRschange.setVisibility(View.GONE);
 
                     TextView talk = (TextView) popUpView.findViewById(R.id.talk);
                     String set="";
-                    if(checkDiffernece<30) {
+                    if((checkDiffernece<30)||("onHold".equals(userProfileStatus))) {
                         TextView status=(TextView)popUpView.findViewById(R.id.status);
                         status.setVisibility(View.GONE);
                         TextView msg=(TextView)popUpView.findViewById(R.id.msg);
@@ -1524,8 +1524,13 @@ if(!checkmonths.equals("0"))
         Double emi = 0.0;
         Double rate = 21.0 / 1200.0;
         int d = 0;
-        if (searchPrice <= 5000) {
-            emi = (principal * 1.0 / months);
+        if (searchPrice <= 5000) {{
+            if (currDay <= 15)
+                d = 35 - currDay;
+            else
+                d = 65 - currDay;
+            dayToday = d;
+            emi = (principal * 1.0 / months);}
         } else {
             if (currDay <= 15)
                 d = 35 - currDay;

@@ -139,7 +139,12 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         typeImage = Constants.IMAGE_TYPE.ADDRESS_PROOF.toString();
-                        if (((position == 0 && (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl()))) && !user.isAppliedFor1k()) || (position == 1 && (addressProof.getBack() == null || AppUtils.isEmpty(addressProof.getBack().getImgUrl()))) && !user.isAppliedFor1k()) {
+                        if (
+                            //((position == 0 && (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl()))) &&
+                                !user.isAppliedFor1k()
+                            //)
+                            //|| (position == 1 && (addressProof.getBack() == null || AppUtils.isEmpty(addressProof.getBack().getImgUrl()))) && !user.isAppliedFor1k()
+                                ) {
                             clickedPosition = position;
                             String[] temp = hasPermissions(getActivity(), PERMISSIONS);
                             if (temp != null && temp.length != 0) {

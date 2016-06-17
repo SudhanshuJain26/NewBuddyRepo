@@ -38,6 +38,7 @@ public class ConfirmOrder extends AppCompatActivity {
     private  int serviceCharge;
     private int downPayment = 0, loanAmt = 0, datToday = 0, w = 0,interest=0;
     private long newemi=0;
+
     String sellerName = "";
 //    BroadcastReceiver broadcastReceiver;
 
@@ -98,8 +99,15 @@ public class ConfirmOrder extends AppCompatActivity {
             month = (month + 3) % 12;
         }
         String checkmonths = checkMonths(month);
+        TextView set1=(TextView)findViewById(R.id.flex);
         TextView setDue = (TextView) findViewById(R.id.flexVal);
-        setDue.setText("5 " + checkmonths);
+//        if(setDue)
+        if(getIntent().getExtras().getInt("monthforemi")==0) {
+            setDue.setVisibility(View.GONE);
+            set1.setVisibility(View.GONE);
+        }
+            setDue.setText("5 " + checkmonths);
+
 
         loanAmt = getIntent().getExtras().getInt("sellingprice") - downPayment;
         tit.setText(getIntent().getExtras().getString("title"));

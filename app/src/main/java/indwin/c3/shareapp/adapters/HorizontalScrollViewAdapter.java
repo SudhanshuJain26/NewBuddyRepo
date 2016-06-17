@@ -34,11 +34,14 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
     SharedPreferences userP;
     private Double emi = 0.0;
     private int currDay;
+    private String userProfileStatus;
 
     public HorizontalScrollViewAdapter(ArrayList<Product> productsList, Context context) {
         this.productsList = productsList;
         this.context = context;
         userP = context.getSharedPreferences("token", Context.MODE_PRIVATE);
+        userProfileStatus = userP.getString("profileStatus","");
+        Log.i("status",userProfileStatus);
     }
 
 
@@ -83,8 +86,11 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
         }
         final Product product = productsList.get(position);
         holder.title.setText(product.getTitle());
-//        holder.price.setText(getApplicationContext(). String.valueOf(setEmi(product)));
+        int emi = setEmi(product);
+        if(emi>200)
         holder.price.setText(context.getApplicationContext().getResources().getString(R.string.Rs) + " " + String.valueOf(setEmi(product))+ " per month ");
+        else
+        holder.price.setText(context.getApplicationContext().getResources().getString(R.string.Rs) + " " + "200" + " per month ");
 //        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
         Picasso.with(context)
                 .load(product.getImgUrl())
@@ -154,8 +160,11 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
                 d = 35 - currDay;
             else
                 d = 65 - currDay;
-
+            if(userProfileStatus.equals("approved"))
             emi = Math.ceil((loanPrice * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
+            else
+                emi = Math.ceil((price*0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
+
         }
         return emi;
     }
@@ -179,7 +188,24 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
             if (mn < m)
                 m = mn;
         }
-        if (price < 5000) {
+        if(price<=400)
+        {
+            int mn = 1;
+            if (mn < m)
+                m = mn;
+        }
+        else if(price<=1000)
+        {
+            int mn = 2;
+            if (mn < m)
+                m = mn;
+        }
+        else if (price < 2000) {
+            int mn = 3;
+            if (mn < m)
+                m = mn;
+        }
+        else if (price < 5000) {
             int mn = 6;
             if (mn < m)
                 m = mn;

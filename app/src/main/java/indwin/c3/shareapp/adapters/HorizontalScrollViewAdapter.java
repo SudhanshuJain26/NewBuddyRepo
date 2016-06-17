@@ -1,6 +1,7 @@
 package indwin.c3.shareapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import indwin.c3.shareapp.ProductsPage;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Splash;
 import indwin.c3.shareapp.models.Product;
@@ -58,7 +60,7 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, final View convertView, ViewGroup parent) {
         RelativeLayout layout;
         Holder holder;
 
@@ -79,9 +81,11 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
 
             holder = (Holder) layout.getTag();
         }
-        Product product = productsList.get(position);
+        final Product product = productsList.get(position);
         holder.title.setText(product.getTitle());
-        holder.price.setText(setEmi(product));
+//        holder.price.setText(getApplicationContext(). String.valueOf(setEmi(product)));
+        holder.price.setText(context.getApplicationContext().getResources().getString(R.string.Rs) + " " + String.valueOf(setEmi(product))+ " per month ");
+//        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
         Picasso.with(context)
                 .load(product.getImgUrl())
                 .placeholder(R.drawable.emptyimageproducts)
@@ -95,12 +99,23 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
         if (product.getSeller().equals("snapdeal"))
             holder.brand.setImageResource(R.drawable.sdeal_fav1x);
 
-        holder.title.setOnClickListener(new View.OnClickListener() {
+        holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("CustomAdapter","My name is Anthony");
+                Intent intent = new Intent(context, ProductsPage.class);
+                intent.putExtra("seller",product.getSeller());
+                intent.putExtra("product", product.getFkid());
+                intent.putExtra("page", "api");
+                context.startActivity(intent);
             }
         });
+
+//        holder.title.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i("CustomAdapter","My name is Anthony");
+//            }
+//        });
 
 
         return layout;

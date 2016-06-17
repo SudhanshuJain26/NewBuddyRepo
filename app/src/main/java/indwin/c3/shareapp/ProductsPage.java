@@ -1049,15 +1049,18 @@ sellingRschange.setVisibility(View.GONE);
         {
             appcBack.setChecked(false);
             appcBack.setEnabled(true);}
+        Boolean flash=true;
+        if(userCode1k.equals("approved")&&(!(userCode7k.equals("approved"))))
+            flash=false;
+        appcBack.setEnabled(flash);
         appcBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(cb!=0){
-                    Boolean flash=true;
-                    if(userCode1k.equals("approved")&&(!(userCode7k.equals("approved"))))
-                        flash=false;
 
-                    if (flash) {
+
+
+                  {
                         int checkD = 0;
                         if (appcBack.isChecked()) {
                             // TODO: 4/21/2016 do something with cashback
@@ -1149,8 +1152,6 @@ sellingRschange.setVisibility(View.GONE);
                         }
 
 
-                    } else {
-                        Toast.makeText(ProductsPage.this, "You cannot apply Cashback!", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else
@@ -1478,7 +1479,7 @@ if(!checkmonths.equals("0"))
                     truth = "Invalid Code";
                 }
                 if (result.contains("flash")) {
-                    Toast.makeText(ProductsPage.this, "You cannot apply Cashback!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductsPage.this, "This discount code is not applicable for you!.", Toast.LENGTH_SHORT).show();
                     truth = "Invalid Code";
                 }
                 hve.setText(truth);
@@ -1523,19 +1524,26 @@ if(!checkmonths.equals("0"))
         Double rate = 21.0 / 1200.0;
         int d = 0;
         if (searchPrice <= 5000) {
-            emi = Math.ceil(principal * 1.0 / months);
+            emi = (principal * 1.0 / months);
         } else {
             if (currDay <= 15)
                 d = 35 - currDay;
             else
                 d = 65 - currDay;
             dayToday = d;
-            emi = Math.ceil((principal * rate * Math.pow(1 + rate, months - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, months) - 1));
+            emi = ((principal * rate * Math.pow(1 + rate, months - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, months) - 1));
         }
+        //Toast.makeText(ProductsPage.this, String.valueOf(emi), Toast.LENGTH_SHORT).show();
         if(emi<0)
             return 0.0;
         else
-            return emi;
+        {
+        if(emi-Math.round(emi)>0)
+            return Math.floor(emi);
+            else
+        return
+        Math.ceil(emi);
+            }
     }
 
     public void setEmi(int sellingP) {

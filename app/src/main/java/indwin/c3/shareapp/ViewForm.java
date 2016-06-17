@@ -443,7 +443,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
             if (form.canGoBack())
                 form.goBack();
 //            else
-           if(checkConfirm.equals("yes")){
+           if("yes".equals(checkConfirm)){
                finish();
            }
 

@@ -404,6 +404,7 @@
         <activity
             android:name=".activities.DeleteAccountActivity"
             android:label="@string/title_activity_delete_account"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />

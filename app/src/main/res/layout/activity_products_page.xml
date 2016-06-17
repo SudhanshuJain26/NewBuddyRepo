@@ -932,6 +932,7 @@ android:visibility="gone"
         </RelativeLayout>
 
 
+
     </ScrollView>
 
     <indwin.c3.shareapp.GIFView

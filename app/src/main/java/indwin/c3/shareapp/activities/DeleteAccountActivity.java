@@ -33,6 +33,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import indwin.c3.shareapp.GIFView;
 import indwin.c3.shareapp.MainActivity;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Splash;
@@ -46,6 +47,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
     private LinearLayout incorrectPasswordLayout;
     private EditText deleteReason, password;
     private Button delete;
+    private GIFView loading;
     private Gson gson;
     private SharedPreferences mPrefs;
     private UserModel user;
@@ -128,6 +130,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(DeleteAccountActivity.this);
                 View view = DeleteAccountActivity.this.getLayoutInflater().inflate(R.layout.alert_delete_account, null);
+                loading = (GIFView) view.findViewById(R.id.loading);
                 builder.setView(view);
                 final AlertDialog dialog = builder.create();
                 view.findViewById(R.id.delete_account).setOnClickListener(new View.OnClickListener() {
@@ -164,6 +167,12 @@ public class DeleteAccountActivity extends AppCompatActivity {
 
         LoginUser(String password) {
             this.password = password;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            loading.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -211,6 +220,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            loading.setVisibility(View.GONE);
             try {
                 if (result.equals("authFailed")) {
                     DeleteAccountActivity.this.runOnUiThread(new Runnable() {
@@ -234,9 +244,13 @@ public class DeleteAccountActivity extends AppCompatActivity {
     private class DeleteAccount extends AsyncTask<String, String, String> {
         String reason;
 
-        DeleteAccount() {
+        @Override
+        protected void onPreExecute() {
+
             reason = deleteReason.getText().toString();
+
         }
+
 
         @Override
         protected String doInBackground(String... params) {

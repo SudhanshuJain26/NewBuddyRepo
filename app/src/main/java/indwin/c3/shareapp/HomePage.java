@@ -233,7 +233,7 @@ public class HomePage extends AppCompatActivity {
             spinner0 = (ProgressBar)findViewById(R.id.progress_bar0);
             spinner0.setVisibility(View.VISIBLE);
 
-            spinner1 = (ProgressBar)findViewById(R.id.progress_bar);
+            spinner1 = (ProgressBar)findViewById(R.id.progress_bar1);
             spinner1.setVisibility(View.VISIBLE);
 
             spinner2 = (ProgressBar)findViewById(R.id.progress_bar2);
@@ -265,7 +265,9 @@ public class HomePage extends AppCompatActivity {
             horizontal5 = (CustomHorizontalScrollView)findViewById(R.id.horizontal5);
             horizontal6 = (CustomHorizontalScrollView)findViewById(R.id.horizontal6);
             //new Trending("trending").execute("trending");
+            new GetTrendingProducts().execute("trending");
             new Trending("Mobiles").execute("Mobiles");
+
             new Trending("Electronics").execute("Electronics");
             new Trending("Computers&subCategory=Laptops").execute("Computers&subCategory=Laptops");
             new Trending("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle").execute("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle");
@@ -4575,14 +4577,14 @@ public class HomePage extends AppCompatActivity {
             if (result.equals("fail")) {
                 System.out.println("Error while computing data");
             } else {
-                if(productType.equals("trending")){
-                    if(spinner0.getVisibility()==View.VISIBLE)
-                        spinner0.setVisibility(View.INVISIBLE);
-
-                    adapter0 = new HorizontalScrollViewAdapter(productsMap.get("trending"),HomePage.this);
-                    horizontal0.setAdapter(HomePage.this,adapter0);
-
-                }
+//                if(productType.equals("trending")){
+//                    if(spinner0.getVisibility()==View.VISIBLE)
+//                        spinner0.setVisibility(View.INVISIBLE);
+//
+//                    adapter0 = new HorizontalScrollViewAdapter(productsMap.get("trending"),HomePage.this);
+//                    horizontal0.setAdapter(HomePage.this,adapter0);
+//
+//                }
                 if(productType.equals("Mobiles")){
                     if(spinner1.getVisibility()==View.VISIBLE)
                         spinner1.setVisibility(View.GONE);
@@ -4643,6 +4645,97 @@ public class HomePage extends AppCompatActivity {
 //                sh.edit().putString("TrendingProductsSerialized", json).apply();
 
             }
+        }
+    }
+
+
+    private class GetTrendingProducts extends AsyncTask<String, Void, String> {
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = getApplicationContext().getResources().getString(R.string.server)+"api/product/trending?category=Computers&category=Mobiles&count=10";
+            String urldisplay = params[0];
+            try {
+                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                String tok_sp = toks.getString("token_value", "");
+                // String tok_sp = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NjU1NDQwMDgsImV4cCI6MTQ2NTU4MDAwOH0.ZpAwCEB0lYSqiYdfaBYjnBJOXfGrqE9qN8USoRzWR8g";
+                HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
+
+
+                        Log.e("MeshCommunication", "Server returned code "
+                                + response.getStatusLine().getStatusCode());
+                        return "fail";
+                    } else {
+
+                        JSONObject resp = new JSONObject(responseString);
+                        if (resp.getString("status").equals("success")) {
+                            JSONArray data1 = new JSONArray(resp.getString("data"));
+                            int lenght = data1.length();
+                            ArrayList<Product> products = new ArrayList<>();
+                            for (int j = 0; j < 10; j++) {
+                                JSONObject js = data1.getJSONObject(j);
+                                Product newProduct = new Product(params[0]);
+                                String categ = js.getString("category");
+                                newProduct.setCategory(categ);
+                                String subc = js.getString("subCategory");
+                                newProduct.setSubCategory(subc);
+                                String brand1 = js.getString("brand");
+                                newProduct.setBrand(brand1);
+                                String id = js.getString("title");
+                                newProduct.setTitle(id);
+                                //String mrp = js.getString("mrp");
+                                String seller = js.getString("seller");
+                                newProduct.setSeller(seller);
+                                String fkid = js.getString("fkProductId");
+                                newProduct.setFkid(fkid);
+                                String selling_price = js.getString("sellingPrice");
+                                newProduct.setSellingPrice(selling_price);
+                                JSONObject img = new JSONObject(js.getString("imgUrls"));
+                                String imgurl = img.getString("200x200");
+                                newProduct.setImgUrl(imgurl);
+                                products.add(newProduct);
+
+
+                            }
+                            productsMap.put("trending",products);
+                            Log.i("trending", "called");
+                            return "win";
+                            //versioncode=data1.getString("version_code");
+                            //return versioncode;
+                        } else
+                            return "fail";
+
+
+                    }
+                }
+
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(spinner0.getVisibility()==View.VISIBLE)
+                spinner0.setVisibility(View.GONE);
+
+            adapter0 = new HorizontalScrollViewAdapter(productsMap.get("trending"),HomePage.this);
+            horizontal0.setAdapter(HomePage.this,adapter0);
+
         }
     }
     }

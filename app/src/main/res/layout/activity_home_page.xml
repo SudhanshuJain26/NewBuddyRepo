@@ -617,21 +617,24 @@
 
                             <LinearLayout
                                 android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="200dp"
                                 android:orientation="horizontal"
                                 android:layout_marginLeft="6dp"
                                 >
 
                                 <LinearLayout
-                                    android:id="@+id/progress_bar_layout0"
+                                    android:id="@+id/progress_bar_layout00"
                                     android:orientation="horizontal"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"
+
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent">
                                     <ProgressBar android:id="@+id/progress_bar0"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="wrap_content"/>
+                                        android:layout_height="match_parent"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center"
+                                        android:layout_marginLeft="140dp"/>
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -639,6 +642,7 @@
 
 
                         </indwin.c3.shareapp.Views.CustomHorizontalScrollView>
+
 
                         <!--<HorizontalScrollView-->
                             <!--android:layout_width="match_parent"-->
@@ -1250,11 +1254,6 @@
                             <!--android:layout_gravity="center_vertical"/>-->
                         </LinearLayout>
 
-                        <ProgressBar android:id="@+id/progress_bar"
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:layout_gravity="center_horizontal" />
-
                         <indwin.c3.shareapp.Views.CustomHorizontalScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1266,24 +1265,31 @@
 
                             <LinearLayout
                                 android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="200dp"
                                 android:orientation="horizontal"
                                 android:layout_marginLeft="6dp"
                                 >
 
                                 <LinearLayout
-                                    android:id="@+id/progress_bar_layout"
+                                    android:id="@+id/progress_bar_layout01"
                                     android:orientation="horizontal"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"></LinearLayout>
+                                    android:layout_height="match_parent">
+                                    <ProgressBar android:id="@+id/progress_bar1"
+                                        android:layout_height="match_parent"
+                                        android:layout_width="match_parent"
+                                        android:gravity="center"
+                                        android:layout_marginLeft="140dp"/>
+                                </LinearLayout>
                             </LinearLayout>
 
 
 
 
                         </indwin.c3.shareapp.Views.CustomHorizontalScrollView>
+
 
                         <!--<HorizontalScrollView-->
                             <!--android:layout_width="match_parent"-->
@@ -1928,7 +1934,8 @@
                                     <ProgressBar android:id="@+id/progress_bar2"
                                         android:layout_height="match_parent"
                                         android:layout_width="match_parent"
-                                        android:gravity="center"/>
+                                        android:gravity="center"
+                                        android:layout_marginLeft="140dp"/>
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -2566,7 +2573,8 @@
                                     <ProgressBar android:id="@+id/progress_bar3"
                                         android:layout_height="match_parent"
                                         android:layout_width="match_parent"
-                                        android:gravity="center"/>
+                                        android:gravity="center"
+                                        android:layout_marginLeft="140dp"/>
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -3212,7 +3220,8 @@
                                     <ProgressBar android:id="@+id/progress_bar4"
                                         android:layout_height="match_parent"
                                         android:layout_width="match_parent"
-                                        android:gravity="center"/>
+                                        android:gravity="center"
+                                        android:layout_marginLeft="140dp"/>
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -3859,7 +3868,8 @@
                                     <ProgressBar android:id="@+id/progress_bar5"
                                         android:layout_height="match_parent"
                                         android:layout_width="match_parent"
-                                        android:gravity="center"/>
+                                        android:gravity="center"
+                                        android:layout_marginLeft="140dp"/>
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -4497,7 +4507,8 @@
                                     <ProgressBar android:id="@+id/progress_bar6"
                                         android:layout_height="match_parent"
                                         android:layout_width="match_parent"
-                                        android:gravity="center"/>
+                                        android:gravity="center"
+                                        android:layout_marginLeft="140dp"/>
                                 </LinearLayout>
                             </LinearLayout>
 

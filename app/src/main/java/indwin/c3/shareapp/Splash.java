@@ -429,7 +429,7 @@ public class Splash extends AppCompatActivity {
 //                new trending().execute("Health%20and%20Beauty");
 //                new trending().execute("Electronics");
 //                new trending().execute("Footwear");
-                new GetTrendingProducts().execute("trending");
+               // new GetTrendingProducts().execute("trending");
 
 
             }

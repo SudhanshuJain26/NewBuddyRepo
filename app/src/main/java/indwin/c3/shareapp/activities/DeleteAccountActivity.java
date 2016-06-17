@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -29,6 +30,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import indwin.c3.shareapp.MainActivity;
@@ -49,6 +51,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
     private UserModel user;
     private TextView incorrectPassword;
     int retryCount = 0;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,19 +184,24 @@ public class DeleteAccountActivity extends AppCompatActivity {
                 postReq.setHeader("x-access-token", tok_sp);
                 HttpResponse httpresponse = client.execute(postReq);
                 String responseText = EntityUtils.toString(httpresponse.getEntity());
-                JSONObject json = new JSONObject(responseText);
+                final JSONObject json = new JSONObject(responseText);
                 if (json.get("status").toString().contains("success")) {
-                    if (json.get("msg").toString().contains("Successful")) {
-                        return "success";
-                    } else
-                        return json.get("msg").toString();
+                    return "success";
+                } else if (json.get("status").toString().contains("error") && (json.get("msg").toString().contains("Invalid Password"))) {
+                    return "authFailed";
                 } else {
-                    if (json.get("status").toString().contains("error")) {
-                        Log.d("Error", json.get("msg").toString());
-                        return json.get("msg").toString();
-                    } else if (json.get("msg").toString().contains("Invalid Token")) {
-                        return "authFailed";
-                    }
+                    DeleteAccountActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Toast.makeText(DeleteAccountActivity.this, json.get("msg").toString(), Toast.LENGTH_SHORT).show();
+                                showErrorPassword(json.get("msg").toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -204,19 +212,19 @@ public class DeleteAccountActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             try {
-                if (retryCount < 3) {
-                    retryCount++;
-                    if (result.equals("authFailed")) {
-                        new FetchNewToken(DeleteAccountActivity.this).execute();
-                        new LoginUser(password).execute();
-                    } else if ("success".equals(result)) {
-                        new DeleteAccount().execute();
-                    } else {
-                        showErrorPassword(result);
-                    }
-                } else
-                    retryCount = 0;
+                if (result.equals("authFailed")) {
+                    DeleteAccountActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(DeleteAccountActivity.this, "Invalid password", Toast.LENGTH_SHORT).show();
+                            showErrorPassword("Invalid password");
+                        }
+                    });
 
+
+                } else if ("success".equals(result)) {
+                    new DeleteAccount().execute();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -316,7 +324,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
                             System.out.println(e.toString() + "int empty");
                         }
                         Intent intform = new Intent(DeleteAccountActivity.this, MainActivity.class);
-                        intform.putExtra(Constants.ACCOUNT_DELETED,true);
+                        intform.putExtra(Constants.ACCOUNT_DELETED, true);
                         intform.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         finish();
                         startActivity(intform);

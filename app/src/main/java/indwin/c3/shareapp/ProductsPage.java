@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
 import android.text.Editable;
 import android.text.Html;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.util.Log;
@@ -261,7 +262,7 @@ public class ProductsPage extends AppCompatActivity  {
                 int cl = st.getInt("creditLimit", 0);
                 int cbv = st.getInt("totalBorrowed", 0);
                 int fcbv = cl - cbv;
-                if(fcbv==0)
+                if(fcbv<=0)
                 {
                     dummyCl=1000;
                     fcbv=100000000;
@@ -272,15 +273,15 @@ public class ProductsPage extends AppCompatActivity  {
 
             } else {
                 Double downValue = sellingPrice * .2;
-                if((sellingPrice<=1000)&&(sellingPrice>150))
-                    downValue=0.0;
+//                if((sellingPrice<=1000)&&(sellingPrice>150))
+//                    downValue=0.0;
                 mValue = downValue.intValue();
 
                 cb = st.getInt("cashBack", 0);
                 int cl = st.getInt("creditLimit", 0);
                 int cbv = st.getInt("totalBorrowed", 0);
                 int fcbv = cl - cbv;
-                if(fcbv==0)
+                if(fcbv<=0)
                 {
                     dummyCl=1000;
                     fcbv=100000000;
@@ -298,8 +299,8 @@ public class ProductsPage extends AppCompatActivity  {
             s = "";
         } catch (Exception e) {
             Double downValue = sellingPrice * .2;
-            if((sellingPrice<=1000)&&(sellingPrice>150))
-                downValue=0.0;
+//            if((sellingPrice<=1000)&&(sellingPrice>150))
+//                downValue=0.0;
             mValue = downValue.intValue();
             dValue.setText("");
             dValue.setText(String.valueOf(mValue));
@@ -485,7 +486,7 @@ sellingRschange.setVisibility(View.GONE);
             int cl = st.getInt("creditLimit", 0);
             int cbv = st.getInt("totalBorrowed", 0);
             int fcbv = cl - cbv;
-            if(fcbv==0)
+            if(fcbv<=0)
             {
                 dummyCl=1000;
                 fcbv=100000000;
@@ -496,7 +497,7 @@ sellingRschange.setVisibility(View.GONE);
                 mind=sellingPrice * .2;
             else
             if((searchPrice<=1000)&&(searchPrice>150))
-                mind=0.0;
+                mind=sellingPrice * .2;
 
             if(sellingPrice-mind>fcbv)
             {
@@ -610,7 +611,7 @@ sellingRschange.setVisibility(View.GONE);
 
                     }
                     //     finish();in.putE
-                } else if (userProfileStatus.equals("waitlisted") || userProfileStatus.equals("declined")||(checkDiffernece<30)) {
+                } else if (userProfileStatus.equals("waitlisted") || userProfileStatus.equals("declined")||(checkDiffernece<=30)) {
                     LayoutInflater inflater = (LayoutInflater) (ProductsPage.this).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     //                 View   parent = inflater.inflate(R.layout.activity_products_page, null, false);
                     View popUpView = inflater.inflate(R.layout.popupwaitlisted, null, false);
@@ -1007,14 +1008,14 @@ sellingRschange.setVisibility(View.GONE);
                     checkD = 0;
                     checkCashback = 0;
                     Double doPay = (searchPrice * .2);
-                    if((sellingPrice<=1000)&&(sellingPrice>150))
-                        doPay=0.0;
+//                    if((sellingPrice<=1000)&&(sellingPrice>150))
+//                        doPay=0.0;
                     dopay2 = doPay.intValue();
                     cb = st.getInt("cashBack", 0);
                     int cl = st.getInt("creditLimit", 0);
                     int cbv = st.getInt("totalBorrowed", 0);
                     int fcbv = cl - cbv;
-                    if(fcbv==0)
+                    if(fcbv<=0)
                     {
                         dummyCl=1000;
                         fcbv=100000000;
@@ -1068,14 +1069,14 @@ sellingRschange.setVisibility(View.GONE);
 
                             sellingPrice = spDec;
                             Double doPay = (searchPrice * .2);
-                            if((searchPrice<=1000)&&(searchPrice>150))
-                                doPay=0.0;
+//                            if((searchPrice<=1000)&&(searchPrice>150))
+//                                doPay=0.0;
                             dopay2 = doPay.intValue();
                             cb = st.getInt("cashBack", 0);
                             int cl = st.getInt("creditLimit", 0);
                             int cbv = st.getInt("totalBorrowed", 0);
                             int fcbv = cl - cbv;
-                            if(fcbv==0)
+                            if(fcbv<=0)
                             {
                                 dummyCl=1000;
                                 fcbv=100000000;
@@ -1119,7 +1120,7 @@ sellingRschange.setVisibility(View.GONE);
                                 mind=sellingPrice * .2;
                             else
                             if((searchPrice<=1000)&&(searchPrice>150))
-                                mind=0.0;
+                                mind=sellingPrice * .2;
 
                             if(sellingPrice-mind>fcbv)
                             {
@@ -1166,11 +1167,11 @@ sellingRschange.setVisibility(View.GONE);
         int cbv = st.getInt("totalBorrowed", 0);
         int fcbv = cl - cbv;
         Double ddd2=sellingPrice*.2;
-        if((searchPrice<=1000)&&(searchPrice>150))
-            ddd2=0.0;
+//        if((searchPrice<=1000)&&(searchPrice>150))
+//            ddd2=0.0;
 
         loan += sellingPrice * .2;
-        if(fcbv==0)
+        if(fcbv<=0)
         {
             dummyCl=1000;
             fcbv=100000000;
@@ -1182,8 +1183,8 @@ sellingRschange.setVisibility(View.GONE);
         }
         totalLoan.setText(String.valueOf(Math.round(loan)));
         Double downValue = sellingPrice * .2;
-        if((searchPrice<=1000)&&(searchPrice>150))
-            downValue=0.0;
+//        if((searchPrice<=1000)&&(searchPrice>150))
+//            downValue=0.0;
 
 
         mValue = downValue.intValue();
@@ -1382,15 +1383,15 @@ sellingRschange.setVisibility(View.GONE);
                 }
                 ((RelativeLayout) findViewById(R.id.cashback)).setVisibility(View.GONE);
                 Double doPay = (searchPrice * .2);
-                if((searchPrice<=1000)&&(searchPrice>150))
-                    doPay=0.0;
+//                if((searchPrice<=1000)&&(searchPrice>150))
+//                    doPay=0.0;
                 dopay2 = doPay.intValue();
                 cb = st.getInt("cashBack", 0);
                 int cl = st.getInt("creditLimit", 0);
                 int cbv = st.getInt("totalBorrowed", 0);
                 int fcbv = cl - cbv;
 //                if((searchPrice<=1000)&&(searchPrice>150))
-                if(fcbv==0)
+                if(fcbv<=0)
                 {
                     dummyCl=1000;
                     fcbv=100000000;
@@ -1433,7 +1434,7 @@ sellingRschange.setVisibility(View.GONE);
                     mind=sellingPrice * .2;
                 else
                 if((searchPrice<=1000)&&(searchPrice>150))
-                    mind=0.0;
+                    mind=sellingPrice * .2;
 
                 if(sellingPrice-mind>fcbv)
                 {
@@ -1556,8 +1557,8 @@ if(!checkmonths.equals("0"))
             i++;
         }
         Double v = Math.floor(sellingPrice * .2);
-        if((sellingPrice<=1000)&&(sellingPrice>150))
-            v=0.0;
+//        if((sellingPrice<=1000)&&(sellingPrice>150))
+//            v=0.0;
         cb = st.getInt("cashBack", 0);
         int cl = st.getInt("creditLimit", 0);
         int cbv = st.getInt("totalBorrowed", 0);
@@ -1567,7 +1568,7 @@ if(!checkmonths.equals("0"))
         if(t.contains("No"))
 
             t="0";
-        if(fcbv==0)
+        if(fcbv<=0)
         {
             dummyCl=1000;
             fcbv=100000000;
@@ -1598,8 +1599,8 @@ if(!checkmonths.equals("0"))
         } else {
 
             Double l=Math.floor(sellingPrice * .2);
-            if((sellingPrice<=1000)&&(sellingPrice>150))
-                l=0.0;
+//            if((sellingPrice<=1000)&&(sellingPrice>150))
+//                l=0.0;
 
 
             int w=0;
@@ -1827,13 +1828,13 @@ if(!checkmonths.equals("0"))
                 int cbv = st.getInt("totalBorrowed", 0);
                 int fcbv = cl - cbv;
                 Double doPay = (searchPrice * .2);
-                if((searchPrice<=1000)&&(searchPrice>150))
-                    doPay=0.0;
+//                if((searchPrice<=1000)&&(searchPrice>150))
+//                    doPay=0.0;
 
                 dopay2 = doPay.intValue();
 //                if((searchPrice<=1000)&&(searchPrice>150))
 //                    dopay2=0;
-                if(fcbv==0)
+                if(fcbv<=0)
                 {
                     dummyCl=1000;
                     fcbv=100000000;
@@ -2008,11 +2009,15 @@ if(!checkmonths.equals("0"))
         setContentView(R.layout.wrongurl);
         queryNew = (EditText) findViewById(R.id.query);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        queryNew.setInputType(InputType.TYPE_NULL);
         queryNew.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Intent in=new Intent(ProductsPage.this, FindProduct.class);
-                startActivity(in);
+                int action=event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    Intent in = new Intent(ProductsPage.this, FindProduct.class);
+                    startActivity(in);
+                }
                 return false;
             }
         });
@@ -2077,11 +2082,15 @@ if(!checkmonths.equals("0"))
         queryNew = (EditText) findViewById(R.id.query);
         pasteiconnew=(ImageView)findViewById(R.id.pasteAg);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        queryNew.setInputType(InputType.TYPE_NULL);
         queryNew.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                int action=event.getAction();
+                if (action == MotionEvent.ACTION_DOWN)
+                {
                 Intent in=new Intent(ProductsPage.this, FindProduct.class);
-                startActivity(in);
+                startActivity(in);}
                 return false;
             }
         });
@@ -2103,6 +2112,7 @@ if(!checkmonths.equals("0"))
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideSoftKeyboard(ProductsPage.this);
                 String minP = editQ.getText().toString();
                 if ((editQ.getText().toString().length() != 0) && (Integer.parseInt(minP) >= 50)) {
                     final ScrollView removescrol = (ScrollView) findViewById(R.id.removescroll);
@@ -2180,7 +2190,7 @@ if(!checkmonths.equals("0"))
         int cl = st.getInt("creditLimit", 0);
         int cbv = st.getInt("totalBorrowed", 0);
         int fcbv = cl - cbv;
-        if(fcbv==0)
+        if(fcbv<=0)
         {
             dummyCl=1000;
             fcbv=100000000;
@@ -2197,17 +2207,16 @@ if(!checkmonths.equals("0"))
 
         queryNew = (EditText) findViewById(R.id.query);
         queryNew.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
+        queryNew.setInputType(InputType.TYPE_NULL);
         queryNew.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                int rr=0;
-                if(rr==0){
-                    rr++;
-                Intent in=new Intent(ProductsPage.this, FindProduct.class);
+                int action=event.getAction();
+                if (action == MotionEvent.ACTION_DOWN)
+                {
+                Intent in = new Intent(ProductsPage.this, FindProduct.class);
                 startActivity(in);
-                if(rr==2)
-                rr=0;}
+                }
                 return false;
             }
         });
@@ -2258,8 +2267,8 @@ if(!checkmonths.equals("0"))
                     i++;
                 }
                 Double v = (sellingPrice * .2);
-                if((sellingPrice<=1000)&&(sellingPrice>150))
-                    v=0.0;
+//                if((sellingPrice<=1000)&&(sellingPrice>150))
+//                    v=0.0;
                 mValue = v.intValue();
                 mValue2 = v.intValue();
                 if(t.contains("No"))
@@ -2270,7 +2279,7 @@ if(!checkmonths.equals("0"))
                 int cbv = st.getInt("totalBorrowed", 0);
                 int fcbv = cl - cbv;
 //                Double mind = sellingPrice * .2;
-                if(fcbv==0)
+                if(fcbv<=0)
                 {
                     dummyCl=1000;
                     fcbv=100000000;
@@ -2318,7 +2327,7 @@ minDownpayment=mValue;
                         mind=sellingPrice * .2;
                     else
                     if((searchPrice<=1000)&&(searchPrice>150))
-                        mind=0.0;
+                        mind=sellingPrice * .2;
 
                     if(sellingPrice-mind>fcbv)
                     {
@@ -2376,7 +2385,7 @@ minDownpayment=mValue;
         int cl = st.getInt("creditLimit", 0);
         int cbv = st.getInt("totalBorrowed", 0);
         int fcbv = cl - cbv;
-        if(fcbv==0)
+        if(fcbv<=0)
         {
             dummyCl=1000;
             fcbv=100000000;
@@ -2767,7 +2776,7 @@ minDownpayment=mValue;
 
         if (seller.equals("flipkart") || seller.equals("snapdeal")) {
 
-            if (loanAmt < 1000)
+            if (loanAmt <= 1000)
                 serv = 29;
             else if (loanAmt <= 5000)
                 serv = 99;

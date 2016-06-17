@@ -263,6 +263,7 @@ public class ConfirmOrder extends AppCompatActivity {
                         TextView t=(TextView)popUpView.findViewById(R.id.textPopbuddydisamt);
 
                         int w=emiWithservice(lo.intValue(),333,getIntent().getExtras().getInt("monthforemi"));
+                        w=(w-(int)newemi)*getIntent().getExtras().getInt("monthforemi");
                         inter.setText(getApplicationContext().getString(R.string.Rs) + w);
                         t.setText("-"+getApplicationContext().getString(R.string.Rs) + w);
                     }

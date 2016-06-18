@@ -214,6 +214,10 @@ public class ProfileFormStep2Fragment1 extends Fragment implements GoogleApiClie
         studentLoanSpinner.setAdapter(studentLoanAdapter);
         studentLoanSpinner.setSelection(studentLoanAdapter.getCount());
 
+       SpinnerHintAdapter adapter2 = new SpinnerHintAdapter(getActivity(), gpaTypeArray, R.layout.spinner_item_underline);
+              adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        gpaTypeSp.setAdapter(adapter2);
 
         if (user.getStudentLoan() != null || "".equals(user.getStudentLoan())) {
             for (int i = 0; i < scholarship.length - 1; i++) {

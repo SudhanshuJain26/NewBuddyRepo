@@ -100,6 +100,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private RelativeLayout panRL;
     private LinearLayout panImageLL;
     private CardView addressProofCv;
+    private String[] addressValue = {"aadhaar", "dl", "voterid", "passport", "ration"};
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -180,7 +181,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
         if (user.getAddressProof() != null && AppUtils.isNotEmpty(user.getAddressProof().getType())) {
             for (int i = 0; i < addressTypeArray.length; i++) {
-                if (user.getAddressProof().getType().equals(addressTypeArray[i])) {
+                if (addressValue[i].equalsIgnoreCase(user.getAddressProof().getType())) {
                     addressTypeSp.setSelection(i);
                     break;
                 }
@@ -360,7 +361,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                     user.setAddressProof(new Image());
                 }
 
-                user.getAddressProof().setType(addressTypeSp.getSelectedItem().toString());
+                user.getAddressProof().setType(addressValue[position]);
             }
 
             @Override

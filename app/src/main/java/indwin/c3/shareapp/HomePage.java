@@ -728,17 +728,17 @@ public class HomePage extends AppCompatActivity {
                         line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
                     } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
                         line1.setText("You have applied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
-                    } else if ("Check".equals(AccountSettingsActivity.verifyEmail.getText().toString())) {
+                    } else if (user.isEmailVerified()) {
                         line1.setText("Ready to get started? Complete your profile now to get a Borrowing Limit and start shopping");
                         but.setText("Complete it now!");
                         but.setVisibility(View.VISIBLE);
-                    } else {
-                        line1.setText("Your email Id needs to be verified. Do it quickly to get your profile approved.");
+                    } else if(!user.isEmailVerified())
+                        line1.setText("Your email Id needs to be verified.");
                         but.setText("verify your email Id now");
                         but.setVisibility(View.VISIBLE);
                         emailverified = false;
                     }
-                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

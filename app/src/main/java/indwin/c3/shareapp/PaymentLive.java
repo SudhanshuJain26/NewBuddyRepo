@@ -52,8 +52,8 @@ public class PaymentLive  extends Activity {
     private String payname,payemail,payamt,paytitle,payphone;
     public static final String EXTRA_PARAMS = "params";
     private String randomStr="";
-    private static final String MERCHANT_KEY ="lhqOEOUh" ;// old account "zMXH8C"prod "n46r73";
-    private static final String SALT = "QsBtDKH3k8";// "YBLKG80u",prod "L3gouXYu";
+    private static final String MERCHANT_KEY ="n46r73" ;// old account "zMXH8C"prod "n46r73";
+    private static final String SALT =  "L3gouXYu";// "YBLKG80u",prod "L3gouXYu";
     private static final String BASE_URL = "https://secure.payu.in";
 //    private static final String BASE_URL = "https://test.payu.in";
     private static final String PAYMENT_URL = BASE_URL + "/_payment";

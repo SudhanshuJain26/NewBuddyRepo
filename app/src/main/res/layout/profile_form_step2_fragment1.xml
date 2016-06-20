@@ -92,7 +92,7 @@
                                 android:id="@+id/gpa_spinner"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                />
+                                android:entries="@array/gpa_values"/>
                             <View
                                 android:layout_width="fill_parent"
                                 android:layout_height="1dp"

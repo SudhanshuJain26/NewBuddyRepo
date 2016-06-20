@@ -124,11 +124,6 @@ public class Adaptersimple extends BaseAdapter {
             radioAdd.setChecked(true);
             SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
             SharedPreferences.Editor e1 = cred.edit();
-
-setAddress(position);
-
-
-
             e1.putString("address", setAddress(position));
             e1.commit();
 

@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             showAccountDeletedPopup();
         }
         act = this;
-        url = getApplicationContext().getString(R.string.server) + "authenticate";
+        url = BuildConfig.SERVER_URL + "authenticate";
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         sharedpreferences2 = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
 
@@ -604,7 +604,7 @@ public class MainActivity extends AppCompatActivity {
 
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
-                String url2 = getApplicationContext().getString(R.string.server) + "api/user/login";
+                String url2 =BuildConfig.SERVER_URL + "api/user/login";
 
                 HttpResponse response = AppUtils.connectToServerPost(url2, payload.toString(), tok_sp);
 
@@ -854,7 +854,7 @@ public class MainActivity extends AppCompatActivity {
                 // payload.put("action", details.get("action"));
 
                 HttpParams httpParameters = new BasicHttpParams();
-                String uurl = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + userId;
+                String uurl = BuildConfig.SERVER_URL + "api/user/form?phone=" + userId;
                 HttpConnectionParams
                         .setConnectionTimeout(httpParameters, 30000);
 
@@ -1418,7 +1418,7 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                     String tok_sp = toks.getString("token_value", "");
                     HttpClient client = new DefaultHttpClient(httpParameters);
-                    String urlsm = getApplicationContext().getString(R.string.server) + "api/content/sms";
+                    String urlsm = BuildConfig.SERVER_URL + "api/content/sms";
                     SharedPreferences pref = act.getSharedPreferences("MyPref", 0);
                     HttpPost httppost = new HttpPost(urlsm);
 
@@ -1519,7 +1519,7 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                     String tok_sp = toks.getString("token_value", "");
                     HttpClient client = new DefaultHttpClient(httpParameters);
-                    String urlsm = getApplicationContext().getString(R.string.server) + "api/content/contact";
+                    String urlsm = BuildConfig.SERVER_URL+ "api/content/contact";
                     SharedPreferences pref = act.getSharedPreferences("MyPref", 0);
                     HttpPost httppost = new HttpPost(urlsm);
 

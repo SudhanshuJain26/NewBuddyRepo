@@ -5,15 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
-import android.webkit.URLUtil;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,12 +28,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.ProductsPage;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Splash;
@@ -134,7 +130,7 @@ public class FindProduct extends AppCompatActivity {
         //recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         //adp = new SearchedProductListAdapter(recentSearchItemsArrayList,this);
 
-        new FindRecentProductLinks(FindProduct.this).execute(getApplicationContext().getResources().getString(R.string.server)+"api/user/product/recent?userid="+userId +"&count=50");
+        new FindRecentProductLinks(FindProduct.this).execute(BuildConfig.SERVER_URL+"api/user/product/recent?userid="+userId +"&count=50");
 
 //        if(ProductsPage.backpressed){
 //            RecentSearchItems items = new RecentSearchItems(ProductsPage.brand1,ProductsPage.title1,Integer.toString(ProductsPage.price),productId);

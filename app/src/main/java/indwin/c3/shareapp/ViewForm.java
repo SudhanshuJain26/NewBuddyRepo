@@ -30,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -489,7 +488,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
                 HttpConnectionParams
                         .setConnectionTimeout(httpParameters, 30000);
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String url2 = getApplicationContext().getString(R.string.server) + "api/user/authtoken?userid=" + userid;
+                String url2 = BuildConfig.SERVER_URL + "api/user/authtoken?userid=" + userid;
                 HttpGet httppost = new HttpGet(url2);
                 try {
 
@@ -690,7 +689,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String urll = getApplicationContext().getString(R.string.server) + "authenticate";
+                String urll =BuildConfig.SERVER_URL + "authenticate";
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 

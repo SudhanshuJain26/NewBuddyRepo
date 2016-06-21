@@ -1,7 +1,6 @@
 package indwin.c3.shareapp;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -230,7 +229,7 @@ public void getAllSms()
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String urll=mContext.getString(R.string.server) + "authenticate";
+                String urll=BuildConfig.SERVER_URL + "authenticate";
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
@@ -314,7 +313,7 @@ public void getAllSms()
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String urll=mContext.getString(R.string.server) + "authenticate";
+                String urll=BuildConfig.SERVER_URL + "authenticate";
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
@@ -402,7 +401,7 @@ public void getAllSms()
                     SharedPreferences toks = mContext.getSharedPreferences("token", Context.MODE_PRIVATE);
                     String tok_sp = toks.getString("token_value", "");
                     HttpClient client = new DefaultHttpClient(httpParameters);
-                    String urlsm = mContext.getString(R.string.server) + "api/content/sms";
+                    String urlsm = BuildConfig.SERVER_URL+ "api/content/sms";
 //                    SharedPreferences pref = mContext.getSharedPreferences("MyPref", 0);
                     HttpPost httppost = new HttpPost(urlsm);
 
@@ -812,7 +811,7 @@ while(w--!=0)
                     SharedPreferences toks = mContext.getSharedPreferences("token", Context.MODE_PRIVATE);
                     String tok_sp = toks.getString("token_value", "");
                     HttpClient client = new DefaultHttpClient(httpParameters);
-                    String urlsm = mContext.getString(R.string.server) + "api/content/contact";
+                    String urlsm = BuildConfig.SERVER_URL + "api/content/contact";
 //                    SharedPreferences pref = act.getSharedPreferences("MyPref", 0);
                     HttpPost httppost = new HttpPost(urlsm);
 

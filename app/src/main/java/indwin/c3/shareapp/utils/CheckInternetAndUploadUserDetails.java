@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.models.FrontBackImage;
 import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
@@ -357,7 +357,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
             try {
                 boolean doApiCall = false;
                 HttpClient client = new DefaultHttpClient();
-                String url = mContext.getResources().getString(R.string.server) + "api/v1/user/profile/docs/upload?phone=" + user.getUserId();
+                String url =BuildConfig.SERVER_URL + "api/v1/user/profile/docs/upload?phone=" + user.getUserId();
                 HttpPost postReq = new HttpPost(url);
                 JSONObject jsonobj = new JSONObject();
                 jsonobj.put("userid", user.getUserId());
@@ -531,7 +531,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
             try {
                 boolean doApiCall = false;
                 HttpClient client = new DefaultHttpClient();
-                String url = mContext.getResources().getString(R.string.server) + "api/v1/user/profile";
+                String url = BuildConfig.SERVER_URL + "api/v1/user/profile";
                 HttpPost putReq = new HttpPost(url);
                 JSONObject jsonobj = new JSONObject();
                 Map userMap = new HashMap<>();

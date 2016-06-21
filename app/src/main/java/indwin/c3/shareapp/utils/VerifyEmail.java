@@ -13,6 +13,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.activities.AccountSettingsActivity;
 
@@ -37,7 +38,7 @@ public class VerifyEmail extends
     protected String doInBackground(String... data) {
         try {
             HttpClient client = new DefaultHttpClient();
-            String url = context.getResources().getString(R.string.server) + "api/auth/verify/email?phone=" + phone + "&email=" + email;
+            String url = BuildConfig.SERVER_URL + "api/auth/verify/email?phone=" + phone + "&email=" + email;
             HttpGet postReq = new HttpGet(url);
             postReq.setHeader("Accept", "application/json");
             postReq.setHeader("Content-type", "application/json");

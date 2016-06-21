@@ -21,8 +21,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.WebView;
-
-import android.webkit.WebViewClient;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -30,9 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.google.gson.Gson;
-
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -53,7 +49,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import indwin.c3.shareapp.models.UserModel;
-
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
 
@@ -808,7 +803,7 @@ else{
                 HttpClient client = new DefaultHttpClient(httpParameters);
 
 
-                HttpPost httppost = new HttpPost(getApplicationContext().getString(R.string.server)+"authenticate");
+                HttpPost httppost = new HttpPost(BuildConfig.SERVER_URL+"authenticate");
 
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
@@ -899,7 +894,7 @@ else{
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
 
-                String urll=getApplicationContext().getString(R.string.server) + "authenticate";
+                String urll=BuildConfig.SERVER_URL + "authenticate";
 
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
@@ -995,7 +990,7 @@ else{
                 HttpClient client = new DefaultHttpClient(httpParameters);
                 //api/login/sendotp
 
-                String url2 = getApplicationContext().getString(R.string.server)+"api/login/signup";
+                String url2 = BuildConfig.SERVER_URL+"api/login/signup";
                 HttpPost httppost = new HttpPost(url2);
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp=toks.getString("token_value","");

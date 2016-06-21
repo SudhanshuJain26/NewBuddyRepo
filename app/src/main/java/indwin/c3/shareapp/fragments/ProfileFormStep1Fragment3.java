@@ -76,7 +76,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private EditText editAadharNumber;
     private TextView aadharNuber, aadharPanHeader, editTextHeader, gotoFragment1, gotoFragment2, gotoFragment3;
     private Spinner aadharOrPan;
-    String[] arrayAaadharOrPan, addressTypeArray;
+    String[] arrayAaadharOrPan;
     private CardView editTextCardView;
     private Button saveAndProceed, previous;
     private ImageView incompleteAadhar, completeAadhar, completeAadhar1, incompleteAddress, completeAddress, incompleteStep1, incompleteStep2, incompleteStep3;
@@ -100,6 +100,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private RelativeLayout panRL;
     private LinearLayout panImageLL;
     private CardView addressProofCv;
+    private String[] addressValue = {"aadhaar", "dl", "voterid", "passport", "ration"};
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -109,7 +110,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 R.layout.profile_form_step1_fragment3, container, false);
         getAllViews(rootView);
         arrayAaadharOrPan = getResources().getStringArray(R.array.aadhar_or_pan);
-        addressTypeArray = getResources().getStringArray(R.array.address_proof_type);
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
@@ -179,8 +179,8 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
 
         if (user.getAddressProof() != null && AppUtils.isNotEmpty(user.getAddressProof().getType())) {
-            for (int i = 0; i < addressTypeArray.length; i++) {
-                if (user.getAddressProof().getType().equals(addressTypeArray[i])) {
+            for (int i = 0; i < addressValue.length; i++) {
+                if (addressValue[i].equalsIgnoreCase(user.getAddressProof().getType())) {
                     addressTypeSp.setSelection(i);
                     break;
                 }
@@ -360,7 +360,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                     user.setAddressProof(new Image());
                 }
 
-                user.getAddressProof().setType(addressTypeSp.getSelectedItem().toString());
+                user.getAddressProof().setType(addressValue[position]);
             }
 
             @Override

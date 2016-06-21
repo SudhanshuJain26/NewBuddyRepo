@@ -33,6 +33,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.GIFView;
 import indwin.c3.shareapp.MainActivity;
 import indwin.c3.shareapp.R;
@@ -182,7 +183,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
                 payload.put("userid", user.getUserId());
                 payload.put("password", password);
                 HttpClient client = new DefaultHttpClient();
-                String url = getResources().getString(R.string.server) + "api/user/login";
+                String url = BuildConfig.SERVER_URL + "api/user/login";
                 HttpPost postReq = new HttpPost(url);
                 postReq.setHeader("Accept", "application/json");
                 postReq.setHeader("Content-type", "application/json");
@@ -259,7 +260,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
                 payload.put("userid", user.getUserId());
                 payload.put("deletionReason", reason);
                 HttpClient client = new DefaultHttpClient();
-                String url = getResources().getString(R.string.server) + "api/user/account/delete";
+                String url = BuildConfig.SERVER_URL + "api/user/account/delete";
                 HttpPost postReq = new HttpPost(url);
                 postReq.setHeader("Accept", "application/json");
                 postReq.setHeader("Content-type", "application/json");

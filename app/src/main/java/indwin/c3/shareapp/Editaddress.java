@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -130,7 +131,7 @@ private  ImageView loader;
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
                 //api/login/sendotp
-                String url2 = getApplicationContext().getString(R.string.server) + "api/user/account/address?userid="+cred.getString("phone_number","");
+                String url2 = BuildConfig.SERVER_URL+ "api/user/account/address?userid="+cred.getString("phone_number","");
                 HttpGet httppost = new HttpGet(url2);
 //                HttpDelete
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
@@ -240,6 +241,7 @@ if(isActive)
                 paydo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Toast.makeText(Editaddress.this, "Please wait while we connect you with the payment gateway", Toast.LENGTH_LONG).show();
                         Intent in=new Intent(Editaddress.this,PaymentLive.class);
                         startActivity(in);
                     }

@@ -14,7 +14,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.activities.ChangePasswordActivity;
 
 /**
@@ -38,7 +38,7 @@ public class VerifyOTP extends
     protected String doInBackground(String... data) {
         try {
             HttpClient client = new DefaultHttpClient();
-            String url = context.getResources().getString(R.string.server) + "api/auth/verifyotp?phone=" + phone;
+            String url = BuildConfig.SERVER_URL + "api/auth/verifyotp?phone=" + phone;
             HttpPost postReq = new HttpPost(url);
             JSONObject jsonobj = new JSONObject();
             jsonobj.put("phone",phone);

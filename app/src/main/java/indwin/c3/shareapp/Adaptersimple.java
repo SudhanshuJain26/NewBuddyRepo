@@ -124,9 +124,10 @@ public class Adaptersimple extends BaseAdapter {
             radioAdd.setChecked(true);
             SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
             SharedPreferences.Editor e1 = cred.edit();
-            String cc = myList.get(position).getLine1().toString();
-            e1.putString("address", cc);
+            e1.putString("address", setAddress(position));
             e1.commit();
+
+
         }
         edit.setTag(position);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -250,12 +251,9 @@ public class Adaptersimple extends BaseAdapter {
                 } else if (position != myList.size() - 1) {
                     SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
                     SharedPreferences.Editor e1 = cred.edit();
-                    String cc = "";
-                    if (position != 0)
-                        cc = myList.get(position).getLine1().toString() + myList.get(position).getLine2().toString() + myList.get(position).getcity().toString() + myList.get(position).getstate().toString();
-                    else
-                        cc = myList.get(position).getLine1().toString();
-                    e1.putString("address", cc);
+
+
+                    e1.putString("address", setAddress(position));
                     e1.commit();
                 }
             }
@@ -318,12 +316,8 @@ public class Adaptersimple extends BaseAdapter {
 
                     SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
                     SharedPreferences.Editor e1 = cred.edit();
-                    String cc = "";
-                    if (position != 0)
-                        cc = myList.get(position).getLine1().toString() + myList.get(position).getLine2().toString() + myList.get(position).getcity().toString() + myList.get(position).getstate().toString();
-                    else
-                        cc = myList.get(position).getLine1().toString();
-                    e1.putString("address", cc);
+
+                    e1.putString("address",setAddress(position));
                     e1.commit();
                 }
             }
@@ -445,6 +439,15 @@ public class Adaptersimple extends BaseAdapter {
         return rowView;
     }
 
+    private String setAddress(int position) {
+      String cc;
+        if (position != 0)
+            cc = myList.get(position).getLine1().toString()+"," + myList.get(position).getLine2().toString()+","  + myList.get(position).getcity().toString()+","  + myList.get(position).getstate().toString();
+        else
+            cc = myList.get(position).getLine1().toString();
+        return cc;
+    }
+
     private class addAddress extends
                              AsyncTask<String, Void, String> {
         @Override
@@ -514,7 +517,7 @@ public class Adaptersimple extends BaseAdapter {
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
                 //api/login/sendotp
-                String url2 = context.getString(R.string.server) + "api/user/account/address";
+                String url2 = BuildConfig.SERVER_URL + "api/user/account/address";
                 HttpPost httppost = new HttpPost(url2);
                 //                HttpDelete
                 SharedPreferences toks = context.getSharedPreferences("token", Context.MODE_PRIVATE);

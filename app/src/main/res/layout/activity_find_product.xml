@@ -130,7 +130,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:text="Recently Pasted"
+            android:text="Recently Browsed Products"
             android:gravity="center"
             android:textSize="14sp"
             android:textColor="#fff"

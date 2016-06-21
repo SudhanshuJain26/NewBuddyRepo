@@ -12,7 +12,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.activities.VerifyOTPActivity;
 
 /**
@@ -36,7 +36,7 @@ public class SendOTP extends
     protected String doInBackground(String... data) {
         try {
             HttpClient client = new DefaultHttpClient();
-            String url = context.getResources().getString(R.string.server) + "api/auth/sendotp?phone=" + phone;
+            String url = BuildConfig.SERVER_URL + "api/auth/sendotp?phone=" + phone;
             HttpPost postReq = new HttpPost(url);
             postReq.setHeader("Accept", "application/json");
             postReq.setHeader("Content-type", "application/json");

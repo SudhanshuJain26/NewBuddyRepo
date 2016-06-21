@@ -89,7 +89,7 @@ loader=(GIFView)findViewById(R.id.loading);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
 
-                HttpPost httppost = new HttpPost(getApplicationContext().getString(R.string.server)+"authenticate");
+                HttpPost httppost = new HttpPost(BuildConfig.SERVER_URL+"authenticate");
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
                 HttpResponse response = client.execute(httppost);
@@ -178,7 +178,7 @@ loader=(GIFView)findViewById(R.id.loading);
                 SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
                  userid=cred.getString("phone_number", "");
                 HttpClient client = new DefaultHttpClient(httpParameters);
-               String  url_otp=getApplicationContext().getString(R.string.server)+"api/auth/sendotp?phone="+userid;
+               String  url_otp=BuildConfig.SERVER_URL+"api/auth/sendotp?phone="+userid;
                 HttpPost httppost = new HttpPost(url_otp);
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
 

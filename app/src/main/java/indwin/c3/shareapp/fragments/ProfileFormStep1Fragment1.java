@@ -56,6 +56,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Views.DatePicker;
 import indwin.c3.shareapp.activities.ProfileFormStep1;
@@ -637,7 +638,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String url2 = getActivity().getString(R.string.server) + "api/user/social?userid=" + phone;
+                String url2 = BuildConfig.SERVER_URL + "api/user/social?userid=" + phone;
                 HttpPut httppost = new HttpPut(url2);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
                 httppost.setHeader("x-access-token", mPrefs.getString("token_value", ""));

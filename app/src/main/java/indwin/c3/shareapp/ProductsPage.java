@@ -601,6 +601,8 @@ sellingRschange.setVisibility(View.GONE);
                         et.putInt("checkCashback", checkCashback);
                         if(hve.getText().toString().contains("off!"))
                             et.putString("whichCoupon", whichCoupon);
+                        else
+                            et.putString("whichCoupon", "");
                         et.putInt("monthtenure", monthsnow);
                         et.putInt("discount", mDis);
                         et.putString("seller", sellerNme1);

@@ -1,7 +1,6 @@
 package indwin.c3.shareapp;
 
 import android.Manifest;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,11 +35,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-
-import io.intercom.android.sdk.Intercom;
-import io.intercom.android.sdk.identity.Registration;
 
 public class Login_with_otp extends AppCompatActivity {
     String url = "";
@@ -74,8 +68,8 @@ public class Login_with_otp extends AppCompatActivity {
         error=(RelativeLayout)findViewById(R.id.error);
         msg=(TextView)findViewById(R.id.msg);
         spinner=(ProgressBar)findViewById(R.id.progressBar1);
-        url=getApplicationContext().getString(R.string.server)+"authenticate";
-        url_otp=getApplicationContext().getString(R.string.server)+"api/login/sendotp";
+        url=BuildConfig.SERVER_URL+"authenticate";
+        url_otp=BuildConfig.SERVER_URL+"api/login/sendotp";
         phone=(EditText)findViewById(R.id.phone_number);
         pL = phone.getPaddingLeft();
         phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -412,7 +406,7 @@ public class Login_with_otp extends AppCompatActivity {
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                url_otp=getApplicationContext().getString(R.string.server)+"api/auth/sendotp?phone="+userid;
+                url_otp=BuildConfig.SERVER_URL+"api/auth/sendotp?phone="+userid;
                 HttpPost httppost = new HttpPost(url_otp);
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp=toks.getString("token_value","");
@@ -522,7 +516,7 @@ public class Login_with_otp extends AppCompatActivity {
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String urll=getApplicationContext().getString(R.string.server) + "authenticate";
+                String urll=BuildConfig.SERVER_URL + "authenticate";
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 

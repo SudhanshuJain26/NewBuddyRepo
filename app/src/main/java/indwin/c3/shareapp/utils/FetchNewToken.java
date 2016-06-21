@@ -17,7 +17,7 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.BuildConfig;
 
 /**
  * Created by shubhang on 19/03/16.
@@ -41,7 +41,7 @@ public class FetchNewToken extends
             HttpConnectionParams
                     .setConnectionTimeout(httpParameters, 30000);
             HttpClient client = new DefaultHttpClient(httpParameters);
-            HttpPost httppost = new HttpPost(mContext.getString(R.string.server) + "authenticate");
+            HttpPost httppost = new HttpPost(BuildConfig.SERVER_URL + "authenticate");
             httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
             HttpResponse response = client.execute(httppost);
             HttpEntity ent = response.getEntity();

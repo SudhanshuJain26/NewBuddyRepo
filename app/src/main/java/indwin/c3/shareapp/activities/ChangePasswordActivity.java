@@ -25,6 +25,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.FetchNewToken;
@@ -192,7 +193,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         protected String doInBackground(String... params) {
             try {
                 HttpClient client = new DefaultHttpClient();
-                String url = getResources().getString(R.string.server) + "api/auth/password/change";
+                String url = BuildConfig.SERVER_URL + "api/auth/password/change";
                 HttpPost postReq = new HttpPost(url);
                 JSONObject jsonobj = new JSONObject();
                 jsonobj.put("phone", user.getUserId());
@@ -256,7 +257,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         protected String doInBackground(String... params) {
             try {
                 HttpClient client = new DefaultHttpClient();
-                String url = getResources().getString(R.string.server) + "api/auth/password/forgot";
+                String url = BuildConfig.SERVER_URL+ "api/auth/password/forgot";
                 HttpPost postReq = new HttpPost(url);
                 JSONObject jsonobj = new JSONObject();
                 jsonobj.put("phone", user.getUserId());

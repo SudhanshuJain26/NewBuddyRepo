@@ -169,7 +169,7 @@ public class Splash extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                url = getApplicationContext().getString(R.string.server) + "authenticate";
+                url = BuildConfig.SERVER_URL + "authenticate";
 
                 //                if(isNetworkAvailable())
                 if (isNetworkAvailable())
@@ -321,7 +321,7 @@ public class Splash extends AppCompatActivity {
                 @Override
                 public void onAnimationEnd(Animation animation) {
 
-                    url = getApplicationContext().getString(R.string.server) + "authenticate";
+                    url = BuildConfig.SERVER_URL + "authenticate";
                     urlauth = url;
                     if (isNetworkAvailable())
                         new ItemsByKeyword().execute("");
@@ -478,7 +478,7 @@ public class Splash extends AppCompatActivity {
 //                    urldisplay = "apparels";
 //                else if (urldisplay.equals("Health%20and%20Beauty"))
 //                    urldisplay = "homeandbeauty";
-                String url = getApplicationContext().getString(R.string.server) + "api/product/trending?category=" + urldisplay + "&count=10";
+                String url = BuildConfig.SERVER_URL + "api/product/trending?category=" + urldisplay + "&count=10";
 
                 HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
                 if (response != null) {
@@ -568,7 +568,7 @@ public class Splash extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String url = getApplicationContext().getResources().getString(R.string.server)+"api/product/trending?category=Computers&category=Mobiles&count=10";
+            String url = BuildConfig.SERVER_URL+"api/product/trending?category=Computers&category=Mobiles&count=10";
             String urldisplay = params[0];
             try {
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
@@ -642,7 +642,7 @@ public class Splash extends AppCompatActivity {
             protected String doInBackground(String... params) {
                 try {
 
-                    String url3 = getApplicationContext().getString(R.string.server) + "api/app/version?platform=android";
+                    String url3 = BuildConfig.SERVER_URL + "api/app/version?platform=android";
                     SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                     String tok_sp = toks.getString("token_value", "");
 
@@ -758,7 +758,7 @@ public class Splash extends AppCompatActivity {
                             }
                             // token=MainActivity.token;
                             // token=MainActivity.token;
-                            url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + userId;
+                            url2 = BuildConfig.SERVER_URL + "api/user/form?phone=" + userId;
 
                             new ValidateForm().execute("");
 
@@ -772,7 +772,7 @@ public class Splash extends AppCompatActivity {
                             } catch (Exception e) {
                                 System.out.println("Intercom nine" + e.toString());
                             }
-                            url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + sh_otp.getString("number", "");
+                            url2 = BuildConfig.SERVER_URL + "api/user/form?phone=" + sh_otp.getString("number", "");
 
                             new ValidateForm().execute("");
 

@@ -1199,7 +1199,7 @@ public class HomePage extends AppCompatActivity {
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
 
-                String url = getApplicationContext().getString(R.string.server) + "api/product/trending?category=" + urldisplay + "&count=10";
+                String url = BuildConfig.SERVER_URL + "api/product/trending?category=" + urldisplay + "&count=10";
 
                 HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
                 if (response != null) {
@@ -1320,7 +1320,7 @@ public class HomePage extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String url = getApplicationContext().getResources().getString(R.string.server)+"api/product/trending?category=Computers&category=Mobiles&count=10";
+            String url = BuildConfig.SERVER_URL+"api/product/trending?category=Computers&category=Mobiles&count=10";
             String urldisplay = params[0];
             try {
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);

@@ -7,16 +7,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-
-import android.hardware.camera2.params.Face;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -46,10 +39,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
-
-import org.json.JSONException;
 import org.json.JSONObject;
-
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -324,7 +314,7 @@ public class FacebookAuth extends AppCompatActivity {
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String url2 = getApplicationContext().getString(R.string.server) + "api/user/social?userid=" + user;
+                String url2 = BuildConfig.SERVER_URL + "api/user/social?userid=" + user;
                 HttpPut httppost = new HttpPut(url2);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
                 httppost.setHeader("x-access-token", toks.getString("token_value", ""));
@@ -410,7 +400,7 @@ public class FacebookAuth extends AppCompatActivity {
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + user;
+                String url2 = BuildConfig.SERVER_URL + "api/user/form?phone=" + user;
                 HttpPut httppost = new HttpPut(url2);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
                 httppost.setHeader("x-access-token", sh_otp.getString("token_value", ""));
@@ -502,7 +492,7 @@ public class FacebookAuth extends AppCompatActivity {
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String urll = getApplicationContext().getString(R.string.server) + "authenticate";
+                String urll = BuildConfig.SERVER_URL + "authenticate";
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 

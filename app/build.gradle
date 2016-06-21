@@ -16,7 +16,21 @@ android {
     }
 
     buildTypes {
+
+
+        debug {
+            buildConfigField "String", "SERVER_URL", '"https://ssl.hellobuddy.in/"'
+            buildConfigField "String", "MERCHANT_KEY", '"lhqOEOUh"'
+            buildConfigField "String", "SALT", '"QsBtDKH3k8"'
+            buildConfigField "String", "PAYU_BASE_URL", '"https://test.payu.in"'
+
+        }
+
         release {
+            buildConfigField "String", "SERVER_URL", '"https://ninja.hellobuddy.in/"'
+            buildConfigField "String", "MERCHANT_KEY", '"n46r73"'
+            buildConfigField "String", "SALT", '"L3gouXYu"'
+            buildConfigField "String", "PAYU_BASE_URL", '"https://secure.payu.in"'
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

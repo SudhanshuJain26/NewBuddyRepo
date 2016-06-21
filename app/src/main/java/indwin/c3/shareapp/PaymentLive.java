@@ -52,10 +52,9 @@ public class PaymentLive  extends Activity {
     private String payname,payemail,payamt,paytitle,payphone;
     public static final String EXTRA_PARAMS = "params";
     private String randomStr="";
-    private static final String MERCHANT_KEY ="n46r73" ;// old account "zMXH8C"prod "n46r73";
-    private static final String SALT =  "L3gouXYu";// "YBLKG80u",prod "L3gouXYu";
-    private static final String BASE_URL = "https://secure.payu.in";
-//    private static final String BASE_URL = "https://test.payu.in";
+    private static final String MERCHANT_KEY =BuildConfig.MERCHANT_KEY ;
+    private static final String SALT = BuildConfig.SALT;
+    private static final String BASE_URL = BuildConfig.PAYU_BASE_URL;
     private static final String PAYMENT_URL = BASE_URL + "/_payment";
     private String orderI="";
     public static final String PARAM_KEY = "key";
@@ -280,9 +279,9 @@ public class PaymentLive  extends Activity {
         formParams.put(PARAM_PRODUCT_INFO,
                 "Mobiles");
         formParams.put(PARAM_SUCCESS_URL,
-                getApplicationContext().getString(R.string.server)+"payment/payu/success");
+                BuildConfig.SERVER_URL+"payment/payu/success");
         formParams.put(PARAM_FAILURE_URL,
-                getApplicationContext().getString(R.string.server)+"payment/payu/failure");
+                BuildConfig.SERVER_URL+"payment/payu/failure");
         formParams.put(PARAM_LAST_NAME,
                 getNonNullValueFromHashMap(mInputParams, PARAM_LAST_NAME));
         formParams.put(PARAM_ADDRESS1,
@@ -629,7 +628,7 @@ public class PaymentLive  extends Activity {
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String urll=getApplicationContext().getString(R.string.server) + "authenticate";
+                String urll=BuildConfig.SERVER_URL + "authenticate";
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
@@ -741,7 +740,7 @@ public class PaymentLive  extends Activity {
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
                 //api/login/sendotp
-                String url2 = getApplicationContext().getString(R.string.server)+"api/order/initiate";
+                String url2 = BuildConfig.SERVER_URL+"api/order/initiate";
                 HttpPost httppost = new HttpPost(url2);
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp=toks.getString("token_value","");
@@ -815,7 +814,7 @@ public class PaymentLive  extends Activity {
                 String tok_sp = toks.getString("token_value", "");
                 SharedPreferences ph = getSharedPreferences("cred", Context.MODE_PRIVATE);
                 String userId = ph.getString("phone_number", "");
-                String url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + userId;
+                String url2 = BuildConfig.SERVER_URL + "api/user/form?phone=" + userId;
 
                 HttpResponse response = AppUtils.connectToServerGet(url2, tok_sp, null);
                 if (response != null) {

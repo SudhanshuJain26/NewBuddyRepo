@@ -1268,7 +1268,7 @@ public class ProductsPage extends AppCompatActivity {
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
                 //api/login/sendotp
-                String url2 = getApplicationContext().getString(R.string.server) + "api/promo/coupon";
+                String url2 = BuildConfig.SERVER_URL + "api/promo/coupon";
                 HttpPost httppost = new HttpPost(url2);
                 //                HttpDelete
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
@@ -1712,7 +1712,7 @@ public class ProductsPage extends AppCompatActivity {
             try {
                 // userid=12&productid=23&action=add
                 // TYPE: get
-                String url = getApplicationContext().getString(R.string.server) + "api/product?productId=" + productId1 + "&seller=" + sellerNme1 + "&userid=" + creduserid;
+                String url = BuildConfig.SERVER_URL + "api/product?productId=" + productId1 + "&seller=" + sellerNme1 + "&userid=" + creduserid;
 
                 //                String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NTY3MjY1NzMsImV4cCI6MTQ1Njc2MjU3M30.98mQFcYm5Uf3Fd7ZNPD-OwMIfObu7vfoq9zNtCCLfyI";
                 // payload.put("action", details.get("action"));

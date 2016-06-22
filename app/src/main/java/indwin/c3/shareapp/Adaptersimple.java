@@ -36,6 +36,7 @@ import java.util.ArrayList;
 /**
  * Created by Aniket Verma(Digo) on 4/24/2016.
  */
+
 public class Adaptersimple extends BaseAdapter {
     RadioButton checkRR;
     private final Context context;

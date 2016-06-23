@@ -119,6 +119,7 @@ public class Otp extends AppCompatActivity {
         //countDownTimer = new MalibuCountDownTimer(30000, 1000);
 
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.INVISIBLE);
         otp1 = (EditText) findViewById(R.id.otp1);
         otp1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -288,6 +289,7 @@ public class Otp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 verify.setEnabled(false);
+                spinner.setVisibility(View.VISIBLE);
                 verify.setTextColor(Color.parseColor("#ffffff"));
 
                 if ((otp1.getText().toString().length() == 4))// && (otp2.getText().toString().length() == 1) && (otp3.getText().toString().length() == 1) && (otp4.getText().toString().length() == 1)) {
@@ -580,6 +582,9 @@ public class Otp extends AppCompatActivity {
 
                 verify.setTextColor(Color.parseColor("#ffffff"));
                 d = 0;
+                spinner.setVisibility(View.GONE);
+            }
+            if(spinner.getVisibility()==View.VISIBLE){
                 spinner.setVisibility(View.GONE);
             }
             if (ot_check == 3) {

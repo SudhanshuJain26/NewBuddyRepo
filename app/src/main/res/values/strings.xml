@@ -2730,6 +2730,7 @@
     <string name="title_activity_flash_approved">FlashApprovedActivity</string>
     <string name="confirmation_email_link">An email verification has been sent to your mail id.
     </string>
+    <string name="error_player">There was anerror initializing the YouTubePlayer </string>
 
 
 </resources>

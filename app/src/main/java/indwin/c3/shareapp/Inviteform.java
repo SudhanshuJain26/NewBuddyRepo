@@ -73,6 +73,7 @@ public class Inviteform extends AppCompatActivity {
     private RelativeLayout error;
     private TextView lgin;
     private TextView msg;
+    public boolean successAchieved =false;
     Intent intform;  private EditText name,email,phone,ref;
     AutoCompleteTextView college;
 int a=0;
@@ -331,6 +332,7 @@ catch(Exception e){}
                 invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                spinner.setVisibility(View.VISIBLE);
                 invite.setTextColor(Color.parseColor("#ffffff"));
                 try { mName=name.getText().toString().trim();
                      String EMAIL_PATTERN =
@@ -443,6 +445,7 @@ mRef=ref.getText().toString().trim();
                             invite.setEnabled(true);
                             phone.setBackgroundResource(R.drawable.texted2);
                             phone.setPadding(pL, pT, pR, pB);
+                            spinner.setVisibility(View.GONE);
                             error.setVisibility(View.VISIBLE);
                             msg.setText("Please Enter the correct details!");
                             invite.setTextColor(Color.parseColor("#66ffffff"));
@@ -581,6 +584,7 @@ mRef=ref.getText().toString().trim();
 
                                     error.setVisibility(View.VISIBLE);
                                     invite.setEnabled(true);
+                                    spinner.setVisibility(View.GONE);
 //                                    name.setBackgroundResource(R.drawable.texted);
 //                                    name.setPadding(pL, pT, pR, pB);
 //                                    phone.setBackgroundResource(R.drawable.texted);
@@ -1048,6 +1052,8 @@ else{
             spinner.setVisibility(View.GONE);
 
             if (result.equals("success")) {
+                successAchieved = true;
+                invite.setEnabled(false);
                 SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
                 SharedPreferences.Editor edc = cred.edit();
                 edc.putString("phone_number", mPhone);
@@ -1060,7 +1066,7 @@ else{
                 user.setEmail(mEmail);
                 String json = gson.toJson(user);
                 mPrefs.edit().putString("UserObject", json).apply();
-                if (truth.equals("success")) {
+                if (truth.equals("success") && successAchieved) {
                     Intent inotp = new Intent(Inviteform.this, Otp.class);
 //                    finish();
 
@@ -1070,7 +1076,7 @@ else{
                     inotp.putExtra("Phone", phone.getText().toString().trim());
 
                 inotp.putExtra("Ref",mRef);
-
+                successAchieved = false;
 
                 startActivity(inotp);
                 overridePendingTransition(0,0);

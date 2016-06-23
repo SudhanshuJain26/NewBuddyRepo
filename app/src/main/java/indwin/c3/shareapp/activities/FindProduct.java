@@ -22,6 +22,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
@@ -44,7 +49,7 @@ import indwin.c3.shareapp.models.RecentSearchItems;
 import indwin.c3.shareapp.utils.AppUtils;
 import io.intercom.android.sdk.Intercom;
 
-public class FindProduct extends AppCompatActivity {
+public class FindProduct extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
     ArrayList<RecentSearchItems> recentSearchItemsArrayList = new ArrayList<RecentSearchItems>();
     EditText search;
@@ -67,6 +72,12 @@ public class FindProduct extends AppCompatActivity {
     SharedPreferences sharedpreferences;
     public static boolean linkpressed = false;
     public static boolean validUrl = false;
+    public static final String YOUTUBE_KEY = "AIzaSyA-RTCQQd1XXf1N_uLH8owBzYBx5AfPyPA";
+    private static final int RECOVERY_DIALOG_REQUEST = 1;
+    private YouTubePlayerView youTubeView;
+    public static final String VIDEO_ID = "WnQgARfeXLY";
+
+
 
 
     @Override
@@ -92,6 +103,9 @@ public class FindProduct extends AppCompatActivity {
         if (sharedpreferences.getInt("checklog", 0) == 1) {
             userId = sharedPreferences2.getString("name", null);
         }
+        youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
+
+        youTubeView.initialize(YOUTUBE_KEY, this);
 
         taptoSearch = (ImageView)findViewById(R.id.pasteAg);
         myClipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -481,6 +495,9 @@ public class FindProduct extends AppCompatActivity {
         }else if(parseString.contains("infibeam")){
             sellerNme = "infibeam";
             checkValidFromApis = 1;
+        }else if(parseString.contains("ebay")){
+            sellerNme = "ebay";
+            checkValidFromApis = 1;
         }
         //amazon
         else if (parseString.contains("amazon")) {
@@ -541,6 +558,23 @@ public class FindProduct extends AppCompatActivity {
         //
         //       Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean b) {
+        if (!b) {
+            player.cueVideo(VIDEO_ID);
+        }
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
+        if (errorReason.isUserRecoverableError()) {
+             errorReason.getErrorDialog(this, RECOVERY_DIALOG_REQUEST).show();
+        } else {
+            //String errorMessage = String.format(getString(R.string.error_player), errorReason.toString());
+            Toast.makeText(this, "There is some problem loading the video", Toast.LENGTH_LONG).show();
+        }
     }
 
 //    private void adjustListHeight(){

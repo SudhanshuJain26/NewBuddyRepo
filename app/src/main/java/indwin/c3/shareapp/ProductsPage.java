@@ -1884,7 +1884,11 @@ public class ProductsPage extends AppCompatActivity {
         } else if (parseString.contains("paytm")) {
             sellerNme1 = "paytm";
             checkValidFromApis = 1;
+        }else if(parseString.contains("ebay")){
+            sellerNme1 = "ebay";
+            checkValidFromApis = 1;
         }
+
         //amazon
         else if (parseString.contains("amazon")) {
             sellerNme1 = "amazon";
@@ -2052,6 +2056,9 @@ public class ProductsPage extends AppCompatActivity {
         if ("snapdeal".equals(seller)) {
             logo.setImageResource(R.drawable.snapdeal);
         }
+        if ("ebay".equals(seller)) {
+            logo.setImageResource(R.drawable.snapdeal);
+        }
 
 
         queryNew = (EditText) findViewById(R.id.query);
@@ -2112,6 +2119,9 @@ public class ProductsPage extends AppCompatActivity {
                         logo.setImageResource(R.drawable.myntra);
                     }
                     if ("shopclues".equals(sellerNme1)) {
+                        logo.setImageResource(R.drawable.shopclues);
+                    }
+                    if ("ebay".equals(sellerNme1)) {
                         logo.setImageResource(R.drawable.shopclues);
                     }
                     //                JSONObject img = new JSONObject(data1.getString("imgUrls"));

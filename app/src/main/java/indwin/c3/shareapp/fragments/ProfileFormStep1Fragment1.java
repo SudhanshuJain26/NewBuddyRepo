@@ -5,25 +5,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -65,41 +59,31 @@ import indwin.c3.shareapp.models.FBUserModel;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.DaysDifferenceFinder;
-import indwin.c3.shareapp.utils.FetchLatestUserDetails;
 import indwin.c3.shareapp.utils.FetchNewToken;
 import indwin.c3.shareapp.utils.HelpTipDialog;
-import indwin.c3.shareapp.utils.VerifyEmail;
 import io.intercom.com.google.gson.Gson;
 
 /**
- * Created by shubhang on 18/03/16.
+ * Created by ROCK
  */
 public class ProfileFormStep1Fragment1 extends Fragment {
-    TextView userEmail;
-    ImageButton editEmail;
-    EditText userEmailEditText;
     static EditText dobEditText;
     private static DatePicker datePicker;
-    Button saveEmail, connectSocialAccountFb, connectSocialAccountInsta;
+    Button  connectSocialAccountFb, connectSocialAccountInsta;
     CallbackManager callbackManager;
     private String email, firstName, friends, gender, lastName, link, name, fbuserId;
     private Boolean veri;
-    static int firstloginsign = 0;
     int w = 0;
     LoginManager loginManager;
     int retryCount = 0;
-    SharedPreferences mPrefs;
     UserModel user;
     public static ImageView completeEmail, incompleteEmail;
-    ImageView completeFb, incompleteFb, incompleteStep1, incompleteStep2, incompleteStep3;
-    Gson gson;
+    ImageView completeFb, incompleteFb;
     ImageView completeGender, incompleteGender;
-    private final int top = 16, left = 16, right = 16, bottom = 16;
     boolean isGenderSelected = false;
     ImageView topImage;
     public static Button verifyEmail;
     private ImageButton socialHelptip;
-    private TextView incorrectEmail;
     private Spinner genderSpinner;
     private ImageView incompleteDOB, completeDOB;
     static boolean updateUserDOB = false;
@@ -115,11 +99,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         FacebookSdk.sdkInitialize(getActivity());
         getAllViews(rootView);
         setAllClickListener();
-        mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        mPrefs.edit().putBoolean("visitedFormStep1Fragment1", true).apply();
 
-
-        gson = new Gson();
         ProfileFormStep1 profileFormStep1 = (ProfileFormStep1) getActivity();
         user = profileFormStep1.getUser();
         if (user.isAppliedFor1k()) {
@@ -150,24 +130,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                          }
 
                 , null);
-        if (AppUtils.isNotEmpty(user.getEmail())) {
-            userEmail.setText(user.getEmail());
-        }
-        if (user.isEmailVerified()) {
-            verifyEmail.setText("Verified!");
-            verifyEmail.setTextColor(Color.GRAY);
-            verifyEmail.setClickable(false);
-            verifyEmail.setEnabled(false);
-            completeEmail.setVisibility(View.VISIBLE);
-            user.setIncompleteEmail(false);
-        } else if (user.isEmailSent()) {
-            verifyEmail.setText("Check");
-            verifyEmail.setTextColor(Color.parseColor("#44c2a6"));
-            verifyEmail.setClickable(true);
-            verifyEmail.setEnabled(true);
-            verifyEmail.setVisibility(View.VISIBLE);
-            completeEmail.setVisibility(View.GONE);
-        }
 
 
         final String genderOptions[] = getResources().getStringArray(R.array.gender);
@@ -217,9 +179,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         if (user.isIncompleteEmail() || user.isIncompleteFb() || user.isIncompleteGender()) {
             if (user.isIncompleteFb() && !user.isAppliedFor1k()) {
                 incompleteFb.setVisibility(View.VISIBLE);
-            }
-            if (user.isIncompleteEmail() && !user.isAppliedFor1k()) {
-                incompleteEmail.setVisibility(View.VISIBLE);
             }
             if (user.isIncompleteGender() && !user.isAppliedFor1k()) {
                 incompleteGender.setVisibility(View.VISIBLE);
@@ -294,7 +253,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                                     }
                                     Toast.makeText(getActivity(), "Please try again!", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    new fblogin().execute();
+                                    new FBLogin().execute();
                                 }
 
                             }
@@ -318,11 +277,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         dobEditText = (EditText) rootView.findViewById(R.id.user_dob_edittext);
         completeDOB = (ImageView) rootView.findViewById(R.id.complete_dob);
         incompleteDOB = (ImageView) rootView.findViewById(R.id.incomplete_dob);
-        userEmail = (TextView) rootView.findViewById(R.id.user_email);
-        userEmailEditText = (EditText) rootView.findViewById(R.id.user_email_edittext);
-        editEmail = (ImageButton) rootView.findViewById(R.id.edit_user_email);
         verifyEmail = (Button) rootView.findViewById(R.id.verify_user_email);
-        saveEmail = (Button) rootView.findViewById(R.id.save_user_email);
         connectSocialAccountFb = (Button) rootView.findViewById(R.id.connect_social_account_fb);
         connectSocialAccountInsta = (Button) rootView.findViewById(R.id.connect_social_account_insta);
         //        dontHaveFb = (Button) rootView.findViewById(R.id.dont_have_fb);
@@ -330,14 +285,10 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         completeFb = (ImageView) rootView.findViewById(R.id.complete_fb);
         incompleteEmail = (ImageView) rootView.findViewById(R.id.incomplete_email);
         incompleteFb = (ImageView) rootView.findViewById(R.id.incomplete_fb);
-        incompleteStep1 = (ImageView) getActivity().findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) getActivity().findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) getActivity().findViewById(R.id.incomplete_step_3);
         completeGender = (ImageView) rootView.findViewById(R.id.complete_gender);
         incompleteGender = (ImageView) rootView.findViewById(R.id.incomplete_gender);
         topImage = (ImageView) getActivity().findViewById(R.id.verify_image_view2);
         socialHelptip = (ImageButton) rootView.findViewById(R.id.social_helptip);
-        incorrectEmail = (TextView) rootView.findViewById(R.id.incorrect_email);
 
 
     }
@@ -370,128 +321,12 @@ public class ProfileFormStep1Fragment1 extends Fragment {
 
             }
         });
-        editEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userEmail.setVisibility(View.GONE);
-                userEmailEditText.setVisibility(View.VISIBLE);
-                userEmailEditText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(userEmailEditText, InputMethodManager.SHOW_IMPLICIT);
-                editEmail.setVisibility(View.GONE);
-                verifyEmail.setTextColor(Color.parseColor("#44c2a6"));
-                verifyEmail.setText("Verify");
-                verifyEmail.setClickable(true);
-                verifyEmail.setEnabled(true);
-                verifyEmail.setVisibility(View.GONE);
-                saveEmail.setVisibility(View.VISIBLE);
-                completeEmail.setVisibility(View.GONE);
-            }
-        });
-        saveEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (AppUtils.isEmpty(userEmailEditText.getText().toString())) {
-                    return;
-                }
-                if (isValidEmail(userEmailEditText.getText())) {
-                    if (AppUtils.isNotEmpty(user.getEmail()) && user.getEmail().equals(userEmailEditText.getText().toString())) {
-
-                    } else {
-                        user.setEmailVerified(false);
-                        verifyEmail.setText("Verify");
-                    }
-
-                    incorrectEmail.setVisibility(View.GONE);
-                    user.setEmail(userEmailEditText.getText().toString());
-                    //userEmail.setText(user.getEmail());
-                    editEmail.setVisibility(View.VISIBLE);
-                    verifyEmail.setVisibility(View.VISIBLE);
-                    saveEmail.setVisibility(View.GONE);
-                    userEmailEditText.setVisibility(View.GONE);
-                    userEmail.setVisibility(View.VISIBLE);
-                } else {
-                    incorrectEmail.setVisibility(View.VISIBLE);
-                }
-                hideKeyboard();
-            }
-        });
-        userEmailEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    if (userEmailEditText.getText().length() > 0 &&
-                            !"".equals(userEmailEditText.getText().toString().trim()))
-                        saveEmail();
-                    else {
-                        incorrectEmail.setVisibility(View.VISIBLE);
-                    }
-                    hideKeyboard();
-                    return true;
-                }
-                return false;
-            }
-        });
-        userEmailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (v == userEmailEditText && !hasFocus) {
-                    incorrectEmail.setVisibility(View.GONE);
-                    userEmail.setText(user.getEmail());
-                    editEmail.setVisibility(View.VISIBLE);
-                    if (user.isEmailVerified()) {
-                        verifyEmail.setText("Verified!");
-                    }
-                    verifyEmail.setVisibility(View.VISIBLE);
-                    saveEmail.setVisibility(View.GONE);
-                    userEmailEditText.setVisibility(View.GONE);
-                    userEmail.setVisibility(View.VISIBLE);
-                    hideKeyboard();
-                }
-            }
-        });
-        userEmailEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                incorrectEmail.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        verifyEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!"".equals(userEmail.getText().toString()))
-                    if ("Check".equals(verifyEmail.getText().toString()))
-                        new FetchLatestUserDetails(getActivity(), user.getUserId(), user).execute();
-                    else {
-                        new VerifyEmail(getActivity(), user.getUserId(), userEmail.getText().toString()).execute();
-                        user.setEmailSent(true);
-                    }
-            }
-        });
 
 
     }
 
     private void setAllHelpTipsEnabled() { socialHelptip.setEnabled(true);}
 
-    private void hideKeyboard() {
-        if (getActivity().getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-        }
-    }
 
     public static void confirmDOB() {
         String date = datePicker.getSelectedDate() + " " + datePicker.getSelectedMonthName() + " " + datePicker.getSelectedYear();
@@ -547,15 +382,6 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             completeDOB.setVisibility(View.VISIBLE);
         }
     }
-
-    public final static boolean isValidEmail(CharSequence target) {
-        if (target == null) {
-            return false;
-        } else {
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-        }
-    }
-
     private void saveGender() {
         isGenderSelected = true;
         user.setGender(genderSpinner.getSelectedItem().toString());
@@ -573,26 +399,8 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         AppUtils.saveUserObject(getActivity(), user);
     }
 
-    private void saveEmail() {
-        user.setEmail(userEmail.getText().toString());
-        user.setUpdateEmail(true);
-        user.setEmailVerified(false);
-        UserModel user = AppUtils.getUserObject(getActivity());
-        userEmail.setText(userEmailEditText.getText().toString());
-        user.setEmail(userEmail.getText().toString());
-        user.setUpdateEmail(true);
-        user.setEmailVerified(false);
-        editEmail.setVisibility(View.VISIBLE);
-        verifyEmail.setVisibility(View.VISIBLE);
-        saveEmail.setVisibility(View.GONE);
-        userEmailEditText.setVisibility(View.GONE);
-        userEmail.setVisibility(View.VISIBLE);
-        user.setEmailVerified(false);
-        AppUtils.saveUserObject(getActivity(), user);
-    }
 
     public static void setViewAndChildrenEnabled(View view, boolean enabled) {
-
         if (view instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup) view;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
@@ -609,7 +417,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private class fblogin extends
+    private class FBLogin extends
                           AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -641,7 +449,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                 String url2 = BuildConfig.SERVER_URL + "api/user/social?userid=" + phone;
                 HttpPut httppost = new HttpPut(url2);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
-                httppost.setHeader("x-access-token", mPrefs.getString("token_value", ""));
+                httppost.setHeader("x-access-token", AppUtils.getFromSharedPrefs(getActivity(), "token_value"));
                 httppost.setHeader("Content-Type", "application/json");
                 StringEntity entity = new StringEntity(payload.toString());
                 httppost.setEntity(entity);
@@ -682,9 +490,9 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                 retryCount++;
                 if (result.equals("authFail")) {
                     new FetchNewToken(getActivity()).execute();
-                    new fblogin().execute();
+                    new FBLogin().execute();
                 } else if (result.equals("fail")) {
-                    new fblogin().execute();
+                    new FBLogin().execute();
                 }
             } else {
                 connectSocialAccountFb.setCompoundDrawablesWithIntrinsicBounds(R.drawable.fb, 0, 0, 0);

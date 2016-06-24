@@ -412,6 +412,8 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         saveAndProceed = (Button) findViewById(R.id.save_and_proceed);
         previous = (Button) findViewById(R.id.previous);
         genderImage = (ImageView) findViewById(R.id.verify_image_view2);
+        //CircleProgressView cpv = (CircleProgressView) findViewById(R.id.circleView);
+        //cpv.bringToFront();
     }
 
     private void setIncomplete() {
@@ -500,6 +502,8 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             findViewById(R.id.up_arrow_4).setVisibility(View.VISIBLE);
         }
         genderImage.setImageDrawable(getResources().getDrawable(image));
+        //ProgressPieView ppv=(ProgressPieView)findViewById(R.id.progressPieViewXml);
+        //ppv.setProgress(60);
     }
 
     @Override

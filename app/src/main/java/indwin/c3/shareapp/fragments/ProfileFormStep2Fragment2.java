@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,25 +28,19 @@ import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.ValidationUtils;
-import io.intercom.com.google.gson.Gson;
 
 /**
- * Created by shubhang on 05/04/16.
+ * Created by ROCK
  */
 public class ProfileFormStep2Fragment2 extends Fragment {
     private SharedPreferences mPrefs;
     private UserModel user;
-    private Button saveAndProceed, previous;
-    private Gson gson;
-    private TextView gotoFragment1, gotoFragment3, gotoFragment2, addFamilyMember;
-    private final int top = 16, left = 16, right = 16, bottom = 16;
-    ImageView incompleteStep1, incompleteStep2, incompleteStep3, incompleteFamilyDetails, completeFamilyDetails;
+    private TextView  addFamilyMember;
+    ImageView  incompleteFamilyDetails, completeFamilyDetails;
     boolean isFamilyMemberAdded = false;
     private EditText phoneFamilyMember1, phoneFamilyMember2;
     private Spinner prefLangFamilyMember1, prefLangFamilyMember2;
     boolean isFamilyMember1Selected = false, isProfessionFamilyMember1Selected = false, isFamilyMember2Selected = false, isProfessionFamilyMember2Selected = false;
-    ImageView topImage;
-    View view1, view2;
     private ImageButton familyHelptip;
     private Spinner familyMember2spinner, professionFamilyMember2spinner, familyMember1spinner;
     private SpinnerHintAdapter adapter, adapter2, languageAdapter;
@@ -64,7 +57,6 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep2Fragment2", true).apply();
-        gson = new Gson();
         ProfileFormStep2 profileFormStep2 = (ProfileFormStep2) getActivity();
         user = profileFormStep2.getUser();
         mobile = AppUtils.getFromSelectedSharedPrefs(getActivity(), "phone_number", "cred");
@@ -73,14 +65,6 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();
-        if (mPrefs.getBoolean("visitedFormStep2Fragment2", false)) {
-            //gotoFragment2.setAlpha(1);
-            //gotoFragment2.setClickable(true);
-        }
-        if (mPrefs.getBoolean("visitedFormStep2Fragment3", false)) {
-            //gotoFragment3.setAlpha(1);
-            //gotoFragment3.setClickable(true);
-        }
 
         familyHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -319,8 +303,6 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         incompleteFamilyDetails = (ImageView) rootView.findViewById(R.id.incomplete_family_details);
         completeFamilyDetails = (ImageView) rootView.findViewById(R.id.complete_family_details);
         familyHelptip = (ImageButton) rootView.findViewById(R.id.family_helptip);
-        view1 = (View) rootView.findViewById(R.id.view_family_member_2);
-        view2 = (View) rootView.findViewById(R.id.profession_view_family_member_2);
         familyMember2spinner = (Spinner) rootView.findViewById(R.id.family_member_2);
         professionFamilyMember2spinner = (Spinner) rootView.findViewById(R.id.profession_family_member_2);
     }
@@ -450,15 +432,6 @@ public class ProfileFormStep2Fragment2 extends Fragment {
             }
         }
 
-        //if (!isFamilyMember1Selected || !isProfessionFamilyMember1Selected || AppUtils.isEmpty(user.getPrefferedLanguageFamilyMemberType1()) || AppUtils.isEmpty(user.getPhoneFamilyMemberType1())) {
-        //    user.setIncompleteFamilyDetails(true);
-        //    completeFamilyDetails.setVisibility(View.GONE);
-        //    incompleteFamilyDetails.setVisibility(View.INVISIBLE);
-        //} else {
-        //    user.setIncompleteFamilyDetails(false);
-        //    incompleteFamilyDetails.setVisibility(View.GONE);
-        //    completeFamilyDetails.setVisibility(View.INVISIBLE);
-        //}
     }
 
     private void resetFamilyDetails() {

@@ -738,10 +738,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
         startActivity(intent);
     }
-    //    @Override
-    //    protected void attachBaseContext(Context newBase) {
-    //        super.attachBaseContext(new CalligraphyContextWrapper(newBase));
-    //    }
 
     public void goToAccSettings(View view) {
         Intent intent = new Intent(ProfileActivity.this, AccountSettingsActivity.class);

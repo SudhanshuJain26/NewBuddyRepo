@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -33,7 +32,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,8 +39,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,33 +55,25 @@ import indwin.c3.shareapp.utils.Constants;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import indwin.c3.shareapp.utils.VerhoeffAlgorithm;
-import io.intercom.com.google.gson.Gson;
 
 /**
- * Created by shubhang on 18/03/16.
+ * Created by ROCK
  */
 public class ProfileFormStep1Fragment3 extends Fragment {
-    private ArrayList<String> addressProofs;
-    private Map<String, String> newaddressProofs;
     private static final int INTENT_REQUEST_GET_IMAGES = 13;
     ImageUploaderRecyclerAdapter adapter;
     ArrayList<Uri> imageUris;
-    private SharedPreferences mPrefs;
-    private Gson gson;
     private UserModel user;
     private EditText editAadharNumber;
-    private TextView aadharNuber, aadharPanHeader, editTextHeader, gotoFragment1, gotoFragment2, gotoFragment3;
+    private TextView aadharNuber, aadharPanHeader, editTextHeader;
     private Spinner aadharOrPan;
     String[] arrayAaadharOrPan;
     private CardView editTextCardView;
-    private Button saveAndProceed, previous;
-    private ImageView incompleteAadhar, completeAadhar, completeAadhar1, incompleteAddress, completeAddress, incompleteStep1, incompleteStep2, incompleteStep3;
+    private ImageView incompleteAadhar, completeAadhar, completeAadhar1, incompleteAddress, completeAddress;
     int currentSelected;
-    private final int top = 16, left = 16, right = 16, bottom = 16;
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     boolean deniedPermissionForever = false;
     private static final int REQUEST_PERMISSION_SETTING = 99;
-    ImageView topImage;
     private ImageButton aadharHelptip, addressHelptip, addPanHelptip;
     boolean validAadhar = false;
     private LinearLayout incorrectFormat;
@@ -97,7 +85,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private Spinner addressTypeSp;
     private ImageView addPanImage;
     private String typeImage;
-    private RelativeLayout panRL;
     private LinearLayout panImageLL;
     private CardView addressProofCv;
     private String[] addressValue = {"aadhaar", "dl", "voterid", "passport", "ration"};
@@ -111,16 +98,10 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         getAllViews(rootView);
         arrayAaadharOrPan = getResources().getStringArray(R.array.aadhar_or_pan);
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
-        mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        mPrefs.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
-        gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
         ProfileFormStep1 profileFormStep1 = (ProfileFormStep1) getActivity();
         user = profileFormStep1.getUser();
-        newaddressProofs = new HashMap<>();
 
         try {
-            addressProofs = user.getAddressProofs();
             if (user.getAddressProof() == null) {
                 user.setAddressProof(new Image());
             } else if (user.getAddressProof().getFront() != null && AppUtils.isNotEmpty(user.getAddressProof().getFront().getImgUrl())) {
@@ -128,7 +109,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 user.setIncompletePermanentAddress(false);
             }
         } catch (Exception e) {
-            addressProofs = new ArrayList<>();
         }
         addressProof = user.getAddressProof();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -420,20 +400,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
     }
 
-    private void saveSelfieAndSignature() {
-        UserModel userSP = AppUtils.getUserObject(getActivity());
-        if (AppUtils.isNotEmpty(userSP.getSignature())) {
-            user.setSignature(userSP.getSignature());
-            user.setUpdateSignature(userSP.isUpdateSignature());
-
-        }
-
-        if (AppUtils.isNotEmpty(userSP.getSelfie())) {
-            user.setSelfie(userSP.getSelfie());
-            user.setUpdateSelfie(userSP.isUpdateSelfie());
-
-        }
-    }
 
     private void getAllViews(View rootView) {
         addressProofCv = (CardView) rootView.findViewById(R.id.address_proof_cv);
@@ -444,20 +410,12 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         aadharPanHeader = (TextView) rootView.findViewById(R.id.aadhar_pan_header);
         editTextHeader = (TextView) rootView.findViewById(R.id.editext_header);
         editTextCardView = (CardView) rootView.findViewById(R.id.edittext_carview);
-        previous = (Button) getActivity().findViewById(R.id.previous);
         editAadharNumber = (EditText) rootView.findViewById(R.id.edit_aadhar_number);
         incompleteAadhar = (ImageView) rootView.findViewById(R.id.incomplete_aadhar);
         completeAadhar = (ImageView) rootView.findViewById(R.id.complete_aadhar);
         completeAadhar1 = (ImageView) rootView.findViewById(R.id.complete_aadhar_1);
         incompleteAddress = (ImageView) rootView.findViewById(R.id.incomplete_address_proof);
         currentSelected = 0;
-        incompleteStep1 = (ImageView) getActivity().findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) getActivity().findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) getActivity().findViewById(R.id.incomplete_step_3);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
-        saveAndProceed = (Button) getActivity().findViewById(R.id.save_and_proceed);
-        panRL = (RelativeLayout) rootView.findViewById(R.id.panRL);
-        topImage = (ImageView) getActivity().findViewById(R.id.verify_image_view2);
         aadharHelptip = (ImageButton) rootView.findViewById(R.id.aadhar_helptip);
         addressHelptip = (ImageButton) rootView.findViewById(R.id.address_helptip);
         incorrectFormat = (LinearLayout) rootView.findViewById(R.id.incorrect_format_layout);

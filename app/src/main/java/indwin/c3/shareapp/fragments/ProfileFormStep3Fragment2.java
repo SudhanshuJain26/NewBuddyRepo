@@ -1,39 +1,27 @@
 package indwin.c3.shareapp.fragments;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.activities.ProfileFormStep3;
 import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.HelpTipDialog;
-import io.intercom.com.google.gson.Gson;
 
 /**
- * Created by shubhang on 07/04/16.
+ * Created by ROCK
  */
 public class ProfileFormStep3Fragment2 extends Fragment {
-    private SharedPreferences mPrefs;
     private UserModel user;
-    private Button saveAndProceed, previous;
-    private Gson gson;
-    private TextView gotoFragment1, gotoFragment3, gotoFragment2;
-    private final int top = 16, left = 16, right = 16, bottom = 16;
-    ImageView incompleteStep1, incompleteStep2, incompleteStep3;
     boolean isMonthlyExpenditureSelected = false, isVehicleSelected = false, isVehicleTypeSelected = false;
     ImageView incompleteMonthlyExpenditure, completeMonthlyExpenditure, incompleteVehicleDetails, completeVehicleDetails;
     ImageView topImage;
@@ -46,9 +34,6 @@ public class ProfileFormStep3Fragment2 extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(
                 R.layout.profile_form_step3_fragment2, container, false);
-        RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
-        mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        mPrefs.edit().putBoolean("visitedFormStep3Fragment2", true).apply();
         ProfileFormStep3 profileFormStep3 = (ProfileFormStep3) getActivity();
         user = profileFormStep3.getUser();
         getAllViews(rootView);
@@ -57,14 +42,6 @@ public class ProfileFormStep3Fragment2 extends Fragment {
         }
         setAllHelpTipsEnabled();
 
-        if (mPrefs.getBoolean("visitedFormStep2Fragment2", false)) {
-            //gotoFragment2.setAlpha(1);
-            //gotoFragment2.setClickable(true);
-        }
-        if (mPrefs.getBoolean("visitedFormStep2Fragment3", false)) {
-            //gotoFragment3.setAlpha(1);
-            //gotoFragment3.setClickable(true);
-        }
         expenditureHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

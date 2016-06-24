@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -21,15 +20,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.gun0912.tedpicker.ImagePickerActivity;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.activities.ImageHelperActivity;
@@ -41,21 +37,12 @@ import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
-import io.intercom.com.google.gson.Gson;
 
 /**
- * Created by shubhang on 07/04/16.
+ * Created by ROCK
  */
 public class ProfileFormStep3Fragment3 extends Fragment {
-    private SharedPreferences mPrefs;
     private UserModel user;
-    private Button saveAndProceed, previous;
-    private Gson gson;
-    private TextView gotoFragment1, gotoFragment3, gotoFragment2;
-    private final int top = 16, left = 16, right = 16, bottom = 16;
-    ImageView incompleteStep1, incompleteStep2, incompleteStep3;
-    private ArrayList<String> bankStmts;
-    private Map<String, String> newBankStmts;
     private static final int INTENT_REQUEST_GET_IMAGES = 13;
     ImageUploaderRecyclerAdapter adapter;
     ArrayList<Uri> imageUris;
@@ -63,9 +50,7 @@ public class ProfileFormStep3Fragment3 extends Fragment {
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     boolean deniedPermissionForever = false;
     private static final int REQUEST_PERMISSION_SETTING = 99;
-    ImageView topImage;
     private ImageButton bankHelptip;
-    private ImageView incompleteStudentLoan, completeStudentLoan;
     private Image bankStmnt;
 
     @Override
@@ -74,14 +59,11 @@ public class ProfileFormStep3Fragment3 extends Fragment {
         View rootView = inflater.inflate(
                 R.layout.profile_form_step3_fragment3, container, false);
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
-        mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        mPrefs.edit().putBoolean("visitedFormStep3Fragment3", true).apply();
         ProfileFormStep3 profileFormStep3 = (ProfileFormStep3) getActivity();
         user = profileFormStep3.getUser();
 
         getAllViews(rootView);
         try {
-            bankStmts = user.getBankStmts();
             if (user.getBankStatement() == null) {
                 user.setBankStatement(new Image());
             } else {
@@ -89,7 +71,6 @@ public class ProfileFormStep3Fragment3 extends Fragment {
                 user.setIncompleteBankStmt(false);
             }
         } catch (Exception e) {
-            bankStmts = new ArrayList<>();
         }
         bankStmnt = user.getBankStatement();
         if (!bankStmnt.getImgUrls().contains("add") && !user.isAppliedFor60k())
@@ -120,22 +101,10 @@ public class ProfileFormStep3Fragment3 extends Fragment {
         );
         adapter = new ImageUploaderRecyclerAdapter(getActivity(), bankStmnt, "Bank Statements", user.isAppliedFor60k(), Constants.IMAGE_TYPE.BANK_STMNTS.toString());
         rvImages.setAdapter(adapter);
-
-
         if (user.isAppliedFor60k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();
-        if (mPrefs.getBoolean("visitedFormStep2Fragment2", false)) {
-            //gotoFragment2.setAlpha(1);
-            //gotoFragment2.setClickable(true);
-        }
-        if (mPrefs.getBoolean("visitedFormStep2Fragment1", false)) {
-            //gotoFragment3.setAlpha(1);
-            //gotoFragment3.setClickable(true);
-        }
-
-
         setOnClickListener();
 
         return rootView;

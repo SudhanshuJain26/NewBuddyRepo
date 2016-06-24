@@ -1,12 +1,9 @@
 package indwin.c3.shareapp.fragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,16 +25,12 @@ import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.ValidationUtils;
-import io.intercom.com.google.gson.Gson;
 
 /**
- * Created by shubhang on 05/04/16.
+ * Created by ROCK
  */
 public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusChangeListener {
-    private SharedPreferences mPrefs;
     private UserModel user;
-    private Gson gson;
-    private final int top = 16, left = 16, right = 16, bottom = 16;
     static EditText verificationDateEditText, classmateName, classmatePhone;
     private static DatePicker datePicker;
     public static boolean updateUserVerificationDate = false;
@@ -47,36 +40,19 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
     private EditText addRollNumberEt;
     private ImageView incompleteRollNumber, completeRollNumber;
     private ImageButton classmateHelptip, verificationHelptip;
-    private boolean isRollNUmberUpdate;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(
                 R.layout.profile_form_step2_fragment4, container, false);
-        RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
-        mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        mPrefs.edit().putBoolean("visitedFormStep2Fragment3", true).apply();
-        gson = new Gson();
         ProfileFormStep2 profileFormStep2 = (ProfileFormStep2) getActivity();
         user = profileFormStep2.getUser();
-
         getAllViews(rootView);
-
         if (user.isAppliedFor7k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();
-        if (mPrefs.getBoolean("visitedFormStep2Fragment2", false)) {
-            //gotoFragment2.setAlpha(1);
-            //gotoFragment2.setClickable(true);
-        }
-        if (mPrefs.getBoolean("visitedFormStep2Fragment1", false)) {
-            //gotoFragment3.setAlpha(1);
-            //gotoFragment3.setClickable(true);
-        }
-
-
         if (user.getClassmateName() != null && !"".equals(user.getClassmateName())
                 && user.getClassmatePhone() != null && !"".equals(user.getClassmatePhone())) {
             completeClassmate.setVisibility(View.VISIBLE);
@@ -197,18 +173,10 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
             }
 
         }
-        //        changeAccNum.setOnClickListener(listener);
         setOnClickListener();
 
-        if (user.isIncompleteFamilyDetails()) {
-            //incompleteStep2.setVisibility(View.VISIBLE);
-        }
-        if (user.isIncompleteDOB() || user.isIncompleteAddressDetails()) {
-            //incompleteStep1.setVisibility(View.VISIBLE);
-        }
         if (user.isIncompleteClassmateDetails()
                 || user.isIncompleteVerificationDate() || user.isIncompleteStudentLoan()) {
-            //incompleteStep3.setVisibility(View.VISIBLE);
             if (user.isIncompleteClassmateDetails() && !user.isAppliedFor7k()) {
                 incompleteClassmate.setVisibility(View.VISIBLE);
             }
@@ -236,7 +204,6 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
 
             @Override
             public void afterTextChanged(Editable s) {
-                isRollNUmberUpdate = true;
                 user.setUpdateRollNumber(true);
             }
         });
@@ -374,8 +341,4 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         super.onResume();
     }
 
-    public void showHideBankStatement(boolean isBankLayoutVisible) {
-
-
-    }
 }

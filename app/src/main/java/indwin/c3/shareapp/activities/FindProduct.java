@@ -461,20 +461,31 @@ public class FindProduct extends AppCompatActivity {
             } else {
                 checkValidUrl = 1;
             }
-        } else if (parseString.contains("myntra")) {
+        }
+        else if (parseString.contains("myntra")) {
             sellerNme = "myntra";
-            checkValidFromApis = 1;
-        } else if (parseString.contains("shopclues")) {
+            productId=parseString;
+            //pos = parseString.lastIndexOf("/");
+
+        }else if (parseString.contains("shopclues")) {
             sellerNme = "shopclues";
             checkValidFromApis = 1;
         } else if (parseString.contains("jabong")) {
             sellerNme = "jabong";
             checkValidFromApis = 1;
 
-        } else if (parseString.contains("paytm")) {
+        }
+        else if (parseString.contains("paytm")) {
             sellerNme = "paytm";
-            checkValidFromApis = 1;
-        }else if(parseString.contains("infibeam")){
+            productId=parseString;
+            //pos = parseString.lastIndexOf("/");
+
+        }
+//        else if (parseString.contains("paytm")) {
+//            sellerNme = "paytm";
+//            checkValidFromApis = 1;
+//        }
+        else if(parseString.contains("infibeam")){
             sellerNme = "infibeam";
             checkValidFromApis = 1;
         }
@@ -651,6 +662,7 @@ private class FindRecentProductLinks extends AsyncTask<String,Void,String> {
                                 String seller = jsonObject1.getString("seller");
                                 String title = jsonObject1.getString("title");
                                 String price = jsonObject1.getString("sellingPrice");
+
                                 String productId = jsonObject1.getString("fkProductId");
                                 RecentSearchItems recentSearchItems = new RecentSearchItems(seller, price, title, productId);
                                 recentSearchItemsArrayList.add(recentSearchItems);

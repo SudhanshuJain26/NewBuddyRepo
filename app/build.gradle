@@ -7,8 +7,8 @@ android {
         applicationId "indwin.c3.shareapp"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 72
-        versionName "2.15"
+        versionCode 73
+        versionName "2.16"
     }
     lintOptions {
         checkReleaseBuilds false
@@ -74,6 +74,10 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.pixplicity.sharp:library:1.0.2@aar'
+
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.google.android.gms:play-services-analytics:8.4.0'
     compile('ch.acra:acra:4.7.0') {
         exclude group: 'org.json'

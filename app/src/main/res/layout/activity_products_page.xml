@@ -52,6 +52,7 @@
         android:layout_height="match_parent"
         android:id="@+id/viewDetail"
         android:visibility="gone"
+
         android:layout_below="@id/toolBar"
         android:background="#ffffff">
 
@@ -177,7 +178,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/sellerMrp"
                     android:layout_marginBottom="@dimen/left"
-                    android:layout_marginLeft="@dimen/left"
+                    android:layout_marginLeft="@dimen/activity_vertical_margin"
                     android:layout_toRightOf="@id/sellerMrpValueold"
                     android:text="Rs 49,999"
                     android:textColor="#000000" />
@@ -204,12 +205,31 @@
                     android:text="Additional costs?"
                     android:textColor="#F28E52" />
             </RelativeLayout>
-
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rlmanProd"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:id="@+id/flipcashicon"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/left"
+                android:src="@drawable/flipcash"
+                android:text="cash"/>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/rlmanProd"
+    android:drawableLeft="@drawable/flipcash"
+    android:drawablePadding="@dimen/left"
+    android:layout_toRightOf="@id/flipcashicon"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:id="@+id/flipcash"
+    android:text="cash"/>
             <RelativeLayout
                 android:id="@+id/rlProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rlmanProd"
+                android:layout_below="@id/flipcash"
                 android:layout_margin="@dimen/activity_horizontal_margin">
 
                 <View
@@ -506,6 +526,7 @@ android:animateLayoutChanges="true"
 
                         <indwin.c3.shareapp.CustomEditText
                             android:id="@+id/dValue"
+                            android:paddingRight="@dimen/left"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"

@@ -51,7 +51,8 @@ public class DeleteAccountActivity extends AppCompatActivity {
     private GIFView loading;
     private Gson gson;
     private SharedPreferences mPrefs;
-    private UserModel user;
+    private UserModel
+            user;
     private TextView incorrectPassword;
     int retryCount = 0;
     private AlertDialog dialog;

@@ -87,7 +87,7 @@ public class ProductsPage extends AppCompatActivity {
     private EditText hve, queryN;
     private long EMIcheck = 0;
     private int checkLongpress = 0,noOfDays,interestRate=21;
-    private List<String> pricesFormonths;
+    private List<Integer> pricesFormonths;
     private GIFView loader;
     private int checkImg = 1, searchPrice, currDay, minDownpayment, firstServicecharge = 0, secondServicecharge = 0;
     private ScrollView viewDetail;
@@ -281,7 +281,11 @@ public class ProductsPage extends AppCompatActivity {
             else
                 inccc = 1;
 
-            if (mValue + inccc <= sellingPrice + secondServicecharge-considerTen*200) {
+            if (mValue + inccc <= sellingPrice + secondServicecharge) {
+                if(mValue + inccc <= sellingPrice + secondServicecharge-considerTen*200)
+                {
+                    
+                }
                 mValue += inccc;
                 spInc = sellingPrice - mValue;
                 int w = serviceCharge(searchPrice, sellingPrice - mValue, sellerNme1);
@@ -447,8 +451,13 @@ public class ProductsPage extends AppCompatActivity {
             int w = serviceCharge(searchPrice, searchPrice - mind.intValue(), sellerNme1);
             firstServicecharge = w;
             secondServicecharge = serviceCharge(searchPrice, sellingPrice - (mind.intValue() + w), sellerNme1);
-            availbalmsg.setText("Minimum Downpayment for this product: " + getApplicationContext().getString(R.string.Rs) + (mind.intValue() + w));
+
+
             minDownpayment = (mind.intValue() + w);
+            if(isZeroDpApplicable&&fcbv>=sellingPrice&&searchPrice<=1000)
+            {mValue=0;
+                minDownpayment=0;}
+            availbalmsg.setText("Minimum Downpayment for this product: " + getApplicationContext().getString(R.string.Rs) + (minDownpayment));
             globalMindown = minDownpayment;
             if (dummyCl == 1000)
                 creditBalance.setText(getApplicationContext().getString(R.string.Rs) + "0");
@@ -968,6 +977,44 @@ public class ProductsPage extends AppCompatActivity {
                     }
                     minDownpayment = globalMindown;
                     mValue = minDownpayment;
+                    int mmonthss=months(searchSubcategory, searchCategory, searchBrand, sellingPrice);
+                    List<String> categories = new ArrayList<String>();
+                    int p=-1;
+                    for (int j = 0; j < 8; j++) {
+                        if ((myMonths[j] <= mmonthss)&&(mmonthss!=0)) {
+
+                            p = j;
+                            //categories.add(String.valueOf(myMonths[j]) + " months");
+                        }
+                    }
+
+                    if (fcbv <= 0) {
+                        dummyCl = 1000;
+                        fcbv = 100000000;
+                    }
+                    for (int ww = p; ww >= 0; ww--) {
+                        categories.add(String.valueOf(myMonths[ww]) + " months");
+                    }
+                    if ((searchPrice <= 150) || (dummyCl == 1000 && Constants.STATUS.APPROVED.toString().equals(userProfileStatus))) {
+                        categories.clear();
+                        categories.add("No Financing");
+                    } else
+
+                    {
+                        categories.add("No Financing");
+                    }
+
+                    // Creating adapter for spinner
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(ProductsPage.this, android.R.layout.simple_spinner_item, categories);
+
+                    // Drop down layout style - list view with radio button
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    dataAdapter.notifyDataSetChanged();
+                    // attaching data adapter to spinner
+                    spinner.setAdapter(dataAdapter);
+
+
                     int w = serviceCharge(searchPrice, sellingPrice - mValue, sellerNme1);
                     firstServicecharge = w;
                     secondServicecharge = serviceCharge(searchPrice, sellingPrice - mValue, sellerNme1);
@@ -1044,11 +1091,7 @@ public class ProductsPage extends AppCompatActivity {
                                 //                                setEmi(2);
 
                             }
-
-
                             dee = 1;
-
-                            //                    sellingPrice = sellingPrice - cb;
                             hve.setBackgroundResource(R.drawable.roundedyellow);
                             ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#F28E52"));
                             //                        setEmi(sellingPrice);
@@ -1074,9 +1117,47 @@ public class ProductsPage extends AppCompatActivity {
 
                             dValue.setText(String.valueOf(Math.round(mind + w)));
                             minDownpayment = Integer.parseInt(dValue.getText().toString());
+                            int mmonthss=months(searchSubcategory, searchCategory, searchBrand, sellingPrice);
+                            List<String> categories = new ArrayList<String>();
+                            int p=-1;
+                            for (int j = 0; j < 8; j++) {
+                                if ((myMonths[j] <= mmonthss)&&(mmonthss!=0)) {
+
+                                    p = j;
+                                    //categories.add(String.valueOf(myMonths[j]) + " months");
+                                }
+                            }
+
+                            if (fcbv <= 0) {
+                                dummyCl = 1000;
+                                fcbv = 100000000;
+                            }
+                            for (int ww = p; ww >= 0; ww--) {
+                                categories.add(String.valueOf(myMonths[ww]) + " months");
+                            }
+                            if ((searchPrice <= 150) || (dummyCl == 1000 && Constants.STATUS.APPROVED.toString().equals(userProfileStatus))) {
+                                categories.clear();
+                                categories.add("No Financing");
+                            } else
+
+                            {
+                                categories.add("No Financing");
+                            }
+
+                            // Creating adapter for spinner
+                            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(ProductsPage.this, android.R.layout.simple_spinner_item, categories);
+
+                            // Drop down layout style - list view with radio button
+                            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                            dataAdapter.notifyDataSetChanged();
+                            // attaching data adapter to spinner
+                            spinner.setAdapter(dataAdapter);
+
 
 
                             hve.setText(getApplicationContext().getString(R.string.Rs) + mDis + " Cashback applied!");
+
                             hve.setKeyListener(null);
                             hve.setTextColor(Color.parseColor("#F28E52"));
                             ((RelativeLayout) findViewById(R.id.plusRelative)).setVisibility(View.VISIBLE);
@@ -1344,6 +1425,42 @@ public class ProductsPage extends AppCompatActivity {
                     //                    setEmi(2);
 
                 }
+                int mmonthss=months(searchSubcategory, searchCategory, searchBrand, sellingPrice);
+                List<String> categories = new ArrayList<String>();
+                int p=-1;
+                for (int j = 0; j < 8; j++) {
+                     if ((myMonths[j] <= mmonthss)&&(mmonthss!=0)) {
+
+                        p = j;
+                        //categories.add(String.valueOf(myMonths[j]) + " months");
+                    }
+                }
+
+                if (fcbv <= 0) {
+                    dummyCl = 1000;
+                    fcbv = 100000000;
+                }
+                for (int ww = p; ww >= 0; ww--) {
+                    categories.add(String.valueOf(myMonths[ww]) + " months");
+                }
+                if ((searchPrice <= 150) || (dummyCl == 1000 && Constants.STATUS.APPROVED.toString().equals(userProfileStatus))) {
+                    categories.clear();
+                    categories.add("No Financing");
+                } else
+
+                {
+                    categories.add("No Financing");
+                }
+
+                // Creating adapter for spinner
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(ProductsPage.this, android.R.layout.simple_spinner_item, categories);
+
+                // Drop down layout style - list view with radio button
+                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                dataAdapter.notifyDataSetChanged();
+                // attaching data adapter to spinner
+                spinner.setAdapter(dataAdapter);
 
 
                 //                hve.setFocusable(false);
@@ -1605,9 +1722,20 @@ public class ProductsPage extends AppCompatActivity {
                 mValue = minDownpayment;
                 checkmonths = "1";
             }
+
+
+            int ww = serviceCharge(searchPrice, searchPrice - mValue, sellerNme1);
+            firstServicecharge = ww;
+            secondServicecharge = serviceCharge(searchPrice, sellingPrice - mValue, sellerNme1);
+            //change vari
+            if(isZeroDpApplicable&&fcbv>=sellingPrice&&searchPrice<=1000)
+            {mValue=0;
+                }
+
             dValue.setText(String.valueOf(mValue));
+            if(mValue!=0)
             minDownpayment = mValue;
-            availbalmsg.setText("Minimum Downpayment for this product: " + getApplicationContext().getString(R.string.Rs) + minDownpayment);
+            availbalmsg.setText("Minimum Downpayment for this product: " + getApplicationContext().getString(R.string.Rs) + mValue);
             if (sellingPrice != searchPrice) {
                 sellingRschange.setVisibility(View.VISIBLE);
                 sellingRschange.setText(getApplicationContext().getString(R.string.Rs) + String.valueOf(Math.round(searchPrice)));
@@ -1618,9 +1746,7 @@ public class ProductsPage extends AppCompatActivity {
                 sellingRs.setText(getApplicationContext().getString(R.string.Rs) + String.valueOf(Math.round(sellingPrice)));
             }
             //            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
-            int ww = serviceCharge(searchPrice, searchPrice - mValue, sellerNme1);
-            firstServicecharge = ww;
-            secondServicecharge = serviceCharge(searchPrice, sellingPrice - mValue, sellerNme1);
+
 
             //            EMIcheck=(Math.round(calculateEmi(sellingPrice, Double.valueOf(searchPrice), monthsnow)));
             EMIcheck = Math.round(calculateEmi(sellingPrice - mValue * 1.0 + secondServicecharge, Double.valueOf(searchPrice), monthsnow));
@@ -2319,6 +2445,8 @@ public class ProductsPage extends AppCompatActivity {
                     if (sellingPrice - mind > fcbv) {
                         mind = Double.valueOf(sellingPrice) - fcbv;
                     }
+                    if(isZeroDpApplicable&&fcbv>=sellingPrice&&searchPrice<=1000)
+                    {mind=0.0;}
                     if (dummyCl == 1000)
                         availbal.setText(getApplicationContext().getString(R.string.Rs) + "0");
                     else
@@ -2326,6 +2454,9 @@ public class ProductsPage extends AppCompatActivity {
                     int w = serviceCharge(searchPrice, sellingPrice - mind.intValue(), sellerNme1);
                     firstServicecharge = w;
                     secondServicecharge = serviceCharge(searchPrice, sellingPrice - mind.intValue() - w, sellerNme1);
+                    if(isZeroDpApplicable&&fcbv>=sellingPrice&&searchPrice<=1000&&mind==0.0)
+minDownpayment=0;
+                    else
                     minDownpayment = mind.intValue() + w;
                     mValue = minDownpayment;
                 }
@@ -2358,10 +2489,10 @@ public class ProductsPage extends AppCompatActivity {
 
         // Spinner Drop down elements
         int arrmont[] = new int[8];
-        int p = 0;
+        int p = -1;
         List<String> categories = new ArrayList<String>();
         for (int j = 0; j < 8; j++) {
-            if (myMonths[j] <= monthsallowed) {
+            if ((myMonths[j] <= monthsallowed)&&(monthsallowed!=0)) {
 
                 p = j;
                 //categories.add(String.valueOf(myMonths[j]) + " months");
@@ -2682,12 +2813,13 @@ public class ProductsPage extends AppCompatActivity {
         }    }
         catch (Exception e)
         {}
+        Collections.sort(pricesFormonths);
         for(int i=0;i<pricesFormonths.size();i++)
         {
-            int pricenew=Integer.parseInt(pricesFormonths.get(i));
+            int pricenew=pricesFormonths.get(i);
             if(price<=pricenew)
             {
-                int w=priceMonths.get(pricesFormonths.get(i));
+                int w=priceMonths.get(pricesFormonths.get(i).toString());
                 if(w<m)
                     m=w;
                 break;
@@ -2695,13 +2827,32 @@ public class ProductsPage extends AppCompatActivity {
             }
 
         }
+        cb = st.getInt("cashBack", 0);
+
+        int cl = st.getInt("creditLimit", 0);
+        int cbv = st.getInt("totalBorrowed", 0);
+        int fcbv = cl - cbv;
+
         int loanAmt=0;
         int newdp= (int) Math.round(.2*price);
+        if (price - newdp > fcbv)
+
+            newdp = price - fcbv;
+        if(isZeroDpApplicable&&fcbv>=price&&price<=1000)
+            newdp=0;
         int checkLoanamt=price-newdp;
-       Double chh=Math.floor(checkLoanamt/(200));
+        int dd=0;
+        dd = serviceCharge(searchPrice, checkLoanamt, sellerNme1);
+
+       Double chh=Math.floor((
+               checkLoanamt-dd)/(200));
         int kk=chh.intValue();
         if(kk<m)
             m=kk;
+
+
+//        int checkbalmon=200*/m;
+
 
 
         return m;
@@ -2818,7 +2969,7 @@ public class ProductsPage extends AppCompatActivity {
             subcategoryForproducts=new HashMap<String, Integer>();
             brandApple=new HashMap<String, Integer>();
             priceMonths=new HashMap<String, Integer>();
-            pricesFormonths=new ArrayList<String>();
+            pricesFormonths=new ArrayList<Integer>();
             serviceChargesmapping=new HashMap<Integer, Integer>();
 
 
@@ -2975,9 +3126,9 @@ public void parseJsonforcategory(String data)
     noOfDays=dataCategories.getInt("noOfDays");
 
         JSONObject categoriesdata=new JSONObject(dataCategories.getString("category"));
-    JSONObject servicechargeapplicableon=new JSONObject(dataCategories.getString("affiliate"));
+//    JSONObject servicechargeapplicableon=new JSONObject(dataCategories.getString("affiliate"));
     try {
-        sercieChargeApplicableon = servicechargeapplicableon.getString("serviceChargeApplicableOn");
+        sercieChargeApplicableon = dataCategories.getString("serviceChargeApplicableOn");
     }
     catch (Exception e){}
     int lenghtcategory=categoriesdata.length();
@@ -2988,11 +3139,11 @@ public void parseJsonforcategory(String data)
         JSONObject scc=scharge.getJSONObject(i);
         if("loanAmount".equals(sercieChargeApplicableon))
         {
-            serviceChargesmapping.put(scc.getInt("loanAmount"),scc.getInt("seriveCharge"));
+            serviceChargesmapping.put(scc.getInt("loanAmount"),scc.getInt("serviceCharge"));
         }
         else
         {
-            serviceChargesmapping.put(scc.getInt("sellingPrice"),scc.getInt("seriveCharge"));
+            serviceChargesmapping.put(scc.getInt("sellingPrice"),scc.getInt("serviceCharge"));
         }
 
     }
@@ -3020,9 +3171,10 @@ public void parseJsonforcategory(String data)
     Iterator iteratorprice =pricem.keys();
     while(iteratorprice.hasNext()){
         String key = (String)iteratorprice.next();
-pricesFormonths.add(key);
+pricesFormonths.add(Integer.parseInt(key));
         priceMonths.put(key,pricem.getInt(key));
     }
+    Collections.sort(pricesFormonths);
 }
 catch (Exception e)
 {}

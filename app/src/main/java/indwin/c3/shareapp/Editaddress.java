@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -240,6 +241,7 @@ if(isActive)
                 paydo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Toast.makeText(Editaddress.this, "Please wait while we connect you with the payment gateway", Toast.LENGTH_LONG).show();
                         Intent in=new Intent(Editaddress.this,PaymentLive.class);
                         startActivity(in);
                     }

@@ -1030,20 +1030,35 @@ public class HomePage extends AppCompatActivity {
             } else {
                 checkValidUrl = 1;
             }
-        } else if (parseString.contains("myntra")) {
+        }
+        else if (parseString.contains("myntra")) {
             sellerNme = "myntra";
-            checkValidFromApis = 1;
-        } else if (parseString.contains("shopclues")) {
+            productId=parseString;
+            //pos = parseString.lastIndexOf("/");
+
+        }
+        else if (parseString.contains("paytm")) {
+            sellerNme = "paytm";
+            productId=parseString;
+            //pos = parseString.lastIndexOf("/");
+
+        }
+//        else if (parseString.contains("myntra")) {
+//            sellerNme = "myntra";
+//            checkValidFromApis = 1;
+//        }
+        else if (parseString.contains("shopclues")) {
             sellerNme = "shopclues";
             checkValidFromApis = 1;
         } else if (parseString.contains("jabong")) {
             sellerNme = "jabong";
             checkValidFromApis = 1;
 
-        } else if (parseString.contains("paytm")) {
-            sellerNme = "paytm";
-            checkValidFromApis = 1;
         }
+//        else if (parseString.contains("paytm")) {
+//            sellerNme = "paytm";
+//            checkValidFromApis = 1;
+//        }
         //amazon
         else if (parseString.contains("amazon")) {
             sellerNme = "amazon";

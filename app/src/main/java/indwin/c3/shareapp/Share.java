@@ -85,7 +85,7 @@ if(results== PackageManager.PERMISSION_GRANTED)
 //                shareIntent
 //                String shareBody = "Hey check out this crazy website!\n" +
 //                        "Remember to use the code "+sh_otp.getString("rcode","")+" while signing up!";
-    String shareBody="Buy mobiles,laptops,fashion accessories of student friendly payment plans. Only on Buddy! Signup using my special link https://hellobuddy.in/me?rc="+ sh_otp.getString("rcode","") +"  and get Rs. 150 cashback as soon as you sign up.";
+    String shareBody="Buy mobiles,laptops,fashion accessories on student friendly payment plans. Only on Buddy! Signup using my special link https://hellobuddy.in/me?rc="+ sh_otp.getString("rcode","") +"  and get Rs. 150 cashback as soon as you sign up.";
 //                String shareBody="Buy mobiles, laptops, fashion accessories and more on easy monthly installments! Remember to use "+ sh_otp.getString("rcode","") +" while signing up! www.hellobuddy.in";
                 Intent sharingIntent = new Intent();
                 sharingIntent.setAction(Intent.ACTION_SEND);

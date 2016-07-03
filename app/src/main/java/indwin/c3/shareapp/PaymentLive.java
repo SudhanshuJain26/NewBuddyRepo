@@ -719,7 +719,9 @@ public class PaymentLive  extends Activity {
                 payload.put("creditsUsed",0);
                 payload.put("deliveryFee",0);
                 payload.put("txnId",getNonNullValueFromHashMap(mInputParams,PARAM_TRANSACTION_ID));
-                payload.put("couponCode",cred.getString("whichCoupon", ""));
+                String coupon=cred.getString("whichCoupon", "");
+               if(!AppUtils.isEmpty(coupon))
+                payload.put("couponCode",coupon);
                 payload.put("deliveryAddress",cred.getString("address",""));
                 payload.put("userComments",cred.getString("usercom", ""));
                 payload.put("serviceCharges",cred.getInt("service",0));

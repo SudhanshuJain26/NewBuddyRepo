@@ -33,51 +33,77 @@
                 android:layout_marginStart="16dp"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:gravity="center_vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="wrap_content">
 
-                        android:text="Enter your Roll Number"
-                        android:textColor="#eeb85f"
-                        android:textSize="14sp"
-                        android:textStyle="bold"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Setup Automatic Repayments"
+                            android:textColor="#eeb85f"
+                            android:textStyle="bold"/>
 
+                        <ImageView
+                            android:id="@+id/incomplete_repayments"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/incomplete"
+                            android:visibility="gone"/>
 
-                    <ImageView
-                        android:id="@+id/incomplete_roll_number"
+                        <ImageView
+                            android:id="@+id/complete_repayments"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/complete"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/auto_repayment_helptip"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
-                        android:src="@drawable/incomplete"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="2dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/helptip"
                         android:visibility="gone"/>
+                </RelativeLayout>
 
-                    <ImageView
-                        android:id="@+id/complete_roll_number"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
-                        android:src="@drawable/complete"
-                        android:visibility="gone"/>
-                </LinearLayout>
-
-                <EditText
-                    android:id="@+id/roll_number_et"
+                <Button
+                    android:id="@+id/setup_repayments"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginStart="-4dp"
-                    android:layout_marginTop="8dp"
-                    android:hint="(Must match the number on your ID)"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/border_radius_yellow"
+                    android:text="Setup"
+                    android:textColor="@color/colorwhite"
                     android:textSize="16sp"/>
+                <LinearLayout android:id="@+id/setupNachLL" android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_marginTop="8dp" android:orientation="horizontal">
+
+                    <CheckBox android:id="@+id/setupNachCB" android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:background="@color/colorwhite"/>
+                    <TextView android:id="@+id/setupNachTv" android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="Set it up later?"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -102,154 +128,76 @@
                         android:tint="#44c2a6"
                         android:visibility="gone"/>
                 </LinearLayout>
+                <TextView android:id="@+id/bankErrorTv" android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:layout_marginTop="4dp"
+                          android:textColor="@color/buddy_red"/>
 
+                <LinearLayout android:id="@+id/bank_statement_layout"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="vertical" android:visibility="gone">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center_vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_vertical">
 
                         <TextView
+                            android:id="@+id/bank_stmt_id_header"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Get a classmate to vouch for you"
+                            android:width="200dp"
+                            android:lines="2"
+                            android:text="Upload last 3 month' Personal Bank Account Statement"
                             android:textColor="#eeb85f"
+                            android:textSize="14sp"
                             android:textStyle="bold"/>
 
                         <ImageView
-                            android:id="@+id/incomplete_classmate"
+                            android:id="@+id/incomplete_bank_stmt"
                             android:layout_width="15dp"
                             android:layout_height="15dp"
+                            android:layout_centerVertical="true"
                             android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
+                            android:layout_toEndOf="@id/bank_stmt_id_header"
+                            android:layout_toRightOf="@id/bank_stmt_id_header"
                             android:src="@drawable/incomplete"
                             android:visibility="gone"/>
 
                         <ImageView
-                            android:id="@+id/complete_classmate"
+                            android:id="@+id/complete_bank_stmt"
                             android:layout_width="15dp"
                             android:layout_height="15dp"
+                            android:layout_centerVertical="true"
                             android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
+                            android:layout_toEndOf="@id/bank_stmt_id_header"
+                            android:layout_toRightOf="@id/bank_stmt_id_header"
                             android:src="@drawable/complete"
                             android:visibility="gone"/>
-                    </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/classmate_helptip"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="2dp"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/helptip"/>
-                </RelativeLayout>
-
-                <EditText
-                    android:id="@+id/classmate_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginStart="-4dp"
-                    android:width="240dp"
-                    android:hint="Classmate's Name"
-                    android:inputType="text"
-                    android:singleLine="true"
-                    android:textSize="16sp"/>
-
-                <EditText
-                    android:id="@+id/classmate_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginStart="-4dp"
-                    android:width="240dp"
-                    android:hint="Classmate's phone number"
-                    android:inputType="phone"
-                    android:singleLine="true"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/incorrect_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Incorrect phone"
-                    android:textColor="@color/intercomsdk_red"
-                    android:textSize="14sp"
-                    android:visibility="gone"/>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center_vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Schedule College Verification"
-                            android:textColor="#eeb85f"
-                            android:textStyle="bold"/>
-
-                        <ImageView
-                            android:id="@+id/incomplete_verification_date"
+                        <ImageButton
+                            android:id="@+id/bank_helptip"
                             android:layout_width="15dp"
                             android:layout_height="15dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginStart="8dp"
-                            android:src="@drawable/incomplete"
-                            android:visibility="gone"/>
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="2dp"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/helptip"/>
+                    </RelativeLayout>
 
-                        <ImageView
-                            android:id="@+id/complete_verification_date"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginStart="8dp"
-                            android:src="@drawable/complete"
-                            android:visibility="gone"/>
-                    </LinearLayout>
-
-                    <ImageButton
-                        android:id="@+id/verification_helptip"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="2dp"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/helptip"/>
-                </RelativeLayout>
-
-                <EditText
-                    android:id="@+id/verification_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginStart="-4dp"
-                    android:width="240dp"
-                    android:drawableEnd="@drawable/calendar"
-                    android:drawableRight="@drawable/calendar"
-                    android:focusable="false"
-                    android:hint="Pick a conveient date"
-                    android:inputType="none"
-                    android:singleLine="true"
-                    android:textSize="16sp"
-                    android:visibility="visible"/>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rvImages"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"/>
 
 
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>

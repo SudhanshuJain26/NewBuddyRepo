@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+>
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        card_view:cardBackgroundColor="@android:color/white"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="2dp" card_view:cardUseCompatPadding="true">
+
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:layout_marginBottom="32dp"
+                      android:gravity="center"
+                      android:orientation="vertical"
+                      android:paddingLeft="20dp"
+                      android:paddingRight="20dp">
+
+            <TextView android:id="@+id/house_no_et" android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="16dp"
+                      android:textColor="@color/black_54"
+                      android:text="Setup Automatic Repayments later"
+                      android:textSize="22sp"
+            />
+            <TextView android:id="@+id/street_et" android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@id/house_no_et"
+                      android:textColor="@color/black_87"
+                      android:layout_marginTop="16dp"
+                      android:text="If you don't have a bank account yet, or do not wish to connect your bank account to Buddy, you may choose to skip this step"/>
+            <TextView android:id="@+id/city_et" android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="16dp"
+                      android:layout_weight="1"
+                      android:textColor="@color/black_54"
+                      android:text="However, this reduces your chances for faster approval and getting approved for higher credit limit!"
+                      android:textStyle="bold"/>
+
+            <TextView android:id="@+id/pincode_et" android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="16dp"
+                      android:layout_weight="1"
+                      android:textColor="@color/black_54"
+                      android:text="You can easily Setup Automatic Repayments later by using the Credit Booster card to boost your credit when you are in a better position to provide it"/>
+
+
+            <Button android:id="@+id/setup_later"
+                    android:layout_width="wrap_content" android:layout_height="30dp"
+                    android:layout_below="@+id/cityLL"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/buddy_yellow" android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="Okay" android:textColor="@color/colorwhite"/>
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
+
+

@@ -60,6 +60,7 @@ public class AppUtils {
     static HashMap<String, HashMap<String, String>> brand;
     public static final String APP_NAME = "buddy";
     public static final String USER_OBJECT = "UserObject";
+    public static final String USER_OBJECT_SERVER = "UserObjectServer";
     public static final String IMAGE = "image";
     public static final String POSITION = "position";
     public static final String SOURCE = "source";
@@ -216,7 +217,7 @@ public class AppUtils {
                 for (int i = 0; i < familyMembers.length(); i++) {
                     JSONObject familyJson = familyMembers.getJSONObject(i);
                     if (i == 1) {
-                        if (familyJson.getString("relation") != null) {
+                        if (familyJson.opt("relation") != null) {
                             user.setFamilyMemberType2(familyJson.getString("relation"));
                             user.setProfessionFamilyMemberType2(familyJson.getString("occupation"));
                             user.setPhoneFamilyMemberType2(familyJson.getString("phone"));
@@ -224,7 +225,7 @@ public class AppUtils {
                                 user.setPrefferedLanguageFamilyMemberType2(familyJson.getString("preferredLanguage"));
                         }
                     } else {
-                        if (familyJson.getString("relation") != null) {
+                        if (familyJson.opt("relation") != null) {
                             user.setFamilyMemberType1(familyJson.getString("relation"));
                             user.setProfessionFamilyMemberType1(familyJson.getString("occupation"));
                             user.setPhoneFamilyMemberType1(familyJson.getString("phone"));
@@ -234,6 +235,8 @@ public class AppUtils {
                     }
                 }
             }
+            if (data1.opt("optionalNACH") != null)
+                user.setOptionalNACH(data1.getBoolean("optionalNACH"));
 
             if (data1.opt("bankAccountNumber") != null)
                 user.setBankAccNum(data1.getString("bankAccountNumber"));
@@ -295,6 +298,12 @@ public class AppUtils {
         }
     }
 
+    public static boolean isCloudinaryUrl(String url) {
+        if (url != null && url.contains("cloudinary")) {
+            return true;
+        }
+        return false;
+    }
 
     public static void hideKeyboard(Activity activity) {
         View view = activity.getCurrentFocus();

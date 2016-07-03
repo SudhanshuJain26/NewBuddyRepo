@@ -35,7 +35,6 @@ public class FetchNewToken extends
     @Override
     protected String doInBackground(String... params) {
 
-        JSONObject payload = new JSONObject();
         try {
             HttpParams httpParameters = new BasicHttpParams();
             HttpConnectionParams
@@ -69,6 +68,9 @@ public class FetchNewToken extends
             return "fail";
         }
     }
+
+
+
 
     protected void onPostExecute(String result) {
         if (result.contains("fail")) {

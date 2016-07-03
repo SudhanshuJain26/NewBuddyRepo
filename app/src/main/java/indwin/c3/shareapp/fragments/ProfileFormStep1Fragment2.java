@@ -9,13 +9,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -124,7 +120,8 @@ public class ProfileFormStep1Fragment2 extends Fragment implements OnBackPressed
                             //|| (position == 1 && (collegeIDs.getBack() == null || AppUtils.isEmpty(collegeIDs.getBack().getImgUrl()))) && !user.isAppliedFor1k()
                                 ) {
 
-                            String[] temp = hasPermissions(getActivity(), PERMISSIONS);
+                            String[] temp = AppUtils.hasPermissions(getActivity(), deniedPermissionForever, REQUEST_PERMISSION_SETTING, PERMISSIONS);
+
                             if (temp != null && temp.length != 0) {
                                 deniedPermissionForever = true;
                                 PERMISSIONS = temp;
@@ -470,7 +467,7 @@ public class ProfileFormStep1Fragment2 extends Fragment implements OnBackPressed
                 AppUtils.saveUserObject(getActivity(), user);
             }
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resuleCode == Activity.RESULT_OK) {
-            hasPermissions(getActivity(), PERMISSIONS);
+            AppUtils.hasPermissions(getActivity(), deniedPermissionForever, REQUEST_PERMISSION_SETTING, PERMISSIONS);
         }
     }
 
@@ -525,7 +522,6 @@ public class ProfileFormStep1Fragment2 extends Fragment implements OnBackPressed
     }
 
 
-
     @Override
     public void onBackPressed() {
         if (collegeNameLayout.getVisibility() == View.VISIBLE) {
@@ -541,38 +537,6 @@ public class ProfileFormStep1Fragment2 extends Fragment implements OnBackPressed
         }
     }
 
-    public String[] hasPermissions(Context context, final String... permissions) {
-        ArrayList<String> askPermissions = new ArrayList<>();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    if (!shouldShowRequestPermissionRationale(permission) && deniedPermissionForever) {
-                        showMessageOKCancel("You need to allow access to Images",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-                                        intent.setData(uri);
-                                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                                    }
-                                });
-                    }
-                    askPermissions.add(permission);
-                }
-            }
-        }
-        return askPermissions.toArray(new String[0]);
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(getActivity())
-                .setMessage(message)
-                .setPositiveButton("Settings", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,

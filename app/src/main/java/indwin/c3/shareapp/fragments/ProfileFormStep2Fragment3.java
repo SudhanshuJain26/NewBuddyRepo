@@ -21,6 +21,7 @@ import java.util.Date;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Views.DatePicker;
 import indwin.c3.shareapp.activities.ProfileFormStep2;
+import indwin.c3.shareapp.models.Error;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.HelpTipDialog;
@@ -40,12 +41,13 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
     private EditText addRollNumberEt;
     private ImageView incompleteRollNumber, completeRollNumber;
     private ImageButton classmateHelptip, verificationHelptip;
+    private TextView errorRollTv;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(
-                R.layout.profile_form_step2_fragment4, container, false);
+                R.layout.profile_form_step2_fragment3, container, false);
         ProfileFormStep2 profileFormStep2 = (ProfileFormStep2) getActivity();
         user = profileFormStep2.getUser();
         getAllViews(rootView);
@@ -80,6 +82,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
 
             @Override
             public void afterTextChanged(Editable s) {
+                user.setUpdateClassmatePhone(true);
 
             }
         });
@@ -138,7 +141,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         addRollNumberEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                errorRollTv.setVisibility(View.GONE);
             }
 
             @Override
@@ -226,13 +229,34 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
             }
         });
 
-        classmatePhone.setOnFocusChangeListener(this);
+        classmatePhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
 
+                if (!hasFocus) {
+                    String mobile = AppUtils.getFromSelectedSharedPrefs(getActivity(), "phone_number", "cred");
+                    if (classmatePhone.getText().toString().equals(mobile)) {
+                        incorrectPhone.setText("This cant be your own number");
+                        incorrectPhone.setVisibility(View.VISIBLE);
+
+                    } else if (!ValidationUtils.isValidPhoneNumber(classmatePhone.getText().toString())) {
+                        incorrectPhone.setText("Incorrect phone number");
+                        incorrectPhone.setVisibility(View.VISIBLE);
+
+                    } else {
+                        incorrectPhone.setVisibility(View.GONE);
+                        user.setClassmatePhone(classmatePhone.getText().toString());
+                        user.setUpdateClassmatePhone(true);
+                    }
+                }
+            }
+        });
     }
 
 
     private void getAllViews(View rootView) {
         addRollNumberEt = (EditText) rootView.findViewById(R.id.roll_number_et);
+        errorRollTv = (TextView) rootView.findViewById(R.id.error_roll_number);
         verificationDateEditText = (EditText) rootView.findViewById(R.id.verification_date);
         completeRollNumber = (ImageView) rootView.findViewById(R.id.complete_roll_number);
         incompleteRollNumber = (ImageView) rootView.findViewById(R.id.incomplete_roll_number);
@@ -255,9 +279,15 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
     public void checkIncomplete() {
         if (!ValidationUtils.isValidPhoneNumber(classmatePhone.getText().toString()) && !classmatePhone.getText().toString().isEmpty()) {
             incorrectPhone.setVisibility(View.VISIBLE);
+        } else {
+            if (
+                    user.isUpdateClassmatePhone()) {
+                user.setClassmatePhone(classmatePhone.getText().toString());
+
+            }
         }
 
-        if (AppUtils.isEmpty(addRollNumberEt.getText().toString())) {
+        if (AppUtils.isEmpty(user.getRollNumber())) {
 
             user.setIncompleteRollNumber(true);
             completeRollNumber.setVisibility(View.GONE);
@@ -269,7 +299,7 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
 
         }
 
-        if (AppUtils.isEmpty(classmateName.getText().toString()) || AppUtils.isEmpty(classmatePhone.getText().toString())) {
+        if (AppUtils.isEmpty(classmateName.getText().toString()) || AppUtils.isEmpty(user.getClassmatePhone())) {
             user.setIncompleteClassmateDetails(true);
             completeClassmate.setVisibility(View.GONE);
             incompleteClassmate.setVisibility(View.VISIBLE);
@@ -277,8 +307,6 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
             user.setIncompleteClassmateDetails(false);
             user.setClassmateName(classmateName.getText().toString());
             user.setUpdateClassmateName(true);
-            user.setClassmatePhone(classmatePhone.getText().toString());
-            user.setUpdateClassmatePhone(true);
             incompleteClassmate.setVisibility(View.GONE);
             completeClassmate.setVisibility(View.VISIBLE);
         }
@@ -321,19 +349,6 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if (v == classmatePhone) {
-            if (!hasFocus && !classmatePhone.getText().toString().isEmpty()) {
-                if (!ValidationUtils.isValidPhoneNumber(classmatePhone.getText().toString())) {
-                    incorrectPhone.setVisibility(View.VISIBLE);
-                    return;
-                }
-                if (user.getUserId().equals(classmatePhone.getText().toString())) {
-                    incorrectPhone.setText("Not your number!");
-                    incorrectPhone.setVisibility(View.VISIBLE);
-                }
-            }
-            incorrectPhone.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -341,4 +356,13 @@ public class ProfileFormStep2Fragment3 extends Fragment implements View.OnFocusC
         super.onResume();
     }
 
+    public void showErrorRollNumber(Error error) {
+
+        user.setRollNumber(null);
+        user.setUpdateRollNumber(true);
+        incompleteRollNumber.setVisibility(View.VISIBLE);
+        completeRollNumber.setVisibility(View.GONE);
+        errorRollTv.setText(error.getError());
+        errorRollTv.setVisibility(View.VISIBLE);
+    }
 }

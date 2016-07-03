@@ -1,5 +1,6 @@
 package indwin.c3.shareapp.utils;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,14 +20,17 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import indwin.c3.shareapp.BuildConfig;
+import indwin.c3.shareapp.activities.ProfileFormStep1;
+import indwin.c3.shareapp.activities.ProfileFormStep2;
+import indwin.c3.shareapp.activities.ProfileFormStep3;
 import indwin.c3.shareapp.models.FrontBackImage;
 import indwin.c3.shareapp.models.Image;
+import indwin.c3.shareapp.models.ResponseModel;
 import indwin.c3.shareapp.models.UserModel;
 import io.intercom.android.sdk.Intercom;
 
@@ -45,38 +49,50 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
     int retryCount = 0;
     String selfieUrl = "", signatureUrl = "";
     String frontCollegeId, backCollegeId, frontAadharId, backAadharId, panImage;
+    private String isLastStep;
+    private Activity activity;
 
     @Override
     public synchronized void onReceive(final Context context, final Intent arg1) {
+        callServer(context, null);
+    }
+
+    private void callServer(Context context, final String isLastStep) {
         mContext = context;
         mPrefs = mContext.getSharedPreferences("buddy", Context.MODE_PRIVATE);
         boolean isUpdatingDB = mPrefs.getBoolean("updatingDB", false);
-
         if (AppUtils.getUserObject(mContext) == null) {
             mPrefs.edit().putBoolean("updatingDB", false).apply();
         } else {
-
             if (!isUpdatingDB) {
 
-                new AsyncTaskRunner().execute();
+                new AsyncTaskRunner().execute(this.isLastStep);
             } else {
                 Runnable myRunnable = new Runnable() {
 
                     public void run() {
-
-                        checkForDBUpdate();
+                        checkForDBUpdate(isLastStep);
                     }
 
 
                 };
                 Thread thread = new Thread(myRunnable);
                 thread.start();
-
             }
         }
     }
 
-    private void checkForDBUpdate() {
+    public CheckInternetAndUploadUserDetails(Activity activity, String islastStep) {
+        this.isLastStep = islastStep;
+        this.activity = activity;
+        callServer(activity, islastStep);
+
+    }
+
+    public CheckInternetAndUploadUserDetails() {
+    }
+
+    private void checkForDBUpdate(String isLastStep) {
         try {
             Thread.sleep(1000);
 
@@ -86,9 +102,9 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
         SharedPreferences sh = mContext.getSharedPreferences("buddy", Context.MODE_PRIVATE);
         boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
         if (isUpdatingDB)
-            checkForDBUpdate();
+            checkForDBUpdate(isLastStep);
         else
-            new AsyncTaskRunner().execute();
+            new AsyncTaskRunner().execute(isLastStep);
     }
 
     private class AsyncTaskRunner extends AsyncTask<String, String, String> {
@@ -97,17 +113,12 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
         @Override
         protected String doInBackground(String... params) {
             try {
-                InetAddress ipAddr = InetAddress.getByName("google.com");
-                if (ipAddr.equals("")) {
-                    isConnected = false;
-                } else {
-                    isConnected = true;
-                }
+                isConnected = AppUtils.isOnline(mContext);
             } catch (Exception e) {
                 isConnected = false;
                 resp = e.getMessage();
             }
-            return resp;
+            return params[0];
         }
 
         @Override
@@ -128,7 +139,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 uploadBankProofs = new ArrayList<>();
                 uploadGradeSheets = new ArrayList<>();
                 if (user != null)
-                    new CloudinaryUploader().execute();
+                    new CloudinaryUploader().execute(result);
             }
         }
     }
@@ -164,8 +175,6 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
             }
 
             if (userImages.getCollegeID() != null) {
-
-
                 try {
                     Long tsLong = System.currentTimeMillis() / 1000;
                     String ts = tsLong.toString();
@@ -177,7 +186,6 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         cloudinary.uploader().upload(userImages.getCollegeID().getFront().getImgUrl(),
                                 ObjectUtils.asMap("public_id", userImages.getUserId() + "collegeId_front" + ts));
                         frontCollegeId = cloudinary.url().secure(true).generate(userImages.getUserId() + "collegeId_front" + ts);
-
                     }
 
                     if ((collegeId.getBack() != null && collegeId.isUpdateBack()) && (AppUtils.uploadStatus.OPEN.toString().equals(collegeId.getBackStatus()) || AppUtils.isEmpty(collegeId.getBackStatus()))) {
@@ -253,9 +261,6 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getBankProof().getNewImgUrls().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
-                        //if (user.getBankProof().getNewImgUrls() != null)
-                        //    user.getBankProof().getNewImgUrls().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
-
                         i++;
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
@@ -281,9 +286,6 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 int i = 0;
                 for (Map.Entry<String, String> entry : userImages.getGradeSheet().getNewImgUrls().entrySet()) {
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
-                        //if (user.getGradeSheet().getNewImgUrls() != null)
-                        //    user.getGradeSheet().getNewImgUrls().put(entry.getKey(), AppUtils.uploadStatus.PICKED.toString());
-
                         i++;
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
@@ -335,15 +337,18 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 }
                 updateUser = true;
             }
-            return "";
+            if (params[0] != null) {
+                updateUser = true;
+            }
+            return params[0];
         }
 
         @Override
         protected void onPostExecute(String result) {
             if (updateUser) {
-                new UploadCoudinaryToServer().execute();
+                new UploadCoudinaryToServer().execute(result);
             }
-            new UploadDetailsToServer().execute();
+            new UploadDetailsToServer().execute(result);
         }
     }
 
@@ -359,20 +364,46 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 HttpPost postReq = new HttpPost(url);
                 JSONObject jsonobj = new JSONObject();
                 jsonobj.put("userid", user.getUserId());
+
+                Image collegeID = user.getCollegeID();
+                Image addressproof = user.getAddressProof();
+                if (Constants.YES_1k.equals(params[0])) {
+                    if (collegeID != null && collegeID.getFront() != null && AppUtils.isNotEmpty(collegeID.getFront().getImgUrl()) && AppUtils.isCloudinaryUrl(collegeID.getFront().getImgUrl())) {
+                        frontCollegeId = collegeID.getFront().getImgUrl();
+                    }
+                    if (collegeID != null && collegeID.getBack() != null && AppUtils.isNotEmpty(collegeID.getBack().getImgUrl()) && AppUtils.isCloudinaryUrl(collegeID.getBack().getImgUrl())) {
+                        backCollegeId = collegeID.getBack().getImgUrl();
+                    }
+
+                    if (AppUtils.isNotEmpty(user.getSelfie())) {
+                        selfieUrl = user.getSelfie();
+                    }
+                    if (AppUtils.isNotEmpty(user.getSignature())) {
+                        selfieUrl = user.getSignature();
+                    }
+                }
+                if (Constants.YES_1k.equals(params[0]) && addressproof != null) {
+                    if (addressproof.getFront() != null && AppUtils.isNotEmpty(addressproof.getFront().getImgUrl()) && AppUtils.isCloudinaryUrl(addressproof.getFront().getImgUrl())) {
+                        frontAadharId = addressproof.getFront().getImgUrl();
+                    }
+                    if (addressproof.getBack() != null && AppUtils.isNotEmpty(addressproof.getBack().getImgUrl()) && AppUtils.isCloudinaryUrl(addressproof.getBack().getImgUrl())) {
+                        backAadharId = addressproof.getBack().getImgUrl();
+                    }
+                }
                 if (frontCollegeId != null || backCollegeId != null) {
-                    JSONObject collegeID = new JSONObject();
+                    JSONObject collegeIDJson = new JSONObject();
                     doApiCall = true;
                     if (frontCollegeId != null) {
                         JSONObject front = new JSONObject();
                         front.put("imgUrl", frontCollegeId);
-                        collegeID.put("front", front);
+                        collegeIDJson.put("front", front);
                     }
                     if (backCollegeId != null) {
                         JSONObject back = new JSONObject();
                         back.put("imgUrl", backCollegeId);
-                        collegeID.put("back", back);
+                        collegeIDJson.put("back", back);
                     }
-                    jsonobj.put("collegeID", collegeID);
+                    jsonobj.put("collegeID", collegeIDJson);
                 }
                 if (frontAadharId != null || backAadharId != null) {
                     JSONObject addressProof = new JSONObject();
@@ -390,6 +421,39 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         addressProof.put("back", back);
                     }
                     jsonobj.put("addressProof", addressProof);
+                }
+                if (Constants.YES_7k.equals(params[0]) || Constants.YES_60k.equals(params[0])) {
+                    if (user.getBankStatement() != null && user.getBankStatement().getImgUrls() != null) {
+                        for (String bankStatement : user.getBankStatement().getImgUrls()) {
+                            if (AppUtils.isCloudinaryUrl(bankStatement)) {
+                                uploadBankStmts.add(bankStatement);
+                            }
+                        }
+                    }
+                }
+                if (Constants.YES_7k.equals(params[0])) {
+
+                    if (user.getBankProof() != null && user.getBankProof().getImgUrls() != null) {
+                        for (String bankProof : user.getBankProof().getImgUrls()) {
+                            if (AppUtils.isCloudinaryUrl(bankProof)) {
+                                uploadBankProofs.add(bankProof);
+                            }
+                        }
+                    }
+                    if (user.getBankStatement() != null && user.getBankStatement().getImgUrls() != null) {
+                        for (String bankStatement : user.getBankStatement().getImgUrls()) {
+                            if (AppUtils.isCloudinaryUrl(bankStatement)) {
+                                uploadBankStmts.add(bankStatement);
+                            }
+                        }
+                    }
+                    if (user.getGradeSheet() != null && user.getGradeSheet().getImgUrls() != null) {
+                        for (String gradesheet : user.getGradeSheet().getImgUrls()) {
+                            if (AppUtils.isCloudinaryUrl(gradesheet)) {
+                                uploadGradeSheets.add(gradesheet);
+                            }
+                        }
+                    }
                 }
                 if (uploadBankStmts.size() > 0) {
                     JSONObject bankStmnt = new JSONObject();
@@ -441,58 +505,19 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 HttpResponse httpresponse = client.execute(postReq);
                 String responseText = EntityUtils.toString(httpresponse.getEntity());
                 JSONObject json = new JSONObject(responseText);
-                //UserModel user = AppUtils.getUserObject(mContext);
+                Gson gson = new Gson();
+                ResponseModel responseModel = (ResponseModel) gson.fromJson(responseText, ResponseModel.class);
+                try {
+                    isLastStep = params[0];
+                } catch (Exception e) {
+                }
+
                 if (json.get("status").equals("success")) {
-                    //JSONObject data = json.getJSONObject("data");
-                    //if (jsonobj.opt("collegeID") != null && !"".equals(jsonobj.get("collegeIDs"))) {
-                    //    uploadCollegeIds.clear();
-                    //    user.setNewCollegeIds(new HashMap<String, String>());
-                    //    user.setUpdateNewCollegeIds(false);
-                    //    JSONArray stmts = data.getJSONArray("collegeIDs");
-                    //    ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
-                    //    }.getType());
-                    //    user.setCollegeIds(yourArray);
-                    //}
-                    //if (jsonobj.opt("addressProof") != null && !"".equals(jsonobj.get("addressProofs"))) {
-                    //    uploadAddressProofs.clear();
-                    //    user.setNewAddressProofs(new HashMap<String, String>());
-                    //    user.setUpdateNewAddressProofs(false);
-                    //    JSONArray stmts = data.getJSONArray("addressProofs");
-                    //    ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
-                    //    }.getType());
-                    //    user.setAddressProofs(yourArray);
-                    //}
-                    //if (jsonobj.opt("bankStatement") != null && !"".equals(jsonobj.get("bankStatements"))) {
-                    //    uploadBankStmts.clear();
-                    //    user.setNewBankStmts(new HashMap<String, String>());
-                    //    user.setUpdateNewBankStmts(false);
-                    //    JSONArray stmts = data.getJSONArray("bankStatements");
-                    //    ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
-                    //    }.getType());
-                    //    user.setBankStmts(yourArray);
-                    //}
-                    //if (jsonobj.opt("bankProof") != null && !"".equals(jsonobj.get("bankProofs"))) {
-                    //    uploadBankProofs.clear();
-                    //    user.setNewBankProofs(new HashMap<String, String>());
-                    //    user.setUpdateNewBankProofs(false);
-                    //    JSONArray stmts = data.getJSONArray("bankProofs");
-                    //    ArrayList<String> yourArray = gson.fromJson(stmts.toString(), new TypeToken<List<String>>() {
-                    //    }.getType());
-                    //    user.setBankProofs(yourArray);
-                    //}
-                    //if (jsonobj.opt("selfie") != null && !"".equals(jsonobj.get("selfie"))) {
-                    //    user.setSelfie(selfieUrl);
-                    //    user.setUpdateSelfie(false);
-                    //}
-                    //if (jsonobj.opt("signature") != null && !"".equals(jsonobj.get("signature"))) {
-                    //    user.setSignature(signatureUrl);
-                    //    user.setUpdateSignature(false);
-                    //}
 
 
-                    //setImagesFromSP();
-                    //AppUtils.saveUserObject(mContext, user);
                     return "success";
+                } else if (json.get("status").equals("error")) {
+
                 } else if (json.get("msg").toString().contains("Invalid Token")) {
                     return "authFailed";
                 }
@@ -509,9 +534,9 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 retryCount++;
                 if (result.equals("authFailed")) {
                     new FetchNewToken(mContext).execute();
-                    new UploadCoudinaryToServer().execute();
+                    new UploadCoudinaryToServer().execute(isLastStep);
                 } else if (result.equals("fail"))
-                    new UploadCoudinaryToServer().execute();
+                    new UploadCoudinaryToServer().execute(isLastStep);
                 else {
                     mPrefs.edit().putBoolean("updatingDB", false).apply();
                 }
@@ -523,130 +548,113 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
     }
 
 
-    private class UploadDetailsToServer extends AsyncTask<String, String, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                boolean doApiCall = false;
-                HttpClient client = new DefaultHttpClient();
-                String url = BuildConfig.SERVER_URL + "api/v1/user/profile";
-                HttpPost putReq = new HttpPost(url);
-                JSONObject jsonobj = new JSONObject();
-                Map userMap = new HashMap<>();
-                jsonobj.put("userid", user.getUserId());
-                if (user.isUpdateName()) {
-                    doApiCall = true;
-                    jsonobj.put("name", user.getName());
-                    userMap.put("name", user.getName());
-                }
+    private void prepareStep1Data(UserModel user, Map userMap, JSONObject jsonobj, boolean pushAllData) {
+        try {
+            if (user.isUpdateGender() || pushAllData) {
+                jsonobj.put("gender", user.getGender());
+                userMap.put("gender", user.getGender());
+            }
+            if (user.isUpdateDOB() || pushAllData) {
+                jsonobj.put("dob", user.getDob());
+                userMap.put("dob", user.getDob());
+            }
 
-                if (user.isUpdateGender()) {
-                    doApiCall = true;
-                    jsonobj.put("gender", user.getGender());
-                    userMap.put("gender", user.getGender());
-                }
-                if (user.isUpdateCollegeName()) {
-                    doApiCall = true;
-                    jsonobj.put("college", user.getCollegeName());
-                    userMap.put("college", user.getCollegeName());
-                }
+            if (user.isUpdateCollegeName() || pushAllData) {
+                jsonobj.put("college", user.getCollegeName());
+                userMap.put("college", user.getCollegeName());
+            }
 
-                if (user.isGpaTypeUpdate()) {
-                    doApiCall = true;
-                    jsonobj.put("gpaType", user.getGpaType());
-                    userMap.put("gpaType", user.getGpaType());
-                }
+            if (user.isUpdateCourseName() || pushAllData) {
+                jsonobj.put("course", user.getCourseName());
+                userMap.put("course", user.getCourseName());
+            }
+            if (user.isUpdateCourseEndDate() || pushAllData) {
+                jsonobj.put("courseCompletionDate", user.getCourseEndDate());
+                userMap.put("courseCompletionDate", user.getCourseEndDate());
+            }
+            if ((user.isUpdateAadharNumber() || pushAllData) && AppUtils.isNotEmpty(user.getAadharNumber())) {
+                jsonobj.put("aadhar", user.getAadharNumber());
+                jsonobj.put("panOrAadhar", "Aadhar");
+                userMap.put("panOrAadhar", "Aadhar");
+                userMap.put("aadhar", user.getAadharNumber());
+            }
+            if ((user.isUpdatePanNumber() || pushAllData) && AppUtils.isNotEmpty(user.getPanNumber())) {
+                jsonobj.put("pan", user.getPanNumber());
+                jsonobj.put("panOrAadhar", "PAN");
+                userMap.put("panOrAadhar", "PAN");
+                userMap.put("pan", user.getPanNumber());
+            }
 
-                if (user.isGpaValueUpdate()) {
-                    doApiCall = true;
-                    jsonobj.put("gpa", user.getGpa());
-                    userMap.put("gpa", user.getGpa());
-                }
 
-                if (user.isUpdateCourseName()) {
-                    doApiCall = true;
-                    jsonobj.put("course", user.getCourseName());
-                    userMap.put("course", user.getCourseName());
-                }
-                if (user.isUpdateCourseEndDate()) {
-                    doApiCall = true;
-                    jsonobj.put("courseCompletionDate", user.getCourseEndDate());
-                    userMap.put("courseCompletionDate", user.getCourseEndDate());
-                }
-                if (user.isUpdateAadharNumber()) {
-                    doApiCall = true;
-                    jsonobj.put("aadhar", user.getAadharNumber());
-                    jsonobj.put("panOrAadhar", "Aadhar");
-                    userMap.put("panOrAadhar", "Aadhar");
-                    userMap.put("aadhar", user.getAadharNumber());
-                }
-                if (user.isUpdatePanNumber()) {
-                    doApiCall = true;
-                    jsonobj.put("pan", user.getPanNumber());
-                    jsonobj.put("panOrAadhar", "PAN");
-                    userMap.put("panOrAadhar", "PAN");
-                    userMap.put("pan", user.getPanNumber());
-                }
-                if (user.isUpdateDOB()) {
-                    doApiCall = true;
-                    jsonobj.put("dob", user.getDob());
-                    userMap.put("dob", user.getDob());
-                }
-                if (user.isUpdateAccommodation()) {
-                    doApiCall = true;
-                    jsonobj.put("accomodation", user.getAccommodation());
-                    userMap.put("accomodation", user.getAccommodation());
-                }
-                if (user.isUpdateCurrentAddress()) {
-                    doApiCall = true;
-                    JSONObject json = new JSONObject();
-                    json.put("line1", user.getCurrentAddress());
-                    json.put("line2", user.getCurrentAddressLine2());
-                    json.put("city", user.getCurrentAddressCity());
-                    json.put("pincode", user.getCurrentAddressPinCode());
-                    jsonobj.put("currentAddress", json);
-                    jsonobj.put("currentAddressCity", user.getCurrentAddressCity());
-                    userMap.put("currentAddress", user.getCurrentAddress());
-                    userMap.put("currentAddressCity", user.getCurrentAddressCity());
-                }
+            if (user.isUpdateAccommodation() || pushAllData) {
+                jsonobj.put("accomodation", user.getAccommodation());
+                userMap.put("accomodation", user.getAccommodation());
+            }
+            if (user.isUpdateCurrentAddress() || pushAllData) {
+                JSONObject json = new JSONObject();
+                json.put("line1", user.getCurrentAddress());
+                json.put("line2", user.getCurrentAddressLine2());
+                json.put("city", user.getCurrentAddressCity());
+                json.put("pincode", user.getCurrentAddressPinCode());
+                jsonobj.put("currentAddress", json);
+                jsonobj.put("currentAddressCity", user.getCurrentAddressCity());
+                userMap.put("currentAddress", user.getCurrentAddress());
+                userMap.put("currentAddressCity", user.getCurrentAddressCity());
+            }
 
-                if (user.isUpdateRollNumber()) {
-                    doApiCall = true;
-                    jsonobj.put("rollNumber", user.getRollNumber());
-                    userMap.put("rollNumber", user.getRollNumber());
+            if (user.isUpdatePermanentAddress() || pushAllData) {
+                JSONObject json = new JSONObject();
+                json.put("line1", user.getPermanentAddress());
+                json.put("line2", user.getPermanentAddressLine2());
+                json.put("city", user.getPermanentAddressCity());
+                json.put("pincode", user.getPermanentAddressPinCode());
+                jsonobj.put("permanentAddress", json);
+                userMap.put("permanentAddress", user.getPermanentAddress());
+            }
+            if (user.isTncUpdate()) {
+                jsonobj.put("tncAccepted", user.isTncAccepted());
+            }
 
-                }
+        } catch (Exception e) {
+        }
+    }
 
-                if (user.isUpdatePermanentAddress()) {
-                    doApiCall = true;
-                    JSONObject json = new JSONObject();
-                    json.put("line1", user.getPermanentAddress());
-                    json.put("line2", user.getPermanentAddressLine2());
-                    json.put("city", user.getPermanentAddressCity());
-                    json.put("pincode", user.getPermanentAddressPinCode());
-                    jsonobj.put("permanentAddress", json);
-                    userMap.put("permanentAddress", user.getPermanentAddress());
-                }
-                JSONArray relation = new JSONArray();
-                if (user.isUpdateFamilyMemberType1() &&
-                        user.isUpdateProfessionFamilyMemberType1() &&
-                        user.isUpdatePreferredLanguageFamilyMemberType1() &&
-                        user.isUpdatePhoneFamilyMemberType1()) {
-                    doApiCall = true;
-                    JSONObject json = new JSONObject();
-                    json.put("relation", user.getFamilyMemberType1());
-                    json.put("occupation", user.getProfessionFamilyMemberType1());
-                    json.put("preferredLanguage", user.getPrefferedLanguageFamilyMemberType1());
+    private void prepareStep2Data(UserModel user, Map userMap, JSONObject jsonobj, boolean pushAllData) {
+        try {
+            if (user.isGpaTypeUpdate() || pushAllData) {
+                jsonobj.put("gpaType", user.getGpaType());
+                userMap.put("gpaType", user.getGpaType());
+            }
+
+            if (user.isGpaValueUpdate() || pushAllData) {
+                jsonobj.put("gpa", user.getGpa());
+                userMap.put("gpa", user.getGpa());
+            }
+            if (user.isUpdateStudentLoan() || pushAllData) {
+                jsonobj.put("takenLoan", user.getStudentLoan());
+                userMap.put("takenLoan", user.getStudentLoan());
+            }
+
+            JSONArray relation = new JSONArray();
+            if ((user.isUpdateFamilyMemberType1() &&
+                    user.isUpdateProfessionFamilyMemberType1() &&
+                    user.isUpdatePreferredLanguageFamilyMemberType1() &&
+                    user.isUpdatePhoneFamilyMemberType1()) || pushAllData) {
+                JSONObject json = new JSONObject();
+                json.put("relation", user.getFamilyMemberType1());
+                json.put("occupation", user.getProfessionFamilyMemberType1());
+                json.put("preferredLanguage", user.getPrefferedLanguageFamilyMemberType1());
+                if (AppUtils.isNotEmpty(user.getPhoneFamilyMemberType1()))
                     json.put("phone", user.getPhoneFamilyMemberType1());
-                    relation.put(json);
-                    jsonobj.put("familyMember", relation);
-                    userMap.put("familyMember", relation);
-                }
-                if (user.isUpdateFamilyMemberType2() &&
-                        user.isUpdateProfessionFamilyMemberType2() &&
-                        user.isUpdatePreferredLanguageFamilyMemberType2() &&
-                        user.isUpdatePhoneFamilyMemberType2()) {
-                    doApiCall = true;
+                relation.put(json);
+                jsonobj.put("familyMember", relation);
+                userMap.put("familyMember", relation);
+            }
+            if ((user.isUpdateFamilyMemberType2() &&
+                    user.isUpdateProfessionFamilyMemberType2() &&
+                    user.isUpdatePreferredLanguageFamilyMemberType2() &&
+                    user.isUpdatePhoneFamilyMemberType2()) || pushAllData) {
+                if (AppUtils.isNotEmpty(user.getFamilyMemberType2()) || AppUtils.isNotEmpty(user.getProfessionFamilyMemberType2()) || AppUtils.isNotEmpty(user.getPrefferedLanguageFamilyMemberType2()) || AppUtils.isNotEmpty(user.getPhoneFamilyMemberType2())) {
                     JSONObject json = new JSONObject();
                     json.put("relation", user.getFamilyMemberType2());
                     json.put("occupation", user.getProfessionFamilyMemberType2());
@@ -654,74 +662,107 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     json.put("phone", user.getPhoneFamilyMemberType2());
                     relation.put(json);
                     jsonobj.put("familyMember", relation);
+                    userMap.put("familyMember", relation);
                 }
-                if (user.isUpdateBankAccNum()) {
+
+            }
+            if (user.isUpdateRollNumber() || pushAllData) {
+                jsonobj.put("rollNumber", user.getRollNumber());
+                userMap.put("rollNumber", user.getRollNumber());
+            }
+            if (user.isUpdateClassmateName() || pushAllData) {
+                jsonobj.put("friendName", user.getClassmateName());
+                userMap.put("friendName", user.getClassmateName());
+            }
+            if (user.isUpdateClassmatePhone() || pushAllData) {
+                jsonobj.put("friendNumber", user.getClassmatePhone());
+                userMap.put("friendNumber", user.getClassmatePhone());
+            }
+            if (user.isUpdateVerificationDate() || pushAllData) {
+                jsonobj.put("collegeIdVerificationDate", user.getVerificationDate());
+                userMap.put("collegeIdVerificationDate", user.getVerificationDate());
+            }
+            if (user.isOptionalNACH() != null) {
+                jsonobj.put("optionalNACH", user.isOptionalNACH());
+                userMap.put("optionalNACH", user.isOptionalNACH());
+
+            }
+            if ((user.isUpdateBankAccNum() || pushAllData) && AppUtils.isNotEmpty(user.getBankAccNum())) {
+                jsonobj.put("bankAccountNumber", user.getBankAccNum());
+                jsonobj.put("bankAccountEncrypted", false);
+                userMap.put("bankAccountNumber", user.getBankAccNum());
+            }
+            if (user.isUpdateBankIfsc() || pushAllData) {
+                jsonobj.put("bankIFSC", user.getBankIfsc());
+                userMap.put("bankIFSC", user.getBankIfsc());
+            }
+
+        } catch (Exception e) {
+        }
+    }
+
+
+    private void prepareStep3Data(UserModel user, Map userMap, JSONObject jsonobj, Boolean pushAllData) {
+        try {
+            if (user.isUpdateAnnualFees() || pushAllData) {
+                jsonobj.put("annualFees", user.getAnnualFees());
+                userMap.put("annualFees", user.getAnnualFees());
+            }
+            if (user.isUpdateScholarship() || pushAllData) {
+                jsonobj.put("scholarship", Boolean.valueOf(user.getScholarship()));
+                userMap.put("scholarship", Boolean.valueOf(user.getScholarship()));
+            }
+            if (user.isUpdateScholarshipType() || pushAllData) {
+                jsonobj.put("scholarshipProgram", user.getScholarshipType());
+                userMap.put("scholarshipProgram", user.getScholarshipType());
+
+            }
+
+
+            if (user.isUpdateScholarshipAmount() || pushAllData) {
+                jsonobj.put("scholarshipAmount", user.getScholarshipAmount());
+                userMap.put("scholarshipAmount", user.getScholarshipAmount());
+            }
+
+            if (user.isUpdateMonthlyExpenditure() || pushAllData) {
+                jsonobj.put("monthlyExpense", user.getMonthlyExpenditure());
+                userMap.put("monthlyExpense", user.getMonthlyExpenditure());
+            }
+            if (user.isUpdateVehicle() || pushAllData) {
+                jsonobj.put("ownVehicle", Boolean.valueOf(user.getVehicle()));
+                userMap.put("ownVehicle", Boolean.valueOf(user.getVehicle()));
+            }
+            if (user.isUpdateVehicleType() || pushAllData) {
+                jsonobj.put("vehicleType", user.getVehicleType());
+                userMap.put("vehicleType", user.getVehicleType());
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private class UploadDetailsToServer extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            ResponseModel responseModel = null;
+            Map userMap = new HashMap<>();
+            try {
+                Boolean doApiCall = false;
+                HttpClient client = new DefaultHttpClient();
+                String url = BuildConfig.SERVER_URL + "api/v1.01/user/profile";
+                HttpPost putReq = new HttpPost(url);
+                JSONObject jsonobj = new JSONObject();
+
+                jsonobj.put("userid", user.getUserId());
+                if (user.isUpdateName()) {
                     doApiCall = true;
-                    jsonobj.put("bankAccountNumber", user.getBankAccNum());
-                    jsonobj.put("bankAccountEncrypted", false);
+                    jsonobj.put("name", user.getName());
+                    userMap.put("name", user.getName());
                 }
-                if (user.isUpdateBankIfsc()) {
-                    doApiCall = true;
-                    jsonobj.put("bankIFSC", user.getBankIfsc());
-                }
-                if (user.isUpdateClassmateName()) {
-                    doApiCall = true;
-                    jsonobj.put("friendName", user.getClassmateName());
-                    userMap.put("friendName", user.getClassmateName());
-                }
-                if (user.isUpdateClassmatePhone()) {
-                    doApiCall = true;
-                    jsonobj.put("friendNumber", user.getClassmatePhone());
-                    userMap.put("friendNumber", user.getClassmatePhone());
-                }
-                if (user.isUpdateVerificationDate()) {
-                    doApiCall = true;
-                    jsonobj.put("collegeIdVerificationDate", user.getVerificationDate());
-                    userMap.put("collegeIdVerificationDate", user.getVerificationDate());
-                }
-                if (user.isUpdateAnnualFees()) {
-                    doApiCall = true;
-                    jsonobj.put("annualFees", user.getAnnualFees());
-                    userMap.put("annualFees", user.getAnnualFees());
-                }
-                if (user.isUpdateScholarship()) {
-                    doApiCall = true;
-                    jsonobj.put("scholarship", Boolean.valueOf(user.getScholarship()));
-                    userMap.put("scholarship", Boolean.valueOf(user.getScholarship()));
-                }
-                if (user.isUpdateScholarshipType()) {
-                    doApiCall = true;
-                    jsonobj.put("scholarshipProgram", user.getScholarshipType());
-                }
-                if (user.isTncUpdate()) {
-                    doApiCall = true;
-                    jsonobj.put("tncAccepted", user.isTncAccepted());
-                }
-                if (user.isUpdateScholarshipAmount()) {
-                    doApiCall = true;
-                    jsonobj.put("scholarshipAmount", user.getScholarshipAmount());
-                }
-                if (user.isUpdateStudentLoan()) {
-                    doApiCall = true;
-                    jsonobj.put("takenLoan", user.getStudentLoan());
-                    userMap.put("takenLoan", user.getStudentLoan());
-                }
-                if (user.isUpdateMonthlyExpenditure()) {
-                    doApiCall = true;
-                    jsonobj.put("monthlyExpense", user.getMonthlyExpenditure());
-                    userMap.put("monthlyExpense", user.getMonthlyExpenditure());
-                }
-                if (user.isUpdateVehicle()) {
-                    doApiCall = true;
-                    jsonobj.put("ownVehicle", Boolean.valueOf(user.getVehicle()));
-                    userMap.put("ownVehicle", Boolean.valueOf(user.getVehicle()));
-                }
-                if (user.isUpdateVehicleType()) {
-                    doApiCall = true;
-                    jsonobj.put("vehicleType", user.getVehicleType());
-                    userMap.put("vehicleType", user.getVehicleType());
-                }
-                if (!doApiCall)
+                isLastStep = params[0];
+                prepareStep1Data(user, userMap, jsonobj, Constants.YES_1k.equals(isLastStep));
+                prepareStep2Data(user, userMap, jsonobj, Constants.YES_7k.equals(isLastStep));
+                prepareStep3Data(user, userMap, jsonobj, Constants.YES_60k.equals(isLastStep));
+                if (userMap.size() == 0)
                     return "";
                 try {
                     Intercom.client().updateUser(userMap);
@@ -739,7 +780,22 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 String responseText = EntityUtils.toString(httpresponse.getEntity());
                 JSONObject json = new JSONObject(responseText);
                 UserModel user = AppUtils.getUserObject(mContext);
-                if (json.get("status").equals("success")) {
+                responseModel = (ResponseModel) gson.fromJson(responseText, ResponseModel.class);
+
+
+                boolean isSuccess = json.get("status").equals("success");
+                boolean isAuthFailed = false;
+                try {
+                    isAuthFailed = json.get("msg").toString().contains("Invalid Token");
+                } catch (Exception e) {
+                }
+
+                boolean isFailed = false;
+                try {
+                    isFailed = json.get("status").equals("error") && (json.opt("msg") == null || !json.get("msg").toString().contains("Invalid Token"));
+                } catch (Exception e) {
+                }
+                if (isSuccess || isFailed) {
                     // Need to get fields which are updated from DB so as to set what is updated.
                     if (jsonobj.opt("gpa") != null && !"".equals(jsonobj.get("gpa")))
                         user.setGpaValueUpdate(false);
@@ -808,18 +864,39 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         user.setUpdateVehicle(false);
                     if (jsonobj.opt("vehicleType") != null && !"".equals(jsonobj.get("vehicleType")))
                         user.setUpdateVehicleType(false);
-                    //setImagesFromSP();
                     AppUtils.saveUserObject(mContext, user);
                     return "success";
-                } else if (json.get("msg").toString().contains("Invalid Token")) {
+                } else if (isAuthFailed) {
                     return "authFailed";
                 }
             } catch (Exception e) {
+
                 e.printStackTrace();
                 return "fail";
+            } finally {
+                if (userMap.size() > 0) {
+                    try {
+                        ProfileFormStep1 pfs1 = (ProfileFormStep1) activity;
+                        pfs1.notifyUploadData(responseModel, params[0], activity);
+                    } catch (Exception e) {
+                        try {
+                            ProfileFormStep2 pfs2 = (ProfileFormStep2) activity;
+                            pfs2.notifyUploadData(responseModel, params[0], activity);
+                        } catch (Exception e1) {
+                            try {
+                                ProfileFormStep3 pfs3 = (ProfileFormStep3) activity;
+                                pfs3.notifyUploadData(responseModel, params[0], activity);
+                            } catch (Exception e2) {
+
+                            }
+
+                        }
+                    }
+                }
             }
             return "fail";
         }
+
 
         @Override
         protected void onPostExecute(String result) {
@@ -827,10 +904,10 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 retryCount++;
                 if (result.equals("authFailed")) {
                     new FetchNewToken(mContext).execute();
-                    new UploadDetailsToServer().execute();
-                } else if (result.equals("fail"))
-                    new UploadDetailsToServer().execute();
-                else {
+                    new UploadDetailsToServer().execute(isLastStep);
+                }
+                //new UploadDetailsToServer().execute(isLastStep);
+                else if ("success".equals(result) || "fail".equals(result)) {
                     mPrefs.edit().putBoolean("updatingDB", false).apply();
                 }
             } else {
@@ -838,5 +915,9 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 mPrefs.edit().putBoolean("updatingDB", false).apply();
             }
         }
+    }
+
+    public interface NotifyProgress {
+        public void notifyUploadData(ResponseModel responseModel, String isLastStep, Activity activity);
     }
 }

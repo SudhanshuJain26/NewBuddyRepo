@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -55,6 +56,7 @@ import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Views.DatePicker;
 import indwin.c3.shareapp.activities.ProfileFormStep1;
 import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
+import indwin.c3.shareapp.models.Error;
 import indwin.c3.shareapp.models.FBUserModel;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
@@ -69,7 +71,7 @@ import io.intercom.com.google.gson.Gson;
 public class ProfileFormStep1Fragment1 extends Fragment {
     static EditText dobEditText;
     private static DatePicker datePicker;
-    Button  connectSocialAccountFb, connectSocialAccountInsta;
+    Button connectSocialAccountFb, connectSocialAccountInsta;
     CallbackManager callbackManager;
     private String email, firstName, friends, gender, lastName, link, name, fbuserId;
     private Boolean veri;
@@ -87,6 +89,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
     private Spinner genderSpinner;
     private ImageView incompleteDOB, completeDOB;
     static boolean updateUserDOB = false;
+    private TextView fbErrorTv;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -211,13 +214,13 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                                     link = fbUserModel.getLink();
                                     fbuserId = fbUserModel.getId();
                                     email = fbUserModel.getEmail();
-                                    UserModel user = AppUtils.getUserObject(getActivity());
-                                    user.setFbUserId(fbuserId);
-                                    AppUtils.saveUserObject(getActivity(), user);
-                                    SharedPreferences sf = getActivity().getSharedPreferences("proid", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor2 = sf.edit();
-                                    editor2.putString("dpid", fbuserId);
-                                    editor2.commit();
+                                    //UserModel user = AppUtils.getUserObject(getActivity());
+                                    //user.setFbUserId(fbuserId);
+                                    //AppUtils.saveUserObject(getActivity(), user);
+                                    //SharedPreferences sf = getActivity().getSharedPreferences("proid", Context.MODE_PRIVATE);
+                                    //SharedPreferences.Editor editor2 = sf.edit();
+                                    //editor2.putString("dpid", fbuserId);
+                                    //editor2.commit();
                                     name = fbUserModel.getName();
                                     veri = fbUserModel.isVerified();
                                 } catch (Exception e) {
@@ -289,7 +292,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         incompleteGender = (ImageView) rootView.findViewById(R.id.incomplete_gender);
         topImage = (ImageView) getActivity().findViewById(R.id.verify_image_view2);
         socialHelptip = (ImageButton) rootView.findViewById(R.id.social_helptip);
-
+        fbErrorTv = (TextView) rootView.findViewById(R.id.fb_error_tv);
 
     }
 
@@ -315,7 +318,8 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         connectSocialAccountFb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                fbErrorTv.setText("");
+                fbErrorTv.setVisibility(View.GONE);
                 loginManager.logOut();
                 loginManager.logInWithReadPermissions(ProfileFormStep1Fragment1.this, Arrays.asList("public_profile", "user_friends", "email", "user_birthday"));
 
@@ -382,6 +386,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
             completeDOB.setVisibility(View.VISIBLE);
         }
     }
+
     private void saveGender() {
         isGenderSelected = true;
         user.setGender(genderSpinner.getSelectedItem().toString());
@@ -397,6 +402,10 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         user.setIsFbConnected(true);
         user.setUpdateFbConnected(true);
         AppUtils.saveUserObject(getActivity(), user);
+        SharedPreferences sf = getActivity().getSharedPreferences("proid", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor2 = sf.edit();
+        editor2.putString("dpid", fbuserId);
+        editor2.commit();
     }
 
 
@@ -417,6 +426,11 @@ public class ProfileFormStep1Fragment1 extends Fragment {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    public void showErrorResponse(Error responseModel) {
+
+
+    }
+
     private class FBLogin extends
                           AsyncTask<String, Void, String> {
         @Override
@@ -427,6 +441,8 @@ public class ProfileFormStep1Fragment1 extends Fragment {
 
         @Override
         protected String doInBackground(String... data) {
+            SharedPreferences cred = getActivity().getSharedPreferences("cred", Context.MODE_PRIVATE);
+            String phone = cred.getString("phone_number", "");
             JSONObject payload = new JSONObject();
             try {
                 payload.put("fbUserId", fbuserId);
@@ -438,10 +454,10 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                 payload.put("fbLink", link);
                 payload.put("fbVerified", veri);
                 payload.put("fbFriends", friends);
+                payload.put("userid", phone);
 
                 HttpParams httpParameters = new BasicHttpParams();
-                SharedPreferences cred = getActivity().getSharedPreferences("cred", Context.MODE_PRIVATE);
-                String phone = cred.getString("phone_number", "");
+
                 HttpConnectionParams
                         .setConnectionTimeout(httpParameters, 30000);
 
@@ -479,28 +495,30 @@ public class ProfileFormStep1Fragment1 extends Fragment {
 
         protected void onPostExecute(String result) {
             if (result.equals("win")) {
-                w++;
-                if (w == 1) {
-                    saveFb();
-                    isFbLoggedIn();
-                    return;
-                }
+                fbErrorTv.setVisibility(View.GONE);
+                user.setFbConnected(true);
+                isFbLoggedIn();
+                return;
             }
-            if (retryCount < 3) {
-                retryCount++;
-                if (result.equals("authFail")) {
-                    new FetchNewToken(getActivity()).execute();
-                    new FBLogin().execute();
-                } else if (result.equals("fail")) {
-                    new FBLogin().execute();
-                }
+            if (result.equals("authFail")) {
+                new FetchNewToken(getActivity()).execute();
+                new FBLogin().execute();
             } else {
+                showFbErrorMessage(result);
                 connectSocialAccountFb.setCompoundDrawablesWithIntrinsicBounds(R.drawable.fb, 0, 0, 0);
                 connectSocialAccountFb.setText("Try connecting again!");
             }
         }
     }
 
+    private void showFbErrorMessage(String message) {
+        try {
+            fbErrorTv.setText(message);
+            fbErrorTv.setVisibility(View.VISIBLE);
+
+        } catch (Exception e) {
+        }
+    }
 
     public void isFbLoggedIn() {
         try {

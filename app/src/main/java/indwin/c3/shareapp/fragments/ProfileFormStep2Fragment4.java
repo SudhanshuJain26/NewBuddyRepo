@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -39,6 +40,7 @@ import indwin.c3.shareapp.activities.ImageHelperActivity;
 import indwin.c3.shareapp.activities.ProfileFormStep2;
 import indwin.c3.shareapp.activities.SetupAutoRepayments;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
+import indwin.c3.shareapp.models.Error;
 import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
@@ -69,7 +71,7 @@ public class ProfileFormStep2Fragment4 extends Fragment {
     private ArrayList<String> bankStmts;
     private Map<String, String> newBankStmts;
     private Image bankStmnt;
-
+    public static TextView bankErrorTv;
 
     private static final int INTENT_REQUEST_GET_IMAGES = 13;
     ImageUploaderRecyclerAdapter adapter;
@@ -78,12 +80,15 @@ public class ProfileFormStep2Fragment4 extends Fragment {
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     boolean deniedPermissionForever = false;
     private static final int REQUEST_PERMISSION_SETTING = 99;
+    public static LinearLayout setupNachLL;
+    private CheckBox setupNachCb;
+    private TextView setupNachTv;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(
-                R.layout.profile_form_step2_fragment3, container, false);
+                R.layout.profile_form_step2_fragment4, container, false);
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
         mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
         mPrefs.edit().putBoolean("visitedFormStep2Fragment3", true).apply();
@@ -97,6 +102,9 @@ public class ProfileFormStep2Fragment4 extends Fragment {
             b = Boolean.parseBoolean(user.getStudentLoan());
 
         } catch (Exception e) {
+        }
+        if (AppUtils.isNotEmpty(user.getBankAccNum())) {
+            setupNachLL.setVisibility(View.GONE);
         }
         showHideBankStatement(b);
         try {
@@ -145,18 +153,14 @@ public class ProfileFormStep2Fragment4 extends Fragment {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
         setAllHelpTipsEnabled();
+        if (user.isOptionalNACH() != null && user.isOptionalNACH()) {
+            setupNachCb.setBackgroundColor(getResources().getColor(R.color.colorwhite));
+            setupNachCb.setChecked(user.isOptionalNACH());
+        }
         if (!user.isAppliedFor7k() && AppUtils.isNotEmpty(user.getBankAccNum()) && AppUtils.isNotEmpty(user.getBankIfsc())) {
             changeAccNum.setVisibility(View.VISIBLE);
         } else {
             changeAccNum.setVisibility(View.GONE);
-        }
-        if (mPrefs.getBoolean("visitedFormStep2Fragment2", false)) {
-            //gotoFragment2.setAlpha(1);
-            //gotoFragment2.setClickable(true);
-        }
-        if (mPrefs.getBoolean("visitedFormStep2Fragment1", false)) {
-            //gotoFragment3.setAlpha(1);
-            //gotoFragment3.setClickable(true);
         }
         if (user.getGender() != null && "girl".equals(user.getGender())) {
         }
@@ -196,9 +200,9 @@ public class ProfileFormStep2Fragment4 extends Fragment {
         }, null);
         setOnClickListener();
 
-            if (user.isIncompleteRepaymentSetup() && !user.isAppliedFor7k()) {
-                incompleteSetupRepayments.setVisibility(View.VISIBLE);
-            }
+        if (user.isIncompleteRepaymentSetup() && !user.isAppliedFor7k()) {
+            incompleteSetupRepayments.setVisibility(View.VISIBLE);
+        }
         return rootView;
     }
 
@@ -210,7 +214,24 @@ public class ProfileFormStep2Fragment4 extends Fragment {
     }
 
     private void setOnClickListener() {
-
+        setupNachTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openNACHDialogBox();
+            }
+        });
+        setupNachCb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (setupNachCb.isChecked()) {
+                    setupNachCb.setChecked(false);
+                    openNACHDialogBox();
+                } else {
+                    setupNachCb.setBackgroundColor(getResources().getColor(R.color.colorwhite));
+                    user.setOptionalNACH(false);
+                }
+            }
+        });
         bankHelptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,10 +266,27 @@ public class ProfileFormStep2Fragment4 extends Fragment {
 
     }
 
+    private void openNACHDialogBox() {
+        final Dialog dialogView = new Dialog(getActivity(), R.style.nach_dialog);
+        dialogView.setContentView(R.layout.setup_nach_later_layout);
+        dialogView.show();
+        Button setupNACH = (Button) dialogView.findViewById(R.id.setup_later);
+        setupNACH.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setupNachCb.setChecked(true);
+                user.setOptionalNACH(true);
+                dialogView.hide();
+            }
+        });
+    }
+
 
     private void getAllViews(View rootView) {
-
-
+        setupNachLL = (LinearLayout) rootView.findViewById(R.id.setupNachLL);
+        setupNachCb = (CheckBox) rootView.findViewById(R.id.setupNachCB);
+        setupNachTv = (TextView) rootView.findViewById(R.id.setupNachTv);
+        bankErrorTv = (TextView) rootView.findViewById(R.id.bankErrorTv);
         setupAutoRepayments = (Button) rootView.findViewById(R.id.setup_repayments);
         bankAccNum = (TextView) rootView.findViewById(R.id.bank_acc_number);
         completeSetupRepayments = (ImageView) rootView.findViewById(R.id.complete_repayments);
@@ -345,8 +383,8 @@ public class ProfileFormStep2Fragment4 extends Fragment {
 
     public void checkIncomplete() {
 
-
-        if (bankAccNum.getText().length() <= 0) {
+        UserModel userDB = AppUtils.getUserObject(getActivity());
+        if (AppUtils.isEmpty(userDB.getBankAccNum()) && ((user.isOptionalNACH() == null) || !(user.isOptionalNACH()))) {
             user.setIncompleteRepaymentSetup(true);
             completeSetupRepayments.setVisibility(View.GONE);
             incompleteSetupRepayments.setVisibility(View.VISIBLE);
@@ -393,5 +431,19 @@ public class ProfileFormStep2Fragment4 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    public void showDuplicateBankAccountNumber(Error error) {
+        bankErrorTv.setVisibility(View.VISIBLE);
+        bankErrorTv.setText(error.getError());
+        incompleteSetupRepayments.setVisibility(View.VISIBLE);
+        completeSetupRepayments.setVisibility(View.GONE);
+        user.setIncompleteRepaymentSetup(true);
+        user.setBankAccNum(null);
+        user.setUpdateBankAccNum(true);
+        user.setBankIfsc(null);
+        user.setUpdateBankIfsc(true);
+        setupNachLL.setVisibility(View.VISIBLE);
+
     }
 }

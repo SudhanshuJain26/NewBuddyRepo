@@ -114,7 +114,7 @@ public class ProfileFormStep1Fragment4 extends Fragment {
         Window window = getActivity().getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
         int statusBarHeight = rectangle.top;
-        currentAddressLayout.getLayoutParams().height = displaymetrics.heightPixels - statusBarHeight;
+        //currentAddressLayout.getLayoutParams().height = displaymetrics.heightPixels - statusBarHeight;
         if (user.isAppliedFor1k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
@@ -187,6 +187,7 @@ public class ProfileFormStep1Fragment4 extends Fragment {
         agreementBtn = (Button) rootView.findViewById(R.id.agreement_btn);
         currentSelected = 0;
         incompleteAddressDetails = (ImageView) rootView.findViewById(R.id.incomplete_address);
+        completeAddressDetails = (ImageView) rootView.findViewById(R.id.complete_address);
         editCurrentAddress = (TextView) rootView.findViewById(R.id.edit_current_address);
         editPermanentAddress = (TextView) rootView.findViewById(R.id.edit_permanent_address);
         addressHelptip = (ImageButton) rootView.findViewById(R.id.address_helptip);

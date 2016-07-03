@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import java.util.List;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.activities.ProfileFormStep2;
 import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
+import indwin.c3.shareapp.models.Error;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.HelpTipDialog;
@@ -35,8 +38,8 @@ import indwin.c3.shareapp.utils.ValidationUtils;
 public class ProfileFormStep2Fragment2 extends Fragment {
     private SharedPreferences mPrefs;
     private UserModel user;
-    private TextView  addFamilyMember;
-    ImageView  incompleteFamilyDetails, completeFamilyDetails;
+    private TextView addFamilyMember;
+    ImageView incompleteFamilyDetails, completeFamilyDetails;
     boolean isFamilyMemberAdded = false;
     private EditText phoneFamilyMember1, phoneFamilyMember2;
     private Spinner prefLangFamilyMember1, prefLangFamilyMember2;
@@ -48,6 +51,8 @@ public class ProfileFormStep2Fragment2 extends Fragment {
     private TextView incorrectPhoneFamily1, incorrectPhoneFamily2;
     private String mobile;
     private String languageOptions[];
+    private String phoneFamily1;
+    private boolean phoneFamily1Update = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -308,82 +313,131 @@ public class ProfileFormStep2Fragment2 extends Fragment {
     }
 
     private void setOnClickListener() {
+        phoneFamilyMember1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                incorrectPhoneFamily1.setVisibility(View.GONE);
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                phoneFamily1 = s.toString();
+                phoneFamily1Update = true;
+
+            }
+        });
+
+        phoneFamilyMember2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                incorrectPhoneFamily2.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         phoneFamilyMember1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
                 if (!hasFocus) {
-                    String mobile = AppUtils.getFromSelectedSharedPrefs(getActivity(), "phone_number", "cred");
-                    if (phoneFamilyMember1.getText().toString().equals(mobile)) {
-                        incorrectPhoneFamily1.setText("This cant be your own number");
-                        incorrectPhoneFamily1.setVisibility(View.VISIBLE);
-
-                    } else if (!ValidationUtils.isValidPhoneNumber(phoneFamilyMember1.getText().toString())) {
-                        incorrectPhoneFamily1.setText("Incorrect phone number");
-                        incorrectPhoneFamily1.setVisibility(View.VISIBLE);
-
-                    } else {
-                        incorrectPhoneFamily1.setVisibility(View.GONE);
-                        user.setPhoneFamilyMemberType1(phoneFamilyMember1.getText().toString());
-                        user.setUpdatePhoneFamilyMemberType1(true);
-                    }
+                    checkAndVaildatePhoneNumber1(phoneFamilyMember1.getText().toString());
                 }
             }
         });
 
 
-        phoneFamilyMember2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+        phoneFamilyMember2.setOnFocusChangeListener(new View.OnFocusChangeListener()
 
-                if (!hasFocus) {
-                    String mobile = AppUtils.getFromSelectedSharedPrefs(getActivity(), "phone_number", "cred");
-                    if (phoneFamilyMember2.getText().toString().equals(mobile)) {
-                        incorrectPhoneFamily2.setText("This cant be your own number");
-                        incorrectPhoneFamily2.setVisibility(View.VISIBLE);
-                    } else if (!ValidationUtils.isValidPhoneNumber(phoneFamilyMember2.getText().toString())) {
-                        incorrectPhoneFamily2.setText("Incorrect phone number");
-                        incorrectPhoneFamily2.setVisibility(View.VISIBLE);
+                                                    {
+                                                        @Override
+                                                        public void onFocusChange(View v, boolean hasFocus) {
 
-                    } else {
-                        user.setPhoneFamilyMemberType2(phoneFamilyMember2.getText().toString());
-                        user.setUpdatePhoneFamilyMemberType2(true);
-                        incorrectPhoneFamily2.setVisibility(View.GONE);
-                    }
-                }
-            }
-        });
+                                                            if (!hasFocus) {
+                                                                String mobile = AppUtils.getFromSelectedSharedPrefs(getActivity(), "phone_number", "cred");
+                                                                if (phoneFamilyMember2.getText().toString().equals(mobile)) {
+                                                                    incorrectPhoneFamily2.setText("This cant be your own number");
+                                                                    incorrectPhoneFamily2.setVisibility(View.VISIBLE);
+                                                                } else if (!ValidationUtils.isValidPhoneNumber(phoneFamilyMember2.getText().toString())) {
+                                                                    incorrectPhoneFamily2.setText("Incorrect phone number");
+                                                                    incorrectPhoneFamily2.setVisibility(View.VISIBLE);
+
+                                                                } else {
+                                                                    user.setPhoneFamilyMemberType2(phoneFamilyMember2.getText().toString());
+                                                                    user.setUpdatePhoneFamilyMemberType2(true);
+                                                                    incorrectPhoneFamily2.setVisibility(View.GONE);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+        );
 
 
-        addFamilyMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isFamilyMemberAdded) {
-                    isFamilyMemberAdded = true;
+        addFamilyMember.setOnClickListener(new View.OnClickListener()
 
-                    showFamilyLayout2();
-                    resetFamilyDetails();
-                    addFamilyMember.setText("Remove this family member");
-                } else {
-                    isFamilyMemberAdded = false;
-                    resetFamilyDetails();
-                    hideFamilyDetails();
-                    user.setUpdatePreferredLanguageFamilyMemberType2(true);
-                    user.setPrefferedLanguageFamilyMemberType2("");
+                                           {
+                                               @Override
+                                               public void onClick(View v) {
+                                                   if (!isFamilyMemberAdded) {
+                                                       isFamilyMemberAdded = true;
 
-                    user.setPhoneFamilyMemberType2("");
-                    user.setUpdatePhoneFamilyMemberType2(true);
-                    addFamilyMember.setText("Add a family member");
-                    user.setProfessionFamilyMemberType2("");
-                    user.setFamilyMemberType2("");
-                }
-            }
-        });
+                                                       showFamilyLayout2();
+                                                       resetFamilyDetails();
+                                                       addFamilyMember.setText("Remove this family member");
+                                                   } else {
+                                                       isFamilyMemberAdded = false;
+                                                       resetFamilyDetails();
+                                                       hideFamilyDetails();
+                                                       user.setUpdatePreferredLanguageFamilyMemberType2(true);
+                                                       user.setPrefferedLanguageFamilyMemberType2("");
 
-        if (user.isIncompleteFamilyDetails()) {
+                                                       user.setPhoneFamilyMemberType2("");
+                                                       user.setUpdatePhoneFamilyMemberType2(true);
+                                                       addFamilyMember.setText("Add a family member");
+                                                       user.setProfessionFamilyMemberType2("");
+                                                       user.setFamilyMemberType2("");
+                                                   }
+                                               }
+                                           }
+
+        );
+
+        if (user.isIncompleteFamilyDetails())
+
+        {
             incompleteFamilyDetails.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    private void checkAndVaildatePhoneNumber1(String phoneNumber) {
+        String mobile = AppUtils.getFromSelectedSharedPrefs(getActivity(), "phone_number", "cred");
+        if (phoneNumber.equals(mobile)) {
+            incorrectPhoneFamily1.setText("This cant be your own number");
+            incorrectPhoneFamily1.setVisibility(View.VISIBLE);
+
+        } else if (!ValidationUtils.isValidPhoneNumber(phoneNumber)) {
+            incorrectPhoneFamily1.setText("Incorrect phone number");
+            incorrectPhoneFamily1.setVisibility(View.VISIBLE);
+
+        } else {
+            incorrectPhoneFamily1.setVisibility(View.GONE);
+            user.setPhoneFamilyMemberType1(phoneNumber);
+            user.setUpdatePhoneFamilyMemberType1(true);
         }
     }
 
@@ -413,6 +467,9 @@ public class ProfileFormStep2Fragment2 extends Fragment {
     }
 
     public void checkIncomplete() {
+        if (phoneFamily1Update) {
+            checkAndVaildatePhoneNumber1(phoneFamilyMember1.getText().toString());
+        }
         if (AppUtils.isNotEmpty(user.getFamilyMemberType1())
                 && AppUtils.isNotEmpty(user.getProfessionFamilyMemberType1())
                 && AppUtils.isNotEmpty(user.getPrefferedLanguageFamilyMemberType1()) &&
@@ -431,6 +488,7 @@ public class ProfileFormStep2Fragment2 extends Fragment {
                 user.setUpdatePhoneFamilyMemberType2(true);
             }
         }
+        phoneFamily1Update = false;
 
     }
 
@@ -440,4 +498,17 @@ public class ProfileFormStep2Fragment2 extends Fragment {
         phoneFamilyMember2.setText("");
     }
 
+    public void showFamilyMemberError(Error error) {
+        if (error.getValue() != null && error.getValue().getRelation().equalsIgnoreCase(familyMember1spinner.getSelectedItem().toString())) {
+            incorrectPhoneFamily1.setText(error.getError());
+            incorrectPhoneFamily1.setVisibility(View.VISIBLE);
+            incompleteFamilyDetails.setVisibility(View.VISIBLE);
+            completeFamilyDetails.setVisibility(View.GONE);
+            user.setPhoneFamilyMemberType1(null);
+            user.setUpdatePhoneFamilyMemberType1(true);
+        } else if (error.getValue() != null && error.getValue().getRelation().equalsIgnoreCase(familyMember2spinner.getSelectedItem().toString())) {
+            incorrectPhoneFamily2.setText(error.getError());
+            incorrectPhoneFamily2.setVisibility(View.VISIBLE);
+        }
+    }
 }

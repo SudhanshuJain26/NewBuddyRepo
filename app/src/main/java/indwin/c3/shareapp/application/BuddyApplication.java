@@ -17,7 +17,7 @@ import indwin.c3.shareapp.R;
  * Created by rock on 5/18/16.
  */
 
-@ReportsCrashes(formUri = "", mailTo = "care@themeshapp.com,moulik@hellobuddy.in", customReportContent = {ReportField.BUILD,
+@ReportsCrashes(formUri = "", mailTo = "sudhanshu.jain@hellobuddy.in,moulik@hellobuddy.in,aniket@hellobuddy.in,deepak@hellobuddy.in", customReportContent = {ReportField.BUILD,
         ReportField.USER_APP_START_DATE, ReportField.USER_CRASH_DATE, ReportField.USER_EMAIL, ReportField.APP_VERSION_NAME,
         ReportField.ANDROID_VERSION, ReportField.PHONE_MODEL, ReportField.CUSTOM_DATA, ReportField.STACK_TRACE,
         ReportField.LOGCAT,}, mode = ReportingInteractionMode.TOAST, resToastText = R.string.crashed_report)

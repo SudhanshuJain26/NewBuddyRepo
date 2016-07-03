@@ -94,24 +94,24 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         } catch (Exception e) {
             e.printStackTrace();
         }
-        SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
-        if (!isUpdatingDB) {
+        //SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+        //boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+        //if (!isUpdatingDB) {
 
             new ValidateForm().execute();
-        } else {
-            Runnable myRunnable = new Runnable() {
-
-                public void run() {
-                    checkForDBUpdate();
-                }
-
-
-            };
-            Thread thread = new Thread(myRunnable);
-            thread.start();
-
-        }
+        //} else {
+        //    Runnable myRunnable = new Runnable() {
+        //
+        //        public void run() {
+        //            checkForDBUpdate();
+        //        }
+        //
+        //
+        //    };
+        //    Thread thread = new Thread(myRunnable);
+        //    thread.start();
+        //
+        //}
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.getMenu().getItem(1).setChecked(true);
@@ -380,11 +380,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         } catch (Exception e) {
 
         }
-        SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
-        if (isUpdatingDB)
-            checkForDBUpdate();
-        else
+        //SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+        //boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+        //if (isUpdatingDB)
+        //    checkForDBUpdate();
+        //else
             new ValidateForm().execute();
     }
 

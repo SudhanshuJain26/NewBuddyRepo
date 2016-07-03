@@ -167,7 +167,10 @@
                         android:textAllCaps="false"
                         android:textColor="#44c2a6"/>
                 </LinearLayout>
-
+                <TextView android:id="@+id/pan_aadhar_error_tv"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:textColor="@color/buddy_red"
+                          android:visibility="gone"/>
                 <LinearLayout
                     android:id="@+id/incorrect_format_layout"
                     android:layout_width="wrap_content"
@@ -198,8 +201,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <RelativeLayout android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:gravity="center_vertical">
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

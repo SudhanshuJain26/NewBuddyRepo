@@ -65,7 +65,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private Spinner aadharOrPan;
     String[] arrayAaadharOrPan;
     private CardView editTextCardView;
-    private ImageView incompleteAadhar, completeAadhar, completeAadhar1, incompleteAddress, completeAddress;
+    private ImageView incompleteAadhar, incompleteAadhar1, completeAadhar, completeAadhar1, incompleteAddress, completeAddress;
     int currentSelected;
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     boolean deniedPermissionForever = false;
@@ -180,7 +180,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 } else uploadImageMsgTv.setText("Upload your Aadhar Proof");
                 aadharPanHeader.setText(arrayAaadharOrPan[0]);
                 aadharNuber.setText(user.getAadharNumber());
-                completeAadhar1.setVisibility(View.VISIBLE);
                 user.setIncompleteAadhar(false);
                 aadharNuber.setVisibility(View.VISIBLE);
                 editTextHeader.setVisibility(View.GONE);
@@ -188,13 +187,14 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 aadharPanHeader.setVisibility(View.VISIBLE);
                 saveAadhar.setVisibility(View.GONE);
                 panImageLL.setVisibility(View.GONE);
+                hideAllAadharDrawable();
+                completeAadhar1.setVisibility(View.VISIBLE);
             } else if ("PAN".equals(user.getPanOrAadhar()) && user.getPanNumber() != null && !"".equals(user.getPanNumber())) {
                 editAadharNumber.setVisibility(View.GONE);
                 addressProofCv.setVisibility(View.VISIBLE);
                 aadharOrPan.setTag(1);
                 aadharPanHeader.setText(arrayAaadharOrPan[1]);
                 aadharNuber.setText(user.getPanNumber());
-                completeAadhar1.setVisibility(View.VISIBLE);
                 user.setIncompleteAadhar(false);
                 uploadImageMsgTv.setText("Upload your Permanent Address Proof");
                 aadharNuber.setVisibility(View.VISIBLE);
@@ -204,6 +204,10 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 saveAadhar.setVisibility(View.GONE);
 
                 panImageLL.setVisibility(View.VISIBLE);
+                hideAllAadharDrawable();
+                completeAadhar1.setVisibility(View.VISIBLE);
+
+
             }
         }
 
@@ -233,8 +237,10 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         setOnClickListener();
         aadharOrPan.setAdapter(adapter);
         if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress()) {
-            if (user.isIncompleteAadhar() && !user.isAppliedFor1k())
+            if (user.isIncompleteAadhar() && !user.isAppliedFor1k()) {
+                hideAllAadharDrawable();
                 incompleteAadhar.setVisibility(View.VISIBLE);
+            }
             if (user.isIncompletePermanentAddress() && !user.isAppliedFor1k())
                 incompleteAddress.setVisibility(View.VISIBLE);
         }
@@ -379,7 +385,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 editTextHeader.setVisibility(View.VISIBLE);
                 aadharNuber.setVisibility(View.GONE);
                 editAadhar.setVisibility(View.GONE);
-                completeAadhar1.setVisibility(View.GONE);
+                hideAllAadharDrawable();
                 saveAadhar.setVisibility(View.VISIBLE);
                 editAadharNumber.setVisibility(View.VISIBLE);
                 editTextCardView.setVisibility(View.VISIBLE);
@@ -417,6 +423,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         incompleteAadhar = (ImageView) rootView.findViewById(R.id.incomplete_aadhar);
         completeAadhar = (ImageView) rootView.findViewById(R.id.complete_aadhar);
         completeAadhar1 = (ImageView) rootView.findViewById(R.id.complete_aadhar_1);
+        incompleteAadhar1 = (ImageView) rootView.findViewById(R.id.incomplete_aadhar_1);
         incompleteAddress = (ImageView) rootView.findViewById(R.id.incomplete_address_proof);
         currentSelected = 0;
         aadharHelptip = (ImageButton) rootView.findViewById(R.id.aadhar_helptip);
@@ -448,7 +455,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             if (!validAadhar) {
                 incorrectFormat.setVisibility(View.VISIBLE);
             } else {
-
+                hideAllAadharDrawable();
                 if (editAadharNumber.getText().toString().equals(oldAadharNumber)) {
 
                 } else {
@@ -500,13 +507,16 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
         if ((AppUtils.isNotEmpty(user.getPanNumber()) && "pan".equalsIgnoreCase(user.getPanOrAadhar())) || (AppUtils.isNotEmpty(user.getAadharNumber()) && "aadhar".equalsIgnoreCase(user.getPanOrAadhar()))) {
             user.setIncompleteAadhar(false);
-            incompleteAadhar.setVisibility(View.GONE);
-            if (aadharPanHeader.getVisibility() == View.GONE)
-                completeAadhar.setVisibility(View.VISIBLE);
+
+            hideAllAadharDrawable();
+            completeAadhar1.setVisibility(View.VISIBLE);
         } else {
+            hideAllAadharDrawable();
             user.setIncompleteAadhar(true);
-            incompleteAadhar.setVisibility(View.VISIBLE);
-            completeAadhar.setVisibility(View.GONE);
+            if (!aadharNuber.getText().toString().trim().isEmpty()) {
+                incompleteAadhar1.setVisibility(View.VISIBLE);
+            } else
+                incompleteAadhar.setVisibility(View.VISIBLE);
         }
         if (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl())) {
             user.setIncompletePermanentAddress(true);
@@ -592,12 +602,17 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     }
 
     public void showErrorpanAadhaar(Error error) {
-
         panAadharErrorTv.setVisibility(View.VISIBLE);
         panAadharErrorTv.setText(error.getError());
-        incompleteAadhar.setVisibility(View.VISIBLE);
-        completeAadhar.setVisibility(View.GONE);
+        hideAllAadharDrawable();
+        incompleteAadhar1.setVisibility(View.VISIBLE);
+    }
 
+    private void hideAllAadharDrawable() {
+        incompleteAadhar1.setVisibility(View.GONE);
+        completeAadhar.setVisibility(View.GONE);
+        incompleteAadhar.setVisibility(View.GONE);
+        completeAadhar1.setVisibility(View.GONE);
     }
 
     @Override

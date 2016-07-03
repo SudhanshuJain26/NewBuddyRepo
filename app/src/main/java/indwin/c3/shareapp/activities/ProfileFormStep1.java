@@ -359,8 +359,11 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean checkIncompleteStep4() {
-        ProfileFormStep1Fragment4 profileFormStep1Fragment4 = (ProfileFormStep1Fragment4) mPagerAdapter.getRegisteredFragment(3);
-        profileFormStep1Fragment4.checkIncomplete();
+        try {
+            ProfileFormStep1Fragment4 profileFormStep1Fragment4 = (ProfileFormStep1Fragment4) mPagerAdapter.getFragment(3);
+            profileFormStep1Fragment4.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep4();
     }
 
@@ -376,8 +379,11 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
 
 
     private boolean checkIncompleteStep1() {
-        ProfileFormStep1Fragment1 profileFormStep1Fragment1 = (ProfileFormStep1Fragment1) mPagerAdapter.getRegisteredFragment(0);
-        profileFormStep1Fragment1.checkIncomplete();
+        try {
+            ProfileFormStep1Fragment1 profileFormStep1Fragment1 = (ProfileFormStep1Fragment1) mPagerAdapter.getFragment(0);
+            profileFormStep1Fragment1.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep1();
     }
 
@@ -392,8 +398,11 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
 
     private boolean checkIncompleteStep2() {
         //ProfileFormStep1Fragment2 profileFormStep1Fragment2 = (ProfileFormStep1Fragment2) getSupportFragmentManager().getFragments().get(1);
-        ProfileFormStep1Fragment2 profileFormStep1Fragment2 = (ProfileFormStep1Fragment2) mPagerAdapter.getRegisteredFragment(1);
-        profileFormStep1Fragment2.checkIncomplete();
+        try {
+            ProfileFormStep1Fragment2 profileFormStep1Fragment2 = (ProfileFormStep1Fragment2) mPagerAdapter.getFragment(1);
+            profileFormStep1Fragment2.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep2();
     }
 
@@ -407,8 +416,11 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean checkIncompleteStep3() {
-        ProfileFormStep1Fragment3 profileFormStep1Fragment3 = (ProfileFormStep1Fragment3) mPagerAdapter.getRegisteredFragment(2);
-        profileFormStep1Fragment3.checkIncomplete();
+        try {
+            ProfileFormStep1Fragment3 profileFormStep1Fragment3 = (ProfileFormStep1Fragment3) mPagerAdapter.getFragment(2);
+            profileFormStep1Fragment3.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep3();
     }
 
@@ -601,7 +613,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                 if (responseModel != null) {
                     for (Error error : responseModel.getErrors()) {
                         if (error.getField().equalsIgnoreCase("fbUserId")) {
-                            ProfileFormStep1Fragment1 profileFormStep1Fragment1 = (ProfileFormStep1Fragment1) mPagerAdapter.getRegisteredFragment(0);
+                            ProfileFormStep1Fragment1 profileFormStep1Fragment1 = (ProfileFormStep1Fragment1) mPagerAdapter.getFragment(0);
                             profileFormStep1Fragment1.showErrorResponse(error);
                         } else if (error.getField().equalsIgnoreCase("pan")) {
                             UserModel userDB = AppUtils.getUserObject(activity);
@@ -612,7 +624,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                             user.setPanNumber(null);
                             user.setPanDuplicate(true);
                             user.setUpdatePanNumber(true);
-                            ProfileFormStep1Fragment3 profileFormStep1Fragment3 = (ProfileFormStep1Fragment3) mPagerAdapter.getRegisteredFragment(2);
+                            ProfileFormStep1Fragment3 profileFormStep1Fragment3 = (ProfileFormStep1Fragment3) mPagerAdapter.getFragment(2);
                             profileFormStep1Fragment3.showErrorpanAadhaar(error);
                             incompleteStep3.setVisibility(View.VISIBLE);
                         } else if (error.getField().equalsIgnoreCase("aadhar")) {
@@ -623,7 +635,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                             user.setAadharNumber(null);
                             user.setAadhaarDuplicate(true);
                             user.setUpdateAadharNumber(true);
-                            ProfileFormStep1Fragment3 profileFormStep1Fragment3 = (ProfileFormStep1Fragment3) mPagerAdapter.getRegisteredFragment(2);
+                            ProfileFormStep1Fragment3 profileFormStep1Fragment3 = (ProfileFormStep1Fragment3) mPagerAdapter.getFragment(2);
                             profileFormStep1Fragment3.showErrorpanAadhaar(error);
                             incompleteStep3.setVisibility(View.VISIBLE);
                         }

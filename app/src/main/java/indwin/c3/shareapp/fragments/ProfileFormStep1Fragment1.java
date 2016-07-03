@@ -462,7 +462,7 @@ public class ProfileFormStep1Fragment1 extends Fragment {
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String url2 = BuildConfig.SERVER_URL + "api/user/social?userid=" + phone;
+                String url2 = BuildConfig.SERVER_URL + "api/v1.01/user/social?userid=" + phone;
                 HttpPut httppost = new HttpPut(url2);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
                 httppost.setHeader("x-access-token", AppUtils.getFromSharedPrefs(getActivity(), "token_value"));

@@ -310,8 +310,11 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
 
 
     private boolean checkIncompleteStep1() {
-        ProfileFormStep3Fragment1 profileFormStep3Fragment1 = (ProfileFormStep3Fragment1) mPagerAdapter.getRegisteredFragment(0);
-        profileFormStep3Fragment1.checkIncomplete();
+        try {
+            ProfileFormStep3Fragment1 profileFormStep3Fragment1 = (ProfileFormStep3Fragment1) mPagerAdapter.getFragment(0);
+            profileFormStep3Fragment1.checkIncomplete();
+        } catch (Exception e) {
+        }
 
         return showHideIncompleteStep1();
     }
@@ -327,8 +330,11 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean checkIncompleteStep2() {
-        ProfileFormStep3Fragment2 profileFormStep3Fragment2 = (ProfileFormStep3Fragment2) mPagerAdapter.getRegisteredFragment(1);
-        profileFormStep3Fragment2.checkIncomplete();
+        try {
+            ProfileFormStep3Fragment2 profileFormStep3Fragment2 = (ProfileFormStep3Fragment2) mPagerAdapter.getFragment(1);
+            profileFormStep3Fragment2.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep2();
     }
 
@@ -343,8 +349,11 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean checkIncompleteStep3() {
-        ProfileFormStep3Fragment3 profileFormStep3Fragment3 = (ProfileFormStep3Fragment3) mPagerAdapter.getRegisteredFragment(2);
-        profileFormStep3Fragment3.checkIncomplete();
+        try {
+            ProfileFormStep3Fragment3 profileFormStep3Fragment3 = (ProfileFormStep3Fragment3) mPagerAdapter.getFragment(2);
+            profileFormStep3Fragment3.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep3();
     }
 

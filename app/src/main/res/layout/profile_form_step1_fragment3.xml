@@ -53,6 +53,17 @@
                         android:src="@drawable/complete"
                         android:visibility="gone"/>
 
+                    <ImageView
+                        android:id="@+id/incomplete_aadhar_1"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/aadhar_pan_header"
+                        android:layout_toRightOf="@id/aadhar_pan_header"
+                        android:src="@drawable/incomplete"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/editext_header"

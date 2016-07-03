@@ -105,7 +105,7 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
 
     public void showHideBankStatements(boolean isBankLayoutVisible) {
 
-        ProfileFormStep2Fragment4 profileFormStep2Fragment4 = (ProfileFormStep2Fragment4) mPagerAdapter.getRegisteredFragment(3);
+        ProfileFormStep2Fragment4 profileFormStep2Fragment4 = (ProfileFormStep2Fragment4) mPagerAdapter.getFragment(3);
         profileFormStep2Fragment4.showHideBankStatement(isBankLayoutVisible);
 
 
@@ -366,8 +366,11 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
 
 
     private boolean checkIncompleteStep1() {
-        ProfileFormStep2Fragment1 profileFormStep2Fragment1 = (ProfileFormStep2Fragment1) mPagerAdapter.getRegisteredFragment(0);
-        profileFormStep2Fragment1.checkIncomplete();
+        try {
+            ProfileFormStep2Fragment1 profileFormStep2Fragment1 = (ProfileFormStep2Fragment1) mPagerAdapter.getFragment(0);
+            profileFormStep2Fragment1.checkIncomplete();
+        } catch (Exception e) {
+        }
 
         return showHideIncompleteStep1();
     }
@@ -383,8 +386,11 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean checkIncompleteStep2() {
-        ProfileFormStep2Fragment2 profileFormStep2Fragment2 = (ProfileFormStep2Fragment2) mPagerAdapter.getRegisteredFragment(1);
-        profileFormStep2Fragment2.checkIncomplete();
+        try {
+            ProfileFormStep2Fragment2 profileFormStep2Fragment2 = (ProfileFormStep2Fragment2) mPagerAdapter.getFragment(1);
+            profileFormStep2Fragment2.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep2();
     }
 
@@ -399,8 +405,11 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean checkIncompleteStep4() {
-        ProfileFormStep2Fragment4 profileFormStep2Fragment4 = (ProfileFormStep2Fragment4) mPagerAdapter.getRegisteredFragment(3);
-        profileFormStep2Fragment4.checkIncomplete();
+        try {
+            ProfileFormStep2Fragment4 profileFormStep2Fragment4 = (ProfileFormStep2Fragment4) mPagerAdapter.getFragment(3);
+            profileFormStep2Fragment4.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep4();
     }
 
@@ -424,8 +433,11 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
 
 
     private boolean checkIncompleteStep3() {
-        ProfileFormStep2Fragment3 profileFormStep2Fragment3 = (ProfileFormStep2Fragment3) mPagerAdapter.getRegisteredFragment(2);
-        profileFormStep2Fragment3.checkIncomplete();
+        try {
+            ProfileFormStep2Fragment3 profileFormStep2Fragment3 = (ProfileFormStep2Fragment3) mPagerAdapter.getFragment(2);
+            profileFormStep2Fragment3.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep3();
     }
 
@@ -601,50 +613,50 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
     public void notifyUploadData(final ResponseModel responseModel, final String isLastStep, final Activity activity) {
 
         //if (isActive) {
-            activity.runOnUiThread(new Runnable() {
-                public void run() {
-                    if (progressDialog != null && progressDialog.isShowing() && Constants.YES_7k.equals(isLastStep)) {
-                        progressDialog.hide();
-                        if (responseModel!=null&&responseModel.getData() != null && responseModel.getData().isAppliedFor7k()) {
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                if (progressDialog != null && progressDialog.isShowing() && Constants.YES_7k.equals(isLastStep)) {
+                    progressDialog.hide();
+                    if (responseModel != null && responseModel.getData() != null && responseModel.getData().isAppliedFor7k()) {
 
-                            Intent intent1 = new Intent(activity, Pending7kApprovalActivity.class);
-                            startActivity(intent1);
-                            finish();
-                        } else if (responseModel != null) {
-                            openDialogBox();
-
-                        }
-                    }
-                    if (responseModel != null) {
-                        if (responseModel.getErrors() != null && responseModel.getErrors().size() > 0) {
-                            UserModel userModel = AppUtils.getUserObject(activity);
-                            for (Error error : responseModel.getErrors()) {
-                                if (error.getField().equalsIgnoreCase("familyMember")) {
-                                    ProfileFormStep2Fragment2 profileFormStep2Fragment2 = (ProfileFormStep2Fragment2) mPagerAdapter.getRegisteredFragment(1);
-                                    profileFormStep2Fragment2.showFamilyMemberError(error);
-                                    userModel.setPhoneFamilyMemberType1(null);
-                                    incompleteStep2.setVisibility(View.VISIBLE);
-                                } else if (error.getField().equalsIgnoreCase("bankAccountNumber")) {
-                                    ProfileFormStep2Fragment4 profileFormStep2Fragment4 = (ProfileFormStep2Fragment4) mPagerAdapter.getRegisteredFragment(3);
-                                    profileFormStep2Fragment4.showDuplicateBankAccountNumber(error);
-                                    userModel.setBankAccNum(null);
-                                    userModel.setBankIfsc(null);
-                                    incompleteStep4.setVisibility(View.VISIBLE);
-                                } else if (error.getField().equalsIgnoreCase("rollNumber")) {
-                                    ProfileFormStep2Fragment3 profileFormStep2Fragment3 = (ProfileFormStep2Fragment3) mPagerAdapter.getRegisteredFragment(2);
-                                    profileFormStep2Fragment3.showErrorRollNumber(error);
-                                    userModel.setRollNumber(null);
-                                    incompleteStep3.setVisibility(View.VISIBLE);
-                                }
-                            }
-                            AppUtils.saveUserObject(activity, userModel);
-                        }
-                    } else {
-                        Toast.makeText(ProfileFormStep2.this, "Error connecting to server", Toast.LENGTH_SHORT).show();
+                        Intent intent1 = new Intent(activity, Pending7kApprovalActivity.class);
+                        startActivity(intent1);
+                        finish();
+                    } else if (responseModel != null) {
+                        openDialogBox();
 
                     }
                 }
-            });
+                if (responseModel != null) {
+                    if (responseModel.getErrors() != null && responseModel.getErrors().size() > 0) {
+                        UserModel userModel = AppUtils.getUserObject(activity);
+                        for (Error error : responseModel.getErrors()) {
+                            if (error.getField().equalsIgnoreCase("familyMember")) {
+                                ProfileFormStep2Fragment2 profileFormStep2Fragment2 = (ProfileFormStep2Fragment2) mPagerAdapter.getFragment(1);
+                                profileFormStep2Fragment2.showFamilyMemberError(error);
+                                userModel.setPhoneFamilyMemberType1(null);
+                                incompleteStep2.setVisibility(View.VISIBLE);
+                            } else if (error.getField().equalsIgnoreCase("bankAccountNumber")) {
+                                ProfileFormStep2Fragment4 profileFormStep2Fragment4 = (ProfileFormStep2Fragment4) mPagerAdapter.getFragment(3);
+                                profileFormStep2Fragment4.showDuplicateBankAccountNumber(error);
+                                userModel.setBankAccNum(null);
+                                userModel.setBankIfsc(null);
+                                incompleteStep4.setVisibility(View.VISIBLE);
+                            } else if (error.getField().equalsIgnoreCase("rollNumber")) {
+                                ProfileFormStep2Fragment3 profileFormStep2Fragment3 = (ProfileFormStep2Fragment3) mPagerAdapter.getFragment(2);
+                                profileFormStep2Fragment3.showErrorRollNumber(error);
+                                userModel.setRollNumber(null);
+                                incompleteStep3.setVisibility(View.VISIBLE);
+                            }
+                        }
+                        AppUtils.saveUserObject(activity, userModel);
+                    }
+                } else {
+                    Toast.makeText(ProfileFormStep2.this, "Error connecting to server", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
         //}
 
     }

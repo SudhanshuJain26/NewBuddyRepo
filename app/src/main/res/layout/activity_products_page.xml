@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/viewDetail"
-        android:visibility="gone"
+
 
         android:layout_below="@id/toolBar"
         android:background="#ffffff">
@@ -111,7 +111,7 @@
                 android:id="@+id/productDisplay"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-
+android:visibility="gone"
                 android:layout_below="@id/logo"
 
                 android:layout_centerHorizontal="true"
@@ -230,6 +230,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/flipcash"
+                android:visibility="gone"
                 android:layout_margin="@dimen/activity_horizontal_margin">
 
                 <View
@@ -439,11 +440,13 @@ android:animateLayoutChanges="true"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/downPayment"
 
+
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
 
 
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:background="@drawable/roundedgrey">
+                android:background="@drawable/roundedblue">
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -470,6 +473,7 @@ android:animateLayoutChanges="true"
                     android:tint="#000000" />
 
 
+
             </RelativeLayout>
 
             <TextView
@@ -492,7 +496,7 @@ android:animateLayoutChanges="true"
                 android:layout_below="@id/duration"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:background="@drawable/roundedbr"
+                android:background="@drawable/roundedblue"
                 android:paddingBottom="@dimen/four"
                 android:paddingTop="@dimen/four">
 

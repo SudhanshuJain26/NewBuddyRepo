@@ -58,16 +58,20 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -82,11 +86,14 @@ public class ProductsPage extends AppCompatActivity {
     private TextView inc, priceChange, status, creditBalance, creditLimit, cashBack, availbal, availbalmsg, knowmore;
     private EditText hve, queryN;
     private long EMIcheck = 0;
-    private int checkLongpress = 0;
+    private int checkLongpress = 0,noOfDays,interestRate=21;
+    private List<Integer> pricesFormonths;
     private GIFView loader;
     private int checkImg = 1, searchPrice, currDay, minDownpayment, firstServicecharge = 0, secondServicecharge = 0;
     private ScrollView viewDetail;
     private String userProfileStatus = "";
+    private Map<String, Integer> categoryForproducts,subcategoryForproducts,brandApple,priceMonths;
+    private Map<Integer,Integer>serviceChargesmapping;
     private android.content.ClipboardManager myClipboard;
     String sellerNme1 = "", productId1 = "";
     private String s = "";
@@ -102,6 +109,7 @@ public class ProductsPage extends AppCompatActivity {
     private CircleImageView profile_image;
     private android.os.Handler rep;
     private boolean mAutoIncrement = false;
+    private  Boolean paymyntra=false;
     private boolean mAutoDecrement = false;
     public int mValue = 0, mValue2 = 0, dee, cb = 0, mDis = 0, checkD = 0;
     private RelativeLayout overview, det, infoLayout, desLayout, specLayout, retLayout, spiii, plusR;
@@ -110,28 +118,29 @@ public class ProductsPage extends AppCompatActivity {
     private Double emi = 0.0;
     private int checkValidFromApis = 0;
     private int monthsnow = 0;
-    private int t = 100, count = 0;
+    private int t = 100, count = 0,considerTen=0;
     private Spinner spinner;
     private int checkLenghtedittext = 0;
     private int value = 0;
     private int maxValue = 0, minProd = 0;
+    private Boolean isZeroDpApplicable=false;
     private String type = "", checkmonths = "";
 
     private int[] myMonths = {1, 2, 3, 6, 9, 12, 15, 18};
-    private String selectedText = "", downPayment = "";
+    private String selectedText = "", downPayment = "",sercieChargeApplicableon="sellingprice";
     private ImageView pasteiconnew;
     private String title, brand, sellerNme, searchQuery, urlforImage;
     private int sellingPrice, monthsallowed, spInc, spDec, dayToday, cuurr;
-    private TextView brandName, sellingRs, pname, sellingRschange;
+    private TextView brandName, sellingRs, pname, sellingRschange,flipcash;
     private EditText query, queryNew;
     private String userCode1k = "", userCode7k = "";
     private CustomEditText dValue;
     private int minDownpaymentfornofina = 0;
     private TextView emiAmount, titlePro, totalLoan, detInfo, detSpec, detRet, detDes;
-    private ImageView seller, spinnArr,
-
-    plus, productImg;
+    private ImageView seller, spinnArr, plus, productImg;
     private RelativeLayout minusR;
+    private String noInterestAppon="";
+    private int nointerestSp,nointerestEmiten=0;
     private int checkCashback = 0;
     private SharedPreferences st;
 
@@ -143,76 +152,8 @@ public class ProductsPage extends AppCompatActivity {
         SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
         creduserid = cred.getString("phone_number", "");
         st = getSharedPreferences("token", Context.MODE_PRIVATE);
-        if (getIntent().getExtras().getString("page").equals("monkey")) {
+        new DeriveMapping().execute();
 
-            wrongUrl();
-
-        } else if (getIntent().getExtras().getString("page").equals("pay")) {
-
-            paytmUrl();
-
-
-            queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-
-                        //                        Intent in = new Intent(HomePage.this, ViewForm.class);
-
-                        // paste = (TextView) findViewById(R.id.pasteAg);
-                        queryNew.requestFocus();
-                        //clickpaste();
-                        parse(queryNew.getText().toString().trim());
-
-                    }
-                    return false;
-                }
-            });
-
-        } else
-        //  if(getIntent().getExtras().getString("page").equals("api"))
-        {
-            setContentView(R.layout.activity_products_page);
-
-            loader = (GIFView) findViewById(R.id.loading);
-            viewDetail = (ScrollView) findViewById(R.id.viewDetail);
-
-            try {
-                SharedPreferences user = getSharedPreferences("token", Context.MODE_PRIVATE);
-
-                userCode1k = user.getString("status1K", "");
-                userCode7k = user.getString("status7K", "");
-                userProfileStatus = user.getString("profileStatus", "");
-                productId1 = getIntent().getExtras().getString("product");
-                sellerNme1 = getIntent().getExtras().getString("seller");
-                sellerNme = sellerNme1;
-                try {
-                    loader = (GIFView) findViewById(R.id.loading);
-                    viewDetail = (ScrollView) findViewById(R.id.viewDetail);
-                } catch (Exception e) {
-                }
-                new linkSearch().execute();
-            } catch (Exception e) {
-                String t = e.toString();
-            }
-            //            correctUrl();
-            //            queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            //                @Override
-            //                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            //                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-            //
-            ////                        Intent in = new Intent(HomePage.this, ViewForm.class);
-            //
-            //                        // paste = (TextView) findViewById(R.id.pasteAg);
-            //                        queryNew.requestFocus();
-            //                        //clickpaste();
-            //                        parse(queryNew.getText().toString().trim());
-            //
-            //                    }
-            //                    return false;
-            //                }
-            //            });
-        }
 
 
     }
@@ -253,7 +194,7 @@ public class ProductsPage extends AppCompatActivity {
                 dp = Integer.parseInt(s);
             Double m = sellingPrice * .2;
 
-            if ((dp >= minDownpayment) && (dp <= sellingPrice + secondServicecharge))//&& w>=mindownn
+            if ((dp >= minDownpayment) && (dp <= sellingPrice + secondServicecharge-considerTen*200))//&& w>=mindownn
             {
                 // TODO: 5/14/2016
                 mValue = dp;
@@ -341,6 +282,10 @@ public class ProductsPage extends AppCompatActivity {
                 inccc = 1;
 
             if (mValue + inccc <= sellingPrice + secondServicecharge) {
+                if(mValue + inccc <= sellingPrice + secondServicecharge-considerTen*200)
+                {
+                    
+                }
                 mValue += inccc;
                 spInc = sellingPrice - mValue;
                 int w = serviceCharge(searchPrice, sellingPrice - mValue, sellerNme1);
@@ -506,8 +451,13 @@ public class ProductsPage extends AppCompatActivity {
             int w = serviceCharge(searchPrice, searchPrice - mind.intValue(), sellerNme1);
             firstServicecharge = w;
             secondServicecharge = serviceCharge(searchPrice, sellingPrice - (mind.intValue() + w), sellerNme1);
-            availbalmsg.setText("Minimum Downpayment for this product: " + getApplicationContext().getString(R.string.Rs) + (mind.intValue() + w));
+
+
             minDownpayment = (mind.intValue() + w);
+            if(isZeroDpApplicable&&fcbv>=sellingPrice&&searchPrice<=1000)
+            {mValue=0;
+                minDownpayment=0;}
+            availbalmsg.setText("Minimum Downpayment for this product: " + getApplicationContext().getString(R.string.Rs) + (minDownpayment));
             globalMindown = minDownpayment;
             if (dummyCl == 1000)
                 creditBalance.setText(getApplicationContext().getString(R.string.Rs) + "0");
@@ -598,6 +548,8 @@ public class ProductsPage extends AppCompatActivity {
                         et.putInt("checkCashback", checkCashback);
                         if (hve.getText().toString().contains("off!"))
                             et.putString("whichCoupon", whichCoupon);
+                        else
+                            et.putString("whichCoupon", "");
                         et.putInt("monthtenure", monthsnow);
                         et.putInt("discount", mDis);
                         et.putString("seller", sellerNme1);
@@ -608,7 +560,7 @@ public class ProductsPage extends AppCompatActivity {
 
                     }
                     //     finish();in.putE
-                } else if (userProfileStatus.equals("waitlisted") || userProfileStatus.equals("declined") || (checkDiffernece <= 30) || ("onHold".equals(userProfileStatus))) {
+                } else if (userProfileStatus.equals("waitlisted") || userProfileStatus.equals("declined") || ((checkDiffernece <= 30) && ("approved".equals(userProfileStatus))) || ("onHold".equals(userProfileStatus))) {
                     LayoutInflater inflater = (LayoutInflater) (ProductsPage.this).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     //                 View   parent = inflater.inflate(R.layout.activity_products_page, null, false);
                     View popUpView = inflater.inflate(R.layout.popupwaitlisted, null, false);
@@ -647,6 +599,15 @@ public class ProductsPage extends AppCompatActivity {
                     });
                     TextView ok = (TextView) popUpView.findViewById(R.id.ok);
                     cover.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popup.dismiss();
+                            RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
+                            cover.setVisibility(View.INVISIBLE);
+                            checkout.setEnabled(true);
+                        }
+                    });
+                    ok.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             popup.dismiss();
@@ -695,10 +656,6 @@ public class ProductsPage extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             popup.dismiss();
-                            Intent profile = new Intent(ProductsPage.this, ProfileActivity.class);
-                            startActivity(profile);
-                            finish();
-                            overridePendingTransition(0, 0);
                             checkout.setEnabled(true);
                             //RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
                             cover1.setVisibility(View.INVISIBLE);
@@ -1020,6 +977,44 @@ public class ProductsPage extends AppCompatActivity {
                     }
                     minDownpayment = globalMindown;
                     mValue = minDownpayment;
+                    int mmonthss=months(searchSubcategory, searchCategory, searchBrand, sellingPrice);
+                    List<String> categories = new ArrayList<String>();
+                    int p=-1;
+                    for (int j = 0; j < 8; j++) {
+                        if ((myMonths[j] <= mmonthss)&&(mmonthss!=0)) {
+
+                            p = j;
+                            //categories.add(String.valueOf(myMonths[j]) + " months");
+                        }
+                    }
+
+                    if (fcbv <= 0) {
+                        dummyCl = 1000;
+                        fcbv = 100000000;
+                    }
+                    for (int ww = p; ww >= 0; ww--) {
+                        categories.add(String.valueOf(myMonths[ww]) + " months");
+                    }
+                    if ((searchPrice <= 150) || (dummyCl == 1000 && Constants.STATUS.APPROVED.toString().equals(userProfileStatus))) {
+                        categories.clear();
+                        categories.add("No Financing");
+                    } else
+
+                    {
+                        categories.add("No Financing");
+                    }
+
+                    // Creating adapter for spinner
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(ProductsPage.this, android.R.layout.simple_spinner_item, categories);
+
+                    // Drop down layout style - list view with radio button
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    dataAdapter.notifyDataSetChanged();
+                    // attaching data adapter to spinner
+                    spinner.setAdapter(dataAdapter);
+
+
                     int w = serviceCharge(searchPrice, sellingPrice - mValue, sellerNme1);
                     firstServicecharge = w;
                     secondServicecharge = serviceCharge(searchPrice, sellingPrice - mValue, sellerNme1);
@@ -1045,6 +1040,8 @@ public class ProductsPage extends AppCompatActivity {
         }
         Boolean flash = true;
         if (userCode1k.equals("approved") && (!(userCode7k.equals("approved"))))
+            flash = false;
+        if (cb == 0)
             flash = false;
         appcBack.setEnabled(flash);
         appcBack.setOnClickListener(new View.OnClickListener() {
@@ -1094,11 +1091,7 @@ public class ProductsPage extends AppCompatActivity {
                                 //                                setEmi(2);
 
                             }
-
-
                             dee = 1;
-
-                            //                    sellingPrice = sellingPrice - cb;
                             hve.setBackgroundResource(R.drawable.roundedyellow);
                             ((RelativeLayout) findViewById(R.id.plusRelative)).setBackgroundColor(Color.parseColor("#F28E52"));
                             //                        setEmi(sellingPrice);
@@ -1124,9 +1117,47 @@ public class ProductsPage extends AppCompatActivity {
 
                             dValue.setText(String.valueOf(Math.round(mind + w)));
                             minDownpayment = Integer.parseInt(dValue.getText().toString());
+                            int mmonthss=months(searchSubcategory, searchCategory, searchBrand, sellingPrice);
+                            List<String> categories = new ArrayList<String>();
+                            int p=-1;
+                            for (int j = 0; j < 8; j++) {
+                                if ((myMonths[j] <= mmonthss)&&(mmonthss!=0)) {
+
+                                    p = j;
+                                    //categories.add(String.valueOf(myMonths[j]) + " months");
+                                }
+                            }
+
+                            if (fcbv <= 0) {
+                                dummyCl = 1000;
+                                fcbv = 100000000;
+                            }
+                            for (int ww = p; ww >= 0; ww--) {
+                                categories.add(String.valueOf(myMonths[ww]) + " months");
+                            }
+                            if ((searchPrice <= 150) || (dummyCl == 1000 && Constants.STATUS.APPROVED.toString().equals(userProfileStatus))) {
+                                categories.clear();
+                                categories.add("No Financing");
+                            } else
+
+                            {
+                                categories.add("No Financing");
+                            }
+
+                            // Creating adapter for spinner
+                            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(ProductsPage.this, android.R.layout.simple_spinner_item, categories);
+
+                            // Drop down layout style - list view with radio button
+                            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                            dataAdapter.notifyDataSetChanged();
+                            // attaching data adapter to spinner
+                            spinner.setAdapter(dataAdapter);
+
 
 
                             hve.setText(getApplicationContext().getString(R.string.Rs) + mDis + " Cashback applied!");
+
                             hve.setKeyListener(null);
                             hve.setTextColor(Color.parseColor("#F28E52"));
                             ((RelativeLayout) findViewById(R.id.plusRelative)).setVisibility(View.VISIBLE);
@@ -1224,7 +1255,7 @@ public class ProductsPage extends AppCompatActivity {
     }
 
     private class COUPON extends
-                         AsyncTask<String, Void, String> {
+            AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             spinner.setVisibility(View.VISIBLE);
@@ -1394,6 +1425,42 @@ public class ProductsPage extends AppCompatActivity {
                     //                    setEmi(2);
 
                 }
+                int mmonthss=months(searchSubcategory, searchCategory, searchBrand, sellingPrice);
+                List<String> categories = new ArrayList<String>();
+                int p=-1;
+                for (int j = 0; j < 8; j++) {
+                     if ((myMonths[j] <= mmonthss)&&(mmonthss!=0)) {
+
+                        p = j;
+                        //categories.add(String.valueOf(myMonths[j]) + " months");
+                    }
+                }
+
+                if (fcbv <= 0) {
+                    dummyCl = 1000;
+                    fcbv = 100000000;
+                }
+                for (int ww = p; ww >= 0; ww--) {
+                    categories.add(String.valueOf(myMonths[ww]) + " months");
+                }
+                if ((searchPrice <= 150) || (dummyCl == 1000 && Constants.STATUS.APPROVED.toString().equals(userProfileStatus))) {
+                    categories.clear();
+                    categories.add("No Financing");
+                } else
+
+                {
+                    categories.add("No Financing");
+                }
+
+                // Creating adapter for spinner
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(ProductsPage.this, android.R.layout.simple_spinner_item, categories);
+
+                // Drop down layout style - list view with radio button
+                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                dataAdapter.notifyDataSetChanged();
+                // attaching data adapter to spinner
+                spinner.setAdapter(dataAdapter);
 
 
                 //                hve.setFocusable(false);
@@ -1490,21 +1557,26 @@ public class ProductsPage extends AppCompatActivity {
                 currentDay += curr.charAt(j);
             }
             currDay = Integer.parseInt(currentDay);
+            currDay=noOfDays;
             cuurr = currDay;
         } catch (Exception e) {
             //532
         }
         Double emi = 0.0;
-        Double rate = 21.0 / 1200.0;
+        Double rate = interestRate / 1200.0;
         int d = 0;
-        if (searchPrice <= 5000) {
+        if ((searchPrice.intValue()<=nointerestSp&&("sellingPrice".equals(noInterestAppon)))||(nointerestEmiten>=months&&("loanAmount".equals(noInterestAppon)))) {
             {
                 if (currDay <= 15)
                     d = 35 - currDay;
                 else
                     d = 65 - currDay;
                 dayToday = d;
-                emi = (principal * 1.0 / months);
+
+
+                        emi = (principal * 1.0 / months);
+
+
             }
         } else {
             if (currDay <= 15)
@@ -1547,6 +1619,7 @@ public class ProductsPage extends AppCompatActivity {
         if (t.contains("No"))
 
             t = "0";
+        considerTen=Integer.parseInt(t);
         if (fcbv <= 0) {
             dummyCl = 1000;
             fcbv = 100000000;
@@ -1649,9 +1722,20 @@ public class ProductsPage extends AppCompatActivity {
                 mValue = minDownpayment;
                 checkmonths = "1";
             }
+
+
+            int ww = serviceCharge(searchPrice, searchPrice - mValue, sellerNme1);
+            firstServicecharge = ww;
+            secondServicecharge = serviceCharge(searchPrice, sellingPrice - mValue, sellerNme1);
+            //change vari
+            if(isZeroDpApplicable&&fcbv>=sellingPrice&&searchPrice<=1000)
+            {mValue=0;
+                }
+
             dValue.setText(String.valueOf(mValue));
+            if(mValue!=0)
             minDownpayment = mValue;
-            availbalmsg.setText("Minimum Downpayment for this product: " + getApplicationContext().getString(R.string.Rs) + minDownpayment);
+            availbalmsg.setText("Minimum Downpayment for this product: " + getApplicationContext().getString(R.string.Rs) + mValue);
             if (sellingPrice != searchPrice) {
                 sellingRschange.setVisibility(View.VISIBLE);
                 sellingRschange.setText(getApplicationContext().getString(R.string.Rs) + String.valueOf(Math.round(searchPrice)));
@@ -1662,9 +1746,7 @@ public class ProductsPage extends AppCompatActivity {
                 sellingRs.setText(getApplicationContext().getString(R.string.Rs) + String.valueOf(Math.round(sellingPrice)));
             }
             //            sellingRs.setText(getApplicationContext().getString(R.string.Rs)+String.valueOf(Math.round(sellingPrice)));
-            int ww = serviceCharge(searchPrice, searchPrice - mValue, sellerNme1);
-            firstServicecharge = ww;
-            secondServicecharge = serviceCharge(searchPrice, sellingPrice - mValue, sellerNme1);
+
 
             //            EMIcheck=(Math.round(calculateEmi(sellingPrice, Double.valueOf(searchPrice), monthsnow)));
             EMIcheck = Math.round(calculateEmi(sellingPrice - mValue * 1.0 + secondServicecharge, Double.valueOf(searchPrice), monthsnow));
@@ -1691,7 +1773,7 @@ public class ProductsPage extends AppCompatActivity {
 
 
     public class linkSearch extends
-                            AsyncTask<String, Void, String> {
+            AsyncTask<String, Void, String> {
         @Override
         public void onPreExecute() {
             //            spinner.setVisibility(View.VISIBLE);
@@ -1708,46 +1790,95 @@ public class ProductsPage extends AppCompatActivity {
 
             //  String urldisplay = data[0];
             //               HashMap<String, String> details = data[0];
-            JSONObject payload = new JSONObject();
+            // JSONObject payload = new JSONObject();
             try {
                 // userid=12&productid=23&action=add
                 // TYPE: get
+                HttpResponse response = null;
+                String responseString = "";
                 String url = BuildConfig.SERVER_URL + "api/product?productId=" + productId1 + "&seller=" + sellerNme1 + "&userid=" + creduserid;
 
+                if (sellerNme1.equals("paytm") || (sellerNme1.equals("myntra")))
+                    url = BuildConfig.SERVER_URL + "api/v1/product/details";
                 //                String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NTY3MjY1NzMsImV4cCI6MTQ1Njc2MjU3M30.98mQFcYm5Uf3Fd7ZNPD-OwMIfObu7vfoq9zNtCCLfyI";
                 // payload.put("action", details.get("action"));
 
-
+                paymyntra = sellerNme1.equals("paytm") || (sellerNme1.equals("myntra"));
                 HttpParams httpParameters = new BasicHttpParams();
 
                 HttpConnectionParams
                         .setConnectionTimeout(httpParameters, 30000);
 
+
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                HttpGet httppost = new HttpGet(url);
-                httppost.setHeader("x-access-token", st.getString("token_value", null));
-                httppost.setHeader("Content-Type", "application/json");
+                if (!paymyntra) {
 
 
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
+                    HttpGet httppost = new HttpGet(url);
+                    httppost.setHeader("x-access-token", st.getString("token_value", null));
+                    httppost.setHeader("Content-Type", "application/json");
+
+
+                    response = client.execute(httppost);
+                    HttpEntity ent = response.getEntity();
+                    responseString = EntityUtils.toString(ent, "UTF-8");
+                } else {
+                    JSONObject payload = new JSONObject();
+                    payload.put("url",productId1);
+                    payload.put("pincode", "560095");
+                    payload.put("original", false);
+                    HttpPost httppost = new HttpPost(url);
+                    httppost.setHeader("x-access-token", st.getString("token_value", null));
+                    httppost.setHeader("Content-Type", "application/json");
+                    StringEntity entity = new StringEntity(payload.toString());
+                    httppost.setEntity(entity);
+                    response = client.execute(httppost);
+                    HttpEntity ent = response.getEntity();
+                    responseString = EntityUtils.toString(ent, "UTF-8");
+                }
                 if (response.getStatusLine().getStatusCode() != 200) {
                     return "fail";
                 } else {
                     JSONObject resp = new JSONObject(responseString);
                     if (resp.getString("status").equals("success")) {
                         JSONObject data1 = new JSONObject(resp.getString("data"));
-                        searchTitle = data1.getString("title");
-                        searchBrand = data1.getString("brand");
-                        searchCategory = data1.getString("category");
-                        searchSubcategory = data1.getString("subCategory");
-                        searchPrice = data1.getInt("sellingPrice");
-                        sellingPrice = searchPrice;
-                        JSONObject img = new JSONObject(data1.getString("imgUrls"));
-                        urlImg = img.getString("400x400");
-                        urlforImage = urlImg;
-                        brand = searchBrand;
+                        try{
+                        searchTitle = data1.getString("title");}
+                        catch (Exception e)
+                        {}
+                        try {
+                            searchBrand = data1.getString("brand");
+                        }
+                        catch (Exception e)
+                        {}
+                        try {
+                            searchCategory = data1.getString("category");
+                        }
+                        catch (Exception e)
+                        {}
+                          try {
+                              searchSubcategory = data1.getString("subCategory");
+                          }catch (Exception e)
+                          {}
+                        try {
+                            searchPrice = data1.getInt("sellingPrice");
+                            sellingPrice = searchPrice;
+                        }catch (Exception e)
+                        {}
+                        if(!paymyntra) {
+                            JSONObject img = new JSONObject(data1.getString("imgUrls"));
+                            urlImg = img.getString("400x400");
+                            urlforImage = urlImg;
+                        }
+                        else
+                        {
+                            urlImg = data1.getString("img");
+                            urlforImage = urlImg;
+                        }
+                        try{
+                            brand = searchBrand;}
+                        catch (Exception e)
+                        {}
                         try {
                             specification = data1.getString("specificaiton");
                         } catch (Exception e) {
@@ -1762,6 +1893,10 @@ public class ProductsPage extends AppCompatActivity {
                             review = data1.getString("fkProductUrl");
                         } catch (Exception e) {
                             review = "";
+                        }
+                        if(paymyntra)
+                        {
+                            review=productId1;
                         }
                         infor = "The minimum downpayment is 20% of the product price and also depends on the payment band (Oxygen/Silicon/Palladium/Krypton) you lie in, which you will get to know after your college ID verification.";
 
@@ -1780,6 +1915,7 @@ public class ProductsPage extends AppCompatActivity {
         protected void onPostExecute(String result) {
 
             if (!result.equals("win")) {
+
                 System.out.println("Error while computing data");
                 Intent in = new Intent(ProductsPage.this, ProductsPage.class);
                 in.putExtra("page", "pay");
@@ -1793,6 +1929,10 @@ public class ProductsPage extends AppCompatActivity {
                 }
                 //                getIntent().getExtras().getString("seller");
             } else {
+              int flipCashback=Math.round(searchPrice*2/100);
+                if(("flipkart".equals(sellerNme1))||("snapdeal".equals(sellerNme1))){
+                    flipcash.setVisibility(View.VISIBLE );
+                flipcash.setText(getApplicationContext().getString(R.string.Rs)+flipCashback+" Cashback on this order!");}
                 try {
                     loader.setVisibility(View.GONE);
                     viewDetail.setVisibility(View.VISIBLE);
@@ -2094,7 +2234,11 @@ public class ProductsPage extends AppCompatActivity {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideSoftKeyboard(ProductsPage.this);
+                try {
+                    hideSoftKeyboard(ProductsPage.this);
+                } catch (Exception e) {
+
+                }
                 String minP = editQ.getText().toString();
                 if ((editQ.getText().toString().length() != 0) && (Integer.parseInt(minP) >= 50)) {
                     final ScrollView removescrol = (ScrollView) findViewById(R.id.removescroll);
@@ -2256,6 +2400,7 @@ public class ProductsPage extends AppCompatActivity {
                 mValue2 = v.intValue();
                 if (t.contains("No"))
                     t = "0";
+                considerTen=Integer.parseInt(t);
                 monthsnow = Integer.parseInt(t);
                 cb = st.getInt("cashBack", 0);
                 int cl = st.getInt("creditLimit", 0);
@@ -2310,6 +2455,8 @@ public class ProductsPage extends AppCompatActivity {
                     if (sellingPrice - mind > fcbv) {
                         mind = Double.valueOf(sellingPrice) - fcbv;
                     }
+                    if(isZeroDpApplicable&&fcbv>=sellingPrice&&searchPrice<=1000)
+                    {mind=0.0;}
                     if (dummyCl == 1000)
                         availbal.setText(getApplicationContext().getString(R.string.Rs) + "0");
                     else
@@ -2317,6 +2464,9 @@ public class ProductsPage extends AppCompatActivity {
                     int w = serviceCharge(searchPrice, sellingPrice - mind.intValue(), sellerNme1);
                     firstServicecharge = w;
                     secondServicecharge = serviceCharge(searchPrice, sellingPrice - mind.intValue() - w, sellerNme1);
+                    if(isZeroDpApplicable&&fcbv>=sellingPrice&&searchPrice<=1000&&mind==0.0)
+minDownpayment=0;
+                    else
                     minDownpayment = mind.intValue() + w;
                     mValue = minDownpayment;
                 }
@@ -2349,10 +2499,10 @@ public class ProductsPage extends AppCompatActivity {
 
         // Spinner Drop down elements
         int arrmont[] = new int[8];
-        int p = 0;
+        int p = -1;
         List<String> categories = new ArrayList<String>();
         for (int j = 0; j < 8; j++) {
-            if (myMonths[j] <= monthsallowed) {
+            if ((myMonths[j] <= monthsallowed)&&(monthsallowed!=0)) {
 
                 p = j;
                 //categories.add(String.valueOf(myMonths[j]) + " months");
@@ -2548,9 +2698,13 @@ public class ProductsPage extends AppCompatActivity {
                         months = 1;
                     else if (diff.intValue() == 2)
                         months = 2;
-                    else if (diff.intValue() >= 3 && diff.intValue() <= 5) {
+                    else if (diff.intValue() == 3)
                         months = 3;
-                    } else if (diff.intValue() >= 6 && diff.intValue() <= 8) {
+                    else if (diff.intValue() == 4)
+                        months = 4;
+                    else if (diff.intValue() == 5)
+                        months = 5;
+                     else if (diff.intValue() >= 6 && diff.intValue() <= 8) {
                         months = 6;
                     } else if (diff.intValue() >= 9 && diff.intValue() <= 11) {
                         months = 9;
@@ -2568,7 +2722,7 @@ public class ProductsPage extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        if (monthsallowed > monthscheck)
+        if ((monthsallowed > monthscheck) && (monthscheck != 0))
             monthsallowed = monthscheck;
 
         //                Double emi = 0.0;
@@ -2577,6 +2731,7 @@ public class ProductsPage extends AppCompatActivity {
         if (searchPrice <= 5000) {
             emi = searchPrice * 0.8 / monthsallowed;
         } else {
+
             if (currDay <= 15)
                 d = 35 - currDay;
             else
@@ -2632,51 +2787,83 @@ public class ProductsPage extends AppCompatActivity {
     public int months(String subcat, String cat, String brand, int price)
 
     {
+        if(AppUtils.isEmpty(subcat))
+            subcat="";
+        if(AppUtils.isEmpty(cat))
+            cat="";
+        if(AppUtils.isEmpty(brand))
+            brand="";
+
         int m = 18;
-        if ((subcat.equals("Fitness " +
-                "Equipments")) || ((subcat.equals("Jewellery"))) || ((subcat.equals("Combos and Kit"))) || ((subcat.equals("Speakers"))) || ((subcat.equals("Team Sports"))) || ((subcat.equals("Racquet Sports"))) || ((subcat.equals("Watches"))) || ((subcat.equals("Health and Personal Care"))) || ((subcat.equals("Leather & Travel Accessories"))) || ((cat.equals("Footwear")))) {
-            int mn = 6;
+        try
+        {
+
+            if(!AppUtils.isEmpty(cat)){
+            int mn = categoryForproducts.get(cat);
             if (mn < m)
-                m = mn;
-        } else if ((subcat.equals("Cameras")) || ((subcat.equals("Entertainment"))) || ((subcat.equals("Smartwatches"))) || ((subcat.equals("Smart Headphones"))) || ((subcat.equals("Smart Bands"))) || ((subcat.equals("Digital Accessories"))) || ((subcat.equals("Tablets"))) || ((subcat.equals("Kindle")))) {
-            int mn = 12;
-            if (mn < m)
-                m = mn;
+                m = mn;}
         }
-        if ((!brand.equals("Apple")) && !(brand.equals("APPLE"))) {
-            int mn = 15;
-            if (mn < m)
-                m = mn;
+        catch (Exception e)
+        {}
+        try{
+        if(!AppUtils.isEmpty(subcat)) {
+            int msc = subcategoryForproducts.get(subcat);
+            if (msc < m)
+                m = msc;
+
+        } }
+        catch (Exception e)
+        {}
+        try{
+        if(!AppUtils.isEmpty(brand)) {
+            int msc = brandApple.get(brand);
+            if (msc < m)
+                m = msc;
+
+        }    }
+        catch (Exception e)
+        {}
+        Collections.sort(pricesFormonths);
+        for(int i=0;i<pricesFormonths.size();i++)
+        {
+            int pricenew=pricesFormonths.get(i);
+            if(price<=pricenew)
+            {
+                int w=priceMonths.get(pricesFormonths.get(i).toString());
+                if(w<m)
+                    m=w;
+                break;
+
+            }
+
         }
-        if (price <= 400) {
-            int mn = 1;
-            if (mn < m)
-                m = mn;
-        } else if (price <= 1000) {
-            int mn = 2;
-            if (mn < m)
-                m = mn;
-        } else if (price < 2000) {
-            int mn = 3;
-            if (mn < m)
-                m = mn;
-        } else if (price < 5000) {
-            int mn = 6;
-            if (mn < m)
-                m = mn;
-        } else if (price < 10000) {
-            int mn = 9;
-            if (mn < m)
-                m = mn;
-        } else if (price < 20000) {
-            int mn = 12;
-            if (mn < m)
-                m = mn;
-        } else if (price < 40000) {
-            int mn = 15;
-            if (mn < m)
-                m = mn;
-        }
+        cb = st.getInt("cashBack", 0);
+
+        int cl = st.getInt("creditLimit", 0);
+        int cbv = st.getInt("totalBorrowed", 0);
+        int fcbv = cl - cbv;
+
+        int loanAmt=0;
+        int newdp= (int) Math.round(.2*price);
+        if (price - newdp > fcbv)
+
+            newdp = price - fcbv;
+        if(isZeroDpApplicable&&fcbv>=price&&price<=1000)
+            newdp=0;
+        int checkLoanamt=price-newdp;
+        int dd=0;
+        dd = serviceCharge(searchPrice, checkLoanamt, sellerNme1);
+
+       Double chh=Math.floor((
+               checkLoanamt-dd)/(200));
+        int kk=chh.intValue();
+        if(kk<m)
+            m=kk;
+
+
+//        int checkbalmon=200*/m;
+
+
 
         return m;
     }
@@ -2749,41 +2936,257 @@ public class ProductsPage extends AppCompatActivity {
 
     int serviceCharge(int sellingCost, int loanAmt, String seller) {
         int serv = 0;
-
-        if (seller.equals("flipkart") || seller.equals("snapdeal")) {
-
-            if (loanAmt <= 1000)
-                serv = 29;
-            else if (loanAmt <= 5000)
-                serv = 99;
-            else if (loanAmt <= 15000)
-                serv = 149;
-            else if (loanAmt <= 20000)
-                serv = 199;
-            else if (loanAmt <= 25000)
-                serv = 299;
-            else if (loanAmt > 25000)
-                serv = 549;
+        int checklorsp=0;
+        if("loanAmount".equals(sercieChargeApplicableon))
+            checklorsp=loanAmt;
+        else
+            checklorsp=sellingCost;
+        Set<Integer> keys=serviceChargesmapping.keySet();
+        ArrayList<Integer> checkKe=new ArrayList<Integer>();
+        for(int l:keys)
+        {
+            checkKe.add(l);
 
 
-        } else {
-            if (sellingCost <= 1000)
-                serv = 29;
-            else if (sellingCost <= 5000)
-                serv = 99;
-            else if (sellingCost <= 10000)
-                serv = 199;
-            else if (sellingCost <= 15000)
-                serv = 299;
-            else if (sellingCost <= 25000)
-                serv = 449;
-            else if (sellingCost > 25000)
-                serv = 599;
         }
+        Collections.sort(checkKe);
+        //Collections.sort(keys);
+        for(int w=0;w<checkKe.size();w++)
+        {
+
+            if(checklorsp<=checkKe.get(w))
+            {
+                serv=serviceChargesmapping.get(checkKe.get(w));
+                break;
+            }
+
+
+
+        }
+//        if("loanAmount".equals(sercieChargeApplicableon))
+
 
         return serv;
 
     }
 
 
+    public class DeriveMapping extends
+            AsyncTask<String, Void, String> {
+        @Override
+        public void onPreExecute() {
+            categoryForproducts=new HashMap<String, Integer>();
+            subcategoryForproducts=new HashMap<String, Integer>();
+            brandApple=new HashMap<String, Integer>();
+            priceMonths=new HashMap<String, Integer>();
+            pricesFormonths=new ArrayList<Integer>();
+            serviceChargesmapping=new HashMap<Integer, Integer>();
+
+
+        }
+
+
+        @Override
+        public String doInBackground(String... data) {
+
+            //  String urldisplay = data[0];
+            //               HashMap<String, String> details = data[0];
+            // JSONObject payload = new JSONObject();
+            try {
+                // userid=12&productid=23&action=add
+                // TYPE: get
+                HttpResponse response = null;
+                String responseString = "";
+                String url = BuildConfig.SERVER_URL + "api/productpage/variables?seller="+getIntent().getExtras().getString("seller")+"&userId=" + creduserid;
+
+                //                String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NTY3MjY1NzMsImV4cCI6MTQ1Njc2MjU3M30.98mQFcYm5Uf3Fd7ZNPD-OwMIfObu7vfoq9zNtCCLfyI";
+                // payload.put("action", details.get("action"));
+
+                HttpParams httpParameters = new BasicHttpParams();
+
+                HttpConnectionParams
+                        .setConnectionTimeout(httpParameters, 30000);
+
+
+                HttpClient client = new DefaultHttpClient(httpParameters);
+
+
+
+                    HttpGet httppost = new HttpGet(url);
+                    httppost.setHeader("x-access-token", st.getString("token_value", null));
+                    httppost.setHeader("Content-Type", "application/json");
+
+
+                    response = client.execute(httppost);
+                    HttpEntity ent = response.getEntity();
+                    responseString = EntityUtils.toString(ent, "UTF-8");
+
+                if (response.getStatusLine().getStatusCode() != 200) {
+                    return "fail";
+                } else {
+                     JSONObject resp = new JSONObject(responseString);
+                    if (resp.getString("status").equals("success")) {
+                        String datacat=resp.getString("data");
+parseJsonforcategory(datacat);
+                        return "win";
+
+
+                    }
+
+                }
+            } catch (Exception e) {
+                String t=e.toString();
+                int www=11;
+            }
+            return "";
+        }
+        protected void onPostExecute(String result) {
+
+
+
+            if (getIntent().getExtras().getString("page").equals("monkey")) {
+
+                wrongUrl();
+
+            } else if (getIntent().getExtras().getString("page").equals("pay")) {
+
+                paytmUrl();
+
+
+                queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                            //                        Intent in = new Intent(HomePage.this, ViewForm.class);
+
+                            // paste = (TextView) findViewById(R.id.pasteAg);
+                            queryNew.requestFocus();
+                            //clickpaste();
+                            parse(queryNew.getText().toString().trim());
+
+                        }
+                        return false;
+                    }
+                });
+
+            } else
+            //  if(getIntent().getExtras().getString("page").equals("api"))
+            {
+                setContentView(R.layout.activity_products_page);
+                flipcash=(TextView)findViewById(R.id.flipcash);
+                loader = (GIFView) findViewById(R.id.loading);
+                viewDetail = (ScrollView) findViewById(R.id.viewDetail);
+
+                try {
+                    SharedPreferences user = getSharedPreferences("token", Context.MODE_PRIVATE);
+
+                    userCode1k = user.getString("status1K", "");
+                    userCode7k = user.getString("status7K", "");
+                    userProfileStatus = user.getString("profileStatus", "");
+                    productId1 = getIntent().getExtras().getString("product");
+                    sellerNme1 = getIntent().getExtras().getString("seller");
+                    sellerNme = sellerNme1;
+                    try {
+                        loader = (GIFView) findViewById(R.id.loading);
+                        viewDetail = (ScrollView) findViewById(R.id.viewDetail);
+                    } catch (Exception e) {
+                    }
+                    new linkSearch().execute();
+                } catch (Exception e) {
+                    String t = e.toString();
+                }
+                //            correctUrl();
+                //            queryNew.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                //                @Override
+                //                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                //                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                //
+                ////                        Intent in = new Intent(HomePage.this, ViewForm.class);
+                //
+                //                        // paste = (TextView) findViewById(R.id.pasteAg);
+                //                        queryNew.requestFocus();
+                //                        //clickpaste();
+                //                        parse(queryNew.getText().toString().trim());
+                //
+                //                    }
+                //                    return false;
+                //                }
+                //            });
+            }
+        }}
+public void parseJsonforcategory(String data)
+{try{
+
+    JSONObject dataCategories=new JSONObject(data);
+    try {
+        isZeroDpApplicable = dataCategories.getBoolean("isZeroDpApplicable");
+    }
+    catch (Exception e)
+    {}
+    JSONObject noint=new JSONObject(dataCategories.getString("noInterest"));
+    try {
+        noInterestAppon = noint.getString("applicableOn");
+        nointerestSp = noint.getInt("sellingPrice");
+        nointerestEmiten = noint.getInt("emiTenure");
+    }
+    catch (Exception e)
+    {}
+    interestRate=dataCategories.getInt("interestRate");
+    noOfDays=dataCategories.getInt("noOfDays");
+
+        JSONObject categoriesdata=new JSONObject(dataCategories.getString("category"));
+//    JSONObject servicechargeapplicableon=new JSONObject(dataCategories.getString("affiliate"));
+    try {
+        sercieChargeApplicableon = dataCategories.getString("serviceChargeApplicableOn");
+    }
+    catch (Exception e){}
+    int lenghtcategory=categoriesdata.length();
+    JSONArray scharge=(dataCategories.getJSONArray("serviceCharges"));
+    for(int i=0;i<scharge.length();i++)
+
+    {
+        JSONObject scc=scharge.getJSONObject(i);
+        if("loanAmount".equals(sercieChargeApplicableon))
+        {
+            serviceChargesmapping.put(scc.getInt("loanAmount"),scc.getInt("serviceCharge"));
+        }
+        else
+        {
+            serviceChargesmapping.put(scc.getInt("sellingPrice"),scc.getInt("serviceCharge"));
+        }
+
+    }
+    Iterator iterator = categoriesdata.keys();
+    while(iterator.hasNext()){
+        String key = (String)iterator.next();
+        categoryForproducts.put(key,categoriesdata.getInt(key));
+    }
+    JSONObject subcategoriesdata=new JSONObject(dataCategories.getString("subCategory"));
+//    int lenghtcategory=categoriesdata.length();
+    Iterator iterator1 = subcategoriesdata.keys();
+    while(iterator1.hasNext()){
+        String key = (String)iterator1.next();
+        subcategoryForproducts.put(key,subcategoriesdata.getInt(key));
+    }
+    JSONObject brandcat=new JSONObject(dataCategories.getString("brand"));
+//    int lenghtcategory=categoriesdata.length();
+    Iterator iterator2 = brandcat.keys();
+    while(iterator2.hasNext()){
+        String key = (String)iterator2.next();
+        brandApple.put(key,brandcat.getInt(key));
+    }
+    JSONObject pricem=new JSONObject(dataCategories.getString("price"));
+//    int lenghtcategory=categoriesdata.length();
+    Iterator iteratorprice =pricem.keys();
+    while(iteratorprice.hasNext()){
+        String key = (String)iteratorprice.next();
+pricesFormonths.add(Integer.parseInt(key));
+        priceMonths.put(key,pricem.getInt(key));
+    }
+    Collections.sort(pricesFormonths);
+}
+catch (Exception e)
+{}
+}
 }

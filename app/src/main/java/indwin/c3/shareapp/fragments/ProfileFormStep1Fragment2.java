@@ -6,18 +6,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
-import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,22 +32,10 @@ import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.gun0912.tedpicker.ImagePickerActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Views.MonthYearPicker;
@@ -62,7 +44,6 @@ import indwin.c3.shareapp.activities.ImageHelperActivity;
 import indwin.c3.shareapp.activities.ProfileFormStep1;
 import indwin.c3.shareapp.adapters.AutoCompleteAdapter;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
-import indwin.c3.shareapp.adapters.PlaceAutocompleteAdapter;
 import indwin.c3.shareapp.models.FrontBackImage;
 import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.OnBackPressedListener;
@@ -71,52 +52,32 @@ import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
-import io.intercom.com.google.gson.Gson;
 
 /**
- * Created by shubhang on 18/03/16.
+ * Created by ROCK
  */
-public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClient.OnConnectionFailedListener, OnBackPressedListener {
-    public static final String TAG = "buddy";
+public class ProfileFormStep1Fragment2 extends Fragment implements OnBackPressedListener {
     public static final int PERMISSION_ALL = 0;
     private static final int REQUEST_PERMISSION_SETTING = 99;
-    private SharedPreferences mPrefs;
     private static UserModel user;
-    private ArrayList<String> collegeIds;
-    private Map<String, String> newCollegeIds;
     private static final int INTENT_REQUEST_GET_IMAGES = 13;
     ImageUploaderRecyclerAdapter adapter;
     ArrayList<Uri> imageUris;
     private TextView editCollegeName, editCourseName, collegeNameHeading;
-    //    collegeNameMap;
     private LinearLayout collegeNameLayout;
-    //    private RelativeLayout collegeNameMapLayout;
-    private AutoCompleteTextView collegeName, googleCollegeName, courseName;
+    private AutoCompleteTextView collegeName, googleCollegeName;
     private ImageButton closeCollegeNameLayout, closeAddCollegeLayout;
-    //    , closeCollegeNameMapLayout;
     ArrayList<String> collegeArrayList, courseArrayList;
-    //    private Button acceptCollege;
     private static MonthYearPicker monthYearPicker;
     private static TextView editCollegeEndDate;
-    private Button saveAndProceed, previous, cantFindCollege;
-    private Gson gson;
-    private static boolean updateCourseEndDate = false;
+    private Button cantFindCollege;
     private RelativeLayout addCollegeLayout, addCourseLayout;
-    protected GoogleApiClient mGoogleApiClient;
-    private PlaceAutocompleteAdapter mGooglePlaceAdapter;
-    private static final LatLngBounds BOUNDS_GREATER_BANGALORE = new LatLngBounds(
-            new LatLng(12.89201, 77.58905), new LatLng(12.97232, 77.59480));
-    private static final Location BANGALORE_CENTER = new Location("Bangalore");
-    boolean isUserRejected = false;
-    private ImageView completeCollegeId, incompleteCollegeId, completeCollegeDetails, incompleteCollegeDetails, incompleteStep1, incompleteStep2, incompleteStep3;
-    private final int top = 16, left = 16, right = 16, bottom = 16;
+    private ImageView completeCollegeId, incompleteCollegeId, completeCollegeDetails, incompleteCollegeDetails;
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     boolean deniedPermissionForever = false;
-    ImageView topImage;
     private ImageButton socialHelptip;
     private Button addCourse, addCollege;
     private EditText addCourseEt;
-
     private Image collegeIDs;
     private int clickedPosition;
     private ImageButton closeAddCourseLayout;
@@ -129,9 +90,6 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         getAllViews(rootView);
         setOnCLickListener();
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
-        mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        mPrefs.edit().putBoolean("visitedFormStep1Fragment2", true).apply();
-        gson = new Gson();
         ProfileFormStep1 profileFormStep1 = (ProfileFormStep1) getActivity();
         user = profileFormStep1.getUser();
         try {
@@ -142,15 +100,8 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                 user.setIncompleteCollegeId(false);
             }
         } catch (Exception e) {
-            collegeIds = new ArrayList<>();
         }
         collegeIDs = user.getCollegeID();
-        BANGALORE_CENTER.setLatitude(12.97232);
-        BANGALORE_CENTER.setLongitude(77.59480);
-        if (mGoogleApiClient == null)
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .addApi(Places.GEO_DATA_API)
-                    .build();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -162,14 +113,15 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                     public void onItemClick(View view, int position) {
 
                         if (
-                                //((position == 0 && (collegeIDs.getFront() == null || AppUtils.isEmpty(collegeIDs.getFront().getImgUrl()))) &&
-                                        !user.isAppliedFor1k()
-                                //)
+                            //((position == 0 && (collegeIDs.getFront() == null || AppUtils.isEmpty(collegeIDs.getFront().getImgUrl()))) &&
+                                !user.isAppliedFor1k()
+                            //)
 
-                                //|| (position == 1 && (collegeIDs.getBack() == null || AppUtils.isEmpty(collegeIDs.getBack().getImgUrl()))) && !user.isAppliedFor1k()
+                            //|| (position == 1 && (collegeIDs.getBack() == null || AppUtils.isEmpty(collegeIDs.getBack().getImgUrl()))) && !user.isAppliedFor1k()
                                 ) {
 
-                            String[] temp = hasPermissions(getActivity(), PERMISSIONS);
+                            String[] temp = AppUtils.hasPermissions(getActivity(), deniedPermissionForever, REQUEST_PERMISSION_SETTING, PERMISSIONS);
+
                             if (temp != null && temp.length != 0) {
                                 deniedPermissionForever = true;
                                 PERMISSIONS = temp;
@@ -191,13 +143,9 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                     }
                 })
         );
-        newCollegeIds = new HashMap<>();
         adapter = new ImageUploaderRecyclerAdapter(getActivity(), collegeIDs, "College Ids", user.isAppliedFor1k(), Constants.IMAGE_TYPE.COLLEGE_ID.toString());
         rvImages.setAdapter(adapter);
 
-        googleCollegeName.setOnItemClickListener(mAutocompleteClickListener);
-        mGooglePlaceAdapter = new PlaceAutocompleteAdapter(getActivity(), mGoogleApiClient, BOUNDS_GREATER_BANGALORE, null);
-        googleCollegeName.setAdapter(mGooglePlaceAdapter);
 
         if (user.isAppliedFor1k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
@@ -243,12 +191,9 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                 incompleteCollegeId.setVisibility(View.VISIBLE);
             if (user.isIncompleteCollegeDetails() && !user.isAppliedFor1k())
                 incompleteCollegeDetails.setVisibility(View.VISIBLE);
-
         }
-
         return rootView;
     }
-
 
     private void setOnCLickListener() {
         closeAddCourseLayout.setOnClickListener(new View.OnClickListener() {
@@ -451,11 +396,6 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         incompleteCollegeId = (ImageView) rootView.findViewById(R.id.incomplete_college_id);
         completeCollegeDetails = (ImageView) rootView.findViewById(R.id.complete_college_details);
         incompleteCollegeDetails = (ImageView) rootView.findViewById(R.id.incomplete_college_details);
-        incompleteStep1 = (ImageView) getActivity().findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) getActivity().findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) getActivity().findViewById(R.id.incomplete_step_3);
-        topImage = (ImageView) getActivity().findViewById(R.id.verify_image_view2);
-        saveAndProceed = (Button) getActivity().findViewById(R.id.save_and_proceed);
         socialHelptip = (ImageButton) rootView.findViewById(R.id.social_helptip);
 
         googleCollegeName = (AutoCompleteTextView) getActivity().findViewById(R.id.google_college_autocomplete);
@@ -468,20 +408,6 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         socialHelptip.setClickable(true);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null)
-            mGoogleApiClient.connect();
-    }
-
-    @Override
-    public void onStop() {
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-        super.onStop();
-    }
 
     public void checkIncomplete() {
         if (collegeIDs.getFront() == null || AppUtils.isEmpty(collegeIDs.getFront().getImgUrl())) {
@@ -536,16 +462,12 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
                     collegeId.setBack(frontBackImage);
                     collegeIDs.setBack(frontBackImage);
                     collegeId.setBackStatus(AppUtils.uploadStatus.OPEN.toString());
-
                 }
-
                 adapter.notifyDataSetChanged();
                 AppUtils.saveUserObject(getActivity(), user);
             }
-
-
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resuleCode == Activity.RESULT_OK) {
-            hasPermissions(getActivity(), PERMISSIONS);
+            AppUtils.hasPermissions(getActivity(), deniedPermissionForever, REQUEST_PERMISSION_SETTING, PERMISSIONS);
         }
     }
 
@@ -595,87 +517,10 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         editCollegeEndDate.setText(date);
         editCollegeEndDate.setFocusable(true);
         editCollegeEndDate.setFocusableInTouchMode(true);
-        updateCourseEndDate = true;
         user.setCourseEndDate(date);
         user.setUpdateCourseEndDate(true);
     }
 
-    private AdapterView.OnItemClickListener mAutocompleteClickListener
-            = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            /*
-             Retrieve the place ID of the selected item from the Adapter.
-             The adapter stores each Place suggestion in a AutocompletePrediction from which we
-             read the place ID and title.
-              */
-            final AutocompletePrediction item = mGooglePlaceAdapter.getItem(position);
-            final String placeId = item.getPlaceId();
-            final CharSequence primaryText = item.getPrimaryText(null);
-            /*
-             Issue a request to the Places Geo Data API to retrieve a Place object with additional
-             details about the place.
-              */
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-        }
-    };
-
-    /**
-     * Callback for results from a Places Geo Data API query that shows the first place result in
-     * the details view on screen.
-     */
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
-            = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(PlaceBuffer places) {
-            if (!places.getStatus().isSuccess()) {
-                // Request did not complete successfully
-                //                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
-                places.release();
-                return;
-            }
-            // Get the Place object from the buffer.
-            final Place place = places.get(0);
-
-            Location location = new Location("college");
-            location.setLatitude(place.getLatLng().latitude);
-            location.setLongitude(place.getLatLng().longitude);
-            float distance = location.distanceTo(BANGALORE_CENTER) / 1000;
-            if (distance > 100) {
-                isUserRejected = true;
-            } else
-                isUserRejected = false;
-            // Format details of the place for display and show it in a TextView.
-            editCollegeName.setText(place.getAddress());
-            editCollegeName.setFocusable(true);
-            editCollegeName.setFocusableInTouchMode(true);
-            user.setCollegeName(place.getAddress().toString());
-            user.setUpdateCollegeName(true);
-            hideAddCollegeLayout();
-            places.release();
-        }
-    };
-
-    /**
-     * Called when the Activity could not connect to Google Play services and the auto manager
-     * could resolve the error automatically.
-     * In this case the API is not available and notify the user.
-     *
-     * @param connectionResult can be inspected to determine the cause of the failure
-     */
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-        //        Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
-        //                + connectionResult.getErrorCode());
-
-        // TODO(Developer): Check error code and notify the user of error state and resolution.
-        //        Toast.makeText(getActivity(),
-        //                "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
-        //                Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void onBackPressed() {
@@ -692,38 +537,6 @@ public class ProfileFormStep1Fragment2 extends Fragment implements GoogleApiClie
         }
     }
 
-    public String[] hasPermissions(Context context, final String... permissions) {
-        ArrayList<String> askPermissions = new ArrayList<>();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    if (!shouldShowRequestPermissionRationale(permission) && deniedPermissionForever) {
-                        showMessageOKCancel("You need to allow access to Images",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-                                        intent.setData(uri);
-                                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                                    }
-                                });
-                    }
-                    askPermissions.add(permission);
-                }
-            }
-        }
-        return askPermissions.toArray(new String[0]);
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(getActivity())
-                .setMessage(message)
-                .setPositiveButton("Settings", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,

@@ -19,7 +19,7 @@
     <string name="fblogin">Connect your account</string>
 
     <string name="crashed_report">An error occurred.</string>
-    <string name="web">https://hellobuddy.in/</string>
+    <string name="web">http://54.169.128.156:7777/</string>
     <string name="title_activity_facebook_auth">FacebookAuth</string>
     <string name="h2">
         <i>Phone Number</i>
@@ -134,6 +134,8 @@
         <item>Telugu</item>
         <item>Tamil</item>
         <item>Malayalam</item>
+        <item>Marathi</item>
+        <item>Select a language</item>
     </string-array>
     <string-array name="gender">
         <item>guy</item>

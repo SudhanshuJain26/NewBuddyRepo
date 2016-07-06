@@ -181,23 +181,23 @@ public class Landing extends AppCompatActivity {
                 }
                 if (time + 5 < userP.getLong("expires", 0)) {
                     SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-                    boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
-                    if (!isUpdatingDB) {
+                    //boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+                    //if (!isUpdatingDB) {
 
                         new ValidateForm().execute("");
-                    } else {
-                        Runnable myRunnable = new Runnable() {
-
-                            public void run() {
-                                checkForDBUpdate();
-                            }
-
-
-                        };
-                        Thread thread = new Thread(myRunnable);
-                        thread.start();
-
-                    }
+                    //} else {
+                    //    Runnable myRunnable = new Runnable() {
+                    //
+                    //        public void run() {
+                    //            checkForDBUpdate();
+                    //        }
+                    //
+                    //
+                    //    };
+                    //    Thread thread = new Thread(myRunnable);
+                    //    thread.start();
+                    //
+                    //}
                 } else
                     new AuthTokc().execute();
             }
@@ -296,24 +296,24 @@ public class Landing extends AppCompatActivity {
                 //            next.fblogin().execute();
                 //                new forgotpass().execute();
 
-                SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-                boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
-                if (!isUpdatingDB) {
+                //SharedPreferences sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+                //boolean isUpdatingDB = sh.getBoolean("updatingDB", false);
+                //if (!isUpdatingDB) {
 
                     new ValidateForm().execute("");
-                } else {
-                    Runnable myRunnable = new Runnable() {
-
-                        public void run() {
-                            checkForDBUpdate();
-                        }
-
-
-                    };
-                    Thread thread = new Thread(myRunnable);
-                    thread.start();
-
-                }
+                //} else {
+                //    Runnable myRunnable = new Runnable() {
+                //
+                //        public void run() {
+                //            checkForDBUpdate();
+                //        }
+                //
+                //
+                //    };
+                //    Thread thread = new Thread(myRunnable);
+                //    thread.start();
+                //
+                //}
 
             }
         }

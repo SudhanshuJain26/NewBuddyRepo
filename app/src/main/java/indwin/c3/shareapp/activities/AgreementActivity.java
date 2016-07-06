@@ -3,8 +3,6 @@ package indwin.c3.shareapp.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,10 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -46,7 +41,6 @@ import com.squareup.picasso.Target;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -73,7 +67,6 @@ public class AgreementActivity extends AppCompatActivity {
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     public static final int PERMISSION_ALL = 0;
     private Target loadTarget;
-    int widthSelfie = 200, heightSelfie = 180;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +198,7 @@ public class AgreementActivity extends AppCompatActivity {
                 takeASelfie.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String[] temp = hasPermissions(AgreementActivity.this, PERMISSIONS);
+                        String[] temp = AppUtils.hasPermissions(AgreementActivity.this, deniedPermissionForever, REQUEST_PERMISSION_SETTING, PERMISSIONS);
                         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && temp != null && temp.length != 0) {
                             deniedPermissionForever = true;
                             PERMISSIONS = temp;
@@ -227,11 +220,7 @@ public class AgreementActivity extends AppCompatActivity {
                 addSignature.setText("");
                 acceptTerms.setVisibility(View.GONE);
             }
-        } catch (
-                Exception e
-                )
-
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -255,10 +244,7 @@ public class AgreementActivity extends AppCompatActivity {
                                                }
                                            }
                                        }
-
         );
-
-
     }
 
 
@@ -317,7 +303,6 @@ public class AgreementActivity extends AppCompatActivity {
     }
 
     private File createImageFile() throws IOException {
-        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
@@ -327,8 +312,6 @@ public class AgreementActivity extends AppCompatActivity {
                 ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
-
-        // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         galleryAddPic();
         return image;
@@ -372,10 +355,9 @@ public class AgreementActivity extends AppCompatActivity {
             user.setSelfie(mCurrentPhotoPath);
             user.setTncAccepted(false);
             user.setTncUpdate(true);
-
             AppUtils.saveUserObject(this, user);
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resultCode == Activity.RESULT_OK) {
-            hasPermissions(this, PERMISSIONS);
+            AppUtils.hasPermissions(this, deniedPermissionForever, REQUEST_PERMISSION_SETTING, PERMISSIONS);
         }
     }
 
@@ -408,39 +390,6 @@ public class AgreementActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    public String[] hasPermissions(Context context, final String... permissions) {
-        ArrayList<String> askPermissions = new ArrayList<>();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    if (!shouldShowRequestPermissionRationale(permission) && deniedPermissionForever) {
-                        showMessageOKCancel("You need to allow access to Camera",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                        intent.setData(uri);
-                                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                                    }
-                                });
-                    }
-                    askPermissions.add(permission);
-                }
-            }
-        }
-        return askPermissions.toArray(new String[0]);
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(this)
-                .setMessage(message)
-                .setPositiveButton("Settings", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -451,11 +400,8 @@ public class AgreementActivity extends AppCompatActivity {
                         return;
                     }
                 }
-
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-
-
 }

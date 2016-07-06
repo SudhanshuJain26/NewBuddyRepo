@@ -36,6 +36,7 @@ import java.util.ArrayList;
 /**
  * Created by Aniket Verma(Digo) on 4/24/2016.
  */
+
 public class Adaptersimple extends BaseAdapter {
     RadioButton checkRR;
     private final Context context;
@@ -442,6 +443,7 @@ public class Adaptersimple extends BaseAdapter {
     private String setAddress(int position) {
       String cc;
         if (position != 0)
+
             cc = myList.get(position).getLine1().toString()+"," + myList.get(position).getLine2().toString()+","  + myList.get(position).getcity().toString()+","  + myList.get(position).getstate().toString();
         else
             cc = myList.get(position).getLine1().toString();

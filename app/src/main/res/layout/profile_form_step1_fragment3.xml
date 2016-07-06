@@ -53,6 +53,17 @@
                         android:src="@drawable/complete"
                         android:visibility="gone"/>
 
+                    <ImageView
+                        android:id="@+id/incomplete_aadhar_1"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/aadhar_pan_header"
+                        android:layout_toRightOf="@id/aadhar_pan_header"
+                        android:src="@drawable/incomplete"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/editext_header"
@@ -167,7 +178,10 @@
                         android:textAllCaps="false"
                         android:textColor="#44c2a6"/>
                 </LinearLayout>
-
+                <TextView android:id="@+id/pan_aadhar_error_tv"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:textColor="@color/buddy_red"
+                          android:visibility="gone"/>
                 <LinearLayout
                     android:id="@+id/incorrect_format_layout"
                     android:layout_width="wrap_content"
@@ -198,8 +212,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <RelativeLayout android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:gravity="center_vertical">
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

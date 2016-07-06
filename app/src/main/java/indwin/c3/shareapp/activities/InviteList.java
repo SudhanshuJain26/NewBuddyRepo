@@ -97,6 +97,10 @@ public class InviteList extends AppCompatActivity {
         backButton = (ImageView) findViewById(R.id.backo);
         addEmails = (TextView) findViewById(R.id.emailtext);
         addPhone = (TextView) findViewById(R.id.phonetext);
+        SharedPreferences preferences = getSharedPreferences("selectedContacts",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
 
         UserModel userModel = AppUtils.getUserObject(this);
         userId = userModel.getUserId();
@@ -117,11 +121,13 @@ public class InviteList extends AppCompatActivity {
             phone_size_selected = getIntent().getIntExtra("phone_send",0);
             email_size_selected = getIntent().getIntExtra("emails_send",0);
             if(phone_size_selected!=0){
+                num_phone.setVisibility(View.VISIBLE);
                 num_phone.setText(phone_size_selected+ " invited");
             }else{
                 num_phone.setVisibility(View.GONE);
             }
             if(email_size_selected!=0){
+                num_email.setVisibility(View.VISIBLE);
             num_email.setText(email_size_selected + " invited");
             }else{
                 num_email.setVisibility(View.GONE);

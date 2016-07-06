@@ -652,7 +652,8 @@ mRef=ref.getText().toString().trim();
                     });
                 }
                 else
-                {     invite.setOnClickListener(new View.OnClickListener() {
+                {
+                    invite.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         invite.setTextColor(Color.parseColor("#ffffff"));

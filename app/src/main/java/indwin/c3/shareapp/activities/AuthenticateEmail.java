@@ -95,6 +95,7 @@ public class AuthenticateEmail extends AppCompatActivity {
     ProgressDialog pDialog;
     String userId;
     AccountManager mAccountManager;
+    ProgressDialog pd;
     public ArrayList<Friends> listfromServerEmail = new ArrayList<>();
     public ArrayList<Friends> isBuddyListEmail = new ArrayList<>();
     public ArrayList<Friends> isInvitedListEmail = new ArrayList<>();
@@ -807,6 +808,12 @@ public class AuthenticateEmail extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            pd= new ProgressDialog(context);
+            pd.setMessage("Finding your friends at Buddy...");
+            pd.setIndeterminate(false);
+            pd.setCancelable(true);
+            pd.show();
+
             isBuddyListEmailYahoo.clear();
             isInvitedListEmailYahoo.clear();
             listfromServerEmailYahoo.clear();
@@ -815,6 +822,7 @@ public class AuthenticateEmail extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            pd.dismiss();
             if(!sentFromYahoo) {
 
                 for (int i = 0; i < isBuddyListEmail.size(); i++) {

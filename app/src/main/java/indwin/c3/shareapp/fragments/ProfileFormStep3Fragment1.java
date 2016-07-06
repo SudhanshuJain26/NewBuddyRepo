@@ -2,7 +2,6 @@ package indwin.c3.shareapp.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.activities.ProfileFormStep3;
@@ -23,23 +21,16 @@ import indwin.c3.shareapp.adapters.SpinnerHintAdapter;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.HelpTipDialog;
-import io.intercom.com.google.gson.Gson;
 
 /**
- * Created by shubhang on 07/04/16.
+ * Created by ROCK
  */
 public class ProfileFormStep3Fragment1 extends Fragment {
-    private boolean selectedAnnualFees = false, selectedScholarship = false,
-            selectedScholarshipType = false, selectedStudentLoan = false;
-    SharedPreferences mPrefs;
-    Gson gson;
-    TextView gotoFragment1, gotoFragment2, gotoFragment3;
+    private boolean  selectedScholarship = false,
+            selectedScholarshipType = false;
     UserModel user;
-    ImageView incompleteStep1, incompleteStep2, incompleteStep3;
-    private final int top = 16, left = 16, right = 16, bottom = 16;
     Button saveAndProceed;
     ImageView incompleteAnnualFees, completeAnnualFees, incompleteScholarshipDetails, completeScholarshipDetails;
-    ImageView topImage;
     EditText scholarshipAmount;
     String[] scholarshipType;
     Spinner scholarshipTypeSpinner;
@@ -50,15 +41,11 @@ public class ProfileFormStep3Fragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        //Inflate the layout for this fragment
         View rootView = inflater.inflate(
                 R.layout.profile_form_step3_fragment1, container, false);
         getAllViews(rootView);
-
         ProfileFormStep3 profileFormStep3 = (ProfileFormStep3) getActivity();
         user = profileFormStep3.getUser();
-        mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        mPrefs.edit().putBoolean("visitedFormStep3Fragment2", true).apply();
         if (user.isAppliedFor60k()) {
             ProfileFormStep1Fragment1.setViewAndChildrenEnabled(rootView, false);
         }
@@ -76,7 +63,6 @@ public class ProfileFormStep3Fragment1 extends Fragment {
                     user.setUpdateAnnualFees(true);
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 user.setUpdateAnnualFees(false);
@@ -84,7 +70,6 @@ public class ProfileFormStep3Fragment1 extends Fragment {
         });
         spinner.setAdapter(adapter);
         spinner.setSelection(adapter.getCount());
-
         scholarshipType = getResources().getStringArray(R.array.scholarship_type);
 
         SpinnerHintAdapter scholarshipTypeAdapter = new SpinnerHintAdapter(getActivity(), scholarshipType, R.layout.spinner_item_underline);
@@ -119,7 +104,6 @@ public class ProfileFormStep3Fragment1 extends Fragment {
                 }
             }
         });
-
 
         final String scholarship[] = getResources().getStringArray(R.array.scholarship);
         final String scholarshipValues[] = getResources().getStringArray(R.array.scholarship_values);
@@ -181,16 +165,12 @@ public class ProfileFormStep3Fragment1 extends Fragment {
         if ("Yes".equalsIgnoreCase(user.getScholarship()) || "true".equalsIgnoreCase(user.getScholarship()) && (AppUtils.isEmpty(user.getScholarshipType()) || AppUtils.isEmpty(user.getScholarshipAmount()))) {
             user.setIncompleteScholarship(true);
         }
-
         if (user.isIncompleteAnnualFees() || user.isIncompleteScholarship()) {
             if (user.isIncompleteAnnualFees())
                 incompleteAnnualFees.setVisibility(View.VISIBLE);
             if (user.isIncompleteScholarship())
                 incompleteScholarshipDetails.setVisibility(View.VISIBLE);
-
         }
-
-
         return rootView;
     }
 
@@ -265,7 +245,6 @@ public class ProfileFormStep3Fragment1 extends Fragment {
 
             user.setIncompleteScholarship(true);
         }
-
         if (user.isIncompleteScholarship()) {
             completeScholarshipDetails.setVisibility(View.GONE);
             incompleteScholarshipDetails.setVisibility(View.VISIBLE);
@@ -273,7 +252,6 @@ public class ProfileFormStep3Fragment1 extends Fragment {
             incompleteScholarshipDetails.setVisibility(View.GONE);
             completeScholarshipDetails.setVisibility(View.VISIBLE);
         }
-
     }
 
     private void checkTypeandAmount() {

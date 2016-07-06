@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
         username = (EditText) findViewById(R.id.phone_number);
         password = (EditText) findViewById(R.id.password);
-
+try{
         locationManager = (LocationManager) getSystemService
                 (Context.LOCATION_SERVICE);
         getLastLocation = locationManager.getLastKnownLocation
@@ -137,7 +137,11 @@ public class MainActivity extends AppCompatActivity {
         simSerialNumber = telephonyManager.getSimSerialNumber();
         getLastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
         latitude = getLastLocation.getLatitude();
-        longitude  = getLastLocation.getLongitude();
+        longitude  = getLastLocation.getLongitude();}
+catch (Exception e)
+{
+    System.out.println(e.toString());
+}
         username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

@@ -199,7 +199,20 @@ public class ProductsPage extends AppCompatActivity {
 
             if ((dp >= minDownpayment) && (dp <= sellingPrice + secondServicecharge-considerTen*200))//&& w>=mindownn
             {
-                // TODO: 5/14/2016
+                if(dp > sellingPrice + secondServicecharge-considerTen*200)
+                {
+
+                    Double rr=calculateEmi(Double.valueOf(sellingPrice - dp+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
+//while((rr<=200.0)&&(monthsnow>=2))
+//{checkPoschange=true;
+//    monthsnow--;
+//    spinner.setSelection(++changePos);
+//  rr=  calculateEmi(Double.valueOf(sellingPrice - dp+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
+//}
+
+                }
+
+                    // TODO: 5/14/2016
                 mValue = dp;
                 cb = st.getInt("cashBack", 0);
 
@@ -1058,8 +1071,8 @@ Boolean ch=mValue + inccc <= sellingPrice + secondServicecharge;
             appcBack.setEnabled(true);
         }
         Boolean flash = true;
-        if (userCode1k.equals("approved") && (!(userCode7k.equals("approved"))))
-            flash = false;
+//        if (userCode1k.equals("approved") && (!(userCode7k.equals("approved"))))
+//            flash = false;
         if (cb == 0)
             flash = false;
         appcBack.setEnabled(flash);
@@ -1374,11 +1387,7 @@ Boolean ch=mValue + inccc <= sellingPrice + secondServicecharge;
                             return "min";
                         //// TODO: 14/6/16 flash users 1k approved and 7k not approved then only flash users
                         Boolean flash = true;
-                        if (userCode1k.equals("approved") && (!(userCode7k.equals("approved"))))
-                            flash = false;
-                        if (!flash) {
-                            return "flash";
-                        }
+
                         return "win";
 
                     }

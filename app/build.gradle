@@ -19,7 +19,7 @@ android {
 
 
         debug {
-            buildConfigField "String", "SERVER_URL", '"http://52.76.241.99/"'
+            buildConfigField "String", "SERVER_URL", '"https://ssl.hellobuddy.in/"'
             buildConfigField "String", "MERCHANT_KEY", '"lhqOEOUh"'
             buildConfigField "String", "SALT", '"QsBtDKH3k8"'
             buildConfigField "String", "PAYU_BASE_URL", '"https://test.payu.in"'
@@ -38,6 +38,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 

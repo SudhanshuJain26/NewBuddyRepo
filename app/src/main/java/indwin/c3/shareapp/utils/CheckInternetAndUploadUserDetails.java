@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.models.FrontBackImage;
 import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
@@ -303,16 +303,15 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     }
                 }
             }
-            if (user.isUpdateSelfie() && (user.getSelfieStatus() == null || AppUtils.uploadStatus.OPEN.toString().equals(user.getSelfieStatus()))) {
+            if (userImages.isUpdateSelfie() && (userImages.getSelfieStatus() == null || AppUtils.uploadStatus.OPEN.toString().equals(userImages.getSelfieStatus()))) {
                 try {
-                    UserModel userDB = AppUtils.getUserObject(mContext);
-                    userDB.setSelfieStatus(AppUtils.uploadStatus.PICKED.toString());
-                    AppUtils.saveUserObject(mContext, userDB);
+                    userImages.setSelfieStatus(AppUtils.uploadStatus.PICKED.toString());
+                    AppUtils.saveUserObject(mContext, userImages);
                     Long tsLong = System.currentTimeMillis() / 1000;
                     String ts = tsLong.toString();
-                    cloudinary.uploader().upload(user.getSelfie(),
-                            ObjectUtils.asMap("public_id", user.getUserId() + "selfie" + ts));
-                    selfieUrl = cloudinary.url().secure(true).generate(user.getUserId() + "selfie" + ts);
+                    cloudinary.uploader().upload(userImages.getSelfie(),
+                            ObjectUtils.asMap("public_id", userImages.getUserId() + "selfie" + ts));
+                    selfieUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "selfie" + ts);
 
 
                 } catch (Exception e) {
@@ -320,16 +319,15 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 }
                 updateUser = true;
             }
-            if (user.isUpdateSignature() && (user.getSignatureStatus() == null || AppUtils.uploadStatus.OPEN.toString().equals(user.getSignatureStatus()))) {
+            if (userImages.isUpdateSignature() && (userImages.getSignatureStatus() == null || AppUtils.uploadStatus.OPEN.toString().equals(userImages.getSignatureStatus()))) {
                 try {
-                    UserModel userDB = AppUtils.getUserObject(mContext);
-                    userDB.setSignatureStatus(AppUtils.uploadStatus.PICKED.toString());
-                    AppUtils.saveUserObject(mContext, userDB);
+                    userImages.setSignatureStatus(AppUtils.uploadStatus.PICKED.toString());
+                    AppUtils.saveUserObject(mContext, userImages);
                     Long tsLong = System.currentTimeMillis() / 1000;
                     String ts = tsLong.toString();
-                    cloudinary.uploader().upload(user.getSignature(),
-                            ObjectUtils.asMap("public_id", user.getUserId() + "signature" + ts));
-                    signatureUrl = cloudinary.url().secure(true).generate(user.getUserId() + "signature" + ts);
+                    cloudinary.uploader().upload(userImages.getSignature(),
+                            ObjectUtils.asMap("public_id", userImages.getUserId() + "signature" + ts));
+                    signatureUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "signature" + ts);
                     user.setSignature(signatureUrl);
 
                 } catch (Exception e) {
@@ -357,7 +355,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
             try {
                 boolean doApiCall = false;
                 HttpClient client = new DefaultHttpClient();
-                String url = mContext.getResources().getString(R.string.server) + "api/v1/user/profile/docs/upload?phone=" + user.getUserId();
+                String url = BuildConfig.SERVER_URL + "api/v1/user/profile/docs/upload?phone=" + user.getUserId();
                 HttpPost postReq = new HttpPost(url);
                 JSONObject jsonobj = new JSONObject();
                 jsonobj.put("userid", user.getUserId());
@@ -531,7 +529,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
             try {
                 boolean doApiCall = false;
                 HttpClient client = new DefaultHttpClient();
-                String url = mContext.getResources().getString(R.string.server) + "api/v1/user/profile";
+                String url = BuildConfig.SERVER_URL + "api/v1/user/profile";
                 HttpPost putReq = new HttpPost(url);
                 JSONObject jsonobj = new JSONObject();
                 Map userMap = new HashMap<>();

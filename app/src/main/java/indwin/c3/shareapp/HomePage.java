@@ -1,14 +1,14 @@
- package indwin.c3.shareapp;
+package indwin.c3.shareapp;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -23,6 +23,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -34,31 +35,22 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -73,11 +65,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -90,7 +80,6 @@ import indwin.c3.shareapp.adapters.HorizontalScrollViewAdapter;
 import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.models.Product;
 import indwin.c3.shareapp.models.RecentSearchItems;
-import indwin.c3.shareapp.models.TrendingMapWrapper;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.Constants;
@@ -107,6 +96,7 @@ public class HomePage extends AppCompatActivity {
     String userId = "";
     Timer timer;
     int page1 = 0;
+    Double latitude, longitude;
     HorizontalScrollViewAdapter adapter0;
     HorizontalScrollViewAdapter adapter1;
     HorizontalScrollViewAdapter adapter2;
@@ -143,14 +133,10 @@ public class HomePage extends AppCompatActivity {
     private int checkedit = 0, currDay;
     private BroadcastReceiver broadcastReceiver;
     private TextView but;
-    //ImageView paste;
     ImageView dot1;
     ImageView dot2;
     ImageView dot3;
     ImageView dot4;
-    //    Map<String,Map<int,V>> map;
-
-    //    HashMap<String, HashMap<String,String>> image;
     private android.content.ClipboardManager myClipboard;
     private String spin = "";
     private String productId = "";
@@ -166,10 +152,13 @@ public class HomePage extends AppCompatActivity {
 
 
     private int checkValidFromApis = 0;
+    String IMEINumber;
+    String simSerialNumber;
     public int cb = 0;
     SharedPreferences st;
     private String sellerNme = "";
     private String token = "";
+    Location getLastLocation;
     private SharedPreferences userP;
     private SharedPreferences mPrefs;
     private Gson gson;
@@ -178,6 +167,7 @@ public class HomePage extends AppCompatActivity {
     private Tracker mTracker;
     //    TimerTask mTimerTask;
     public int currentPage = 0;
+    public String[] urls;
 
     private SharedPreferences sh, ss;
     private ArrayList<RecentSearchItems> recentSearchItemsList = new ArrayList<>();
@@ -186,27 +176,31 @@ public class HomePage extends AppCompatActivity {
     SharedPreferences sharedpreferences, sharedpreferences2;
     public static final String MyPREFERENCES = "buddy";
     TextView supported;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+                this.moveTaskToBack(true);
+                return true;
+            }
+        return true;
+        }
+
     public boolean emailverified = true;
     HashMap<String,ArrayList<Product>> productsMap = new HashMap<String,ArrayList<Product>>();
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         user = AppUtils.getUserObject(this);
+        new GetImageUrls().execute();
         BuddyApplication application = (BuddyApplication) getApplication();
         mTracker = application.getDefaultTracker();
         sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
         ss = getSharedPreferences("cred", Context.MODE_PRIVATE);
         userP = getSharedPreferences("token", Context.MODE_PRIVATE);
         cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
-
-//        new Trending().execute("Computers&subCategory=Laptops");
-//        new Trending().execute("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle");
-//        new Trending().execute("Health%20and%20Beauty");
-//        new Trending().execute("Electronics");
-//        new Trending().execute("Footwear");
-
-        //sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         sharedpreferences2 = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
         if (sh.getInt("checklog", 0) == 1) {
             userId = sharedpreferences2.getString("name", null);
@@ -215,6 +209,10 @@ public class HomePage extends AppCompatActivity {
         token = userP.getString("token_value", null);
         intentFilter = new IntentFilter();
         intentFilter.addAction("CLOSE_ALL");
+        locationManager = (LocationManager) getSystemService
+                (Context.LOCATION_SERVICE);
+        getLastLocation = locationManager.getLastKnownLocation
+                (LocationManager.PASSIVE_PROVIDER);
 
 
         broadcastReceiver = new BroadcastReceiver() {
@@ -226,6 +224,10 @@ public class HomePage extends AppCompatActivity {
             }
         };
         registerReceiver(broadcastReceiver, intentFilter);
+
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        IMEINumber = telephonyManager.getDeviceId();
+        simSerialNumber = telephonyManager.getSimSerialNumber();
         if (Splash.checklog == 1)
             finish();
         else {
@@ -264,7 +266,6 @@ public class HomePage extends AppCompatActivity {
             horizontal4 = (CustomHorizontalScrollView)findViewById(R.id.horizontal4);
             horizontal5 = (CustomHorizontalScrollView)findViewById(R.id.horizontal5);
             horizontal6 = (CustomHorizontalScrollView)findViewById(R.id.horizontal6);
-            //new Trending("trending").execute("trending");
             new GetTrendingProducts().execute("trending");
             new Trending("Mobiles").execute("Mobiles");
 
@@ -274,157 +275,13 @@ public class HomePage extends AppCompatActivity {
             new Trending("Health%20and%20Beauty").execute("Health%20and%20Beauty");
             new Trending("Footwear").execute("Footwear");
 
-//            ImageView image1 = (ImageView) findViewById(R.id.img11);
-//            ImageView image2 = (ImageView) findViewById(R.id.img12);
-//            ImageView image3 = (ImageView) findViewById(R.id.img13);
-//            ImageView image4 = (ImageView) findViewById(R.id.img14);
-//            ImageView image5 = (ImageView) findViewById(R.id.img21);
-//            ImageView image6 = (ImageView) findViewById(R.id.img22);
-//            ImageView image7 = (ImageView) findViewById(R.id.img23);
-//            ImageView image8 = (ImageView) findViewById(R.id.img24);
-//            ImageView image9 = (ImageView) findViewById(R.id.img31);
-//            ImageView image10 = (ImageView) findViewById(R.id.img32);
-//            ImageView image11 = (ImageView) findViewById(R.id.img33);
-//            ImageView image12 = (ImageView) findViewById(R.id.img34);
-//            ImageView image13 = (ImageView) findViewById(R.id.img41);
-//            ImageView image14 = (ImageView) findViewById(R.id.img42);
-//            ImageView image15 = (ImageView) findViewById(R.id.img43);
-//            ImageView image16 = (ImageView) findViewById(R.id.img44);
-//            ImageView image17 = (ImageView) findViewById(R.id.img51);
-//            ImageView image18 = (ImageView) findViewById(R.id.img52);
-//            ImageView image19 = (ImageView) findViewById(R.id.img53);
-//            ImageView image20 = (ImageView) findViewById(R.id.img54);
-//            ImageView image21 = (ImageView) findViewById(R.id.img61);
-//            ImageView image22 = (ImageView) findViewById(R.id.img62);
-//            ImageView image23 = (ImageView) findViewById(R.id.img63);
-//            ImageView image24 = (ImageView) findViewById(R.id.img64);
-//            ImageView image25 = (ImageView) findViewById(R.id.img01);
-//            ImageView image26 = (ImageView) findViewById(R.id.img02);
-//            ImageView image27 = (ImageView) findViewById(R.id.img03);
-//            ImageView image28 = (ImageView) findViewById(R.id.img04);
-//            ImageView image29 = (ImageView) findViewById(R.id.img05);
-//            ImageView image30 = (ImageView) findViewById(R.id.img06);
-//            ImageView image31 = (ImageView) findViewById(R.id.img07);
-//            ImageView image32 = (ImageView) findViewById(R.id.img08);
-//            ImageView image33 = (ImageView) findViewById(R.id.img09);
-//            ImageView image34 = (ImageView) findViewById(R.id.img10);
-
-//            ImageView image70 = (ImageView) findViewById(R.id.img15);
-//            ImageView image35 = (ImageView) findViewById(R.id.img16);
-//            ImageView image36 = (ImageView) findViewById(R.id.img17);
-//            ImageView image37 = (ImageView) findViewById(R.id.img18);
-//            ImageView image38 = (ImageView) findViewById(R.id.img19);
-//            ImageView image39 = (ImageView) findViewById(R.id.img20);
-//            ImageView image40 = (ImageView) findViewById(R.id.img25);
-//            ImageView image41 = (ImageView) findViewById(R.id.img26);
-//            ImageView image42 = (ImageView) findViewById(R.id.img27);
-//            ImageView image43 = (ImageView) findViewById(R.id.img28);
-//            ImageView image44 = (ImageView) findViewById(R.id.img29);
-//            ImageView image45 = (ImageView) findViewById(R.id.img30);
-//            ImageView image46 = (ImageView) findViewById(R.id.img35);
-//            ImageView image47 = (ImageView) findViewById(R.id.img36);
-//            ImageView image48 = (ImageView) findViewById(R.id.img37);
-//            ImageView image49 = (ImageView) findViewById(R.id.img38);
-//            ImageView image50 = (ImageView) findViewById(R.id.img39);
-//            ImageView image51 = (ImageView) findViewById(R.id.img40);
-//            ImageView image52 = (ImageView) findViewById(R.id.img45);
-//            ImageView image53 = (ImageView) findViewById(R.id.img46);
-//            ImageView image54 = (ImageView) findViewById(R.id.img47);
-//            ImageView image55 = (ImageView) findViewById(R.id.img48);
-//            ImageView image56 = (ImageView) findViewById(R.id.img49);
-//            ImageView image57 = (ImageView) findViewById(R.id.img50);
-//            ImageView image58 = (ImageView) findViewById(R.id.img55);
-//            ImageView image59 = (ImageView) findViewById(R.id.img56);
-//            ImageView image60 = (ImageView) findViewById(R.id.img57);
-//            ImageView image61 = (ImageView) findViewById(R.id.img58);
-//            ImageView image62 = (ImageView) findViewById(R.id.img59);
-//            ImageView image63 = (ImageView) findViewById(R.id.img60);
-//            ImageView image64 = (ImageView) findViewById(R.id.img65);
-//            ImageView image65 = (ImageView) findViewById(R.id.img66);
-//            ImageView image66 = (ImageView) findViewById(R.id.img67);
-//            ImageView image67 = (ImageView) findViewById(R.id.img68);
-//            ImageView image68 = (ImageView) findViewById(R.id.img69);
-//            ImageView image69 = (ImageView) findViewById(R.id.img70);
-
-
-//            image1.setOnClickListener(this);
-//            image2.setOnClickListener(this);
-//            image3.setOnClickListener(this);
-//            image4.setOnClickListener(this);
-//            image5.setOnClickListener(this);
-//            image6.setOnClickListener(this);
-//            image7.setOnClickListener(this);
-//            image8.setOnClickListener(this);
-//            image9.setOnClickListener(this);
-//            image10.setOnClickListener(this);
-//            image11.setOnClickListener(this);
-//            image12.setOnClickListener(this);
-//            image13.setOnClickListener(this);
-//            image14.setOnClickListener(this);
-//            image15.setOnClickListener(this);
-//            image16.setOnClickListener(this);
-//            image17.setOnClickListener(this);
-//            image18.setOnClickListener(this);
-//            image19.setOnClickListener(this);
-//            image20.setOnClickListener(this);
-//            image21.setOnClickListener(this);
-//            image22.setOnClickListener(this);
-//            image23.setOnClickListener(this);
-//            image24.setOnClickListener(this);
-//            image25.setOnClickListener(this);
-//            image26.setOnClickListener(this);
-//            image27.setOnClickListener(this);
-//            image28.setOnClickListener(this);
-//            image29.setOnClickListener(this);
-//            image30.setOnClickListener(this);
-//            image31.setOnClickListener(this);
-//            image32.setOnClickListener(this);
-//            image33.setOnClickListener(this);
-//            image34.setOnClickListener(this);
-//            image35.setOnClickListener(this);
-//            image36.setOnClickListener(this);
-//            image37.setOnClickListener(this);
-//            image38.setOnClickListener(this);
-//            image39.setOnClickListener(this);
-//            image40.setOnClickListener(this);
-//            image41.setOnClickListener(this);
-//            image42.setOnClickListener(this);
-//            image43.setOnClickListener(this);
-//            image44.setOnClickListener(this);
-//            image45.setOnClickListener(this);
-//            image46.setOnClickListener(this);
-//            image47.setOnClickListener(this);
-//            image48.setOnClickListener(this);
-//            image49.setOnClickListener(this);
-//            image50.setOnClickListener(this);
-//            image51.setOnClickListener(this);
-//            image52.setOnClickListener(this);
-//            image53.setOnClickListener(this);
-//            image54.setOnClickListener(this);
-//            image55.setOnClickListener(this);
-//            image56.setOnClickListener(this);
-//            image57.setOnClickListener(this);
-//            image58.setOnClickListener(this);
-//            image59.setOnClickListener(this);
-//            image60.setOnClickListener(this);
-//            image61.setOnClickListener(this);
-//            image62.setOnClickListener(this);
-//            image63.setOnClickListener(this);
-//            image64.setOnClickListener(this);
-//            image65.setOnClickListener(this);
-//            image66.setOnClickListener(this);
-//            image67.setOnClickListener(this);
-//            image68.setOnClickListener(this);
-//            image69.setOnClickListener(this);
-//            image70.setOnClickListener(this);
-
 
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.editlayout);
 
 
             imageSlider = (ViewPager) findViewById(R.id.imageslider);
+            //new GetImageBanners().execute();
             dot1 = (ImageView) findViewById(R.id.c1);
-//            dot1.setImageResource(R.drawable.circle2);
             dot2 = (ImageView) findViewById(R.id.c2);
             dot3 = (ImageView) findViewById(R.id.c3);
             dot4 = (ImageView) findViewById(R.id.c4);
@@ -438,15 +295,6 @@ public class HomePage extends AppCompatActivity {
                 }
             });
 
-
-            // paste = (ImageView) findViewById(R.id.pasteAg);
-            adp = new SecondViewPagerAdapter(getApplicationContext(), 4, HomePage.this);
-            imageSlider.setAdapter(adp);
-            //AsynchTaskTimer();
-//            doTimerTask();
-            adp.notifyDataSetChanged();
-
-            imageSlider.setCurrentItem(0);
             dot1.setBackgroundResource(R.drawable.circle2);
             imageSlider.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -509,15 +357,6 @@ public class HomePage extends AppCompatActivity {
                 }
             }, 1000, 5000);
 
-//            ImageView img1 = (ImageView) findViewById(R.id.img1);
-//            img1.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//
-//                }
-//            });
-
 
             if (!isNetworkAvailable()) {
                 showMessageOKCancel("Internet is not working. Some features of the app may be disabled.",
@@ -528,8 +367,6 @@ public class HomePage extends AppCompatActivity {
                             }
                         });
             }
-
-//
             ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
             scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
 
@@ -538,70 +375,10 @@ public class HomePage extends AppCompatActivity {
 
                     query.clearFocus();
                     hideSoftKeyboard(HomePage.this);                     //for verticalScrollView
-                    //DO SOMETHING WITH THE SCROLL COORDINATES
-
                 }
             });
 
-//
-
             spin = "trending";
-
-            try {
-               // populateTrendingRow();
-            } catch (Exception e) {
-            }
-            try {
-                //  cardclick();
-            } catch (Exception e) {
-            }
-
-            try {
-                spin = "Mobiles";
-                //populateFirstRow();
-                //  cardclick();
-            } catch (Exception e) {
-            }
-
-            spin = "Electronics";
-            try {
-
-//                populateSecondRow();
-            } catch (Exception e) {
-
-                System.out.println(e.getMessage());
-            }
-            spin = "Computers&subCategory=Laptops";
-            try {
-
-                //populateThirdRow();
-            } catch (Exception e) {
-
-                System.out.println(e.getMessage());
-            }
-            spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
-            try {
-
-               // populateFouthRow();
-            } catch (Exception e) {
-
-                System.out.println(e.getMessage());
-            }
-            spin = "Health%20and%20Beauty";
-            try {
-            //    populateFifthRow();
-            } catch (Exception e) {
-
-                System.out.println(e.getMessage());
-            }
-            spin = "Footwear";
-            try {
-             //   populateSixthRow();
-            } catch (Exception e) {
-
-                System.out.println(e.getMessage());
-            }
-
 
             FloatingActionButton intercom = (FloatingActionButton) findViewById(R.id.chat);
             intercom.setOnClickListener(new View.OnClickListener() {
@@ -654,19 +431,13 @@ public class HomePage extends AppCompatActivity {
                     noti.setVisibility(View.GONE);
                     Splash.notify = 1;
 
-                    // clickpaste();
-
                 }
             });
-
-            //pageSwitcher(5);
-
 
             noti.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     query.clearFocus();
-                    //                    send();
                     Intent intent = new Intent(HomePage.this, ProfileActivity.class);
                     startActivity(intent);
                     overridePendingTransition(0, 0);
@@ -678,11 +449,9 @@ public class HomePage extends AppCompatActivity {
             gson = new Gson();
 
             try {
-                TextView name1, line1, line2, but;
+                TextView name1, line1, but;
                 name1 = (TextView) findViewById(R.id.nameintr);
                 line1 = (TextView) findViewById(R.id.line1);
-                line2 = (TextView) findViewById(R.id.line2);
-                TextView line3 = (TextView) findViewById(R.id.line3);
                 but = (TextView) findViewById(R.id.but);
                 name1.setText("Hi " + user.getName() + ",");
 
@@ -750,8 +519,6 @@ public class HomePage extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     query.clearFocus();
-
-                    //                    send();
                     if (emailverified) {
                         Intent intent = new Intent(HomePage.this, ProfileActivity.class);
                         startActivity(intent);
@@ -769,23 +536,12 @@ public class HomePage extends AppCompatActivity {
 
             navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
-            //        navigationView.getMenu().getItem(0).setChecked(true);
-            //        GridView gridviewshow=(GridView)findViewById(R.id.grid1a);
-            //       gridviewshow.setAdapter(new ImageAdapter(this));
-
-
             navigationView.getMenu().getItem(0).setChecked(true);
-            //Setting Navigation View Item Selected Listener
-            // to handle the item click of the navigation menu
             navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
-                // This method will trigger on item Click of navigation menu
                 @Override
                 public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-
-                    //Checking if the item is in
-                    //Closing drawer on item click
                     drawerLayout.closeDrawers();
 
                     switch (menuItem.getItemId()) {
@@ -799,7 +555,6 @@ public class HomePage extends AppCompatActivity {
                             intform = new Intent(HomePage.this, ViewForm.class);
 
                             Splash.checkNot = 1;
-                            //clickpaste();
                             intform.putExtra("which_page", 11);
                             intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
                             startActivity(intform);
@@ -808,29 +563,15 @@ public class HomePage extends AppCompatActivity {
                             return true;
                         case R.id.About:
                             Splash.checkNot = 1;
-
-                            // clickpaste();
                             intform = new Intent(HomePage.this, ViewForm.class);
-                            //                        else
-                            //                            intform=new Intent(Formempty.this, FacebookAuth.class);
-
-                            // finish();
                             intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
                             intform.putExtra("which_page", 3);
-                            //  finish();
                             startActivity(intform);
                             finish();
                             overridePendingTransition(0, 0);
-                            //                        intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
-                            //                        intform.putExtra("which_page",3);
-                            //                        finish();
-                            //                        startActivity(intform);
-                            //                        overridePendingTransition(0, 0);
                             return true;
                         case R.id.app_form:
                             Splash.checkNot = 1;
-
-                            // clickpaste();
                             intform = new Intent(HomePage.this, ProfileActivity.class);
                             startActivity(intform);
                             finish();
@@ -838,18 +579,10 @@ public class HomePage extends AppCompatActivity {
                             return true;
                         case R.id.faq:
                             navigationView.getMenu().getItem(0).setChecked(true);
-                            // Intent in//
                             Splash.checkNot = 1;
-
-                            // clickpaste();
                             intform = new Intent(HomePage.this, ViewForm.class);
-                            //                        else
-                            //                            intform=new Intent(Formempty.this, FacebookAuth.class);
-
-
                             intform.putExtra("url", "http://hellobuddy.in/#/faqs");
                             intform.putExtra("which_page", 5);
-                            //     finish();
                             startActivity(intform);
                             overridePendingTransition(0, 0);
                             finish();
@@ -857,12 +590,6 @@ public class HomePage extends AppCompatActivity {
 
                         case R.id.security:
                             Splash.checkNot = 1;
-
-
-                            //clickpaste();
-
-                            //                        if(!fbid.equals("empty"))
-
                             intform = new Intent(HomePage.this, ViewForm.class);
 
                             intform.putExtra("which_page", 15);
@@ -875,8 +602,6 @@ public class HomePage extends AppCompatActivity {
                             intform = new Intent(HomePage.this, ViewForm.class);
                             intform.putExtra("which_page", 16);
                             Splash.checkNot = 1;
-
-                            //  clickpaste();
                             intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
                             startActivity(intform);
                             finish();
@@ -887,9 +612,6 @@ public class HomePage extends AppCompatActivity {
 
                             intform = new Intent(HomePage.this, ViewForm.class);
                             Splash.checkNot = 1;
-
-                            //clickpaste();
-
                             intform.putExtra("which_page", 17);
                             intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
                             startActivity(intform);
@@ -901,9 +623,6 @@ public class HomePage extends AppCompatActivity {
 
                             intform = new Intent(HomePage.this, ViewForm.class);
                             Splash.checkNot = 1;
-
-                            // clickpaste();
-
                             intform.putExtra("which_page", 999);
                             intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
                             startActivity(intform);
@@ -915,15 +634,10 @@ public class HomePage extends AppCompatActivity {
                             SharedPreferences sh_otp = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editornew = sh_otp.edit();
                             editornew.putInt("chshare", 1);
-                            // finish();
                             Splash.checkNot = 1;
-
-                            //clickpaste();
-                            //   editornew.putString("rcode", getIntent().getExtras().getString("UniC"));
                             editornew.commit();
-                            Intent in = new Intent(HomePage.this, Share.class);
+                            Intent in = new Intent(HomePage.this, ShareSecond.class);
                             startActivity(in);
-                            finish();
                             overridePendingTransition(0, 0);
                             return true;
 
@@ -968,8 +682,6 @@ public class HomePage extends AppCompatActivity {
                             }
                             intform = new Intent(HomePage.this, MainActivity.class);
                             Splash.checkNot = 1;
-
-                            //  clickpaste();
                             finish();
                             startActivity(intform);
                             overridePendingTransition(0, 0);
@@ -978,8 +690,6 @@ public class HomePage extends AppCompatActivity {
                         default:
                             return true;
                     }
-                    //Check to see which item was being clicked and perform appropriate action
-
                 }
             });
 
@@ -988,72 +698,39 @@ public class HomePage extends AppCompatActivity {
             View headerView = nview.getHeaderView(0);
             ImageView arr = (ImageView) headerView.findViewById(R.id.arrow);
             RelativeLayout header = (RelativeLayout) headerView.findViewById(R.id.head);
-            //RelativeLayout header = (RelativeLayout) headerView.findViewById(R.id.head);
             header.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //     Toast.makeText(Formempty.this, "clicked", Toast.LENGTH_SHORT).show();
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             });
-            //dddddd
             ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
 
                 @Override
                 public void onDrawerClosed(View drawerView) {
-
-                    // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
                     super.onDrawerClosed(drawerView);
                 }
 
                 @Override
                 public void onDrawerOpened(View drawerView) {
-                    // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
-
                     super.onDrawerOpened(drawerView);
                 }
             };
 
-            //Setting the actionb
-            // arToggle to drawer layout
             drawerLayout.setDrawerListener(actionBarDrawerToggle);
 
-            //calling sync state is necessay or else your hamburger icon wont show up
             actionBarDrawerToggle.syncState();
-
-
-            // paste.setVisibility(View.GONE);
-            //        mRecycler = (RecyclerView) findViewById(R.id.recycler_view);
 
             query = (EditText) findViewById(R.id.link);
 
-            // query.setCompoundDrawablesWithIntrinsicBounds(50,50,50,50);
             query.setImeOptions(EditorInfo.IME_ACTION_DONE);
             query.setInputType(InputType.TYPE_NULL);
-
-//            query.setOnFocusChangeListener(new View.OnFocusChangeListener() {  // done by sudhanshu
-//
-//                public void onFocusChange(View v, boolean hasFocus) {
-//                    if (!hasFocus) {
-//                        paste.setVisibility(View.GONE);
-//
-//
-//                        // code to execute when EditText loses focus
-//                    }if(hasFocus){
-//                        paste.setVisibility(View.VISIBLE);
-//
-//
-//                    }
-//                }
-//            });
 
 
             query.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    // hideSoftKeyboard(HomePage.this);
-                    // paste.setVisibility(View.GONE);
                 }
 
                 int w = 1;
@@ -1062,105 +739,20 @@ public class HomePage extends AppCompatActivity {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if (count == 0) {
                         w = 0;
-//                        ImageView home = (ImageView) findViewById(R.id.ho);
-//                        home.setBackgroundResource(R.drawable.list_grad);
-                        //  Toast.makeText(HomePage.this, "2", Toast.LENGTH_LONG).show();
-                        // paste.setVisibility(View.VISIBLE);
                     } else {
-                        //paste.setVisibility(View.GONE);
                     }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
                     query.requestFocus();
-
-                    //if(w==0)
-                    //    paste.setVisibility(View.VISIBLE);
                 }
             });
-            //
-
-
-//            query.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//                @Override
-//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-//
-//
-//                        //                        Intent in = new Intent(HomePage.this, ViewForm.class);
-//                        Splash.checkNot = 1;
-//                        paste = (ImageView) findViewById(R.id.pasteAg);
-//                        query.requestFocus();
-//                        clickpaste();
-//                        parse(query.getText().toString().trim());
-//
-//                        if ((checkValidUrl == 0) && (checkValidFromApis == 0)) {
-//                            Long time = Calendar.getInstance().getTimeInMillis() / 1000;
-//                            Intent in = new Intent(HomePage.this, ProductsPage.class);
-//                            in.putExtra("seller", sellerNme);
-//                            in.putExtra("product", productId);
-//                            in.putExtra("query", query.getText().toString());
-//                            query.setText("");
-//                            in.putExtra("page", "api");
-//                            checkValidFromApis = 0;
-//                            checkValidUrl = 0;
-//                            startActivity(in);
-//                            //                            if (time + 5 < userP.getLong("expires", 0))
-//                            ////                                new checkAuth().execute(url);//
-//                            //                            {
-//                            //                                new linkSearch().execute();
-//                            //                            } else
-//                            //                                //   new checkAuth().execute(url);
-//                            //                                new AuthTokc().execute("cc");
-//
-//                        } else if (checkValidUrl == 1) {
-//                            //monkey page
-//                            Intent in = new Intent(HomePage.this, ProductsPage.class);
-//                            query.setText("");
-//                            in.putExtra("query", query.getText().toString());
-//                            in.putExtra("page", "monkey");
-//                            startActivity(in);
-//                            checkValidFromApis = 0;
-//                            checkValidUrl = 0;
-//                            //                            finish();
-//                            page = "monkey";
-//                        } else if ((checkValidFromApis == 1)) {
-//                            //not monley page
-//                            query.setText("");
-//                            Intent in = new Intent(HomePage.this, ProductsPage.class);
-//                            in.putExtra("query", query.getText().toString());
-//                            in.putExtra("seller", sellerNme);
-//                            in.putExtra("page", "pay");
-//                            startActivity(in);
-//                            checkValidFromApis = 0;
-//                            checkValidUrl = 0;
-//                            //                            finish();
-//                            page = "pay";
-//                        }
-//                        //                        in.putExtra("url", query.getText().toString());
-//                        //                        in.putExtra("which_page", 9);
-//                        //                        startActivity(in);
-//                        //  Toast.makeText(HomePage.this,"oscar goes to caprio",Toast.LENGTH_LONG).show();
-//                        //TODO: do something
-//                    }
-//                    return false;
-//                }
-//            });
-//            ImageView home = (ImageView) findViewById(R.id.ho);
-//            home.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    query.clearFocus();
-//                    hideSoftKeyboard(HomePage.this);
-//                }
-//            });
             DrawerLayout f = (DrawerLayout) findViewById(R.id.drawer);
             f.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     query.clearFocus();
-                    // hideSoftKeyboard(HomePage.this);
                 }
             });
             query.setOnTouchListener(new View.OnTouchListener() {
@@ -1168,23 +760,14 @@ public class HomePage extends AppCompatActivity {
                 public boolean onTouch(View v, MotionEvent event) {
 
                     int action = 0;
-                    // if (checkedit == 1) {
-                    //       Toast.makeText(HomePage.this,"check",Toast.LENGTH_LONG).show();
                     if (action == MotionEvent.ACTION_DOWN && checkedit == 0) {
-                        //paste.setVisibility(View.VISIBLE);
                         query.setInputType(InputType.TYPE_NULL);
 
                         Intent intent = new Intent(HomePage.this, FindProduct.class);
-//                        //intent.putExtra("searchlist",recentSearchItemsList);
-//                        Log.i("jbabc","2345");
                         HomePage.this.startActivity(intent);
-                        // new FindRecentProductLinks(HomePage.this).execute("https://ssl.hellobuddy.in/api/user/product/recent?userid="+userId +"&count=5");
                         checkedit = 1;
-                        // ImageView home = (ImageView) findViewById(R.id.ho);
 
                     }
-//                    }
-//                    checkedit = 1;
 
                     return false;
                 }
@@ -1194,54 +777,25 @@ public class HomePage extends AppCompatActivity {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     int action = 0;
-                    // if (checkedit == 1) {
-                    //       Toast.makeText(HomePage.this,"check",Toast.LENGTH_LONG).show();
                     if (action == MotionEvent.ACTION_DOWN && checkedit == 0) {
-                        //paste.setVisibility(View.VISIBLE);
                         query.setInputType(InputType.TYPE_NULL);
 
                         Intent intent = new Intent(HomePage.this, FindProduct.class);
-//                        //intent.putExtra("searchlist",recentSearchItemsList);
-//                        Log.i("jbabc","2345");
                         HomePage.this.startActivity(intent);
-//                        new FindRecentProductLinks(HomePage.this).execute("https://ssl.hellobuddy.in/api/user/product/recent?userid=8971923656&count=5");
                         checkedit = 1;
-                        // ImageView home = (ImageView) findViewById(R.id.ho);
                     }
-//                    }
                     return false;
                 }
             });
 
-//            query.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-////                    if (checkedit == 1) {
-//                        //       Toast.makeText(HomePage.this,"check",Toast.LENGTH_LONG).show();
-//                        paste.setVisibility(View.VISIBLE);
-//                        query.setInputType(InputType.TYPE_NULL);
-////                        Log.i("Tension","called twice");
-////                        Intent intent = new Intent(HomePage.this, FindProduct.class);
-////                        //intent.putExtra("searchlist",recentSearchItemsList);
-////                        Log.i("jbabc","2345");
-////                        HomePage.this.startActivity(intent);
-//                        new FindRecentProductLinks(HomePage.this).execute("https://ssl.hellobuddy.in/api/user/product/recent?userid=8971923656&count=5");
-//
-//                        ImageView home = (ImageView) findViewById(R.id.ho);
-//
-////                    }
-////                    checkedit=1;
-//                }
-//            });
 
             myClipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            //clickpaste();
+
 
 
             this.arraySpinner = new String[]{
                     "MOBILES", "LAPTOPS", "FASHION", "BEAUTY & PERSONAL CARE", "ENTERTAINMENT", "FOOTWEAR"
             };
-//
         }
     }
 
@@ -1251,36 +805,9 @@ public class HomePage extends AppCompatActivity {
         checkedit = 0;
     }
 
-//
-
-
-    private void setNewIdsNull(String json) {
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-            if (jsonObject.optJSONArray("newAddressProofs") != null) {
-                jsonObject.put("newAddressProofs", null);
-            }
-            if (jsonObject.optJSONArray("newBankProofs") != null) {
-                jsonObject.put("newBankProofs", null);
-            }
-            if (jsonObject.optJSONArray("newBankStmts") != null) {
-                jsonObject.put("newBankStmts", null);
-            }
-            if (jsonObject.optJSONArray("newCollegeIds") != null) {
-                jsonObject.put("newCollegeIds", null);
-            }
-
-
-        } catch (Exception e) {
-
-
-        }
-    }
-
 
     @Override
     public void onDestroy() {
-        // TODO Auto-generated method stub
 
         try {
             if (broadcastReceiver != null)
@@ -1301,754 +828,12 @@ public class HomePage extends AppCompatActivity {
                 .show();
     }
 
-    //
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-//
-//
-//    public void switchtoProductPage() {
-//        Intent in = new Intent(HomePage.this, ProductsPage.class);
-//        in.putExtra("seller", sellerNme);
-//        in.putExtra("product", productId);
-//        in.putExtra("page", "api");
-//        startActivity(in);
-//    }
-//
-//    @Override
-//    public void onClick(View v) {
-//        Long time = Calendar.getInstance().getTimeInMillis() / 1000;
-//
-//        switch (v.getId()) {
-////            case R.id.img11:
-////                spin = "Mobiles";
-////
-////                productId = Splash.fkid1.get(spin).get("0");
-////                sellerNme = Splash.sellers.get(spin).get("0");
-////                switchtoProductPage();
-////
-////
-////                break;
-////
-////            case R.id.img12:
-////                spin = "Mobiles";
-////                productId = Splash.fkid1.get(spin).get("1");
-////                sellerNme = Splash.sellers.get(spin).get("1");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img13:
-////                spin = "Mobiles";
-////                productId = Splash.fkid1.get(spin).get("2");
-////                sellerNme = Splash.sellers.get(spin).get("2");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img14:
-////                spin = "Mobiles";
-////
-////                productId = Splash.fkid1.get(spin).get("3");
-////                sellerNme = Splash.sellers.get(spin).get("3");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img15:
-////                spin = "Mobiles";
-////
-////                productId = Splash.fkid1.get(spin).get("4");
-////                sellerNme = Splash.sellers.get(spin).get("4");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img16:
-////                spin = "Mobiles";
-////
-////                productId = Splash.fkid1.get(spin).get("5");
-////                sellerNme = Splash.sellers.get(spin).get("5");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img17:
-////                spin = "Mobiles";
-////
-////                productId = Splash.fkid1.get(spin).get("6");
-////                sellerNme = Splash.sellers.get(spin).get("6");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img18:
-////                spin = "Mobiles";
-////
-////                productId = Splash.fkid1.get(spin).get("7");
-////                sellerNme = Splash.sellers.get(spin).get("7");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img19:
-////                spin = "Mobiles";
-////
-////                productId = Splash.fkid1.get(spin).get("8");
-////                sellerNme = Splash.sellers.get(spin).get("8");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img20:
-////                spin = "Mobiles";
-////
-////                productId = Splash.fkid1.get(spin).get("9");
-////                sellerNme = Splash.sellers.get(spin).get("9");
-////                switchtoProductPage();
-////
-////                break;
-//
-////            case R.id.img21:
-////                spin = "Electronics";
-////
-////                productId = Splash.fkid1.get(spin).get("0");
-////                sellerNme = Splash.sellers.get(spin).get("0");
-////                switchtoProductPage();
-////
-////
-////                break;
-////
-////            case R.id.img22:
-////                spin = "Electronics";
-////                productId = Splash.fkid1.get(spin).get("1");
-////                sellerNme = Splash.sellers.get(spin).get("1");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img23:
-////                spin = "Electronics";
-////                productId = Splash.fkid1.get(spin).get("2");
-////                sellerNme = Splash.sellers.get(spin).get("2");
-////                switchtoProductPage();
-////
-////
-////                break;
-////
-////            case R.id.img24:
-////                spin = "Electronics";
-////
-////                productId = Splash.fkid1.get(spin).get("3");
-////                sellerNme = Splash.sellers.get(spin).get("3");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img25:
-////                spin = "Electronics";
-////
-////                productId = Splash.fkid1.get(spin).get("4");
-////                sellerNme = Splash.sellers.get(spin).get("4");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img26:
-////                spin = "Electronics";
-////
-////                productId = Splash.fkid1.get(spin).get("5");
-////                sellerNme = Splash.sellers.get(spin).get("5");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img27:
-////                spin = "Electronics";
-////
-////                productId = Splash.fkid1.get(spin).get("6");
-////                sellerNme = Splash.sellers.get(spin).get("6");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img28:
-////                spin = "Electronics";
-////
-////                productId = Splash.fkid1.get(spin).get("7");
-////                sellerNme = Splash.sellers.get(spin).get("7");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img29:
-////                spin = "Electronics";
-////
-////                productId = Splash.fkid1.get(spin).get("8");
-////                sellerNme = Splash.sellers.get(spin).get("8");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img30:
-////                spin = "Electronics";
-////
-////                productId = Splash.fkid1.get(spin).get("9");
-////                sellerNme = Splash.sellers.get(spin).get("9");
-////                switchtoProductPage();
-////
-////                break;
-//
-//
-////            case R.id.img31:
-////                spin = "Computers&subCategory=Laptops";
-////
-////                productId = Splash.fkid1.get(spin).get("0");
-////                sellerNme = Splash.sellers.get(spin).get("0");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img32:
-////                spin = "Computers&subCategory=Laptops";
-////
-////                productId = Splash.fkid1.get(spin).get("1");
-////                sellerNme = Splash.sellers.get(spin).get("1");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img33:
-////                spin = "Computers&subCategory=Laptops";
-////
-////                productId = Splash.fkid1.get(spin).get("2");
-////                sellerNme = Splash.sellers.get(spin).get("2");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img34:
-////                spin = "Computers&subCategory=Laptops";
-////
-////                productId = Splash.fkid1.get(spin).get("3");
-////                sellerNme = Splash.sellers.get(spin).get("3");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img35:
-////                spin = "Computers&subCategory=Laptops";
-////
-////                productId = Splash.fkid1.get(spin).get("4");
-////                sellerNme = Splash.sellers.get(spin).get("4");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img36:
-////                spin = "Computers&subCategory=Laptops";
-////
-////                productId = Splash.fkid1.get(spin).get("5");
-////                sellerNme = Splash.sellers.get(spin).get("5");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img37:
-////                spin = "Computers&subCategory=Laptops";
-////
-////                productId = Splash.fkid1.get(spin).get("6");
-////                sellerNme = Splash.sellers.get(spin).get("6");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img38:
-////                spin = "Computers&subCategory=Laptops";
-////
-////                productId = Splash.fkid1.get(spin).get("7");
-////                sellerNme = Splash.sellers.get(spin).get("7");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img39:
-////                spin = "Computers&subCategory=Laptops";
-////
-////                productId = Splash.fkid1.get(spin).get("8");
-////                sellerNme = Splash.sellers.get(spin).get("8");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img40:
-////                spin = "Computers&subCategory=Laptops";
-////
-////                productId = Splash.fkid1.get(spin).get("9");
-////                sellerNme = Splash.sellers.get(spin).get("9");
-////                switchtoProductPage();
-////
-////                break;
-//
-////            case R.id.img41:
-////                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
-////
-////                productId = Splash.fkid1.get(spin).get("0");
-////                sellerNme = Splash.sellers.get(spin).get("0");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img42:
-////                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
-////
-////                productId = Splash.fkid1.get(spin).get("1");
-////                sellerNme = Splash.sellers.get(spin).get("1");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img43:
-////                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
-////
-////                productId = Splash.fkid1.get(spin).get("2");
-////                sellerNme = Splash.sellers.get(spin).get("2");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img44:
-////                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
-////
-////                productId = Splash.fkid1.get(spin).get("3");
-////                sellerNme = Splash.sellers.get(spin).get("3");
-////                switchtoProductPage();
-////
-////                break;
-////
-////
-////            case R.id.img45:
-////                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
-////
-////                productId = Splash.fkid1.get(spin).get("4");
-////                sellerNme = Splash.sellers.get(spin).get("4");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img46:
-////                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
-////
-////                productId = Splash.fkid1.get(spin).get("5");
-////                sellerNme = Splash.sellers.get(spin).get("5");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img47:
-////                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
-////
-////                productId = Splash.fkid1.get(spin).get("6");
-////                sellerNme = Splash.sellers.get(spin).get("6");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img48:
-////                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
-////
-////                productId = Splash.fkid1.get(spin).get("7");
-////                sellerNme = Splash.sellers.get(spin).get("7");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img49:
-////                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
-////
-////                productId = Splash.fkid1.get(spin).get("8");
-////                sellerNme = Splash.sellers.get(spin).get("8");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img50:
-////                spin = "Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle";
-////
-////                productId = Splash.fkid1.get(spin).get("9");
-////                sellerNme = Splash.sellers.get(spin).get("9");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img51:
-////                spin = "Health%20and%20Beauty";
-////
-////                productId = Splash.fkid1.get(spin).get("0");
-////                sellerNme = Splash.sellers.get(spin).get("0");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img52:
-////                spin = "Health%20and%20Beauty";
-////
-////                productId = Splash.fkid1.get(spin).get("1");
-////                sellerNme = Splash.sellers.get(spin).get("1");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img53:
-////                spin = "Health%20and%20Beauty";
-////
-////                productId = Splash.fkid1.get(spin).get("2");
-////                sellerNme = Splash.sellers.get(spin).get("2");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img54:
-////                spin = "Health%20and%20Beauty";
-////
-////                productId = Splash.fkid1.get(spin).get("3");
-////                sellerNme = Splash.sellers.get(spin).get("3");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img55:
-////                spin = "Health%20and%20Beauty";
-////
-////                productId = Splash.fkid1.get(spin).get("4");
-////                sellerNme = Splash.sellers.get(spin).get("4");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img56:
-////                spin = "Health%20and%20Beauty";
-////
-////                productId = Splash.fkid1.get(spin).get("5");
-////                sellerNme = Splash.sellers.get(spin).get("5");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img57:
-////                spin = "Health%20and%20Beauty";
-////
-////                productId = Splash.fkid1.get(spin).get("6");
-////                sellerNme = Splash.sellers.get(spin).get("6");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img58:
-////                spin = "Health%20and%20Beauty";
-////
-////                productId = Splash.fkid1.get(spin).get("7");
-////                sellerNme = Splash.sellers.get(spin).get("7");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img59:
-////                spin = "Health%20and%20Beauty";
-////
-////                productId = Splash.fkid1.get(spin).get("8");
-////                sellerNme = Splash.sellers.get(spin).get("8");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img60:
-////                spin = "Health%20and%20Beauty";
-////
-////                productId = Splash.fkid1.get(spin).get("9");
-////                sellerNme = Splash.sellers.get(spin).get("9");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img61:
-////                spin = "Footwear";
-////
-////                productId = Splash.fkid1.get(spin).get("0");
-////                sellerNme = Splash.sellers.get(spin).get("0");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img62:
-////                spin = "Footwear";
-////
-////                productId = Splash.fkid1.get(spin).get("1");
-////                sellerNme = Splash.sellers.get(spin).get("1");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img63:
-////                spin = "Footwear";
-////
-////                productId = Splash.fkid1.get(spin).get("2");
-////                sellerNme = Splash.sellers.get(spin).get("2");
-////                switchtoProductPage();
-////
-////                break;
-////            case R.id.img64:
-////                spin = "Footwear";
-////
-////                productId = Splash.fkid1.get(spin).get("3");
-////                sellerNme = Splash.sellers.get(spin).get("3");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img65:
-////                spin = "Footwear";
-////
-////                productId = Splash.fkid1.get(spin).get("4");
-////                sellerNme = Splash.sellers.get(spin).get("4");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img66:
-////                spin = "Footwear";
-////
-////                productId = Splash.fkid1.get(spin).get("5");
-////                sellerNme = Splash.sellers.get(spin).get("5");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img67:
-////                spin = "Footwear";
-////
-////                productId = Splash.fkid1.get(spin).get("6");
-////                sellerNme = Splash.sellers.get(spin).get("6");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img68:
-////                spin = "Footwear";
-////
-////                productId = Splash.fkid1.get(spin).get("7");
-////                sellerNme = Splash.sellers.get(spin).get("7");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img69:
-////                spin = "Footwear";
-////
-////                productId = Splash.fkid1.get(spin).get("8");
-////                sellerNme = Splash.sellers.get(spin).get("8");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img70:
-////                spin = "Footwear";
-////
-////                productId = Splash.fkid1.get(spin).get("9");
-////                sellerNme = Splash.sellers.get(spin).get("9");
-////                switchtoProductPage();
-////
-////                break;
-//
-////            case R.id.img01:
-////                spin = "trending";
-////
-////                productId = Splash.fkid1.get(spin).get("0");
-////                sellerNme = Splash.sellers.get(spin).get("0");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img02:
-////                spin = "trending";
-////
-////                productId = Splash.fkid1.get(spin).get("1");
-////                sellerNme = Splash.sellers.get(spin).get("1");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img03:
-////                spin = "trending";
-////
-////                productId = Splash.fkid1.get(spin).get("2");
-////                sellerNme = Splash.sellers.get(spin).get("2");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img04:
-////                spin = "trending";
-////
-////                productId = Splash.fkid1.get(spin).get("3");
-////                sellerNme = Splash.sellers.get(spin).get("3");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img05:
-////                spin = "trending";
-////
-////                productId = Splash.fkid1.get(spin).get("4");
-////                sellerNme = Splash.sellers.get(spin).get("4");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img06:
-////                spin = "trending";
-////
-////                productId = Splash.fkid1.get(spin).get("5");
-////                sellerNme = Splash.sellers.get(spin).get("5");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img07:
-////                spin = "trending";
-////
-////                productId = Splash.fkid1.get(spin).get("6");
-////                sellerNme = Splash.sellers.get(spin).get("6");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img08:
-////                spin = "trending";
-////
-////                productId = Splash.fkid1.get(spin).get("7");
-////                sellerNme = Splash.sellers.get(spin).get("7");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img09:
-////                spin = "trending";
-////
-////                productId = Splash.fkid1.get(spin).get("8");
-////                sellerNme = Splash.sellers.get(spin).get("8");
-////                switchtoProductPage();
-////
-////                break;
-////
-////            case R.id.img10:
-////                spin = "trending";
-////
-////                productId = Splash.fkid1.get(spin).get("9");
-////                sellerNme = Splash.sellers.get(spin).get("9");
-////                switchtoProductPage();
-////
-////                break;
-//
-//
-//            default:
-//                break;
-//
-//        }
-//
-//    }
-
-
-    private class trending extends
-            AsyncTask<String, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            //            spinner.setVisibility(View.VISIBLE);
-
-        }
-
-
-        @Override
-        protected String doInBackground(String... data) {
-
-            String urldisplay = data[0];
-
-            JSONObject payload = new JSONObject();
-            try {
-                // userid=12&productid=23&action=add
-                // TYPE: get
-                String url = "http://54.255.147.43:80/api/product/trending?category=" + urldisplay;
-
-                String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NTY3MjY1NzMsImV4cCI6MTQ1Njc2MjU3M30.98mQFcYm5Uf3Fd7ZNPD-OwMIfObu7vfoq9zNtCCLfyI";
-                // payload.put("action", details.get("action"));
-
-
-                HttpParams httpParameters = new BasicHttpParams();
-
-                HttpConnectionParams
-                        .setConnectionTimeout(httpParameters, 30000);
-
-                HttpClient client = new DefaultHttpClient(httpParameters);
-
-                // url2=getApplicationContext().getString(R.string.server)+"api/login/verifyotp";
-                if (urldisplay.equals("Computers&subCategory=Laptops"))
-                    urldisplay = "Laptops";
-
-                else if (urldisplay.equals("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle"))
-                    urldisplay = "apparels";
-                else if (urldisplay.equals("Health%20and%20Beauty"))
-                    urldisplay = "homeandbeauty";
-                HttpGet httppost = new HttpGet(url);
-                httppost.setHeader("x-access-token", token);
-                httppost.setHeader("Content-Type", "application/json");
-
-
-                HttpResponse response = client.execute(httppost);
-                HttpEntity ent = response.getEntity();
-                String responseString = EntityUtils.toString(ent, "UTF-8");
-                if (response.getStatusLine().getStatusCode() != 200) {
-
-                    Log.e("MeshCommunication", "Server returned code "
-                            + response.getStatusLine().getStatusCode());
-                    return "fail";
-                } else {
-                    JSONObject resp = new JSONObject(responseString);
-                    if (resp.getString("status").equals("success")) {
-                        JSONArray data1 = new JSONArray(resp.getString("data"));
-                        int lenght = data1.length();
-                        for (int j = 0; j < lenght; j++) {
-                            JSONObject js = data1.getJSONObject(j);
-                            String id = js.getString("title");
-                            String mrp = js.getString("mrp");
-                            String seller = js.getString("seller");
-                            String fkid = js.getString("fkProductId");
-                            String selling_price = js.getString("sellingPrice");
-                            JSONObject img = new JSONObject(js.getString("imgUrls"));
-                            String imgurl = img.getString("200x200");
-
-                            //                           image.get(urldisplay).put(String.valueOf(j), imgurl);
-                            //                            mrp1.get(urldisplay).put(String.valueOf(j), mrp);
-                            //                            title.get(urldisplay).put(String.valueOf(j), id);
-                            //                            fkid1.get(urldisplay).put(String.valueOf(j), fkid);
-                            //                            selling.get(urldisplay).put(String.valueOf(j),selling_price);
-                            //                            sellers.get(urldisplay).put(String.valueOf(j), seller);
-
-                            String p = id;
-                        }
-                        return "win";
-                        //versioncode=data1.getString("version_code");
-                        //return versioncode;
-                    } else
-                        return "fail";
-
-
-                }
-            } catch (Exception e) {
-                String t = e.toString();
-                return "fail";
-            }
-        }
-
-        protected void onPostExecute(String result) {
-            if (result.equals("fail")) {
-                System.out.println("Error while computing data");
-            }
-            //else
-
-        }
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -2061,7 +846,6 @@ public class HomePage extends AppCompatActivity {
     }
 
     private void get() {
-        Intent incoming;
         try {
             formstatus = getIntent().getExtras().getString("Form");
 
@@ -2124,2073 +908,14 @@ public class HomePage extends AppCompatActivity {
         } catch (Exception e) {
             System.out.println(e.toString());
         }
-        //  send();
     }
 
-    private void send() {
-
-        {
-
-            if (formstatus.equals("declined")) {
-
-                Intent in = new Intent(HomePage.this, Formempty.class);
-
-                // Intent in = new Intent(MainActivity.this, Inviteform.class);
-                in.putExtra("Name", name);
-                in.putExtra("fbid", fbid);
-                in.putExtra("Rej", rejectionReason);
-                in.putExtra("Email", email);
-                in.putExtra("Form", formstatus);
-                in.putExtra("UniC", uniqueCode);
-                Splash.checkNot = 1;
-                // clickpaste();
-                startActivity(in);
-                overridePendingTransition(0, 0);
-
-            }
-
-
-            if (formstatus.equals("saved")) {
-
-                Intent in = new Intent(HomePage.this, Formempty.class);
-                // Intent in = new Intent(MainActivity.this, Inviteform.class);
-                //    finish();
-                in.putExtra("Name", name);
-                in.putExtra("fbid", fbid);
-                in.putExtra("Email", email);
-                in.putExtra("Form", formstatus);
-                in.putExtra("UniC", uniqueCode);
-                Splash.checkNot = 1;
-
-                // clickpaste();
-                startActivity(in);
-                overridePendingTransition(0, 0);
-            } else if (formstatus.equals("submitted")) {
-                Splash.checkNot = 1;
-                //clickpaste();
-                Intent in = new Intent(HomePage.this, Formstatus.class);
-                in.putExtra("screen_no", screen_no);
-                try {
-                    in.putExtra("VeriDate", verificationdate);
-                } catch (Exception e) {
-                    System.out.println(e.toString());
-                }
-
-
-                //  finish();
-                in.putExtra("Name", name);
-                in.putExtra("fbid", fbid);
-                in.putExtra("Email", email);
-                in.putExtra("Form", formstatus);
-                in.putExtra("UniC", uniqueCode);
-                startActivity(in);
-                overridePendingTransition(0, 0);
-            }
-            if (formstatus.equals("flashApproved")) {
-                Splash.checkNot = 1;
-
-                // clickpaste();
-                Intent in = new Intent(HomePage.this, Approved.class);
-                //   finish();
-                // Intent in = new Intent(MainActivity.this, Inviteform.class);
-                in.putExtra("Name", name);
-                in.putExtra("fbid", fbid);
-                in.putExtra("Email", email);//  in.putExtra("Credits",creditLimit);
-                in.putExtra("Form", formstatus);
-                in.putExtra("Credits", creditLimit);
-                in.putExtra("UniC", uniqueCode);
-                startActivity(in);
-                overridePendingTransition(0, 0);
-            }
-            if (formstatus.equals("approved")) {
-                Splash.checkNot = 1;
-                //  clickpaste();
-                Intent in = new Intent(HomePage.this, Approved.class);
-                //   finish();
-                // Intent in = new Intent(MainActivity.this, Inviteform.class);
-                in.putExtra("Name", name);
-                in.putExtra("fbid", fbid);
-                in.putExtra("Email", email);//  in.putExtra("Credits",creditLimit);
-                in.putExtra("Form", formstatus);
-                in.putExtra("Credits", creditLimit);
-                in.putExtra("UniC", uniqueCode);
-                startActivity(in);
-                overridePendingTransition(0, 0);
-            } else if (formstatus.equals("empty")) {
-                Splash.checkNot = 1;
-
-
-                // clickpaste();
-                //                    Intent in = new Intent(MainActivity.this, Inviteform    .class);
-
-                Intent in = new Intent(HomePage.this, Formempty.class);
-                //    finish();
-                in.putExtra("Name", name);
-                in.putExtra("Email", email);
-                in.putExtra("fbid", fbid);
-                in.putExtra("Form", formstatus);
-                in.putExtra("UniC", uniqueCode);
-                startActivity(in);
-                overridePendingTransition(0, 0);
-            }
-        }
-
-
-        noti.setVisibility(View.GONE);
-    }
-
-//
 
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-//    private void populateTrendingRow() {
-//
-//        TextView price1 = (TextView) findViewById(R.id.title01);
-//        TextView price2 = (TextView) findViewById(R.id.title02);
-//        TextView price3 = (TextView) findViewById(R.id.title03);
-//        TextView price4 = (TextView) findViewById(R.id.title04);
-//        TextView price5 = (TextView) findViewById(R.id.title05);
-//        TextView price6 = (TextView) findViewById(R.id.title06);
-//        TextView price7 = (TextView) findViewById(R.id.title07);
-//        TextView price8 = (TextView) findViewById(R.id.title08);
-//        TextView price9 = (TextView) findViewById(R.id.title09);
-//        TextView price10 = (TextView) findViewById(R.id.title10);
-//
-//        TextView title1 = (TextView) findViewById(R.id.titlexxx01);
-//        TextView title2 = (TextView) findViewById(R.id.titlexxx02);
-//        TextView title3 = (TextView) findViewById(R.id.titlexxx03);
-//        TextView title4 = (TextView) findViewById(R.id.titlexxx04);
-//        TextView title5 = (TextView) findViewById(R.id.titlexxx05);
-//        TextView title6 = (TextView) findViewById(R.id.titlexxx06);
-//        TextView title7 = (TextView) findViewById(R.id.titlexxx07);
-//        TextView title8 = (TextView) findViewById(R.id.titlexxx08);
-//        TextView title9 = (TextView) findViewById(R.id.titlexxx09);
-//        TextView title10 = (TextView) findViewById(R.id.titlexxx10);
-//        //TextView title4 = (TextView) findViewById(R.id.titlexxx04);
-//
-//
-//        ImageView img1 = (ImageView) findViewById(R.id.img01);
-//        ImageView img2 = (ImageView) findViewById(R.id.img02);
-//        ImageView img3 = (ImageView) findViewById(R.id.img03);
-//        ImageView img4 = (ImageView) findViewById(R.id.img04);
-//        ImageView img5 = (ImageView) findViewById(R.id.img05);
-//        ImageView img6 = (ImageView) findViewById(R.id.img06);
-//        ImageView img7 = (ImageView) findViewById(R.id.img07);
-//        ImageView img8 = (ImageView) findViewById(R.id.img08);
-//        ImageView img9 = (ImageView) findViewById(R.id.img09);
-//        ImageView img10 = (ImageView) findViewById(R.id.img10);
-//
-//
-//        ImageView brand1 = (ImageView) findViewById(R.id.brand01);
-//        ImageView brand2 = (ImageView) findViewById(R.id.brand02);
-//        ImageView brand3 = (ImageView) findViewById(R.id.brand03);
-//        ImageView brand4 = (ImageView) findViewById(R.id.brand04);
-//        ImageView brand5 = (ImageView) findViewById(R.id.brand05);
-//        ImageView brand6 = (ImageView) findViewById(R.id.brand06);
-//        ImageView brand7 = (ImageView) findViewById(R.id.brand07);
-//        ImageView brand8 = (ImageView) findViewById(R.id.brand08);
-//        ImageView brand9 = (ImageView) findViewById(R.id.brand09);
-//        ImageView brand10 = (ImageView) findViewById(R.id.brand10);
-//        //ImageView brand4 = (ImageView) findViewById(R.id.brand04);
-//
-//
-//        if (Splash.sellers.get(spin).get("0").equals("flipkart"))
-//            brand1.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("amazon"))
-//            brand1.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("paytm"))
-//            brand1.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("snapdeal"))
-//            brand1.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("flipkart"))
-//            brand2.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("amazon"))
-//            brand2.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("paytm"))
-//            brand2.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
-//            brand2.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
-//            brand3.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("amazon"))
-//            brand3.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("paytm"))
-//            brand3.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
-//            brand3.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("flipkart"))
-//            brand4.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("amazon"))
-//            brand4.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("paytm"))
-//            brand4.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
-//            brand4.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-//            brand5.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("amazon"))
-//            brand5.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("paytm"))
-//            brand5.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-//            brand5.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-//            brand6.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("amazon"))
-//            brand6.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("paytm"))
-//            brand6.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-//            brand6.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-//            brand7.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("amazon"))
-//            brand7.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("paytm"))
-//            brand7.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-//            brand7.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-//            brand8.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("amazon"))
-//            brand8.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("paytm"))
-//            brand8.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-//            brand8.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-//            brand9.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("amazon"))
-//            brand9.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("paytm"))
-//            brand9.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-//            brand9.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-//            brand10.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("amazon"))
-//            brand10.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("paytm"))
-//            brand10.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-//            brand10.setImageResource(R.drawable.sdeal_fav1x);
-//
-//
-////            card1 = (ImageView) findViewById(R.id.img1);
-////            card2 = (ImageView) findViewById(R.id.imgx);
-////            card3 = (ImageView) findViewById(R.id.img2);
-////            card4 = (ImageView) findViewById(R.id.img2x);
-//
-//        title1.setText(Splash.title.get(spin).get("0"));
-//        title2.setText(Splash.title.get(spin).get("1"));
-//        title3.setText(Splash.title.get(spin).get("2"));
-//        title4.setText(Splash.title.get(spin).get("3"));
-//        title5.setText(Splash.title.get(spin).get("4"));
-//        title6.setText(Splash.title.get(spin).get("5"));
-//        title7.setText(Splash.title.get(spin).get("6"));
-//        title8.setText(Splash.title.get(spin).get("7"));
-//        title9.setText(Splash.title.get(spin).get("8"));
-//        title10.setText(Splash.title.get(spin).get("9"));
-//
-//
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("0"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img1);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("1"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img2);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("2"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img3);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("3"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img4);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("4"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img5);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("5"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img6);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("6"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img7);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("7"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img8);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("8"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img9);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("9"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img10);
-//
-//
-//        Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-//
-//        int price01 = princ1.intValue();
-//        Double emi01 = show(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), price01);
-//        if (emi01.intValue() < 200)
-//            emi01 = 200.0;
-//        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
-//        //emi2
-//
-//
-//        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-//
-//        int price02 = princ2.intValue();
-//        Double emi02 = show(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), price02);
-//        if (emi02.intValue() < 200)
-//            emi02 = 200.0;
-//        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
-//
-//
-//        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-//        int price03 = princ3.intValue();
-//        Double emi03 = show(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), price03);
-//        if (emi03.intValue() < 200)
-//            emi03 = 200.0;
-//        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
-//
-//
-//        //emi4
-//
-//        Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-//        int price04 = princ4.intValue();
-//        Double emi04 = show(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), price04);
-//        if (emi04.intValue() < 200)
-//            emi04 = 200.0;
-//        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
-//
-//
-//        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-//        int price05 = princ5.intValue();
-//        Double emi05 = show(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), price05);
-//        if (emi05.intValue() < 200)
-//            emi05 = 200.0;
-//        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//
-//
-//        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-//        int price06 = princ6.intValue();
-//        Double emi06 = show(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), price06);
-//        if (emi06.intValue() < 200)
-//            emi06 = 200.0;
-//
-//        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//
-//
-//        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-//        int price07 = princ7.intValue();
-//        Double emi07 = show(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), price07);
-//        if (emi07.intValue() < 200)
-//            emi07 = 200.0;
-//        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
-//
-//
-//        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-//        int price08 = princ8.intValue();
-//        Double emi08 = show(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), price08);
-//        if (emi08.intValue() < 200)
-//            emi08 = 200.0;
-//        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
-//
-//
-//        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-//        int price09 = princ9.intValue();
-//        Double emi09 = show(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), price09);
-//        if (emi09.intValue() < 200)
-//            emi09 = 200.0;
-//        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
-//
-//
-//        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-//        int price00 = princ10.intValue();
-//        Double emi10 = show(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), price00);
-//        if (emi10.intValue() < 200)
-//            emi10 = 200.0;
-//        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
-//
-//
-//    }
-
-
-//    private void populateFirstRow() {
-//
-//
-//        TextView price1 = (TextView) findViewById(R.id.title11);
-//        TextView price2 = (TextView) findViewById(R.id.title12);
-//        TextView price3 = (TextView) findViewById(R.id.title13);
-//        TextView price4 = (TextView) findViewById(R.id.title14);
-//        TextView price5 = (TextView) findViewById(R.id.title15);
-//        TextView price6 = (TextView) findViewById(R.id.title16);
-//        TextView price7 = (TextView) findViewById(R.id.title17);
-//        TextView price8 = (TextView) findViewById(R.id.title18);
-//        TextView price9 = (TextView) findViewById(R.id.title19);
-//        TextView price10 = (TextView) findViewById(R.id.title20);
-//
-//        TextView title1 = (TextView) findViewById(R.id.titlexxx11);
-//        TextView title2 = (TextView) findViewById(R.id.titlexxx12);
-//        TextView title3 = (TextView) findViewById(R.id.titlexxx13);
-//        TextView title4 = (TextView) findViewById(R.id.titlexxx14);
-//        TextView title5 = (TextView) findViewById(R.id.titlexxx15);
-//        TextView title6 = (TextView) findViewById(R.id.titlexxx16);
-//        TextView title7 = (TextView) findViewById(R.id.titlexxx17);
-//        TextView title8 = (TextView) findViewById(R.id.titlexxx18);
-//        TextView title9 = (TextView) findViewById(R.id.titlexxx19);
-//        TextView title10 = (TextView) findViewById(R.id.titlexxx20);
-//
-//
-//        ImageView img1 = (ImageView) findViewById(R.id.img11);
-//        ImageView img2 = (ImageView) findViewById(R.id.img12);
-//        ImageView img3 = (ImageView) findViewById(R.id.img13);
-//        ImageView img4 = (ImageView) findViewById(R.id.img14);
-//        ImageView img5 = (ImageView) findViewById(R.id.img15);
-//        ImageView img6 = (ImageView) findViewById(R.id.img16);
-//        ImageView img7 = (ImageView) findViewById(R.id.img17);
-//        ImageView img8 = (ImageView) findViewById(R.id.img18);
-//        ImageView img9 = (ImageView) findViewById(R.id.img19);
-//        ImageView img10 = (ImageView) findViewById(R.id.img20);
-//
-//        ImageView brand1 = (ImageView) findViewById(R.id.brand11);
-//        ImageView brand2 = (ImageView) findViewById(R.id.brand12);
-//        ImageView brand3 = (ImageView) findViewById(R.id.brand13);
-//        ImageView brand4 = (ImageView) findViewById(R.id.brand14);
-//        ImageView brand5 = (ImageView) findViewById(R.id.brand15);
-//        ImageView brand6 = (ImageView) findViewById(R.id.brand16);
-//        ImageView brand7 = (ImageView) findViewById(R.id.brand17);
-//        ImageView brand8 = (ImageView) findViewById(R.id.brand18);
-//        ImageView brand9 = (ImageView) findViewById(R.id.brand19);
-//        ImageView brand10 = (ImageView) findViewById(R.id.brand20);
-//        if (Splash.sellers.get(spin).get("0").equals("flipkart"))
-//            brand1.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("amazon"))
-//            brand1.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("paytm"))
-//            brand1.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("snapdeal"))
-//            brand1.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("flipkart"))
-//            brand2.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("amazon"))
-//            brand2.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("paytm"))
-//            brand2.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
-//            brand2.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
-//            brand3.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("amazon"))
-//            brand3.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("paytm"))
-//            brand3.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
-//            brand3.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("flipkart"))
-//            brand4.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("amazon"))
-//            brand4.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("paytm"))
-//            brand4.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
-//            brand4.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-//            brand5.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("amazon"))
-//            brand5.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("paytm"))
-//            brand5.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-//            brand5.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-//            brand6.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("amazon"))
-//            brand6.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("paytm"))
-//            brand6.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-//            brand6.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-//            brand7.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("amazon"))
-//            brand7.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("paytm"))
-//            brand7.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-//            brand7.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-//            brand8.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("amazon"))
-//            brand8.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("paytm"))
-//            brand8.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-//            brand8.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-//            brand9.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("amazon"))
-//            brand9.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("paytm"))
-//            brand9.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-//            brand9.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-//            brand10.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("amazon"))
-//            brand10.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("paytm"))
-//            brand10.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-//            brand10.setImageResource(R.drawable.sdeal_fav1x);
-//
-//
-////            card1 = (ImageView) findViewById(R.id.img1);
-////            card2 = (ImageView) findViewById(R.id.imgx);
-////            card3 = (ImageView) findViewById(R.id.img2);
-////            card4 = (ImageView) findViewById(R.id.img2x);
-//
-//        title1.setText(Splash.title.get(spin).get("0"));
-//        title2.setText(Splash.title.get(spin).get("1"));
-//        title3.setText(Splash.title.get(spin).get("2"));
-//        title4.setText(Splash.title.get(spin).get("3"));
-//        title5.setText(Splash.title.get(spin).get("4"));
-//        title6.setText(Splash.title.get(spin).get("5"));
-//        title7.setText(Splash.title.get(spin).get("6"));
-//        title8.setText(Splash.title.get(spin).get("7"));
-//        title9.setText(Splash.title.get(spin).get("8"));
-//        title10.setText(Splash.title.get(spin).get("9"));
-//
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("0"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img1);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("1"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img2);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("2"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img3);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("3"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img4);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("4"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img5);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("5"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img6);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("6"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img7);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("7"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img8);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("8"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img9);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("9"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img10);
-//
-//
-//        Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-//
-//        int price01 = princ1.intValue();
-//        Double emi01 = show(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), price01);
-//        if (emi01.intValue() < 200)
-//            emi01 = 200.0;
-//        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
-//        //emi2
-//
-//
-//        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-//
-//        int price02 = princ2.intValue();
-//        Double emi02 = show(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), price02);
-//        if (emi02.intValue() < 200)
-//            emi02 = 200.0;
-//        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
-//
-//
-//        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-//        int price03 = princ3.intValue();
-//        Double emi03 = show(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), price03);
-//        if (emi03.intValue() < 200)
-//            emi03 = 200.0;
-//        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
-////
-//
-//        //emi4
-//
-//        Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-//        int price04 = princ4.intValue();
-//        Double emi04 = show(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), price04);
-//        if (emi04.intValue() < 200)
-//            emi04 = 200.0;
-//        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
-//
-//
-//        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-//        int price05 = princ5.intValue();
-//        Double emi05 = show(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), price05);
-//        if (emi05.intValue() < 200)
-//            emi05 = 200.0;
-//        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//
-//
-//        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-//        int price06 = princ6.intValue();
-//        Double emi06 = show(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), price06);
-//        if (emi06.intValue() < 200)
-//            emi06 = 200.0;
-//        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//
-//
-//        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-//        int price07 = princ7.intValue();
-//        Double emi07 = show(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), price07);
-//        if (emi07.intValue() < 200)
-//            emi07 = 200.0;
-//        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
-//
-//
-//        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-//        int price08 = princ8.intValue();
-//        Double emi08 = show(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), price08);
-//        if (emi08.intValue() < 200)
-//            emi08 = 200.0;
-//        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
-//
-//
-//        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-//        int price09 = princ9.intValue();
-//        Double emi09 = show(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), price09);
-//        if (emi09.intValue() < 200)
-//            emi09 = 200.0;
-//        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
-//
-//
-//        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-//        int price00 = princ10.intValue();
-//        Double emi10 = show(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), price00);
-//        if (emi10.intValue() < 200)
-//            emi10 = 200.0;
-//        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
-//
-//
-//    }
-
-//    private void populateSecondRow() {
-//
-//
-//        TextView price1 = (TextView) findViewById(R.id.title21);
-//        TextView price2 = (TextView) findViewById(R.id.title22);
-//        TextView price3 = (TextView) findViewById(R.id.title23);
-//        TextView price4 = (TextView) findViewById(R.id.title24);
-//        TextView price5 = (TextView) findViewById(R.id.title25);
-//        TextView price6 = (TextView) findViewById(R.id.title26);
-//        TextView price7 = (TextView) findViewById(R.id.title27);
-//        TextView price8 = (TextView) findViewById(R.id.title28);
-//        TextView price9 = (TextView) findViewById(R.id.title29);
-//        TextView price10 = (TextView) findViewById(R.id.title30);
-//
-//        TextView title1 = (TextView) findViewById(R.id.titlexxx21);
-//        TextView title2 = (TextView) findViewById(R.id.titlexxx22);
-//        TextView title3 = (TextView) findViewById(R.id.titlexxx23);
-//        TextView title4 = (TextView) findViewById(R.id.titlexxx24);
-//        TextView title5 = (TextView) findViewById(R.id.titlexxx25);
-//        TextView title6 = (TextView) findViewById(R.id.titlexxx26);
-//        TextView title7 = (TextView) findViewById(R.id.titlexxx27);
-//        TextView title8 = (TextView) findViewById(R.id.titlexxx28);
-//        TextView title9 = (TextView) findViewById(R.id.titlexxx29);
-//        TextView title10 = (TextView) findViewById(R.id.titlexxx30);
-//
-//
-//        ImageView img1 = (ImageView) findViewById(R.id.img21);
-//        ImageView img2 = (ImageView) findViewById(R.id.img22);
-//        ImageView img3 = (ImageView) findViewById(R.id.img23);
-//        ImageView img4 = (ImageView) findViewById(R.id.img24);
-//        ImageView img5 = (ImageView) findViewById(R.id.img25);
-//        ImageView img6 = (ImageView) findViewById(R.id.img26);
-//        ImageView img7 = (ImageView) findViewById(R.id.img27);
-//        ImageView img8 = (ImageView) findViewById(R.id.img28);
-//        ImageView img9 = (ImageView) findViewById(R.id.img29);
-//        ImageView img10 = (ImageView) findViewById(R.id.img30);
-//
-//        ImageView brand1 = (ImageView) findViewById(R.id.brand21);
-//        ImageView brand2 = (ImageView) findViewById(R.id.brand22);
-//        ImageView brand3 = (ImageView) findViewById(R.id.brand23);
-//        ImageView brand4 = (ImageView) findViewById(R.id.brand24);
-//        ImageView brand5 = (ImageView) findViewById(R.id.brand25);
-//        ImageView brand6 = (ImageView) findViewById(R.id.brand26);
-//        ImageView brand7 = (ImageView) findViewById(R.id.brand27);
-//        ImageView brand8 = (ImageView) findViewById(R.id.brand28);
-//        ImageView brand9 = (ImageView) findViewById(R.id.brand29);
-//        ImageView brand10 = (ImageView) findViewById(R.id.brand30);
-//        if (Splash.sellers.get(spin).get("0").equals("flipkart"))
-//            brand1.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("amazon"))
-//            brand1.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("paytm"))
-//            brand1.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("snapdeal"))
-//            brand1.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("flipkart"))
-//            brand2.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("amazon"))
-//            brand2.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("paytm"))
-//            brand2.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
-//            brand2.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
-//            brand3.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("amazon"))
-//            brand3.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("paytm"))
-//            brand3.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
-//            brand3.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("flipkart"))
-//            brand4.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("amazon"))
-//            brand4.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("paytm"))
-//            brand4.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
-//            brand4.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-//            brand5.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("amazon"))
-//            brand5.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("paytm"))
-//            brand5.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-//            brand5.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-//            brand6.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("amazon"))
-//            brand6.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("paytm"))
-//            brand6.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-//            brand6.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-//            brand7.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("amazon"))
-//            brand7.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("paytm"))
-//            brand7.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-//            brand7.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-//            brand8.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("amazon"))
-//            brand8.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("paytm"))
-//            brand8.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-//            brand8.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-//            brand9.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("amazon"))
-//            brand9.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("paytm"))
-//            brand9.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-//            brand9.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-//            brand10.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("amazon"))
-//            brand10.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("paytm"))
-//            brand10.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-//            brand10.setImageResource(R.drawable.sdeal_fav1x);
-//
-//
-////            card1 = (ImageView) findViewById(R.id.img1);
-////            card2 = (ImageView) findViewById(R.id.imgx);
-////            card3 = (ImageView) findViewById(R.id.img2);
-////            card4 = (ImageView) findViewById(R.id.img2x);
-//
-//        title1.setText(Splash.title.get(spin).get("0"));
-//        title2.setText(Splash.title.get(spin).get("1"));
-//        title3.setText(Splash.title.get(spin).get("2"));
-//        title4.setText(Splash.title.get(spin).get("3"));
-//        title5.setText(Splash.title.get(spin).get("4"));
-//        title6.setText(Splash.title.get(spin).get("5"));
-//        title7.setText(Splash.title.get(spin).get("6"));
-//        title8.setText(Splash.title.get(spin).get("7"));
-//        title9.setText(Splash.title.get(spin).get("8"));
-//        title10.setText(Splash.title.get(spin).get("9"));
-//
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("0"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img1);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("1"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img2);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("2"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img3);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("3"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img4);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("4"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img5);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("5"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img6);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("6"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img7);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("7"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img8);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("8"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img9);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("9"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img10);
-//
-//        Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-//
-//        int price01 = princ1.intValue();
-//        Double emi01 = show(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), price01);
-//        if (emi01.intValue() < 200)
-//            emi01 = 200.0;
-//        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
-//        //emi2
-//
-//
-//        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-//
-//        int price02 = princ2.intValue();
-//        Double emi02 = show(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), price02);
-//        if (emi02.intValue() < 200)
-//            emi02 = 200.0;
-//        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
-//
-//
-//        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-//        int price03 = princ3.intValue();
-//        Double emi03 = show(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), price03);
-//        if (emi03.intValue() < 200)
-//            emi03 = 200.0;
-//        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
-//
-//
-//        //emi4
-//
-//        Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-//        int price04 = princ4.intValue();
-//        Double emi04 = show(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), price04);
-//        if (emi04.intValue() < 200)
-//            emi04 = 200.0;
-//        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
-//
-//
-//        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-//        int price05 = princ5.intValue();
-//        Double emi05 = show(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), price05);
-//        // price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//        if (emi05.intValue() < 200)
-//            emi05 = 200.0;
-//        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//
-//
-//        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-//        int price06 = princ6.intValue();
-//        Double emi06 = show(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), price06);
-//        //price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//        if (emi06.intValue() < 200)
-//            emi06 = 200.0;
-//        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//
-//
-//        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-//        int price07 = princ7.intValue();
-//        Double emi07 = show(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), price07);
-//        if (emi07.intValue() < 200)
-//            emi07 = 200.0;
-//        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
-//
-//
-//        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-//        int price08 = princ8.intValue();
-//        Double emi08 = show(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), price08);
-//        if (emi08.intValue() < 200)
-//            emi08 = 200.0;
-//        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
-//
-//
-//        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-//        int price09 = princ9.intValue();
-//        Double emi09 = show(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), price09);
-//        if (emi09.intValue() < 200)
-//            emi09 = 200.0;
-//        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
-//
-//
-//        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-//        int price00 = princ10.intValue();
-//        Double emi10 = show(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), price00);
-//        if (emi10.intValue() < 200)
-//            emi10 = 200.0;
-//        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
-//
-//
-//    }
-
-//    private void populateThirdRow() {
-//        TextView price1 = (TextView) findViewById(R.id.title31);
-//        TextView price2 = (TextView) findViewById(R.id.title32);
-//        TextView price3 = (TextView) findViewById(R.id.title33);
-//        TextView price4 = (TextView) findViewById(R.id.title34);
-//        TextView price5 = (TextView) findViewById(R.id.title35);
-//        TextView price6 = (TextView) findViewById(R.id.title36);
-//        TextView price7 = (TextView) findViewById(R.id.title37);
-//        TextView price8 = (TextView) findViewById(R.id.title38);
-//        TextView price9 = (TextView) findViewById(R.id.title39);
-//        TextView price10 = (TextView) findViewById(R.id.title40);
-//
-//        TextView title1 = (TextView) findViewById(R.id.titlexxx31);
-//        TextView title2 = (TextView) findViewById(R.id.titlexxx32);
-//        TextView title3 = (TextView) findViewById(R.id.titlexxx33);
-//        TextView title4 = (TextView) findViewById(R.id.titlexxx34);
-//        TextView title5 = (TextView) findViewById(R.id.titlexxx35);
-//        TextView title6 = (TextView) findViewById(R.id.titlexxx36);
-//        TextView title7 = (TextView) findViewById(R.id.titlexxx37);
-//        TextView title8 = (TextView) findViewById(R.id.titlexxx38);
-//        TextView title9 = (TextView) findViewById(R.id.titlexxx39);
-//        TextView title10 = (TextView) findViewById(R.id.titlexxx40);
-//
-//
-//        ImageView img1 = (ImageView) findViewById(R.id.img31);
-//        ImageView img2 = (ImageView) findViewById(R.id.img32);
-//        ImageView img3 = (ImageView) findViewById(R.id.img33);
-//        ImageView img4 = (ImageView) findViewById(R.id.img34);
-//        ImageView img5 = (ImageView) findViewById(R.id.img35);
-//        ImageView img6 = (ImageView) findViewById(R.id.img36);
-//        ImageView img7 = (ImageView) findViewById(R.id.img37);
-//        ImageView img8 = (ImageView) findViewById(R.id.img38);
-//        ImageView img9 = (ImageView) findViewById(R.id.img39);
-//        ImageView img10 = (ImageView) findViewById(R.id.img40);
-//
-//        ImageView brand1 = (ImageView) findViewById(R.id.brand31);
-//        ImageView brand2 = (ImageView) findViewById(R.id.brand32);
-//        ImageView brand3 = (ImageView) findViewById(R.id.brand33);
-//        ImageView brand4 = (ImageView) findViewById(R.id.brand34);
-//        ImageView brand5 = (ImageView) findViewById(R.id.brand35);
-//        ImageView brand6 = (ImageView) findViewById(R.id.brand36);
-//        ImageView brand7 = (ImageView) findViewById(R.id.brand37);
-//        ImageView brand8 = (ImageView) findViewById(R.id.brand38);
-//        ImageView brand9 = (ImageView) findViewById(R.id.brand39);
-//        ImageView brand10 = (ImageView) findViewById(R.id.brand40);
-//        if (Splash.sellers.get(spin).get("0").equals("flipkart"))
-//            brand1.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("amazon"))
-//            brand1.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("paytm"))
-//            brand1.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("snapdeal"))
-//            brand1.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("flipkart"))
-//            brand2.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("amazon"))
-//            brand2.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("paytm"))
-//            brand2.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
-//            brand2.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
-//            brand3.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("amazon"))
-//            brand3.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("paytm"))
-//            brand3.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
-//            brand3.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("flipkart"))
-//            brand4.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("amazon"))
-//            brand4.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("paytm"))
-//            brand4.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
-//            brand4.setImageResource(R.drawable.sdeal_fav1x);
-//
-//        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-//            brand5.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("amazon"))
-//            brand5.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("paytm"))
-//            brand5.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-//            brand5.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-//            brand6.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("amazon"))
-//            brand6.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("paytm"))
-//            brand6.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-//            brand6.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-//            brand7.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("amazon"))
-//            brand7.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("paytm"))
-//            brand7.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-//            brand7.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-//            brand8.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("amazon"))
-//            brand8.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("paytm"))
-//            brand8.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-//            brand8.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-//            brand9.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("amazon"))
-//            brand9.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("paytm"))
-//            brand9.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-//            brand9.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-//            brand10.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("amazon"))
-//            brand10.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("paytm"))
-//            brand10.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-//            brand10.setImageResource(R.drawable.sdeal_fav1x);
-//
-//
-////            card1 = (ImageView) findViewById(R.id.img1);
-////            card2 = (ImageView) findViewById(R.id.imgx);
-////            card3 = (ImageView) findViewById(R.id.img2);
-////            card4 = (ImageView) findViewById(R.id.img2x);
-//
-//        title1.setText(Splash.title.get(spin).get("0"));
-//        title2.setText(Splash.title.get(spin).get("1"));
-//        title3.setText(Splash.title.get(spin).get("2"));
-//        title4.setText(Splash.title.get(spin).get("3"));
-//        title5.setText(Splash.title.get(spin).get("4"));
-//        title6.setText(Splash.title.get(spin).get("5"));
-//        title7.setText(Splash.title.get(spin).get("6"));
-//        title8.setText(Splash.title.get(spin).get("7"));
-//        title9.setText(Splash.title.get(spin).get("8"));
-//        title10.setText(Splash.title.get(spin).get("9"));
-//
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("0"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img1);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("1"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img2);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("2"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img3);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("3"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img4);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("4"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img5);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("5"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img6);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("6"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img7);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("7"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img8);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("8"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img9);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("9"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img10);
-//
-//        Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-//
-//        int price01 = princ1.intValue();
-//        Double emi01 = show(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), price01);
-//        if (emi01.intValue() < 200)
-//            emi01 = 200.0;
-//        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
-//        //emi2
-//
-//
-//        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-//
-//        int price02 = princ2.intValue();
-//        Double emi02 = show(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), price02);
-//        if (emi02.intValue() < 200)
-//            emi02 = 200.0;
-//        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
-//
-//
-//        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-//        int price03 = princ3.intValue();
-//        Double emi03 = show(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), price03);
-//        if (emi03.intValue() < 200)
-//            emi03 = 200.0;
-//        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
-//
-//
-//        //emi4
-//
-//        Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-//        int price04 = princ4.intValue();
-//        Double emi04 = show(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), price04);
-//        if (emi04.intValue() < 200)
-//            emi04 = 200.0;
-//        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
-//
-//
-//        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-//        int price05 = princ5.intValue();
-//        Double emi05 = show(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), price05);
-//        //price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//        if (emi05.intValue() < 200)
-//            emi05 = 200.0;
-//        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//
-//
-//        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-//        int price06 = princ6.intValue();
-//        Double emi06 = show(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), price06);
-//        //price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//        if (emi06.intValue() < 200)
-//            emi06 = 200.0;
-//        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//
-//
-//        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-//        int price07 = princ7.intValue();
-//        Double emi07 = show(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), price07);
-//        if (emi07.intValue() < 200)
-//            emi07 = 200.0;
-//        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
-//
-//
-//        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-//        int price08 = princ8.intValue();
-//        Double emi08 = show(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), price08);
-//        if (emi08.intValue() < 200)
-//            emi08 = 200.0;
-//        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
-//
-//
-//        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-//        int price09 = princ9.intValue();
-//        Double emi09 = show(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), price09);
-//        if (emi09.intValue() < 200)
-//            emi09 = 200.0;
-//        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
-//
-//
-//        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-//        int price00 = princ10.intValue();
-//        Double emi10 = show(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), price00);
-//        if (emi10.intValue() < 200)
-//            emi10 = 200.0;
-//        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
-//
-//
-//    }
-//
-//    private void populateFouthRow() {
-//        TextView price1 = (TextView) findViewById(R.id.title41);
-//        TextView price2 = (TextView) findViewById(R.id.title42);
-//        TextView price3 = (TextView) findViewById(R.id.title43);
-//        TextView price4 = (TextView) findViewById(R.id.title44);
-//        TextView price5 = (TextView) findViewById(R.id.title45);
-//        TextView price6 = (TextView) findViewById(R.id.title46);
-//        TextView price7 = (TextView) findViewById(R.id.title47);
-//        TextView price8 = (TextView) findViewById(R.id.title48);
-//        TextView price9 = (TextView) findViewById(R.id.title49);
-//        TextView price10 = (TextView) findViewById(R.id.title50);
-//
-//        TextView title1 = (TextView) findViewById(R.id.titlexxx41);
-//        TextView title2 = (TextView) findViewById(R.id.titlexxx42);
-//        TextView title3 = (TextView) findViewById(R.id.titlexxx43);
-//        TextView title4 = (TextView) findViewById(R.id.titlexxx44);
-//        TextView title5 = (TextView) findViewById(R.id.titlexxx45);
-//        TextView title6 = (TextView) findViewById(R.id.titlexxx46);
-//        TextView title7 = (TextView) findViewById(R.id.titlexxx47);
-//        TextView title8 = (TextView) findViewById(R.id.titlexxx48);
-//        TextView title9 = (TextView) findViewById(R.id.titlexxx49);
-//        TextView title10 = (TextView) findViewById(R.id.titlexxx50);
-//
-//
-//        ImageView img1 = (ImageView) findViewById(R.id.img41);
-//        ImageView img2 = (ImageView) findViewById(R.id.img42);
-//        ImageView img3 = (ImageView) findViewById(R.id.img43);
-//        ImageView img4 = (ImageView) findViewById(R.id.img44);
-//        ImageView img5 = (ImageView) findViewById(R.id.img45);
-//        ImageView img6 = (ImageView) findViewById(R.id.img46);
-//        ImageView img7 = (ImageView) findViewById(R.id.img47);
-//        ImageView img8 = (ImageView) findViewById(R.id.img48);
-//        ImageView img9 = (ImageView) findViewById(R.id.img49);
-//        ImageView img10 = (ImageView) findViewById(R.id.img50);
-//
-//        ImageView brand1 = (ImageView) findViewById(R.id.brand41);
-//        ImageView brand2 = (ImageView) findViewById(R.id.brand42);
-//        ImageView brand3 = (ImageView) findViewById(R.id.brand43);
-//        ImageView brand4 = (ImageView) findViewById(R.id.brand44);
-//        ImageView brand5 = (ImageView) findViewById(R.id.brand45);
-//        ImageView brand6 = (ImageView) findViewById(R.id.brand46);
-//        ImageView brand7 = (ImageView) findViewById(R.id.brand47);
-//        ImageView brand8 = (ImageView) findViewById(R.id.brand48);
-//        ImageView brand9 = (ImageView) findViewById(R.id.brand49);
-//        ImageView brand10 = (ImageView) findViewById(R.id.brand50);
-//        if (Splash.sellers.get(spin).get("0").equals("flipkart"))
-//            brand1.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("amazon"))
-//            brand1.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("paytm"))
-//            brand1.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("snapdeal"))
-//            brand1.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("flipkart"))
-//            brand2.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("amazon"))
-//            brand2.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("paytm"))
-//            brand2.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
-//            brand2.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
-//            brand3.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("amazon"))
-//            brand3.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("paytm"))
-//            brand3.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
-//            brand3.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("flipkart"))
-//            brand4.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("amazon"))
-//            brand4.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("paytm"))
-//            brand4.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
-//            brand4.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-//            brand5.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("amazon"))
-//            brand5.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("paytm"))
-//            brand5.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-//            brand5.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-//            brand6.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("amazon"))
-//            brand6.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("paytm"))
-//            brand6.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-//            brand6.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-//            brand7.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("amazon"))
-//            brand7.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("paytm"))
-//            brand7.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-//            brand7.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-//            brand8.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("amazon"))
-//            brand8.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("paytm"))
-//            brand8.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-//            brand8.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-//            brand9.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("amazon"))
-//            brand9.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("paytm"))
-//            brand9.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-//            brand9.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-//            brand10.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("amazon"))
-//            brand10.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("paytm"))
-//            brand10.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-//            brand10.setImageResource(R.drawable.sdeal_fav1x);
-//
-//
-////            card1 = (ImageView) findViewById(R.id.img1);
-////            card2 = (ImageView) findViewById(R.id.imgx);
-////            card3 = (ImageView) findViewById(R.id.img2);
-////            card4 = (ImageView) findViewById(R.id.img2x);
-//
-//        title1.setText(Splash.title.get(spin).get("0"));
-//        title2.setText(Splash.title.get(spin).get("1"));
-//        title3.setText(Splash.title.get(spin).get("2"));
-//        title4.setText(Splash.title.get(spin).get("3"));
-//        title5.setText(Splash.title.get(spin).get("4"));
-//        title6.setText(Splash.title.get(spin).get("5"));
-//        title7.setText(Splash.title.get(spin).get("6"));
-//        title8.setText(Splash.title.get(spin).get("7"));
-//        title9.setText(Splash.title.get(spin).get("8"));
-//        title10.setText(Splash.title.get(spin).get("9"));
-//
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("0"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img1);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("1"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img2);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("2"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img3);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("3"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img4);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("4"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img5);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("5"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img6);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("6"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img7);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("7"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img8);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("8"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img9);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("9"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img10);
-//
-//
-//        Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-//
-//        int price01 = princ1.intValue();
-//        Double emi01 = show(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), price01);
-//        if (emi01.intValue() < 200)
-//            emi01 = 200.0;
-//        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
-//        //emi2
-//
-//
-//        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-//
-//        int price02 = princ2.intValue();
-//        Double emi02 = show(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), price02);
-//        if (emi02.intValue() < 200)
-//            emi02 = 200.0;
-//        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
-//
-//
-//        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-//        int price03 = princ3.intValue();
-//        Double emi03 = show(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), price03);
-//        if (emi03.intValue() < 200)
-//            emi03 = 200.0;
-//        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
-//
-//
-//        //emi4
-//
-//        Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-//        int price04 = princ4.intValue();
-//        Double emi04 = show(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), price04);
-//        if (emi04.intValue() < 200)
-//            emi04 = 200.0;
-//        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
-//
-//
-//        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-//        int price05 = princ5.intValue();
-//        Double emi05 = show(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), price05);
-//        //price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//        if (emi05.intValue() < 200)
-//            emi05 = 200.0;
-//        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//
-//
-//        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-//        int price06 = princ6.intValue();
-//        Double emi06 = show(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), price06);
-//        //price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//        if (emi06.intValue() < 200)
-//            emi06 = 200.0;
-//        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//
-//
-//        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-//        int price07 = princ7.intValue();
-//        Double emi07 = show(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), price07);
-//        if (emi07.intValue() < 200)
-//            emi07 = 200.0;
-//        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
-//
-//
-//        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-//        int price08 = princ8.intValue();
-//        Double emi08 = show(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), price08);
-//        if (emi08.intValue() < 200)
-//            emi08 = 200.0;
-//        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
-//
-//
-//        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-//        int price09 = princ9.intValue();
-//        Double emi09 = show(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), price09);
-//        if (emi09.intValue() < 200)
-//            emi09 = 200.0;
-//        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
-//
-//
-//        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-//        int price00 = princ10.intValue();
-//        Double emi10 = show(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), price00);
-//        if (emi10.intValue() < 200)
-//            emi10 = 200.0;
-//        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
-//
-//    }
-//
-//    private void populateFifthRow() {
-//        TextView price1 = (TextView) findViewById(R.id.title51);
-//        TextView price2 = (TextView) findViewById(R.id.title52);
-//        TextView price3 = (TextView) findViewById(R.id.title53);
-//        TextView price4 = (TextView) findViewById(R.id.title54);
-//        TextView price5 = (TextView) findViewById(R.id.title55);
-//        TextView price6 = (TextView) findViewById(R.id.title56);
-//        TextView price7 = (TextView) findViewById(R.id.title57);
-//        TextView price8 = (TextView) findViewById(R.id.title58);
-//        TextView price9 = (TextView) findViewById(R.id.title59);
-//        TextView price10 = (TextView) findViewById(R.id.title60);
-//
-//        TextView title1 = (TextView) findViewById(R.id.titlexxx51);
-//        TextView title2 = (TextView) findViewById(R.id.titlexxx52);
-//        TextView title3 = (TextView) findViewById(R.id.titlexxx53);
-//        TextView title4 = (TextView) findViewById(R.id.titlexxx54);
-//        TextView title5 = (TextView) findViewById(R.id.titlexxx55);
-//        TextView title6 = (TextView) findViewById(R.id.titlexxx56);
-//        TextView title7 = (TextView) findViewById(R.id.titlexxx57);
-//        TextView title8 = (TextView) findViewById(R.id.titlexxx58);
-//        TextView title9 = (TextView) findViewById(R.id.titlexxx59);
-//        TextView title10 = (TextView) findViewById(R.id.titlexxx60);
-//
-//
-//        ImageView img1 = (ImageView) findViewById(R.id.img51);
-//        ImageView img2 = (ImageView) findViewById(R.id.img52);
-//        ImageView img3 = (ImageView) findViewById(R.id.img53);
-//        ImageView img4 = (ImageView) findViewById(R.id.img54);
-//        ImageView img5 = (ImageView) findViewById(R.id.img55);
-//        ImageView img6 = (ImageView) findViewById(R.id.img56);
-//        ImageView img7 = (ImageView) findViewById(R.id.img57);
-//        ImageView img8 = (ImageView) findViewById(R.id.img58);
-//        ImageView img9 = (ImageView) findViewById(R.id.img59);
-//        ImageView img10 = (ImageView) findViewById(R.id.img60);
-//
-//        ImageView brand1 = (ImageView) findViewById(R.id.brand51);
-//        ImageView brand2 = (ImageView) findViewById(R.id.brand52);
-//        ImageView brand3 = (ImageView) findViewById(R.id.brand53);
-//        ImageView brand4 = (ImageView) findViewById(R.id.brand54);
-//        ImageView brand5 = (ImageView) findViewById(R.id.brand55);
-//        ImageView brand6 = (ImageView) findViewById(R.id.brand56);
-//        ImageView brand7 = (ImageView) findViewById(R.id.brand57);
-//        ImageView brand8 = (ImageView) findViewById(R.id.brand58);
-//        ImageView brand9 = (ImageView) findViewById(R.id.brand59);
-//        ImageView brand10 = (ImageView) findViewById(R.id.brand60);
-//        if (Splash.sellers.get(spin).get("0").equals("flipkart"))
-//            brand1.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("amazon"))
-//            brand1.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("paytm"))
-//            brand1.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("snapdeal"))
-//            brand1.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("flipkart"))
-//            brand2.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("amazon"))
-//            brand2.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("paytm"))
-//            brand2.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
-//            brand2.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
-//            brand3.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("amazon"))
-//            brand3.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("paytm"))
-//            brand3.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
-//            brand3.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("flipkart"))
-//            brand4.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("amazon"))
-//            brand4.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("paytm"))
-//            brand4.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
-//            brand4.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-//            brand5.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("amazon"))
-//            brand5.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("paytm"))
-//            brand5.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-//            brand5.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-//            brand6.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("amazon"))
-//            brand6.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("paytm"))
-//            brand6.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-//            brand6.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-//            brand7.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("amazon"))
-//            brand7.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("paytm"))
-//            brand7.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-//            brand7.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-//            brand8.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("amazon"))
-//            brand8.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("paytm"))
-//            brand8.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-//            brand8.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-//            brand9.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("amazon"))
-//            brand9.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("paytm"))
-//            brand9.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-//            brand9.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-//            brand10.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("amazon"))
-//            brand10.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("paytm"))
-//            brand10.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-//            brand10.setImageResource(R.drawable.sdeal_fav1x);
-//
-//
-////            card1 = (ImageView) findViewById(R.id.img1);
-////            card2 = (ImageView) findViewById(R.id.imgx);
-////            card3 = (ImageView) findViewById(R.id.img2);
-////            card4 = (ImageView) findViewById(R.id.img2x);
-//
-//        title1.setText(Splash.title.get(spin).get("0"));
-//        title2.setText(Splash.title.get(spin).get("1"));
-//        title3.setText(Splash.title.get(spin).get("2"));
-//        title4.setText(Splash.title.get(spin).get("3"));
-//        title5.setText(Splash.title.get(spin).get("4"));
-//        title6.setText(Splash.title.get(spin).get("5"));
-//        title7.setText(Splash.title.get(spin).get("6"));
-//        title8.setText(Splash.title.get(spin).get("7"));
-//        title9.setText(Splash.title.get(spin).get("8"));
-//        title10.setText(Splash.title.get(spin).get("9"));
-//
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("0"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img1);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("1"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img2);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("2"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img3);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("3"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img4);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("4"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img5);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("5"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img6);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("6"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img7);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("7"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img8);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("8"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img9);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("9"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img10);
-//
-//
-//        Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-//
-//        int price01 = princ1.intValue();
-//        Double emi01 = show(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), price01);
-//        if (emi01.intValue() < 200)
-//            emi01 = 200.0;
-//        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
-//        //emi2
-//
-//
-//        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-//
-//        int price02 = princ2.intValue();
-//        Double emi02 = show(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), price02);
-//        if (emi02.intValue() < 200)
-//            emi02 = 200.0;
-//        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
-//
-//
-//        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-//        int price03 = princ3.intValue();
-//        Double emi03 = show(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), price03);
-//        if (emi03.intValue() < 200)
-//            emi03 = 200.0;
-//        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
-//
-//
-//        //emi4
-//
-//        Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-//        int price04 = princ4.intValue();
-//        Double emi04 = show(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), price04);
-//        if (emi04.intValue() < 200)
-//            emi04 = 200.0;
-//        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
-//
-//
-//        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-//        int price05 = princ5.intValue();
-//        Double emi05 = show(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), price05);
-//        // price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//        if (emi05.intValue() < 200)
-//            emi05 = 200.0;
-//        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//
-//
-//        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-//        int price06 = princ6.intValue();
-//        Double emi06 = show(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), price06);
-//        //price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//        if (emi06.intValue() < 200)
-//            emi06 = 200.0;
-//        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//
-//
-//        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-//        int price07 = princ7.intValue();
-//        Double emi07 = show(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), price07);
-//        if (emi07.intValue() < 200)
-//            emi07 = 200.0;
-//        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
-//
-//
-//        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-//        int price08 = princ8.intValue();
-//        Double emi08 = show(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), price08);
-//        if (emi08.intValue() < 200)
-//            emi08 = 200.0;
-//        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
-//
-//
-//        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-//        int price09 = princ9.intValue();
-//        Double emi09 = show(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), price09);
-//        if (emi09.intValue() < 200)
-//            emi09 = 200.0;
-//        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
-//
-//
-//        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-//        int price00 = princ10.intValue();
-//        Double emi10 = show(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), price00);
-//        if (emi10.intValue() < 200)
-//            emi10 = 200.0;
-//        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
-//
-//
-//    }
-//
-//
-//    private void populateSixthRow() {
-//        TextView price1 = (TextView) findViewById(R.id.title61);
-//        TextView price2 = (TextView) findViewById(R.id.title62);
-//        TextView price3 = (TextView) findViewById(R.id.title63);
-//        TextView price4 = (TextView) findViewById(R.id.title64);
-//        TextView price5 = (TextView) findViewById(R.id.title65);
-//        TextView price6 = (TextView) findViewById(R.id.title66);
-//        TextView price7 = (TextView) findViewById(R.id.title67);
-//        TextView price8 = (TextView) findViewById(R.id.title68);
-//        TextView price9 = (TextView) findViewById(R.id.title69);
-//        TextView price10 = (TextView) findViewById(R.id.title70);
-//
-//        TextView title1 = (TextView) findViewById(R.id.titlexxx61);
-//        TextView title2 = (TextView) findViewById(R.id.titlexxx62);
-//        TextView title3 = (TextView) findViewById(R.id.titlexxx63);
-//        TextView title4 = (TextView) findViewById(R.id.titlexxx64);
-//        TextView title5 = (TextView) findViewById(R.id.titlexxx65);
-//        TextView title6 = (TextView) findViewById(R.id.titlexxx66);
-//        TextView title7 = (TextView) findViewById(R.id.titlexxx67);
-//        TextView title8 = (TextView) findViewById(R.id.titlexxx68);
-//        TextView title9 = (TextView) findViewById(R.id.titlexxx69);
-//        TextView title10 = (TextView) findViewById(R.id.titlexxx70);
-//
-//
-//        ImageView img1 = (ImageView) findViewById(R.id.img61);
-//        ImageView img2 = (ImageView) findViewById(R.id.img62);
-//        ImageView img3 = (ImageView) findViewById(R.id.img63);
-//        ImageView img4 = (ImageView) findViewById(R.id.img64);
-//        ImageView img5 = (ImageView) findViewById(R.id.img65);
-//        ImageView img6 = (ImageView) findViewById(R.id.img66);
-//        ImageView img7 = (ImageView) findViewById(R.id.img67);
-//        ImageView img8 = (ImageView) findViewById(R.id.img68);
-//        ImageView img9 = (ImageView) findViewById(R.id.img69);
-//        ImageView img10 = (ImageView) findViewById(R.id.img70);
-//
-//        ImageView brand1 = (ImageView) findViewById(R.id.brand61);
-//        ImageView brand2 = (ImageView) findViewById(R.id.brand62);
-//        ImageView brand3 = (ImageView) findViewById(R.id.brand63);
-//        ImageView brand4 = (ImageView) findViewById(R.id.brand64);
-//        ImageView brand5 = (ImageView) findViewById(R.id.brand65);
-//        ImageView brand6 = (ImageView) findViewById(R.id.brand66);
-//        ImageView brand7 = (ImageView) findViewById(R.id.brand67);
-//        ImageView brand8 = (ImageView) findViewById(R.id.brand68);
-//        ImageView brand9 = (ImageView) findViewById(R.id.brand69);
-//        ImageView brand10 = (ImageView) findViewById(R.id.brand70);
-//        if (Splash.sellers.get(spin).get("0").equals("flipkart"))
-//            brand1.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("amazon"))
-//            brand1.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("paytm"))
-//            brand1.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("0").equals("snapdeal"))
-//            brand1.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("flipkart"))
-//            brand2.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("amazon"))
-//            brand2.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("paytm"))
-//            brand2.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("1").equals("snapdeal"))
-//            brand2.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("flipkart"))
-//            brand3.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("amazon"))
-//            brand3.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("paytm"))
-//            brand3.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("2").equals("snapdeal"))
-//            brand3.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("flipkart"))
-//            brand4.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("amazon"))
-//            brand4.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("paytm"))
-//            brand4.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("3").equals("snapdeal"))
-//            brand4.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("flipkart"))
-//            brand5.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("amazon"))
-//            brand5.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("paytm"))
-//            brand5.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("4").equals("snapdeal"))
-//            brand5.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("flipkart"))
-//            brand6.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("amazon"))
-//            brand6.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("paytm"))
-//            brand6.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("5").equals("snapdeal"))
-//            brand6.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("flipkart"))
-//            brand7.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("amazon"))
-//            brand7.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("paytm"))
-//            brand7.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("6").equals("snapdeal"))
-//            brand7.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("flipkart"))
-//            brand8.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("amazon"))
-//            brand8.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("paytm"))
-//            brand8.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("7").equals("snapdeal"))
-//            brand8.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("flipkart"))
-//            brand9.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("amazon"))
-//            brand9.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("paytm"))
-//            brand9.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("8").equals("snapdeal"))
-//            brand9.setImageResource(R.drawable.sdeal_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("flipkart"))
-//            brand10.setImageResource(R.drawable.fk_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("amazon"))
-//            brand10.setImageResource(R.drawable.amazon_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("paytm"))
-//            brand10.setImageResource(R.drawable.paytm_fav1x);
-//        if (Splash.sellers.get(spin).get("9").equals("snapdeal"))
-//            brand10.setImageResource(R.drawable.sdeal_fav1x);
-//
-//
-////            card1 = (ImageView) findViewById(R.id.img1);
-////            card2 = (ImageView) findViewById(R.id.imgx);
-////            card3 = (ImageView) findViewById(R.id.img2);
-////            card4 = (ImageView) findViewById(R.id.img2x);
-//
-//        title1.setText(Splash.title.get(spin).get("0"));
-//        title2.setText(Splash.title.get(spin).get("1"));
-//        title3.setText(Splash.title.get(spin).get("2"));
-//        title4.setText(Splash.title.get(spin).get("3"));
-//        title5.setText(Splash.title.get(spin).get("4"));
-//        title6.setText(Splash.title.get(spin).get("5"));
-//        title7.setText(Splash.title.get(spin).get("6"));
-//        title8.setText(Splash.title.get(spin).get("7"));
-//        title9.setText(Splash.title.get(spin).get("8"));
-//        title10.setText(Splash.title.get(spin).get("9"));
-//
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("0"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img1);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("1"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img2);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("2"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img3);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("3"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img4);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("4"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img5);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("5"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img6);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("6"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img7);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("7"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img8);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("8"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img9);
-//        Picasso.with(this)
-//                .load(Splash.image.get(spin).get("9"))
-//                .placeholder(R.drawable.emptyimageproducts)
-//                .into(img10);
-//
-//
-//        Double princ1 = Double.parseDouble(Splash.selling.get(spin).get("0"));
-//
-//        int price01 = princ1.intValue();
-//        Double emi01 = show(Splash.subCategory.get(spin).get("0"), Splash.category.get(spin).get("0"), Splash.brand.get(spin).get("0"), price01);
-//        if (emi01.intValue() < 200)
-//            emi01 = 200.0;
-//        price1.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi01.intValue()) + " per month");
-//        //emi2
-//
-//
-//        Double princ2 = Double.parseDouble(Splash.selling.get(spin).get("1"));
-//
-//        int price02 = princ2.intValue();
-//        Double emi02 = show(Splash.subCategory.get(spin).get("1"), Splash.category.get(spin).get("1"), Splash.brand.get(spin).get("1"), price02);
-//        if (emi02.intValue() < 200)
-//            emi02 = 200.0;
-//        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
-//
-//
-//        Double princ3 = Double.parseDouble(Splash.selling.get(spin).get("2"));
-//        int price03 = princ3.intValue();
-//        Double emi03 = show(Splash.subCategory.get(spin).get("2"), Splash.category.get(spin).get("2"), Splash.brand.get(spin).get("2"), price03);
-//        if (emi03.intValue() < 200)
-//            emi03 = 200.0;
-//        price3.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi03.intValue()) + " per month");
-//
-//
-//        //emi4
-//
-//        Double princ4 = Double.parseDouble(Splash.selling.get(spin).get("3"));
-//        int price04 = princ4.intValue();
-//        Double emi04 = show(Splash.subCategory.get(spin).get("3"), Splash.category.get(spin).get("3"), Splash.brand.get(spin).get("3"), price04);
-//        if (emi04.intValue() < 200)
-//            emi04 = 200.0;
-//        price4.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi04.intValue()) + " per month");
-//
-//
-//        Double princ5 = Double.parseDouble(Splash.selling.get(spin).get("4"));
-//        int price05 = princ5.intValue();
-//        Double emi05 = show(Splash.subCategory.get(spin).get("4"), Splash.category.get(spin).get("4"), Splash.brand.get(spin).get("4"), price05);
-//        //price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//        if (emi05.intValue() < 200)
-//            emi05 = 200.0;
-//        price5.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi05.intValue()) + " per month");
-//
-//
-//        Double princ6 = Double.parseDouble(Splash.selling.get(spin).get("5"));
-//        int price06 = princ6.intValue();
-//        Double emi06 = show(Splash.subCategory.get(spin).get("5"), Splash.category.get(spin).get("5"), Splash.brand.get(spin).get("5"), price06);
-//        //price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//        if (emi06.intValue() < 200)
-//            emi06 = 200.0;
-//        price6.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi06.intValue()) + " per month");
-//
-//
-//        Double princ7 = Double.parseDouble(Splash.selling.get(spin).get("6"));
-//        int price07 = princ7.intValue();
-//        Double emi07 = show(Splash.subCategory.get(spin).get("6"), Splash.category.get(spin).get("6"), Splash.brand.get(spin).get("6"), price07);
-//        if (emi07.intValue() < 200)
-//            emi07 = 200.0;
-//        price7.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi07.intValue()) + " per month");
-//
-//
-//        Double princ8 = Double.parseDouble(Splash.selling.get(spin).get("7"));
-//        int price08 = princ8.intValue();
-//        Double emi08 = show(Splash.subCategory.get(spin).get("7"), Splash.category.get(spin).get("7"), Splash.brand.get(spin).get("7"), price08);
-//        if (emi08.intValue() < 200)
-//            emi08 = 200.0;
-//        price8.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi08.intValue()) + " per month");
-//
-//
-//        Double princ9 = Double.parseDouble(Splash.selling.get(spin).get("8"));
-//        int price09 = princ9.intValue();
-//        Double emi09 = show(Splash.subCategory.get(spin).get("8"), Splash.category.get(spin).get("8"), Splash.brand.get(spin).get("8"), price09);
-//        if (emi09.intValue() < 200)
-//            emi09 = 200.0;
-//        price9.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi09.intValue()) + " per month");
-//
-//
-//        Double princ10 = Double.parseDouble(Splash.selling.get(spin).get("9"));
-//        int price00 = princ10.intValue();
-//        Double emi10 = show(Splash.subCategory.get(spin).get("9"), Splash.category.get(spin).get("9"), Splash.brand.get(spin).get("9"), price00);
-//        if (emi10.intValue() < 200)
-//            emi10 = 200.0;
-//        price10.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi10.intValue()) + " per month");
-//
-//
-//    }
-
-
-    //    public Double calculateEmi( int monthsallowed ,int sellingPrice){
-//        Double rate = 21.0 / 1200.0;
-//        int d = 0;
-//        if (sellingPrice <= 5000) {
-//            emi = sellingPrice * 0.8 / monthsallowed;
-//        } else {
-//            if (currDay <= 15)
-//                d = 35 - currDay;
-//            else
-//                d = 65 - currDay;
-//
-//            emi = Math.ceil((sellingPrice * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
-//        }
-//        return emi;
-//    }
-//
-//
-//
     public int months(String subcat, String cat, String brand, int price)
 
     {
@@ -4228,8 +953,6 @@ public class HomePage extends AppCompatActivity {
                 m = mn;
         }
 
-        int monthscheck = 0;
-        //digo
         String course = userP.getString("course", "");
 
         if (!course.equals("")) {
@@ -4281,9 +1004,6 @@ public class HomePage extends AppCompatActivity {
                     if (m > months)
                         m = months;
                 }
-
-
-                //                        Toast.makeText(HomePage.this, curr, Toast.LENGTH_SHORT).show();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -4318,8 +1038,6 @@ public class HomePage extends AppCompatActivity {
             }
 
         }
-        //snapdeal
-
 
         else if (parseString.contains("snapdeal")) {
             sellerNme = "snapdeal";
@@ -4407,8 +1125,6 @@ public class HomePage extends AppCompatActivity {
         if (checkValidUrl == 1) {
             //monkey page
         }
-        //
-        //       Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -4448,7 +1164,6 @@ public class HomePage extends AppCompatActivity {
 
             int loanPrice = setLoanAmt(price);
             int monthsallowed = months(subcat, cat, brand, price);
-//
             Double rate = 21.0 / 1200.0;
             int d = 0;
             if (price <= 5000) {
@@ -4509,7 +1224,7 @@ public class HomePage extends AppCompatActivity {
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
 
-                String url = getApplicationContext().getString(R.string.server) + "api/product/trending?category=" + urldisplay + "&count=10";
+                String url = BuildConfig.SERVER_URL + "api/product/trending?category=" + urldisplay + "&count=10";
 
                 HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
                 if (response != null) {
@@ -4558,8 +1273,6 @@ public class HomePage extends AppCompatActivity {
                             productsMap.put(data[0],products);
                             Log.i("trending", "called");
                             return "win";
-                            //versioncode=data1.getString("version_code");
-                            //return versioncode;
                         } else
                             return "fail";
 
@@ -4579,14 +1292,6 @@ public class HomePage extends AppCompatActivity {
             if (result.equals("fail")) {
                 System.out.println("Error while computing data");
             } else {
-//                if(productType.equals("trending")){
-//                    if(spinner0.getVisibility()==View.VISIBLE)
-//                        spinner0.setVisibility(View.INVISIBLE);
-//
-//                    adapter0 = new HorizontalScrollViewAdapter(productsMap.get("trending"),HomePage.this);
-//                    horizontal0.setAdapter(HomePage.this,adapter0);
-//
-//                }
                 if(productType.equals("Mobiles")){
                     if(spinner1.getVisibility()==View.VISIBLE)
                         spinner1.setVisibility(View.GONE);
@@ -4630,22 +1335,6 @@ public class HomePage extends AppCompatActivity {
                 }
 
 
-
-
-
-//                TrendingMapWrapper mapWrapper = new TrendingMapWrapper();
-//                mapWrapper.setCategory(category);
-//                mapWrapper.setBrand(brand);
-//                mapWrapper.setFkid1(fkid1);
-//                mapWrapper.setImage(image);
-//                mapWrapper.setMrp1(mrp1);
-//                mapWrapper.setSellers(sellers);
-//                mapWrapper.setSelling(selling);
-//                mapWrapper.setSubCategory(subCategory);
-//                mapWrapper.setTitle(title);
-//                String json = gson.toJson(mapWrapper);
-//                sh.edit().putString("TrendingProductsSerialized", json).apply();
-
             }
         }
     }
@@ -4656,7 +1345,7 @@ public class HomePage extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String url = getApplicationContext().getResources().getString(R.string.server)+"api/product/trending?category=Computers&category=Mobiles&count=10";
+            String url = BuildConfig.SERVER_URL+"api/product/trending?category=Computers&category=Mobiles&count=10";
             String urldisplay = params[0];
             try {
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
@@ -4677,7 +1366,6 @@ public class HomePage extends AppCompatActivity {
                         JSONObject resp = new JSONObject(responseString);
                         if (resp.getString("status").equals("success")) {
                             JSONArray data1 = new JSONArray(resp.getString("data"));
-                            int lenght = data1.length();
                             ArrayList<Product> products = new ArrayList<>();
                             for (int j = 0; j < 10; j++) {
                                 JSONObject js = data1.getJSONObject(j);
@@ -4690,7 +1378,6 @@ public class HomePage extends AppCompatActivity {
                                 newProduct.setBrand(brand1);
                                 String id = js.getString("title");
                                 newProduct.setTitle(id);
-                                //String mrp = js.getString("mrp");
                                 String seller = js.getString("seller");
                                 newProduct.setSeller(seller);
                                 String fkid = js.getString("fkProductId");
@@ -4707,8 +1394,6 @@ public class HomePage extends AppCompatActivity {
                             productsMap.put("trending",products);
                             Log.i("trending", "called");
                             return "win";
-                            //versioncode=data1.getString("version_code");
-                            //return versioncode;
                         } else
                             return "fail";
 
@@ -4740,9 +1425,74 @@ public class HomePage extends AppCompatActivity {
 
         }
     }
+
+    private class GetImageUrls extends AsyncTask<String, Void, String> {
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = BuildConfig.SERVER_URL+"api/v1/homepage/images?clientDevice=android";
+            try {
+                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                String tok_sp = toks.getString("token_value", "");
+                // String tok_sp = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NjU1NDQwMDgsImV4cCI6MTQ2NTU4MDAwOH0.ZpAwCEB0lYSqiYdfaBYjnBJOXfGrqE9qN8USoRzWR8g";
+                HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
+
+
+                        Log.e("MeshCommunication", "Server returned code "
+                                + response.getStatusLine().getStatusCode());
+                        return "fail";
+                    } else {
+
+                        JSONObject resp = new JSONObject(responseString);
+                        if (resp.getString("status").equals("success")) {
+                            JSONArray data1 = new JSONArray(resp.getString("data"));
+                            JSONObject json = data1.getJSONObject(0);
+                            JSONArray jsonArray = json.getJSONArray("urls");
+                            String[] urls1 = new String[jsonArray.length()];
+                            for(int i=0;i<jsonArray.length();i++){
+                                urls1[i] = jsonArray.getString(i);
+                            }
+                            urls = urls1;
+
+                            return "win";
+                        } else
+                            return "fail";
+
+
+                    }
+                }
+
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            adp = new SecondViewPagerAdapter(getApplicationContext(),urls, HomePage.this);
+            imageSlider.setAdapter(adp);
+            adp.notifyDataSetChanged();
+
+            imageSlider.setCurrentItem(0);
+
+        }
     }
 
 
 
-
+}
 

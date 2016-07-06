@@ -517,7 +517,7 @@ public class Adaptersimple extends BaseAdapter {
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
                 //api/login/sendotp
-                String url2 = context.getString(R.string.server) + "api/user/account/address";
+                String url2 = BuildConfig.SERVER_URL + "api/user/account/address";
                 HttpPost httppost = new HttpPost(url2);
                 //                HttpDelete
                 SharedPreferences toks = context.getSharedPreferences("token", Context.MODE_PRIVATE);

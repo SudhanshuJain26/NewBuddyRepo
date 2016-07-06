@@ -31,6 +31,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.Landing;
 import indwin.c3.shareapp.MainActivity;
 import indwin.c3.shareapp.R;
@@ -434,7 +435,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             SharedPreferences ss = getSharedPreferences("cred", Context.MODE_PRIVATE);
             JSONObject payload = new JSONObject();
             try {
-                String url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + ss.getString("phone_number", "");
+                String url2 = BuildConfig.SERVER_URL + "api/user/form?phone=" + ss.getString("phone_number", "");
                 try {
 
                 } catch (Exception e) {

@@ -15,6 +15,8 @@
 
     <color name="background">#33A4D0</color>
     <color name="spinner_background">#21A5E0</color>
+    <color name="textcolor_invite">#64000000</color>
+    <color name="inviteColor">#5CACBD</color>
 
 
 

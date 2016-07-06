@@ -50,8 +50,6 @@
     </string>
 
     <string name="title_activity_profile_form_step1">ProfileFormStep1</string>
-    <!--<string name="server">https://ssl.hellobuddy.in/</string>-->
-    <string name="server">https://ninja.hellobuddy.in/</string>
     <string name="title_choose_image">Choose an Image</string>
     <string-array name="aadhar_or_pan">
         <item>Aadhar Number</item>
@@ -2731,6 +2729,8 @@
     <string name="confirmation_email_link">An email verification has been sent to your mail id.
     </string>
     <string name="error_player">There was anerror initializing the YouTubePlayer </string>
-
-
+    <string name="cashback">Invite your friends to Buddy and earn Rs.150 Cashback for every friend that signs up with your code</string>
+    <string name="payment_cashback">There more!Earn Rs.20 in Paytm Cash everytime an invited friend submits their profile for verification!</string>
+    <string name="verifyEarnings">View your Earnings</string>
+    <string name="invite_friends">Invite friends via Email/SMS</string>
 </resources>

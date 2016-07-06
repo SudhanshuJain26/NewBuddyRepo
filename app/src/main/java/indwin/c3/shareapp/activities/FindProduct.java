@@ -5,15 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
-import android.webkit.URLUtil;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,12 +33,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.ProductsPage;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Splash;
@@ -49,7 +45,7 @@ import indwin.c3.shareapp.models.RecentSearchItems;
 import indwin.c3.shareapp.utils.AppUtils;
 import io.intercom.android.sdk.Intercom;
 
-public class FindProduct extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
+public class FindProduct extends AppCompatActivity {
 
     ArrayList<RecentSearchItems> recentSearchItemsArrayList = new ArrayList<RecentSearchItems>();
     EditText search;
@@ -72,10 +68,8 @@ public class FindProduct extends YouTubeBaseActivity implements YouTubePlayer.On
     SharedPreferences sharedpreferences;
     public static boolean linkpressed = false;
     public static boolean validUrl = false;
-    public static final String YOUTUBE_KEY = "AIzaSyA-RTCQQd1XXf1N_uLH8owBzYBx5AfPyPA";
-    private static final int RECOVERY_DIALOG_REQUEST = 1;
-    private YouTubePlayerView youTubeView;
-    public static final String VIDEO_ID = "WnQgARfeXLY";
+    ImageView play_video;
+    TextView play;
 
 
 
@@ -83,10 +77,7 @@ public class FindProduct extends YouTubeBaseActivity implements YouTubePlayer.On
     @Override
     protected void onStart() {
         super.onStart();
-//        if(taptoSearch!=null)
-//            if(taptoSearch.getVisibility() ==View.VISIBLE)
-//                taptoSearch.setVisibility(View.INVISIBLE);
-        Log.i("VISIBLE","called");
+//
     }
 
 
@@ -103,10 +94,17 @@ public class FindProduct extends YouTubeBaseActivity implements YouTubePlayer.On
         if (sharedpreferences.getInt("checklog", 0) == 1) {
             userId = sharedPreferences2.getString("name", null);
         }
-        youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
 
-        youTubeView.initialize(YOUTUBE_KEY, this);
+        play_video = (ImageView)findViewById(R.id.play_video);
+        play = (TextView)findViewById(R.id.play);
 
+        play_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FindProduct.this,YouTubeActivity.class);
+                startActivity(intent);
+            }
+        });
         taptoSearch = (ImageView)findViewById(R.id.pasteAg);
         myClipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         taptoSearch.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +146,7 @@ public class FindProduct extends YouTubeBaseActivity implements YouTubePlayer.On
         //recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         //adp = new SearchedProductListAdapter(recentSearchItemsArrayList,this);
 
-        new FindRecentProductLinks(FindProduct.this).execute(getApplicationContext().getResources().getString(R.string.server)+"api/user/product/recent?userid="+userId +"&count=50");
+        new FindRecentProductLinks(FindProduct.this).execute(BuildConfig.SERVER_URL+"api/user/product/recent?userid="+userId +"&count=50");
 
 //        if(ProductsPage.backpressed){
 //            RecentSearchItems items = new RecentSearchItems(ProductsPage.brand1,ProductsPage.title1,Integer.toString(ProductsPage.price),productId);
@@ -559,92 +557,6 @@ public class FindProduct extends YouTubeBaseActivity implements YouTubePlayer.On
         //       Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
 
     }
-
-    @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean b) {
-        if (!b) {
-            player.cueVideo(VIDEO_ID);
-        }
-    }
-
-    @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
-        if (errorReason.isUserRecoverableError()) {
-             errorReason.getErrorDialog(this, RECOVERY_DIALOG_REQUEST).show();
-        } else {
-            //String errorMessage = String.format(getString(R.string.error_player), errorReason.toString());
-            Toast.makeText(this, "There is some problem loading the video", Toast.LENGTH_LONG).show();
-        }
-    }
-
-//    private void adjustListHeight(){
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//        params.height = getTotalHeightofListView() + textView.getHeight();
-//        productbox.setLayoutParams(params);
-//        productbox.requestLayout();
-//      //  commentBox.setLayoutParams(params);
-//
-//    }
-
-//    private void getTotalHeightofListView() {
-//        if(adp.getCount() > 2){
-//            View item = adp.getView(0, null, recyclerView);
-//            item.measure(0, 0);
-////            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) (2.5 * item.getMeasuredHeight()));
-////            recyclerView.setLayoutParams(params);
-//
-//        }
-//    }
-
-//    public interface ClickListener {
-//        void onClick(View view, int position);
-//
-//        void onLongClick(View view, int position);
-//    }
-//
-//    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-//
-//        private GestureDetector gestureDetector;
-//        private FindProduct.ClickListener clickListener;
-//
-//        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final FindProduct.ClickListener clickListener) {
-//            this.clickListener = clickListener;
-//            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-//                @Override
-//                public boolean onSingleTapUp(MotionEvent e) {
-//                    return true;
-//                }
-//
-//                @Override
-//                public void onLongPress(MotionEvent e) {
-//                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-//                    if (child != null && clickListener != null) {
-//                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
-//                    }
-//                }
-//            });
-//        }
-
-//        @Override
-//        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-//
-//            View child = rv.findChildViewUnder(e.getX(), e.getY());
-//            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-//                clickListener.onClick(child, rv.getChildPosition(child));
-//            }
-//            return false;
-//        }
-//
-//        @Override
-//        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-//        }
-//
-//        @Override
-//        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-//
-//        }
-//    }
 private class FindRecentProductLinks extends AsyncTask<String,Void,String> {
 
     Context ctx;

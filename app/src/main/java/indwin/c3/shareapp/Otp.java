@@ -102,6 +102,7 @@ public class Otp extends AppCompatActivity {
             }
 
             public void onFinish() {
+
                 timer.setText("Resend Otp");
                 timer.setEnabled(true);
                 //mTextField.setText("done!");
@@ -236,8 +237,12 @@ public class Otp extends AppCompatActivity {
                             Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                             Long oldtime = toks.getLong("expires", 0);
                             //        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
-                            if (time + 5 < toks.getLong("expires", 0))
+                            if (time + 5 < toks.getLong("expires", 0)) {
                                 new verifyOtp().execute("");
+
+
+                            }
+
                             else
                                 new AuthTokc().execute();
                         }
@@ -291,6 +296,7 @@ public class Otp extends AppCompatActivity {
                 verify.setEnabled(false);
                 spinner.setVisibility(View.VISIBLE);
                 verify.setTextColor(Color.parseColor("#ffffff"));
+
 
                 if ((otp1.getText().toString().length() == 4))// && (otp2.getText().toString().length() == 1) && (otp3.getText().toString().length() == 1) && (otp4.getText().toString().length() == 1)) {
                 {
@@ -384,7 +390,9 @@ public class Otp extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             spinner.setVisibility(View.VISIBLE);
+            timer.setVisibility(View.INVISIBLE);
         }
+
 
 
         @Override
@@ -413,7 +421,7 @@ public class Otp extends AppCompatActivity {
                     payload.put("otp", code);
 
                     payload.put("phone", phone);
-                    url2 = getApplicationContext().getString(R.string.server) + "api/login/verifyotp";
+                    url2 =BuildConfig.SERVER_URL + "api/login/verifyotp";
                     httppost = new HttpPost(url2);
 
                     String tok_sp = toks.getString("token_value", "");
@@ -422,7 +430,7 @@ public class Otp extends AppCompatActivity {
                     payload.put("otp", code);
 
                     payload.put("phone", phone);
-                    url2 = getApplicationContext().getString(R.string.server) + "api/auth/verifyotp";
+                    url2 = BuildConfig.SERVER_URL + "api/auth/verifyotp";
                     httppost = new HttpPost(url2);
                     SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                     String tok_sp = toks.getString("token_value", "");
@@ -580,6 +588,7 @@ public class Otp extends AppCompatActivity {
             if (ot_check != 3) {
                 verify.setEnabled(true);
 
+
                 verify.setTextColor(Color.parseColor("#ffffff"));
                 d = 0;
                 spinner.setVisibility(View.GONE);
@@ -589,6 +598,7 @@ public class Otp extends AppCompatActivity {
             }
             if (ot_check == 3) {
                 verify.setEnabled(true);
+                timer.setVisibility(View.VISIBLE);
 
                 verify.setTextColor(Color.parseColor("#664A4A4A"));
                 d = 0;
@@ -734,7 +744,7 @@ public class Otp extends AppCompatActivity {
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String url_otp = getApplicationContext().getString(R.string.server) + "api/login/resendotp?phone=" + phone;
+                String url_otp = BuildConfig.SERVER_URL + "api/login/resendotp?phone=" + phone;
                 HttpPost httppost = new HttpPost(url_otp);
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
@@ -844,7 +854,7 @@ public class Otp extends AppCompatActivity {
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String urll = getApplicationContext().getString(R.string.server) + "authenticate";
+                String urll = BuildConfig.SERVER_URL + "authenticate";
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 

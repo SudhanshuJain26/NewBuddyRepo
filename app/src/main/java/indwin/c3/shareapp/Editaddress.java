@@ -130,7 +130,7 @@ private  ImageView loader;
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
                 //api/login/sendotp
-                String url2 = getApplicationContext().getString(R.string.server) + "api/user/account/address?userid="+cred.getString("phone_number","");
+                String url2 = BuildConfig.SERVER_URL+ "api/user/account/address?userid="+cred.getString("phone_number","");
                 HttpGet httppost = new HttpGet(url2);
 //                HttpDelete
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);

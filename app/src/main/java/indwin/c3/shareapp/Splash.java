@@ -2,6 +2,7 @@ package indwin.c3.shareapp;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.app.VoiceInteractor;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,7 +41,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import indwin.c3.shareapp.activities.ProfileActivity;
@@ -72,7 +75,7 @@ public class Splash extends AppCompatActivity {
     SharedPreferences sh, sh_otp;
 
     public static int notify = 0;
-
+    public String dateStamp;
     public static final String MyPREFERENCES = "buddy";
     SharedPreferences sharedpreferences, sharedpreferences2;
     String url2 = "";
@@ -104,6 +107,8 @@ public class Splash extends AppCompatActivity {
         mTracker = application.getDefaultTracker();
         gson = new Gson();
         init();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        dateStamp = sdf.format(new Date());
 
 
         sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
@@ -169,7 +174,7 @@ public class Splash extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                url = getApplicationContext().getString(R.string.server) + "authenticate";
+                url = BuildConfig.SERVER_URL + "authenticate";
 
                 //                if(isNetworkAvailable())
                 if (isNetworkAvailable())
@@ -321,7 +326,7 @@ public class Splash extends AppCompatActivity {
                 @Override
                 public void onAnimationEnd(Animation animation) {
 
-                    url = getApplicationContext().getString(R.string.server) + "authenticate";
+                    url = BuildConfig.SERVER_URL + "authenticate";
                     urlauth = url;
                     if (isNetworkAvailable())
                         new ItemsByKeyword().execute("");
@@ -478,7 +483,7 @@ public class Splash extends AppCompatActivity {
 //                    urldisplay = "apparels";
 //                else if (urldisplay.equals("Health%20and%20Beauty"))
 //                    urldisplay = "homeandbeauty";
-                String url = getApplicationContext().getString(R.string.server) + "api/product/trending?category=" + urldisplay + "&count=10";
+                String url = BuildConfig.SERVER_URL + "api/product/trending?category=" + urldisplay + "&count=10";
 
                 HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
                 if (response != null) {
@@ -564,6 +569,7 @@ public class Splash extends AppCompatActivity {
     }
 
 
+
     public class CheckVersion extends AsyncTask<String, Void, String> {
 
 
@@ -571,7 +577,7 @@ public class Splash extends AppCompatActivity {
             protected String doInBackground(String... params) {
                 try {
 
-                    String url3 = getApplicationContext().getString(R.string.server) + "api/app/version?platform=android";
+                    String url3 = BuildConfig.SERVER_URL + "api/app/version?platform=android";
                     SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                     String tok_sp = toks.getString("token_value", "");
 
@@ -687,7 +693,7 @@ public class Splash extends AppCompatActivity {
                             }
                             // token=MainActivity.token;
                             // token=MainActivity.token;
-                            url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + userId;
+                            url2 = BuildConfig.SERVER_URL + "api/user/form?phone=" + userId;
 
                             new ValidateForm().execute("");
 
@@ -701,7 +707,7 @@ public class Splash extends AppCompatActivity {
                             } catch (Exception e) {
                                 System.out.println("Intercom nine" + e.toString());
                             }
-                            url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + sh_otp.getString("number", "");
+                            url2 = BuildConfig.SERVER_URL + "api/user/form?phone=" + sh_otp.getString("number", "");
 
                             new ValidateForm().execute("");
 
@@ -716,6 +722,55 @@ public class Splash extends AppCompatActivity {
                 }
             }
         }
+
+    public class SendSessionDetails extends AsyncTask<Void,Void,String>{
+        JSONObject jsonObject = new JSONObject();
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try{
+
+                SharedPreferences cred = getApplicationContext().getSharedPreferences("cred", Context.MODE_PRIVATE);
+                String creduserid = cred.getString("phone_number", "");
+                jsonObject.put("userId",creduserid);
+                jsonObject.put("timeStamp",dateStamp);
+                jsonObject.put("clientDevice","android");
+
+                HttpResponse response = AppUtils.connectToServerPost(url, null, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
+
+
+                        Log.e("MeshCommunication", "Server returned code "
+                                + response.getStatusLine().getStatusCode());
+                        return "fail";
+                    } else {
+
+                        JSONObject resp = new JSONObject(responseString);
+
+                        if (resp.getString("status").contains("fail")) {
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return "fail";
+                        } else {
+
+                            return "win";
+
+                        }
+
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 
         public boolean isNetworkAvailable() {
             ConnectivityManager connectivityManager

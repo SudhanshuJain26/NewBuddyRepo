@@ -237,7 +237,7 @@ public class Landing extends AppCompatActivity {
                 // payload.put("action", details.get("action"));
 
 
-                String urll = getApplicationContext().getString(R.string.server) + "authenticate";
+                String urll = BuildConfig.SERVER_URL + "authenticate";
 
 
                 HttpResponse response = AppUtils.connectToServerPost(urll, null, null);
@@ -361,7 +361,7 @@ public class Landing extends AppCompatActivity {
                 // payload.put("action", details.get("action"));
 
 
-                String url2 = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + ss.getString("phone_number", "");
+                String url2 = BuildConfig.SERVER_URL + "api/user/form?phone=" + ss.getString("phone_number", "");
 
 
                 try {

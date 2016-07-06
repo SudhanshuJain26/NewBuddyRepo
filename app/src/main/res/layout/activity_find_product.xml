@@ -116,13 +116,49 @@
 
         />
     </FrameLayout>
-    <com.google.android.youtube.player.YouTubePlayerView
-        android:id="@+id/youtube_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:background="#fff"
-        />
+        android:layout_height="32dp"
+        android:background="#48ffffff"
+        android:layout_marginTop="210dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:id="@+id/frame1"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:text="Not sure how to do it?"
+                android:alpha="1"
+                android:layout_marginLeft="15dp"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/play1x"
+                android:layout_marginLeft="45dp"
+                android:id="@+id/play_video"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:text="Play Tutorial"
+                android:textSize="14sp"
+                android:id="@+id/play"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
+    </FrameLayout>
 
 
 
@@ -130,7 +166,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/product_box"
-        android:layout_marginTop="400dp"
+        android:layout_marginTop="300dp"
         android:background="@color/background"
         >
 

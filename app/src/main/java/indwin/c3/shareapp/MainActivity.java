@@ -12,6 +12,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -94,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    Double latitude, longitude;
+    String IMEINumber;
+    String simSerialNumber;
+    Location getLastLocation;
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
             showAccountDeletedPopup();
         }
         act = this;
-        url = getApplicationContext().getString(R.string.server) + "authenticate";
+
+        url = BuildConfig.SERVER_URL + "authenticate";
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         sharedpreferences2 = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
 
@@ -118,6 +127,17 @@ public class MainActivity extends AppCompatActivity {
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
         username = (EditText) findViewById(R.id.phone_number);
         password = (EditText) findViewById(R.id.password);
+
+        locationManager = (LocationManager) getSystemService
+                (Context.LOCATION_SERVICE);
+        getLastLocation = locationManager.getLastKnownLocation
+                (LocationManager.PASSIVE_PROVIDER);
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        IMEINumber = telephonyManager.getDeviceId();
+        simSerialNumber = telephonyManager.getSimSerialNumber();
+        getLastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        latitude = getLastLocation.getLatitude();
+        longitude  = getLastLocation.getLongitude();
         username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -599,12 +619,22 @@ public class MainActivity extends AppCompatActivity {
 
                 payload.put("userid", userId);
                 payload.put("password", pass);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("imei",IMEINumber);
+                jsonObject.put("simNumber",simSerialNumber);
+                JSONObject location = new JSONObject();
+                location.put("latitude",latitude);
+                location.put("longitude",longitude);
+                jsonObject.put("location",location);
+                payload.put("deviceDetails",jsonObject);
+                payload.put("clientDevice","android");
+
                 // payload.put("action", details.get("action"));
 
 
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
-                String url2 = getApplicationContext().getString(R.string.server) + "api/user/login";
+                String url2 =BuildConfig.SERVER_URL + "api/user/login";
 
                 HttpResponse response = AppUtils.connectToServerPost(url2, payload.toString(), tok_sp);
 
@@ -854,7 +884,7 @@ public class MainActivity extends AppCompatActivity {
                 // payload.put("action", details.get("action"));
 
                 HttpParams httpParameters = new BasicHttpParams();
-                String uurl = getApplicationContext().getString(R.string.server) + "api/user/form?phone=" + userId;
+                String uurl = BuildConfig.SERVER_URL + "api/user/form?phone=" + userId;
                 HttpConnectionParams
                         .setConnectionTimeout(httpParameters, 30000);
 
@@ -1418,7 +1448,7 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                     String tok_sp = toks.getString("token_value", "");
                     HttpClient client = new DefaultHttpClient(httpParameters);
-                    String urlsm = getApplicationContext().getString(R.string.server) + "api/content/sms";
+                    String urlsm = BuildConfig.SERVER_URL + "api/content/sms";
                     SharedPreferences pref = act.getSharedPreferences("MyPref", 0);
                     HttpPost httppost = new HttpPost(urlsm);
 
@@ -1519,7 +1549,7 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                     String tok_sp = toks.getString("token_value", "");
                     HttpClient client = new DefaultHttpClient(httpParameters);
-                    String urlsm = getApplicationContext().getString(R.string.server) + "api/content/contact";
+                    String urlsm = BuildConfig.SERVER_URL+ "api/content/contact";
                     SharedPreferences pref = act.getSharedPreferences("MyPref", 0);
                     HttpPost httppost = new HttpPost(urlsm);
 

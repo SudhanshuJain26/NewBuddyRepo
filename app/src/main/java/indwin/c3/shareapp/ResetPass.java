@@ -235,7 +235,7 @@ private EditText newpass,reenter;
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String urll=getApplicationContext().getString(R.string.server) + "authenticate";
+                String urll=BuildConfig.SERVER_URL + "authenticate";
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
@@ -319,7 +319,7 @@ private EditText newpass,reenter;
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
                 //api/login/sendotp
-                String url2 = getApplicationContext().getString(R.string.server)+"api/auth/password/forgot";
+                String url2 = BuildConfig.SERVER_URL+"api/auth/password/forgot";
                 HttpPost httppost = new HttpPost(url2);
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp=toks.getString("token_value","");

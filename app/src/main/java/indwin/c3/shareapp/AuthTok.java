@@ -4,8 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import indwin.c3.shareapp.FacebookAuth;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -17,7 +16,7 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-import static indwin.c3.shareapp.FacebookAuth.*;
+import static indwin.c3.shareapp.FacebookAuth.con;
 
 /**
  * Created by Aniket Verma(Digo) on 3/21/2016.
@@ -51,7 +50,7 @@ Context context;
                     .setConnectionTimeout(httpParameters, 30000);
 
             HttpClient client = new DefaultHttpClient(httpParameters);
-String urll=context.getString(R.string.server) + "authenticate";
+String urll=BuildConfig.SERVER_URL + "authenticate";
             HttpPost httppost = new HttpPost(urll);
             httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 

@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -290,12 +292,16 @@ Boolean ch=mValue + inccc <= sellingPrice + secondServicecharge;
                     spinner.setSelection(changePos+1);
                     monthsnow--;
                     RelativeLayout d=(RelativeLayout)findViewById(R.id.downRupees);
+                    Drawable[] d1={getResources().getDrawable(R.drawable.roundedbr),getResources().getDrawable(R.drawable.roundedbr)};
+                    TransitionDrawable dw=new TransitionDrawable(d1);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        d.setBackground(getResources().getDrawable(R.drawable.roundedbr));
+                        d.setBackground(dw);
+                        dw.startTransition(500);
                     }
-                    else
-                        d.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundedbr));
-
+                    else {
+                        d.setBackgroundDrawable(dw);
+                        dw.startTransition(500);
+                    }
 
 
                 }

@@ -49,6 +49,8 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        if(productsList==null)
+            return 0;
         return productsList.size();
     }
 

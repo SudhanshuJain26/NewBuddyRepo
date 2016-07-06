@@ -1,7 +1,9 @@
 package indwin.c3.shareapp.activities;
 
+import android.app.Activity;
 import android.app.Application;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,13 +35,16 @@ import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment1;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment2;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment3;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment4;
+import indwin.c3.shareapp.models.Error;
 import indwin.c3.shareapp.models.Image;
+import indwin.c3.shareapp.models.ResponseModel;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
+import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
 
-public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnPageChangeListener, CheckInternetAndUploadUserDetails.NotifyProgress {
 
     public static boolean isBackInsideFrag = false;
     private ViewPager mPager;
@@ -50,6 +56,8 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     private ImageView genderImage;
     private ImageView incompleteStep1, incompleteStep2, incompleteStep3, incompleteStep4;
     int previousPosition;
+    private ProgressDialog progressDialog;
+    private static boolean isActive = false;
 
     @Override
 
@@ -72,6 +80,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             gotoFragment3.setAlpha(1);
             gotoFragment3.setClickable(true);
         }
+
         UserModel user = AppUtils.getUserObject(this);
         if (user.isAppliedFor1k()) {
             saveAndProceed.setVisibility(View.GONE);
@@ -117,6 +126,17 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isActive = true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isActive = false;
+    }
 
     private void populateFragments() {
         fragments = new ArrayList<>();
@@ -173,61 +193,74 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             }
         });
         saveAndProceed.setOnClickListener(new View.OnClickListener() {
+                                              @Override
+                                              public void onClick(View v) {
+                                                  int currentPage = mPager.getCurrentItem();
+
+                                                  if (currentPage != (fragments.size() - 1)) {
+                                                      mPager.setCurrentItem(currentPage + 1);
+                                                      uploadDetailsToServer(null);
+
+
+                                                  } else {
+                                                      boolean incompleteStep4 = checkIncompleteStep4();
+                                                      saveStep4Data(null);
+                                                      if (checkIncompleteStep1() || checkIncompleteStep2() || checkIncompleteStep3() || incompleteStep4) {
+                                                          openDialogBox();
+                                                          uploadDetailsToServer(null);
+                                                          return;
+                                                      } else {
+                                                          SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+                                                          mPrefs.edit().putBoolean("updatingDB", false).apply();
+
+                                                          progressDialog = new ProgressDialog(ProfileFormStep1.this);
+                                                          progressDialog.setCancelable(false);
+                                                          progressDialog.setMessage("Submitting your details..");
+                                                          progressDialog.show();
+                                                          uploadDetailsToServer(Constants.YES_1k);
+
+
+                                                      }
+                                                  }
+                                              }
+                                          }
+
+        );
+    }
+
+    private void openDialogBox() {
+        final Dialog dialog1 = new Dialog(ProfileFormStep1.this);
+        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog1.setContentView(R.layout.incomplete_alert_box);
+
+        Button okay = (Button) dialog1.findViewById(R.id.okay_button);
+        okay.setTextColor(Color.parseColor("#44c2a6"));
+        okay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentPage = mPager.getCurrentItem();
+                uploadDetailsToServer(null);
 
-                if (currentPage != (fragments.size() - 1)) {
-                    mPager.setCurrentItem(currentPage + 1);
-                    Intent intent = new Intent(ProfileFormStep1.this, CheckInternetAndUploadUserDetails.class);
-                    sendBroadcast(intent);
+                dialog1.dismiss();
+                Intent intent2 = new Intent(ProfileFormStep1.this, ProfileActivity.class);
+                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent2);
+                finish();
+            }
+        });
 
+        CheckBox stopMessage = (CheckBox) dialog1.findViewById(R.id.check_message);
+        stopMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences mPrefs = getSharedPreferences(AppUtils.APP_NAME, Context.MODE_PRIVATE);
+                if (((CheckBox) v).isChecked()) {
+                    mPrefs.edit().putBoolean("skipIncompleteMessage", true).apply();
                 } else {
-                    boolean incompleteStep4 = checkIncompleteStep4();
-                    saveStep4Data();
-                    if (checkIncompleteStep1() || checkIncompleteStep2() || checkIncompleteStep3() || incompleteStep4) {
-                        final Dialog dialog1 = new Dialog(ProfileFormStep1.this);
-                        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog1.setContentView(R.layout.incomplete_alert_box);
-
-                        Button okay = (Button) dialog1.findViewById(R.id.okay_button);
-                        okay.setTextColor(Color.parseColor("#44c2a6"));
-                        okay.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                uploadDetailsToServer();
-
-                                dialog1.dismiss();
-                                Intent intent2 = new Intent(ProfileFormStep1.this, ProfileActivity.class);
-                                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent2);
-                                finish();
-                            }
-                        });
-
-                        CheckBox stopMessage = (CheckBox) dialog1.findViewById(R.id.check_message);
-                        stopMessage.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                SharedPreferences mPrefs = getSharedPreferences(AppUtils.APP_NAME, Context.MODE_PRIVATE);
-                                if (((CheckBox) v).isChecked()) {
-                                    mPrefs.edit().putBoolean("skipIncompleteMessage", true).apply();
-                                } else {
-                                    mPrefs.edit().putBoolean("skipIncompleteMessage", false).apply();
-                                }
-                            }
-                        });
-                        dialog1.show();
-                        return;
-                    } else {
-                        uploadDetailsToServer();
-                        Intent intent1 = new Intent(ProfileFormStep1.this, PendingFlashApprovalActivity.class);
-                        startActivity(intent1);
-                        finish();
-                    }
+                    mPrefs.edit().putBoolean("skipIncompleteMessage", false).apply();
                 }
             }
         });
+        dialog1.show();
     }
 
     private void saveStep1Data() {
@@ -245,7 +278,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             user.setUpdateGender(false);
         }
         AppUtils.saveUserObject(this, userModel);
-        uploadDetailsToServer();
+        uploadDetailsToServer(null);
 
     }
 
@@ -296,7 +329,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         user.setUpdateRollNumber(false);
         user.setUpdateCollegeName(false);
         user.setUpdateCourseName(false);
-        uploadDetailsToServer();
+        uploadDetailsToServer(null);
 
     }
 
@@ -309,14 +342,12 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             userModel.getAddressProof().setType(this.user.getAddressProof().getType());
             AppUtils.saveUserObject(this, userModel);
         }
-        uploadDetailsToServer();
+        uploadDetailsToServer(null);
     }
 
-    private void saveStep4Data() {
+    private void saveStep4Data(String isLastStep) {
 
         UserModel userModel = AppUtils.getUserObject(this);
-
-
         if (AppUtils.isNotEmpty(user.getAccommodation()) && user.isUpdateAccommodation()) {
             userModel.setAccommodation(user.getAccommodation());
             userModel.setUpdateAccommodation(true);
@@ -324,13 +355,15 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         }
 
         AppUtils.saveUserObject(this, userModel);
-        uploadDetailsToServer();
 
     }
 
     private boolean checkIncompleteStep4() {
-        ProfileFormStep1Fragment4 profileFormStep1Fragment4 = (ProfileFormStep1Fragment4) mPagerAdapter.getRegisteredFragment(3);
-        profileFormStep1Fragment4.checkIncomplete();
+        try {
+            ProfileFormStep1Fragment4 profileFormStep1Fragment4 = (ProfileFormStep1Fragment4) mPagerAdapter.getFragment(3);
+            profileFormStep1Fragment4.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep4();
     }
 
@@ -346,8 +379,11 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
 
 
     private boolean checkIncompleteStep1() {
-        ProfileFormStep1Fragment1 profileFormStep1Fragment1 = (ProfileFormStep1Fragment1) mPagerAdapter.getRegisteredFragment(0);
-        profileFormStep1Fragment1.checkIncomplete();
+        try {
+            ProfileFormStep1Fragment1 profileFormStep1Fragment1 = (ProfileFormStep1Fragment1) mPagerAdapter.getFragment(0);
+            profileFormStep1Fragment1.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep1();
     }
 
@@ -361,8 +397,12 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean checkIncompleteStep2() {
-        ProfileFormStep1Fragment2 profileFormStep1Fragment2 = (ProfileFormStep1Fragment2) mPagerAdapter.getRegisteredFragment(1);
-        profileFormStep1Fragment2.checkIncomplete();
+        //ProfileFormStep1Fragment2 profileFormStep1Fragment2 = (ProfileFormStep1Fragment2) getSupportFragmentManager().getFragments().get(1);
+        try {
+            ProfileFormStep1Fragment2 profileFormStep1Fragment2 = (ProfileFormStep1Fragment2) mPagerAdapter.getFragment(1);
+            profileFormStep1Fragment2.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep2();
     }
 
@@ -376,8 +416,11 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean checkIncompleteStep3() {
-        ProfileFormStep1Fragment3 profileFormStep1Fragment3 = (ProfileFormStep1Fragment3) mPagerAdapter.getRegisteredFragment(2);
-        profileFormStep1Fragment3.checkIncomplete();
+        try {
+            ProfileFormStep1Fragment3 profileFormStep1Fragment3 = (ProfileFormStep1Fragment3) mPagerAdapter.getFragment(2);
+            profileFormStep1Fragment3.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep3();
     }
 
@@ -412,6 +455,8 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         saveAndProceed = (Button) findViewById(R.id.save_and_proceed);
         previous = (Button) findViewById(R.id.previous);
         genderImage = (ImageView) findViewById(R.id.verify_image_view2);
+        //CircleProgressView cpv = (CircleProgressView) findViewById(R.id.circleView);
+        //cpv.bringToFront();
     }
 
     private void setIncomplete() {
@@ -447,9 +492,9 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
         return false;
     }
 
-    private void uploadDetailsToServer() {
-        Intent intent = new Intent(ProfileFormStep1.this, CheckInternetAndUploadUserDetails.class);
-        sendBroadcast(intent);
+    private void uploadDetailsToServer(String isLastStep) {
+        CheckInternetAndUploadUserDetails ciauo = new CheckInternetAndUploadUserDetails(ProfileFormStep1.this, isLastStep);
+
     }
 
     @Override
@@ -500,6 +545,8 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             findViewById(R.id.up_arrow_4).setVisibility(View.VISIBLE);
         }
         genderImage.setImageDrawable(getResources().getDrawable(image));
+        //ProgressPieView ppv=(ProgressPieView)findViewById(R.id.progressPieViewXml);
+        //ppv.setProgress(60);
     }
 
     @Override
@@ -525,7 +572,9 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
             } else if (previousPosition == 3) {
 
                 checkIncompleteStep4();
-                saveStep4Data();
+                saveStep4Data(null);
+                uploadDetailsToServer(null);
+
             }
         }
         previousPosition = position;
@@ -544,4 +593,59 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
     public void setUser(UserModel user) {
         this.user = user;
     }
+
+    @Override
+    public void notifyUploadData(final ResponseModel responseModel, final String isLastStep, final Activity activity) {
+        //if (isActive) {
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                if (progressDialog != null && progressDialog.isShowing() && Constants.YES_1k.equals(isLastStep)) {
+                    progressDialog.hide();
+                    if (responseModel != null && responseModel.getData() != null && responseModel.getData().isAppliedFor1k()) {
+                        Intent intent1 = new Intent(activity, PendingFlashApprovalActivity.class);
+                        startActivity(intent1);
+                        finish();
+                    } else if (responseModel != null) {
+                        openDialogBox();
+                    }
+                }
+
+                if (responseModel != null) {
+                    for (Error error : responseModel.getErrors()) {
+                        if (error.getField().equalsIgnoreCase("fbUserId")) {
+                            ProfileFormStep1Fragment1 profileFormStep1Fragment1 = (ProfileFormStep1Fragment1) mPagerAdapter.getFragment(0);
+                            profileFormStep1Fragment1.showErrorResponse(error);
+                        } else if (error.getField().equalsIgnoreCase("pan")) {
+                            UserModel userDB = AppUtils.getUserObject(activity);
+                            userDB.setPanNumber(null);
+                            userDB.setUpdatePanNumber(true);
+                            AppUtils.saveUserObject(activity, userDB);
+
+                            user.setPanNumber(null);
+                            user.setPanDuplicate(true);
+                            user.setUpdatePanNumber(true);
+                            ProfileFormStep1Fragment3 profileFormStep1Fragment3 = (ProfileFormStep1Fragment3) mPagerAdapter.getFragment(2);
+                            profileFormStep1Fragment3.showErrorpanAadhaar(error);
+                            incompleteStep3.setVisibility(View.VISIBLE);
+                        } else if (error.getField().equalsIgnoreCase("aadhar")) {
+                            UserModel userDB = AppUtils.getUserObject(activity);
+                            userDB.setAadharNumber(null);
+                            userDB.setUpdateAadharNumber(true);
+                            AppUtils.saveUserObject(activity, userDB);
+                            user.setAadharNumber(null);
+                            user.setAadhaarDuplicate(true);
+                            user.setUpdateAadharNumber(true);
+                            ProfileFormStep1Fragment3 profileFormStep1Fragment3 = (ProfileFormStep1Fragment3) mPagerAdapter.getFragment(2);
+                            profileFormStep1Fragment3.showErrorpanAadhaar(error);
+                            incompleteStep3.setVisibility(View.VISIBLE);
+                        }
+                    }
+                } else {
+                    Toast.makeText(ProfileFormStep1.this, "Error connecting to server", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //}
+    }
+
 }

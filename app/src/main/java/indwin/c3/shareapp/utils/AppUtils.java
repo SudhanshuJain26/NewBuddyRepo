@@ -2,9 +2,17 @@ package indwin.c3.shareapp.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -52,6 +60,7 @@ public class AppUtils {
     static HashMap<String, HashMap<String, String>> brand;
     public static final String APP_NAME = "buddy";
     public static final String USER_OBJECT = "UserObject";
+    public static final String USER_OBJECT_SERVER = "UserObjectServer";
     public static final String IMAGE = "image";
     public static final String POSITION = "position";
     public static final String SOURCE = "source";
@@ -208,7 +217,7 @@ public class AppUtils {
                 for (int i = 0; i < familyMembers.length(); i++) {
                     JSONObject familyJson = familyMembers.getJSONObject(i);
                     if (i == 1) {
-                        if (familyJson.getString("relation") != null) {
+                        if (familyJson.opt("relation") != null) {
                             user.setFamilyMemberType2(familyJson.getString("relation"));
                             user.setProfessionFamilyMemberType2(familyJson.getString("occupation"));
                             user.setPhoneFamilyMemberType2(familyJson.getString("phone"));
@@ -216,7 +225,7 @@ public class AppUtils {
                                 user.setPrefferedLanguageFamilyMemberType2(familyJson.getString("preferredLanguage"));
                         }
                     } else {
-                        if (familyJson.getString("relation") != null) {
+                        if (familyJson.opt("relation") != null) {
                             user.setFamilyMemberType1(familyJson.getString("relation"));
                             user.setProfessionFamilyMemberType1(familyJson.getString("occupation"));
                             user.setPhoneFamilyMemberType1(familyJson.getString("phone"));
@@ -226,6 +235,8 @@ public class AppUtils {
                     }
                 }
             }
+            if (data1.opt("optionalNACH") != null)
+                user.setOptionalNACH(data1.getBoolean("optionalNACH"));
 
             if (data1.opt("bankAccountNumber") != null)
                 user.setBankAccNum(data1.getString("bankAccountNumber"));
@@ -287,6 +298,12 @@ public class AppUtils {
         }
     }
 
+    public static boolean isCloudinaryUrl(String url) {
+        if (url != null && url.contains("cloudinary")) {
+            return true;
+        }
+        return false;
+    }
 
     public static void hideKeyboard(Activity activity) {
         View view = activity.getCurrentFocus();
@@ -305,7 +322,6 @@ public class AppUtils {
                 .setConnectionTimeout(httpParameters, 30000);
 
         HttpClient client = new DefaultHttpClient(httpParameters);
-        //                String url2="http://54.255.147.43:80/api/user/form?phone="+sh_otp.getString("number","");
 
         HttpGet httppost = new HttpGet(url);
 
@@ -324,6 +340,40 @@ public class AppUtils {
         }
         return null;
 
+    }
+
+
+    public static String[] hasPermissions(final Activity activity, boolean deniedPermissionForever, final int REQUEST_PERMISSION_SETTING, final String... permissions) {
+        ArrayList<String> askPermissions = new ArrayList<>();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && activity != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+                    if (!activity.shouldShowRequestPermissionRationale(permission) && deniedPermissionForever) {
+                        showMessageOKCancel(activity, "You need to allow access to Images",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
+                                        intent.setData(uri);
+                                        activity.startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                                    }
+                                });
+                    }
+                    askPermissions.add(permission);
+                }
+            }
+        }
+        return askPermissions.toArray(new String[0]);
+    }
+
+    private static void showMessageOKCancel(Activity activity, String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(activity)
+                .setMessage(message)
+                .setPositiveButton("Settings", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
 

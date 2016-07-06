@@ -33,14 +33,14 @@
     android:layout_centerHorizontal="true"
     android:id="@+id/error"
     android:visibility="gone"
-
     android:layout_height="wrap_content">
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/warn"
         android:padding="2dp"
- android:src="@drawable/warning"
+        android:src="@drawable/warning"
         />
 <TextView
     android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
     android:background="@drawable/texted"
     android:textColorHint="#99ffffff"
     android:textColor="#CCffffff"
-android:gravity="center"
+    android:gravity="center"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:paddingLeft="16dp"
@@ -74,25 +74,15 @@ android:gravity="center"
     android:maxLength="4"
     android:inputType="number"
     android:textCursorDrawable="@null"
-
-
-
     android:id="@+id/otp1"
-
     android:hint="@string/hint1"/>
-        <ProgressBar
-            android:id="@+id/progressBar1"
-            android:layout_above="@id/otp1"
-            android:background="@xml/progress"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+
 
 <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/texted"
-        android:layout_centerInParent="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/texted"
+    android:layout_centerInParent="true"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:paddingLeft="16dp"
@@ -212,4 +202,12 @@ android:id="@+id/ver"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="272dp"
         android:layout_marginStart="272dp"></FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        android:background="@xml/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textLookBuddy"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

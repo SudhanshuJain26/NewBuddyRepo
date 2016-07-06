@@ -2,6 +2,7 @@ package indwin.c3.shareapp;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.app.VoiceInteractor;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,7 +41,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import indwin.c3.shareapp.activities.ProfileActivity;
@@ -72,7 +75,7 @@ public class Splash extends AppCompatActivity {
     SharedPreferences sh, sh_otp;
 
     public static int notify = 0;
-
+    public String dateStamp;
     public static final String MyPREFERENCES = "buddy";
     SharedPreferences sharedpreferences, sharedpreferences2;
     String url2 = "";
@@ -104,6 +107,8 @@ public class Splash extends AppCompatActivity {
         mTracker = application.getDefaultTracker();
         gson = new Gson();
         init();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        dateStamp = sdf.format(new Date());
 
 
         sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
@@ -563,76 +568,6 @@ public class Splash extends AppCompatActivity {
         }
     }
 
-    private class GetTrendingProducts extends AsyncTask<String, Void, String> {
-
-
-        @Override
-        protected String doInBackground(String... params) {
-            String url = BuildConfig.SERVER_URL+"api/product/trending?category=Computers&category=Mobiles&count=10";
-            String urldisplay = params[0];
-            try {
-                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
-                String tok_sp = toks.getString("token_value", "");
-               // String tok_sp = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NjU1NDQwMDgsImV4cCI6MTQ2NTU4MDAwOH0.ZpAwCEB0lYSqiYdfaBYjnBJOXfGrqE9qN8USoRzWR8g";
-                HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
-                if (response != null) {
-                    HttpEntity ent = response.getEntity();
-                    String responseString = EntityUtils.toString(ent, "UTF-8");
-                    if (response.getStatusLine().getStatusCode() != 200) {
-
-
-                        Log.e("MeshCommunication", "Server returned code "
-                                + response.getStatusLine().getStatusCode());
-                        return "fail";
-                    } else {
-
-                        JSONObject resp = new JSONObject(responseString);
-                        if (resp.getString("status").equals("success")) {
-                            JSONArray data1 = new JSONArray(resp.getString("data"));
-                            int lenght = data1.length();
-                            for (int j = 0; j < 10; j++) {
-                                JSONObject js = data1.getJSONObject(j);
-                                String categ = js.getString("category");
-                                String subc = js.getString("subCategory");
-                                String brand1 = js.getString("brand");
-                                String id = js.getString("title");
-                                //String mrp = js.getString("mrp");
-                                String seller = js.getString("seller");
-                                String fkid = js.getString("fkProductId");
-                                String selling_price = js.getString("sellingPrice");
-                                JSONObject img = new JSONObject(js.getString("imgUrls"));
-                                String imgurl = img.getString("200x200");
-                                category.get(urldisplay).put(String.valueOf(j), categ);
-                                subCategory.get(urldisplay).put(String.valueOf(j), subc);
-                                brand.get(urldisplay).put(String.valueOf(j), brand1);
-                                image.get(urldisplay).put(String.valueOf(j), imgurl);
-                                //mrp1.get(urldisplay).put(String.valueOf(j), mrp);
-                                title.get(urldisplay).put(String.valueOf(j), id);
-                                fkid1.get(urldisplay).put(String.valueOf(j), fkid);
-                                selling.get(urldisplay).put(String.valueOf(j), selling_price);
-                                sellers.get(urldisplay).put(String.valueOf(j), seller);
-
-
-                            }
-                            Log.i("trending", "called");
-                            return "win";
-                            //versioncode=data1.getString("version_code");
-                            //return versioncode;
-                        } else
-                            return "fail";
-
-
-                    }
-                }
-
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            return null;
-        }
-    }
 
 
     public class CheckVersion extends AsyncTask<String, Void, String> {
@@ -787,6 +722,55 @@ public class Splash extends AppCompatActivity {
                 }
             }
         }
+
+    public class SendSessionDetails extends AsyncTask<Void,Void,String>{
+        JSONObject jsonObject = new JSONObject();
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try{
+
+                SharedPreferences cred = getApplicationContext().getSharedPreferences("cred", Context.MODE_PRIVATE);
+                String creduserid = cred.getString("phone_number", "");
+                jsonObject.put("userId",creduserid);
+                jsonObject.put("timeStamp",dateStamp);
+                jsonObject.put("clientDevice","android");
+
+                HttpResponse response = AppUtils.connectToServerPost(url, null, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
+
+
+                        Log.e("MeshCommunication", "Server returned code "
+                                + response.getStatusLine().getStatusCode());
+                        return "fail";
+                    } else {
+
+                        JSONObject resp = new JSONObject(responseString);
+
+                        if (resp.getString("status").contains("fail")) {
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return "fail";
+                        } else {
+
+                            return "win";
+
+                        }
+
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 
         public boolean isNetworkAvailable() {
             ConnectivityManager connectivityManager

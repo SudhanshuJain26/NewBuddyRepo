@@ -102,6 +102,7 @@ public class Otp extends AppCompatActivity {
             }
 
             public void onFinish() {
+
                 timer.setText("Resend Otp");
                 timer.setEnabled(true);
                 //mTextField.setText("done!");
@@ -119,6 +120,7 @@ public class Otp extends AppCompatActivity {
         //countDownTimer = new MalibuCountDownTimer(30000, 1000);
 
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.INVISIBLE);
         otp1 = (EditText) findViewById(R.id.otp1);
         otp1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -235,8 +237,12 @@ public class Otp extends AppCompatActivity {
                             Long time = Calendar.getInstance().getTimeInMillis() / 1000;
                             Long oldtime = toks.getLong("expires", 0);
                             //        Toast.makeText(FacebookAuth.this, String.valueOf(oldtime), Toast.LENGTH_SHORT).show();
-                            if (time + 5 < toks.getLong("expires", 0))
+                            if (time + 5 < toks.getLong("expires", 0)) {
                                 new verifyOtp().execute("");
+
+
+                            }
+
                             else
                                 new AuthTokc().execute();
                         }
@@ -288,7 +294,9 @@ public class Otp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 verify.setEnabled(false);
+                spinner.setVisibility(View.VISIBLE);
                 verify.setTextColor(Color.parseColor("#ffffff"));
+
 
                 if ((otp1.getText().toString().length() == 4))// && (otp2.getText().toString().length() == 1) && (otp3.getText().toString().length() == 1) && (otp4.getText().toString().length() == 1)) {
                 {
@@ -382,7 +390,9 @@ public class Otp extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             spinner.setVisibility(View.VISIBLE);
+            timer.setVisibility(View.INVISIBLE);
         }
+
 
 
         @Override
@@ -578,12 +588,17 @@ public class Otp extends AppCompatActivity {
             if (ot_check != 3) {
                 verify.setEnabled(true);
 
+
                 verify.setTextColor(Color.parseColor("#ffffff"));
                 d = 0;
                 spinner.setVisibility(View.GONE);
             }
+            if(spinner.getVisibility()==View.VISIBLE){
+                spinner.setVisibility(View.GONE);
+            }
             if (ot_check == 3) {
                 verify.setEnabled(true);
+                timer.setVisibility(View.VISIBLE);
 
                 verify.setTextColor(Color.parseColor("#664A4A4A"));
                 d = 0;

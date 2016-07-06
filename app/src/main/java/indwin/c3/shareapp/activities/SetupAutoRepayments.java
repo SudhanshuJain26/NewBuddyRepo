@@ -4,17 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +35,6 @@ import indwin.c3.shareapp.fragments.ProfileFormStep2Fragment4;
 import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
-import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.Constants;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
@@ -117,7 +111,7 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
                     @Override
                     public void onItemClick(View view, int position) {
                         if (bankProof.getImgUrls().get(position - user.getBankProof().getInvalidImgUrls().size() - user.getBankProof().getValidImgUrls().size()).equals("add")) {
-                            String[] temp = hasPermissions(SetupAutoRepayments.this, PERMISSIONS);
+                            String[] temp = AppUtils.hasPermissions(SetupAutoRepayments.this, deniedPermissionForever, REQUEST_PERMISSION_SETTING, PERMISSIONS);
                             if (temp != null && temp.length != 0) {
                                 deniedPermissionForever = true;
                                 PERMISSIONS = temp;
@@ -196,15 +190,13 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
                 user.setBankIfsc(ifscCode.getText().toString().toUpperCase());
                 user.setUpdateBankIfsc(true);
                 AppUtils.saveUserObject(SetupAutoRepayments.this, user);
-                Intent intent = new Intent(SetupAutoRepayments.this, CheckInternetAndUploadUserDetails.class);
-                sendBroadcast(intent);
                 ProfileFormStep2Fragment4.bankAccNum.setText(mask);
+                ProfileFormStep2Fragment4.setupNachLL.setVisibility(View.GONE);
                 ProfileFormStep2Fragment4.setupAutoRepayments.setVisibility(View.GONE);
                 ProfileFormStep2Fragment4.bankAccNum.setVisibility(View.VISIBLE);
                 ProfileFormStep2Fragment4.incompleteSetupRepayments.setVisibility(View.GONE);
                 ProfileFormStep2Fragment4.changeAccNum.setVisibility(View.VISIBLE);
-                //                ProfileFormStep2Fragment3.completeSetupRepayments.setVisibility(View.GONE);
-                //                ProfileFormStep2Fragment3.changeAccNum.setVisibility(View.VISIBLE);
+                ProfileFormStep2Fragment4.bankErrorTv.setVisibility(View.GONE);
                 finish();
             }
         });
@@ -351,38 +343,6 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
         return false;
     }
 
-    public String[] hasPermissions(Context context, final String... permissions) {
-        ArrayList<String> askPermissions = new ArrayList<>();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    if (!shouldShowRequestPermissionRationale(permission) && deniedPermissionForever) {
-                        showMessageOKCancel("You need to allow access to Images",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                        intent.setData(uri);
-                                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                                    }
-                                });
-                    }
-                    askPermissions.add(permission);
-                }
-            }
-        }
-        return askPermissions.toArray(new String[0]);
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(this)
-                .setMessage(message)
-                .setPositiveButton("Settings", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -422,7 +382,7 @@ public class SetupAutoRepayments extends AppCompatActivity implements View.OnFoc
             adapter.notifyDataSetChanged();
             image.setUpdateNewImgUrls(true);
         } else if (requestCode == REQUEST_PERMISSION_SETTING && resuleCode == Activity.RESULT_OK) {
-            hasPermissions(this, PERMISSIONS);
+            AppUtils.hasPermissions(this, deniedPermissionForever, REQUEST_PERMISSION_SETTING, PERMISSIONS);
         }
     }
 }

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="indwin.c3.shareapp.ShareSecond">
+
+    <RelativeLayout
+    android:id="@+id/toolBar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/abc_action_bar_default_height_material"
+    android:background="@color/background">
+
+    <ImageView
+    android:id="@+id/backo"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:padding="5dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="14dp"
+    android:src="@drawable/back11"
+    android:tint="#ffffff" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="16dp"
+    android:layout_toRightOf="@id/backo"
+    android:text="Invite friends to Buddy"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:textColor="#ffffff" />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/toolBar"
+    android:orientation="vertical"
+    android:background="#fff">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src ="@drawable/share1"
+            android:layout_marginTop="40dp"
+            android:gravity = "center"
+            android:id="@+id/email"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/invite_friends"
+            android:textColor="@color/background"
+            android:padding="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No SMS charges applicable"
+            android:textSize="11sp"
+            android:textColor="@color/textcolor_invite"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="OR"
+            android:textColor="@color/textcolor_invite"
+            android:gravity="center"
+            android:layout_marginTop="20dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:id="@+id/coupon_code"
+            android:background="@drawable/rectangle_box">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/inside"
+                android:gravity="center"
+                android:textColor="@color/colorSignature"
+                android:textSize="14sp"
+                android:layout_centerVertical="true"
+                 />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/blueshare1x"
+                android:layout_toRightOf="@+id/inside"
+                android:layout_marginLeft="10dp"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:text="Share your invite code"
+            android:textColor="@color/background"
+            android:padding="5dp"/>
+
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="25dp"
+            android:text="@string/cashback"
+            android:textSize="13sp"
+            android:id="@id/line1"
+            android:lineSpacingMultiplier="1.4"
+            android:textColor="@color/textcolor_invite"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/payment_cashback"
+            android:id="@+id/line2"
+            android:lineSpacingMultiplier="1.4"
+            android:textSize="13sp"
+            android:textColor="@color/textcolor_invite"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:text = "Get upto Rs.3000 fuenfunfui ufaienfuinfeiwbf fiuenbvfwebcldv"
+            android:id="@+id/line3"
+            android:lineSpacingMultiplier="1.4"
+            android:textSize="13sp"
+            android:textColor="@color/textcolor_invite"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/background"
+            android:gravity="center"
+            android:text="@string/verifyEarnings"    />
+
+    </LinearLayout>
+</RelativeLayout>
+
+
+

@@ -4,18 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +27,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,8 +34,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,6 +42,7 @@ import indwin.c3.shareapp.activities.FullScreenActivity;
 import indwin.c3.shareapp.activities.ImageHelperActivity;
 import indwin.c3.shareapp.activities.ProfileFormStep1;
 import indwin.c3.shareapp.adapters.ImageUploaderRecyclerAdapter;
+import indwin.c3.shareapp.models.Error;
 import indwin.c3.shareapp.models.FrontBackImage;
 import indwin.c3.shareapp.models.Image;
 import indwin.c3.shareapp.models.UserModel;
@@ -59,33 +51,25 @@ import indwin.c3.shareapp.utils.Constants;
 import indwin.c3.shareapp.utils.HelpTipDialog;
 import indwin.c3.shareapp.utils.RecyclerItemClickListener;
 import indwin.c3.shareapp.utils.VerhoeffAlgorithm;
-import io.intercom.com.google.gson.Gson;
 
 /**
- * Created by shubhang on 18/03/16.
+ * Created by ROCK
  */
 public class ProfileFormStep1Fragment3 extends Fragment {
-    private ArrayList<String> addressProofs;
-    private Map<String, String> newaddressProofs;
     private static final int INTENT_REQUEST_GET_IMAGES = 13;
     ImageUploaderRecyclerAdapter adapter;
     ArrayList<Uri> imageUris;
-    private SharedPreferences mPrefs;
-    private Gson gson;
     private UserModel user;
     private EditText editAadharNumber;
-    private TextView aadharNuber, aadharPanHeader, editTextHeader, gotoFragment1, gotoFragment2, gotoFragment3;
+    private TextView aadharNuber, aadharPanHeader, editTextHeader;
     private Spinner aadharOrPan;
     String[] arrayAaadharOrPan;
     private CardView editTextCardView;
-    private Button saveAndProceed, previous;
-    private ImageView incompleteAadhar, completeAadhar, completeAadhar1, incompleteAddress, completeAddress, incompleteStep1, incompleteStep2, incompleteStep3;
+    private ImageView incompleteAadhar, incompleteAadhar1, completeAadhar, completeAadhar1, incompleteAddress, completeAddress;
     int currentSelected;
-    private final int top = 16, left = 16, right = 16, bottom = 16;
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     boolean deniedPermissionForever = false;
     private static final int REQUEST_PERMISSION_SETTING = 99;
-    ImageView topImage;
     private ImageButton aadharHelptip, addressHelptip, addPanHelptip;
     boolean validAadhar = false;
     private LinearLayout incorrectFormat;
@@ -97,12 +81,14 @@ public class ProfileFormStep1Fragment3 extends Fragment {
     private Spinner addressTypeSp;
     private ImageView addPanImage;
     private String typeImage;
-    private RelativeLayout panRL;
     private LinearLayout panImageLL;
     private CardView addressProofCv;
     private String[] addressValue = {"aadhaar", "dl", "voterid", "passport", "ration"};
+    private TextView panAadharErrorTv;
+    private String oldAadharNumber;
 
     @Override
+
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -111,16 +97,10 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         getAllViews(rootView);
         arrayAaadharOrPan = getResources().getStringArray(R.array.aadhar_or_pan);
         RecyclerView rvImages = (RecyclerView) rootView.findViewById(R.id.rvImages);
-        mPrefs = getActivity().getSharedPreferences("buddy", Context.MODE_PRIVATE);
-        mPrefs.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
-        gson = new Gson();
-        String json = mPrefs.getString("UserObject", "");
         ProfileFormStep1 profileFormStep1 = (ProfileFormStep1) getActivity();
         user = profileFormStep1.getUser();
-        newaddressProofs = new HashMap<>();
 
         try {
-            addressProofs = user.getAddressProofs();
             if (user.getAddressProof() == null) {
                 user.setAddressProof(new Image());
             } else if (user.getAddressProof().getFront() != null && AppUtils.isNotEmpty(user.getAddressProof().getFront().getImgUrl())) {
@@ -128,7 +108,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 user.setIncompletePermanentAddress(false);
             }
         } catch (Exception e) {
-            addressProofs = new ArrayList<>();
         }
         addressProof = user.getAddressProof();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -146,7 +125,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                             //|| (position == 1 && (addressProof.getBack() == null || AppUtils.isEmpty(addressProof.getBack().getImgUrl()))) && !user.isAppliedFor1k()
                                 ) {
                             clickedPosition = position;
-                            String[] temp = hasPermissions(getActivity(), PERMISSIONS);
+                            String[] temp = AppUtils.hasPermissions(getActivity(), deniedPermissionForever, REQUEST_PERMISSION_SETTING, PERMISSIONS);
                             if (temp != null && temp.length != 0) {
                                 deniedPermissionForever = true;
                                 PERMISSIONS = temp;
@@ -201,7 +180,6 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 } else uploadImageMsgTv.setText("Upload your Aadhar Proof");
                 aadharPanHeader.setText(arrayAaadharOrPan[0]);
                 aadharNuber.setText(user.getAadharNumber());
-                completeAadhar1.setVisibility(View.VISIBLE);
                 user.setIncompleteAadhar(false);
                 aadharNuber.setVisibility(View.VISIBLE);
                 editTextHeader.setVisibility(View.GONE);
@@ -209,13 +187,14 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 aadharPanHeader.setVisibility(View.VISIBLE);
                 saveAadhar.setVisibility(View.GONE);
                 panImageLL.setVisibility(View.GONE);
+                hideAllAadharDrawable();
+                completeAadhar1.setVisibility(View.VISIBLE);
             } else if ("PAN".equals(user.getPanOrAadhar()) && user.getPanNumber() != null && !"".equals(user.getPanNumber())) {
                 editAadharNumber.setVisibility(View.GONE);
                 addressProofCv.setVisibility(View.VISIBLE);
                 aadharOrPan.setTag(1);
                 aadharPanHeader.setText(arrayAaadharOrPan[1]);
                 aadharNuber.setText(user.getPanNumber());
-                completeAadhar1.setVisibility(View.VISIBLE);
                 user.setIncompleteAadhar(false);
                 uploadImageMsgTv.setText("Upload your Permanent Address Proof");
                 aadharNuber.setVisibility(View.VISIBLE);
@@ -225,6 +204,10 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 saveAadhar.setVisibility(View.GONE);
 
                 panImageLL.setVisibility(View.VISIBLE);
+                hideAllAadharDrawable();
+                completeAadhar1.setVisibility(View.VISIBLE);
+
+
             }
         }
 
@@ -254,8 +237,10 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         setOnClickListener();
         aadharOrPan.setAdapter(adapter);
         if (user.isIncompleteAadhar() || user.isIncompletePermanentAddress()) {
-            if (user.isIncompleteAadhar() && !user.isAppliedFor1k())
+            if (user.isIncompleteAadhar() && !user.isAppliedFor1k()) {
+                hideAllAadharDrawable();
                 incompleteAadhar.setVisibility(View.VISIBLE);
+            }
             if (user.isIncompletePermanentAddress() && !user.isAppliedFor1k())
                 incompleteAddress.setVisibility(View.VISIBLE);
         }
@@ -267,7 +252,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             @Override
             public void onClick(View v) {
                 typeImage = Constants.IMAGE_TYPE.PAN.toString();
-                String[] temp = hasPermissions(getActivity(), PERMISSIONS);
+                String[] temp = AppUtils.hasPermissions(getActivity(), deniedPermissionForever, REQUEST_PERMISSION_SETTING, PERMISSIONS);
                 if (temp != null && temp.length != 0) {
                     deniedPermissionForever = true;
                     PERMISSIONS = temp;
@@ -321,6 +306,9 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         aadharOrPan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (currentSelected != position)
+                    panAadharErrorTv.setVisibility(View.GONE);
+
                 if (position == 0) {
                     addressProofCv.setVisibility(View.GONE);
                     uploadImageMsgTv.setText("Upload your Aadhar Proof");
@@ -397,7 +385,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 editTextHeader.setVisibility(View.VISIBLE);
                 aadharNuber.setVisibility(View.GONE);
                 editAadhar.setVisibility(View.GONE);
-                completeAadhar1.setVisibility(View.GONE);
+                hideAllAadharDrawable();
                 saveAadhar.setVisibility(View.VISIBLE);
                 editAadharNumber.setVisibility(View.VISIBLE);
                 editTextCardView.setVisibility(View.VISIBLE);
@@ -420,22 +408,9 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
     }
 
-    private void saveSelfieAndSignature() {
-        UserModel userSP = AppUtils.getUserObject(getActivity());
-        if (AppUtils.isNotEmpty(userSP.getSignature())) {
-            user.setSignature(userSP.getSignature());
-            user.setUpdateSignature(userSP.isUpdateSignature());
-
-        }
-
-        if (AppUtils.isNotEmpty(userSP.getSelfie())) {
-            user.setSelfie(userSP.getSelfie());
-            user.setUpdateSelfie(userSP.isUpdateSelfie());
-
-        }
-    }
 
     private void getAllViews(View rootView) {
+        panAadharErrorTv = (TextView) rootView.findViewById(R.id.pan_aadhar_error_tv);
         addressProofCv = (CardView) rootView.findViewById(R.id.address_proof_cv);
         panImageLL = (LinearLayout) rootView.findViewById(R.id.pan_image_ll);
         addPanImage = (ImageView) rootView.findViewById(R.id.addPanImage);
@@ -444,20 +419,13 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         aadharPanHeader = (TextView) rootView.findViewById(R.id.aadhar_pan_header);
         editTextHeader = (TextView) rootView.findViewById(R.id.editext_header);
         editTextCardView = (CardView) rootView.findViewById(R.id.edittext_carview);
-        previous = (Button) getActivity().findViewById(R.id.previous);
         editAadharNumber = (EditText) rootView.findViewById(R.id.edit_aadhar_number);
         incompleteAadhar = (ImageView) rootView.findViewById(R.id.incomplete_aadhar);
         completeAadhar = (ImageView) rootView.findViewById(R.id.complete_aadhar);
         completeAadhar1 = (ImageView) rootView.findViewById(R.id.complete_aadhar_1);
+        incompleteAadhar1 = (ImageView) rootView.findViewById(R.id.incomplete_aadhar_1);
         incompleteAddress = (ImageView) rootView.findViewById(R.id.incomplete_address_proof);
         currentSelected = 0;
-        incompleteStep1 = (ImageView) getActivity().findViewById(R.id.incomplete_step_1);
-        incompleteStep2 = (ImageView) getActivity().findViewById(R.id.incomplete_step_2);
-        incompleteStep3 = (ImageView) getActivity().findViewById(R.id.incomplete_step_3);
-        topImage = (ImageView) rootView.findViewById(R.id.verify_image_view2);
-        saveAndProceed = (Button) getActivity().findViewById(R.id.save_and_proceed);
-        panRL = (RelativeLayout) rootView.findViewById(R.id.panRL);
-        topImage = (ImageView) getActivity().findViewById(R.id.verify_image_view2);
         aadharHelptip = (ImageButton) rootView.findViewById(R.id.aadhar_helptip);
         addressHelptip = (ImageButton) rootView.findViewById(R.id.address_helptip);
         incorrectFormat = (LinearLayout) rootView.findViewById(R.id.incorrect_format_layout);
@@ -487,6 +455,13 @@ public class ProfileFormStep1Fragment3 extends Fragment {
             if (!validAadhar) {
                 incorrectFormat.setVisibility(View.VISIBLE);
             } else {
+                hideAllAadharDrawable();
+                if (editAadharNumber.getText().toString().equals(oldAadharNumber)) {
+
+                } else {
+                    oldAadharNumber = editAadharNumber.getText().toString();
+                    panAadharErrorTv.setVisibility(View.GONE);
+                }
                 incompleteAadhar.setVisibility(View.GONE);
                 incorrectFormat.setVisibility(View.GONE);
                 aadharNuber.setText(text);
@@ -505,7 +480,7 @@ public class ProfileFormStep1Fragment3 extends Fragment {
                 } else {
                     userModel.setPanNumber(text.toUpperCase());
                     userModel.setUpdatePanNumber(true);
-                    this.user.setAadharNumber(text.toUpperCase());
+                    this.user.setPanNumber(text.toUpperCase());
                     userModel.setPanOrAadhar("PAN");
                     AppUtils.saveUserObject(getActivity(), userModel);
                     aadharPanHeader.setText("PAN");
@@ -530,15 +505,18 @@ public class ProfileFormStep1Fragment3 extends Fragment {
 
     public void checkIncomplete() {
 
-        if (aadharNuber.getVisibility() == View.GONE) {
-            user.setIncompleteAadhar(true);
-            incompleteAadhar.setVisibility(View.VISIBLE);
-            completeAadhar.setVisibility(View.GONE);
-        } else {
+        if ((AppUtils.isNotEmpty(user.getPanNumber()) && "pan".equalsIgnoreCase(user.getPanOrAadhar())) || (AppUtils.isNotEmpty(user.getAadharNumber()) && "aadhar".equalsIgnoreCase(user.getPanOrAadhar()))) {
             user.setIncompleteAadhar(false);
-            incompleteAadhar.setVisibility(View.GONE);
-            if (aadharPanHeader.getVisibility() == View.GONE)
-                completeAadhar.setVisibility(View.VISIBLE);
+
+            hideAllAadharDrawable();
+            completeAadhar1.setVisibility(View.VISIBLE);
+        } else {
+            hideAllAadharDrawable();
+            user.setIncompleteAadhar(true);
+            if (!aadharNuber.getText().toString().trim().isEmpty()) {
+                incompleteAadhar1.setVisibility(View.VISIBLE);
+            } else
+                incompleteAadhar.setVisibility(View.VISIBLE);
         }
         if (addressProof.getFront() == null || AppUtils.isEmpty(addressProof.getFront().getImgUrl())) {
             user.setIncompletePermanentAddress(true);
@@ -623,37 +601,18 @@ public class ProfileFormStep1Fragment3 extends Fragment {
         }
     }
 
-    public String[] hasPermissions(Context context, final String... permissions) {
-        ArrayList<String> askPermissions = new ArrayList<>();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    if (!shouldShowRequestPermissionRationale(permission) && deniedPermissionForever) {
-                        showMessageOKCancel("You need to allow access to Images",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-                                        intent.setData(uri);
-                                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                                    }
-                                });
-                    }
-                    askPermissions.add(permission);
-                }
-            }
-        }
-        return askPermissions.toArray(new String[0]);
+    public void showErrorpanAadhaar(Error error) {
+        panAadharErrorTv.setVisibility(View.VISIBLE);
+        panAadharErrorTv.setText(error.getError());
+        hideAllAadharDrawable();
+        incompleteAadhar1.setVisibility(View.VISIBLE);
     }
 
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(getActivity())
-                .setMessage(message)
-                .setPositiveButton("Settings", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
+    private void hideAllAadharDrawable() {
+        incompleteAadhar1.setVisibility(View.GONE);
+        completeAadhar.setVisibility(View.GONE);
+        incompleteAadhar.setVisibility(View.GONE);
+        completeAadhar1.setVisibility(View.GONE);
     }
 
     @Override

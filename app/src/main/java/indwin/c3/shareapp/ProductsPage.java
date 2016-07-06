@@ -2037,7 +2037,11 @@ d=currDay;
         } else if (parseString.contains("paytm")) {
             sellerNme1 = "paytm";
             checkValidFromApis = 1;
+        }else if(parseString.contains("ebay")){
+            sellerNme1 = "ebay";
+            checkValidFromApis = 1;
         }
+
         //amazon
         else if (parseString.contains("amazon")) {
             sellerNme1 = "amazon";
@@ -2206,6 +2210,9 @@ d=currDay;
         if ("snapdeal".equals(seller)) {
             logo.setImageResource(R.drawable.snapdeal);
         }
+        if ("ebay".equals(seller)) {
+            logo.setImageResource(R.drawable.logo1x);
+        }
 
 
         queryNew = (EditText) findViewById(R.id.query);
@@ -2272,6 +2279,9 @@ d=currDay;
                     }
                     if ("shopclues".equals(sellerNme1)) {
                         logo.setImageResource(R.drawable.shopclues);
+                    }
+                    if ("ebay".equals(sellerNme1)) {
+                        logo.setImageResource(R.drawable.logo1x);
                     }
                     //                JSONObject img = new JSONObject(data1.getString("imgUrls"));
                     //                urlImg = img.getString("400x400");

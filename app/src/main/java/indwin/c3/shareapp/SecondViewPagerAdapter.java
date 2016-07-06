@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import indwin.c3.shareapp.models.Image;
 
 /**
@@ -30,11 +32,12 @@ public class SecondViewPagerAdapter extends PagerAdapter {
     ImageView img2;
     ImageView img3;
     ImageView img4;
+    String[] urls;
 
-    public SecondViewPagerAdapter(Context context, int size, HomePage act) {
+    public SecondViewPagerAdapter(Context context,String[] urls, HomePage act) {
         this.context = context;
-        this.size = size;
         this.act = act;
+        this.urls = urls;
         inflater = (LayoutInflater) act
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -56,7 +59,7 @@ public class SecondViewPagerAdapter extends PagerAdapter {
                    dot3.setVisibility(View.GONE);
                    dot4.setVisibility(View.GONE);
                    img1 = (ImageView) layout.findViewById(R.id.imageView1);
-                   img1.setImageResource(R.drawable.first_image);
+                   Picasso.with(context).load(urls[0]).into(img1);
 //                   img1.setOnClickListener(new View.OnClickListener() {
 //                       @Override
 //                       public void onClick(View v) {
@@ -80,7 +83,7 @@ public class SecondViewPagerAdapter extends PagerAdapter {
                    dot3.setVisibility(View.GONE);
                    dot4.setVisibility(View.GONE);
                    img2 = (ImageView) layout.findViewById(R.id.imageView1);
-                   img2.setImageResource(R.drawable.second_image);
+                   Picasso.with(context).load(urls[1]).into(img2);
 //                img.setOnClickListener(new View.OnClickListener() {
 ////                    @Override
 ////                    public void onClick(View v) {
@@ -105,7 +108,7 @@ public class SecondViewPagerAdapter extends PagerAdapter {
                    dot4.setVisibility(View.GONE);
 
                    img3 = (ImageView) layout.findViewById(R.id.imageView1);
-                   img3.setImageResource(R.drawable.third_image);
+                   Picasso.with(context).load(urls[2]).into(img3);
                    img3.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
@@ -128,7 +131,7 @@ public class SecondViewPagerAdapter extends PagerAdapter {
                    dot4.setVisibility(View.GONE);
                    dot4.setBackgroundResource(R.drawable.circle2);
                    img4 = (ImageView) layout.findViewById(R.id.imageView1);
-                   img4.setImageResource(R.drawable.forth_image);
+                   Picasso.with(context).load(urls[3]).into(img4);
                    img4.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
@@ -177,7 +180,7 @@ public class SecondViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return size;
+        return urls.length;
     }
 
 

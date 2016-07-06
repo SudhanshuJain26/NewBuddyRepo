@@ -79,7 +79,7 @@ public class UserModel {
     Map<String, String> newBankStmts;
     ArrayList<String> bankProofs;
     Map<String, String> newBankProofs;
-
+    private Boolean optionalNACH;
     String iv;
     int creditLimit = 0;
     int availableCredit = 0;
@@ -171,6 +171,76 @@ public class UserModel {
 
     private Image addressProof;
     private Image bankStatement;
+
+
+    private boolean isFbUserIdDuplicate;
+    private boolean isPanDuplicate;
+    private boolean isAadhaarDuplicate;
+    private boolean isRollNumberDuplicate;
+    private boolean isFbUserIdWrong;
+    private boolean isBankAccDuplicate;
+    private boolean isFamilyPhoneDuplicate;
+
+
+    public void setFbConnected(boolean fbConnected) {
+        isFbConnected = fbConnected;
+    }
+
+    public boolean isFbUserIdDuplicate() {
+        return isFbUserIdDuplicate;
+    }
+
+    public void setFbUserIdDuplicate(boolean fbUserIdDuplicate) {
+        isFbUserIdDuplicate = fbUserIdDuplicate;
+    }
+
+    public boolean isPanDuplicate() {
+        return isPanDuplicate;
+    }
+
+    public void setPanDuplicate(boolean panDuplicate) {
+        isPanDuplicate = panDuplicate;
+    }
+
+    public boolean isAadhaarDuplicate() {
+        return isAadhaarDuplicate;
+    }
+
+    public void setAadhaarDuplicate(boolean aadhaarDuplicate) {
+        isAadhaarDuplicate = aadhaarDuplicate;
+    }
+
+    public boolean isRollNumberDuplicate() {
+        return isRollNumberDuplicate;
+    }
+
+    public void setRollNumberDuplicate(boolean rollNumberDuplicate) {
+        isRollNumberDuplicate = rollNumberDuplicate;
+    }
+
+    public boolean isFbUserIdWrong() {
+        return isFbUserIdWrong;
+    }
+
+    public void setFbUserIdWrong(boolean fbUserIdWrong) {
+        isFbUserIdWrong = fbUserIdWrong;
+    }
+
+    public boolean isBankAccDuplicate() {
+        return isBankAccDuplicate;
+    }
+
+    public void setBankAccDuplicate(boolean bankAccDuplicate) {
+        isBankAccDuplicate = bankAccDuplicate;
+    }
+
+    public boolean isFamilyPhoneDuplicate() {
+        return isFamilyPhoneDuplicate;
+    }
+
+    public void setFamilyPhoneDuplicate(boolean familyPhoneDuplicate) {
+        isFamilyPhoneDuplicate = familyPhoneDuplicate;
+    }
 
     public boolean isEmailSent() {
         return emailSent;
@@ -1500,5 +1570,13 @@ public class UserModel {
 
     public void setTncUpdate(boolean tncUpdate) {
         this.tncUpdate = tncUpdate;
+    }
+
+    public Boolean isOptionalNACH() {
+        return optionalNACH;
+    }
+
+    public void setOptionalNACH(Boolean optionalNACH) {
+        this.optionalNACH = optionalNACH;
     }
 }

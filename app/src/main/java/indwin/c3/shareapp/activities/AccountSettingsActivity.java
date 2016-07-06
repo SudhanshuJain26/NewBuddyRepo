@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,14 +22,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
 import indwin.c3.shareapp.utils.FetchLatestUserDetails;
+import indwin.c3.shareapp.utils.FetchNewToken;
 import indwin.c3.shareapp.utils.ValidationUtils;
-import indwin.c3.shareapp.utils.VerifyEmail;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.com.google.gson.Gson;
 
@@ -49,6 +60,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             emailUnderline;
     LinearLayout changePasswordLayout, deleteAccountLayout;
     private TextView incorrectEmail;
+    private String errorMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +141,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 nameUnderline.setLayoutParams(params);
             }
         });
-
 
         saveName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,12 +228,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                                  emailUnderline.setLayoutParams(params);
                                              } else {
                                                  incorrectEmail.setVisibility(View.VISIBLE);
-
                                              }
                                          }
 
                                      }
-
         );
         editEmail.setOnClickListener(new View.OnClickListener()
 
@@ -236,8 +245,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                              editEmail.setVisibility(View.GONE);
                                              saveEmail.setVisibility(View.VISIBLE);
                                              verifyEmail.setTextColor(Color.parseColor("#7c6a94"));
-
-
                                              verifyEmail.setClickable(true);
                                              verifyEmail.setEnabled(true);
                                              verifyEmail.setVisibility(View.GONE);
@@ -248,7 +255,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                              emailUnderline.setLayoutParams(params);
                                          }
                                      }
-
         );
         verifyEmail.setOnClickListener(new View.OnClickListener()
 
@@ -264,7 +270,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                                    }
                                            }
                                        }
-
         );
 
         changePassword.setOnClickListener(new View.OnClickListener()
@@ -276,7 +281,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                                   startActivity(intent);
                                               }
                                           }
-
         );
         changePasswordLayout.setOnClickListener(new View.OnClickListener()
 
@@ -287,7 +291,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                                         startActivity(intent);
                                                     }
                                                 }
-
         );
         deleteAccountLayout.setOnClickListener(new View.OnClickListener()
 
@@ -298,7 +301,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                                        startActivity(intent);
                                                    }
                                                }
-
         );
         deleteAccount.setOnClickListener(new View.OnClickListener()
 
@@ -309,7 +311,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                                  startActivity(intent);
                                              }
                                          }
-
         );
     }
 
@@ -338,5 +339,87 @@ public class AccountSettingsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+
+    public class VerifyEmail extends
+                             AsyncTask<String, Void, String> {
+
+        Context context;
+        int retryCount = 0;
+        String phone;
+        String email;
+
+        public VerifyEmail(Context context, String phone, String email) {
+            this.context = context;
+            this.phone = phone;
+            this.email = email;
+        }
+
+        @Override
+        protected String doInBackground(String... data) {
+            try {
+                HttpClient client = new DefaultHttpClient();
+                String url = BuildConfig.SERVER_URL + "api/auth/verify/email?phone=" + phone + "&email=" + email;
+                HttpGet postReq = new HttpGet(url);
+                postReq.setHeader("Accept", "application/json");
+                postReq.setHeader("Content-type", "application/json");
+                SharedPreferences toks = context.getSharedPreferences("token", Context.MODE_PRIVATE);
+                String tok_sp = toks.getString("token_value", "");
+                postReq.setHeader("x-access-token", tok_sp);
+                HttpResponse httpresponse = client.execute(postReq);
+                String responseText = EntityUtils.toString(httpresponse.getEntity());
+                JSONObject json = new JSONObject(responseText);
+                if (json.get("status").toString().contains("success")) {
+                    if (json.get("msg").toString().contains("sent")) {
+                        return "success";
+                    }
+                } else {
+                    if (json.get("status").toString().contains("error")) {
+                        try {
+                            errorMsg = json.getString("msg");
+                        } catch (Exception e) {
+                        }
+                        Log.d("Error", json.get("msg").toString());
+                        return "fail";
+                    } else if (json.get("msg").toString().contains("Invalid Token")) {
+                        return "authFailed";
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return "fail";
+        }
+
+        protected void onPostExecute(String result) {
+            try {
+                if (retryCount < 3) {
+                    retryCount++;
+                    if (result.equals("success")) {
+                        Toast.makeText(context, context.getResources().getString(R.string.confirmation_email_link), Toast.LENGTH_SHORT).show();
+                        AccountSettingsActivity.verifyEmail.setText("Check");
+                    } else if (result.equals("authFailed")) {
+                        new FetchNewToken(context).execute();
+                        new VerifyEmail(context, phone, email).execute();
+                    } else if (result.equals("fail"))
+                        try {
+                            showErrorEmailMsg(errorMsg);
+                        } catch (Exception e) {
+                        }
+                } else {
+                    retryCount = 0;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void showErrorEmailMsg(String msg) {
+        if (AppUtils.isNotEmpty(msg)) {
+            incorrectEmail.setText(msg);
+            incorrectEmail.setVisibility(View.VISIBLE);
+        }
     }
 }

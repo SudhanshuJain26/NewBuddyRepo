@@ -12,6 +12,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -94,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    Double latitude, longitude;
+    String IMEINumber;
+    String simSerialNumber;
+    Location getLastLocation;
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
             showAccountDeletedPopup();
         }
         act = this;
+
         url = BuildConfig.SERVER_URL + "authenticate";
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         sharedpreferences2 = getSharedPreferences("buddyin", Context.MODE_PRIVATE);
@@ -118,6 +127,17 @@ public class MainActivity extends AppCompatActivity {
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
         username = (EditText) findViewById(R.id.phone_number);
         password = (EditText) findViewById(R.id.password);
+
+        locationManager = (LocationManager) getSystemService
+                (Context.LOCATION_SERVICE);
+        getLastLocation = locationManager.getLastKnownLocation
+                (LocationManager.PASSIVE_PROVIDER);
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        IMEINumber = telephonyManager.getDeviceId();
+        simSerialNumber = telephonyManager.getSimSerialNumber();
+        getLastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        latitude = getLastLocation.getLatitude();
+        longitude  = getLastLocation.getLongitude();
         username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -599,6 +619,16 @@ public class MainActivity extends AppCompatActivity {
 
                 payload.put("userid", userId);
                 payload.put("password", pass);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("imei",IMEINumber);
+                jsonObject.put("simNumber",simSerialNumber);
+                JSONObject location = new JSONObject();
+                location.put("latitude",latitude);
+                location.put("longitude",longitude);
+                jsonObject.put("location",location);
+                payload.put("deviceDetails",jsonObject);
+                payload.put("clientDevice","android");
+
                 // payload.put("action", details.get("action"));
 
 

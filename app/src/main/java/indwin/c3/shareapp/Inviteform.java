@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -15,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -68,19 +71,36 @@ public class Inviteform extends AppCompatActivity {
     private RelativeLayout error;
     private TextView lgin;
     private TextView msg;
+    public boolean successAchieved =true;
     Intent intform;  private EditText name,email,phone,ref;
     AutoCompleteTextView college;
 int a=0;
     String mName,mEmail,mCollege,mPhone,mRef="",truth="";static String token="";
+    Double latitude, longitude;
+    String IMEINumber;
+    String simSerialNumber;
+    Location getLastLocation;
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inviteform);
+        locationManager = (LocationManager) getSystemService
+                (Context.LOCATION_SERVICE);
+        getLastLocation = locationManager.getLastKnownLocation
+                (LocationManager.PASSIVE_PROVIDER);
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        IMEINumber = telephonyManager.getDeviceId();
+        simSerialNumber = telephonyManager.getSimSerialNumber();
+        getLastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        latitude = getLastLocation.getLatitude();
+        longitude  = getLastLocation.getLongitude();
+
 
         error=(RelativeLayout)findViewById(R.id.error);
         msg=(TextView)findViewById(R.id.msg);
-spinner=(ProgressBar)findViewById(R.id.progressBar1);
+        spinner=(ProgressBar)findViewById(R.id.progressBar1);
         name=(EditText)findViewById(R.id.name);
         name.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 try{
@@ -320,12 +340,26 @@ catch(Exception e){}
             }
         });
 
+        int res1 = ContextCompat.checkSelfPermission(Inviteform.this,Manifest.permission.ACCESS_FINE_LOCATION);
+        if(res1 ==PackageManager.PERMISSION_GRANTED){
+            locationManager = (LocationManager) getSystemService
+                    (Context.LOCATION_SERVICE);
+            getLastLocation = locationManager.getLastKnownLocation
+                    (LocationManager.PASSIVE_PROVIDER);
+            latitude = getLastLocation.getLatitude();
+            longitude  = getLastLocation.getLongitude();
+
+        }else {
+            ActivityCompat.requestPermissions(Inviteform.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 2);
+        }
+
 
         int res= ContextCompat.checkSelfPermission(Inviteform.this, Manifest.permission.RECEIVE_SMS);
         if(res== PackageManager.PERMISSION_GRANTED){
                 invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                spinner.setVisibility(View.VISIBLE);
                 invite.setTextColor(Color.parseColor("#ffffff"));
                 try { mName=name.getText().toString().trim();
                      String EMAIL_PATTERN =
@@ -438,6 +472,7 @@ mRef=ref.getText().toString().trim();
                             invite.setEnabled(true);
                             phone.setBackgroundResource(R.drawable.texted2);
                             phone.setPadding(pL, pT, pR, pB);
+                            spinner.setVisibility(View.GONE);
                             error.setVisibility(View.VISIBLE);
                             msg.setText("Please Enter the correct details!");
                             invite.setTextColor(Color.parseColor("#66ffffff"));
@@ -576,6 +611,7 @@ mRef=ref.getText().toString().trim();
 
                                     error.setVisibility(View.VISIBLE);
                                     invite.setEnabled(true);
+                                    spinner.setVisibility(View.GONE);
 //                                    name.setBackgroundResource(R.drawable.texted);
 //                                    name.setPadding(pL, pT, pR, pB);
 //                                    phone.setBackgroundResource(R.drawable.texted);
@@ -753,7 +789,27 @@ mRef=ref.getText().toString().trim();
                         //                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      startActivity(intent);
                     }
                 });}
-                break;}}
+                break;
+            case 2:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    locationManager = (LocationManager) getSystemService
+                            (Context.LOCATION_SERVICE);
+                    getLastLocation = locationManager.getLastKnownLocation
+                            (LocationManager.PASSIVE_PROVIDER);
+
+                    latitude = getLastLocation.getLatitude();
+                    longitude  = getLastLocation.getLongitude();
+
+
+
+                }else {
+                    latitude = 0.000;
+                    longitude =0.000;
+                }
+
+
+
+        }}
 
                     @Override
     public void onBackPressed() {
@@ -863,6 +919,7 @@ else{
 
         }
     }
+
 
     public  class AuthTokc extends
             AsyncTask<String, Void, String> {
@@ -981,6 +1038,15 @@ else{
                     payload.put("refCode",mRef);
                 payload.put("phone", mPhone);
                 payload.put("offlineForm",false);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("imei",IMEINumber);
+                jsonObject.put("simNumber",simSerialNumber);
+                JSONObject location = new JSONObject();
+                location.put("latitude",latitude);
+                location.put("longitude",longitude);
+                jsonObject.put("location",location);
+                payload.put("deviceDetails",jsonObject);
+                payload.put("clientDevice","android");
                 // payload.put("action", details.get("action"));
 
                 HttpParams httpParameters = new BasicHttpParams();
@@ -1044,6 +1110,8 @@ else{
             spinner.setVisibility(View.GONE);
 
             if (result.equals("success")) {
+
+                invite.setEnabled(false);
                 SharedPreferences cred = getSharedPreferences("cred", Context.MODE_PRIVATE);
                 SharedPreferences.Editor edc = cred.edit();
                 edc.putString("phone_number", mPhone);
@@ -1056,7 +1124,7 @@ else{
                 user.setEmail(mEmail);
                 String json = gson.toJson(user);
                 mPrefs.edit().putString("UserObject", json).apply();
-                if (truth.equals("success")) {
+                if (truth.equals("success") && successAchieved) {
                     Intent inotp = new Intent(Inviteform.this, Otp.class);
 //                    finish();
 
@@ -1066,7 +1134,7 @@ else{
                     inotp.putExtra("Phone", phone.getText().toString().trim());
 
                 inotp.putExtra("Ref",mRef);
-
+                successAchieved = false;
 
                 startActivity(inotp);
                 overridePendingTransition(0,0);

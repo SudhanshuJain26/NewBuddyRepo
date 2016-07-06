@@ -1,7 +1,9 @@
 package indwin.c3.shareapp.activities;
 
+import android.app.Activity;
 import android.app.Application;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -27,12 +30,14 @@ import indwin.c3.shareapp.application.BuddyApplication;
 import indwin.c3.shareapp.fragments.ProfileFormStep3Fragment1;
 import indwin.c3.shareapp.fragments.ProfileFormStep3Fragment2;
 import indwin.c3.shareapp.fragments.ProfileFormStep3Fragment3;
+import indwin.c3.shareapp.models.ResponseModel;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.CheckInternetAndUploadUserDetails;
+import indwin.c3.shareapp.utils.Constants;
 import io.intercom.android.sdk.Intercom;
 
-public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnPageChangeListener, CheckInternetAndUploadUserDetails.NotifyProgress {
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private ArrayList<Fragment> fragments;
@@ -43,6 +48,8 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
     private ImageView incompleteStep1, incompleteStep2, incompleteStep3;
     int previousPosition;
     boolean takenStudentLoan;
+    private ProgressDialog progressDialog;
+    private static boolean isActive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,58 +171,67 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
                         saveStep2Data();
                     }
                     if (checkIncompleteStep1() || incompleteStep2 || incompleteStep3) {
-                        final Dialog dialog1 = new Dialog(ProfileFormStep3.this);
-                        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog1.setContentView(R.layout.incomplete_alert_box);
-
-                        Button okay = (Button) dialog1.findViewById(R.id.okay_button);
-                        okay.setTextColor(Color.parseColor("#44c2a6"));
-                        okay.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                uploadDetailsToServer();
-                                dialog1.dismiss();
-                                Intent intent2 = new Intent(ProfileFormStep3.this, ProfileActivity.class);
-                                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent2);
-                                finish();
-                            }
-                        });
-
-                        CheckBox stopMessage = (CheckBox) dialog1.findViewById(R.id.check_message);
-                        stopMessage.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                SharedPreferences mPrefs = getSharedPreferences(AppUtils.APP_NAME, Context.MODE_PRIVATE);
-                                if (((CheckBox) v).isChecked()) {
-                                    mPrefs.edit().putBoolean("skipIncompleteMessage", true).apply();
-                                } else {
-                                    mPrefs.edit().putBoolean("skipIncompleteMessage", false).apply();
-                                }
-                            }
-                        });
-                        dialog1.show();
+                        openDialogBox();
                         return;
                     } else {
-                        uploadDetailsToServer();
-                        Intent intent1 = new Intent(ProfileFormStep3.this, Pending60kApprovalActivity.class);
-                        startActivity(intent1);
-                        finish();
+                        SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+                        mPrefs.edit().putBoolean("updatingDB", false).apply();
+                        CheckInternetAndUploadUserDetails ciauo = new CheckInternetAndUploadUserDetails(ProfileFormStep3.this, Constants.YES_60k);
+                        progressDialog = new ProgressDialog(ProfileFormStep3.this);
+                        progressDialog.setCancelable(false);
+                        progressDialog.setMessage("Submitting your details..");
+                        progressDialog.show();
                     }
                 }
             }
         });
     }
 
-    private void uploadDetailsToServer() {
-        Intent intent = new Intent(ProfileFormStep3.this, CheckInternetAndUploadUserDetails.class);
-        sendBroadcast(intent);
+    private void openDialogBox() {
+
+        final Dialog dialog1 = new Dialog(ProfileFormStep3.this);
+        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog1.setContentView(R.layout.incomplete_alert_box);
+
+        Button okay = (Button) dialog1.findViewById(R.id.okay_button);
+        okay.setTextColor(Color.parseColor("#44c2a6"));
+        okay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadDetailsToServer();
+                dialog1.dismiss();
+                Intent intent2 = new Intent(ProfileFormStep3.this, ProfileActivity.class);
+                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent2);
+                finish();
+            }
+        });
+
+        CheckBox stopMessage = (CheckBox) dialog1.findViewById(R.id.check_message);
+        stopMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences mPrefs = getSharedPreferences(AppUtils.APP_NAME, Context.MODE_PRIVATE);
+                if (((CheckBox) v).isChecked()) {
+                    mPrefs.edit().putBoolean("skipIncompleteMessage", true).apply();
+                } else {
+                    mPrefs.edit().putBoolean("skipIncompleteMessage", false).apply();
+                }
+            }
+        });
+        dialog1.show();
     }
+
+    private void uploadDetailsToServer() {
+        CheckInternetAndUploadUserDetails ciauo = new CheckInternetAndUploadUserDetails(ProfileFormStep3.this, null);
+    }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         setIncomplete();
+
     }
 
     private void saveStep1Data() {
@@ -294,8 +310,11 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
 
 
     private boolean checkIncompleteStep1() {
-        ProfileFormStep3Fragment1 profileFormStep3Fragment1 = (ProfileFormStep3Fragment1) mPagerAdapter.getRegisteredFragment(0);
-        profileFormStep3Fragment1.checkIncomplete();
+        try {
+            ProfileFormStep3Fragment1 profileFormStep3Fragment1 = (ProfileFormStep3Fragment1) mPagerAdapter.getFragment(0);
+            profileFormStep3Fragment1.checkIncomplete();
+        } catch (Exception e) {
+        }
 
         return showHideIncompleteStep1();
     }
@@ -311,8 +330,11 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean checkIncompleteStep2() {
-        ProfileFormStep3Fragment2 profileFormStep3Fragment2 = (ProfileFormStep3Fragment2) mPagerAdapter.getRegisteredFragment(1);
-        profileFormStep3Fragment2.checkIncomplete();
+        try {
+            ProfileFormStep3Fragment2 profileFormStep3Fragment2 = (ProfileFormStep3Fragment2) mPagerAdapter.getFragment(1);
+            profileFormStep3Fragment2.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep2();
     }
 
@@ -327,8 +349,11 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
     }
 
     private boolean checkIncompleteStep3() {
-        ProfileFormStep3Fragment3 profileFormStep3Fragment3 = (ProfileFormStep3Fragment3) mPagerAdapter.getRegisteredFragment(2);
-        profileFormStep3Fragment3.checkIncomplete();
+        try {
+            ProfileFormStep3Fragment3 profileFormStep3Fragment3 = (ProfileFormStep3Fragment3) mPagerAdapter.getFragment(2);
+            profileFormStep3Fragment3.checkIncomplete();
+        } catch (Exception e) {
+        }
         return showHideIncompleteStep3();
     }
 
@@ -387,11 +412,6 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
     public void onBackPressed() {
         onPageSelected(mPager.getCurrentItem());
         super.onBackPressed();
-        //if (mPager.getCurrentItem() == 0) {
-        //    super.onBackPressed();
-        //} else {
-        //    mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        //}
     }
 
     private void hideShowUpArrow(int i) {
@@ -479,5 +499,43 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
             return true;
         }
         return false;
+    }
+
+
+    @Override
+    public void notifyUploadData(final ResponseModel responseModel, final String isLastStep, final Activity activity) {
+        if (isActive) {
+            activity.runOnUiThread(new Runnable() {
+                public void run() {
+                    if (progressDialog != null && progressDialog.isShowing() && Constants.YES_60k.equals(isLastStep)) {
+                        progressDialog.hide();
+                        if (responseModel != null && responseModel.getData() != null && responseModel.getData().isAppliedFor60k()) {
+                            Intent intent1 = new Intent(activity, Pending60kApprovalActivity.class);
+                            startActivity(intent1);
+                            finish();
+                        } else if (responseModel != null) {
+                            openDialogBox();
+                        } else {
+                            Toast.makeText(ProfileFormStep3.this, "Error connecting to server", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                }
+            });
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isActive = true;
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isActive = false;
     }
 }

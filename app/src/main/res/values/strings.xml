@@ -134,6 +134,8 @@
         <item>Telugu</item>
         <item>Tamil</item>
         <item>Malayalam</item>
+        <item>Marathi</item>
+        <item>Select a language</item>
     </string-array>
     <string-array name="gender">
         <item>guy</item>
@@ -2728,6 +2730,9 @@
     <string name="title_activity_flash_approved">FlashApprovedActivity</string>
     <string name="confirmation_email_link">An email verification has been sent to your mail id.
     </string>
-
-
+    <string name="error_player">There was anerror initializing the YouTubePlayer </string>
+    <string name="cashback">Invite your friends to Buddy and earn Rs.150 Cashback for every friend that signs up with your code</string>
+    <string name="payment_cashback">There more!Earn Rs.20 in Paytm Cash everytime an invited friend submits their profile for verification!</string>
+    <string name="verifyEarnings">View your Earnings</string>
+    <string name="invite_friends">Invite friends via Email/SMS</string>
 </resources>

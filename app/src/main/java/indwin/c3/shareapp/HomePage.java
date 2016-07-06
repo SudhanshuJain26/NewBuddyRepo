@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -21,10 +23,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -92,6 +96,7 @@ public class HomePage extends AppCompatActivity {
     String userId = "";
     Timer timer;
     int page1 = 0;
+    Double latitude, longitude;
     HorizontalScrollViewAdapter adapter0;
     HorizontalScrollViewAdapter adapter1;
     HorizontalScrollViewAdapter adapter2;
@@ -147,10 +152,13 @@ public class HomePage extends AppCompatActivity {
 
 
     private int checkValidFromApis = 0;
+    String IMEINumber;
+    String simSerialNumber;
     public int cb = 0;
     SharedPreferences st;
     private String sellerNme = "";
     private String token = "";
+    Location getLastLocation;
     private SharedPreferences userP;
     private SharedPreferences mPrefs;
     private Gson gson;
@@ -159,6 +167,7 @@ public class HomePage extends AppCompatActivity {
     private Tracker mTracker;
     //    TimerTask mTimerTask;
     public int currentPage = 0;
+    public String[] urls;
 
     private SharedPreferences sh, ss;
     private ArrayList<RecentSearchItems> recentSearchItemsList = new ArrayList<>();
@@ -167,13 +176,25 @@ public class HomePage extends AppCompatActivity {
     SharedPreferences sharedpreferences, sharedpreferences2;
     public static final String MyPREFERENCES = "buddy";
     TextView supported;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+                this.moveTaskToBack(true);
+                return true;
+            }
+        return true;
+        }
+
     public boolean emailverified = true;
     HashMap<String,ArrayList<Product>> productsMap = new HashMap<String,ArrayList<Product>>();
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         user = AppUtils.getUserObject(this);
+        new GetImageUrls().execute();
         BuddyApplication application = (BuddyApplication) getApplication();
         mTracker = application.getDefaultTracker();
         sh = getSharedPreferences("buddy", Context.MODE_PRIVATE);
@@ -188,6 +209,10 @@ public class HomePage extends AppCompatActivity {
         token = userP.getString("token_value", null);
         intentFilter = new IntentFilter();
         intentFilter.addAction("CLOSE_ALL");
+        locationManager = (LocationManager) getSystemService
+                (Context.LOCATION_SERVICE);
+        getLastLocation = locationManager.getLastKnownLocation
+                (LocationManager.PASSIVE_PROVIDER);
 
 
         broadcastReceiver = new BroadcastReceiver() {
@@ -199,6 +224,10 @@ public class HomePage extends AppCompatActivity {
             }
         };
         registerReceiver(broadcastReceiver, intentFilter);
+
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        IMEINumber = telephonyManager.getDeviceId();
+        simSerialNumber = telephonyManager.getSimSerialNumber();
         if (Splash.checklog == 1)
             finish();
         else {
@@ -251,6 +280,7 @@ public class HomePage extends AppCompatActivity {
 
 
             imageSlider = (ViewPager) findViewById(R.id.imageslider);
+            //new GetImageBanners().execute();
             dot1 = (ImageView) findViewById(R.id.c1);
             dot2 = (ImageView) findViewById(R.id.c2);
             dot3 = (ImageView) findViewById(R.id.c3);
@@ -264,11 +294,7 @@ public class HomePage extends AppCompatActivity {
 
                 }
             });
-            adp = new SecondViewPagerAdapter(getApplicationContext(), 4, HomePage.this);
-            imageSlider.setAdapter(adp);
-            adp.notifyDataSetChanged();
 
-            imageSlider.setCurrentItem(0);
             dot1.setBackgroundResource(R.drawable.circle2);
             imageSlider.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -610,9 +636,8 @@ public class HomePage extends AppCompatActivity {
                             editornew.putInt("chshare", 1);
                             Splash.checkNot = 1;
                             editornew.commit();
-                            Intent in = new Intent(HomePage.this, Share.class);
+                            Intent in = new Intent(HomePage.this, ShareSecond.class);
                             startActivity(in);
-                            finish();
                             overridePendingTransition(0, 0);
                             return true;
 
@@ -1415,5 +1440,74 @@ public class HomePage extends AppCompatActivity {
 
         }
     }
+
+    private class GetImageUrls extends AsyncTask<String, Void, String> {
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = BuildConfig.SERVER_URL+"api/v1/homepage/images?clientDevice=android";
+            try {
+                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                String tok_sp = toks.getString("token_value", "");
+                // String tok_sp = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NjU1NDQwMDgsImV4cCI6MTQ2NTU4MDAwOH0.ZpAwCEB0lYSqiYdfaBYjnBJOXfGrqE9qN8USoRzWR8g";
+                HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
+
+
+                        Log.e("MeshCommunication", "Server returned code "
+                                + response.getStatusLine().getStatusCode());
+                        return "fail";
+                    } else {
+
+                        JSONObject resp = new JSONObject(responseString);
+                        if (resp.getString("status").equals("success")) {
+                            JSONArray data1 = new JSONArray(resp.getString("data"));
+                            JSONObject json = data1.getJSONObject(0);
+                            JSONArray jsonArray = json.getJSONArray("urls");
+                            String[] urls1 = new String[jsonArray.length()];
+                            for(int i=0;i<jsonArray.length();i++){
+                                urls1[i] = jsonArray.getString(i);
+                            }
+                            urls = urls1;
+
+                            return "win";
+                        } else
+                            return "fail";
+
+
+                    }
+                }
+
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            adp = new SecondViewPagerAdapter(getApplicationContext(),urls, HomePage.this);
+            imageSlider.setAdapter(adp);
+            adp.notifyDataSetChanged();
+
+            imageSlider.setCurrentItem(0);
+
+        }
     }
+
+
+
+}
 

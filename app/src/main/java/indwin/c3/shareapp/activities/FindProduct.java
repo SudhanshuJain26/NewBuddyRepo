@@ -20,6 +20,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
@@ -63,15 +68,16 @@ public class FindProduct extends AppCompatActivity {
     SharedPreferences sharedpreferences;
     public static boolean linkpressed = false;
     public static boolean validUrl = false;
+    ImageView play_video;
+    TextView play;
+
+
 
 
     @Override
     protected void onStart() {
         super.onStart();
-//        if(taptoSearch!=null)
-//            if(taptoSearch.getVisibility() ==View.VISIBLE)
-//                taptoSearch.setVisibility(View.INVISIBLE);
-        Log.i("VISIBLE","called");
+//
     }
 
 
@@ -89,6 +95,16 @@ public class FindProduct extends AppCompatActivity {
             userId = sharedPreferences2.getString("name", null);
         }
 
+        play_video = (ImageView)findViewById(R.id.play_video);
+        play = (TextView)findViewById(R.id.play);
+
+        play_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FindProduct.this,YouTubeActivity.class);
+                startActivity(intent);
+            }
+        });
         taptoSearch = (ImageView)findViewById(R.id.pasteAg);
         myClipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         taptoSearch.setOnClickListener(new View.OnClickListener() {
@@ -488,6 +504,9 @@ public class FindProduct extends AppCompatActivity {
         else if(parseString.contains("infibeam")){
             sellerNme = "infibeam";
             checkValidFromApis = 1;
+        }else if(parseString.contains("ebay")){
+            sellerNme = "ebay";
+            checkValidFromApis = 1;
         }
         //amazon
         else if (parseString.contains("amazon")) {
@@ -549,75 +568,6 @@ public class FindProduct extends AppCompatActivity {
         //       Toast.makeText(HomePage.this, productId, Toast.LENGTH_SHORT).show();
 
     }
-
-//    private void adjustListHeight(){
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//        params.height = getTotalHeightofListView() + textView.getHeight();
-//        productbox.setLayoutParams(params);
-//        productbox.requestLayout();
-//      //  commentBox.setLayoutParams(params);
-//
-//    }
-
-//    private void getTotalHeightofListView() {
-//        if(adp.getCount() > 2){
-//            View item = adp.getView(0, null, recyclerView);
-//            item.measure(0, 0);
-////            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) (2.5 * item.getMeasuredHeight()));
-////            recyclerView.setLayoutParams(params);
-//
-//        }
-//    }
-
-//    public interface ClickListener {
-//        void onClick(View view, int position);
-//
-//        void onLongClick(View view, int position);
-//    }
-//
-//    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-//
-//        private GestureDetector gestureDetector;
-//        private FindProduct.ClickListener clickListener;
-//
-//        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final FindProduct.ClickListener clickListener) {
-//            this.clickListener = clickListener;
-//            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-//                @Override
-//                public boolean onSingleTapUp(MotionEvent e) {
-//                    return true;
-//                }
-//
-//                @Override
-//                public void onLongPress(MotionEvent e) {
-//                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-//                    if (child != null && clickListener != null) {
-//                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
-//                    }
-//                }
-//            });
-//        }
-
-//        @Override
-//        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-//
-//            View child = rv.findChildViewUnder(e.getX(), e.getY());
-//            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-//                clickListener.onClick(child, rv.getChildPosition(child));
-//            }
-//            return false;
-//        }
-//
-//        @Override
-//        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-//        }
-//
-//        @Override
-//        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-//
-//        }
-//    }
 private class FindRecentProductLinks extends AsyncTask<String,Void,String> {
 
     Context ctx;

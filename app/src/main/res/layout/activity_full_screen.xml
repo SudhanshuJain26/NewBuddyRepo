@@ -26,7 +26,8 @@
             android:layout_marginLeft="24dp"
             android:textColor="@color/colorwhite"
             android:textSize="12sp"/>
-        <ImageView android:layout_marginLeft="10dp" android:id="@+id/imageStatus" android:layout_width="10dp" android:layout_height="10dp"/>
+        <ImageView android:id="@+id/imageStatus" android:layout_width="10dp"
+                   android:layout_height="10dp" android:layout_marginLeft="10dp"/>
 
         <TextView
             android:id="@+id/verificationStatus"
@@ -35,6 +36,9 @@
             android:layout_marginLeft="20dp"
             android:textColor="@color/colorwhite"
             android:textSize="12sp"/>
+
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                   android:src="@drawable/delete"/>
 
     </LinearLayout>
 

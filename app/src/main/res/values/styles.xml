@@ -19,7 +19,7 @@
         <item name="windowNoTitle">true</item>
 
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">#FFFFFF</item>
@@ -27,7 +27,7 @@
     <style name="DrawerArrowStyle2" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">#27648f</item>
     </style>
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="Theme.Window.NoMinWidth" parent="">
         <item name="android:windowBackground">@null</item>
@@ -35,12 +35,12 @@
     </style>
 
     <!--<style name="AppTheme.Dialog">-->
-        <!--<item name="android:windowFrame">@null</item>-->
-        <!--<item name="android:windowBackground">@android:drawable/screen_background_dark_transparent</item>-->
-        <!--<item name="android:windowIsFloating">true</item>-->
-        <!--<item name="android:windowContentOverlay">@null</item>-->
-        <!--<item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>-->
-        <!--<item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>-->
+    <!--<item name="android:windowFrame">@null</item>-->
+    <!--<item name="android:windowBackground">@android:drawable/screen_background_dark_transparent</item>-->
+    <!--<item name="android:windowIsFloating">true</item>-->
+    <!--<item name="android:windowContentOverlay">@null</item>-->
+    <!--<item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>-->
+    <!--<item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>-->
     <!--</style>-->
 
     <style name="NewDialog" parent="@android:style/Theme.Dialog">
@@ -55,8 +55,24 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="nach_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
         <item name="android:textColorSecondary">#FFFFFF</item>
+    </style>
+
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTabText</item>
+        <item name="tabSelectedTextColor">@color/colorSignature</item>
+    </style>
+
+    <style name="MyCustomTabText" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">35sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/abc_secondary_text_material_light</item>
+
     </style>
 
 </resources>

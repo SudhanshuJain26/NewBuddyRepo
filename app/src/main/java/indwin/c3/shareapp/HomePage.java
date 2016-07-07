@@ -214,11 +214,16 @@ public class HomePage extends AppCompatActivity {
         token = userP.getString("token_value", null);
         intentFilter = new IntentFilter();
         intentFilter.addAction("CLOSE_ALL");
-        locationManager = (LocationManager) getSystemService
-                (Context.LOCATION_SERVICE);
-        getLastLocation = locationManager.getLastKnownLocation
-                (LocationManager.PASSIVE_PROVIDER);
-
+        try {
+            locationManager = (LocationManager) getSystemService
+                    (Context.LOCATION_SERVICE);
+            getLastLocation = locationManager.getLastKnownLocation
+                    (LocationManager.PASSIVE_PROVIDER);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -230,9 +235,9 @@ public class HomePage extends AppCompatActivity {
         };
         registerReceiver(broadcastReceiver, intentFilter);
 
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        IMEINumber = telephonyManager.getDeviceId();
-        simSerialNumber = telephonyManager.getSimSerialNumber();
+//        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//        IMEINumber = telephonyManager.getDeviceId();
+//        simSerialNumber = telephonyManager.getSimSerialNumber();
         if (Splash.checklog == 1)
             finish();
         else {

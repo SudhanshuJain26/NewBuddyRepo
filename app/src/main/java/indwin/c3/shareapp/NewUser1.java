@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -53,6 +54,7 @@ public class NewUser1 extends Fragment {
     String name;
     String referralCode;
     boolean check1;
+    Activity act1;
 
 
     Button done;
@@ -159,6 +161,7 @@ public class NewUser1 extends Fragment {
         userId = userModel.getUserId();
         name = userModel.getName();
         friendsArrayList = (List<Friends>) getArguments().getSerializable("list");
+        act1 = getActivity();
 
         mChecked = getArray();
 
@@ -195,6 +198,7 @@ public class NewUser1 extends Fragment {
         final View headerView = inflater.inflate(R.layout.header1,
                 mListView, false);
         checkBox_header = (CheckBox) headerView.findViewById(R.id.checkbox);
+
 
 
         adapter = new CustomAdapter(getContext(),friendsArrayList);

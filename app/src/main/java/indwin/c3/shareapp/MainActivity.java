@@ -69,6 +69,9 @@ import io.intercom.android.sdk.identity.Registration;
 public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODEC = 2;
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private static final int PERMISSION_REQUEST_CODEL = 3;
+    private static final int PERMISSION_REQUEST_CODER = 4;
+    private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     TextView notreg, login_otp;
     private PendingIntent pendingIntent;
     String url = "";
@@ -106,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(checkAndRequestPermissions()){
+
+        }
 
         boolean accountDeleted = getIntent().getBooleanExtra(Constants.ACCOUNT_DELETED, false);
         if (accountDeleted) {
@@ -130,11 +136,15 @@ public class MainActivity extends AppCompatActivity {
 
         locationManager = (LocationManager) getSystemService
                 (Context.LOCATION_SERVICE);
+
+
+
+//        checkPermission();
+//        checkPermissionPHONEState();
+
         getLastLocation = locationManager.getLastKnownLocation
                 (LocationManager.PASSIVE_PROVIDER);
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        IMEINumber = telephonyManager.getDeviceId();
-        simSerialNumber = telephonyManager.getSimSerialNumber();
+
         getLastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
         latitude = getLastLocation.getLatitude();
         longitude  = getLastLocation.getLongitude();
@@ -1999,4 +2009,81 @@ public class MainActivity extends AppCompatActivity {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         return resultCode == ConnectionResult.SUCCESS;
     }
+//    private void requestPermission() {
+//
+//        if (ActivityCompat.shouldShowRequestPermissionRationale(this
+//                , Manifest.permission.ACCESS_FINE_LOCATION)) {
+//
+//            Toast.makeText(getApplicationContext(), "Accessing Location permission needed. Please allow in App Settings for better experience.", Toast.LENGTH_LONG).show();
+//
+//        } else {
+//
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODEL);
+//        }
+//    }
+//
+//    private void requestPermissionPhoneState() {
+//
+//        if (ActivityCompat.shouldShowRequestPermissionRationale(this
+//                , Manifest.permission.READ_PHONE_STATE)) {
+//
+//            Toast.makeText(getApplicationContext(), "Mobile information needed. Please allow in App Settings for better experience.", Toast.LENGTH_LONG).show();
+//
+//        } else {
+//
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_CODER);
+//        }
+//    }
+    private  boolean checkAndRequestPermissions() {
+        int permissionSendMessage = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_PHONE_STATE);
+        int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int readSmsPermission = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_SMS);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (locationPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (readSmsPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_SMS);
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+
+
+//    private boolean checkPermission() {
+//        int result = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+//        if (result == PackageManager.PERMISSION_GRANTED) {
+//
+//            return true;
+//
+//        } else {
+//            requestPermission();
+//            return false;
+//
+//        }
+//    }
+//
+//    private boolean checkPermissionPHONEState() {
+//        int result = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE);
+//        if (result == PackageManager.PERMISSION_GRANTED) {
+//            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//            IMEINumber = telephonyManager.getDeviceId();
+//            simSerialNumber = telephonyManager.getSimSerialNumber();
+//            return true;
+//
+//        } else {
+//            requestPermissionPhoneState();
+//            return false;
+//
+//        }
+//    }
+
 }

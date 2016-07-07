@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import indwin.c3.shareapp.BlinkingFragment;
+import indwin.c3.shareapp.Buddies;
 import indwin.c3.shareapp.BuddiesEmail;
 import indwin.c3.shareapp.NewUserEmail1;
 import indwin.c3.shareapp.R;
@@ -42,6 +46,7 @@ public class FillEmailContacts extends AppCompatActivity {
     TextView logged_email;
     TextView disconnect;
     ImageView backButton;
+    TextView another_email;
 
 
     @Override
@@ -57,9 +62,19 @@ public class FillEmailContacts extends AppCompatActivity {
         SharedPreferences.Editor editor1 = prefs1.edit();
         editor1.clear();
         editor1.commit();
+        another_email = (TextView)findViewById(R.id.another_email);
         if(logged_email.getText().equals("Connect to your account")){
             disconnect.setText("Connect");
         }
+        another_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(FillEmailContacts.this,AuthenticateEmail.class);
+                startActivity(intent);
+                disconnect.setVisibility(View.VISIBLE);
+            }
+        });
 
 //        try{
 //            String message = getIntent().getStringExtra("message");
@@ -158,63 +173,35 @@ public class FillEmailContacts extends AppCompatActivity {
             disconnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(disconnect.getText().equals("Disconnect")) {
+
 
                         SharedPreferences preferences1 = getSharedPreferences("inviteCalls",MODE_PRIVATE);
                         SharedPreferences.Editor editor1 = preferences1.edit();
                         editor1.putBoolean("DisconnectEmail",true);
                         editor1.commit();
 
-                        disconnect.setText("Connect");
+                        disconnect.setVisibility(View.GONE);
                         logged_email.setText("Connect to your account");
                         SharedPreferences preferences = getSharedPreferences("invite_lists", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.clear();
                         editor.apply();
-                        isBuddyList.clear();
-                        isInvitedList.clear();
-                        listfromServer.clear();
+//                        isBuddyList.clear();
+//                        isInvitedList.clear();
+//                        listfromServer.clear();
 
-                        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+                        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+                        tabLayout.removeTabAt(0);
 
-                        if (fragmentList == null) {
-                            // code that handles no existing fragments
-                        }
+                        tabLayout.addTab(tabLayout.newTab().setText("New Users"),0);
 
-                        for (Fragment frag : fragmentList )
-                        {
-                            getSupportFragmentManager().beginTransaction().remove(frag).commit();
-                        }
-                    }else if(disconnect.getText().equals("Connect")){
 
-                        Intent intent = new Intent(FillEmailContacts.this,AuthenticateEmail.class);
-                        startActivity(intent);
-                    }
+                        EmailAdapter1 adapter1 = new EmailAdapter1(getSupportFragmentManager(),3);
+                        viewPager.setAdapter(adapter1);
+
                 }
             });
-
-
-
-//        if (yahooArrayList != null) {
-//            SharedPreferences preferences = getSharedPreferences("cred", Context.MODE_PRIVATE);
-//            SharedPreferences.Editor editor = preferences.edit();
-//            Gson gson = new Gson();
-//
-//            String json = gson.toJson(yahooArrayList);
-//
-//            editor.putString("email_contacts_notSelectedYahoo", json);
-//            editor.commit();
-//        } else {
-//            SharedPreferences sharedPrefs = getSharedPreferences("cred", MODE_PRIVATE);
-//            Gson gson = new Gson();
-//            String json = sharedPrefs.getString("email_contacts_notSelectedYahoo", null);
-//            if (json != null) {
-//                Type type = new TypeToken<ArrayList<Friends>>() {
-//                }.getType();
-//                yahooArrayList = gson.fromJson(json, type);
-//            }
-//        }
-
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -266,6 +253,51 @@ public class FillEmailContacts extends AppCompatActivity {
         public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+    public class EmailAdapter1 extends FragmentStatePagerAdapter{
+
+        int tabCount;
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public EmailAdapter1(FragmentManager fm,int tabCount) {
+            super(fm);
+            this.tabCount = tabCount;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+
+                    return BlinkingFragment.init();
+                case 1:
+
+                    return AlreadyInvited1.init(isInvitedList);
+                case 2:
+
+                    return BuddiesEmail.init(isBuddyList);
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return tabCount;
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+
         }
 
         @Override

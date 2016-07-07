@@ -132,7 +132,7 @@ public class HomePage extends AppCompatActivity {
     private RecyclerView mRecycler;
     private int checkedit = 0, currDay;
     private BroadcastReceiver broadcastReceiver;
-    private TextView but;
+
     ImageView dot1;
     ImageView dot2;
     ImageView dot3;
@@ -149,6 +149,7 @@ public class HomePage extends AppCompatActivity {
     CustomHorizontalScrollView horizontal4;
     CustomHorizontalScrollView horizontal5;
     CustomHorizontalScrollView horizontal6;
+    int nextPageCode;
 
 
     private int checkValidFromApis = 0;
@@ -168,6 +169,7 @@ public class HomePage extends AppCompatActivity {
     //    TimerTask mTimerTask;
     public int currentPage = 0;
     public String[] urls;
+    public String[] messages;
 
     private SharedPreferences sh, ss;
     private ArrayList<RecentSearchItems> recentSearchItemsList = new ArrayList<>();
@@ -176,6 +178,7 @@ public class HomePage extends AppCompatActivity {
     SharedPreferences sharedpreferences, sharedpreferences2;
     public static final String MyPREFERENCES = "buddy";
     TextView supported;
+    TextView name1, line1, but;
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -205,6 +208,8 @@ public class HomePage extends AppCompatActivity {
         if (sh.getInt("checklog", 0) == 1) {
             userId = sharedpreferences2.getString("name", null);
         }
+
+
 
         token = userP.getString("token_value", null);
         intentFilter = new IntentFilter();
@@ -277,6 +282,11 @@ public class HomePage extends AppCompatActivity {
 
 
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.editlayout);
+            name1 = (TextView) findViewById(R.id.nameintr);
+            line1 = (TextView) findViewById(R.id.line1);
+            but = (TextView) findViewById(R.id.but);
+            name1.setText("Hi " + user.getName() + ",");
+            but = (TextView) findViewById(R.id.but);
 
 
             imageSlider = (ViewPager) findViewById(R.id.imageslider);
@@ -448,91 +458,91 @@ public class HomePage extends AppCompatActivity {
             mPrefs.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
             gson = new Gson();
 
-            try {
-                TextView name1, line1, but;
-                name1 = (TextView) findViewById(R.id.nameintr);
-                line1 = (TextView) findViewById(R.id.line1);
-                but = (TextView) findViewById(R.id.but);
-                name1.setText("Hi " + user.getName() + ",");
-
-                String status60K = "";
-                if (user.getStatus60K() != null) {
-                    status60K = user.getStatus60K();
-                }
-                String status7K = "";
-                if (user.getStatus7K() != null) {
-                    status7K = user.getStatus7K();
-                }
-                String status1K = "";
-                if (user.getStatus1K() != null) {
-                    status1K = user.getStatus1K();
-                }
-                but.setVisibility(View.GONE);
-                if (Constants.STATUS.DECLINED.toString().equals(user.getProfileStatus()) || Constants.STATUS.WAITLISTED.equals(user.getProfileStatus())) {
-
-                    line1.setText("Your profile has currently been waitlisted for approval. Touch here to find out more.");
-
-                } else if (Constants.STATUS.APPROVED.toString().equals(user.getProfileStatus())) {
-
-                    if (Constants.STATUS.APPROVED.toString().equals(status60K)) {
-                        name1.setText("Congrats " + user.getName() + ",");
-                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Happy shopping!");
-                    } else if (Constants.STATUS.APPROVED.toString().equals(status7K)) {
-                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Go ahead and shop or complete your profile to apply for a higher credit limit.");
-                    } else if (Constants.STATUS.APPROVED.toString().equals(status1K)) {
-                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " FLASH credit limit! Go ahead and shop or complete your profile to apply for a higher credit limit.");
-                    } else if (Constants.STATUS.DECLINED.toString().equals(status1K) || "waitlisted".equals(status1K)) {
-                        line1.setText("Your profile has currently been waitlisted for Rs.1000 FLASH credit limit! We suggest that you complete your profile to apply for a higher limit.");
-                    } else if (Constants.STATUS.APPLIED.toString().equals(status60K)) {
-                        line1.setText("You have applied for upto Rs.60,000 credit. We will inform you as soon as it gets approved.");
-                    } else if (Constants.STATUS.APPLIED.toString().equals(status7K)) {
-                        line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
-                    } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
-                        line1.setText("You have ap'plied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
-                    }
-                } else {
-                    if (Constants.STATUS.APPLIED.toString().equals(status60K)) {
-                        line1.setText("You have applied for upto Rs.60,000 credit. We will inform you as soon as it gets approved.");
-                    } else if (Constants.STATUS.APPLIED.toString().equals(status7K)) {
-                        line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
-                    } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
-                        line1.setText("You have applied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
-                    } else if (user.isEmailVerified()) {
-                        line1.setText("Ready to get started? Complete your profile now to get a Borrowing Limit and start shopping");
-                        but.setText("Complete it now!");
-                        but.setVisibility(View.VISIBLE);
-                    } else if(!user.isEmailVerified())
-                        line1.setText("Your email Id needs to be verified.");
-                        but.setText("verify your email Id now");
-                        but.setVisibility(View.VISIBLE);
-                        emailverified = false;
-                    }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-            but = (TextView) findViewById(R.id.but);
-
-            but.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    query.clearFocus();
-                    if (emailverified) {
-                        Intent intent = new Intent(HomePage.this, ProfileActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(0, 0);
-                        Splash.notify = 1;
-                    } else {
-                        Intent intent = new Intent(HomePage.this, AccountSettingsActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(0, 0);
-                        Splash.notify = 1;
-                    }
-
-                }
-            });
+//            try {
+//
+//                name1 = (TextView) findViewById(R.id.nameintr);
+//                line1 = (TextView) findViewById(R.id.line1);
+//                but = (TextView) findViewById(R.id.but);
+//                name1.setText("Hi " + user.getName() + ",");
+//
+//                String status60K = "";
+//                if (user.getStatus60K() != null) {
+//                    status60K = user.getStatus60K();
+//                }
+//                String status7K = "";
+//                if (user.getStatus7K() != null) {
+//                    status7K = user.getStatus7K();
+//                }
+//                String status1K = "";
+//                if (user.getStatus1K() != null) {
+//                    status1K = user.getStatus1K();
+//                }
+//                but.setVisibility(View.GONE);
+//                if (Constants.STATUS.DECLINED.toString().equals(user.getProfileStatus()) || Constants.STATUS.WAITLISTED.equals(user.getProfileStatus())) {
+//
+//                    line1.setText("Your profile has currently been waitlisted for approval. Touch here to find out more.");
+//
+//                } else if (Constants.STATUS.APPROVED.toString().equals(user.getProfileStatus())) {
+//
+//                    if (Constants.STATUS.APPROVED.toString().equals(status60K)) {
+//                        name1.setText("Congrats " + user.getName() + ",");
+//                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Happy shopping!");
+//                    } else if (Constants.STATUS.APPROVED.toString().equals(status7K)) {
+//                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Go ahead and shop or complete your profile to apply for a higher credit limit.");
+//                    } else if (Constants.STATUS.APPROVED.toString().equals(status1K)) {
+//                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " FLASH credit limit! Go ahead and shop or complete your profile to apply for a higher credit limit.");
+//                    } else if (Constants.STATUS.DECLINED.toString().equals(status1K) || "waitlisted".equals(status1K)) {
+//                        line1.setText("Your profile has currently been waitlisted for Rs.1000 FLASH credit limit! We suggest that you complete your profile to apply for a higher limit.");
+//                    } else if (Constants.STATUS.APPLIED.toString().equals(status60K)) {
+//                        line1.setText("You have applied for upto Rs.60,000 credit. We will inform you as soon as it gets approved.");
+//                    } else if (Constants.STATUS.APPLIED.toString().equals(status7K)) {
+//                        line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
+//                    } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
+//                        line1.setText("You have ap'plied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
+//                    }
+//                } else {
+//                    if (Constants.STATUS.APPLIED.toString().equals(status60K)) {
+//                        line1.setText("You have applied for upto Rs.60,000 credit. We will inform you as soon as it gets approved.");
+//                    } else if (Constants.STATUS.APPLIED.toString().equals(status7K)) {
+//                        line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
+//                    } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
+//                        line1.setText("You have applied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
+//                    } else if (user.isEmailVerified()) {
+//                        line1.setText("Ready to get started? Complete your profile now to get a Borrowing Limit and start shopping");
+//                        but.setText("Complete it now!");
+//                        but.setVisibility(View.VISIBLE);
+//                    } else if(!user.isEmailVerified())
+//                        line1.setText("Your email Id needs to be verified.");
+//                        but.setText("verify your email Id now");
+//                        but.setVisibility(View.VISIBLE);
+//                        emailverified = false;
+//                    }
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//            but = (TextView) findViewById(R.id.but);
+//
+//            but.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    query.clearFocus();
+//                    if (emailverified) {
+//                        Intent intent = new Intent(HomePage.this, ProfileActivity.class);
+//                        startActivity(intent);
+//                        overridePendingTransition(0, 0);
+//                        Splash.notify = 1;
+//                    } else {
+//                        Intent intent = new Intent(HomePage.this, AccountSettingsActivity.class);
+//                        startActivity(intent);
+//                        overridePendingTransition(0, 0);
+//                        Splash.notify = 1;
+//                    }
+//
+//                }
+//            });
 
             navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
@@ -1506,6 +1516,70 @@ public class HomePage extends AppCompatActivity {
 
         }
     }
+
+    public class GetMessage extends AsyncTask<String,Void,String>{
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            String comma = ",";
+            String stop = ".";
+            messages= new String [2];
+            messages[0] = s.substring(s.lastIndexOf(comma)+1);
+            messages[1] = s.substring(s.lastIndexOf(stop)+1);
+            line1.setText(messages[0]);
+            but.setText(messages[1]);
+            if(messages[1].equals("Start Now") || messages[1].equals("Verify Now") || messages[1].equals("Complete it now") || messages[1].equals("Apply Now") || messages[1].equals("Find out more")){
+                nextPageCode = 1;
+            }else if(messages[1].equals("Okay")){
+                nextPageCode = 2;
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = params[0];
+            UserModel user = AppUtils.getUserObject(HomePage.this);
+            String userId = user.getUserId();
+            try {
+                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                String tok_sp = toks.getString("token_value", "");
+                // String tok_sp = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NjU1NDQwMDgsImV4cCI6MTQ2NTU4MDAwOH0.ZpAwCEB0lYSqiYdfaBYjnBJOXfGrqE9qN8USoRzWR8g";
+                HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
+
+
+                        Log.e("MeshCommunication", "Server returned code "
+                                + response.getStatusLine().getStatusCode());
+                        return "fail";
+                    } else {
+
+                        JSONObject resp = new JSONObject(responseString);
+                        if (resp.getString("status").equals("success")) {
+                            String message = resp.getString("message");
+
+                            return message;
+                        } else
+                            return "";
+
+
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+            return null;
+
+        }
+    }
+
+
 
 
 

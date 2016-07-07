@@ -8,8 +8,10 @@ import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +19,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -59,6 +65,8 @@ public class GetContacts extends AppCompatActivity  {
     ImageView backButton;
     ArrayList<Friends> newFriends = new ArrayList<>();
     ContactsAdapter adapter;
+    Boolean blinking = false;
+    ContactAdapter1 adapter1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,26 +100,29 @@ public class GetContacts extends AppCompatActivity  {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.apply();
-//                    isBuddyList.clear();
-//                    isInvitedList.clear();
-                    listfromServer.clear();
-                    adapter.onSwitchToNextFragment();
+                    SharedPreferences preferences1 = getSharedPreferences("disconnect",MODE_PRIVATE);
+                    SharedPreferences.Editor editor2 = preferences1.edit();
+                    editor2.putBoolean("DISCONNECT",true);
+                    editor2.apply();
+
+                    tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                    tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+                    tabLayout.removeTabAt(0);
+
+                    tabLayout.addTab(tabLayout.newTab().setText("New Users"),0);
 
 
-//                    List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+                    ContactAdapter1 adapter1 = new ContactAdapter1(getSupportFragmentManager(),3);
+                    viewPager.setAdapter(adapter1);
 //
-//                    if (fragmentList == null) {
-//                        // code that handles no existing fragments
-//                    }
-//
-//                    for (Fragment frag : fragmentList )
-//                    {
-//                        getSupportFragmentManager().beginTransaction().remove(frag).commit();
-//                    }
-//                }else if(disconnect.getText().equals("Connect")){
-//
-//                    Intent intent = new Intent(GetContacts.this,InviteList.class);
-//                    startActivity(intent);
+                }else{
+                    SharedPreferences preferences2 = getSharedPreferences("disconnect",MODE_PRIVATE);
+                    SharedPreferences.Editor editor3 = preferences2.edit();
+                    editor3.putBoolean("DISCONNECT",false);
+                    editor3.apply();
+                    Intent intent = new Intent(GetContacts.this,InviteList.class);
+                    startActivity(intent);
+
                 }
             }
         });
@@ -189,7 +200,7 @@ public class GetContacts extends AppCompatActivity  {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        adapter = new ContactsAdapter(getSupportFragmentManager());
+        adapter = new ContactsAdapter(getSupportFragmentManager(),3);
 
         adapter.addFragment(new NewUser1(), "New Users"+ "     ( "+getApplicationContext().getResources().getString(R.string.Rs)+listfromServer.size()*170+" )");
         adapter.addFragment(new AlreadyInvited(), "Invited" + "                   ("+isInvitedList.size()+")");
@@ -197,9 +208,21 @@ public class GetContacts extends AppCompatActivity  {
         viewPager.setAdapter(adapter);
     }
 
+    private void setupViewPager1(ViewPager viewPager) {
+        adapter1 = new ContactAdapter1(getSupportFragmentManager(),3);
+
+        adapter1.addFragment(new BlinkingFragment(), "New Users"+ "     ( "+0+")");
+        adapter1.addFragment(new AlreadyInvited(), "Invited" + "                   ("+isInvitedList.size()+")");
+        adapter1.addFragment(new Buddies(),"Buddies" + "                    ("+isBuddyList.size()   +")");
+        viewPager.setAdapter(adapter);
+    }
 
 
-    class ContactsAdapter extends FragmentPagerAdapter {
+
+
+
+    class ContactsAdapter extends FragmentStatePagerAdapter {
+        int tabCount;
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
         private final FragmentManager mFragmentManager;
@@ -207,19 +230,21 @@ public class GetContacts extends AppCompatActivity  {
         private Context context;
 
 
-        public ContactsAdapter(FragmentManager manager) {
+        public ContactsAdapter(FragmentManager manager,int tabCount) {
             super(manager);
             mFragmentManager = manager;
+            this.tabCount = tabCount;
         }
 
         @Override
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    if(mFragmentAtPos0==null){
-                        mFragmentAtPos0 = NewUser1.init(listfromServer);
-                    }
-                    return mFragmentAtPos0;
+                    if(!blinking)
+                    return NewUser1.init(listfromServer);
+                    else
+                    return BlinkingFragment.init();
+
                 case 1:
                     return AlreadyInvited.init(isInvitedList);
                 case 2:
@@ -230,24 +255,15 @@ public class GetContacts extends AppCompatActivity  {
             return null;
         }
 
-            public void onSwitchToNextFragment() {
-                mFragmentManager.beginTransaction().remove(mFragmentAtPos0)
-                        .commit();
-                if (mFragmentAtPos0 instanceof NewUser1){
-                    mFragmentAtPos0 = new BlinkingFragment();
-                }
-                this.notifyDataSetChanged();
-            }
-
-
         @Override
         public int getCount() {
-            return mFragmentList.size();
+            return tabCount;
         }
 
         public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
+
         }
 
         @Override
@@ -255,6 +271,53 @@ public class GetContacts extends AppCompatActivity  {
             return mFragmentTitleList.get(position);
         }
     }
+
+    public class ContactAdapter1 extends FragmentStatePagerAdapter {
+        int tabCount;
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ContactAdapter1(FragmentManager fm , int tabCount) {
+            super(fm);
+            this.tabCount = tabCount;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+
+                    return BlinkingFragment.init();
+                case 1:
+
+                    return AlreadyInvited.init(isInvitedList);
+                case 2:
+
+                    return Buddies.init(isBuddyList);
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return tabCount;
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+
+
 
 //
 }

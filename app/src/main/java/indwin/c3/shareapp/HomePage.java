@@ -1,6 +1,7 @@
 package indwin.c3.shareapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -179,6 +180,9 @@ public class HomePage extends AppCompatActivity {
     public static final String MyPREFERENCES = "buddy";
     TextView supported;
     TextView name1, line1, but;
+    ProgressDialog messagesDialog;
+
+    String status = "";
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -208,7 +212,8 @@ public class HomePage extends AppCompatActivity {
         if (sh.getInt("checklog", 0) == 1) {
             userId = sharedpreferences2.getString("name", null);
         }
-
+        UserModel userModel = AppUtils.getUserObject(HomePage.this);
+        userId = userModel.getUserId();
 
 
         token = userP.getString("token_value", null);
@@ -242,6 +247,26 @@ public class HomePage extends AppCompatActivity {
             finish();
         else {
             setContentView(R.layout.activity_home_page);
+            noti = (RelativeLayout) findViewById(R.id.not);
+            name1 = (TextView) findViewById(R.id.nameintr);
+            line1 = (TextView) findViewById(R.id.line1);
+            but = (TextView) findViewById(R.id.but);
+            name1.setText("Hi " + user.getName() + ",");
+            SharedPreferences preferences = getSharedPreferences("message",MODE_PRIVATE);
+            String message0 = preferences.getString("message0","");
+            String message1 = preferences.getString("message1","");
+            status = preferences.getString("status","");
+            nextPageCode = preferences.getInt("pageCode",0);
+
+
+            line1.setText(message0);
+            but.setText(message1);
+            if(line1.getText().length()==0){
+                Splash.notify=1;
+                noti.setVisibility(View.GONE);
+            }
+            //new GetMessage().execute("http://ninja-dev.hellobuddy.in/api/v1/user/messages?userid="+user.getUserId());
+
             spinner0 = (ProgressBar)findViewById(R.id.progress_bar0);
             spinner0.setVisibility(View.VISIBLE);
 
@@ -264,11 +289,6 @@ public class HomePage extends AppCompatActivity {
             spinner6.setVisibility(View.VISIBLE);
 
 
-
-
-
-
-
             horizontal0 = (CustomHorizontalScrollView)findViewById(R.id.horizontal0);
             horizontal1 = (CustomHorizontalScrollView)findViewById(R.id.horizontal1);
             horizontal2 = (CustomHorizontalScrollView)findViewById(R.id.horizontal2);
@@ -287,11 +307,8 @@ public class HomePage extends AppCompatActivity {
 
 
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.editlayout);
-            name1 = (TextView) findViewById(R.id.nameintr);
-            line1 = (TextView) findViewById(R.id.line1);
-            but = (TextView) findViewById(R.id.but);
-            name1.setText("Hi " + user.getName() + ",");
-            but = (TextView) findViewById(R.id.but);
+
+
 
 
             imageSlider = (ViewPager) findViewById(R.id.imageslider);
@@ -431,7 +448,7 @@ public class HomePage extends AppCompatActivity {
                 }
             });
             get();
-            noti = (RelativeLayout) findViewById(R.id.not);
+
 
             if (Splash.notify == 1) {
                 noti.setVisibility(View.GONE);
@@ -443,20 +460,58 @@ public class HomePage extends AppCompatActivity {
             cross.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                   new ReadMessage().execute("http://ssl.hellobuddy.in/api/v1/user/messages/read?userid="+userId+"&status="+status);
                     noti.setVisibility(View.GONE);
                     Splash.notify = 1;
 
                 }
             });
 
+//            noti.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    query.clearFocus();
+//                    Intent intent = new Intent(HomePage.this, ProfileActivity.class);
+//                    startActivity(intent);
+//                    overridePendingTransition(0, 0);
+//                    Splash.notify = 1;
+//                }
+//            });
+
             noti.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    query.clearFocus();
-                    Intent intent = new Intent(HomePage.this, ProfileActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    Splash.notify = 1;
+                    if(nextPageCode==1){
+                        Intent intent = new Intent(HomePage.this, ProfileActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        Splash.notify = 1;
+                    }
+                    else if(nextPageCode==2){
+                        noti.setVisibility(View.GONE);
+                    }
+                    else if(nextPageCode==3){
+
+                        Intent intform = new Intent(HomePage.this, ViewForm.class);
+                        Splash.checkNot = 1;
+                        intform.putExtra("which_page", 17);
+                        intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+                        startActivity(intform);
+                        overridePendingTransition(0, 0);
+                        Splash.notify=1;
+
+                    }else if(nextPageCode==4){
+                        try {
+                            Intercom.client().displayMessageComposer();
+                        } catch (Exception e) {
+
+                        }
+                        Splash.notify=1;
+                    }else if(nextPageCode==5){
+                        Intent intent = new Intent(HomePage.this,AccountSettingsActivity.class);
+                        startActivity(intent);
+                        Splash.notify=1;
+                    }
                 }
             });
             mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
@@ -1522,23 +1577,107 @@ public class HomePage extends AppCompatActivity {
         }
     }
 
-    public class GetMessage extends AsyncTask<String,Void,String>{
+//    public class GetMessage extends AsyncTask<String,Void,String>{
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            if(messagesDialog.isShowing())
+//                messagesDialog.dismiss();
+//            String comma = ",";
+//            String stop = ".";
+//            messages= new String [2];
+//            if(s!=null) {
+//                messages[0] = s.substring(s.indexOf(comma) + 1, s.indexOf(stop));
+//                messages[1] = s.substring(s.indexOf(stop) + 1);
+//                line1.setText(messages[0]);
+//                but.setText(messages[1]);
+//                if (messages[1].equals("Start Now") || messages[1].equals("Verify Now") || messages[1].equals("Complete it now") || messages[1].equals("Apply Now") || messages[1].equals("Find out more")) {
+//                    nextPageCode = 1;
+//                } else if (messages[1].equals("Okay")) {
+//                    nextPageCode = 2;
+//                } else if (messages[1].equals("Repay Now")) {
+//                    nextPageCode = 3;
+//                } else if (messages[1].equals("Talk to us")) {
+//                    nextPageCode = 4;
+//                }
+//            }
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            String url = params[0];
+//            UserModel user = AppUtils.getUserObject(HomePage.this);
+//            String userId = user.getUserId();
+//            try {
+//                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+//                String tok_sp = toks.getString("token_value", "");
+//                // String tok_sp = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NjU1NDQwMDgsImV4cCI6MTQ2NTU4MDAwOH0.ZpAwCEB0lYSqiYdfaBYjnBJOXfGrqE9qN8USoRzWR8g";
+//                HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
+//                if (response != null) {
+//                    HttpEntity ent = response.getEntity();
+//                    String responseString = EntityUtils.toString(ent, "UTF-8");
+//                    if (response.getStatusLine().getStatusCode() != 200) {
+//
+//
+//                        Log.e("MeshCommunication", "Server returned code "
+//                                + response.getStatusLine().getStatusCode());
+//                        return "fail";
+//                    } else {
+//
+//                        JSONObject resp = new JSONObject(responseString);
+//                        if (resp.getString("status").equals("success")) {
+//                            JSONObject message = resp.getJSONObject("msg");
+//                            status = message.getString("status");
+//                            String lines = message.getString("message");
+//
+//                            return lines;
+//                        } else
+//                            return "";
+//
+//
+//                    }
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//
+//            }
+//            return null;
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            name1 = (TextView) findViewById(R.id.nameintr);
+//            line1 = (TextView) findViewById(R.id.line1);
+//            but = (TextView) findViewById(R.id.but);
+//            name1.setText("Hi " + user.getName() + ",");
+//            messagesDialog = new ProgressDialog(HomePage.this);
+//            messagesDialog.setMessage("Loading your messages");
+//            messagesDialog.setIndeterminate(true);
+//            messagesDialog.show();
+//        }
+//    }
+
+    public class ReadMessage extends AsyncTask<String,Void,String>{
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            String comma = ",";
-            String stop = ".";
-            messages= new String [2];
-            messages[0] = s.substring(s.lastIndexOf(comma)+1);
-            messages[1] = s.substring(s.lastIndexOf(stop)+1);
-            line1.setText(messages[0]);
-            but.setText(messages[1]);
-            if(messages[1].equals("Start Now") || messages[1].equals("Verify Now") || messages[1].equals("Complete it now") || messages[1].equals("Apply Now") || messages[1].equals("Find out more")){
-                nextPageCode = 1;
-            }else if(messages[1].equals("Okay")){
-                nextPageCode = 2;
-            }
+//            String comma = ",";
+//            String stop = ".";
+//            messages= new String [2];
+//            messages[0] = s.substring(s.lastIndexOf(comma)+1);
+//            messages[1] = s.substring(s.lastIndexOf(stop)+1);
+//            line1.setText(messages[0]);
+//            but.setText(messages[1]);
+//            if(messages[1].equals("Start Now") || messages[1].equals("Verify Now") || messages[1].equals("Complete it now") || messages[1].equals("Apply Now") || messages[1].equals("Find out more")){
+//                nextPageCode = 1;
+//            }else if(messages[1].equals("Okay")){
+//                nextPageCode = 2;
+//            }
         }
 
         @Override
@@ -1564,9 +1703,9 @@ public class HomePage extends AppCompatActivity {
 
                         JSONObject resp = new JSONObject(responseString);
                         if (resp.getString("status").equals("success")) {
-                            String message = resp.getString("message");
 
-                            return message;
+
+                            return "win";
                         } else
                             return "";
 

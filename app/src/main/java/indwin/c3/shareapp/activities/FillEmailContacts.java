@@ -1,6 +1,7 @@
 package indwin.c3.shareapp.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +27,7 @@ import java.util.List;
 import indwin.c3.shareapp.BlinkingFragment;
 import indwin.c3.shareapp.Buddies;
 import indwin.c3.shareapp.BuddiesEmail;
+import indwin.c3.shareapp.MyPageScrollListener;
 import indwin.c3.shareapp.NewUserEmail1;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.models.Friends;
@@ -47,75 +50,39 @@ public class FillEmailContacts extends AppCompatActivity {
     TextView disconnect;
     ImageView backButton;
     TextView another_email;
+    public static boolean  yahooMalfunction =false;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fill_email_contacts);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        disconnect = (TextView) findViewById(R.id.disconnect);
+        logged_email = (TextView) findViewById(R.id.email_text);
+
+        backButton = (ImageView) findViewById(R.id.backo);
         UserModel userModel = AppUtils.getUserObject(this);
         userId = userModel.getUserId();
-        logged_email = (TextView)findViewById(R.id.email_text);
-        disconnect = (TextView)findViewById(R.id.disconnect);
-        backButton =(ImageView)findViewById(R.id.backo);
-        SharedPreferences prefs1 = getSharedPreferences("CHECKBOX_STATE_EMAIL",MODE_PRIVATE);
-        SharedPreferences.Editor editor1 = prefs1.edit();
-        editor1.clear();
-        editor1.commit();
-        another_email = (TextView)findViewById(R.id.another_email);
-        if(logged_email.getText().equals("Connect to your account")){
-            disconnect.setText("Connect");
+        if(disconnect.getVisibility()==View.GONE){
+            logged_email.setText("+ Connect another email account");
         }
-        another_email.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(FillEmailContacts.this,AuthenticateEmail.class);
-                startActivity(intent);
-                disconnect.setVisibility(View.VISIBLE);
-            }
-        });
-
-//        try{
-//            String message = getIntent().getStringExtra("message");
-//            isBuddyList = new ArrayList<>();
-//            isInvitedList = new ArrayList<>();
-//            listfromServer = new ArrayList<>();
-//            Toast.makeText(getApplicationContext(),"Error in yahoo server",Toast.LENGTH_SHORT).show();
-//        }catch (Exception e){
-//            String message = "";
-//
-//
-//        }
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-
-        SharedPreferences prefs = getSharedPreferences("cred",MODE_PRIVATE);
-        String email = prefs.getString("user_loggedin_email","");
-        logged_email.setText(email);
-        isBuddyList = (ArrayList<Friends>) getIntent().getSerializableExtra("buddyList");
-        isInvitedList = (ArrayList<Friends>) getIntent().getSerializableExtra("invitedList");
-        listfromServer = (ArrayList<Friends>)getIntent().getSerializableExtra("userList");
+        try {
+            isBuddyList = (ArrayList<Friends>) getIntent().getSerializableExtra("buddyList");
+            isInvitedList = (ArrayList<Friends>) getIntent().getSerializableExtra("invitedList");
+            listfromServer = (ArrayList<Friends>) getIntent().getSerializableExtra("userList");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         //new GetInvitedEmail(this).execute();
-        if (isBuddyList != null) {
-            SharedPreferences preferences = getSharedPreferences("inviteCalls", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            Gson gson = new Gson();
+        if (isBuddyList == null) {
 
-            String json = gson.toJson(isBuddyList);
-
-            editor.putString("email_contacts_isBuddy", json);
-            editor.commit();
-        } else {
-            SharedPreferences sharedPrefs = getSharedPreferences("inviteCalls", MODE_PRIVATE);
+            SharedPreferences sharedPrefs = getSharedPreferences("list1", MODE_PRIVATE);
             Gson gson = new Gson();
-            String json = sharedPrefs.getString("email_contacts_isBuddy", null);
+            String json = sharedPrefs.getString("email_contacts_buddy", null);
             if (json != null) {
                 Type type = new TypeToken<ArrayList<Friends>>() {
                 }.getType();
@@ -123,19 +90,11 @@ public class FillEmailContacts extends AppCompatActivity {
             }
         }
 
-        if (isInvitedList != null) {
-            SharedPreferences preferences = getSharedPreferences("inviteCalls", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            Gson gson = new Gson();
+        if (isInvitedList == null) {
 
-            String json = gson.toJson(isInvitedList);
-
-            editor.putString("email_contacts_isInvited", json);
-            editor.commit();
-        } else {
-            SharedPreferences sharedPrefs = getSharedPreferences("inviteCalls", MODE_PRIVATE);
+            SharedPreferences sharedPrefs = getSharedPreferences("list1", MODE_PRIVATE);
             Gson gson = new Gson();
-            String json = sharedPrefs.getString("email_contacts_isInvited", null);
+            String json = sharedPrefs.getString("email_contacts_invited", null);
             if (json != null) {
                 Type type = new TypeToken<ArrayList<Friends>>() {
                 }.getType();
@@ -143,80 +102,208 @@ public class FillEmailContacts extends AppCompatActivity {
             }
         }
 
-        if (listfromServer!= null) {
-            SharedPreferences preferences = getSharedPreferences("inviteCalls", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
+        if (listfromServer == null) {
+            SharedPreferences sharedPrefs = getSharedPreferences("list1", MODE_PRIVATE);
             Gson gson = new Gson();
-
-            String json = gson.toJson(listfromServer);
-
-            editor.putString("email_contacts_listfromServer", json);
-            editor.commit();
-        } else {
-            SharedPreferences sharedPrefs = getSharedPreferences("inviteCalls", MODE_PRIVATE);
-            Gson gson = new Gson();
-            String json = sharedPrefs.getString("email_contacts_listfromServer", null);
+            String json = sharedPrefs.getString("email_contacts_notSelected", null);
             if (json != null) {
                 Type type = new TypeToken<ArrayList<Friends>>() {
                 }.getType();
                 listfromServer = gson.fromJson(json, type);
             }
         }
+        SharedPreferences prefs2 = getSharedPreferences("disconnect", MODE_PRIVATE);
+        if (!prefs2.getBoolean("disconnectemail", false)) {
 
-        Collections.sort(listfromServer, new Comparator<Friends>() {
-            @Override
-            public int compare(Friends s1, Friends s2) {
-                return s1.getName().compareToIgnoreCase(s2.getName());
+
+            SharedPreferences prefs1 = getSharedPreferences("CHECKBOX_STATE_EMAIL", MODE_PRIVATE);
+            SharedPreferences.Editor editor1 = prefs1.edit();
+            editor1.clear();
+            editor1.commit();
+
+            if (logged_email.getText().equals("Connect to your account")) {
+                disconnect.setText("Connect");
             }
-        });
+
+
+            SharedPreferences prefs = getSharedPreferences("cred", MODE_PRIVATE);
+            String email = prefs.getString("user_loggedin_email", "");
+            logged_email.setText(email);
+
+
+            setupViewPager(viewPager);
+            tabLayout.setupWithViewPager(viewPager);
+
+
+        }
+
+        else {
+//
+
+                tabLayout.addTab(tabLayout.newTab().setText("New Users"), 0);
+                tabLayout.addTab(tabLayout.newTab().setText("Invited"+"                           ("+isInvitedList.size()+")"), 1);
+                tabLayout.addTab(tabLayout.newTab().setText("Buddies"+"                            ("+isBuddyList.size()+")"), 2);
+                viewPager.setOnPageChangeListener(new MyPageScrollListener(tabLayout));
+                disconnect.setVisibility(View.GONE);
+                logged_email.setText("+ Connect another email account");
+                tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        int position = tab.getPosition();
+                        if (viewPager.getCurrentItem() != position) {
+                            viewPager.setCurrentItem(position, true);
+                        }
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+
+                    }
+                });
+
+
+                EmailAdapter1 adapter1 = new EmailAdapter1(getSupportFragmentManager(), 3);
+                viewPager.setAdapter(adapter1);
+        }
+
+
+//            Collections.sort(listfromServer, new Comparator<Friends>() {
+//                @Override
+//                public int compare(Friends s1, Friends s2) {
+//                    return s1.getName().compareToIgnoreCase(s2.getName());
+//                }
+//            });
 
             disconnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (disconnect.getText().equals("Connect")) {
+                        Intent intent = new Intent(FillEmailContacts.this, AuthenticateEmail.class);
+                        startActivity(intent);
+                        disconnect.setText("Disconnect");
+                        finish();
+                    } else {
 
 
-                        SharedPreferences preferences1 = getSharedPreferences("inviteCalls",MODE_PRIVATE);
-                        SharedPreferences.Editor editor1 = preferences1.edit();
-                        editor1.putBoolean("DisconnectEmail",true);
-                        editor1.commit();
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(FillEmailContacts.this);
+                        alertDialogBuilder.setMessage("Are u sure you want to disconnect your email account");
+                        alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                        disconnect.setVisibility(View.GONE);
-                        logged_email.setText("Connect to your account");
-                        SharedPreferences preferences = getSharedPreferences("invite_lists", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.clear();
-                        editor.apply();
+                                SharedPreferences preferences1 = getSharedPreferences("disconnect", MODE_PRIVATE);
+                                SharedPreferences.Editor editor1 = preferences1.edit();
+                                editor1.putBoolean("disconnectemail", true);
+                                editor1.commit();
+                                disconnect.setVisibility(View.GONE);
+
+                                //disconnect.setText("Connect");
+                                SharedPreferences prefs = getSharedPreferences("preferencename2", 0);
+                                SharedPreferences.Editor editor2 = prefs.edit();
+                                editor2.clear();
+                                editor2.apply();
+
+                                logged_email.setText("+ Connect another email account");
+                                SharedPreferences preferences = getSharedPreferences("invite_lists", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.clear();
+                                editor.apply();
 //                        isBuddyList.clear();
 //                        isInvitedList.clear();
 //                        listfromServer.clear();
 
-                        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-                        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-                        tabLayout.removeTabAt(0);
+                                tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                                tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+                                tabLayout.removeTabAt(0);
 
-                        tabLayout.addTab(tabLayout.newTab().setText("New Users"),0);
+                                tabLayout.addTab(tabLayout.newTab().setText("New Users"), 0);
 
 
-                        EmailAdapter1 adapter1 = new EmailAdapter1(getSupportFragmentManager(),3);
-                        viewPager.setAdapter(adapter1);
+                                EmailAdapter1 adapter1 = new EmailAdapter1(getSupportFragmentManager(), 3);
+                                viewPager.setAdapter(adapter1);
 
+                            }
+                        });
+
+                        alertDialogBuilder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog alertDialog = alertDialogBuilder.show();
+
+
+                    }
                 }
             });
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (disconnect.getVisibility() == View.GONE) {
+                        SharedPreferences sharedPrefs1 = getSharedPreferences("selectedContacts", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPrefs1.edit();
+                        editor.remove("email_contacts_selected");
+                        editor.apply();
+
+                    }
+                    Intent intent = new Intent(FillEmailContacts.this, ShowSelectedItems.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
 
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+            logged_email.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(logged_email.getText().equals("+ Connect another email account")) {
+
+                        Intent intent = new Intent(FillEmailContacts.this, AuthenticateEmail.class);
+                        startActivity(intent);
+                        finish();
+                        SharedPreferences sharedPrefs1 = getSharedPreferences("selectedContacts", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPrefs1.edit();
+                        editor.remove("email_contacts_selected");
+                        editor.apply();
+
+                        disconnect.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
+//        viewPager = (ViewPager) findViewById(R.id.viewpager);
+//        setupViewPager(viewPager);
+//
+//
+//        tabLayout = (TabLayout) findViewById(R.id.tabs);
+//
 
     }
 
+
     private void setupViewPager(ViewPager viewPager) {
         EmailAdapter adapter = new EmailAdapter(getSupportFragmentManager());
-        adapter.addFragment(new NewUserEmail1(), "New Users"+ "     ( "+getApplicationContext().getResources().getString(R.string.Rs)+listfromServer.size()*170+" )");
-        adapter.addFragment(new AlreadyInvited1(), "Invited" + "                   ("+isInvitedList.size()+")");
-        adapter.addFragment(new BuddiesEmail(),"Buddies" + "                    ("+isBuddyList.size()   +")");
+        if(listfromServer==null){
+            listfromServer = new ArrayList<>();
+            yahooMalfunction = true;
+
+        }
+        if(isBuddyList==null){
+            isBuddyList = new ArrayList<>();
+        }
+        if(isInvitedList==null){
+            isInvitedList = new ArrayList<>();
+        }
+        adapter.addFragment(new NewUserEmail1(), "New Users"+ "                           ( "+getApplicationContext().getResources().getString(R.string.Rs)+listfromServer.size()*170+" )");
+        adapter.addFragment(new AlreadyInvited1(), "Invited" + "                          ("+isInvitedList.size()+")");
+        adapter.addFragment(new BuddiesEmail(),"Buddies" + "                              ("+isBuddyList.size()   +")");
         viewPager.setAdapter(adapter);
 
     }

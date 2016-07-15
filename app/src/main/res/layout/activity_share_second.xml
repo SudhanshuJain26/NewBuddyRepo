@@ -59,7 +59,8 @@
             android:gravity="center"
             android:text="@string/invite_friends"
             android:textColor="@color/background"
-            android:padding="5dp"/>
+            android:padding="5dp"
+            android:id="@+id/blue1"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -116,7 +117,8 @@
             android:layout_marginTop="5dp"
             android:text="Share your invite code"
             android:textColor="@color/background"
-            android:padding="5dp"/>
+            android:padding="5dp"
+            android:id="@+id/blue2"/>
 
 
 
@@ -163,7 +165,8 @@
             android:layout_marginTop="20dp"
             android:textColor="@color/background"
             android:gravity="center"
-            android:text="@string/verifyEarnings"    />
+            android:text="@string/verifyEarnings"
+            android:id="@+id/verify"/>
 
     </LinearLayout>
 </RelativeLayout>

@@ -21,8 +21,10 @@ import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 import indwin.c3.shareapp.application.BuddyApplication;
@@ -40,6 +42,9 @@ public class Landing extends AppCompatActivity {
     int data;
     private String phoneNumberCall = "";
     Intent inTent;
+    String status;
+    int pageCode;
+    String[] messages;
     private String action = "", cashBack = "", name = "", email = "", fbid = "", formstatus = "", uniqueCode = "", creditLimit = "", panoradhar = "", bankaccount = "", collegeid = "", verificationdate = "", rejectionReason = "", referral_code = "";
 
     @Override
@@ -162,6 +167,12 @@ public class Landing extends AppCompatActivity {
                     Gson gson = new Gson();
                     String json = sh.getString("UserObject", "");
                     UserModel user = AppUtils.getUserObject(this);
+                    String userId = user.getUserId();
+                    SharedPreferences preferences = getSharedPreferences("userid",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("userid",userId);
+                    editor.commit();
+//                    new GetMessage().execute("http://ninja-dev.hellobuddy.in/api/v1/user/messages?userid="+user.getUserId());
                     Intent in = new Intent(Landing.this, HomePage.class);
                     finish();
                     // Intent in = new Intent(MainActivity.this, Inviteform.class);
@@ -742,6 +753,7 @@ public class Landing extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+          //  new GetMessage().execute("http://ninja-dev.hellobuddy.in/api/v1/user/messages?userid="+ss.getString("phone_number",""));
             // spinner.setVisibility(View.INVISIBLE);
             //                    inotp.putExtra("Name", mName);
             //                    inotp.putExtra("Email",email.getText().toString());
@@ -872,5 +884,90 @@ public class Landing extends AppCompatActivity {
 
 
         }
+
+
     }
+
+//    public class GetMessage extends AsyncTask<String,Void,String>{
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//
+//            String comma = ",";
+//            String stop = ".";
+//            messages= new String [2];
+//            if(s!=null) {
+//                messages[0] = s.substring(s.indexOf(comma) + 1, s.lastIndexOf(stop));
+//                messages[1] = s.substring(s.lastIndexOf(stop)+1);
+//                SharedPreferences preferences = getSharedPreferences("message",MODE_PRIVATE);
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.putString("message0",messages[0]);
+//                editor.putString("message1",messages[1]);
+//                editor.apply();
+//
+//                if (messages[1].equals("Start Now") || messages[1].equals("Verify Now") || messages[1].equals("Complete it now") || messages[1].equals("Apply Now") || messages[1].equals("Find out more")) {
+//                    pageCode = 1;
+//                } else if (messages[1].equals("Okay")) {
+//                    pageCode = 2;
+//                } else if (messages[1].equals("Repay Now")) {
+//                    pageCode = 3;
+//                } else if (messages[1].equals("Talk to us")) {
+//                    pageCode = 4;
+//                }
+//                editor.putInt("pageCode",pageCode);
+//                editor.putString("status",status);
+//                editor.apply();
+//            }else{
+//                messages[0] = "";
+//                messages[1] = "";
+//            }
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            String url = params[0];
+//            UserModel user = AppUtils.getUserObject(Landing.this);
+//            String userId = user.getUserId();
+//            try {
+//                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+//                String tok_sp = toks.getString("token_value", "");
+//                // String tok_sp = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NjU1NDQwMDgsImV4cCI6MTQ2NTU4MDAwOH0.ZpAwCEB0lYSqiYdfaBYjnBJOXfGrqE9qN8USoRzWR8g";
+//                HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
+//                if (response != null) {
+//                    HttpEntity ent = response.getEntity();
+//                    String responseString = EntityUtils.toString(ent, "UTF-8");
+//                    if (response.getStatusLine().getStatusCode() != 200) {
+//
+//
+//                        Log.e("MeshCommunication", "Server returned code "
+//                                + response.getStatusLine().getStatusCode());
+//                        return "fail";
+//                    } else {
+//
+//                        JSONObject resp = new JSONObject(responseString);
+//                        if (resp.getString("status").equals("success")) {
+//                            JSONObject message = resp.getJSONObject("msg");
+//                            status = message.getString("status");
+//                            String lines = message.getString("message");
+//
+//                            return lines;
+//                        } else
+//                            return "";
+//
+//
+//                    }
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//
+//            }
+//            return null;
+//
+//        }
+//
+//
+//    }
 }

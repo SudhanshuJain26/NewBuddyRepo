@@ -4,10 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -28,6 +32,7 @@ import org.json.JSONObject;
 import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.FetchNewToken;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.com.google.gson.Gson;
@@ -44,11 +49,49 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     UserModel user;
     boolean oldPasswordExists = false, newPasswordExists = false, reEnterPasswordExists = false;
     Button forgotPassword;
+    String carrierName;
+    String osVersion;
+    String deviceName;
+    LocationManager locationManager;
+    Location getLastLocation;
+    Double latitude,longitude;
+    String IMEINumber,simSerialNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+        locationManager = (LocationManager) getSystemService
+                (Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        try {
+            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+        }
+        if (!gps_enabled) {
+
+            getLastLocation = locationManager.getLastKnownLocation
+                    (LocationManager.PASSIVE_PROVIDER);
+
+            latitude = getLastLocation.getLatitude();
+            longitude = getLastLocation.getLongitude();
+        }else{
+            LocationListener locationListener = new MyLocationListener();
+//            locationManager.requestLocationUpdates(
+//                    LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+            locationManager.requestLocationUpdates("gps",5000,10.0f,locationListener);
+        }
+        getLastLocation = locationManager.getLastKnownLocation
+                (LocationManager.PASSIVE_PROVIDER);
+        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        IMEINumber = telephonyManager.getDeviceId();
+        simSerialNumber = telephonyManager.getSimSerialNumber();
+        getLastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        latitude = getLastLocation.getLatitude();
+        longitude  = getLastLocation.getLongitude();
+        carrierName = telephonyManager.getNetworkOperatorName();
+        deviceName = AppUtils.getDeviceName();
+        osVersion = android.os.Build.VERSION.RELEASE;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
@@ -181,6 +224,31 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         }
     }
 
+    private class MyLocationListener implements LocationListener {
+
+
+        @Override
+        public void onLocationChanged(Location location) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    }
+
     private class UploadNewPasswordToServer extends AsyncTask<String, String, String> {
         String oldPasswordString, newPassword;
 
@@ -199,6 +267,18 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 jsonobj.put("phone", user.getUserId());
                 jsonobj.put("oldpassword", oldPasswordString);
                 jsonobj.put("newpassword", newPassword);
+                JSONObject jsonObject = new JSONObject();
+//                jsonObject.put("IMEI",IMEINumber);
+//                jsonObject.put("SIM",simSerialNumber);
+//                jsonObject.put("connectionType","mobile");
+//                jsonObject.put("deviceCarrier",carrierName);
+//                jsonObject.put("osVersion", osVersion);
+                jsonObject.put("deviceModel", AppUtils.getDeviceName());
+                jsonObject.put("userAgent","android");
+                jsonObject.put("deviceName","");
+                jsonobj.put("deviceData",jsonObject);
+
+
                 StringEntity se = new StringEntity(jsonobj.toString());
                 postReq.setHeader("Accept", "application/json");
                 postReq.setHeader("Content-type", "application/json");

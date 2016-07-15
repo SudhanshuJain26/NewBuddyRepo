@@ -26,6 +26,8 @@
 -useuniqueclassmembernames
 -keepattributes SourceFile,LineNumberTable
 -allowaccessmodification
+-keepattributes InnerClasses,EnclosingMethod
+-dontoptimize
 
 # Ignore warnings:
 #-dontwarn org.mockito.**
@@ -50,6 +52,8 @@
 -dontwarn com.google.appengine.api.urlfetch.**
 -keep public class android.net.http.SslError
 -keep  class indwin.c3.shareapp.adapters.PlaceAutocompleteAdapter
+
+
 
 -keep public class android.webkit.WebViewClient
 -keep class org.apache.http.** { *; }

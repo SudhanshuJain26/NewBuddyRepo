@@ -12,10 +12,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
@@ -24,6 +27,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +42,7 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import android.location.LocationListener;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
@@ -54,9 +59,11 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import indwin.c3.shareapp.application.BuddyApplication;
@@ -105,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
     String simSerialNumber;
     Location getLastLocation;
     LocationManager locationManager;
+    String carrierName;
+    String deviceName;
+    String osVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,25 +143,38 @@ public class MainActivity extends AppCompatActivity {
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
         username = (EditText) findViewById(R.id.phone_number);
         password = (EditText) findViewById(R.id.password);
-try{
+    try {
         locationManager = (LocationManager) getSystemService
                 (Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        try {
+            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+        }
+        if (!gps_enabled) {
 
+            getLastLocation = locationManager.getLastKnownLocation
+                    (LocationManager.PASSIVE_PROVIDER);
 
-
-//        checkPermission();
-//        checkPermissionPHONEState();
-
-        getLastLocation = locationManager.getLastKnownLocation
-                (LocationManager.PASSIVE_PROVIDER);
-
-        getLastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-        latitude = getLastLocation.getLatitude();
-        longitude  = getLastLocation.getLongitude();}
-catch (Exception e)
-{
-    System.out.println(e.toString());
+            latitude = getLastLocation.getLatitude();
+            longitude = getLastLocation.getLongitude();
+        }else{
+            LocationListener locationListener = new MyLocationListener();
+//            locationManager.requestLocationUpdates(
+//                    LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+            locationManager.requestLocationUpdates("gps",5000,10.0f,locationListener);
+        }
+    }
+    catch (Exception e)
+    {
+        System.out.println(e.toString());
 }
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        IMEINumber = telephonyManager.getDeviceId();
+        simSerialNumber = telephonyManager.getSimSerialNumber();
+        carrierName = telephonyManager.getNetworkOperatorName();
+        deviceName = getDeviceName();
+        osVersion = android.os.Build.VERSION.RELEASE;
         username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -527,6 +550,31 @@ catch (Exception e)
         client.disconnect();
     }
 
+    private class MyLocationListener implements LocationListener {
+
+
+        @Override
+        public void onLocationChanged(Location location) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    }
+
     private class ItemsByKeyword extends
                                  AsyncTask<String, Void, String> {
 
@@ -634,14 +682,33 @@ catch (Exception e)
                 payload.put("userid", userId);
                 payload.put("password", pass);
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("imei",IMEINumber);
-                jsonObject.put("simNumber",simSerialNumber);
-                JSONObject location = new JSONObject();
-                location.put("latitude",latitude);
-                location.put("longitude",longitude);
-                jsonObject.put("location",location);
-                payload.put("deviceDetails",jsonObject);
-                payload.put("clientDevice","android");
+                jsonObject.put("IMEI",IMEINumber);
+                jsonObject.put("SIM",simSerialNumber);
+                jsonObject.put("connectionType","mobile");
+                jsonObject.put("deviceCarrier",carrierName);
+                jsonObject.put("osVersion", osVersion);
+                jsonObject.put("deviceModel",deviceName);
+                jsonObject.put("userAgent","android");
+                jsonObject.put("deviceName","");
+
+                JSONObject jsonObject1 = new JSONObject();
+                JSONObject jsonObject2 = new JSONObject();
+                jsonObject2.put("lat",latitude);
+                jsonObject2.put("long",longitude);
+                jsonObject1.put("location",jsonObject2);
+                jsonObject1.put("client","android");
+                jsonObject1.put("timestamp",Splash.dateStamp);
+                payload.put("sessionData",jsonObject1);
+                Log.i("TAG",Splash.dateStamp);
+
+
+//                JSONObject location = new JSONObject();
+//                location.put("latitude",latitude);
+//                location.put("longitude",longitude);
+//                jsonObject.put("location",location);
+
+                payload.put("deviceData",jsonObject);
+
 
                 // payload.put("action", details.get("action"));
 
@@ -1120,6 +1187,7 @@ catch (Exception e)
             }
         }
 
+
         private void checkDataForNormalUser(UserModel user, Gson gson, JSONObject data1) {
             AppUtils.checkDataForNormalUser(user, gson, data1, MainActivity.this);
             try {
@@ -1437,6 +1505,42 @@ catch (Exception e)
 
         }
     }
+
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
+    private static String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+
+//        String phrase = "";
+        StringBuilder phrase = new StringBuilder();
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+//                phrase += Character.toUpperCase(c);
+                phrase.append(Character.toUpperCase(c));
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+//            phrase += c;
+            phrase.append(c);
+        }
+
+        return phrase.toString();
+    }
+
+
 
     public class SendSmsToServer extends AsyncTask<List<SMS>, String, String> {
 
@@ -2043,6 +2147,7 @@ catch (Exception e)
                 Manifest.permission.READ_PHONE_STATE);
         int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         int readSmsPermission = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_SMS);
+//        int contactsPermission = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS);
         List<String> listPermissionsNeeded = new ArrayList<>();
         if (locationPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -2053,6 +2158,10 @@ catch (Exception e)
         if (readSmsPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.READ_SMS);
         }
+
+//        if (readSmsPermission != PackageManager.PERMISSION_GRANTED) {
+//            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+//        }
 
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);

@@ -140,7 +140,8 @@
                 android:text="Not sure how to do it?"
                 android:alpha="1"
                 android:layout_marginLeft="15dp"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:id="@+id/not"/>
 
             <ImageView
                 android:layout_width="wrap_content"

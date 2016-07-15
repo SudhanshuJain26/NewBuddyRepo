@@ -618,7 +618,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="200dp"
                                 android:orientation="horizontal"
-                                android:layout_marginLeft="6dp"
+                                android:layout_marginLeft="10dp"
                                 >
 
                                 <LinearLayout
@@ -1266,7 +1266,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="200dp"
                                 android:orientation="horizontal"
-                                android:layout_marginLeft="6dp"
+                                android:layout_marginLeft="10dp"
                                 >
 
                                 <LinearLayout
@@ -1920,7 +1920,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="200dp"
                                 android:orientation="horizontal"
-                                android:layout_marginLeft="6dp"
+                                android:layout_marginLeft="10dp"
                                 >
 
                                 <LinearLayout
@@ -2559,7 +2559,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="200dp"
                                 android:orientation="horizontal"
-                                android:layout_marginLeft="6dp"
+                                android:layout_marginLeft="10dp"
                                 >
 
                                 <LinearLayout
@@ -3206,7 +3206,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="200dp"
                                 android:orientation="horizontal"
-                                android:layout_marginLeft="6dp"
+                                android:layout_marginLeft="10dp"
                                 >
 
                                 <LinearLayout
@@ -3854,7 +3854,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="200dp"
                                 android:orientation="horizontal"
-                                android:layout_marginLeft="6dp"
+                                android:layout_marginLeft="10dp"
                                 >
 
                                 <LinearLayout
@@ -4493,7 +4493,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="200dp"
                                 android:orientation="horizontal"
-                                android:layout_marginLeft="6dp"
+                                android:layout_marginLeft="10dp"
                                 >
 
                                 <LinearLayout

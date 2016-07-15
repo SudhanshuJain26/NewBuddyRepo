@@ -135,7 +135,7 @@ public class InviteList extends AppCompatActivity {
         addPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addPhone.setEnabled(false);
+                spinner.setVisibility(View.VISIBLE);
                 checkPermission();
 
 //
@@ -170,8 +170,8 @@ public class InviteList extends AppCompatActivity {
                 }else {
 
                     Intent intent = new Intent(InviteList.this, AuthenticateEmail.class);
-                    addEmails.setEnabled(true);
-                    addPhone.setEnabled(true);
+//                    addEmails.setEnabled(true);
+//                    addPhone.setEnabled(true);
                     startActivity(intent);
                 }
 
@@ -237,6 +237,7 @@ public class InviteList extends AppCompatActivity {
                                 if (!isBuddy && isInvited)
                                     isInvitedListEmail.add(friends);
 
+
                             }
                         }
 
@@ -292,33 +293,33 @@ public class InviteList extends AppCompatActivity {
         }
     }
 
-    private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS);
-        if (result == PackageManager.PERMISSION_GRANTED) {
+    private void checkPermission() {
+//        int result = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS);
+//        if (result == PackageManager.PERMISSION_GRANTED) {
 
             spinner.setVisibility(View.VISIBLE);
 
             readContacts();
-            return true;
+//            return true;
+//
+//        } else {
+//            requestPermission();
+//            return false;
+//
+//        }
+//    }
 
-        } else {
-            requestPermission();
-            return false;
-
-        }
-    }
-
-    private void requestPermission() {
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this
-                , Manifest.permission.READ_CALL_LOG)) {
-
-            Toast.makeText(getApplicationContext(), "Reading Contacts permission needed. Please allow in App Settings for sending invites.", Toast.LENGTH_LONG).show();
-
-        } else {
-
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CALL_LOG}, PERMISSION_REQUEST_CODE);
-        }
+//    private void requestPermission() {
+//
+//        if (ActivityCompat.shouldShowRequestPermissionRationale(this
+//                , Manifest.permission.READ_CALL_LOG)) {
+//
+//            Toast.makeText(getApplicationContext(), "Reading Contacts permission needed. Please allow in App Settings for sending invites.", Toast.LENGTH_LONG).show();
+//
+//        } else {
+//
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CALL_LOG}, PERMISSION_REQUEST_CODE);
+//        }
     }
 
     public void readContacts() {
@@ -548,7 +549,7 @@ public class InviteList extends AppCompatActivity {
                                 isInvited = false;
 
                                 Friends friends = new Friends(phone, email, isBuddy, isInvited, name);
-                                if(phone.length()!=0 && phone!=null){
+                                if(phone.length()!=0 && phone!=null && name!=null){
                                 if (isBuddy) {
                                     isBuddyListPhone.add(friends);
                                     Log.i(friends.getName(),friends.getPhone_Num());
@@ -580,6 +581,10 @@ public class InviteList extends AppCompatActivity {
                 progressDialog.setMessage("Finding your friends ...");
                 progressDialog.setIndeterminate(false);
                 progressDialog.setCancelable(true);
+                isBuddyListPhone.clear();
+                isInvitedListPhone.clear();
+                isInvitedListEmail.clear();
+                isInvitedListEmail.clear();
 
                 progressDialog.show();
 

@@ -4,19 +4,27 @@
     android:layout_height="match_parent"
     android:background="@color/colorwhite">
 
+    <RelativeLayout
+        android:layout_width="270dp"
+        android:layout_height="210dp"
+        android:layout_centerInParent="true"
+        android:id="@+id/box">
+
     <indwin.c3.shareapp.GIFView1
-        android:layout_width="200dp"
-        android:layout_height="150dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:id="@+id/cat"
+        android:alpha="0.7"
         />
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hit 'Connect' to get access to your phone contacts"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/cat"
+        android:layout_below="@+id/box"
         android:layout_marginLeft="105dp"
         android:layout_marginRight="105dp"
         android:gravity="center"

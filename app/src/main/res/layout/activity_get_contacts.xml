@@ -6,12 +6,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="indwin.c3.shareapp.activities.FillEmailContacts">
 
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:background="@xml/progress"
+        android:id="@+id/spinner"
+        android:visibility="gone"
+        />
+
 
     <RelativeLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/abc_action_bar_default_height_material"
-        android:background="@color/colorSignature">
+        android:background="@color/background">
 
         <ImageView
             android:id="@+id/backo"
@@ -49,6 +58,18 @@
 
         >
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/email_text"
+            android:src="@drawable/refreshblue"
+            android:id="@+id/refresh"
+            android:paddingLeft="15dp"
+            android:paddingBottom="15dp"
+            android:paddingTop="17dp"
+
+            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,6 +80,8 @@
             android:paddingTop="15dp"
 
             />
+
+
 
         <TextView
             android:layout_width="wrap_content"

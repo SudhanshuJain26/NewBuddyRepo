@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import indwin.c3.shareapp.BuildConfig;
+import indwin.c3.shareapp.HomePage;
 import indwin.c3.shareapp.ProductsPage;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Splash;
@@ -70,7 +71,7 @@ public class FindProduct extends AppCompatActivity {
     public static boolean validUrl = false;
     ImageView play_video;
     TextView play;
-
+    TextView not_sure;
 
 
 
@@ -97,6 +98,24 @@ public class FindProduct extends AppCompatActivity {
 
         play_video = (ImageView)findViewById(R.id.play_video);
         play = (TextView)findViewById(R.id.play);
+        not_sure = (TextView)findViewById(R.id.not);
+
+        not_sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FindProduct.this,YouTubeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FindProduct.this,YouTubeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         play_video.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,36 +167,6 @@ public class FindProduct extends AppCompatActivity {
 
         new FindRecentProductLinks(FindProduct.this).execute(BuildConfig.SERVER_URL+"api/user/product/recent?userid="+userId +"&count=50");
 
-//        if(ProductsPage.backpressed){
-//            RecentSearchItems items = new RecentSearchItems(ProductsPage.brand1,ProductsPage.title1,Integer.toString(ProductsPage.price),productId);
-//            adp.addObject(items);
-//            adp.notifyDataSetChanged();
-//            search.setText("");
-//            if(taptoSearch.getVisibility()==View.INVISIBLE)
-//                taptoSearch.setVisibility(View.VISIBLE);
-//        }
-        //recyclerView.setAdapter(adp);
-
-//        taptoSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                try {
-//
-//                    search.requestFocus();
-//                    ClipData abc = myClipboard.getPrimaryClip();
-//                    ClipData.Item item = abc.getItemAt(0);
-//                    String text = item.getText().toString();
-//
-//
-//                    search.setText("   " + text);
-//
-//                    taptoSearch.setVisibility(View.GONE);
-//
-//                } catch (Exception e) {
-//                    Toast.makeText(FindProduct.this, "Please copy a URL", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -372,6 +361,8 @@ public class FindProduct extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(FindProduct.this, HomePage.class);
+                startActivity(intent);
                 finish();
 
             }

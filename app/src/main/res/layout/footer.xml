@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/rl"
+    android:background="#000">
+
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_above="@+id/skip"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/dots">
+
+
+        <ImageView
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+
+            android:layout_margin="10dp"
+            android:id="@+id/c1small"
+            android:background="@drawable/circle"
+            />
+        <ImageView
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_toRightOf="@id/c1small"
+            android:layout_margin="10dp"
+            android:id="@+id/c2small"
+
+            android:background="@drawable/circle"
+            />
+        <ImageView
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_toRightOf="@id/c2small"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/c3small"
+
+            android:background="@drawable/circle"
+            />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="skip"
+        android:textColor="@color/colorwhite"
+        android:id="@+id/skip"
+        android:textSize="16sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/dots"
+        android:layout_alignEnd="@+id/dots" />
+
+</RelativeLayout>

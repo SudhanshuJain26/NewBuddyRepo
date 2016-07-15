@@ -20,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -43,8 +44,10 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,12 +55,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
 
 public class Inviteform extends AppCompatActivity {
-    private NavigationView navigationView;
-    private DrawerLayout drawerLayout;
+
     private Toolbar toolbar;
     private WebView form;
     private ProgressBar spinner;
@@ -81,6 +84,9 @@ int a=0;
     String simSerialNumber;
     Location getLastLocation;
     LocationManager locationManager;
+    String status;
+    int pageCode;
+    String[] messages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -368,7 +374,7 @@ catch(Exception e){}
 
 
 
-mRef=ref.getText().toString().trim();
+                    mRef=ref.getText().toString().trim();
                     mEmail=email.getText().toString().trim();
                     pattern = Pattern.compile(EMAIL_PATTERN);
                     matcher = pattern.matcher(mEmail);
@@ -1038,15 +1044,15 @@ else{
                     payload.put("refCode",mRef);
                 payload.put("phone", mPhone);
                 payload.put("offlineForm",false);
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("imei",IMEINumber);
-                jsonObject.put("simNumber",simSerialNumber);
-                JSONObject location = new JSONObject();
-                location.put("latitude",latitude);
-                location.put("longitude",longitude);
-                jsonObject.put("location",location);
-                payload.put("deviceDetails",jsonObject);
-                payload.put("clientDevice","android");
+//                JSONObject jsonObject = new JSONObject();
+//                jsonObject.put("imei",IMEINumber);
+//                jsonObject.put("simNumber",simSerialNumber);
+//                JSONObject location = new JSONObject();
+//                location.put("latitude",latitude);
+//                location.put("longitude",longitude);
+//                jsonObject.put("location",location);
+//                payload.put("deviceDetails",jsonObject);
+//                payload.put("clientDevice","android");
                 // payload.put("action", details.get("action"));
 
                 HttpParams httpParameters = new BasicHttpParams();
@@ -1116,6 +1122,7 @@ else{
                 SharedPreferences.Editor edc = cred.edit();
                 edc.putString("phone_number", mPhone);
                 edc.commit();
+                new GetMessage().execute("http://ninja-dev.hellobuddy.in/api/v1/user/messages?userid="+mPhone);
                 SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
                 Gson gson = new Gson();
                 UserModel user = new UserModel();
@@ -1181,6 +1188,92 @@ else{
 
             }
         }
+
+        public class GetMessage extends AsyncTask<String,Void,String>{
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+
+                String comma = ",";
+                String stop = ".";
+                messages= new String [2];
+                if(s!=null) {
+                    messages[0] = s.substring(s.indexOf(comma) + 1, s.lastIndexOf(stop));
+                    messages[1] = s.substring(s.lastIndexOf(stop)+1);
+                    SharedPreferences preferences = getSharedPreferences("message",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("message0",messages[0]);
+                    editor.putString("message1",messages[1]);
+                    editor.apply();
+
+                    if (messages[1].equals("Start Now") || messages[1].equals("Verify Now") || messages[1].equals("Complete it now") || messages[1].equals("Apply Now") || messages[1].equals("Find out more")) {
+                        pageCode = 1;
+                    } else if (messages[1].equals("Okay")) {
+                        pageCode = 2;
+                    } else if (messages[1].equals("Repay Now")) {
+                        pageCode = 3;
+                    } else if (messages[1].equals("Talk to us")) {
+                        pageCode = 4;
+                    }
+                    editor.putInt("pageCode",pageCode);
+                    editor.putString("status",status);
+                    editor.apply();
+                }else{
+                    messages[0] = "";
+                    messages[1] = "";
+                }
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                String url = params[0];
+
+                try {
+                    SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                    String tok_sp = toks.getString("token_value", "");
+                    // String tok_sp = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NjU1NDQwMDgsImV4cCI6MTQ2NTU4MDAwOH0.ZpAwCEB0lYSqiYdfaBYjnBJOXfGrqE9qN8USoRzWR8g";
+                    HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
+                    if (response != null) {
+                        HttpEntity ent = response.getEntity();
+                        String responseString = EntityUtils.toString(ent, "UTF-8");
+                        if (response.getStatusLine().getStatusCode() != 200) {
+
+
+                            Log.e("MeshCommunication", "Server returned code "
+                                    + response.getStatusLine().getStatusCode());
+                            return "fail";
+                        } else {
+
+                            JSONObject resp = new JSONObject(responseString);
+                            if (resp.getString("status").equals("success")) {
+                                JSONObject message = resp.getJSONObject("msg");
+                                status = message.getString("status");
+                                String lines = message.getString("message");
+                                if(lines.length()!=0)
+                                return lines;
+                                else
+                                    return null;
+                            } else
+                                return "";
+
+
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
+                return null;
+
+            }
+
+
+        }
+
+
 
     }
 }

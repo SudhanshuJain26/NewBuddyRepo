@@ -68,6 +68,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
     private String reviewUrl = "",checkConfirm="";
     private String seller, prodid;
     int which_page = 0;
+    boolean shre  =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +146,9 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
             test.setText("Recharge Paytm Wallet");
         else if( which_page==20)
             test.setText("Insane Deals");
+        else if( which_page==26){
+            test.setText("Refer & Earn");
+        }
 
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
 
@@ -210,6 +214,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
             navigationView.getMenu().getItem(2).setChecked(true);
         else if (which_page == 17)
             navigationView.getMenu().getItem(3).setChecked(true);
+
 
 
         //        GridView gridviewshow=(GridView)findViewById(R.id.grid1a);
@@ -310,7 +315,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
                         editornew.putInt("chshare", 1);
                         //editornew.putString("rcode", getIntent().getExtras().getString("UniC"));
                         editornew.commit();
-                        Intent in = new Intent(ViewForm.this, Share.class);
+                        Intent in = new Intent(ViewForm.this, ShareSecond.class);
                         in.putExtra("checksharefromweb", 1);
 
                         startActivity(in);
@@ -454,10 +459,17 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
                     finish();
                     return;
                 }
-                Intent in = new Intent(ViewForm.this, HomePage.class);
-                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(in);
-                finish();
+               if(!shre) {
+                   Intent in = new Intent(ViewForm.this, HomePage.class);
+                   in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                   startActivity(in);
+                   finish();
+               }else{
+                   Intent in = new Intent(ViewForm.this, ShareSecond.class);
+                   in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                   startActivity(in);
+                   finish();
+               }
             }
         }
     }
@@ -621,6 +633,16 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
 
                         }
                         break;
+
+                    case 26:
+                        try{
+                            url = "http://hellobuddy.in/refer-&-earn" +  "?m=no&userid=" + userid + "&key=" + result;
+                            shre = true;
+                        }catch (Exception e){
+
+                        }
+                        break;
+
 
                 }
                 int apiversion = Build.VERSION.SDK_INT;

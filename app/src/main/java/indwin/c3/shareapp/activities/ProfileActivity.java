@@ -35,7 +35,7 @@ import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.Landing;
 import indwin.c3.shareapp.MainActivity;
 import indwin.c3.shareapp.R;
-import indwin.c3.shareapp.Share;
+import indwin.c3.shareapp.ShareSecond;
 import indwin.c3.shareapp.Splash;
 import indwin.c3.shareapp.ViewForm;
 import indwin.c3.shareapp.Views.MLRoundedImageView;
@@ -163,7 +163,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         SharedPreferences.Editor editornew = sh_otp.edit();
                         editornew.putInt("chshare", 1);
                         editornew.commit();
-                        intform = new Intent(ProfileActivity.this, Share.class);
+                        intform = new Intent(ProfileActivity.this, ShareSecond.class);
                         break;
                     case R.id.Recharge:
 

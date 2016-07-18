@@ -278,7 +278,7 @@ public class Approved extends AppCompatActivity {
                         editornew.putInt("chshare", 1);
                         //                        editornew.putString("rcode", getIntent().getExtras().getString("UniC"));
                         editornew.commit();
-                        Intent in = new Intent(Approved.this, Share.class);
+                        Intent in = new Intent(Approved.this, ShareSecond.class);
 
                         startActivity(in);
                         overridePendingTransition(0, 0);

@@ -1,6 +1,7 @@
 package indwin.c3.shareapp;
 
 import android.app.Activity;
+//import android.content.BroadcastReceiver;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -37,7 +38,7 @@ import io.intercom.com.google.gson.Gson;
 /**
  * Created by Aniket Verma(Digo) on 4/2/2016.
  */
-public class AndroidReceiver extends BroadcastReceiver{
+public class AndroidReceiver extends BroadcastReceiver {
     private static final int PERMISSION_REQUEST_CODEC = 2;
     private Context mContext;
     List<SMS> lstSms = new ArrayList<SMS>();

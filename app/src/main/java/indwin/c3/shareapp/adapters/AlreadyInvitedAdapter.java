@@ -1,5 +1,8 @@
 package indwin.c3.shareapp.adapters;
 
+/**
+ * Created by sudhanshu on 15/7/16.
+ */
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,3 +106,7 @@ public class AlreadyInvitedAdapter extends BaseAdapter {
     }
 
 }
+
+
+
+

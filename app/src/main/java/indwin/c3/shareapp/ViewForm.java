@@ -65,9 +65,10 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
 
-    private String reviewUrl = "",checkConfirm="";
+    private String reviewUrl = "", checkConfirm = "";
     private String seller, prodid;
     int which_page = 0;
+    boolean shre  =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +76,9 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
         userP = getSharedPreferences("token", Context.MODE_PRIVATE);
 
         try {
-            checkConfirm= getIntent().getExtras().getString("Confirm");
+            checkConfirm = getIntent().getExtras().getString("Confirm");
         } catch (Exception e) {
-            checkConfirm="";
+            checkConfirm = "";
         }
 
         try {
@@ -143,8 +144,11 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
 
         else if (which_page == 999)
             test.setText("Recharge Paytm Wallet");
-        else if( which_page==20)
+        else if (which_page == 20)
             test.setText("Insane Deals");
+        else if( which_page==26){
+            test.setText("Refer & Earn");
+        }
 
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
 
@@ -210,6 +214,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
             navigationView.getMenu().getItem(2).setChecked(true);
         else if (which_page == 17)
             navigationView.getMenu().getItem(3).setChecked(true);
+
 
 
         //        GridView gridviewshow=(GridView)findViewById(R.id.grid1a);
@@ -310,7 +315,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
                         editornew.putInt("chshare", 1);
                         //editornew.putString("rcode", getIntent().getExtras().getString("UniC"));
                         editornew.commit();
-                        Intent in = new Intent(ViewForm.this, Share.class);
+                        Intent in = new Intent(ViewForm.this, ShareSecond.class);
                         in.putExtra("checksharefromweb", 1);
 
                         startActivity(in);
@@ -441,12 +446,10 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
         } else {
             if (form.canGoBack())
                 form.goBack();
-//            else
-           if("yes".equals(checkConfirm)){
-               finish();
-           }
-
-            else {
+            //            else
+            if ("yes".equals(checkConfirm)) {
+                finish();
+            } else {
                 if (!isNetworkAvailable()) {
                     Intent in = new Intent(ViewForm.this, Landing.class);
                     in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -454,10 +457,17 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
                     finish();
                     return;
                 }
-                Intent in = new Intent(ViewForm.this, HomePage.class);
-                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(in);
-                finish();
+               if(!shre) {
+                   Intent in = new Intent(ViewForm.this, HomePage.class);
+                   in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                   startActivity(in);
+                   finish();
+               }else{
+                   Intent in = new Intent(ViewForm.this, ShareSecond.class);
+                   in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                   startActivity(in);
+                   finish();
+               }
             }
         }
     }
@@ -532,80 +542,80 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
         }
 
         protected void onPostExecute(String result) {
-
+            String baseUrl = BuildConfig.WEB_URL;
 
             if (!result.equals("fail")) {//url="http://www.convert-jpg-to-pdf.net/";
                 switch (which_page) {
                     case 1:
-                        url = getApplicationContext().getString(R.string.web) + "/?m=no&userid=" + userid + "&key=" + result;
+                        url = baseUrl + "/?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 2:
-                        url = getApplicationContext().getString(R.string.web) + "/?m=no&userid=" + userid + "&key=" + result;
+                        url = baseUrl + "/?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 3:
-                        url = getApplicationContext().getString(R.string.web) + "/about-us?m=no&userid=" + userid + "&key=" + result;
+                        url = baseUrl + "/about-us?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 4:
                         //                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
-                        url = getApplicationContext().getString(R.string.web) + "/profile?m=no&userid=" + userid + "&key=" + result;
+                        url = baseUrl + "/profile?m=no&userid=" + userid + "&key=" + result;
                         //                        url="http://hellobuddy.in/#/profile";
                         break;
                     case 5:
-                        url = getApplicationContext().getString(R.string.web) + "/faqs?m=no&userid=" + userid + "&key=" + result;
+                        url = baseUrl + "/faqs?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 6:
                         //                        url="http://hellobuddy.in/#/profile";
-                        url = getApplicationContext().getString(R.string.web) + "/profile?m=no&userid=" + userid + "&key=" + result;
+                        url = baseUrl + "/profile?m=no&userid=" + userid + "&key=" + result;
                         ;
                         //                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
                         break;
 
                     case 7:
                         //                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
-                        url = getApplicationContext().getString(R.string.web) + "/profile?m=no&userid=" + userid + "&key=" + result;
+                        url = baseUrl + "/profile?m=no&userid=" + userid + "&key=" + result;
                         //                        url="http://hellobuddy.in/#/profile";
                         break;
 
                     case 8:
                         //                        url="http://abhimanyutak.github.io/buddyapp/?m=no&userid="+userid+"&key="+result+"#/profile";
-                        url = getApplicationContext().getString(R.string.web) + "/profile?m=no&userid=" + userid + "&key=" + result;
+                        url = baseUrl + "/profile?m=no&userid=" + userid + "&key=" + result;
                         //                        url="http://hellobuddy.in/#/profile";
                         break;
                     case 9:
                         try {
-                            url = getApplicationContext().getString(R.string.web) + "/search/products/?flipkartURL=" + URLEncoder.encode(res, "UTF-8") + "&m=no&userid=" + userid + "&key=" + result;
+                            url = baseUrl + "/search/products/?flipkartURL=" + URLEncoder.encode(res, "UTF-8") + "&m=no&userid=" + userid + "&key=" + result;
                         } catch (Exception e) {
                         }
                         break;
                     case 10:
-                        url = getApplicationContext().getString(R.string.web) + "/search/products/" + prodid + "?seller=" + seller + "&m=no&userid=" + userid + "&key=" + result;
+                        url = baseUrl + "/search/products/" + prodid + "?seller=" + seller + "&m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 11:
-                        url = getApplicationContext().getString(R.string.web) + "/how-it-works?m=no&userid=" + userid + "&key=" + result;
+                        url = baseUrl + "/how-it-works?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 14:
-                        url = getApplicationContext().getString(R.string.web) + "/whyBuddy?m=no&userid=" + userid + "&key=" + result;
+                        url = baseUrl + "/whyBuddy?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 15:
-                        url = getApplicationContext().getString(R.string.web) + "/security" +
+                        url = baseUrl + "/security" +
                                 "?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 99:
-                        url = getApplicationContext().getString(R.string.web) + "/security" +
+                        url = baseUrl + "/security" +
                                 "?m=no&userid=" + userid + "&key=" + result;
                         break;
 
                     case 16:
-                        url = getApplicationContext().getString(R.string.web) + "/orders" +
+                        url = baseUrl + "/orders" +
                                 "?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 999:
-                        url = getApplicationContext().getString(R.string.web) + "/recharge" +
+                        url = baseUrl + "/recharge" +
                                 "?m=no&userid=" + userid + "&key=" + result;
                         break;
 
                     case 17:
-                        url = getApplicationContext().getString(R.string.web) + "/repayments" +
+                        url = baseUrl + "/repayments" +
                                 "?m=no&userid=" + userid + "&key=" + result;
                         break;
                     case 119:
@@ -615,12 +625,22 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
                         }
 
                     case 20:
-                        try{
+                        try {
                             url = "http://hellobuddy.in/deals";
+                        } catch (Exception e) {
+
+                        }
+                        break;
+
+                    case 26:
+                        try{
+                            url = "http://hellobuddy.in/refer-&-earn" +  "?m=no&userid=" + userid + "&key=" + result;
+                            shre = true;
                         }catch (Exception e){
 
                         }
                         break;
+
 
                 }
                 int apiversion = Build.VERSION.SDK_INT;
@@ -689,7 +709,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
                         .setConnectionTimeout(httpParameters, 30000);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
-                String urll =BuildConfig.SERVER_URL + "authenticate";
+                String urll = BuildConfig.SERVER_URL + "authenticate";
                 HttpPost httppost = new HttpPost(urll);
                 httppost.setHeader("Authorization", "Basic YnVkZHlhcGlhZG1pbjptZW1vbmdvc2gx");
 
@@ -789,7 +809,7 @@ public class ViewForm extends AppCompatActivity implements AdvancedWebView.Liste
             // TODO Auto-generated method stub
 
             if (url.equals("buddy://profile")) {
-              //  Toast.makeText(ViewForm.this, "gopi", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(ViewForm.this, "gopi", Toast.LENGTH_SHORT).show();
             } else
 
                 view.loadUrl(url);

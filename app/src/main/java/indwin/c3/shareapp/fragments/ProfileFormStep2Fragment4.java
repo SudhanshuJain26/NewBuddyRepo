@@ -389,6 +389,11 @@ public class ProfileFormStep2Fragment4 extends Fragment {
             completeSetupRepayments.setVisibility(View.GONE);
             incompleteSetupRepayments.setVisibility(View.VISIBLE);
         } else {
+            if (AppUtils.isNotEmpty(userDB.getBankAccNum()))
+                user.setBankAccNum(userDB.getBankAccNum());
+            if (AppUtils.isNotEmpty(userDB.getBankIfsc()))
+                user.setBankIfsc(userDB.getBankIfsc());
+
             user.setIncompleteRepaymentSetup(false);
             incompleteSetupRepayments.setVisibility(View.GONE);
             completeSetupRepayments.setVisibility(View.VISIBLE);

@@ -2,6 +2,7 @@ package indwin.c3.shareapp.activities;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,20 +12,26 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.GoogleAuthUtil;
+//import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.AccountPicker;
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
@@ -55,6 +62,8 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import indwin.c3.shareapp.BuildConfig;
@@ -62,40 +71,39 @@ import indwin.c3.shareapp.GetAccessToken;
 import indwin.c3.shareapp.GoogleConstants;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.Share;
-import indwin.c3.shareapp.YahooConstants;
 import indwin.c3.shareapp.models.Friends;
 import indwin.c3.shareapp.models.UserModel;
 import indwin.c3.shareapp.utils.AppUtils;
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.OAuthProvider;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
-import oauth.signpost.exception.OAuthMessageSignerException;
-import oauth.signpost.exception.OAuthNotAuthorizedException;
+
 
 public class AuthenticateEmail extends AppCompatActivity {
 
     ImageView google;
-    ImageView yahoo;
+//    ImageView yahoo;
     final String TAG = getClass().getName();
     ProgressBar progressBar;
     boolean sentFromYahoo = false;
+
+
 
     private Dialog auth_dialog;
     List<Friends> friends1;
     List<Friends> yahooEmailList;
 
     private String oAuthVerifier;
+    String mEmail;
 
-    CommonsHttpOAuthConsumer mainConsumer;
-    CommonsHttpOAuthProvider mainProvider;
+
+//    CommonsHttpOAuthConsumer mainConsumer;
+//    CommonsHttpOAuthProvider mainProvider;
     ImageView back;
     ProgressDialog pDialog;
     String userId;
     AccountManager mAccountManager;
     ProgressDialog pd;
+    FrameLayout  rl1;
+    RelativeLayout rl2;
+    int pageCode;
     public ArrayList<Friends> listfromServerEmail = new ArrayList<>();
     public ArrayList<Friends> isBuddyListEmail = new ArrayList<>();
     public ArrayList<Friends> isInvitedListEmail = new ArrayList<>();
@@ -103,40 +111,70 @@ public class AuthenticateEmail extends AppCompatActivity {
     public ArrayList<Friends> isBuddyListEmailYahoo = new ArrayList<>();
     public ArrayList<Friends> isInvitedListEmailYahoo = new ArrayList<>();
     public ArrayList<String> alreadyListed = new ArrayList<>();
-  ;
+  ;int width,height;
+    ViewGroup.LayoutParams params;
+    static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
+
+
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//
+//        Uri uriData = intent.getData();
+//        if (uriData != null && uriData.toString().startsWith(YahooConstants.CALLBACK_URL)) {
+//            setVerifier(uriData.getQueryParameter("oauth_verifier"));
+//        }
+//        if(uriData!=null)
+//        new OAuthGetAccessTokenTask().execute();
+//        super.onNewIntent(intent);
+//
+//    }
+
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    public void onBackPressed() {
 
-        Uri uriData = intent.getData();
-        if (uriData != null && uriData.toString().startsWith(YahooConstants.CALLBACK_URL)) {
-            setVerifier(uriData.getQueryParameter("oauth_verifier"));
+        if(pageCode==0){
+            Intent intent = new Intent(AuthenticateEmail.this,ShowSelectedItems.class);
+            startActivity(intent);
+            finish();
+        }else{
+            Intent intent = new Intent(AuthenticateEmail.this,FillEmailContacts.class);
+            startActivity(intent);
+            finish();
         }
-        if(uriData!=null)
-        new OAuthGetAccessTokenTask().execute();
-        super.onNewIntent(intent);
 
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authenticate_email);
-        this.mainConsumer = new CommonsHttpOAuthConsumer(YahooConstants.CLIENT_ID, YahooConstants.CLIENT_SECRET);
-        this.mainProvider = new CommonsHttpOAuthProvider(YahooConstants.REQUEST_TOKEN_ENDPOINT_URL, YahooConstants.ACCESS_TOKEN_ENDPOINT_URL, YahooConstants.AUTHORIZE_WEBSITE_URL);
+//        this.mainConsumer = new CommonsHttpOAuthConsumer(YahooConstants.CLIENT_ID, YahooConstants.CLIENT_SECRET);
+//        this.mainProvider = new CommonsHttpOAuthProvider(YahooConstants.REQUEST_TOKEN_ENDPOINT_URL, YahooConstants.ACCESS_TOKEN_ENDPOINT_URL, YahooConstants.AUTHORIZE_WEBSITE_URL);
 
         google = (ImageView) findViewById(R.id.google);
-        yahoo = (ImageView) findViewById(R.id.yahoo);
+       // yahoo = (ImageView) findViewById(R.id.yahoo);
         back = (ImageView) findViewById(R.id.backo);
+        rl1 = (FrameLayout)findViewById(R.id.googleframe);
+       // rl2 = (RelativeLayout)findViewById(R.id.yahooFrame);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                if(pageCode==0){
+                    Intent intent = new Intent(AuthenticateEmail.this,ShowSelectedItems.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Intent intent = new Intent(AuthenticateEmail.this,FillEmailContacts.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
         UserModel userModel = AppUtils.getUserObject(this);
         userId = userModel.getUserId();
+        Log.i("TAG","userId="+userId);
+        pageCode = getIntent().getIntExtra("pageCode",1);
         SharedPreferences preferences = getSharedPreferences("inviteCalls",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove("email_contacts_isBuddy");
@@ -154,8 +192,22 @@ public class AuthenticateEmail extends AppCompatActivity {
         isBuddyListEmailYahoo.clear();
         isInvitedListEmailYahoo.clear();
         listfromServerEmailYahoo.clear();
+        WindowManager manager = (WindowManager) getSystemService(Activity.WINDOW_SERVICE);
 
 
+
+
+            width = manager.getDefaultDisplay().getWidth();
+            height = manager.getDefaultDisplay().getHeight();
+
+        rl1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchAuthDialog();
+                if(yahooEmailList!=null)
+                    yahooEmailList.clear();
+            }
+        });
 
         google.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,15 +218,15 @@ public class AuthenticateEmail extends AppCompatActivity {
             }
         });
 
-        yahoo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new OAuthRequestTokenTask(v.getContext(), mainConsumer, mainProvider).execute();
-                sentFromYahoo = true;
-                if(friends1!=null)
-                friends1.clear();
-            }
-        });
+//        yahoo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new OAuthRequestTokenTask(v.getContext(), mainConsumer, mainProvider).execute();
+//                sentFromYahoo = true;
+//                if(friends1!=null)
+//                friends1.clear();
+//            }
+//        });
 
 
     }
@@ -192,128 +244,141 @@ public class AuthenticateEmail extends AppCompatActivity {
 
     }
 
-    public void setVerifier(String verifier) {
-        this.oAuthVerifier = verifier;
-//      this.webview.loadData("verifier = " + this.OAuthVerifier + "<br>", "text/html", null);
-        Log.d("setVerifier", verifier);
-
-        this.showToken();
-    }
-
-    public void showToken() {
-        //Log.d("SubPlurkV2", "Token = " + mainConsumer.getToken() + " and secret = " + mainConsumer.getTokenSecret());
-        String str =
-                "verifier = " + this.oAuthVerifier + "<br>" +
-                        "Token = " + mainConsumer.getToken() + "<br>" +
-                        "secret = " + mainConsumer.getTokenSecret() + "<br>" +
-                        "oauth_expires_in = " + mainProvider.getResponseParameters().getFirst("oauth_expires_in") + "<br>" +
-                        "oauth_session_handle = " + mainProvider.getResponseParameters().getFirst("oauth_session_handle") + "<br>" +
-                        "oauth_authorization_expires_in = " + mainProvider.getResponseParameters().getFirst("oauth_authorization_expires_in") + "<br>" +
-                        "xoauth_yahoo_guid = " + mainProvider.getResponseParameters().getFirst("xoauth_yahoo_guid") + "<br>";
-        Log.i("YahooScreen", "str : " + str);
-    }
-
-    public void getContacts() {
-        String guid = mainProvider.getResponseParameters().getFirst("xoauth_yahoo_guid");
-        String url = "https://social.yahooapis.com/v1/user/" + guid + "/contacts?format=json";
-        new GetYahooContacts().execute(url);
-    }
-
-    private class GetYahooContacts extends AsyncTask<String, Void, Void> {
-        OAuthConsumer consumer = mainConsumer;
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            new SendEmails(AuthenticateEmail.this).execute();
-//            Intent intent = new Intent(AuthenticateEmail.this, FillEmailContacts.class);
-            SharedPreferences preferences = getSharedPreferences("inviteCalls",MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(yahooEmailList);
-            editor.putString("yahooEmailList", json);
-            editor.commit();
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("yahoovalues", (Serializable) yahooEmailList);
+//    public void setVerifier(String verifier) {
+//        this.oAuthVerifier = verifier;
+////      this.webview.loadData("verifier = " + this.OAuthVerifier + "<br>", "text/html", null);
+//        Log.d("setVerifier", verifier);
 //
-//            intent.putExtras(bundle);
-//            startActivity(intent);
+//        this.showToken();
+//    }
 
-            super.onPostExecute(aVoid);
-        }
+//    public void showToken() {
+//        //Log.d("SubPlurkV2", "Token = " + mainConsumer.getToken() + " and secret = " + mainConsumer.getTokenSecret());
+//        String str =
+//                "verifier = " + this.oAuthVerifier + "<br>" +
+//                        "Token = " + mainConsumer.getToken() + "<br>" +
+//                        "secret = " + mainConsumer.getTokenSecret() + "<br>" +
+//                        "oauth_expires_in = " + mainProvider.getResponseParameters().getFirst("oauth_expires_in") + "<br>" +
+//                        "oauth_session_handle = " + mainProvider.getResponseParameters().getFirst("oauth_session_handle") + "<br>" +
+//                        "oauth_authorization_expires_in = " + mainProvider.getResponseParameters().getFirst("oauth_authorization_expires_in") + "<br>" +
+//                        "xoauth_yahoo_guid = " + mainProvider.getResponseParameters().getFirst("xoauth_yahoo_guid") + "<br>";
+//        Log.i("YahooScreen", "str : " + str);
+//    }
 
-        @Override
-        protected Void doInBackground(String... params) {
+//    public void getContacts() {
+//        String guid = mainProvider.getResponseParameters().getFirst("xoauth_yahoo_guid");
+//        String url = "https://social.yahooapis.com/v1/user/" + guid + "/contacts?format=json";
+//        new GetYahooContacts().execute(url);
+//        SharedPreferences preferences1 = getSharedPreferences("disconnect",MODE_PRIVATE);
+//        SharedPreferences.Editor editor1 = preferences1.edit();
+//        editor1.putBoolean("disconnectemail",false);
+//        editor1.commit();
+//
+//    }
 
-            final HttpGet request = new HttpGet(params[0]);
-            Log.i("doGet", "Requesting URL : " + params[0]);
+//    private class GetYahooContacts extends AsyncTask<String, Void, Void> {
+//        OAuthConsumer consumer = mainConsumer;
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            new SendEmails(AuthenticateEmail.this).execute();
+////            Intent intent = new Intent(AuthenticateEmail.this, FillEmailContacts.class);
+//            SharedPreferences preferences = getSharedPreferences("inviteCalls",MODE_PRIVATE);
+//            SharedPreferences.Editor editor = preferences.edit();
+//            Gson gson = new Gson();
+//            String json = gson.toJson(yahooEmailList);
+//            editor.putString("yahooEmailList", json);
+//            editor.commit();
+//
+//            super.onPostExecute(aVoid);
+//        }
+//
+//        @Override
+//        protected Void doInBackground(String... params) {
+//
+//            final HttpGet request = new HttpGet(params[0]);
+//            Log.i("doGet", "Requesting URL : " + params[0]);
+//
+//            try {
+//                consumer.sign(request);
+//                Log.i("YahooScreen", "request url : " + request.getURI());
+//
+//                DefaultHttpClient httpclient = new DefaultHttpClient();
+//                HttpResponse response;
+//                try {
+//                    response = httpclient.execute((HttpUriRequest) request);
+//                    Log.i("doGet", "Statusline : " + response.getStatusLine());
+//                    InputStream data = response.getEntity().getContent();
+//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(data));
+//                    String responeLine;
+//                    StringBuilder responseBuilder = new StringBuilder();
+//                    while ((responeLine = bufferedReader.readLine()) != null) {
+//                        responseBuilder.append(responeLine);
+//                    }
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(responseBuilder.toString());
+//                        JSONObject jsonObject1 = jsonObject.getJSONObject("contacts");
+//                        JSONArray jsonObject2 = jsonObject1.getJSONArray("contact");
+//                        yahooEmailList = new ArrayList<Friends>();
+//                        for (int i = 0; i < jsonObject2.length(); i++) {
+//
+//                            JSONObject object = jsonObject2.getJSONObject(i);
+//                            JSONArray fields = object.getJSONArray("fields");
+//                            JSONObject name = fields.getJSONObject(0);
+//                            JSONObject email = fields.getJSONObject(2);
+//                            String email_registered = email.getString("value");
+//
+//                            JSONObject json = name.getJSONObject("value");
+//                            String givenName = json.getString("givenName");
+//                            String familyName = json.getString("familyName");
+//                            Friends friends = new Friends(givenName + " " + familyName, email_registered);
+//                            yahooEmailList.add(friends);
+//                        }
+//
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    Log.i("doGet", "Response : " + responseBuilder.toString());
+//
+//                    //return responseBuilder.toString();
+//                } catch (ClientProtocolException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            } catch (OAuthExpectationFailedException e) {
+//                e.printStackTrace();
+//            } catch (OAuthMessageSignerException e) {
+//                e.printStackTrace();
+//            } catch (OAuthCommunicationException e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//    }
 
-            try {
-                consumer.sign(request);
-                Log.i("YahooScreen", "request url : " + request.getURI());
-
-                DefaultHttpClient httpclient = new DefaultHttpClient();
-                HttpResponse response;
-                try {
-                    response = httpclient.execute((HttpUriRequest) request);
-                    Log.i("doGet", "Statusline : " + response.getStatusLine());
-                    InputStream data = response.getEntity().getContent();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(data));
-                    String responeLine;
-                    StringBuilder responseBuilder = new StringBuilder();
-                    while ((responeLine = bufferedReader.readLine()) != null) {
-                        responseBuilder.append(responeLine);
-                    }
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseBuilder.toString());
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("contacts");
-                        JSONArray jsonObject2 = jsonObject1.getJSONArray("contact");
-                        yahooEmailList = new ArrayList<Friends>();
-                        for (int i = 0; i < jsonObject2.length(); i++) {
-
-                            JSONObject object = jsonObject2.getJSONObject(i);
-                            JSONArray fields = object.getJSONArray("fields");
-                            JSONObject name = fields.getJSONObject(0);
-                            JSONObject email = fields.getJSONObject(2);
-                            String email_registered = email.getString("value");
-
-                            JSONObject json = name.getJSONObject("value");
-                            String givenName = json.getString("givenName");
-                            String familyName = json.getString("familyName");
-                            Friends friends = new Friends(givenName + " " + familyName, email_registered);
-                            yahooEmailList.add(friends);
-                        }
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    Log.i("doGet", "Response : " + responseBuilder.toString());
-
-                    //return responseBuilder.toString();
-                } catch (ClientProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            } catch (OAuthExpectationFailedException e) {
-                e.printStackTrace();
-            } catch (OAuthMessageSignerException e) {
-                e.printStackTrace();
-            } catch (OAuthCommunicationException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
+    private void pickUserAccount() {
+        String[] accountTypes = new String[]{"com.google"};
+        Intent intent = AccountPicker.newChooseAccountIntent(null, null,
+                accountTypes, false, null, null, null, null);
+        startActivityForResult(intent, REQUEST_CODE_PICK_ACCOUNT);
     }
 
     private void launchAuthDialog() {
         final Context context = this;
         sentFromYahoo = false;
         auth_dialog = new Dialog(context);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(auth_dialog.getWindow().getAttributes());
+        lp.width = width;
+        lp.height = height;
+        auth_dialog.getWindow().setAttributes(lp);
         auth_dialog.setTitle("Authentication");
         auth_dialog.setCancelable(true);
         auth_dialog.setContentView(R.layout.auth_dialog);
+
 
         auth_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
@@ -321,6 +386,8 @@ public class AuthenticateEmail extends AppCompatActivity {
                 finish();
             }
         });
+
+
 
         WebView web = (WebView) auth_dialog.findViewById(R.id.web);
         web.getSettings().setJavaScriptEnabled(true);
@@ -356,41 +423,41 @@ public class AuthenticateEmail extends AppCompatActivity {
     }
 
 
-    public class OAuthGetAccessTokenTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            try {
-                mainProvider.retrieveAccessToken(mainConsumer, oAuthVerifier);
-            } catch (OAuthMessageSignerException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (OAuthNotAuthorizedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (OAuthExpectationFailedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (OAuthCommunicationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        /* (non-Javadoc)
-         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-         */
-        @Override
-        protected void onPostExecute(Void result) {
-            // TODO Auto-generated method stub
-            //super.onPostExecute(result);
-            showToken();
-            getContacts();
-
-        }
-
-    }
+//    public class OAuthGetAccessTokenTask extends AsyncTask<Void, Void, Void> {
+//        @Override
+//        protected Void doInBackground(Void... arg0) {
+//            try {
+//                mainProvider.retrieveAccessToken(mainConsumer, oAuthVerifier);
+//            } catch (OAuthMessageSignerException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            } catch (OAuthNotAuthorizedException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            } catch (OAuthExpectationFailedException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            } catch (OAuthCommunicationException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//
+//            return null;
+//        }
+//
+//        /* (non-Javadoc)
+//         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+////         */
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            // TODO Auto-generated method stub
+//            //super.onPostExecute(result);
+//            showToken();
+//            getContacts();
+//
+//        }
+//
+//    }
 
     private class GoogleAuthToken extends AsyncTask<String, String, JSONObject> {
         private ProgressDialog pDialog;
@@ -511,6 +578,7 @@ public class AuthenticateEmail extends AppCompatActivity {
                 }
             });
             pDialog.show();
+
         }
 
         @Override
@@ -518,6 +586,7 @@ public class AuthenticateEmail extends AppCompatActivity {
             String accessToken = args[0];
             ContactsService contactsService = new ContactsService(
                     GoogleConstants.APP);
+
             contactsService.setHeader("Authorization", "Bearer " + accessToken);
             contactsService.setHeader("GData-Version", "3.0");
             List<ContactEntry> contactEntries = null;
@@ -536,6 +605,11 @@ public class AuthenticateEmail extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<ContactEntry> googleContacts) {
+            SharedPreferences preferences2 = getSharedPreferences("disconnect",MODE_PRIVATE);
+            SharedPreferences.Editor editor2 = preferences2.edit();
+            editor2.putBoolean("disconnectemail",false);
+            editor2.commit();
+
             if (null != googleContacts && googleContacts.size() > 0) {
                 friends1 = new ArrayList<Friends>();
 
@@ -578,7 +652,7 @@ public class AuthenticateEmail extends AppCompatActivity {
                     }
                 }
 
-                //new SendEmailstoServer(AuthenticateEmail.this).execute();
+//                new SendEmailstoServer(AuthenticateEmail.this).execute();
                 new SendEmails(AuthenticateEmail.this).execute();
                 SharedPreferences prefs = getSharedPreferences("inviteCalls", MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
@@ -783,10 +857,17 @@ public class AuthenticateEmail extends AppCompatActivity {
 
                             Friends friends = new Friends(phone, email, isBuddy, isInvited, name);
                             if(email.length()!=0) {
-                                if (isBuddy)
-                                    isBuddyListEmailYahoo.add(friends);
-                                if (!isBuddy && isInvited)
-                                    isInvitedListEmailYahoo.add(friends);
+                                if(sentFromYahoo) {
+                                    if (isBuddy)
+                                        isBuddyListEmailYahoo.add(friends);
+                                    if (!isBuddy && isInvited)
+                                        isInvitedListEmailYahoo.add(friends);
+                                }else{
+                                    if (isBuddy)
+                                        isBuddyListEmail.add(friends);
+                                    if (!isBuddy && isInvited)
+                                        isInvitedListEmail.add(friends);
+                                }
 
                             }
                         }
@@ -817,6 +898,9 @@ public class AuthenticateEmail extends AppCompatActivity {
             isBuddyListEmailYahoo.clear();
             isInvitedListEmailYahoo.clear();
             listfromServerEmailYahoo.clear();
+            isBuddyListEmail.clear();
+            isInvitedListEmail.clear();
+            listfromServerEmail.clear();
         }
 
         @Override
@@ -839,6 +923,27 @@ public class AuthenticateEmail extends AppCompatActivity {
                         listfromServerEmail.add(friends1.get(i));
                     }
                 }
+
+                Collections.sort(isBuddyListEmail, new Comparator<Friends>() {
+                    @Override
+                    public int compare(Friends s1, Friends s2) {
+                        return s1.getName().compareToIgnoreCase(s2.getName());
+                    }
+                });
+
+                Collections.sort(isInvitedListEmail, new Comparator<Friends>() {
+                    @Override
+                    public int compare(Friends s1, Friends s2) {
+                        return s1.getName().compareToIgnoreCase(s2.getName());
+                    }
+                });
+
+                Collections.sort(listfromServerEmail, new Comparator<Friends>() {
+                    @Override
+                    public int compare(Friends s1, Friends s2) {
+                        return s1.getName().compareToIgnoreCase(s2.getName());
+                    }
+                });
             }else{
                 for (int i = 0; i < isBuddyListEmailYahoo.size(); i++) {
                     String name = isBuddyListEmailYahoo.get(i).getName();
@@ -857,12 +962,39 @@ public class AuthenticateEmail extends AppCompatActivity {
                 }else{
 
                 }
+
+                Collections.sort(isBuddyListEmailYahoo, new Comparator<Friends>() {
+                    @Override
+                    public int compare(Friends s1, Friends s2) {
+                        return s1.getName().compareToIgnoreCase(s2.getName());
+                    }
+                });
+
+                Collections.sort(isInvitedListEmailYahoo, new Comparator<Friends>() {
+                    @Override
+                    public int compare(Friends s1, Friends s2) {
+                        return s1.getName().compareToIgnoreCase(s2.getName());
+                    }
+                });
+
+                Collections.sort(listfromServerEmailYahoo, new Comparator<Friends>() {
+                    @Override
+                    public int compare(Friends s1, Friends s2) {
+                        return s1.getName().compareToIgnoreCase(s2.getName());
+                    }
+                });
+
+
             }
 
             Intent intent = new Intent(AuthenticateEmail.this,FillEmailContacts.class);
             SharedPreferences preferences = getSharedPreferences("inviteCalls",MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("DisconnectEmail",false);
+            editor.commit();
+
+
+
             editor.commit();
             sentFromYahoo = false;
             if (friends1 != null && friends1.size()!=0) {
@@ -871,6 +1003,12 @@ public class AuthenticateEmail extends AppCompatActivity {
                 bundle.putSerializable("buddyList",isBuddyListEmail);
                 bundle.putSerializable("userList",listfromServerEmail);
                 intent.putExtras(bundle);
+                SharedPreferences preferences1 = getSharedPreferences("list2",MODE_PRIVATE);
+                SharedPreferences.Editor editor1 = preferences1.edit();
+                editor1.putInt("inviteSize",isInvitedListEmail.size());
+                editor1.apply();
+
+                saveListinPrefs();
             }
             if(yahooEmailList!=null && yahooEmailList.size()!=0){
                 Bundle bundle = new Bundle();
@@ -878,53 +1016,87 @@ public class AuthenticateEmail extends AppCompatActivity {
                 bundle.putSerializable("buddyList",isBuddyListEmailYahoo);
                 bundle.putSerializable("userList",listfromServerEmailYahoo);
                 intent.putExtras(bundle);
+                SharedPreferences preferences2 = getSharedPreferences("list2",MODE_PRIVATE);
+                SharedPreferences.Editor editor2 = preferences2.edit();
+                editor2.putInt("inviteSize",isInvitedListEmailYahoo.size());
+                editor2.apply();
             }
+
+            SharedPreferences sharedPreferences = getSharedPreferences("authenticate",MODE_PRIVATE);
+            SharedPreferences.Editor editor1 = sharedPreferences.edit();
+            editor1.putBoolean("authenticatedone",true);
+            editor1.commit();
             context.startActivity(intent);
+
+        }
+
+        public void saveListinPrefs(){
+            SharedPreferences preferences = getSharedPreferences("list1", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(listfromServerEmail);
+            editor.putString("email_contacts_notSelected", json);
+            editor.commit();
+
+            SharedPreferences preferences1 = getSharedPreferences("list1", MODE_PRIVATE);
+            SharedPreferences.Editor editor1 = preferences1.edit();
+            Gson gson1 = new Gson();
+            String json1 = gson1.toJson(isInvitedListEmail);
+            editor1.putString("email_contacts_invited", json1);
+            editor1.commit();
+
+            SharedPreferences preferences2 = getSharedPreferences("list1", MODE_PRIVATE);
+            SharedPreferences.Editor editor2 = preferences2.edit();
+            Gson gson2 = new Gson();
+            String json2 = gson2.toJson(isBuddyListEmail);
+            editor2.putString("email_contacts_buddy", json2);
+            editor2.commit();
+
         }
     }
 
 
-        public class OAuthRequestTokenTask extends AsyncTask<Void, Void, String> {
-
-            final String TAG = getClass().getName();
-            private Context context;
-            private OAuthProvider provider;
-            private OAuthConsumer consumer;
-
-            public OAuthRequestTokenTask(Context context, OAuthConsumer consumer, OAuthProvider provider) {
-                this.context = context;
-                this.consumer = consumer;
-                this.provider = provider;
-            }
-
-            @Override
-            protected String doInBackground(Void... params) {
-
-                try {
-                    Log.i(TAG, "Retrieving request token from Google servers");
-                    final String url = provider.retrieveRequestToken(consumer, YahooConstants.CALLBACK_URL);
-                    Log.i(TAG, "Popping a browser with the authorize URL : " + url);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    context.startActivity(intent);
-
-                    return url;
-                } catch (Exception e) {
-                    Log.e(TAG, "Error during OAUth retrieve request token", e);
-                }
-
-                return null;
-            }
-
-            /* (non-Javadoc)
-             * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-             */
-            @Override
-            protected void onPostExecute(String result) {
-                Log.i(TAG, "onPostExecute result : " + result);
-                super.onPostExecute(result);
-
-            }
-        }
+//        public class OAuthRequestTokenTask extends AsyncTask<Void, Void, String> {
+//
+//            final String TAG = getClass().getName();
+//            private Context context;
+//            private OAuthProvider provider;
+//            private OAuthConsumer consumer;
+//
+//            public OAuthRequestTokenTask(Context context, OAuthConsumer consumer, CommonsHttpOAuthProvider provider) {
+//                this.context = context;
+//                this.consumer = consumer;
+//                this.provider = provider;
+//            }
+//
+//            @Override
+//            protected String doInBackground(Void... params) {
+//
+//                try {
+//                    Log.i(TAG, "Retrieving request token from Google servers");
+//                    final String url = provider.retrieveRequestToken(consumer, YahooConstants.CALLBACK_URL);
+//                    Log.i(TAG, "Popping a browser with the authorize URL : " + url);
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                    context.startActivity(intent);
+//
+//                    return url;
+//                } catch (Exception e) {
+//                    Log.e(TAG, "Error during OAUth retrieve request token", e);
+//                }
+//
+//                return null;
+//            }
+//
+//            /* (non-Javadoc)
+//             * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+//             */
+//            @Override
+//            protected void onPostExecute(String result) {
+//                Log.i(TAG, "onPostExecute result : " + result);
+//                super.onPostExecute(result);
+//
+//            }
+//        }
     }
 

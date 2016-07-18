@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import indwin.c3.shareapp.activities.FillEmailContacts;
 import indwin.c3.shareapp.activities.ShowSelectedItems;
 import indwin.c3.shareapp.models.Friends;
 import indwin.c3.shareapp.models.UserModel;
@@ -51,6 +54,7 @@ public class NewUserEmail1 extends ListFragment {
     String name;
     String referralCode;
     boolean check1;
+    View headerView;
 
     Button done;
 
@@ -64,11 +68,12 @@ public class NewUserEmail1 extends ListFragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        checkBox_header.setOnClickListener(new View.OnClickListener() {
+        headerView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
+                checkBox_header.setChecked(!checkBox_header.isChecked());
 
                 if(checkBox_header.isChecked()) {
                     done.setVisibility(View.VISIBLE);
@@ -97,13 +102,35 @@ public class NewUserEmail1 extends ListFragment {
             }
         });
 
+        checkBox_header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkBox_header.isChecked()) {
+                    done.setVisibility(View.VISIBLE);
+                    master =true;
+                }
+                else {
+                    done.setVisibility(View.GONE);
+                    selectedFriendlist.clear();
+                    master = false;
+                }
+
+                for (int i = 0; i < friendsArrayList.size(); i++) {
+                    mChecked.put(i, checkBox_header.isChecked());
+                }
+
+                    /*
+                     * Update View
+                     */
+                adapter.notifyDataSetChanged();
+            }
+        });
+
 
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                sh_otp = getContext().getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
-//                new SendSelectedContactstoServer(getContext()).execute();
 
                 SharedPreferences prefs = getContext().getSharedPreferences("preferencename2", 0);
                 SharedPreferences.Editor editor = prefs.edit();
@@ -121,10 +148,11 @@ public class NewUserEmail1 extends ListFragment {
                 }
 
                 Intent intent = new Intent(getContext(), ShowSelectedItems.class);
+                intent.putExtra("email",2);
 
                 if(selectedFriendlist!=null || selectedFriendlist.size()!=0){
 
-// add elements to al, including duplicates
+
                     Set<Friends> hs = new HashSet<>();
                     hs.addAll(selectedFriendlist);
                     selectedFriendlist.clear();
@@ -143,6 +171,7 @@ public class NewUserEmail1 extends ListFragment {
 
                 }
                 getContext().startActivity(intent);
+                getActivity().finish();
 
             }
         });
@@ -156,7 +185,6 @@ public class NewUserEmail1 extends ListFragment {
         userId = userModel.getUserId();
         name = userModel.getName();
         friendsArrayList = (List<Friends>) getArguments().getSerializable("list");
-
         mChecked = getArray();
 
         SharedPreferences toks = getContext().getSharedPreferences("token", Context.MODE_PRIVATE);
@@ -189,10 +217,27 @@ public class NewUserEmail1 extends ListFragment {
 
         View rootView = inflater.inflate(R.layout.email_user_list, container, false);
         mListView = (ListView) rootView.findViewById(android.R.id.list);
-        final View headerView = inflater.inflate(R.layout.header1,
+        headerView = inflater.inflate(R.layout.header1,
                 mListView, false);
-        checkBox_header = (CheckBox) headerView.findViewById(R.id.checkbox);
+        final FrameLayout frameLayout = (FrameLayout)rootView.findViewById(R.id.frame2);
+        if(FillEmailContacts.yahooMalfunction) {
 
+            new CountDownTimer(3000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    frameLayout.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onFinish() {
+                    frameLayout.setVisibility(View.GONE);
+
+                }
+            }.start();
+
+            FillEmailContacts.yahooMalfunction=false;
+        }
+        checkBox_header = (CheckBox) headerView.findViewById(R.id.checkbox);
         adapter = new CustomAdapter(getContext(),friendsArrayList);
         done = (Button) rootView.findViewById(R.id.done);
         mListView.addHeaderView(headerView);
@@ -247,85 +292,77 @@ public class NewUserEmail1 extends ListFragment {
 
             View mView = convertView;
 
+
             final LayoutInflater sInflater = (LayoutInflater) context.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
 
-            mView = sInflater.inflate(R.layout.contact_item, null, false);
+                mView = sInflater.inflate(R.layout.contact_item, null, false);
 
-            final Friends rowItem = (Friends) getItem(position);
-
-
-
-            final TextView name = (TextView) mView.findViewById(R.id.contact_name);
-            final ImageView imageView = (ImageView) mView.findViewById(R.id.contact_image);
-            final CheckBox checkBox = (CheckBox) mView.findViewById(R.id.checkBox);
-
-            if(position%3==0)
-                imageView.setImageResource(R.drawable.blueuser1x);
-            if(position%3==1)
-                imageView.setImageResource(R.drawable.reduser1x);
-            if(position%3==2)
-                imageView.setImageResource(R.drawable.greenuser1x);
-            if(mChecked.size()==0){
-                mChecked = getArray();
-            }
+                final Friends rowItem = (Friends) getItem(position);
 
 
-            name.setText(rowItem.getName());
-            if(prefs.contains(rowItem.getName()))
-                checkBox.setChecked(prefs.getBoolean(rowItem.getName(), false));
-//            if(prefs.getBoolean(rowItem.getName(), false)){
-//                if(!selectedFriendlist.contains(rowItem)) {
-//                    selectedFriendlist.add(rowItem);
-//                    number++;
-//                }
-//            }else{
-//                if(selectedFriendlist.contains(rowItem)){
-//                    selectedFriendlist.remove(rowItem);
-//                    number--;
-//                }
-//            }
-//            if(selectedFriendlist.size()>0){
-//                done.setVisibility(View.VISIBLE);
-//            }else{
-//                done.setVisibility(View.GONE);
-//            }
-            String TAG = String.valueOf(prefs.getBoolean(rowItem.getName(),false));
-            Log.i("TAG",TAG + position);
-            checkBox.setOnCheckedChangeListener(
-                    new CompoundButton.OnCheckedChangeListener() {
+                TextView name = (TextView) mView.findViewById(R.id.contact_name);
+                ImageView imageView = (ImageView) mView.findViewById(R.id.contact_image);
+                final CheckBox checkBox = (CheckBox) mView.findViewById(R.id.checkBox);
 
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        checkBox.setChecked(!checkBox.isChecked());
+                    }
+                });
+
+                if (position % 3 == 0)
+                    imageView.setImageResource(R.drawable.blueuser1x);
+                if (position % 3 == 1)
+                    imageView.setImageResource(R.drawable.reduser1x);
+                if (position % 3 == 2)
+                    imageView.setImageResource(R.drawable.greenuser1x);
+                if (mChecked.size() == 0) {
+                    mChecked = getArray();
+                }
+
+
+                name.setText(rowItem.getName());
+                if (prefs.contains(rowItem.getName()))
+                    checkBox.setChecked(prefs.getBoolean(rowItem.getName(), false));
+                String TAG = String.valueOf(prefs.getBoolean(rowItem.getName(), false));
+                Log.i("TAG", TAG + position);
+                checkBox.setOnCheckedChangeListener(
+                        new CompoundButton.OnCheckedChangeListener() {
+
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 //                            if(prefs.getBoolean(rowItem.getName(),false)){
 //
 //                            }else {
-                            prefs.edit().putBoolean(rowItem.getName(), isChecked).apply();
-                            done.setVisibility(View.VISIBLE);
+                                prefs.edit().putBoolean(rowItem.getName(), isChecked).apply();
+                                done.setVisibility(View.VISIBLE);
 //                            }
 //                            String TAGs = String.valueOf(prefs.getBoolean(rowItem.getName(),false));
 //                            Log.i("TAGs",TAGs + position);
 //
 //
-                            if (isChecked) {
+                                if (isChecked) {
 
-                                number++;
+                                    number++;
 
-                                mChecked.put(position, isChecked);
+                                    mChecked.put(position, isChecked);
 //                                    if (!selectedFriendlist.contains(getItem(position))) {
 //                                        selectedFriendlist.add((Friends)getItem(position));
 //
 //                                    }
 
 
-                                if (isAllValuesChecked()) {
-                                    checkBox_header.setChecked(isChecked);
-                                }
+                                    if (isAllValuesChecked()) {
+                                        checkBox_header.setChecked(isChecked);
+                                    }
 
 
-                            } else {
+                                } else {
 
-                                mChecked.put(position,isChecked);
+                                    mChecked.put(position, isChecked);
 
 
 //                                    if (selectedFriendlist.contains(getItem(position))) {
@@ -334,29 +371,29 @@ public class NewUserEmail1 extends ListFragment {
 //                                    }
 //
 //
-                                number--;
+                                    number--;
 
-                                checkBox_header.setChecked(isChecked);
+                                    checkBox_header.setChecked(isChecked);
 
-                            }
+                                }
 //
-                            if(master) {
+                                if (master) {
 
-                                if (number == 0)
-                                    done.setVisibility(View.GONE);
-                                if (!checkBox_header.isChecked() && number != 0)
-                                    done.setVisibility(View.VISIBLE);
-                            }else{
-                                if(number!=0)
-                                    done.setVisibility(View.VISIBLE);
-                                else
-                                    done.setVisibility(View.GONE);
-                            }
+                                    if (number == 0)
+                                        done.setVisibility(View.GONE);
+                                    if (!checkBox_header.isChecked() && number != 0)
+                                        done.setVisibility(View.VISIBLE);
+                                } else {
+                                    if (number != 0)
+                                        done.setVisibility(View.VISIBLE);
+                                    else
+                                        done.setVisibility(View.GONE);
+                                }
 //
-                        }
-                    });
+                            }
+                        });
 
-            checkBox.setChecked((mChecked.get(position) == true ? true : false));
+                checkBox.setChecked((mChecked.get(position) == true ? true : false));
 //
 
             /* **************ADDING CONTENTS**************** */
@@ -364,8 +401,10 @@ public class NewUserEmail1 extends ListFragment {
             /*
              * Return View here
              */
-            return mView;
+                return mView;
+
         }
+
 
         /*
          * Find if all value
@@ -392,6 +431,12 @@ public class NewUserEmail1 extends ListFragment {
             array.put(i,prefs.getBoolean("mChecked2_"+i,false));
 
         return array;
+    }
+
+    public class ViewHolder{
+        TextView name;
+        ImageView imageView;
+        CheckBox checkBox;
     }
 }
 

@@ -230,7 +230,7 @@ android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/flipcash"
-                android:visibility="gone"
+
                 android:layout_margin="@dimen/activity_horizontal_margin">
 
                 <View
@@ -243,6 +243,8 @@ android:visibility="gone"
                     android:id="@+id/overView"
                     android:layout_width="match_parent"
 android:animateLayoutChanges="true"
+                    android:visibility="gone"
+
                     android:layout_height="wrap_content">
 
                     <ImageView
@@ -433,12 +435,29 @@ android:animateLayoutChanges="true"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:text="Plan Duration" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/infotip"
+                android:tint="#3380B6"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_toRightOf="@id/downPayment"
+                android:layout_below="@id/rlProfile"
+                android:id="@+id/infor"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/flash"
+                android:layout_below="@id/downPayment"
+                android:layout_height="wrap_content">
+
 
             <RelativeLayout
                 android:id="@+id/downRupees"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/downPayment"
+
 
 
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -473,15 +492,68 @@ android:animateLayoutChanges="true"
                     android:tint="#000000" />
 
 
+            </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:visibility="gone"
+                    android:id="@+id/flashfull"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:background="#663380B6"/>
 
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/downRupees111"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/downPayment"
+
+
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+
+
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/roundedblue">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Rs.20,000"
+                    android:visibility="gone"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinnerItem111"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+
+                    android:layout_centerHorizontal="true"
+                    android:background="@android:color/transparent"></Spinner>
+
+                <ImageView
+                    android:id="@+id/spinnArr111"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:visibility="invisible"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/expandmore"
+                    android:tint="#000000" />
+
+
+
+            </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_below="@id/downRupees"
+                android:layout_below="@id/flash"
                 android:layout_marginBottom="@dimen/left"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
@@ -622,7 +694,7 @@ android:animateLayoutChanges="true"
                 android:id="@+id/plusRelative"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
-                android:visibility="gone"
+
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/durationLayout"
                 android:layout_marginRight="16dp"

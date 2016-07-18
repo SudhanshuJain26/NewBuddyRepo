@@ -1,14 +1,14 @@
 package indwin.c3.shareapp;
 
 /**
- * Created by sudhanshu on 27/6/16.
+ * Created by sudhanshu on 15/7/16.
  */
 public class GoogleConstants {
 
-//    public static final String CLIENT_ID	= "875864589454-i3m057319aq6b66445uf7vbf08skr2a0.apps.googleusercontent.com";
+    //    public static final String CLIENT_ID	= "875864589454-i3m057319aq6b66445uf7vbf08skr2a0.apps.googleusercontent.com";
     public static final String CLIENT_ID	= "253617796244-qf0bl3s11nnrpoo2q9enhfllvivv9q54.apps.googleusercontent.com";
 
-//    public static final String CLIENT_SECRET 	= "ZBzLS2_3lP5j6k1NJlteHuVi";
+    //    public static final String CLIENT_SECRET 	= "ZBzLS2_3lP5j6k1NJlteHuVi";
     public static final String CLIENT_SECRET 	= "QIERh_87MKx8f6FOnCjHuhjp";
 
     public static String REDIRECT_URI = "http://localhost";
@@ -20,5 +20,5 @@ public class GoogleConstants {
 
     public static final String CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/full?max-results=1000";
     public static final int MAX_NB_CONTACTS = 1000;
-    public static final String APP = "OAuthGoogle";
+    public static final String APP = "Buddy";
 }

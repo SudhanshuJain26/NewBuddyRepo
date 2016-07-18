@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:components="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+
+    tools:context="indwin.c3.shareapp.ProductsPage">
+
+    <RelativeLayout
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="#3380B6">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/arrowlay"
+            android:layout_height="match_parent">
+
+
+
+            <ImageView
+                android:id="@+id/backo"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:padding="3dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="18dp"
+                android:src="@drawable/back11"
+                android:tint="#ffffff" />
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/arrowlay"
+            android:text="Paytm Recharge"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
+        <ImageView
+            android:id="@+id/interCom"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/chechintercom" />
+
+    </RelativeLayout>
+    <ScrollView
+        android:layout_below="@id/toolBar"
+        android:layout_width="wrap_content"
+android:id="@+id/scccs"
+        android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:id="@+id/rltouc"
+
+
+        android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="@dimen/sixty4"
+        android:layout_height="@dimen/sixty4"
+
+
+        android:layout_centerHorizontal="true"
+        android:id="@+id/payyy"
+        android:src="@drawable/payyy"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:id="@+id/moneypay"
+        android:gravity="center"
+        android:layout_below="@id/payyy"
+
+
+android:inputType="number"
+        android:imeOptions="actionDone"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:hint="Enter Amount"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/between"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_centerHorizontal="true"
+        android:text="(Between Rs 200 to Rs 1500)"
+        android:layout_below="@id/moneypay"
+        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+            android:id="@+id/chooseamount"
+        android:layout_centerHorizontal="true"
+
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/between"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+
+            android:background="@drawable/roundedgreypay"
+            android:id="@+id/enter200"
+            android:text="Rs 200"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/enter200"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:background="@drawable/roundedgreypay"
+            android:id="@+id/enter500"
+            android:text="Rs 500"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/enter500"
+            android:background="@drawable/roundedgreypay"
+            android:id="@+id/enter1500"
+            android:text="Rs 1500"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/radioooo"
+        android:layout_marginTop="@dimen/thirty2"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/chooseamount"
+        android:layout_height="wrap_content">
+        <RadioGroup
+            android:layout_width="fill_parent"
+            android:id="@+id/rgroup1"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/prd1"
+                android:padding="4dp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="I have the same phone number registered with both Paytm and Buddy" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:id="@+id/prd2"
+                android:layout_marginTop="8dp"
+                android:text="I have a different number registered with Paytm" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:id="@+id/newno"
+                android:inputType="number"
+
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+               android:hint="Mobile Number" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:id="@+id/prd3"
+                android:padding="4dp"
+                android:text="I don't have a Paytm account but will get one registered with the number below and redeem the money within the next 7 days." />
+
+        </RadioGroup>
+
+    </RelativeLayout>
+
+    </RelativeLayout>
+    </ScrollView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:textColor="@color/colorwhite"
+        android:id="@+id/recharge"
+        android:text="RECHARGE NOW"
+        android:layout_alignParentBottom="true"
+        android:background="@color/textgrey"/>
+    <indwin.c3.shareapp.GIFView
+        android:layout_width="96dp"
+        android:visibility="gone"
+        android:id="@+id/loading"
+        android:layout_centerInParent="true"
+        android:layout_height="96dp"
+        />
+    </RelativeLayout>

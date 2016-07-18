@@ -279,7 +279,7 @@ public class Formempty extends AppCompatActivity {
                         String sh = getIntent().getExtras().getString("UniC");
                         // editornew.putString("rcode", getIntent().getExtras().getString("UniC"));
                         editornew.commit();
-                        Intent in = new Intent(Formempty.this, Share.class);
+                        Intent in = new Intent(Formempty.this, ShareSecond.class);
                         startActivity(in);
                         overridePendingTransition(0, 0);
                         return true;

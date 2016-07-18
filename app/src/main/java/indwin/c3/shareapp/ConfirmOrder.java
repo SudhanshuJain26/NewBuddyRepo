@@ -185,6 +185,7 @@ public class ConfirmOrder extends AppCompatActivity {
                 SharedPreferences.Editor et = cred.edit();
 
                 et.putInt("emi", (int)newemi);
+                et.putInt("iRate",getIntent().getExtras().getInt("rateChanged"));
 
                 et.putInt("downpayment", downPayment);
                 et.putInt("interEst",interest);

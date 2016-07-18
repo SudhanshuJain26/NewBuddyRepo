@@ -1,15 +1,25 @@
 package indwin.c3.shareapp.activities;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,9 +35,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import indwin.c3.shareapp.BuildConfig;
+import indwin.c3.shareapp.GPSTracker;
 import indwin.c3.shareapp.R;
+import indwin.c3.shareapp.Splash;
 import indwin.c3.shareapp.models.UserModel;
+import indwin.c3.shareapp.utils.AppUtils;
 import indwin.c3.shareapp.utils.FetchNewToken;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.com.google.gson.Gson;
@@ -44,11 +60,48 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     UserModel user;
     boolean oldPasswordExists = false, newPasswordExists = false, reEnterPasswordExists = false;
     Button forgotPassword;
-
+    String carrierName;
+    String osVersion;
+    String deviceName;
+    LocationManager locationManager;
+    Location getLastLocation;
+    Double latitude,longitude;
+    String IMEINumber,simSerialNumber;
+    public int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change_password);
+        if(checkAndRequestPermissions()) {
+            setContentView(R.layout.activity_change_password);
+            try {
+                locationManager = (LocationManager) getSystemService
+                        (Context.LOCATION_SERVICE);
+                GPSTracker gps = new GPSTracker(this);
+                if (gps.canGetLocation()) { // gps enabled} // return boolean true/false
+                    latitude = gps.getLatitude();
+                    longitude = gps.getLongitude();
+
+                } else {
+
+                    getLastLocation = locationManager.getLastKnownLocation
+                            (LocationManager.PASSIVE_PROVIDER);
+
+                    latitude = getLastLocation.getLatitude();
+                    longitude = getLastLocation.getLongitude();
+                }
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            IMEINumber = telephonyManager.getDeviceId();
+            simSerialNumber = telephonyManager.getSimSerialNumber();
+            getLastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            latitude = getLastLocation.getLatitude();
+            longitude = getLastLocation.getLongitude();
+            carrierName = telephonyManager.getNetworkOperatorName();
+            deviceName = AppUtils.getDeviceName();
+            osVersion = android.os.Build.VERSION.RELEASE;
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
@@ -181,6 +234,8 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         }
     }
 
+
+
     private class UploadNewPasswordToServer extends AsyncTask<String, String, String> {
         String oldPasswordString, newPassword;
 
@@ -199,6 +254,29 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 jsonobj.put("phone", user.getUserId());
                 jsonobj.put("oldpassword", oldPasswordString);
                 jsonobj.put("newpassword", newPassword);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("deviceID",IMEINumber);
+                jsonObject.put("SIM",simSerialNumber);
+                jsonObject.put("connectionType","mobile");
+                jsonObject.put("deviceCarrier",carrierName);
+                jsonObject.put("osVersion", osVersion);
+                jsonObject.put("deviceModel",deviceName);
+                jsonObject.put("userAgent","android");
+
+                String versionCode = BuildConfig.VERSION_NAME;
+                jsonObject.put("appVersion",versionCode);
+                jsonobj.put("deviceData",jsonObject);
+                JSONObject jsonObject1 = new JSONObject();
+                JSONObject jsonObject2 = new JSONObject();
+                jsonObject2.put("lat",latitude);
+                jsonObject2.put("long",longitude);
+                jsonObject1.put("location",jsonObject2);
+                jsonObject1.put("client","android");
+                jsonObject1.put("timestamp", Splash.dateStamp);
+                jsonobj.put("sessionData",jsonObject1);
+                Log.i("TAG",Splash.dateStamp);
+
+
                 StringEntity se = new StringEntity(jsonobj.toString());
                 postReq.setHeader("Accept", "application/json");
                 postReq.setHeader("Content-type", "application/json");
@@ -365,4 +443,33 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             oldPassword.setVisibility(View.GONE);
         }
     }
+
+    private  boolean checkAndRequestPermissions() {
+        int permissionSendMessage = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_PHONE_STATE);
+        int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int readSmsPermission = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_SMS);
+//        int contactsPermission = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (locationPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (readSmsPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_SMS);
+        }
+
+//        if (readSmsPermission != PackageManager.PERMISSION_GRANTED) {
+//            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+//        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+
 }

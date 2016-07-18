@@ -21,7 +21,6 @@ import java.util.Date;
 
 import indwin.c3.shareapp.ProductsPage;
 import indwin.c3.shareapp.R;
-import indwin.c3.shareapp.Splash;
 import indwin.c3.shareapp.models.Product;
 
 /**
@@ -40,18 +39,17 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
         this.productsList = productsList;
         this.context = context;
         userP = context.getSharedPreferences("token", Context.MODE_PRIVATE);
-        userProfileStatus = userP.getString("profileStatus","");
-        Log.i("status",userProfileStatus);
+        userProfileStatus = userP.getString("profileStatus", "");
+        Log.i("status", userProfileStatus);
     }
-
-
 
 
     @Override
     public int getCount() {
-        if(productsList==null)
+        if (productsList == null)
             return 0;
         return productsList.size();
+
     }
 
     @Override
@@ -71,14 +69,14 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
 
         if (convertView == null) {
 
-            layout = (RelativeLayout) View.inflate(context,R.layout.product_tile, null);
+            layout = (RelativeLayout) View.inflate(context, R.layout.product_tile, null);
 
             holder = new Holder();
 
             holder.title = (TextView) layout.findViewById(R.id.title);
-            holder.price = (TextView)layout.findViewById(R.id.price);
-            holder.brand = (ImageView)layout.findViewById(R.id.brand_image);
-            holder.item = (ImageView)layout.findViewById(R.id.product_image);
+            holder.price = (TextView) layout.findViewById(R.id.price);
+            holder.brand = (ImageView) layout.findViewById(R.id.brand_image);
+            holder.item = (ImageView) layout.findViewById(R.id.product_image);
             layout.setTag(holder);
 
         } else {
@@ -89,11 +87,11 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
         final Product product = productsList.get(position);
         holder.title.setText(product.getTitle());
         int emi = setEmi(product);
-        if(emi>200)
-        holder.price.setText(context.getApplicationContext().getResources().getString(R.string.Rs) + " " + String.valueOf(setEmi(product))+ " per month ");
+        if (emi > 200)
+            holder.price.setText(context.getApplicationContext().getResources().getString(R.string.Rs) + " " + String.valueOf(setEmi(product)) + " per month ");
         else
-        holder.price.setText(context.getApplicationContext().getResources().getString(R.string.Rs) + " " + "200" + " per month ");
-//        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
+            holder.price.setText(context.getApplicationContext().getResources().getString(R.string.Rs) + " " + "200" + " per month ");
+        //        price2.setText(getApplicationContext().getString(R.string.Rs) + " " + String.valueOf(emi02.intValue()) + " per month");
         Picasso.with(context)
                 .load(product.getImgUrl())
                 .placeholder(R.drawable.emptyimageproducts)
@@ -111,27 +109,27 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ProductsPage.class);
-                intent.putExtra("seller",product.getSeller());
+                intent.putExtra("seller", product.getSeller());
                 intent.putExtra("product", product.getFkid());
                 intent.putExtra("page", "api");
                 context.startActivity(intent);
             }
         });
 
-//        holder.title.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.i("CustomAdapter","My name is Anthony");
-//            }
-//        });
+        //        holder.title.setOnClickListener(new View.OnClickListener() {
+        //            @Override
+        //            public void onClick(View v) {
+        //                Log.i("CustomAdapter","My name is Anthony");
+        //            }
+        //        });
 
 
         return layout;
     }
 
-    public int setEmi(Product product){
+    public int setEmi(Product product) {
 
-        Double emi = show(product.getSubCategory(),product.getCategory(),product.getBrand(),Integer.parseInt(product.getSellingPrice()));
+        Double emi = show(product.getSubCategory(), product.getCategory(), product.getBrand(), Integer.parseInt(product.getSellingPrice()));
         return emi.intValue();
 
 
@@ -141,7 +139,7 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
 
         int loanPrice = setLoanAmt(price);
         int monthsallowed = months(subcat, cat, brand, price);
-//
+        //
         Double rate = 21.0 / 1200.0;
         int d = 0;
         if (price <= 5000) {
@@ -162,10 +160,10 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
                 d = 35 - currDay;
             else
                 d = 65 - currDay;
-            if(userProfileStatus.equals("approved"))
-            emi = Math.ceil((loanPrice * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
+            if (userProfileStatus.equals("approved"))
+                emi = Math.ceil((loanPrice * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
             else
-                emi = Math.ceil((price*0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
+                emi = Math.ceil((price * 0.8 * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
 
         }
         return emi;
@@ -190,24 +188,19 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
             if (mn < m)
                 m = mn;
         }
-        if(price<=400)
-        {
+        if (price <= 400) {
             int mn = 1;
             if (mn < m)
                 m = mn;
-        }
-        else if(price<=1000)
-        {
+        } else if (price <= 1000) {
             int mn = 2;
             if (mn < m)
                 m = mn;
-        }
-        else if (price < 2000) {
+        } else if (price < 2000) {
             int mn = 3;
             if (mn < m)
                 m = mn;
-        }
-        else if (price < 5000) {
+        } else if (price < 5000) {
             int mn = 6;
             if (mn < m)
                 m = mn;
@@ -303,7 +296,7 @@ public class HorizontalScrollViewAdapter extends BaseAdapter {
         return loanAmt;
     }
 
-    private class Holder{
+    private class Holder {
         TextView title;
         TextView price;
         ImageView item;

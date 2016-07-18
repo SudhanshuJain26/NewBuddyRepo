@@ -2,6 +2,7 @@ package indwin.c3.shareapp;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.app.VoiceInteractor;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,14 +15,18 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
@@ -73,14 +78,16 @@ public class Splash extends AppCompatActivity {
     private RelativeLayout sp;
     public static int checkNot = 0;
     SharedPreferences sh, sh_otp;
-
+    String status = "";
     public static int notify = 0;
-    public String dateStamp;
+    public  static String dateStamp;
     public static final String MyPREFERENCES = "buddy";
     SharedPreferences sharedpreferences, sharedpreferences2;
     String url2 = "";
     Intent intent;
+    int pageCode;
     Uri data;
+    String[] messages;
 
     private String cashBack, approvedBand = "";
     Gson gson;
@@ -98,16 +105,20 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notify = 0;
+        setContentView(R.layout.activity_splash);
 
         SharedPreferences t1 = getSharedPreferences("cred", Context.MODE_PRIVATE);
         SharedPreferences.Editor e1 = t1.edit();
         e1.putInt("add", 0);
         e1.commit();
+//        carrierName = telephonyManager.getNetworkOperatorName();
+//        deviceName = getDeviceName();
+//        osVersion = android.os.Build.VERSION.RELEASE;
         BuddyApplication application = (BuddyApplication) getApplication();
         mTracker = application.getDefaultTracker();
         gson = new Gson();
         init();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateStamp = sdf.format(new Date());
 
 
@@ -124,7 +135,7 @@ public class Splash extends AppCompatActivity {
         }
 
         sh_otp = getSharedPreferences("buddyotp", Context.MODE_PRIVATE);
-        setContentView(R.layout.activity_splash);
+
         try {
             intent = getIntent();
             action = intent.getAction();
@@ -157,15 +168,16 @@ public class Splash extends AppCompatActivity {
 
         sp = (RelativeLayout) findViewById(R.id.splash);
         ImageView logo = (ImageView) findViewById(R.id.buddyLogo);
-        final Animation animationFadeIn = new AlphaAnimation(0, 1);
-        animationFadeIn.setInterpolator(new AccelerateInterpolator());
-        animationFadeIn.setStartOffset(500); // Start fading out after 500 milli seconds
-        animationFadeIn.setDuration(1500);
+        final Animation translateAnimation = AnimationUtils.loadAnimation(Splash.this,R.anim.diagnol_translate);
+//        final Animation animationFadeIn = new AlphaAnimation(0, 1);
+//        animationFadeIn.setInterpolator(new AccelerateInterpolator());
+//        animationFadeIn.setStartOffset(500); // Start fading out after 500 milli seconds
+//        animationFadeIn.setDuration(1500);
 
         //        final Animation animationFadeIn = AnimationUtils.loadAnimation(this, R.anim.fadein);
 
-        logo.startAnimation(animationFadeIn);
-        animationFadeIn.setAnimationListener(new Animation.AnimationListener() {
+        sp.startAnimation(translateAnimation);
+        translateAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 
@@ -192,10 +204,11 @@ public class Splash extends AppCompatActivity {
                         selling = wrapper.getSelling();
                         title = wrapper.getTitle();
                         image = wrapper.getImage();
-                        Intent in = new Intent(Splash.this, Landing.class);
-                        finish();
+                        Intent in = new Intent(Splash.this,Landing.class);
+
                         startActivity(in);
                         overridePendingTransition(0, 0);
+                        finish();
                     }
                 }
                 //                new ItemsByKeyword().execute("");
@@ -214,6 +227,98 @@ public class Splash extends AppCompatActivity {
 
             }
         });
+
+
+    }
+
+    public class GetMessage extends AsyncTask<String,Void,String>{
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            String comma = ",";
+            String stop = ".";
+            messages= new String [2];
+            if(s!=null) {
+                messages[0] = s.substring(s.indexOf(comma) + 1, s.lastIndexOf(stop));
+                messages[1] = s.substring(s.lastIndexOf(stop) + 1);
+            }else{
+                messages[0] = "";
+                messages[1] = "";
+            }
+                SharedPreferences preferences = getSharedPreferences("message",MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("message0",messages[0]);
+                editor.putString("message1",messages[1]);
+                editor.apply();
+                messages[1] = messages[1].trim();
+//                line1.setText(messages[0]);
+//                but.setText(messages[1]);
+                if (messages[1].equals("Start Now")  || messages[1].equals("Complete it now") || messages[1].equals("Apply Now") || messages[1].equals("Find out more")) {
+                    pageCode = 1;
+                } else if (messages[1].equals("Okay")) {
+                    pageCode = 2;
+                } else if (messages[1].equals("Repay Now")) {
+                    pageCode = 3;
+                } else if (messages[1].equals("Talk to us")) {
+                    pageCode = 4;
+                }else if (messages[1].equals("Verify Now")) {
+                    pageCode = 5;
+                }
+
+                editor.putInt("pageCode",pageCode);
+                editor.putString("status",status);
+                editor.apply();
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = params[0];
+            UserModel user = AppUtils.getUserObject(Splash.this);
+            String userId = user.getUserId();
+            try {
+                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+                String tok_sp = toks.getString("token_value", "");
+                // String tok_sp = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NjU1NDQwMDgsImV4cCI6MTQ2NTU4MDAwOH0.ZpAwCEB0lYSqiYdfaBYjnBJOXfGrqE9qN8USoRzWR8g";
+                HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
+                if (response != null) {
+                    HttpEntity ent = response.getEntity();
+                    String responseString = EntityUtils.toString(ent, "UTF-8");
+                    if (response.getStatusLine().getStatusCode() != 200) {
+
+
+                        Log.e("MeshCommunication", "Server returned code "
+                                + response.getStatusLine().getStatusCode());
+                        return "fail";
+                    } else {
+
+                        JSONObject resp = new JSONObject(responseString);
+                        if (resp.getString("status").equals("success")) {
+                            JSONObject message = resp.getJSONObject("msg");
+                            status = message.getString("status");
+                            String lines = message.getString("message");
+                            if(lines.length()==0)
+                                return null;
+
+                            return lines;
+                        } else
+                            return "";
+
+
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+            return null;
+
+        }
 
 
     }
@@ -309,14 +414,15 @@ public class Splash extends AppCompatActivity {
             //            Toast.makeText(Splash.this, "onresume1", Toast.LENGTH_LONG).show();
 
             sp = (RelativeLayout) findViewById(R.id.splash);
-            ImageView logo = (ImageView) findViewById(R.id.buddyLogo);
-            final Animation animationFadeIn = new AlphaAnimation(0, 1);
-            animationFadeIn.setInterpolator(new AccelerateInterpolator());
-            animationFadeIn.setStartOffset(500); // Start fading out after 500 milli seconds
-            animationFadeIn.setDuration(1500);
+//            ImageView logo = (ImageView) findViewById(R.id.buddyLogo);
+//            final Animation animationFadeIn = new AlphaAnimation(0, 1);
+            final Animation translateAnimation1 = AnimationUtils.loadAnimation(Splash.this,R.anim.diagnol_translate);
+//            animationFadeIn.setInterpolator(new AccelerateInterpolator());
+//            animationFadeIn.setStartOffset(500); // Start fading out after 500 milli seconds
+//            animationFadeIn.setDuration(1500);
 
-            logo.startAnimation(animationFadeIn);
-            animationFadeIn.setAnimationListener(new Animation.AnimationListener() {
+            sp.startAnimation(translateAnimation1);
+            translateAnimation1.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
 
@@ -344,10 +450,11 @@ public class Splash extends AppCompatActivity {
                             selling = wrapper.getSelling();
                             title = wrapper.getTitle();
                             image = wrapper.getImage();
-                            Intent in = new Intent(Splash.this, Landing.class);
-                            finish();
+                            Intent in = new Intent(Splash.this,Landing.class);
+
                             startActivity(in);
                             overridePendingTransition(0, 0);
+                            finish();
                         }
 
                     }
@@ -428,6 +535,11 @@ public class Splash extends AppCompatActivity {
         protected void onPostExecute(String result) {
             if (result.equals("win")) {
                 new CheckVersion().execute("");
+                UserModel user = AppUtils.getUserObject(Splash.this);
+
+                if(user!=null)
+                new GetMessage().execute("http://ssl.hellobuddy.in/api/v1/user/messages?userid="+user.getUserId());
+
 //                new trending().execute("Mobiles");
 //                new trending().execute("Computers&subCategory=Laptops");
 //                new trending().execute("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle");
@@ -612,7 +724,12 @@ public class Splash extends AppCompatActivity {
                 }
             }
 
-            protected void onPostExecute(String result) {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        protected void onPostExecute(String result) {
                 if (!result.equals("fail")) {
                     PackageInfo pInfo = null;
                     try {
@@ -712,10 +829,10 @@ public class Splash extends AppCompatActivity {
                             new ValidateForm().execute("");
 
                         } else {
-                            Intent in = new Intent(Splash.this, Landing.class);
-                            finish();
+                            Intent in = new Intent(Splash.this,Landing.class);
                             startActivity(in);
                             overridePendingTransition(0, 0);
+                            finish();
 
                         }
                     }
@@ -1012,7 +1129,7 @@ public class Splash extends AppCompatActivity {
                     if (formstatus.equals("declined")) {
 
                         Intent in = new Intent(Splash.this, HomePage.class);
-                        finish();
+
                         // Intent in = new Intent(MainActivity.this, Inviteform.class);
                         in.putExtra("Name", name);
                         in.putExtra("fbid", fbid);
@@ -1020,8 +1137,13 @@ public class Splash extends AppCompatActivity {
                         in.putExtra("Email", email);
                         in.putExtra("Form", formstatus);
                         in.putExtra("UniC", uniqueCode);
+                        in.putExtra("pageCode",pageCode);
+                        in.putExtra("message0",messages[0]);
+                        in.putExtra("message1",messages[1]);
+
                         startActivity(in);
                         overridePendingTransition(0, 0);
+                        finish();
 
                     }
 
@@ -1030,14 +1152,18 @@ public class Splash extends AppCompatActivity {
 
                         Intent in = new Intent(Splash.this, HomePage.class);
                         // Intent in = new Intent(MainActivity.this, Inviteform.class);
-                        finish();
+
                         in.putExtra("Name", name);
                         in.putExtra("fbid", fbid);
                         in.putExtra("Email", email);
                         in.putExtra("Form", formstatus);
                         in.putExtra("UniC", referral_code);
+                        in.putExtra("pageCode",pageCode);
+                        in.putExtra("message0",messages[0]);
+                        in.putExtra("message1",messages[1]);
                         startActivity(in);
                         overridePendingTransition(0, 0);
+                        finish();
                     } else if (formstatus.equals("submitted")) {
                         //                 Intent in = new Intent(MainActivity.this, Landing.class);
                         bankaccount = "some";
@@ -1051,19 +1177,25 @@ public class Splash extends AppCompatActivity {
                             in.putExtra("VeriDate", verificationdate);
                         }
 
-                        finish();
+
                         in.putExtra("Name", name);
                         in.putExtra("fbid", fbid);
                         in.putExtra("Email", email);
                         in.putExtra("Form", formstatus);
                         in.putExtra("UniC", referral_code);
+                        in.putExtra("pageCode",pageCode);
+                        in.putExtra("message0",messages[0]);
+                        in.putExtra("message1",messages[1]);
+
                         startActivity(in);
                         overridePendingTransition(0, 0);
+                        finish();
+
                     }
                     if (formstatus.equals("approved") || (formstatus.equals("flashApproved"))) {
 
                         Intent in = new Intent(Splash.this, HomePage.class);
-                        finish();
+
                         // Intent in = new Intent(MainActivity.this, Inviteform.class);
                         in.putExtra("Name", name);
                         in.putExtra("fbid", fbid);
@@ -1071,37 +1203,50 @@ public class Splash extends AppCompatActivity {
                         in.putExtra("Form", formstatus);
                         in.putExtra("Credits", creditLimit);
                         in.putExtra("UniC", referral_code);
+                        in.putExtra("pageCode",pageCode);
+                        in.putExtra("message0",messages[0]);
+                        in.putExtra("message1",messages[1]);
                         startActivity(in);
                         overridePendingTransition(0, 0);
+                        finish();
                     } else if (formstatus.equals("empty")) {
 
                         //                    Intent in = new Intent(MainActivity.this, Inviteform    .class);
                         Intent in = new Intent(Splash.this, HomePage.class);
-                        finish();
+
                         in.putExtra("Name", name);
                         in.putExtra("Email", email);
                         in.putExtra("fbid", fbid);
                         in.putExtra("Form", formstatus);
                         in.putExtra("UniC", referral_code);
+                        in.putExtra("pageCode",pageCode);
+                        in.putExtra("message0",messages[0]);
+                        in.putExtra("message1",messages[1]);
                         startActivity(in);
                         overridePendingTransition(0, 0);
+                        finish();
                     } else {
 
                         Intent in = new Intent(Splash.this, HomePage.class);
-                        finish();
+
                         in.putExtra("Name", name);
                         in.putExtra("Email", email);
                         in.putExtra("fbid", fbid);
                         in.putExtra("Form", formstatus);
                         in.putExtra("UniC", referral_code);
+                        in.putExtra("pageCode",pageCode);
+                        in.putExtra("message0",messages[0]);
+                        in.putExtra("message1",messages[1]);
                         startActivity(in);
                         overridePendingTransition(0, 0);
+                        finish();
                     }
                 } else {
                     Intent in = new Intent(Splash.this, MainActivity.class);
-                    finish();
+
                     startActivity(in);
                     overridePendingTransition(0, 0);
+                    finish();
                 }
 
             }

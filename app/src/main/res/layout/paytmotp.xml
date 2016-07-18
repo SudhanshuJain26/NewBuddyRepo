@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:components="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+
+    >
+
+    <RelativeLayout
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="#3380B6">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/arrowlay"
+            android:layout_height="match_parent">
+
+
+
+            <ImageView
+                android:id="@+id/backo"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:padding="3dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="18dp"
+                android:src="@drawable/back11"
+                android:tint="#ffffff" />
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/arrowlay"
+            android:text="Otp Confirmation"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
+        <ImageView
+            android:id="@+id/interCom"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/chechintercom" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_below="@id/toolBar"
+        android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:src="@drawable/bandtala"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/sixty4"
+        android:id="@+id/bandtala"
+
+
+        android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_below="@id/bandtala"
+            android:id="@+id/rl1"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:background="@drawable/textaddressotp"
+                android:textColorHint="@color/textgrey"
+                android:textColor="@color/textgrey"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:maxLength="1"
+                android:inputType="number"
+                android:textCursorDrawable="@null"
+
+
+
+                android:id="@+id/otp1"
+
+                android:hint="1"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:layout_centerInParent="true"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:inputType="number"
+                android:textCursorDrawable="@null"
+
+                android:maxLength="1"
+                android:layout_toRightOf="@id/otp1"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/otp2"
+                android:background="@drawable/textaddressotp"
+                android:textColorHint="@color/textgrey"
+                android:textColor="@color/textgrey"
+                android:hint="1"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:layout_centerInParent="true"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="16dp"
+
+                android:paddingRight="16dp"
+                android:inputType="number"
+
+                android:textCursorDrawable="@null"
+                android:maxLength="1"
+                android:background="@drawable/textaddressotp"
+                android:textColorHint="@color/textgrey"
+                android:textColor="@color/textgrey"
+                android:layout_toRightOf="@id/otp2"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/otp3"
+                android:hint="1"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:layout_centerInParent="true"
+
+                android:paddingTop="10dp"
+                android:textCursorDrawable="@null"
+                android:paddingBottom="10dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:inputType="number"
+                android:background="@drawable/textaddressotp"
+                android:textColorHint="@color/textgrey"
+                android:textColor="@color/textgrey"
+                android:maxLength="1"
+                android:layout_toRightOf="@id/otp3"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/otp4"
+                android:hint="1"/>
+
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/buddyLogo"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/rl1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textgrey"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:paddingBottom="8dp"
+            android:text="We've sent an SMS containing an OTP to your Phone Number +91 7070362045"
+           android:layout_marginTop="40dp"
+            android:padding="@dimen/four"></TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buddyLogo"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+
+            android:onClick="true"
+            android:layout_centerInParent="true"
+            android:textColor="#3380B6"
+            android:padding="20dp"
+            android:id="@+id/textLook"
+            android:text="RESEND"/>
+
+
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:textColor="@color/colorwhite"
+        android:id="@+id/ver"
+
+        android:text="VERIFY"
+        android:layout_alignParentBottom="true"
+        android:background="@color/textgrey"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/error"></RelativeLayout>
+</RelativeLayout>

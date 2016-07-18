@@ -13,6 +13,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -113,6 +114,8 @@ public class AppUtils {
                 user.setProfileStatus(data1.getString("profileStatus"));
                 userMap.put("profileStatus", user.getProfileStatus());
             }
+            if (data1.opt("rejectionReason") != null)
+                user.setRejectionReason(data1.getString("rejectionReason"));
             if (data1.opt("status1K") != null) {
                 String status1K = data1.getString("status1K");
                 user.setStatus1K(status1K);
@@ -145,28 +148,28 @@ public class AppUtils {
                 System.out.println("Intercom four" + e.toString());
             }
 
-            if (data1.opt("gpa") != null) {
-
-                user.setGpa(data1.getString("gpa"));
-            }
-            if (data1.opt("gpaType") != null) {
-
-                user.setGpaType(data1.getString("gpaType"));
-            }
             if (data1.opt("fbConnected") != null)
                 user.setIsFbConnected(Boolean.parseBoolean(data1.getString("fbConnected")));
-            if (data1.opt("college") != null)
+            if (data1.opt("college") != null && (!user.isUpdateCollegeName() || user.isAppliedFor1k()))
                 user.setCollegeName(data1.getString("college"));
-            if (data1.opt("course") != null)
+            if (data1.opt("course") != null && (!user.isUpdateCourseName() || user.isAppliedFor1k()))
                 user.setCourseName(data1.getString("course"));
-            if (data1.opt("courseCompletionDate") != null)
+            if (data1.opt("courseCompletionDate") != null && (!user.isUpdateCourseEndDate() || user.isAppliedFor1k()))
                 user.setCourseEndDate(data1.getString("courseCompletionDate"));
+
+            //Unused Data
             if (data1.opt("collegeIDs") != null)
                 user.setCollegeIds(gson.fromJson(data1.getString("collegeIDs"), ArrayList.class));
 
 
             if (data1.opt("addressProofs") != null)
                 user.setAddressProofs(gson.fromJson(data1.getString("addressProofs"), ArrayList.class));
+            if (data1.opt("bankStatements") != null)
+                user.setBankStmts(gson.fromJson(data1.getString("bankStatements"), ArrayList.class));
+            if (data1.opt("bankProofs") != null)
+                user.setBankProofs(gson.fromJson(data1.getString("bankProofs"), ArrayList.class));
+            //
+
             if (data1.opt("panOrAadhar") != null) {
                 user.setPanOrAadhar(data1.getString("panOrAadhar"));
                 if ("PAN".equals(user.getPanOrAadhar()))
@@ -174,11 +177,11 @@ public class AppUtils {
                 else
                     user.setAadharNumber(data1.getString("aadhar"));
             }
-            if (data1.opt("dob") != null)
+            if (data1.opt("dob") != null && (!user.isUpdateDOB() || user.isAppliedFor1k()))
                 user.setDob(data1.getString("dob"));
-            if (data1.opt("accomodation") != null)
+            if (data1.opt("accomodation") != null && (!user.isUpdateDOB() || user.isAppliedFor1k()))
                 user.setAccommodation(data1.getString("accomodation"));
-            if (data1.opt("currentAddress") != null) {
+            if (data1.opt("currentAddress") != null && (!user.isUpdateCurrentAddress() || user.isAppliedFor1k())) {
 
                 JSONObject currentAddress = data1.getJSONObject("currentAddress");
                 user.setCurrentAddress(currentAddress.getString("line1"));
@@ -193,7 +196,7 @@ public class AppUtils {
                     user.setCurrentAddressPinCode(currentAddress.getString("pincode"));
                 }
             }
-            if (data1.opt("permanentAddress") != null) {
+            if (data1.opt("permanentAddress") != null && (!user.isUpdatePermanentAddress() || user.isAppliedFor1k())) {
                 JSONObject permanentAddress = data1.getJSONObject("permanentAddress");
                 user.setPermanentAddress(permanentAddress.getString("line1"));
 
@@ -207,11 +210,22 @@ public class AppUtils {
                     user.setPermanentAddressPinCode(permanentAddress.getString("pincode"));
                 }
             }
-            if (data1.opt("rollNumber") != null)
+
+
+            if (data1.opt("gpa") != null && (!user.isGpaValueUpdate() || user.isAppliedFor7k())) {
+
+                user.setGpa(data1.getString("gpa"));
+            }
+            if (data1.opt("gpaType") != null && (!user.isGpaTypeUpdate() || user.isAppliedFor7k())) {
+
+                user.setGpaType(data1.getString("gpaType"));
+            }
+            if (data1.opt("takenLoan") != null && (!user.isUpdateStudentLoan() || user.isAppliedFor7k()))
+                user.setStudentLoan(data1.getString("takenLoan"));
+            if (data1.opt("rollNumber") != null && (!user.isUpdateRollNumber() || user.isAppliedFor7k()))
                 user.setRollNumber(data1.getString("rollNumber"));
 
-            if (data1.opt("rejectionReason") != null)
-                user.setRejectionReason(data1.getString("rejectionReason"));
+
             if (data1.optJSONArray("familyMember") != null) {
                 JSONArray familyMembers = data1.getJSONArray("familyMember");
                 for (int i = 0; i < familyMembers.length(); i++) {
@@ -238,66 +252,163 @@ public class AppUtils {
             if (data1.opt("optionalNACH") != null)
                 user.setOptionalNACH(data1.getBoolean("optionalNACH"));
 
-            if (data1.opt("bankAccountNumber") != null)
+            if (data1.opt("bankAccountNumber") != null && (!user.isUpdateBankAccNum() || user.isAppliedFor7k()))
                 user.setBankAccNum(data1.getString("bankAccountNumber"));
-            if (data1.opt("bankIFSC") != null)
+            if (data1.opt("bankIFSC") != null && (!user.isUpdateBankIfsc() || user.isAppliedFor7k()))
                 user.setBankIfsc(data1.getString("bankIFSC"));
-            if (data1.opt("friendName") != null)
+            if (data1.opt("friendName") != null && (!user.isUpdateClassmateName() || user.isAppliedFor7k()))
                 user.setClassmateName(data1.getString("friendName"));
-            if (data1.opt("friendNumber") != null)
+            if (data1.opt("friendNumber") != null && (!user.isUpdateClassmatePhone() || user.isAppliedFor7k()))
                 user.setClassmatePhone(data1.getString("friendNumber"));
-            if (data1.opt("collegeIdVerificationDate") != null)
+            if (data1.opt("collegeIdVerificationDate") != null && (!user.isUpdateVerificationDate() || user.isAppliedFor7k()))
                 user.setVerificationDate(data1.getString("collegeIdVerificationDate"));
-            if (data1.opt("annualFees") != null)
+
+            //60k start
+
+            if (data1.opt("annualFees") != null && !user.isUpdateAnnualFees())
                 user.setAnnualFees(data1.getString("annualFees"));
-            if (data1.opt("scholarship") != null)
+            if (data1.opt("scholarship") != null && !user.isUpdateScholarship())
                 user.setScholarship(String.valueOf(data1.getString("scholarship")));
-            if (data1.opt("scholarshipProgram") != null)
+            if (data1.opt("scholarshipProgram") != null && !user.isUpdateScholarshipType())
                 user.setScholarshipType(data1.getString("scholarshipProgram"));
-            if (data1.opt("scholarshipAmount") != null)
+            if (data1.opt("scholarshipAmount") != null && !user.isUpdateScholarshipAmount())
                 user.setScholarshipAmount(data1.getString("scholarshipAmount"));
-            if (data1.opt("takenLoan") != null)
-                user.setStudentLoan(data1.getString("takenLoan"));
-            if (data1.opt("monthlyExpense") != null)
+
+            if (data1.opt("monthlyExpense") != null && !user.isUpdateMonthlyExpenditure())
                 user.setMonthlyExpenditure(data1.getString("monthlyExpense"));
-            if (data1.opt("ownVehicle") != null)
+            if (data1.opt("ownVehicle") != null && !user.isUpdateVehicle())
                 user.setVehicle(String.valueOf(data1.getString("ownVehicle")));
 
-            if (data1.opt("vehicleType") != null)
+            if (data1.opt("vehicleType") != null && !user.isUpdateVehicleType())
                 user.setVehicleType(data1.getString("vehicleType"));
-            if (data1.opt("bankStatements") != null)
-                user.setBankStmts(gson.fromJson(data1.getString("bankStatements"), ArrayList.class));
-            if (data1.opt("bankProofs") != null)
-                user.setBankProofs(gson.fromJson(data1.getString("bankProofs"), ArrayList.class));
 
-            if (data1.opt("bankStatement") != null)
-                user.setBankStatement(gson.fromJson(data1.getString("bankStatement"), Image.class));
-            if (data1.opt("collegeID") != null)
-                user.setCollegeID(gson.fromJson(data1.getString("collegeID"), Image.class));
-            if (data1.opt("bankProof") != null)
-                user.setBankProof(gson.fromJson(data1.getString("bankProof"), Image.class));
-            if (data1.opt("gradeSheet") != null)
-                user.setGradeSheet(gson.fromJson(data1.getString("gradeSheet"), Image.class));
-            if (data1.opt("addressProof") != null)
-                user.setAddressProof(gson.fromJson(data1.getString("addressProof"), Image.class));
+            //Images
+
+
+            if (data1.opt("collegeID") != null) {
+                Image collegeID = user.getCollegeID();
+                Image collegeIDServer = null;
+                try {
+                    collegeIDServer = gson.fromJson(data1.getString("collegeID"), Image.class);
+                } catch (Exception e) {
+                }
+                if (user.getCollegeID() == null) {
+                    user.setCollegeID(new Image());
+                }
+                if (user.isAppliedFor1k() || (collegeID == null) || (collegeID.getFront() == null) || !AppUtils.uploadStatus.PICKED.toString().equals(collegeID.getFrontStatus())) {
+
+                    if (collegeIDServer != null) {
+                        user.getCollegeID().setFront(collegeIDServer.getFront());
+                        user.getCollegeID().setUpdateFront(false);
+                    }
+                }
+                if (user.isAppliedFor1k() || (collegeID == null) || (collegeID.getBack() == null) || !collegeID.isUpdateBack()) {
+
+                    if (collegeIDServer != null) {
+                        user.getCollegeID().setBack(collegeIDServer.getBack());
+                        user.getCollegeID().setUpdateBack(false);
+
+                    }
+                }
+            }
+
+            if (data1.opt("addressProof") != null) {
+                Image addressProof = user.getAddressProof();
+
+                Image addressProofServer = null;
+                try {
+                    addressProofServer = gson.fromJson(data1.getString("addressProof"), Image.class);
+                } catch (Exception e) {
+                }
+
+                if (user.getAddressProof() == null) {
+                    user.setAddressProof(new Image());
+                }
+                if (user.isAppliedFor1k() || (addressProof == null) || (addressProof.getFront() == null) || !AppUtils.uploadStatus.PICKED.toString().equals(addressProof.getFrontStatus())) {
+
+                    if (addressProofServer != null) {
+                        user.getAddressProof().setFront(addressProofServer.getFront());
+                        user.getAddressProof().setUpdateFront(false);
+                    }
+                }
+                if (user.isAppliedFor1k() || (addressProof == null) || (addressProof.getBack() == null) || !addressProof.isUpdateBack()) {
+
+                    if (addressProofServer != null) {
+                        user.getAddressProof().setBack(addressProofServer.getBack());
+                        user.getAddressProof().setUpdateBack(false);
+
+                    }
+                }
+            }
+
+
+            if (data1.opt("selfie") != null && (!user.isUpdateSelfie() || user.isAppliedFor1k())) {
+                JSONArray array = data1.getJSONArray("selfie");
+                user.setSelfie((String) array.get(array.length() - 1));
+            }
+            if (data1.opt("signature") != null && (!user.isUpdateSignature() || user.isAppliedFor1k())) {
+                JSONArray array = data1.getJSONArray("signature");
+                user.setSignature((String) array.get(array.length() - 1));
+            }
             if (data1.opt("panProof") != null) {
                 user.setPanProof(gson.fromJson(data1.getString("panProof"), FrontBackImage.class));
             }
+
+
+            if (data1.opt("gradeSheet") != null)
+                user.setGradeSheet(gson.fromJson(data1.getString("gradeSheet"), Image.class));
+
+
+            if (data1.opt("bankStatement") != null)
+                user.setBankStatement(gson.fromJson(data1.getString("bankStatement"), Image.class));
+
+            if (data1.opt("bankProof") != null)
+                user.setBankProof(gson.fromJson(data1.getString("bankProof"), Image.class));
+
+
+            //Images
             if (data1.opt("tncAccepted") != null)
                 user.setTncAccepted(data1.getBoolean("tncAccepted"));
-            if (data1.opt("selfie") != null) {
-                JSONArray array = data1.getJSONArray("selfie");
-                user.setSelfie((String) array.get(0));
-            }
-            if (data1.opt("signature") != null) {
-                JSONArray array = data1.getJSONArray("signature");
-                user.setSignature((String) array.get(0));
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
+    private static String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+
+//        String phrase = "";
+        StringBuilder phrase = new StringBuilder();
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+//                phrase += Character.toUpperCase(c);
+                phrase.append(Character.toUpperCase(c));
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+//            phrase += c;
+            phrase.append(c);
+        }
+
+        return phrase.toString();
+    }
     public static boolean isCloudinaryUrl(String url) {
         if (url != null && url.contains("cloudinary")) {
             return true;

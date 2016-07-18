@@ -3,9 +3,9 @@ package indwin.c3.shareapp.models;
 import java.io.Serializable;
 
 /**
- * Created by sudhanshu on 24/6/16.
+ * Created by sudhanshu on 15/7/16.
  */
-public class Friends implements Serializable{
+public class Friends implements Serializable {
     String phone_Num;
     String email;
     boolean isSelected;

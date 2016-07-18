@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:components="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+
+    tools:context="indwin.c3.shareapp.ProductsPage">
+
+    <RelativeLayout
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="#3380B6">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/arrowlay"
+            android:layout_height="match_parent">
+
+
+
+            <ImageView
+                android:id="@+id/backo"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:padding="3dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="18dp"
+                android:src="@drawable/back11"
+                android:tint="#ffffff" />
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/arrowlay"
+            android:text="Confirm Recharge"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
+        <ImageView
+            android:id="@+id/interCom"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/chechintercom" />
+
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_below="@id/toolBar"
+
+
+        android:layout_height="wrap_content">
+    <RelativeLayout
+android:id="@+id/touchnow"
+        android:layout_width="match_parent"
+        android:layout_below="@id/toolBar"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+
+        android:id="@+id/r1am"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/thirty2"
+            android:id="@+id/rc"
+
+            android:text="Recharge Amount"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+          android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:id="@+id/rcamount"
+            android:textColor="#000000"
+            android:layout_below="@id/rc"
+
+            android:text="Rs 200"/>
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_below="@id/r1am"
+        android:id="@+id/cont"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/thirty2"
+            android:id="@+id/cno"
+
+            android:text="Mobile Number"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/cnonumber"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:textColor="#000000"
+            android:layout_below="@id/cno"
+
+            android:text="Rs 200"/>
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_below="@id/cont"
+        android:id="@+id/imagePayyyy"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="@dimen/sixty4"
+            android:id="@+id/budll"
+            android:layout_height="@dimen/sixty4"
+            android:src="@drawable/buddylll"/>
+        <ImageView
+            android:layout_width="@dimen/sixty4"
+            android:layout_toRightOf="@id/budll"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_height="@dimen/sixty4"
+            android:src="@drawable/payyy"/>
+        </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/money"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginLeft="@dimen/thirty2"
+        android:layout_marginRight="@dimen/thirty2"
+        android:paddingRight="@dimen/sixty4"
+        android:paddingLeft="@dimen/sixty4"
+        android:background="#666666"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/thirty2"
+        android:layout_below="@id/imagePayyyy"
+        android:layout_height="48dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/charge"
+            android:layout_centerHorizontal="true"
+            android:text="You will be charged Rs.200"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chargedat"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/charge"
+            android:text="You will be charged Rs.200"/>
+    </RelativeLayout>
+        <EditText
+            android:id="@+id/hve"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@id/money"
+            android:layout_marginLeft="@dimen/thirty2"
+            android:layout_marginRight="@dimen/thirty2"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:background="@drawable/roundedblue"
+            android:gravity="center"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+
+            android:textAppearance="?android:textAppearanceSmall"
+            android:hint="Offers and Cashback"
+            android:inputType="textNoSuggestions"
+            android:textColor="#3380B6"
+            android:textColorHint="#3380B6"
+            android:textCursorDrawable=
+                "@null" />
+
+        <RelativeLayout
+            android:id="@+id/plusRelative"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+
+            android:layout_below="@id/money"
+android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/thirty2"
+
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+
+            android:background="#3380B6"
+            >
+
+            <ImageView
+                android:id="@+id/plus"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:rotationY="180"
+
+                android:src="@drawable/back11"
+                android:tint="#ffffff"
+
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/cashback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/roundedgrey"
+            android:layout_below="@id/plusRelative"
+            android:layout_margin="@dimen/thirty2"
+
+
+            >
+
+<RadioGroup
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/radioCou"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#3380B6"
+                android:text="ENTER COUPON CODE"
+                android:textColor="#3380B6"/>
+
+
+
+            <RadioButton
+                android:id="@+id/radioCash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/radioCou"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:buttonTint="#F28E52"
+                android:textColor="#F28E52"
+                android:text="USE CASHBACK"/>
+
+
+</RadioGroup>
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_below="@id/cashback"
+            android:layout_marginTop="@dimen/thirty2"
+            android:textColor="#000000"
+            android:id="@+id/panow"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Payable Now Rs 100"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scc"
+            android:text="Service Charges"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:layout_below="@id/panow"
+            />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/checkboxlayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/thirty2"
+            android:layout_below="@id/scc"
+            android:layout_marginBottom="64dp"
+            android:layout_marginLeft="@dimen/thirty2"
+            android:layout_height="wrap_content">
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkboxvalue"
+
+                android:buttonTint="#3380B6"
+                />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_toRightOf="@id/checkboxvalue"
+
+    android:text="I agree to terms and conditions"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    </ScrollView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:textColor="@color/colorwhite"
+
+        android:text="PAY Rs.100"
+        android:layout_alignParentBottom="true"
+        android:background="@color/textgrey"/>
+
+</RelativeLayout>

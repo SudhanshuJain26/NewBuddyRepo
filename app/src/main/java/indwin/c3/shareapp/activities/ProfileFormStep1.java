@@ -210,6 +210,7 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                                                           uploadDetailsToServer(null);
                                                           return;
                                                       } else {
+                                                          if(AppUtils.isOnline(ProfileFormStep1.this)){
                                                           SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
                                                           mPrefs.edit().putBoolean("updatingDB", false).apply();
 
@@ -217,7 +218,9 @@ public class ProfileFormStep1 extends AppCompatActivity implements ViewPager.OnP
                                                           progressDialog.setCancelable(false);
                                                           progressDialog.setMessage("Submitting your details..");
                                                           progressDialog.show();
-                                                          uploadDetailsToServer(Constants.YES_1k);
+                                                          uploadDetailsToServer(Constants.YES_1k);}else{
+                                                              Toast.makeText(ProfileFormStep1.this,"No Internet Connection",Toast.LENGTH_SHORT).show();
+                                                          }
 
 
                                                       }

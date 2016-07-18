@@ -100,6 +100,7 @@ public class ProductsPage extends AppCompatActivity {
     private android.content.ClipboardManager myClipboard;
     String sellerNme1 = "", productId1 = "";
     private String s = "";
+    private int rateChanged=0;
     private String whichCoupon = "";
     private TextView checkout;
     private int checkCorrectdis = 1, dopay2 = 0, dummyCl = 0, globalMindown = 0;
@@ -196,19 +197,30 @@ public class ProductsPage extends AppCompatActivity {
             else
                 dp = Integer.parseInt(s);
             Double m = sellingPrice * .2;
+            int doubleschar= serviceCharge(searchPrice, sellingPrice - dp, sellerNme1);
 
-            if ((dp >= minDownpayment) && (dp <= sellingPrice + secondServicecharge-considerTen*200))//&& w>=mindownn
+            if ((dp >= minDownpayment) && (dp <= sellingPrice + doubleschar-200))//&& w>=mindownn
             {
-                if(dp > sellingPrice + secondServicecharge-considerTen*200)
+                if(dp > sellingPrice + doubleschar-considerTen*200)
                 {
 
-                    Double rr=calculateEmi(Double.valueOf(sellingPrice - dp+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
-//while((rr<=200.0)&&(monthsnow>=2))
-//{checkPoschange=true;
-//    monthsnow--;
-//    spinner.setSelection(++changePos);
-//  rr=  calculateEmi(Double.valueOf(sellingPrice - dp+secondServicecharge), Double.valueOf(sellingPrice), monthsnow);
-//}
+                    Double rr=calculateEmi(Double.valueOf(sellingPrice - dp+doubleschar), Double.valueOf(sellingPrice), monthsnow);
+while((rr<=200.0)&&(monthsnow>=2))
+{checkPoschange=true;
+    if((monthsnow==18)||(monthsnow==15)||(monthsnow==12)||(monthsnow==9))
+        monthsnow=monthsnow-3;
+    else
+    monthsnow--;
+
+    spinner.setSelection(++changePos);
+  rr=  calculateEmi(Double.valueOf(sellingPrice - dp+doubleschar), Double.valueOf(sellingPrice), monthsnow);
+}                    RelativeLayout fla=(RelativeLayout)findViewById(R.id.flashfull);
+                    Animation ani111 = AnimationUtils.loadAnimation(ProductsPage.this, R.anim.show);
+                    Animation ani111f = AnimationUtils.loadAnimation(ProductsPage.this, R.anim.fadeout);
+                    fla.setVisibility(View.VISIBLE);
+                    fla.startAnimation(ani111);
+                    fla.postDelayed(hide,1000);
+
 
                 }
 
@@ -283,7 +295,7 @@ public class ProductsPage extends AppCompatActivity {
         //        Toast.makeText(ProductsPage.this, "lets do it", Toast.LENGTH_SHORT).show();
         EMIcheck = Math.round(emi);
         emiAmount.setText(getApplicationContext().getString(R.string.Rs) + String.valueOf(Math.round(emi)) + " per month");
-        //calculate emi and set emi call
+        //calculate emi and set emi callvoid
 
     }
 
@@ -291,11 +303,14 @@ public class ProductsPage extends AppCompatActivity {
         mValue = Integer.parseInt(dValue.getText().toString());
         if (monthsnow != 0) {
             int inccc = 0;
-            if (checkLongpress == 1)
+            if (checkLongpress == 1) {
+                if(sellingPrice<=1000)
                 inccc = 10;
-            else
+                else
+                    inccc=100;
+            }else
                 inccc = 1;
-Boolean ch=mValue + inccc <= sellingPrice + secondServicecharge;
+Boolean ch=mValue + inccc < sellingPrice + secondServicecharge-200;
             Boolean tt=mValue + inccc <= sellingPrice + secondServicecharge-considerTen*200;
             Boolean tr=tt&&changePos==0;
             if ((ch&&considerTen!=1)||(considerTen ==1&&(tt))) {
@@ -303,18 +318,17 @@ Boolean ch=mValue + inccc <= sellingPrice + secondServicecharge;
                 {
                     checkPoschange=true;
                     spinner.setSelection(changePos+1);
+
                     monthsnow--;
-                    RelativeLayout d=(RelativeLayout)findViewById(R.id.downRupees);
-                    Drawable[] d1={getResources().getDrawable(R.drawable.roundedbr),getResources().getDrawable(R.drawable.roundedbr)};
-                    TransitionDrawable dw=new TransitionDrawable(d1);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        d.setBackground(dw);
-                        dw.startTransition(500);
-                    }
-                    else {
-                        d.setBackgroundDrawable(dw);
-                        dw.startTransition(500);
-                    }
+                    RelativeLayout fla=(RelativeLayout)findViewById(R.id.flashfull);
+                    Animation ani111 = AnimationUtils.loadAnimation(ProductsPage.this, R.anim.show);
+                    Animation ani111f = AnimationUtils.loadAnimation(ProductsPage.this, R.anim.fadeout);
+                    fla.setVisibility(View.VISIBLE);
+                    fla.startAnimation(ani111);
+                    fla.postDelayed(hide,1000);
+//fla.setVisibility(View.GONE);
+//                    fla.startAnimation(ani111f);
+
 
 
                 }
@@ -332,7 +346,13 @@ Boolean ch=mValue + inccc <= sellingPrice + secondServicecharge;
             }
         }
     }
-
+    Runnable hide = new Runnable() {
+        @Override
+        public void run() {
+            RelativeLayout fla=(RelativeLayout)findViewById(R.id.flashfull);
+            fla.setVisibility(View.GONE);
+        }
+    };
     public void decrement() {
 
         if (monthsnow != 0) {
@@ -522,6 +542,28 @@ Boolean ch=mValue + inccc <= sellingPrice + secondServicecharge;
         userProfileStatus = user.getString("profileStatus", "");
         userCode1k = user.getString("status1K", "");
         userCode7k = user.getString("status7K", "");
+        ImageView info=(ImageView) findViewById(R.id.infor);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = (LayoutInflater) (ProductsPage.this).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                View popUpView = inflater.inflate(R.layout.popuptenure, null, false);
+
+                popup = new PopupWindow(popUpView);
+                //                        580, true);
+
+                popup.setContentView(popUpView);
+                popup.setWidth(ListPopupWindow.WRAP_CONTENT);
+                popup.setHeight(ListPopupWindow.WRAP_CONTENT);
+                popup.showAtLocation(popUpView, Gravity.CENTER, 0, 0);
+
+                RelativeLayout cover = (RelativeLayout) findViewById(R.id.cover);
+                //                prod.setTi(Color.parseColor("#CC000000"));
+                cover.setVisibility(View.VISIBLE);
+
+            }
+        });
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -549,6 +591,7 @@ Boolean ch=mValue + inccc <= sellingPrice + secondServicecharge;
                         in.putExtra("prid", productId1);
                         in.putExtra("servicecharge", secondServicecharge);
                         in.putExtra("brand", brand);
+                        in.putExtra("rateChanged",rateChanged);
                         in.putExtra("emicheck", EMIcheck);
                         in.putExtra("cashback", checkCashback);
                         if (hve.getText().toString().contains("off!"))
@@ -1597,7 +1640,7 @@ Boolean ch=mValue + inccc <= sellingPrice + secondServicecharge;
             {
               d=currDay;
                 dayToday = d;
-
+rateChanged=0;
 
                         emi = (principal * 1.0 / months);
 
@@ -1605,6 +1648,7 @@ Boolean ch=mValue + inccc <= sellingPrice + secondServicecharge;
             }
         } else {
 d=currDay;
+            rateChanged=interestRate;
             dayToday = d;
             emi = ((principal * rate * Math.pow(1 + rate, months - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, months) - 1));
         }

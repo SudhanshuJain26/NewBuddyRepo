@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import indwin.c3.shareapp.BuildConfig;
 import indwin.c3.shareapp.R;
 import indwin.c3.shareapp.fragments.ProfileFormStep1Fragment4;
 import indwin.c3.shareapp.models.UserModel;
@@ -95,7 +96,7 @@ public class AgreementActivity extends AppCompatActivity {
                     return true;
                 }
             });
-            termsAndConditionWebView.loadUrl(getApplicationContext().getString(R.string.web) + "termsApp");
+            termsAndConditionWebView.loadUrl(BuildConfig.WEB_URL + "termsApp");
             takeASelfie = (TargetButton) findViewById(R.id.take_a_selfie_button);
             acceptTerms = (Button) findViewById(R.id.accept_terms);
             if (AppUtils.isNotEmpty(user.getSignature())) {

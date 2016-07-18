@@ -97,11 +97,15 @@ public class Adaptersimple extends BaseAdapter {
             rowView = convertView;
             radioAdd = (RadioButton) rowView.findViewById(R.id.radioAdd);
         } else {
+            if (position == 0) {
+                SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
+                SharedPreferences.Editor e1 = cred.edit();
+                e1.putString("address", setAddress(position));
+                e1.commit();
+            }
             rowView = inflater.inflate(R.layout.listelementsaddress, parent, false);
             radioAdd = (RadioButton) rowView.findViewById(R.id.radioAdd);
-
         }
-
 
         final View rowView2 = LayoutInflater.from(context).inflate(R.layout.activity_editaddress, parent, false);
         textAdd1 = (TextView) rowView.findViewById(R.id.addRess1);
@@ -114,22 +118,33 @@ public class Adaptersimple extends BaseAdapter {
         final ImageView imicon = (ImageView) rowView.findViewById(R.id.img);
         edit = (ImageView) rowView.findViewById(R.id.edit);
         if (position == 0) {
-            imicon.setVisibility(View.GONE);
             radioAdd.setVisibility(View.VISIBLE);
             edit.setVisibility(View.INVISIBLE);
+        } else {
+            edit.setVisibility(View.VISIBLE);
         }
 
         if (currentPosition != position) {
             radioAdd.setChecked(false);
         } else {
             radioAdd.setChecked(true);
-            SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
-            SharedPreferences.Editor e1 = cred.edit();
-            e1.putString("address", setAddress(position));
-            e1.commit();
-
+        }
+        if (position != myList.size() - 1) {
+            imicon.setVisibility(View.GONE);
+            radioAdd.setVisibility(View.VISIBLE);
+            textAdd2.setVisibility(View.VISIBLE);
+            textAdd3.setVisibility(View.VISIBLE);
+            textAdd1.setVisibility(View.VISIBLE);
+        } else {
+            imicon.setVisibility(View.VISIBLE);
 
         }
+        if (position != myList.size() - 1 && position != 0) {
+            textAdd2.setVisibility(View.VISIBLE);
+            textAdd3.setVisibility(View.VISIBLE);
+            textAdd1.setVisibility(View.VISIBLE);
+        }
+
         edit.setTag(position);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,11 +220,6 @@ public class Adaptersimple extends BaseAdapter {
                 int position = (Integer) v.getTag();
 
 
-                currentPosition = position;
-
-
-                notifyDataSetChanged();
-
                 if (position == myList.size() - 1) {
                     SharedPreferences tt = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
                     int w = tt.getInt("add", 0);
@@ -250,10 +260,10 @@ public class Adaptersimple extends BaseAdapter {
                         textAdd3.setVisibility(View.GONE);
                     }
                 } else if (position != myList.size() - 1) {
+                    currentPosition = position;
+                    notifyDataSetChanged();
                     SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
                     SharedPreferences.Editor e1 = cred.edit();
-
-
                     e1.putString("address", setAddress(position));
                     e1.commit();
                 }
@@ -318,7 +328,7 @@ public class Adaptersimple extends BaseAdapter {
                     SharedPreferences cred = context.getSharedPreferences("cred", Context.MODE_PRIVATE);
                     SharedPreferences.Editor e1 = cred.edit();
 
-                    e1.putString("address",setAddress(position));
+                    e1.putString("address", setAddress(position));
                     e1.commit();
                 }
             }
@@ -441,17 +451,16 @@ public class Adaptersimple extends BaseAdapter {
     }
 
     private String setAddress(int position) {
-      String cc;
+        String cc;
         if (position != 0)
-
-            cc = myList.get(position).getLine1().toString()+"," + myList.get(position).getLine2().toString()+","  + myList.get(position).getcity().toString()+","  + myList.get(position).getstate().toString();
+            cc = myList.get(position).getLine1().toString() + "," + myList.get(position).getLine2().toString() + "," + myList.get(position).getcity().toString() + "," + myList.get(position).getstate().toString();
         else
             cc = myList.get(position).getLine1().toString();
         return cc;
     }
 
     private class addAddress extends
-                             AsyncTask<String, Void, String> {
+            AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             save.setEnabled(false);
@@ -637,3 +646,4 @@ public class Adaptersimple extends BaseAdapter {
 
 
 }
+

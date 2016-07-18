@@ -56,7 +56,7 @@ public class PaymentLive  extends Activity {
     private static final String SALT = BuildConfig.SALT;
     private static final String BASE_URL = BuildConfig.PAYU_BASE_URL;
     private static final String PAYMENT_URL = BASE_URL + "/_payment";
-    private String orderI="";
+    private String orderI="",txnId="";
     public static final String PARAM_KEY = "key";
     public static final String PARAM_TRANSACTION_ID = "txnid";
     public static final String PARAM_AMOUNT = "amount";
@@ -726,7 +726,7 @@ public class PaymentLive  extends Activity {
                 payload.put("userComments",cred.getString("usercom", ""));
                 payload.put("serviceCharges",cred.getInt("service",0));
                 payload.put("productFrom","android");
-                payload.put("interestRate",21);
+                payload.put("interestRate",cred.getInt("iRate",0));
                 payload.put("totalPayable" ,cred.getInt("emi",0)*cred.getInt("monthtenure",0)+cred.getInt("downpayment",0));
 //
                 if(cred.getInt("checkCashback",0)==1)
@@ -770,6 +770,9 @@ public class PaymentLive  extends Activity {
                                 + response.getStatusLine().getStatusCode());
                         return resp.getString("msg");
                     } else {
+                        JSONObject datan=new JSONObject(resp.getString("data"));
+                        orderI=datan.getString("orderId");
+                        txnId=datan.getString("txnId");
 //                        truth=resp.getString("status");
                         return resp.getString("status");
 
@@ -790,14 +793,86 @@ public class PaymentLive  extends Activity {
             if(!result.equals("fail"))
             {
 //                new ValidateForm().execute();
+                if(!"0".equals(payamt))
+
                 configureWebView();
+                else
+                {
+new Submitorder().execute();}
             }
             else
                 finish();
 
         }}
+///ssss
+private class Submitorder extends
+        AsyncTask<String, Void, String> {
+    @Override
+    protected void onPreExecute() {
 
-    private class ValidateForm extends
+
+    }
+
+    @Override
+    protected String doInBackground(String... data) {
+
+        String del1 = "";
+        try {
+            del1 = data[0];
+        } catch (Exception e) {
+            del1 = "";
+        }
+        //   HashMap<String, String> details = data[0];
+        JSONObject payload = new JSONObject();
+        try {
+            payload.put("orderId", orderI);
+
+            payload.put(  "txnid", txnId);
+            payload.put("paymentStatus","success");
+            SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+            String tok_sp = toks.getString("token_value", "");
+            SharedPreferences ph = getSharedPreferences("cred", Context.MODE_PRIVATE);
+            String userId = ph.getString("phone_number", "");
+            String url2 = BuildConfig.SERVER_URL + "api/order/submit";
+
+            HttpResponse response = AppUtils.connectToServerPost(url2,payload.toString() ,tok_sp);
+            if (response != null) {
+                HttpEntity ent = response.getEntity();
+                String responseString = EntityUtils.toString(ent, "UTF-8");
+
+                if (response.getStatusLine().getStatusCode() != 200) {
+            // userid=12&productid=23&action=add
+            // TYPE: POST
+                    Log.e("MeshCommunication", "Server returned code "
+                            + response.getStatusLine().getStatusCode());
+                    return "fail";
+                } else {
+                    JSONObject resp = new JSONObject(responseString);
+
+if(resp.getString("status").equals("success"))
+    return "win";
+
+                    }}}
+        catch (Exception e)
+        {
+
+        }
+    return "fail";}
+
+    protected void onPostExecute(String result) {
+
+
+        if (result.equals("win")) {
+            Intent in=new Intent(PaymentLive.this,Ordersuccessfailure.class);
+            in.putExtra("orderId",orderI);
+            startActivity(in);
+            finish();
+        }
+    else
+    finish();}
+}
+
+            private class ValidateForm extends
             AsyncTask<String, Void, String> {
 
         @Override

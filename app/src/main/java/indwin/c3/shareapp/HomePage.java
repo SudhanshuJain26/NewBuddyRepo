@@ -1,6 +1,7 @@
 package indwin.c3.shareapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,7 +24,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -74,6 +74,7 @@ import java.util.TimerTask;
 import indwin.c3.shareapp.Views.CustomHorizontalScrollView;
 import indwin.c3.shareapp.activities.AccountSettingsActivity;
 import indwin.c3.shareapp.activities.FindProduct;
+import indwin.c3.shareapp.activities.Paytmhome;
 import indwin.c3.shareapp.activities.ProfileActivity;
 import indwin.c3.shareapp.activities.SupportedWebsites;
 import indwin.c3.shareapp.adapters.HorizontalScrollViewAdapter;
@@ -179,18 +180,22 @@ public class HomePage extends AppCompatActivity {
     public static final String MyPREFERENCES = "buddy";
     TextView supported;
     TextView name1, line1, but;
+    ProgressDialog messagesDialog;
+
+    String status = "";
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-                this.moveTaskToBack(true);
-                return true;
-            }
-        return true;
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            this.moveTaskToBack(true);
+            return true;
         }
+        return true;
+    }
 
     public boolean emailverified = true;
-    HashMap<String,ArrayList<Product>> productsMap = new HashMap<String,ArrayList<Product>>();
+    HashMap<String, ArrayList<Product>> productsMap = new HashMap<String, ArrayList<Product>>();
     LocationManager locationManager;
 
     @Override
@@ -208,7 +213,8 @@ public class HomePage extends AppCompatActivity {
         if (sh.getInt("checklog", 0) == 1) {
             userId = sharedpreferences2.getString("name", null);
         }
-
+        UserModel userModel = AppUtils.getUserObject(HomePage.this);
+        userId = userModel.getUserId();
 
 
         token = userP.getString("token_value", null);
@@ -217,11 +223,9 @@ public class HomePage extends AppCompatActivity {
         try {
             locationManager = (LocationManager) getSystemService
                     (Context.LOCATION_SERVICE);
-            getLastLocation = locationManager.getLastKnownLocation
-                    (LocationManager.PASSIVE_PROVIDER);
-        }
-        catch (Exception e)
-        {
+            //getLastLocation = locationManager.getLastKnownLocation
+            //        (LocationManager.PASSIVE_PROVIDER);
+        } catch (Exception e) {
             System.out.println(e.toString());
         }
 
@@ -235,47 +239,65 @@ public class HomePage extends AppCompatActivity {
         };
         registerReceiver(broadcastReceiver, intentFilter);
 
-//        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-//        IMEINumber = telephonyManager.getDeviceId();
-//        simSerialNumber = telephonyManager.getSimSerialNumber();
+        //        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        //        IMEINumber = telephonyManager.getDeviceId();
+        //        simSerialNumber = telephonyManager.getSimSerialNumber();
         if (Splash.checklog == 1)
             finish();
         else {
             setContentView(R.layout.activity_home_page);
+            noti = (RelativeLayout) findViewById(R.id.not);
+            name1 = (TextView) findViewById(R.id.nameintr);
+            line1 = (TextView) findViewById(R.id.line1);
+            but = (TextView) findViewById(R.id.but);
+            name1.setText("Hi " + user.getName() + ",");
+            SharedPreferences preferences = getSharedPreferences("message",MODE_PRIVATE);
+            String message0 = preferences.getString("message0","");
+            String message1 = preferences.getString("message1","");
+            status = preferences.getString("status","");
+            nextPageCode = preferences.getInt("pageCode",0);
+
+
+            line1.setText(message0);
+            but.setText(message1);
+            if(line1.getText().length()==0){
+                Splash.notify=1;
+                noti.setVisibility(View.GONE);
+            }
+            //new GetMessage().execute("http://ninja-dev.hellobuddy.in/api/v1/user/messages?userid="+user.getUserId());
+
             spinner0 = (ProgressBar)findViewById(R.id.progress_bar0);
+
             spinner0.setVisibility(View.VISIBLE);
 
-            spinner1 = (ProgressBar)findViewById(R.id.progress_bar1);
+            spinner1 = (ProgressBar) findViewById(R.id.progress_bar1);
             spinner1.setVisibility(View.VISIBLE);
 
-            spinner2 = (ProgressBar)findViewById(R.id.progress_bar2);
+            spinner2 = (ProgressBar) findViewById(R.id.progress_bar2);
             spinner2.setVisibility(View.VISIBLE);
 
-            spinner3 = (ProgressBar)findViewById(R.id.progress_bar3);
+            spinner3 = (ProgressBar) findViewById(R.id.progress_bar3);
             spinner3.setVisibility(View.VISIBLE);
 
-            spinner4 = (ProgressBar)findViewById(R.id.progress_bar4);
+            spinner4 = (ProgressBar) findViewById(R.id.progress_bar4);
             spinner4.setVisibility(View.VISIBLE);
 
-            spinner5 = (ProgressBar)findViewById(R.id.progress_bar5);
+            spinner5 = (ProgressBar) findViewById(R.id.progress_bar5);
             spinner5.setVisibility(View.VISIBLE);
 
-            spinner6 = (ProgressBar)findViewById(R.id.progress_bar6);
+            spinner6 = (ProgressBar) findViewById(R.id.progress_bar6);
             spinner6.setVisibility(View.VISIBLE);
 
 
 
+            horizontal0 = (CustomHorizontalScrollView) findViewById(R.id.horizontal0);
+            horizontal1 = (CustomHorizontalScrollView) findViewById(R.id.horizontal1);
+            horizontal2 = (CustomHorizontalScrollView) findViewById(R.id.horizontal2);
+            horizontal3 = (CustomHorizontalScrollView) findViewById(R.id.horizontal3);
+            horizontal4 = (CustomHorizontalScrollView) findViewById(R.id.horizontal4);
+            horizontal5 = (CustomHorizontalScrollView) findViewById(R.id.horizontal5);
+            horizontal6 = (CustomHorizontalScrollView) findViewById(R.id.horizontal6);
 
-
-
-
-            horizontal0 = (CustomHorizontalScrollView)findViewById(R.id.horizontal0);
-            horizontal1 = (CustomHorizontalScrollView)findViewById(R.id.horizontal1);
-            horizontal2 = (CustomHorizontalScrollView)findViewById(R.id.horizontal2);
-            horizontal3 = (CustomHorizontalScrollView)findViewById(R.id.horizontal3);
-            horizontal4 = (CustomHorizontalScrollView)findViewById(R.id.horizontal4);
-            horizontal5 = (CustomHorizontalScrollView)findViewById(R.id.horizontal5);
-            horizontal6 = (CustomHorizontalScrollView)findViewById(R.id.horizontal6);
             new GetTrendingProducts().execute("trending");
             new Trending("Mobiles").execute("Mobiles");
 
@@ -287,11 +309,8 @@ public class HomePage extends AppCompatActivity {
 
 
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.editlayout);
-            name1 = (TextView) findViewById(R.id.nameintr);
-            line1 = (TextView) findViewById(R.id.line1);
-            but = (TextView) findViewById(R.id.but);
-            name1.setText("Hi " + user.getName() + ",");
-            but = (TextView) findViewById(R.id.but);
+
+
 
 
             imageSlider = (ViewPager) findViewById(R.id.imageslider);
@@ -431,7 +450,7 @@ public class HomePage extends AppCompatActivity {
                 }
             });
             get();
-            noti = (RelativeLayout) findViewById(R.id.not);
+
 
             if (Splash.notify == 1) {
                 noti.setVisibility(View.GONE);
@@ -443,111 +462,64 @@ public class HomePage extends AppCompatActivity {
             cross.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                   new ReadMessage().execute("http://ssl.hellobuddy.in/api/v1/user/messages/read?userid="+userId+"&status="+status);
                     noti.setVisibility(View.GONE);
                     Splash.notify = 1;
 
                 }
             });
 
+//            noti.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    query.clearFocus();
+//                    Intent intent = new Intent(HomePage.this, ProfileActivity.class);
+//                    startActivity(intent);
+//                    overridePendingTransition(0, 0);
+//                    Splash.notify = 1;
+//                }
+//            });
+
             noti.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    query.clearFocus();
-                    Intent intent = new Intent(HomePage.this, ProfileActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    Splash.notify = 1;
+                    if(nextPageCode==1){
+                        Intent intent = new Intent(HomePage.this, ProfileActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        Splash.notify = 1;
+                    }
+
+                    else if(nextPageCode==2){
+                        noti.setVisibility(View.GONE);
+                    }
+                    else if(nextPageCode==3){
+
+                        Intent intform = new Intent(HomePage.this, ViewForm.class);
+                        Splash.checkNot = 1;
+                        intform.putExtra("which_page", 17);
+                        intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
+                        startActivity(intform);
+                        overridePendingTransition(0, 0);
+                        Splash.notify=1;
+
+                    }else if(nextPageCode==4){
+                        try {
+                            Intercom.client().displayMessageComposer();
+                        } catch (Exception e) {
+
+                        }
+                        Splash.notify=1;
+                    }else if(nextPageCode==5){
+                        Intent intent = new Intent(HomePage.this,AccountSettingsActivity.class);
+                        startActivity(intent);
+                        Splash.notify=1;
+                    }
                 }
             });
             mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
             mPrefs.edit().putBoolean("visitedFormStep1Fragment3", true).apply();
             gson = new Gson();
-
-//            try {
-//
-//                name1 = (TextView) findViewById(R.id.nameintr);
-//                line1 = (TextView) findViewById(R.id.line1);
-//                but = (TextView) findViewById(R.id.but);
-//                name1.setText("Hi " + user.getName() + ",");
-//
-//                String status60K = "";
-//                if (user.getStatus60K() != null) {
-//                    status60K = user.getStatus60K();
-//                }
-//                String status7K = "";
-//                if (user.getStatus7K() != null) {
-//                    status7K = user.getStatus7K();
-//                }
-//                String status1K = "";
-//                if (user.getStatus1K() != null) {
-//                    status1K = user.getStatus1K();
-//                }
-//                but.setVisibility(View.GONE);
-//                if (Constants.STATUS.DECLINED.toString().equals(user.getProfileStatus()) || Constants.STATUS.WAITLISTED.equals(user.getProfileStatus())) {
-//
-//                    line1.setText("Your profile has currently been waitlisted for approval. Touch here to find out more.");
-//
-//                } else if (Constants.STATUS.APPROVED.toString().equals(user.getProfileStatus())) {
-//
-//                    if (Constants.STATUS.APPROVED.toString().equals(status60K)) {
-//                        name1.setText("Congrats " + user.getName() + ",");
-//                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Happy shopping!");
-//                    } else if (Constants.STATUS.APPROVED.toString().equals(status7K)) {
-//                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " credit limit! Go ahead and shop or complete your profile to apply for a higher credit limit.");
-//                    } else if (Constants.STATUS.APPROVED.toString().equals(status1K)) {
-//                        line1.setText("You have been approved for Rs." + user.getCreditLimit() + " FLASH credit limit! Go ahead and shop or complete your profile to apply for a higher credit limit.");
-//                    } else if (Constants.STATUS.DECLINED.toString().equals(status1K) || "waitlisted".equals(status1K)) {
-//                        line1.setText("Your profile has currently been waitlisted for Rs.1000 FLASH credit limit! We suggest that you complete your profile to apply for a higher limit.");
-//                    } else if (Constants.STATUS.APPLIED.toString().equals(status60K)) {
-//                        line1.setText("You have applied for upto Rs.60,000 credit. We will inform you as soon as it gets approved.");
-//                    } else if (Constants.STATUS.APPLIED.toString().equals(status7K)) {
-//                        line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
-//                    } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
-//                        line1.setText("You have ap'plied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
-//                    }
-//                } else {
-//                    if (Constants.STATUS.APPLIED.toString().equals(status60K)) {
-//                        line1.setText("You have applied for upto Rs.60,000 credit. We will inform you as soon as it gets approved.");
-//                    } else if (Constants.STATUS.APPLIED.toString().equals(status7K)) {
-//                        line1.setText("You have applied for Rs.7000 credit limit. Go ahead and complete your profile to apply for higher credit limit!");
-//                    } else if (Constants.STATUS.APPLIED.toString().equals(status1K)) {
-//                        line1.setText("You have applied for Rs.1000 FLASH credit limit. Go ahead and complete your profile to apply for higher credit limit.");
-//                    } else if (user.isEmailVerified()) {
-//                        line1.setText("Ready to get started? Complete your profile now to get a Borrowing Limit and start shopping");
-//                        but.setText("Complete it now!");
-//                        but.setVisibility(View.VISIBLE);
-//                    } else if(!user.isEmailVerified())
-//                        line1.setText("Your email Id needs to be verified.");
-//                        but.setText("verify your email Id now");
-//                        but.setVisibility(View.VISIBLE);
-//                        emailverified = false;
-//                    }
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//
-//
-//            but = (TextView) findViewById(R.id.but);
-//
-//            but.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    query.clearFocus();
-//                    if (emailverified) {
-//                        Intent intent = new Intent(HomePage.this, ProfileActivity.class);
-//                        startActivity(intent);
-//                        overridePendingTransition(0, 0);
-//                        Splash.notify = 1;
-//                    } else {
-//                        Intent intent = new Intent(HomePage.this, AccountSettingsActivity.class);
-//                        startActivity(intent);
-//                        overridePendingTransition(0, 0);
-//                        Splash.notify = 1;
-//                    }
-//
-//                }
-//            });
 
             navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
@@ -635,12 +607,15 @@ public class HomePage extends AppCompatActivity {
                             return true;
                         case R.id.Recharge:
 
+                            Intent iii = new Intent(HomePage.this, Paytmhome.class);
 
+                            iii.putExtra("send", 9);
                             intform = new Intent(HomePage.this, ViewForm.class);
                             Splash.checkNot = 1;
                             intform.putExtra("which_page", 999);
                             intform.putExtra("url", "http://hellobuddy.in/#/how-it-works");
-                            startActivity(intform);
+                            // startActivity(intform);
+                            startActivity(iii);
                             finish();
                             overridePendingTransition(0, 0);
                             return true;
@@ -679,6 +654,65 @@ public class HomePage extends AppCompatActivity {
                             SharedPreferences.Editor editorabc2 = preferencesbc2.edit();
                             editorabc2.clear();
                             editorabc2.commit();
+                            SharedPreferences preferencesbc3 = getSharedPreferences("selectedContacts", 0);
+                            SharedPreferences.Editor editorabc3 = preferencesbc3.edit();
+                            editorabc3.clear();
+                            editorabc3.commit();
+                            SharedPreferences preferencesbc4 = getSharedPreferences("disconnect", 0);
+                            SharedPreferences.Editor editorabc4 = preferencesbc4.edit();
+                            editorabc4.clear();
+                            editorabc4.commit();
+                            SharedPreferences preferencesbc5 = getSharedPreferences("authenticate", 0);
+                            SharedPreferences.Editor editorabc5 = preferencesbc5.edit();
+                            editorabc5.clear();
+                            editorabc5.commit();
+                            SharedPreferences preferencesbc6 = getSharedPreferences("CHECKBOX_STATE", 0);
+                            SharedPreferences.Editor editorabc6 = preferencesbc6.edit();
+                            editorabc6.clear();
+                            editorabc6.commit();
+                            SharedPreferences preferencesbc7 = getSharedPreferences("preferencename1", 0);
+                            SharedPreferences.Editor editorabc7 = preferencesbc7.edit();
+                            editorabc7.clear();
+                            editorabc7.commit();
+                            SharedPreferences preferencesbc8 = getSharedPreferences("preferencename2", 0);
+                            SharedPreferences.Editor editorabc8 = preferencesbc8.edit();
+                            editorabc8.clear();
+                            editorabc8.commit();
+                            SharedPreferences preferencesbc9 = getSharedPreferences("list1", 0);
+                            SharedPreferences.Editor editorabc9 = preferencesbc9.edit();
+                            editorabc9.clear();
+                            editorabc9.commit();
+                            SharedPreferences preferencesbc10 = getSharedPreferences("list2", 0);
+                            SharedPreferences.Editor editorabc10 = preferencesbc10.edit();
+                            editorabc10.clear();
+                            editorabc10.commit();
+                            SharedPreferences preferencesbc11 = getSharedPreferences("selectedlistfromphone", 0);
+                            SharedPreferences.Editor editorabc11 = preferencesbc11.edit();
+                            editorabc11.clear();
+                            editorabc11.commit();
+                            SharedPreferences preferencesbc12 = getSharedPreferences("CHECKBOX_STATE_EMAIL", 0);
+                            SharedPreferences.Editor editorabc12 = preferencesbc12.edit();
+                            editorabc12.clear();
+                            editorabc12.commit();
+                            SharedPreferences preferencesbc13 = getSharedPreferences("inviteCalls", 0);
+                            SharedPreferences.Editor editorabc13 = preferencesbc13.edit();
+                            editorabc13.clear();
+                            editorabc13.commit();
+                            SharedPreferences preferencesbc14 = getSharedPreferences("inviteCalls2", 0);
+                            SharedPreferences.Editor editorabc14 = preferencesbc14.edit();
+                            editorabc14.clear();
+                            editorabc14.commit();
+                            SharedPreferences preferencesbc15 = getSharedPreferences("invite_lists", 0);
+                            SharedPreferences.Editor editorabc15 = preferencesbc15.edit();
+                            editorabc15.clear();
+                            editorabc15.commit();
+
+
+
+
+
+
+
                             navigationView.getMenu().getItem(0).setChecked(true);
                             int a = 0;
                             SharedPreferences sharedpreferences = getSharedPreferences("buddy", Context.MODE_PRIVATE);
@@ -712,13 +746,16 @@ public class HomePage extends AppCompatActivity {
             NavigationView nview = (NavigationView) drawerLayout.findViewById(R.id.navigation_view);
             View headerView = nview.getHeaderView(0);
             ImageView arr = (ImageView) headerView.findViewById(R.id.arrow);
-            RelativeLayout header = (RelativeLayout) headerView.findViewById(R.id.head);
-            header.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
-            });
+            try {
+                RelativeLayout header = (RelativeLayout) headerView.findViewById(R.id.head);
+                header.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                    }
+                });
+            } catch (Exception e) {
+            }
             ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
 
@@ -805,7 +842,6 @@ public class HomePage extends AppCompatActivity {
 
 
             myClipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-
 
 
             this.arraySpinner = new String[]{
@@ -1052,9 +1088,7 @@ public class HomePage extends AppCompatActivity {
                 checkValidUrl = 1;
             }
 
-        }
-
-        else if (parseString.contains("snapdeal")) {
+        } else if (parseString.contains("snapdeal")) {
             sellerNme = "snapdeal";
             pos = parseString.lastIndexOf("/");
             if (pos != -1) {
@@ -1070,23 +1104,21 @@ public class HomePage extends AppCompatActivity {
             } else {
                 checkValidUrl = 1;
             }
-        }
-        else if (parseString.contains("myntra")) {
+        } else if (parseString.contains("myntra")) {
             sellerNme = "myntra";
-            productId=parseString;
+            productId = parseString;
             //pos = parseString.lastIndexOf("/");
 
-        }
-        else if (parseString.contains("paytm")) {
+        } else if (parseString.contains("paytm")) {
             sellerNme = "paytm";
-            productId=parseString;
+            productId = parseString;
             //pos = parseString.lastIndexOf("/");
 
         }
-//        else if (parseString.contains("myntra")) {
-//            sellerNme = "myntra";
-//            checkValidFromApis = 1;
-//        }
+        //        else if (parseString.contains("myntra")) {
+        //            sellerNme = "myntra";
+        //            checkValidFromApis = 1;
+        //        }
         else if (parseString.contains("shopclues")) {
             sellerNme = "shopclues";
             checkValidFromApis = 1;
@@ -1095,10 +1127,10 @@ public class HomePage extends AppCompatActivity {
             checkValidFromApis = 1;
 
         }
-//        else if (parseString.contains("paytm")) {
-//            sellerNme = "paytm";
-//            checkValidFromApis = 1;
-//        }
+        //        else if (parseString.contains("paytm")) {
+        //            sellerNme = "paytm";
+        //            checkValidFromApis = 1;
+        //        }
         //amazon
         else if (parseString.contains("amazon")) {
             sellerNme = "amazon";
@@ -1177,51 +1209,51 @@ public class HomePage extends AppCompatActivity {
     }
 
     public int setLoanAmt(int sellingPrice) {
-            int loanAmt = 0;
-            Double value = sellingPrice * .8;
-            int loanAmt1 = value.intValue();
-            int loanAmt2 = userP.getInt("creditLimit", 0) - userP.getInt("totalBorrowed", 0);
-            if (loanAmt1 < loanAmt2) {
-                loanAmt = loanAmt1;
-            } else {
-                loanAmt = loanAmt2;
-            }
-            return loanAmt;
+        int loanAmt = 0;
+        Double value = sellingPrice * .8;
+        int loanAmt1 = value.intValue();
+        int loanAmt2 = userP.getInt("creditLimit", 0) - userP.getInt("totalBorrowed", 0);
+        if (loanAmt1 < loanAmt2) {
+            loanAmt = loanAmt1;
+        } else {
+            loanAmt = loanAmt2;
         }
+        return loanAmt;
+    }
 
 
-        public Double show(String subcat, String cat, String brand, int price) {
+    public Double show(String subcat, String cat, String brand, int price) {
 
-            int loanPrice = setLoanAmt(price);
-            int monthsallowed = months(subcat, cat, brand, price);
-            Double rate = 21.0 / 1200.0;
-            int d = 0;
-            if (price <= 5000) {
-                emi = price * 0.8 / monthsallowed;
-            } else {
+        int loanPrice = setLoanAmt(price);
+        int monthsallowed = months(subcat, cat, brand, price);
+        Double rate = 21.0 / 1200.0;
+        int d = 0;
+        if (price <= 5000) {
+            emi = price * 0.8 / monthsallowed;
+        } else {
 
-                Date date = new Date();
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                String curr = df.format(date);
-                String currentDay = "";
-                for (int j = curr.length() - 2; j < curr.length(); j++) {
+            Date date = new Date();
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            String curr = df.format(date);
+            String currentDay = "";
+            for (int j = curr.length() - 2; j < curr.length(); j++) {
 
-                    currentDay += curr.charAt(j);
-                }
-
-                currDay = Integer.parseInt(currentDay);
-                if (currDay <= 15)
-                    d = 35 - currDay;
-                else
-                    d = 65 - currDay;
-
-                emi = Math.ceil((loanPrice * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
+                currentDay += curr.charAt(j);
             }
-            return emi;
+
+            currDay = Integer.parseInt(currentDay);
+            if (currDay <= 15)
+                d = 35 - currDay;
+            else
+                d = 65 - currDay;
+
+            emi = Math.ceil((loanPrice * rate * Math.pow(1 + rate, monthsallowed - 1) * (1 + rate * d * 12 / 365)) / (Math.pow(1 + rate, monthsallowed) - 1));
         }
+        return emi;
+    }
 
     public class Trending extends
-            AsyncTask<String, Void, String> {
+                          AsyncTask<String, Void, String> {
 
         String productType;
 
@@ -1231,7 +1263,6 @@ public class HomePage extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
 
 
         }
@@ -1295,12 +1326,12 @@ public class HomePage extends AppCompatActivity {
                                     String imgurl = img.getString("200x200");
                                     newProduct.setImgUrl(imgurl);
                                     products.add(newProduct);
-                                }catch (JSONException e){
+                                } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
 
                             }
-                            productsMap.put(data[0],products);
+                            productsMap.put(data[0], products);
                             Log.i("trending", "called");
                             return "win";
                         } else
@@ -1322,46 +1353,46 @@ public class HomePage extends AppCompatActivity {
             if (result.equals("fail")) {
                 System.out.println("Error while computing data");
             } else {
-                if(productType.equals("Mobiles")){
-                    if(spinner1.getVisibility()==View.VISIBLE)
+                if (productType.equals("Mobiles")) {
+                    if (spinner1.getVisibility() == View.VISIBLE)
                         spinner1.setVisibility(View.GONE);
 
-                    adapter1 = new HorizontalScrollViewAdapter(productsMap.get("Mobiles"),HomePage.this);
-                    horizontal1.setAdapter(HomePage.this,adapter1);
+                    adapter1 = new HorizontalScrollViewAdapter(productsMap.get("Mobiles"), HomePage.this);
+                    horizontal1.setAdapter(HomePage.this, adapter1);
 
                 }
-                if(productType.equals("Electronics")){
-                    if(spinner2.getVisibility()==View.VISIBLE)
+                if (productType.equals("Electronics")) {
+                    if (spinner2.getVisibility() == View.VISIBLE)
                         spinner2.setVisibility(View.GONE);
-                    adapter2 = new HorizontalScrollViewAdapter(productsMap.get("Electronics"),HomePage.this);
-                    horizontal2.setAdapter(HomePage.this,adapter2);
+                    adapter2 = new HorizontalScrollViewAdapter(productsMap.get("Electronics"), HomePage.this);
+                    horizontal2.setAdapter(HomePage.this, adapter2);
                 }
-                if(productType.equals("Computers&subCategory=Laptops")){
-                    if(spinner3.getVisibility()==View.VISIBLE)
+                if (productType.equals("Computers&subCategory=Laptops")) {
+                    if (spinner3.getVisibility() == View.VISIBLE)
                         spinner3.setVisibility(View.GONE);
-                    adapter3 = new HorizontalScrollViewAdapter(productsMap.get("Computers&subCategory=Laptops"),HomePage.this);
-                    horizontal3.setAdapter(HomePage.this,adapter3);
+                    adapter3 = new HorizontalScrollViewAdapter(productsMap.get("Computers&subCategory=Laptops"), HomePage.this);
+                    horizontal3.setAdapter(HomePage.this, adapter3);
                 }
 
-                if(productType.equals("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle")){
-                    if(spinner4.getVisibility()==View.VISIBLE)
+                if (productType.equals("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle")) {
+                    if (spinner4.getVisibility() == View.VISIBLE)
                         spinner4.setVisibility(View.GONE);
-                    adapter4 = new HorizontalScrollViewAdapter(productsMap.get("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle"),HomePage.this);
-                    horizontal4.setAdapter(HomePage.this,adapter4);
+                    adapter4 = new HorizontalScrollViewAdapter(productsMap.get("Apparels&category=Wearable%20Smart%20Devices&category=Lifestyle"), HomePage.this);
+                    horizontal4.setAdapter(HomePage.this, adapter4);
                 }
 
-                if(productType.equals("Health%20and%20Beauty")){
-                    if(spinner5.getVisibility()==View.VISIBLE)
+                if (productType.equals("Health%20and%20Beauty")) {
+                    if (spinner5.getVisibility() == View.VISIBLE)
                         spinner5.setVisibility(View.GONE);
-                    adapter5 = new HorizontalScrollViewAdapter(productsMap.get("Health%20and%20Beauty"),HomePage.this);
-                    horizontal5.setAdapter(HomePage.this,adapter5);
+                    adapter5 = new HorizontalScrollViewAdapter(productsMap.get("Health%20and%20Beauty"), HomePage.this);
+                    horizontal5.setAdapter(HomePage.this, adapter5);
                 }
 
-                if(productType.equals("Footwear")){
-                    if(spinner6.getVisibility()==View.VISIBLE)
+                if (productType.equals("Footwear")) {
+                    if (spinner6.getVisibility() == View.VISIBLE)
                         spinner6.setVisibility(View.GONE);
-                    adapter6 = new HorizontalScrollViewAdapter(productsMap.get("Footwear"),HomePage.this);
-                    horizontal6.setAdapter(HomePage.this,adapter6);
+                    adapter6 = new HorizontalScrollViewAdapter(productsMap.get("Footwear"), HomePage.this);
+                    horizontal6.setAdapter(HomePage.this, adapter6);
                 }
 
 
@@ -1375,7 +1406,7 @@ public class HomePage extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String url = BuildConfig.SERVER_URL+"api/product/trending?category=Computers&category=Mobiles&count=10";
+            String url = BuildConfig.SERVER_URL + "api/product/trending?category=Computers&category=Mobiles&count=10";
             String urldisplay = params[0];
             try {
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
@@ -1421,7 +1452,7 @@ public class HomePage extends AppCompatActivity {
 
 
                             }
-                            productsMap.put("trending",products);
+                            productsMap.put("trending", products);
                             Log.i("trending", "called");
                             return "win";
                         } else
@@ -1447,11 +1478,11 @@ public class HomePage extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if(spinner0.getVisibility()==View.VISIBLE)
+            if (spinner0.getVisibility() == View.VISIBLE)
                 spinner0.setVisibility(View.GONE);
 
-            adapter0 = new HorizontalScrollViewAdapter(productsMap.get("trending"),HomePage.this);
-            horizontal0.setAdapter(HomePage.this,adapter0);
+            adapter0 = new HorizontalScrollViewAdapter(productsMap.get("trending"), HomePage.this);
+            horizontal0.setAdapter(HomePage.this, adapter0);
 
         }
     }
@@ -1461,7 +1492,7 @@ public class HomePage extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String url = BuildConfig.SERVER_URL+"api/v1/homepage/images?clientDevice=android";
+            String url = BuildConfig.SERVER_URL + "api/v1/homepage/images?clientDevice=android";
             try {
                 SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
                 String tok_sp = toks.getString("token_value", "");
@@ -1484,7 +1515,7 @@ public class HomePage extends AppCompatActivity {
                             JSONObject json = data1.getJSONObject(0);
                             JSONArray jsonArray = json.getJSONArray("urls");
                             String[] urls1 = new String[jsonArray.length()];
-                            for(int i=0;i<jsonArray.length();i++){
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 urls1[i] = jsonArray.getString(i);
                             }
                             urls = urls1;
@@ -1513,7 +1544,7 @@ public class HomePage extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            adp = new SecondViewPagerAdapter(getApplicationContext(),urls, HomePage.this);
+            adp = new SecondViewPagerAdapter(getApplicationContext(), urls, HomePage.this);
             imageSlider.setAdapter(adp);
             adp.notifyDataSetChanged();
 
@@ -1522,23 +1553,107 @@ public class HomePage extends AppCompatActivity {
         }
     }
 
-    public class GetMessage extends AsyncTask<String,Void,String>{
+//    public class GetMessage extends AsyncTask<String,Void,String>{
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            if(messagesDialog.isShowing())
+//                messagesDialog.dismiss();
+//            String comma = ",";
+//            String stop = ".";
+//            messages= new String [2];
+//            if(s!=null) {
+//                messages[0] = s.substring(s.indexOf(comma) + 1, s.indexOf(stop));
+//                messages[1] = s.substring(s.indexOf(stop) + 1);
+//                line1.setText(messages[0]);
+//                but.setText(messages[1]);
+//                if (messages[1].equals("Start Now") || messages[1].equals("Verify Now") || messages[1].equals("Complete it now") || messages[1].equals("Apply Now") || messages[1].equals("Find out more")) {
+//                    nextPageCode = 1;
+//                } else if (messages[1].equals("Okay")) {
+//                    nextPageCode = 2;
+//                } else if (messages[1].equals("Repay Now")) {
+//                    nextPageCode = 3;
+//                } else if (messages[1].equals("Talk to us")) {
+//                    nextPageCode = 4;
+//                }
+//            }
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            String url = params[0];
+//            UserModel user = AppUtils.getUserObject(HomePage.this);
+//            String userId = user.getUserId();
+//            try {
+//                SharedPreferences toks = getSharedPreferences("token", Context.MODE_PRIVATE);
+//                String tok_sp = toks.getString("token_value", "");
+//                // String tok_sp = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjY1M2M2YTUwZTQzNzgyNjc0M2YyNjYiLCJuYW1lIjoiYnVkZHkgYXBpIGFkbWluIiwidXNlcm5hbWUiOiJidWRkeWFwaWFkbWluIiwicGFzc3dvcmQiOiJtZW1vbmdvc2gxIiwiZW1haWwiOiJjYXJlQGhlbGxvYnVkZHkuaW4iLCJpYXQiOjE0NjU1NDQwMDgsImV4cCI6MTQ2NTU4MDAwOH0.ZpAwCEB0lYSqiYdfaBYjnBJOXfGrqE9qN8USoRzWR8g";
+//                HttpResponse response = AppUtils.connectToServerGet(url, tok_sp, null);
+//                if (response != null) {
+//                    HttpEntity ent = response.getEntity();
+//                    String responseString = EntityUtils.toString(ent, "UTF-8");
+//                    if (response.getStatusLine().getStatusCode() != 200) {
+//
+//
+//                        Log.e("MeshCommunication", "Server returned code "
+//                                + response.getStatusLine().getStatusCode());
+//                        return "fail";
+//                    } else {
+//
+//                        JSONObject resp = new JSONObject(responseString);
+//                        if (resp.getString("status").equals("success")) {
+//                            JSONObject message = resp.getJSONObject("msg");
+//                            status = message.getString("status");
+//                            String lines = message.getString("message");
+//
+//                            return lines;
+//                        } else
+//                            return "";
+//
+//
+//                    }
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//
+//            }
+//            return null;
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            name1 = (TextView) findViewById(R.id.nameintr);
+//            line1 = (TextView) findViewById(R.id.line1);
+//            but = (TextView) findViewById(R.id.but);
+//            name1.setText("Hi " + user.getName() + ",");
+//            messagesDialog = new ProgressDialog(HomePage.this);
+//            messagesDialog.setMessage("Loading your messages");
+//            messagesDialog.setIndeterminate(true);
+//            messagesDialog.show();
+//        }
+//    }
+
+    public class ReadMessage extends AsyncTask<String,Void,String>{
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            String comma = ",";
-            String stop = ".";
-            messages= new String [2];
-            messages[0] = s.substring(s.lastIndexOf(comma)+1);
-            messages[1] = s.substring(s.lastIndexOf(stop)+1);
-            line1.setText(messages[0]);
-            but.setText(messages[1]);
-            if(messages[1].equals("Start Now") || messages[1].equals("Verify Now") || messages[1].equals("Complete it now") || messages[1].equals("Apply Now") || messages[1].equals("Find out more")){
-                nextPageCode = 1;
-            }else if(messages[1].equals("Okay")){
-                nextPageCode = 2;
-            }
+//            String comma = ",";
+//            String stop = ".";
+//            messages= new String [2];
+//            messages[0] = s.substring(s.lastIndexOf(comma)+1);
+//            messages[1] = s.substring(s.lastIndexOf(stop)+1);
+//            line1.setText(messages[0]);
+//            but.setText(messages[1]);
+//            if(messages[1].equals("Start Now") || messages[1].equals("Verify Now") || messages[1].equals("Complete it now") || messages[1].equals("Apply Now") || messages[1].equals("Find out more")){
+//                nextPageCode = 1;
+//            }else if(messages[1].equals("Okay")){
+//                nextPageCode = 2;
+//            }
         }
 
         @Override
@@ -1564,9 +1679,9 @@ public class HomePage extends AppCompatActivity {
 
                         JSONObject resp = new JSONObject(responseString);
                         if (resp.getString("status").equals("success")) {
-                            String message = resp.getString("message");
 
-                            return message;
+
+                            return "win";
                         } else
                             return "";
 
@@ -1583,6 +1698,7 @@ public class HomePage extends AppCompatActivity {
 
         }
     }
+
 
 
 

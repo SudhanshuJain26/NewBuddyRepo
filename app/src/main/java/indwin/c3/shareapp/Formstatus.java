@@ -342,7 +342,7 @@ public class Formstatus extends AppCompatActivity {
                         editornew.putInt("chshare", 1);
                         //                        editornew.putString("rcode", getIntent().getExtras().getString("UniC"));
                         editornew.commit();
-                        Intent in = new Intent(Formstatus.this, Share.class);
+                        Intent in = new Intent(Formstatus.this, ShareSecond.class);
 
                         startActivity(in);
                         overridePendingTransition(0, 0);

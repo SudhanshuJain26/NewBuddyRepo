@@ -174,13 +174,17 @@ public class ProfileFormStep3 extends AppCompatActivity implements ViewPager.OnP
                         openDialogBox();
                         return;
                     } else {
-                        SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-                        mPrefs.edit().putBoolean("updatingDB", false).apply();
-                        CheckInternetAndUploadUserDetails ciauo = new CheckInternetAndUploadUserDetails(ProfileFormStep3.this, Constants.YES_60k);
-                        progressDialog = new ProgressDialog(ProfileFormStep3.this);
-                        progressDialog.setCancelable(false);
-                        progressDialog.setMessage("Submitting your details..");
-                        progressDialog.show();
+                        if (AppUtils.isOnline(ProfileFormStep3.this)) {
+                            SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+                            mPrefs.edit().putBoolean("updatingDB", false).apply();
+                            CheckInternetAndUploadUserDetails ciauo = new CheckInternetAndUploadUserDetails(ProfileFormStep3.this, Constants.YES_60k);
+                            progressDialog = new ProgressDialog(ProfileFormStep3.this);
+                            progressDialog.setCancelable(false);
+                            progressDialog.setMessage("Submitting your details..");
+                            progressDialog.show();
+                        } else {
+                            Toast.makeText(ProfileFormStep3.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }

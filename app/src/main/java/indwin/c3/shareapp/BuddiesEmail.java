@@ -1,5 +1,8 @@
 package indwin.c3.shareapp;
 
+/**
+ * Created by sudhanshu on 15/7/16.
+ */
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import indwin.c3.shareapp.activities.AlreadyInvited1;
+import indwin.c3.shareapp.AlreadyInvited1;
 import indwin.c3.shareapp.adapters.AlreadyInvitedAdapter;
 import indwin.c3.shareapp.models.Friends;
 

@@ -1,6 +1,9 @@
 package indwin.c3.shareapp.application;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
+
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -30,6 +33,12 @@ public class BuddyApplication extends Application {
         if (BuildConfig.IS_ACRA_ENABLED) {
             ACRA.init(this);
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
 

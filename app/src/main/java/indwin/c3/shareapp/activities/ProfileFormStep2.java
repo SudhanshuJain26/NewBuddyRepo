@@ -186,13 +186,17 @@ public class ProfileFormStep2 extends AppCompatActivity implements ViewPager.OnP
 
                         return;
                     } else {
-                        SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
-                        mPrefs.edit().putBoolean("updatingDB", false).apply();
-                        progressDialog = new ProgressDialog(ProfileFormStep2.this);
-                        progressDialog.setCancelable(false);
-                        progressDialog.setMessage("Submitting your details..");
-                        progressDialog.show();
-                        uploadDetailsToServer(Constants.YES_7k);
+                        if (AppUtils.isOnline(ProfileFormStep2.this)) {
+                            SharedPreferences mPrefs = getSharedPreferences("buddy", Context.MODE_PRIVATE);
+                            mPrefs.edit().putBoolean("updatingDB", false).apply();
+                            progressDialog = new ProgressDialog(ProfileFormStep2.this);
+                            progressDialog.setCancelable(false);
+                            progressDialog.setMessage("Submitting your details..");
+                            progressDialog.show();
+                            uploadDetailsToServer(Constants.YES_7k);
+                        } else {
+                            Toast.makeText(ProfileFormStep2.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }

@@ -1,15 +1,28 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 android {
     compileSdkVersion 23
     buildToolsVersion '23.0.2'
+    dexOptions {
+        javaMaxHeapSize "4g"
+        preDexLibraries = false
+    }
 
     defaultConfig {
         applicationId "indwin.c3.shareapp"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 74
-        versionName "2.17"
+        multiDexEnabled true
+        versionCode 76
+        versionName "2.19"
     }
+
+//    task jar(type: Jar) {
+//        baseName = 'core'
+//        dependsOn classes
+//        from sourceSets.main.classes
+//        exclude('net/intellidata/core/**/*Impl*')
+//    }
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
@@ -20,21 +33,24 @@ android {
 
         debug {
             buildConfigField "String", "SERVER_URL", '"https://ssl.hellobuddy.in/"'
+            buildConfigField "String", "WEB_URL", '"https://hellobuddy.in/"'
             buildConfigField "String", "MERCHANT_KEY", '"lhqOEOUh"'
             buildConfigField "String", "SALT", '"QsBtDKH3k8"'
             buildConfigField "String", "PAYU_BASE_URL", '"https://test.payu.in"'
             buildConfigField "boolean", "IS_ACRA_ENABLED", 'true'
+            minifyEnabled false
 
 
         }
 
         release {
             buildConfigField "String", "SERVER_URL", '"https://ninja.hellobuddy.in/"'
+            buildConfigField "String", "WEB_URL", '"https://hellobuddy.in/"'
             buildConfigField "String", "MERCHANT_KEY", '"n46r73"'
             buildConfigField "String", "SALT", '"L3gouXYu"'
             buildConfigField "String", "PAYU_BASE_URL", '"https://secure.payu.in"'
             buildConfigField "boolean", "IS_ACRA_ENABLED", 'false'
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -53,6 +69,18 @@ repositories {
         url "https://s3.amazonaws.com/repo.commonsware.com"
     }
 }
+
+sourceSets {
+    main {
+        java {
+            exclude 'com/google/gdata/util/common/base/UnicodeEscaper$1.class'
+            exclude 'com/google/gdata/util/common/base/Escaper.class'
+
+
+
+        }
+    }
+}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -64,13 +92,14 @@ dependencies {
 
     }
     compile files('libs/advancedweb/Android-AdvancedWebView.jar')
-    compile files('libs/org.apache.http.legacy.jar')
+    //compile files('libs/org.apache.http.legacy.jar')
     compile files('libs/PayU-release.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile files('libs/signpost-commonshttp4-1.2.1.1.jar')
-    compile files('libs/signpost-core-1.2.1.1.jar')
+    compile files('libs/gdata-contacts-3.0.jar')
     compile 'com.google.guava:guava:19.0-rc2'
-    compile 'com.google.gdata:core:1.47.1'
+    compile 'com.android.support:multidex:1.0.1'
+    compile files('libs/gdata-client-1.0.jar')
+    compile files('libs/gdata-core-1.0.jar')
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'de.hdodenhof:circleimageview:1.3.0'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
@@ -79,7 +108,9 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.2.1'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
-    compile 'com.google.code.gson:gson:2.6.2'
+    compile ('com.google.code.gson:gson:2.6.2'){
+        exclude group: 'com.google.gdata'
+    }
     compile 'uk.co.chrisjenx:calligraphy:0.7.+'
     compile 'com.github.ParkSangGwon:TedPicker:v1.0.10'
     compile 'com.cloudinary:cloudinary-android:1.1.2'

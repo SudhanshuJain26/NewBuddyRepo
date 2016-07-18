@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import indwin.c3.shareapp.BuildConfig;
@@ -165,7 +167,8 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         cloudinary.uploader().upload(userImages.getPanProof().getImgUrl(),
                                 ObjectUtils.asMap("public_id", userImages.getUserId() + "pan" + ts));
                         panImage = cloudinary.url().secure(true).generate(userImages.getUserId() + "pan" + ts);
-
+                        panProof.setImgUrl(panImage);
+                        AppUtils.saveUserObject(mContext, userImages);
                     }
 
 
@@ -179,22 +182,30 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                     Long tsLong = System.currentTimeMillis() / 1000;
                     String ts = tsLong.toString();
                     Image collegeId = userImages.getCollegeID();
-                    if ((collegeId.getFront() != null && collegeId.isUpdateFront()) && (AppUtils.uploadStatus.OPEN.toString().equals(collegeId.getFrontStatus()) || AppUtils.isEmpty(collegeId.getFrontStatus()))) {
+                    if ((Constants.YES_1k.equals(params[0]) && collegeId.getFront() != null && !AppUtils.isCloudinaryUrl(collegeId.getFront().getImgUrl())) ||
+
+                            (collegeId.getFront() != null && collegeId.isUpdateFront()) && (AppUtils.uploadStatus.OPEN.toString().equals(collegeId.getFrontStatus()) || AppUtils.isEmpty(collegeId.getFrontStatus()))) {
                         collegeId.setFrontStatus(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
                         updateUser = true;
                         cloudinary.uploader().upload(userImages.getCollegeID().getFront().getImgUrl(),
                                 ObjectUtils.asMap("public_id", userImages.getUserId() + "collegeId_front" + ts));
                         frontCollegeId = cloudinary.url().secure(true).generate(userImages.getUserId() + "collegeId_front" + ts);
+                        collegeId.getFront().setImgUrl(frontCollegeId);
+                        AppUtils.saveUserObject(mContext, userImages);
                     }
 
-                    if ((collegeId.getBack() != null && collegeId.isUpdateBack()) && (AppUtils.uploadStatus.OPEN.toString().equals(collegeId.getBackStatus()) || AppUtils.isEmpty(collegeId.getBackStatus()))) {
+                    if ((Constants.YES_1k.equals(params[0]) && collegeId.getFront() != null && !AppUtils.isCloudinaryUrl(collegeId.getFront().getImgUrl())) ||
+
+                            (collegeId.getBack() != null && collegeId.isUpdateBack()) && (AppUtils.uploadStatus.OPEN.toString().equals(collegeId.getBackStatus()) || AppUtils.isEmpty(collegeId.getBackStatus()))) {
                         collegeId.setBackStatus(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
                         updateUser = true;
                         cloudinary.uploader().upload(userImages.getCollegeID().getBack().getImgUrl(),
                                 ObjectUtils.asMap("public_id", userImages.getUserId() + "collegeId_back" + ts));
                         backCollegeId = cloudinary.url().secure(true).generate(userImages.getUserId() + "collegeId_back" + ts);
+                        collegeId.getBack().setImgUrl(backCollegeId);
+                        AppUtils.saveUserObject(mContext, userImages);
                     }
 
                 } catch (Exception e) {
@@ -206,7 +217,9 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 Long tsLong = System.currentTimeMillis() / 1000;
                 String ts = tsLong.toString();
                 Image addressProof = userImages.getAddressProof();
-                if ((addressProof.getFront() != null && addressProof.isUpdateFront()) && (AppUtils.uploadStatus.OPEN.toString().equals(addressProof.getFrontStatus()) || AppUtils.isEmpty(addressProof.getFrontStatus()))) {
+                if ((Constants.YES_1k.equals(params[0]) && addressProof.getFront() != null && !AppUtils.isCloudinaryUrl(addressProof.getFront().getImgUrl())) ||
+
+                        (addressProof.getFront() != null && addressProof.isUpdateFront()) && (AppUtils.uploadStatus.OPEN.toString().equals(addressProof.getFrontStatus()) || AppUtils.isEmpty(addressProof.getFrontStatus()))) {
                     updateUser = true;
                     try {
 
@@ -214,17 +227,22 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         cloudinary.uploader().upload(userImages.getAddressProof().getFront().getImgUrl(),
                                 ObjectUtils.asMap("public_id", userImages.getUserId() + "aadhar_front" + ts));
                         frontAadharId = cloudinary.url().secure(true).generate(userImages.getUserId() + "aadhar_front" + ts);
-
+                        addressProof.getFront().setImgUrl(frontAadharId);
+                        AppUtils.saveUserObject(mContext, userImages);
 
                     } catch (Exception e3) {
                     }
                 }
-                if ((addressProof.getBack() != null && addressProof.isUpdateBack()) && (AppUtils.uploadStatus.OPEN.toString().equals(addressProof.getBackStatus()) || AppUtils.isEmpty(addressProof.getBackStatus()))) {
+                if ((Constants.YES_1k.equals(params[0]) && addressProof.getBack() != null && !AppUtils.isCloudinaryUrl(addressProof.getBack().getImgUrl())) ||
+
+                        (addressProof.getBack() != null && addressProof.isUpdateBack()) && (AppUtils.uploadStatus.OPEN.toString().equals(addressProof.getBackStatus()) || AppUtils.isEmpty(addressProof.getBackStatus()))) {
                     addressProof.setBackStatus(AppUtils.uploadStatus.PICKED.toString());
                     try {
                         cloudinary.uploader().upload(userImages.getAddressProof().getBack().getImgUrl(),
                                 ObjectUtils.asMap("public_id", userImages.getUserId() + "aadhar_back" + ts));
                         backAadharId = cloudinary.url().secure(true).generate(userImages.getUserId() + "aadhar_back" + ts);
+                        addressProof.getBack().setImgUrl(backAadharId);
+                        AppUtils.saveUserObject(mContext, userImages);
                     } catch (Exception e) {
 
                     }
@@ -232,11 +250,104 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 }
                 AppUtils.saveUserObject(mContext, userImages);
             }
+            if ((Constants.YES_1k.equals(params[0]) && userImages.getSelfie() != null && !AppUtils.isCloudinaryUrl(userImages.getSelfie()) ||
+
+                    (userImages.isUpdateSelfie() && (userImages.getSelfieStatus() == null || AppUtils.uploadStatus.OPEN.toString().equals(userImages.getSelfieStatus()))))) {
+                try {
+                    userImages.setSelfieStatus(AppUtils.uploadStatus.PICKED.toString());
+                    AppUtils.saveUserObject(mContext, userImages);
+                    Long tsLong = System.currentTimeMillis() / 1000;
+                    String ts = tsLong.toString();
+                    cloudinary.uploader().upload(userImages.getSelfie(),
+                            ObjectUtils.asMap("public_id", userImages.getUserId() + "selfie" + ts));
+                    selfieUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "selfie" + ts);
+                    userImages.setSelfie(selfieUrl);
+                    AppUtils.saveUserObject(mContext, userImages);
+                    user.setSelfie(selfieUrl);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                updateUser = true;
+            }
+            if ((Constants.YES_1k.equals(params[0]) && userImages.getSignature() != null && !AppUtils.isCloudinaryUrl(userImages.getSignature()) ||
+
+
+                    (userImages.isUpdateSignature() && (userImages.getSignatureStatus() == null || AppUtils.uploadStatus.OPEN.toString().equals(userImages.getSignatureStatus()))))) {
+                try {
+
+                    userImages.setSignatureStatus(AppUtils.uploadStatus.PICKED.toString());
+                    AppUtils.saveUserObject(mContext, userImages);
+                    Long tsLong = System.currentTimeMillis() / 1000;
+                    String ts = tsLong.toString();
+                    cloudinary.uploader().upload(userImages.getSignature(),
+                            ObjectUtils.asMap("public_id", userImages.getUserId() + "signature" + ts));
+                    signatureUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "signature" + ts);
+                    userImages.setSignature(signatureUrl);
+                    AppUtils.saveUserObject(mContext, userImages);
+                    user.setSignature(signatureUrl);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                updateUser = true;
+            }
+            //7k image start
+            userImages = AppUtils.getUserObject(mContext);
+            if (userImages.getGradeSheet() != null && userImages.getGradeSheet().getNewImgUrls().size() > 0) {
+                int i = 0;
+                Map map = userImages.getGradeSheet().getNewImgUrls();
+                Map copiedMap = new HashMap();
+                copiedMap.putAll(map);
+                Iterator it = copiedMap.entrySet().iterator();
+
+                while (it.hasNext()) {
+                    Map.Entry<String, String> entry = (Map.Entry) it.next();
+                    if ((Constants.YES_7k.equals(params[0]) && !AppUtils.isCloudinaryUrl(entry.getKey())) || AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
+                        i++;
+                        entry.setValue(AppUtils.uploadStatus.PICKED.toString());
+                        AppUtils.saveUserObject(mContext, userImages);
+
+                        try {
+                            Long tsLong = System.currentTimeMillis() / 1000;
+                            String ts = tsLong.toString();
+                            cloudinary.uploader().upload(entry.getKey(),
+                                    ObjectUtils.asMap("public_id", userImages.getUserId() + "gradeSheet" + ts + i));
+                            String cloudinaryUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "gradeSheet" + ts + i);
+
+                            Image image = userImages.getGradeSheet();
+                            List<String> imgUrls = image.getImgUrls();
+                            for (int j = 0; j < imgUrls.size(); j++) {
+                                if (imgUrls.get(j).equals(entry.getKey())) {
+                                    imgUrls.set(j, cloudinaryUrl);
+                                }
+                            }
+                            map.remove(entry.getKey());
+                            map.put(cloudinaryUrl, AppUtils.uploadStatus.UPLOADED.toString());
+                            AppUtils.saveUserObject(mContext, userImages);
+                            uploadGradeSheets.add(cloudinaryUrl);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        updateUser = true;
+                    }
+                }
+            }
+
+            //7k image end
             userImages = AppUtils.getUserObject(mContext);
             if (userImages.getBankStatement() != null && userImages.getBankStatement().getNewImgUrls().size() > 0) {
                 int i = 0;
-                for (Map.Entry<String, String> entry : userImages.getBankStatement().getNewImgUrls().entrySet()) {
-                    if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
+                Map map = userImages.getBankStatement().getNewImgUrls();
+                Map copiedMap = new HashMap();
+                copiedMap.putAll(map);
+                Iterator it = copiedMap.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<String, String> entry = (Map.Entry) it.next();
+
+                    if (((AppUtils.isCloudinaryUrl(entry.getKey())) && ((Constants.YES_7k.equals(params[0]) || Constants.YES_60k.equals(params[0])))) ||
+                            AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
                         i++;
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
                         AppUtils.saveUserObject(mContext, userImages);
@@ -247,6 +358,16 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                             cloudinary.uploader().upload(entry.getKey(),
                                     ObjectUtils.asMap("public_id", userImages.getUserId() + "bankStmt" + ts + i));
                             String cloudinaryUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "bankStmt" + ts + i);
+                            Image image = userImages.getBankStatement();
+                            List<String> imgUrls = image.getImgUrls();
+                            for (int j = 0; j < imgUrls.size(); j++) {
+                                if (imgUrls.get(j).equals(entry.getKey())) {
+                                    imgUrls.set(j, cloudinaryUrl);
+                                }
+                            }
+                            map.remove(entry.getKey());
+                            map.put(cloudinaryUrl, AppUtils.uploadStatus.UPLOADED.toString());
+                            AppUtils.saveUserObject(mContext, userImages);
                             uploadBankStmts.add(cloudinaryUrl);
 
                         } catch (Exception e) {
@@ -259,7 +380,12 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
             userImages = AppUtils.getUserObject(mContext);
             if (userImages.getBankProof() != null && userImages.getBankProof().getNewImgUrls().size() > 0) {
                 int i = 0;
-                for (Map.Entry<String, String> entry : userImages.getBankProof().getNewImgUrls().entrySet()) {
+                Map map = userImages.getBankProof().getNewImgUrls();
+                Map copiedMap = new HashMap();
+                copiedMap.putAll(map);
+                Iterator it = copiedMap.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<String, String> entry = (Map.Entry) it.next();
                     if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
                         i++;
                         entry.setValue(AppUtils.uploadStatus.PICKED.toString());
@@ -272,7 +398,17 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                                     ObjectUtils.asMap("public_id", userImages.getUserId() + "bankProof" + ts + i));
                             String cloudinaryUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "bankProof" + ts + i);
                             uploadBankProofs.add(cloudinaryUrl);
+                            Image image = userImages.getBankProof();
+                            List<String> imgUrls = image.getImgUrls();
+                            for (int j = 0; j < imgUrls.size(); j++) {
+                                if (imgUrls.get(j).equals(entry.getKey())) {
+                                    imgUrls.set(j, cloudinaryUrl);
+                                }
+                            }
+                            map.remove(entry.getKey());
 
+                            map.put(cloudinaryUrl, AppUtils.uploadStatus.UPLOADED.toString());
+                            AppUtils.saveUserObject(mContext, userImages);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -281,62 +417,7 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 }
             }
 
-            userImages = AppUtils.getUserObject(mContext);
-            if (userImages.getGradeSheet() != null && userImages.getGradeSheet().getNewImgUrls().size() > 0) {
-                int i = 0;
-                for (Map.Entry<String, String> entry : userImages.getGradeSheet().getNewImgUrls().entrySet()) {
-                    if (AppUtils.uploadStatus.OPEN.toString().equals(entry.getValue())) {
-                        i++;
-                        entry.setValue(AppUtils.uploadStatus.PICKED.toString());
-                        AppUtils.saveUserObject(mContext, userImages);
 
-                        try {
-                            Long tsLong = System.currentTimeMillis() / 1000;
-                            String ts = tsLong.toString();
-                            cloudinary.uploader().upload(entry.getKey(),
-                                    ObjectUtils.asMap("public_id", userImages.getUserId() + "gradeSheet" + ts + i));
-                            String cloudinaryUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "gradeSheet" + ts + i);
-                            uploadGradeSheets.add(cloudinaryUrl);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        updateUser = true;
-                    }
-                }
-            }
-            if (userImages.isUpdateSelfie() && (userImages.getSelfieStatus() == null || AppUtils.uploadStatus.OPEN.toString().equals(userImages.getSelfieStatus()))) {
-                try {
-                    userImages.setSelfieStatus(AppUtils.uploadStatus.PICKED.toString());
-                    AppUtils.saveUserObject(mContext, userImages);
-                    Long tsLong = System.currentTimeMillis() / 1000;
-                    String ts = tsLong.toString();
-                    cloudinary.uploader().upload(userImages.getSelfie(),
-                            ObjectUtils.asMap("public_id", userImages.getUserId() + "selfie" + ts));
-                    selfieUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "selfie" + ts);
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                updateUser = true;
-            }
-            if (userImages.isUpdateSignature() && (userImages.getSignatureStatus() == null || AppUtils.uploadStatus.OPEN.toString().equals(userImages.getSignatureStatus()))) {
-                try {
-                    userImages.setSignatureStatus(AppUtils.uploadStatus.PICKED.toString());
-                    AppUtils.saveUserObject(mContext, userImages);
-                    Long tsLong = System.currentTimeMillis() / 1000;
-                    String ts = tsLong.toString();
-                    cloudinary.uploader().upload(userImages.getSignature(),
-                            ObjectUtils.asMap("public_id", userImages.getUserId() + "signature" + ts));
-                    signatureUrl = cloudinary.url().secure(true).generate(userImages.getUserId() + "signature" + ts);
-                    user.setSignature(signatureUrl);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                updateUser = true;
-            }
             if (params[0] != null) {
                 updateUser = true;
             }
@@ -375,11 +456,11 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                         backCollegeId = collegeID.getBack().getImgUrl();
                     }
 
-                    if (AppUtils.isNotEmpty(user.getSelfie())) {
+                    if (AppUtils.isNotEmpty(user.getSelfie()) && AppUtils.isCloudinaryUrl(user.getSelfie())) {
                         selfieUrl = user.getSelfie();
                     }
-                    if (AppUtils.isNotEmpty(user.getSignature())) {
-                        selfieUrl = user.getSignature();
+                    if (AppUtils.isNotEmpty(user.getSignature()) && AppUtils.isCloudinaryUrl(user.getSignature())) {
+                        signatureUrl = user.getSignature();
                     }
                 }
                 if (Constants.YES_1k.equals(params[0]) && addressproof != null) {
@@ -513,6 +594,36 @@ public class CheckInternetAndUploadUserDetails extends BroadcastReceiver {
                 }
 
                 if (json.get("status").equals("success")) {
+                    UserModel userModel = AppUtils.getUserObject(mContext);
+                    if (jsonobj.opt("panProof") != null)
+                        userModel.setUpdatePanProof(false);
+                    if (jsonobj.opt("selfie") != null && !"".equals(jsonobj.get("selfie")))
+                        userModel.setUpdateSelfie(false);
+                    if (jsonobj.opt("signature") != null && !"".equals(jsonobj.get("signature")))
+                        userModel.setUpdateSignature(false);
+                    if (jsonobj.opt("collegeID") != null) {
+                        JSONObject collegeIDJSON = jsonobj.getJSONObject("collegeID");
+                        if (collegeIDJSON.opt("front") != null) {
+                            userModel.getCollegeID().setUpdateFront(false);
+                            userModel.getCollegeID().setFrontStatus(AppUtils.uploadStatus.OPEN.toString());
+                        }
+                        if (collegeIDJSON.opt("back") != null) {
+                            userModel.getCollegeID().setUpdateBack(false);
+                            userModel.getCollegeID().setBackStatus(AppUtils.uploadStatus.OPEN.toString());
+                        }
+                    }
+
+                    if (jsonobj.opt("addressProof") != null) {
+                        JSONObject addressProofJSON = jsonobj.getJSONObject("addressProof");
+                        if (addressProofJSON.opt("front") != null) {
+                            userModel.getAddressProof().setUpdateFront(false);
+                            userModel.getAddressProof().setFrontStatus(AppUtils.uploadStatus.OPEN.toString());
+                        }
+                        if (addressProofJSON.opt("back") != null) {
+                            userModel.getAddressProof().setUpdateBack(false);
+                            userModel.getAddressProof().setBackStatus(AppUtils.uploadStatus.OPEN.toString());
+                        }
+                    }
 
 
                     return "success";

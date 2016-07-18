@@ -63,6 +63,7 @@ public class YouTubeActivity extends YouTubeBaseActivity implements YouTubePlaye
 
         @Override
         public void onStopped() {
+
         }
 
     };
@@ -87,6 +88,7 @@ public class YouTubeActivity extends YouTubeBaseActivity implements YouTubePlaye
 
         @Override
         public void onVideoEnded() {
+            finish();
         }
 
         @Override

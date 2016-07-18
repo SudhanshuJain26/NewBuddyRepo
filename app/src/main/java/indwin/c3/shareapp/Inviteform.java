@@ -49,7 +49,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -92,8 +94,10 @@ int a=0;
     String status;
     int pageCode;
     String[] messages;
+
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     boolean otpsend = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1289,7 +1293,7 @@ else{
                 jsonObject1.put("client","android");
                 jsonObject1.put("timestamp",Splash.dateStamp);
                 payload.put("sessionData",jsonObject1);
-                // payload.put("action", details.get("action"));
+
 
                 HttpParams httpParameters = new BasicHttpParams();
 
@@ -1508,8 +1512,6 @@ else{
 
 
         }
-
-
 
 
     }

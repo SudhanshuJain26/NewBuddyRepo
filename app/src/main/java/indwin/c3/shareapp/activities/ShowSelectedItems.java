@@ -106,6 +106,7 @@ public class ShowSelectedItems extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,6 +155,7 @@ public class ShowSelectedItems extends AppCompatActivity {
             textView2.setVisibility(View.VISIBLE);
         }
 
+
         textView1.setText("Earn upto "+ getApplicationContext().getResources().getString(R.string.Rs) + num_phones_invited*170);
         textView2.setText("Earn upto "+ getApplicationContext().getResources().getString(R.string.Rs) + num_emails_invited*170);
         final SharedPreferences sharedPreferences = getSharedPreferences("disconnect",MODE_PRIVATE);
@@ -179,6 +181,7 @@ public class ShowSelectedItems extends AppCompatActivity {
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
             if(checkAndRequestPermissions()) {
 
                     Intent intent = new Intent(ShowSelectedItems.this, GetContacts.class);
@@ -355,6 +358,7 @@ public class ShowSelectedItems extends AppCompatActivity {
 
                 if(!flag) {
                     Intent intent = new Intent(ShowSelectedItems.this, AuthenticateEmail.class);
+
                     intent.putExtra("pageCode",0);
                     startActivity(intent);
 

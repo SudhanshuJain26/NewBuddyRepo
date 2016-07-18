@@ -147,6 +147,41 @@ public class MainActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
 
 
+
+
+    try {
+        locationManager = (LocationManager) getSystemService
+                (Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        try {
+            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+        }
+        if (!gps_enabled) {
+
+            getLastLocation = locationManager.getLastKnownLocation
+                    (LocationManager.PASSIVE_PROVIDER);
+
+            latitude = getLastLocation.getLatitude();
+            longitude = getLastLocation.getLongitude();
+        }else{
+            LocationListener locationListener = new MyLocationListener();
+//            locationManager.requestLocationUpdates(
+//                    LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+            locationManager.requestLocationUpdates("gps",5000,10.0f,locationListener);
+        }
+    }
+    catch (Exception e)
+    {
+        System.out.println(e.toString());
+}
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        IMEINumber = telephonyManager.getDeviceId();
+        simSerialNumber = telephonyManager.getSimSerialNumber();
+        carrierName = telephonyManager.getNetworkOperatorName();
+        deviceName = getDeviceName();
+        osVersion = android.os.Build.VERSION.RELEASE;
+
         username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -655,13 +690,14 @@ public class MainActivity extends AppCompatActivity {
                 payload.put("password", pass);
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("deviceID",IMEINumber);
+                jsonObject.put("IMEI",IMEINumber);
+
                 jsonObject.put("SIM",simSerialNumber);
                 jsonObject.put("connectionType","mobile");
                 jsonObject.put("deviceCarrier",carrierName);
                 jsonObject.put("osVersion", osVersion);
                 jsonObject.put("deviceModel",deviceName);
                 jsonObject.put("userAgent","android");
-
 
                 JSONObject jsonObject1 = new JSONObject();
                 JSONObject jsonObject2 = new JSONObject();
@@ -2110,6 +2146,7 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.READ_PHONE_STATE);
         int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         int readSmsPermission = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_SMS);
+//        int contactsPermission = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS);
         List<String> listPermissionsNeeded = new ArrayList<>();
         if (locationPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -2123,7 +2160,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        if (listPermissionsNeeded.size()>0) {
+
+
+        if (!listPermissionsNeeded.isEmpty()) {
+
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
             return false;
         }

@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -67,6 +68,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     Location getLastLocation;
     Double latitude,longitude;
     String IMEINumber,simSerialNumber;
+
     public int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,13 +97,14 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             IMEINumber = telephonyManager.getDeviceId();
             simSerialNumber = telephonyManager.getSimSerialNumber();
-            getLastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-            latitude = getLastLocation.getLatitude();
-            longitude = getLastLocation.getLongitude();
+//            getLastLocation = locati
+//            latitude = getLastLocation.getLatitude();
+//            longitude = getLastLocation.getLongitude();
             carrierName = telephonyManager.getNetworkOperatorName();
             deviceName = AppUtils.getDeviceName();
             osVersion = android.os.Build.VERSION.RELEASE;
         }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
             TextView headerTitle = (TextView) findViewById(R.id.activity_header);
@@ -234,6 +237,30 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         }
     }
 
+    private class MyLocationListener implements LocationListener {
+
+
+        @Override
+        public void onLocationChanged(Location location) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    }
 
 
     private class UploadNewPasswordToServer extends AsyncTask<String, String, String> {

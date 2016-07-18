@@ -109,10 +109,12 @@ public class ShareSecond extends AppCompatActivity {
         editor2.clear();
         editor2.commit();
 
+
         SharedPreferences prefs1 = getSharedPreferences("preferencename2", 0);
         SharedPreferences.Editor editor1 = prefs1.edit();
         editor1.clear();
         editor1.commit();
+
 
         SharedPreferences preferences = getSharedPreferences("selectedContacts",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -148,11 +150,15 @@ public class ShareSecond extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ShareSecond.this,ShowSelectedItems.class);
+
                 SharedPreferences preferences = getSharedPreferences("selectedContacts",MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.clear();
                 editor.commit();
                 startActivity(intent);
+
+
+
 
             }
         });
@@ -187,6 +193,7 @@ public class ShareSecond extends AppCompatActivity {
                     startActivity(Intent.createChooser(sharingIntent, "Share via"));}
                 else
                     ActivityCompat.requestPermissions(ShareSecond.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
 
             }
         });

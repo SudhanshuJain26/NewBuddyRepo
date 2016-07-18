@@ -205,7 +205,6 @@ public class Splash extends AppCompatActivity {
                         title = wrapper.getTitle();
                         image = wrapper.getImage();
                         Intent in = new Intent(Splash.this,Landing.class);
-
                         startActivity(in);
                         overridePendingTransition(0, 0);
                         finish();
@@ -830,6 +829,7 @@ public class Splash extends AppCompatActivity {
 
                         } else {
                             Intent in = new Intent(Splash.this,Landing.class);
+
                             startActivity(in);
                             overridePendingTransition(0, 0);
                             finish();

@@ -105,6 +105,17 @@ public class FindProduct extends AppCompatActivity {
         });
 
 
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FindProduct.this,YouTubeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

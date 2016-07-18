@@ -222,6 +222,7 @@ public class NewUserEmail1 extends ListFragment {
         final FrameLayout frameLayout = (FrameLayout)rootView.findViewById(R.id.frame2);
         if(FillEmailContacts.yahooMalfunction) {
 
+
             new CountDownTimer(3000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -234,6 +235,7 @@ public class NewUserEmail1 extends ListFragment {
 
                 }
             }.start();
+
 
             FillEmailContacts.yahooMalfunction=false;
         }
@@ -306,22 +308,24 @@ public class NewUserEmail1 extends ListFragment {
                 final CheckBox checkBox = (CheckBox) mView.findViewById(R.id.checkBox);
 
 
-                mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        checkBox.setChecked(!checkBox.isChecked());
-                    }
-                });
 
-                if (position % 3 == 0)
-                    imageView.setImageResource(R.drawable.blueuser1x);
-                if (position % 3 == 1)
-                    imageView.setImageResource(R.drawable.reduser1x);
-                if (position % 3 == 2)
-                    imageView.setImageResource(R.drawable.greenuser1x);
-                if (mChecked.size() == 0) {
-                    mChecked = getArray();
+            mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkBox.setChecked(!checkBox.isChecked());
                 }
+            });
+
+            if(position%3==0)
+                imageView.setImageResource(R.drawable.blueuser1x);
+            if(position%3==1)
+                imageView.setImageResource(R.drawable.reduser1x);
+            if(position%3==2)
+                imageView.setImageResource(R.drawable.greenuser1x);
+            if(mChecked.size()==0){
+                mChecked = getArray();
+            }
+
 
 
                 name.setText(rowItem.getName());

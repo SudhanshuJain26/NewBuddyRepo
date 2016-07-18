@@ -332,6 +332,17 @@
             android:id="@+id/email_invited"
 
             />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:text = "21 invited"
+            android:paddingTop ="2dp"
+            android:id="@+id/email_invited"
+
+            />
+
 
 
         <TextView

@@ -546,6 +546,49 @@ android:animateLayoutChanges="true"
 
 
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/downRupees111"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/downPayment"
+
+
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+
+
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/roundedblue">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Rs.20,000"
+                    android:visibility="gone"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinnerItem111"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+
+                    android:layout_centerHorizontal="true"
+                    android:background="@android:color/transparent"></Spinner>
+
+                <ImageView
+                    android:id="@+id/spinnArr111"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:visibility="invisible"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/expandmore"
+                    android:tint="#000000" />
+
+
+
+            </RelativeLayout>
 
 
             <TextView

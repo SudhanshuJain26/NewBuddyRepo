@@ -328,6 +328,8 @@ public class NewUser1 extends Fragment {
 
                             @Override
                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
 //                            if(prefs.getBoolean(rowItem.getName(),false)){
 //
 //                            }else {

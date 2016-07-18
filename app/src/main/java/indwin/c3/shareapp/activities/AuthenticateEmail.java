@@ -101,9 +101,10 @@ public class AuthenticateEmail extends AppCompatActivity {
     String userId;
     AccountManager mAccountManager;
     ProgressDialog pd;
+
+    int pageCode;
     FrameLayout  rl1;
     RelativeLayout rl2;
-    int pageCode;
     public ArrayList<Friends> listfromServerEmail = new ArrayList<>();
     public ArrayList<Friends> isBuddyListEmail = new ArrayList<>();
     public ArrayList<Friends> isInvitedListEmail = new ArrayList<>();
@@ -114,6 +115,7 @@ public class AuthenticateEmail extends AppCompatActivity {
   ;int width,height;
     ViewGroup.LayoutParams params;
     static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
+
 
 
 //    @Override
@@ -133,17 +135,30 @@ public class AuthenticateEmail extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if(pageCode==0){
-            Intent intent = new Intent(AuthenticateEmail.this,ShowSelectedItems.class);
+        if (pageCode == 0) {
+            Intent intent = new Intent(AuthenticateEmail.this, ShowSelectedItems.class);
             startActivity(intent);
             finish();
-        }else{
-            Intent intent = new Intent(AuthenticateEmail.this,FillEmailContacts.class);
+        } else {
+            Intent intent = new Intent(AuthenticateEmail.this, FillEmailContacts.class);
             startActivity(intent);
             finish();
         }
-
     }
+
+
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//
+//        Uri uriData = intent.getData();
+//        if (uriData != null && uriData.toString().startsWith(YahooConstants.CALLBACK_URL)) {
+//            setVerifier(uriData.getQueryParameter("oauth_verifier"));
+//        }
+//        if(uriData!=null)
+//        new OAuthGetAccessTokenTask().execute();
+//        super.onNewIntent(intent);
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +171,7 @@ public class AuthenticateEmail extends AppCompatActivity {
        // yahoo = (ImageView) findViewById(R.id.yahoo);
         back = (ImageView) findViewById(R.id.backo);
         rl1 = (FrameLayout)findViewById(R.id.googleframe);
+
        // rl2 = (RelativeLayout)findViewById(R.id.yahooFrame);
         back.setOnClickListener(new View.OnClickListener() {
             @Override

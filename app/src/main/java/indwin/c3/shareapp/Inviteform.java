@@ -904,6 +904,7 @@ else{
                         invite.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                invite.setEnabled(false);
                                 invite.setTextColor(Color.parseColor("#ffffff"));
                                 try {
                                     mName = name.getText().toString().trim();
@@ -1345,6 +1346,7 @@ else{
                 Log.e("mesherror", e.getMessage());
                 return "fail";
 
+
             }
         }
 
@@ -1395,7 +1397,7 @@ else{
         }  else{
 
 
-//
+                invite.setEnabled(true);
                 spinner.setVisibility(View.GONE);
                 error.setVisibility(View.VISIBLE);
                 msg.setText(result);

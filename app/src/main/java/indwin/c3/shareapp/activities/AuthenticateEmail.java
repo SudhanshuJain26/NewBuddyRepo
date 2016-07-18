@@ -662,7 +662,10 @@ public class AuthenticateEmail extends AppCompatActivity {
                         email = tempEmail.getAddress();
                     }
                     Friends friends = new Friends(name, email);
-                    if (friends.getName() != null && friends.getName().length() != 0 && friends.getEmail()!=null && friends.getEmail().length()!=0) {
+                    if (friends.getEmail()!=null && friends.getEmail().length()!=0) {
+                        if(friends.getName().length()==0){
+                            friends.setName(friends.getEmail());
+                        }
 
                         friends1.add(friends);
                     }

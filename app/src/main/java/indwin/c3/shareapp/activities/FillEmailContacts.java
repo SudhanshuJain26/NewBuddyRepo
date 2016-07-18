@@ -311,11 +311,11 @@ public class FillEmailContacts extends AppCompatActivity {
 
                         Intent intent = new Intent(FillEmailContacts.this, AuthenticateEmail.class);
                         startActivity(intent);
-                        finish();
                         SharedPreferences sharedPrefs1 = getSharedPreferences("selectedContacts", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPrefs1.edit();
                         editor.remove("email_contacts_selected");
                         editor.apply();
+                        finish();
 
                         disconnect.setVisibility(View.VISIBLE);
                     }

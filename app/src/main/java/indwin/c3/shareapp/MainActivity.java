@@ -175,12 +175,12 @@ public class MainActivity extends AppCompatActivity {
     {
         System.out.println(e.toString());
 }
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        IMEINumber = telephonyManager.getDeviceId();
-        simSerialNumber = telephonyManager.getSimSerialNumber();
-        carrierName = telephonyManager.getNetworkOperatorName();
-        deviceName = getDeviceName();
-        osVersion = android.os.Build.VERSION.RELEASE;
+//        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//        IMEINumber = telephonyManager.getDeviceId();
+//        simSerialNumber = telephonyManager.getSimSerialNumber();
+//        carrierName = telephonyManager.getNetworkOperatorName();
+//        deviceName = getDeviceName();
+//        osVersion = android.os.Build.VERSION.RELEASE;
 
         username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
